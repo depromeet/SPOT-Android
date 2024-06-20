@@ -1,0 +1,20 @@
+name: Slack Alarm Webhook
+
+on:
+  pull_request:
+    types: [opened]
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created, edited]
+
+jobs:
+  mention_notification:
+    name: Mention Notification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Laurenfrost/mention-to-slack@latest
+        with:
+          configuration-path: .github/mention-to-slack.yml
+          repo-token: ${{ secrets.GH_TOKEN }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
