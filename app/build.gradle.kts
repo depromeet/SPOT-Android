@@ -9,21 +9,21 @@ plugins {
 }
 
 android {
-    namespace = "com.example.depromeetandroid"
-    compileSdk = 34
+    namespace = Constants.packageName
+    compileSdk = Constants.compileSdk
 
     defaultConfig {
-        applicationId = "com.example.depromeetandroid"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = Constants.packageName
+        minSdk = Constants.minSdk
+        targetSdk = Constants.targetSdk
+        versionCode = Constants.versionCode
+        versionName = Constants.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -31,74 +31,74 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = Versions.javaVersion
+        targetCompatibility = Versions.javaVersion
     }
+
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = Versions.jvmVersion
     }
 
     buildFeatures {
-        viewBinding = true
         dataBinding = true
+        viewBinding = true
     }
 }
 
 dependencies {
+    KotlinDependencies.run {
+        implementation(kotlin)
+        implementation(coroutines)
+        implementation(jsonSerialization)
+        implementation(dateTime)
+    }
 
-    // ktx
-    implementation("androidx.fragment:fragment-ktx:1.8.0")
+    AndroidXDependencies.run {
+        implementation(coreKtx)
+        implementation(appCompat)
+        implementation(constraintLayout)
+        implementation(fragment)
+        implementation(startup)
+        implementation(legacy)
+        implementation(security)
+        implementation(hilt)
+        implementation(lifeCycleKtx)
+        implementation(lifecycleJava8)
+        implementation(splashScreen)
+        implementation(pagingRuntime)
+        implementation(workManager)
+        implementation(hiltWorkManager)
+    }
 
-    // app compat
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    KaptDependencies.run {
+        kapt(hiltCompiler)
+        kapt(hiltWorkManagerCompiler)
+    }
 
-    // material
-    implementation("com.google.android.material:material:1.12.0")
+    implementation(MaterialDesignDependencies.materialDesign)
 
-    // constraint layout
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    TestDependencies.run {
+        testImplementation(jUnit)
+        androidTestImplementation(androidTest)
+        androidTestImplementation(espresso)
+    }
 
-    // test
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    // hilt
-    kapt("com.google.dagger:hilt-compiler:${rootProject.extra["hiltVersion"]}")
-    implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
-
-    // lifecycle
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${rootProject.extra["lifecycleVersion"]}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${rootProject.extra["lifecycleVersion"]}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${rootProject.extra["lifecycleVersion"]}")
-
-    // recyclerview
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-
-    // coroutine
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.extra["coroutineVersion"]}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${rootProject.extra["coroutineVersion"]}")
-
-    // network
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-
-    // coil
-    implementation("io.coil-kt:coil:2.4.0")
-
-    // serialization
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-
-    // timber
-    implementation("com.jakewharton.timber:timber:5.0.1")
-
-    // shared preference
-    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
-
-    // splash screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    ThirdPartyDependencies.run {
+        implementation(coil)
+        implementation(platform(okHttpBom))
+        implementation(okHttp)
+        implementation(okHttpLoggingInterceptor)
+        implementation(retrofit)
+        implementation(retrofitJsonConverter)
+        implementation(timber)
+        implementation(ossLicense)
+        implementation(progressView)
+        implementation(balloon)
+        implementation(lottie)
+        debugImplementation(flipperLeakCanary)
+        debugImplementation(leakCanary)
+        debugImplementation(soloader)
+    }
 }
