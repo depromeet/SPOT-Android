@@ -5,16 +5,14 @@ buildscript {
         mavenCentral()
     }
 
-    extra.apply {
-        set("hiltVersion", "2.46.1")
-        set("coroutineVersion", "1.7.3")
-        set("lifecycleVersion", "2.8.2")
+    dependencies {
+        classpath("com.android.tools.build:gradle:${Versions.gradleVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlinVersion}")
+        classpath(ClassPathPlugins.hilt)
+        classpath(ClassPathPlugins.oss)
     }
 }
 
-plugins {
-    id("com.android.application") version "8.1.1" apply false
-    id("com.android.library") version "8.1.1" apply false
-    id("org.jetbrains.kotlin.android") version "1.8.21" apply false
-    id("com.google.dagger.hilt.android") version "2.44" apply false
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
 }
