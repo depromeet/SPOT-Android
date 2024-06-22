@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "DepromeetAndroid"
 include(":app")
 include(":data")
+include(":domain")
