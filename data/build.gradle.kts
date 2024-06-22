@@ -1,28 +1,23 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version Versions.kotlinVersion
 }
 
 android {
-    namespace = Constants.packageName
+    namespace = "com.depromeet.data"
     compileSdk = Constants.compileSdk
 
     defaultConfig {
-        applicationId = Constants.packageName
         minSdk = Constants.minSdk
-        targetSdk = Constants.targetSdk
-        versionCode = Constants.versionCode
-        versionName = Constants.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -30,19 +25,15 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = Versions.javaVersion
         targetCompatibility = Versions.javaVersion
     }
-
     kotlinOptions {
         jvmTarget = Versions.jvmVersion
     }
-
     buildFeatures {
-        dataBinding = true
-        viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -56,16 +47,10 @@ dependencies {
 
     AndroidXDependencies.run {
         implementation(coreKtx)
-        implementation(appCompat)
-        implementation(constraintLayout)
-        implementation(fragment)
         implementation(startup)
         implementation(legacy)
         implementation(security)
         implementation(hilt)
-        implementation(lifeCycleKtx)
-        implementation(lifecycleJava8)
-        implementation(splashScreen)
         implementation(pagingRuntime)
         implementation(workManager)
         implementation(hiltWorkManager)
@@ -85,19 +70,11 @@ dependencies {
     }
 
     ThirdPartyDependencies.run {
-        implementation(coil)
         implementation(platform(okHttpBom))
         implementation(okHttp)
         implementation(okHttpLoggingInterceptor)
         implementation(retrofit)
         implementation(retrofitJsonConverter)
         implementation(timber)
-        implementation(ossLicense)
-        implementation(progressView)
-        implementation(balloon)
-        implementation(lottie)
-        debugImplementation(flipperLeakCanary)
-        debugImplementation(leakCanary)
-        debugImplementation(soloader)
     }
 }
