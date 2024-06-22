@@ -35,7 +35,7 @@ object Versions {
     const val balloonVersion = "1.4.5"
     const val lottieVersion = "6.0.0"
 
-    const val gradleVersion = "8.0.1"
+    const val gradleVersion = "8.0.2"
 
     const val junitVersion = "4.13.2"
     const val espressoVersion = "3.3.0"
