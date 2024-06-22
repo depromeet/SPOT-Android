@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     KotlinDependencies.run {
         implementation(kotlin)
         implementation(coroutines)
