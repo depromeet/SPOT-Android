@@ -30,4 +30,7 @@ android {
 }
 dependencies {
     implementation(AndroidXDependencies.lifeCycleKtx)
+    implementation(KotlinDependencies.kotlin)
+    implementation(AndroidXDependencies.appCompat)
+    implementation(MaterialDesignDependencies.materialDesign)
 }
