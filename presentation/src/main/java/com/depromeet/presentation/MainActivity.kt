@@ -1,9 +1,8 @@
-package com.depromeet.androidApp.presentation
+package com.depromeet.presentation
 
 import android.os.Bundle
-import com.depromeet.androidApp.R
-import com.depromeet.androidApp.databinding.ActivityMainBinding
 import com.depromeet.core.base.BindingActivity
+import com.depromeet.presentation.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -16,7 +16,7 @@
         android:theme="@style/Theme.DepromeetAndroid"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.MainActivity"
+         android:name="com.depromeet.presentation.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>

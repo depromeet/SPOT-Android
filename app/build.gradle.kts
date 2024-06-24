@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":presentation"))
     KotlinDependencies.run {
         implementation(kotlin)
         implementation(coroutines)
