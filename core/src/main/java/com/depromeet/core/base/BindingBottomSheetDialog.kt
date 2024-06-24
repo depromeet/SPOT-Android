@@ -12,8 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 abstract class BindingBottomSheetDialog<T : ViewDataBinding>(
     @LayoutRes private val layoutRes: Int,
 ) : BottomSheetDialogFragment() {
-    private var _binding: T? = null
-    private val binding get() = requireNotNull(_binding)
+    protected var _binding: T? = null
+    protected val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,

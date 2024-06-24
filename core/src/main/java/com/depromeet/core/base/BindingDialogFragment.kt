@@ -12,8 +12,8 @@ import androidx.fragment.app.DialogFragment
 abstract class BindingDialogFragment<T : ViewDataBinding>(
     @LayoutRes private val layoutResId: Int,
 ) : DialogFragment() {
-    private var _binding: T? = null
-    private val binding: T
+    protected var _binding: T? = null
+    protected val binding: T
         get() = requireNotNull(_binding) { "binding object is not initialized" }
 
     override fun onCreateView(
