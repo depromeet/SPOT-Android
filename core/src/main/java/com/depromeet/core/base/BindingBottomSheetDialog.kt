@@ -5,23 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-abstract class BindingBottomSheetDialog<T : ViewDataBinding>(
+abstract class BindingBottomSheetDialog<B : ViewBinding>(
     @LayoutRes private val layoutRes: Int,
+    private val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> B,
 ) : BottomSheetDialogFragment() {
-    protected var _binding: T? = null
-    protected val binding get() = requireNotNull(_binding)
+
+    private var _binding: B? = null
+    protected val binding: B
+        get() = requireNotNull(_binding) { "binding object is not initialized" }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding = bindingInflater.invoke(inflater, container, false)
         return binding.root
     }
 

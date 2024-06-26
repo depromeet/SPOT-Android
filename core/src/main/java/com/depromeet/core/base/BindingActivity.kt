@@ -2,24 +2,29 @@ package com.depromeet.core.base
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 import com.depromeet.core.extension.hideKeyboard
 
-abstract class BindingActivity<T : ViewDataBinding>(
-    @LayoutRes private val layoutResId: Int,
+abstract class BaseActivity<B : ViewBinding>(
+    val bindingFactory: (LayoutInflater) -> B,
 ) : AppCompatActivity() {
 
-    protected lateinit var binding: T
+    private var _binding: B? = null
+    protected val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, layoutResId)
-        binding.lifecycleOwner = this
+        _binding = bindingFactory(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

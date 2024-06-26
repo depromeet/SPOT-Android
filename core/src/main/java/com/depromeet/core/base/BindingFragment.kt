@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 
-abstract class BindingFragment<T : ViewDataBinding>(
+abstract class BindingFragment<B : ViewBinding>(
     @LayoutRes private val layoutResId: Int,
+    private val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> B,
 ) : Fragment() {
-    protected var _binding: T? = null
-    protected val binding: T
+
+    private var _binding: B? = null
+    protected val binding: B
         get() = requireNotNull(_binding) { "binding object is not initialized" }
 
     override fun onCreateView(
@@ -21,9 +22,8 @@ abstract class BindingFragment<T : ViewDataBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, layoutResId, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
+        _binding = bindingInflater.invoke(inflater, container, false)
+        return _binding!!.root
     }
 
     override fun onDestroyView() {
