@@ -1,13 +1,15 @@
 package com.depromeet.core.base
 
+import android.app.Activity
+import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.depromeet.core.extension.hideKeyboard
 
 abstract class BaseActivity<B : ViewBinding>(
     val bindingFactory: (LayoutInflater) -> B,
@@ -41,5 +43,11 @@ abstract class BaseActivity<B : ViewBinding>(
     private fun isTouchOutsideView(view: View, ev: MotionEvent): Boolean {
         val outRect = Rect(view.left, view.top, view.right, view.bottom)
         return !outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

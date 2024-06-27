@@ -1,4 +1,4 @@
-package com.depromeet.core.extension
+package com.depromeet.presentation.extension
 
 import android.graphics.Point
 import android.os.Build

@@ -1,4 +1,4 @@
-package com.depromeet.core.extension
+package com.depromeet.presentation.extension
 
 import android.app.Activity
 import android.content.Intent
