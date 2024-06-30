@@ -1,4 +1,4 @@
-package com.depromeet.androidApp.di
+package com.depromeet.spot.di
 
 import com.depromeet.data.repository.ExampleRepositoryImpl
 import com.depromeet.domain.repository.ExampleRepository

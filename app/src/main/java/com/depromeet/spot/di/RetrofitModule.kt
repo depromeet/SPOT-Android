@@ -1,6 +1,6 @@
-package com.depromeet.androidApp.di
+package com.depromeet.spot.di
 
-import com.depromeet.androidApp.BuildConfig.BASE_URL
+import com.depromeet.spot.BuildConfig.BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

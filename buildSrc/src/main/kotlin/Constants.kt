@@ -1,5 +1,5 @@
 object Constants {
-    const val packageName = "com.depromeet.androidApp"
+    const val packageName = "com.depromeet.spot"
     const val compileSdk = 34
     const val minSdk = 28
     const val targetSdk = 34

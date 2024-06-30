@@ -1,4 +1,4 @@
-package com.depromeet.androidApp
+package com.depromeet.spot
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
