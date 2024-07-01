@@ -1,24 +1,32 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.plugin.serialization") version Versions.kotlinVersion
 }
 
 android {
-    namespace = "com.example.depromeetandroid"
-    compileSdk = 34
+    namespace = Constants.packageName
+    compileSdk = Constants.compileSdk
 
     defaultConfig {
-        applicationId = "com.example.depromeetandroid"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = Constants.packageName
+        minSdk = Constants.minSdk
+        targetSdk = Constants.targetSdk
+        versionCode = Constants.versionCode
+        versionName = Constants.versionName
+
+        buildConfigField("String", "BASE_URL", getApiKey("base.url"))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -26,22 +34,83 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Versions.javaVersion
+        targetCompatibility = Versions.javaVersion
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Versions.jvmVersion
+    }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+        buildConfig = true
     }
 }
 
-dependencies {
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+}
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+dependencies {
+    implementation(project(":core"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":presentation"))
+    KotlinDependencies.run {
+        implementation(kotlin)
+        implementation(coroutines)
+        implementation(jsonSerialization)
+        implementation(dateTime)
+    }
+
+    AndroidXDependencies.run {
+        implementation(coreKtx)
+        implementation(appCompat)
+        implementation(constraintLayout)
+        implementation(fragment)
+        implementation(startup)
+        implementation(legacy)
+        implementation(security)
+        implementation(hilt)
+        implementation(lifeCycleKtx)
+        implementation(lifecycleJava8)
+        implementation(splashScreen)
+        implementation(pagingRuntime)
+        implementation(workManager)
+        implementation(hiltWorkManager)
+    }
+
+    KaptDependencies.run {
+        kapt(hiltCompiler)
+        kapt(hiltWorkManagerCompiler)
+    }
+
+    implementation(MaterialDesignDependencies.materialDesign)
+
+    TestDependencies.run {
+        testImplementation(jUnit)
+        androidTestImplementation(androidTest)
+        androidTestImplementation(espresso)
+    }
+
+    ThirdPartyDependencies.run {
+        implementation(coil)
+        implementation(platform(okHttpBom))
+        implementation(okHttp)
+        implementation(okHttpLoggingInterceptor)
+        implementation(retrofit)
+        implementation(retrofitJsonConverter)
+        implementation(timber)
+        implementation(ossLicense)
+        implementation(progressView)
+        implementation(balloon)
+        implementation(lottie)
+        debugImplementation(flipperLeakCanary)
+        debugImplementation(leakCanary)
+        debugImplementation(soloader)
+    }
 }
