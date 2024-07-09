@@ -17,8 +17,15 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
     ActivityReviewMainBinding.inflate(it)
 }) {
 
-    private val imageViews: List<View> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
+    private val imageViews: List<View> by lazy {
+        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
     private var selectedImageUris: MutableList<String> = mutableListOf()
+
+    companion object {
+        private const val DATE_FORMAT = "yy.MM.dd"
+        private const val FRAGMENT_RESULT_KEY = "requestKey"
+        private const val SELECTED_IMAGES = "selected_images"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,43 +43,46 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
 
     private fun initDatePickerDialog() {
         val today = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
-        binding.tvDate.text = dateFormat.format(today.time)
-        binding.layoutDate.setOnClickListener {
-            val datePickerDialogFragment = DatePickerDialogFragment().apply {
-                onDateSelected = { year, month, day ->
-                    val selectedDate = Calendar.getInstance()
-                    selectedDate.set(year, month, day)
-                    binding.tvDate.text = dateFormat.format(selectedDate.time)
+        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+        with(binding) {
+            tvDate.text = dateFormat.format(today.time)
+            layoutDate.setOnClickListener {
+                val datePickerDialogFragment = DatePickerDialogFragment().apply {
+                    onDateSelected = { year, month, day ->
+                        val selectedDate = Calendar.getInstance()
+                        selectedDate.set(year, month, day)
+                        tvDate.text = dateFormat.format(selectedDate.time)
+                    }
                 }
+                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
             }
-            datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
         }
     }
 
     private fun setupFragmentResultListener() {
-        supportFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
-            val newSelectedImages = bundle.getStringArrayList("selected_images")
+        supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
+            val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
             newSelectedImages?.let { updateSelectedImages(it) }
         }
     }
 
     private fun updateSelectedImages(newImageUris: List<String>) {
         selectedImageUris.addAll(newImageUris)
-        binding.tvAddPhoto.isVisible = selectedImageUris.isEmpty()
-
-        for ((index, uri) in selectedImageUris.withIndex()) {
-            if (index < imageViews.size) {
-                val image = imageViews[index] as ImageView
-                image.isVisible = true
-                image.setImageURI(Uri.parse(uri))
+        with(binding) {
+            tvAddPhoto.isVisible = selectedImageUris.isEmpty()
+            for ((index, uri) in selectedImageUris.withIndex()) {
+                if (index < imageViews.size) {
+                    val image = imageViews[index] as ImageView
+                    image.isVisible = true
+                    image.setImageURI(Uri.parse(uri))
+                }
             }
-        }
-        if (selectedImageUris.size == 3) {
-            binding.svReviewPhoto.post {
-                binding.svReviewPhoto.fullScroll(View.FOCUS_RIGHT)
+            if (selectedImageUris.size == 3) {
+                svReviewPhoto.post {
+                    svReviewPhoto.fullScroll(View.FOCUS_RIGHT)
+                }
             }
+            btnAddPhoto.isVisible = selectedImageUris.size < imageViews.size
         }
-        binding.btnAddPhoto.isVisible = selectedImageUris.size < imageViews.size
     }
 }
