@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.databinding.ActivityReviewMainBinding
+import com.depromeet.presentation.extension.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -18,7 +19,7 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
 }) {
 
     private val imageViews: List<View> by lazy {
-        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
+        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)}
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     companion object {
@@ -32,6 +33,7 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
         initUploadDialog()
         initDatePickerDialog()
         setupFragmentResultListener()
+
     }
 
     private fun initUploadDialog() {
@@ -46,7 +48,7 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
         val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
         with(binding) {
             tvDate.text = dateFormat.format(today.time)
-            layoutDate.setOnClickListener {
+            layoutDate.setOnSingleClickListener {
                 val datePickerDialogFragment = DatePickerDialogFragment().apply {
                     onDateSelected = { year, month, day ->
                         val selectedDate = Calendar.getInstance()
