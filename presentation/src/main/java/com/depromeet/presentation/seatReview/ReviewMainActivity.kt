@@ -63,9 +63,14 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
 
         for ((index, uri) in selectedImageUris.withIndex()) {
             if (index < imageViews.size) {
-                val imageView = imageViews[index] as ImageView
-                imageView.isVisible = true
-                imageView.setImageURI(Uri.parse(uri))
+                val image = imageViews[index] as ImageView
+                image.isVisible = true
+                image.setImageURI(Uri.parse(uri))
+            }
+        }
+        if (selectedImageUris.size == 3) {
+            binding.svReviewPhoto.post {
+                binding.svReviewPhoto.fullScroll(View.FOCUS_RIGHT)
             }
         }
         binding.btnAddPhoto.isVisible = selectedImageUris.size < imageViews.size
