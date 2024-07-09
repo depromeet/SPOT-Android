@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomSpeechBubbleView">
+        <attr name="android:text" format="string"/>
+        <attr name="android:textSize" format="dimension"/>
+    </declare-styleable>
+</resources>
