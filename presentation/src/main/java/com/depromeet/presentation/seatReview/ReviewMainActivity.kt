@@ -30,7 +30,6 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
         val today = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
         binding.tvDate.text = dateFormat.format(today.time)
-
         binding.layoutDate.setOnSingleClickListener {
             val datePickerDialogFragment = DatePickerDialogFragment().apply {
                 onDateSelected = { year, month, day ->
