@@ -19,7 +19,8 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
 }) {
 
     private val imageViews: List<View> by lazy {
-        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)}
+        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)
+    }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     companion object {
@@ -33,7 +34,6 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
         initUploadDialog()
         initDatePickerDialog()
         setupFragmentResultListener()
-
     }
 
     private fun initUploadDialog() {
@@ -64,12 +64,20 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
     private fun setupFragmentResultListener() {
         supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
             val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
-            newSelectedImages?.let { updateSelectedImages(it) }
+            newSelectedImages?.let { addSelectedImages(it) }
         }
     }
 
-    private fun updateSelectedImages(newImageUris: List<String>) {
-        selectedImageUris.addAll(newImageUris)
+    private fun addSelectedImages(newImageUris: List<String>) {
+        for (uri in newImageUris) {
+            if (!selectedImageUris.contains(uri)) {
+                selectedImageUris.add(uri)
+            }
+        }
+        updateImageViews()
+    }
+
+    private fun updateImageViews() {
         with(binding) {
             tvAddPhoto.isVisible = selectedImageUris.isEmpty()
             for ((index, uri) in selectedImageUris.withIndex()) {
@@ -78,6 +86,10 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
                     image.isVisible = true
                     image.setImageURI(Uri.parse(uri))
                 }
+            }
+            for (index in selectedImageUris.size until imageViews.size) {
+                val image = imageViews[index] as ImageView
+                image.isVisible = false
             }
             if (selectedImageUris.size == 3) {
                 svReviewPhoto.post {
