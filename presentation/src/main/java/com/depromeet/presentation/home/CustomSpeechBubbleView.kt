@@ -17,6 +17,8 @@ class CustomSpeechBubbleView(context: Context, attrs: AttributeSet?) : View(cont
     private var text: String = ""
     private val textPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var textSize: Float = 0f
+    private var textColor: Int = 0
+    private var backgroundColor: Int = 0
     private val typedArray =
         context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView)
     private val paddingLeft = resources.getDimension(R.dimen.speech_bubble_padding_left)
@@ -27,18 +29,24 @@ class CustomSpeechBubbleView(context: Context, attrs: AttributeSet?) : View(cont
     private val triangleWidth = 20f
 
     init {
-        bubblePaint.color = context.getColor(R.color.black)
-        bubblePaint.style = Paint.Style.FILL
-
-        textPaint.color = context.getColor(R.color.white)
-
+        backgroundColor = typedArray.getColor(
+            R.styleable.CustomSpeechBubbleView_backgroundColor,
+            context.getColor(R.color.black)
+        )
+        textColor = typedArray.getColor(
+            R.styleable.CustomSpeechBubbleView_textColor,
+            context.getColor(R.color.white)
+        )
         textSize = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_android_textSize,
+            R.styleable.CustomSpeechBubbleView_textSize,
             resources.getDimension(R.dimen.speech_bubble_text_size)
         )
-        text = typedArray.getString(R.styleable.CustomSpeechBubbleView_android_text) ?: ""
+        text = typedArray.getString(R.styleable.CustomSpeechBubbleView_text) ?: ""
         typedArray.recycle()
 
+        bubblePaint.color = backgroundColor
+        bubblePaint.style = Paint.Style.FILL
+        textPaint.color = textColor
         textPaint.textSize = textSize
         textPaint.textAlign = Paint.Align.CENTER
     }

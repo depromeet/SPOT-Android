@@ -2,7 +2,9 @@
 <resources>
 
     <declare-styleable name="CustomSpeechBubbleView">
-        <attr name="android:text" format="string"/>
-        <attr name="android:textSize" format="dimension"/>
+        <attr name="text" format="string"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color" />
+        <attr name="backgroundColor" format="color"/>
     </declare-styleable>
 </resources>
