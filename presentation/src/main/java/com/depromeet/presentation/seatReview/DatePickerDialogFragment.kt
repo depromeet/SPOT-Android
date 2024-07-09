@@ -19,11 +19,7 @@ class DatePickerDialogFragment : BindingBottomSheetDialog<FragmentDatePickerBott
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.datePicker.init(
-            selectedYear,
-            selectedMonth,
-            selectedDay,
-        ) { _, year, month, day ->
+        binding.datePicker.init(selectedYear, selectedMonth, selectedDay,) { _, year, month, day ->
             selectedYear = year
             selectedMonth = month
             selectedDay = day

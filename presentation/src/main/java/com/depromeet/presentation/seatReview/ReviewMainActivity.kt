@@ -15,12 +15,18 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
 }) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initUploadDialog()
+        initDatePickerDialog()
+    }
 
+    private fun initUploadDialog() {
         binding.btnAddPhoto.setOnSingleClickListener {
             val uploadDialogFragment = UploadDialogFragment()
             uploadDialogFragment.show(supportFragmentManager, uploadDialogFragment.tag)
         }
+    }
 
+    private fun initDatePickerDialog() {
         val today = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
         binding.tvDate.text = dateFormat.format(today.time)
