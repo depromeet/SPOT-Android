@@ -61,7 +61,7 @@
     <LinearLayout
         android:id="@+id/layout_bottom"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,20 +95,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingStart="8dp"
                     android:paddingEnd="8dp">
 
                     <FrameLayout
-                        android:layout_width="150dp"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp">
 
                         <ImageView
+                            android:id="@+id/iv_first_image"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_launcher_background"
-                            android:visibility="gone" />
+                            android:src="@drawable/ic_launcher_background" />
 
                         <View
                             android:layout_width="match_parent"
@@ -117,15 +116,16 @@
                     </FrameLayout>
 
                     <FrameLayout
-                        android:layout_width="150dp"
+                        android:layout_width="200dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="8dp">
 
                         <ImageView
+                            android:id="@+id/second_image"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:visibility="gone" />
+                            android:src="@drawable/ic_launcher_background" />
 
                         <View
                             android:layout_width="match_parent"
@@ -134,16 +134,16 @@
                     </FrameLayout>
 
                     <FrameLayout
-                        android:layout_width="150dp"
+                        android:layout_width="200dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="8dp">
 
                         <ImageView
+                            android:id="@+id/iv_third_image"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_launcher_background"
-                            android:visibility="gone" />
+                            android:src="@drawable/ic_launcher_background" />
 
                         <View
                             android:layout_width="match_parent"
@@ -262,7 +262,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/shape_gray_fill_radius16"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -307,7 +307,6 @@
                     android:text="개의 후기"
                     android:textSize="13sp" />
             </LinearLayout>
-
             <ImageView
                 android:id="@+id/iv_next_my_Seat"
                 android:layout_width="wrap_content"
@@ -320,4 +319,20 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/uploadButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shape_gray_fill_raduis6"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="업로드"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

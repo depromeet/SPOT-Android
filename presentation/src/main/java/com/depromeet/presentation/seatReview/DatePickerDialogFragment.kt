@@ -5,8 +5,10 @@ import android.view.View
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentDatePickerBottomSheetBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class DatePickerDialogFragment : BindingBottomSheetDialog<FragmentDatePickerBottomSheetBinding>(
     R.layout.fragment_date_picker_bottom_sheet,
     FragmentDatePickerBottomSheetBinding::inflate,
