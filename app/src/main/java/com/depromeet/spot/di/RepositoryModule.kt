@@ -2,6 +2,7 @@ package com.depromeet.spot.di
 
 import com.depromeet.data.repository.ExampleRepositoryImpl
 import com.depromeet.domain.repository.ExampleRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,10 +11,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+abstract class RepositoryModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideMockRepository(mockRepositoryImpl: ExampleRepositoryImpl): ExampleRepository =
-        mockRepositoryImpl
+    abstract fun bindExampleRepository(
+        exampleRepositoryImpl: ExampleRepositoryImpl
+    ): ExampleRepository
 }
