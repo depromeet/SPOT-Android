@@ -60,7 +60,7 @@
 
     <LinearLayout
         android:id="@+id/layout_bottom"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@id/layout_top">
 
         <LinearLayout
-            android:id="@+id/layout_add_photo"
+            android:id="@+id/layout_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -93,63 +93,42 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="250dp"
                     android:orientation="horizontal"
                     android:paddingEnd="8dp">
 
-                    <FrameLayout
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp">
-
-                        <ImageView
-                            android:id="@+id/iv_first_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_launcher_background" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
+                    <TextView
+                        android:id="@+id/tv_add_photo"
                         android:layout_width="200dp"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp">
+                        android:gravity="center"
+                        android:text="야구장의 시야를 확인하세요 ! "
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:visibility="visible" />
 
-                        <ImageView
-                            android:id="@+id/second_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_launcher_background" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
+                    <ImageView
+                        android:id="@+id/iv_first_image"
                         android:layout_width="200dp"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp">
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:id="@+id/iv_third_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_launcher_background" />
+                    <ImageView
+                        android:id="@+id/iv_second_image"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </FrameLayout>
+                    <ImageView
+                        android:id="@+id/iv_third_image"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
                 </LinearLayout>
             </HorizontalScrollView>
         </LinearLayout>
