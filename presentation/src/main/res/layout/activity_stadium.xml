@@ -110,6 +110,8 @@
             android:id="@+id/iv_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:padding="10dp"
             android:src="@drawable/ic_close"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,11 +126,22 @@
             android:text="@string/viewfinder_zoom_description_statement"
             android:textColor="@color/white"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.3" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="39dp"
+            android:src="@drawable/ic_pinch_zoom"
+            app:layout_constraintEnd_toEndOf="@id/tv_zoom_description_statement"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="@id/tv_zoom_description_statement"
+            app:layout_constraintTop_toBottomOf="@id/tv_zoom_description_statement" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -137,10 +150,10 @@
         android:id="@+id/fcv_detail"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
