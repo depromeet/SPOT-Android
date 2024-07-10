@@ -17,8 +17,10 @@ import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 
+@AndroidEntryPoint
 class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBinding>(
     R.layout.fragment_upload_bottom_sheet,
     FragmentUploadBottomSheetBinding::inflate,
