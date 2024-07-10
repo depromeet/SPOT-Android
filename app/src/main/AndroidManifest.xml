@@ -20,7 +20,7 @@
         android:theme="@style/Theme.DepromeetAndroid"
         tools:targetApi="31">
         <activity
-         android:name="com.depromeet.presentation.MainActivity"
+            android:name="com.depromeet.presentation.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
@@ -28,6 +28,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.depromeet.presentation.seatReview.ReviewMainActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
+            android:exported="true"/>
     </application>
 
 </manifest>

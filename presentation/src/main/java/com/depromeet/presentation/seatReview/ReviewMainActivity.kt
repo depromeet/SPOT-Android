@@ -1,6 +1,5 @@
 package com.depromeet.presentation.seatReview
 
-import android.app.DatePickerDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -38,8 +37,9 @@ class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initUploadDialog()
         initDatePickerDialog()
+        initUploadDialog()
+        initReviewMySeatDialog()
         setupFragmentResultListener()
     }
 
@@ -47,6 +47,13 @@ class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
         binding.btnAddImage.setOnClickListener {
             val uploadDialogFragment = ImageUploadDialog()
             uploadDialogFragment.show(supportFragmentManager, uploadDialogFragment.tag)
+        }
+    }
+
+    private fun initReviewMySeatDialog() {
+        binding.layoutReviewMySeat.setOnSingleClickListener {
+            val reviewMySeatDialogFragment = ReviewMySeatDialog()
+            reviewMySeatDialogFragment.show(supportFragmentManager, reviewMySeatDialogFragment.tag)
         }
     }
 
