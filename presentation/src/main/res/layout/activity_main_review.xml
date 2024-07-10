@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@drawable/ic_chevron_left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/layout_date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_gray50_fill_30"
+            android:orientation="horizontal"
+            android:paddingVertical="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:textAlignment="center"
+                android:textColor="#121212"
+                android:textSize="13sp"
+                android:textFontWeight="500"
+                android:textStyle="normal"
+                tools:text="24.06.30" />
+
+            <ImageView
+                android:id="@+id/iv_edit_date"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_pencil" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_top">
+
+        <LinearLayout
+            android:id="@+id/layout_add_image"
+            android:layout_width="wrap_content"
+            android:layout_height="268dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:paddingEnd="16dp">
+
+            <ImageButton
+                android:id="@+id/btn_add_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                android:visibility="visible"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="118dp"
+                android:src="@drawable/ic_plus" />
+
+            <HorizontalScrollView
+                android:id="@+id/sv_add_image"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_weight="3">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/layout_add_default_image"
+                        android:layout_width="257dp"
+                        android:background="@drawable/rect_white_fill_gray200_dash_12"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_add_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="102dp"
+                            android:gravity="center"
+                            android:textFontWeight="700"
+                            android:textSize="16sp"
+                            android:text="야구장의 시야를 올려주세요 ⚾️"
+                            android:textColor="@color/black"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center"
+                            android:text="사진은 최대 3장,\n 15mb까지 올릴 수 있어요"
+                            android:textColor="#0088EF"
+                            android:textFontWeight="500"
+                            android:textStyle="normal"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_first_image"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/iv_second_image"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/iv_third_image"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="9dp"
+            android:layout_marginTop="20dp"
+            android:background="#F4F4F4" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_seat_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rect_gray200_fill_16"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_stadium_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="16dp"
+                android:text="잠실 야구장"
+                android:lineHeight="145dp"
+                android:paddingEnd="50dp"
+                android:textColor="#121212"
+                android:textFontWeight="700"
+                android:textStyle="normal"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginStart="16dp" />
+
+            <LinearLayout
+                android:id="@+id/layout_seat_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_next_stadium"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_seat_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    tools:text="네이비석" />
+
+                <TextView
+                    android:id="@+id/tv_seat_block"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginStart="3dp"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp"
+                    tools:text="304" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:text="블럭"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_column_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginStart="3dp"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp"
+                    tools:text="2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:text="열"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_seat_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginStart="3dp"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp"
+                    tools:text="19" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_next_stadium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_chevron_down"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_review_my_seat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/rect_gray200_fill_16"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_review_my_seat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="16dp"
+                android:text="내 자리 후기"
+                android:textSize="16sp"
+                android:lineHeight="145dp"
+                android:textColor="#121212"
+                android:textFontWeight="700"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginStart="16dp" />
+
+            <LinearLayout
+                android:id="@+id/tv_review_number"
+                android:layout_width="0dp"
+                android:layout_marginEnd="2dp"
+                android:visibility="invisible"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_next_my_seat"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    tools:text="3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:text="개의 후기"
+                    android:textColor="#9F9F9F"
+                    android:textFontWeight="500"
+                    android:textSize="13sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_next_my_seat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_chevron_down"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/uploadButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rect_gray200_fill_6"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="업로드"
+        android:textFontWeight="700"
+        android:textStyle="normal"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

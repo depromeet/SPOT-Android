@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
-import com.depromeet.presentation.databinding.ActivityReviewMainBinding
+import com.depromeet.presentation.databinding.ActivityMainReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -14,12 +16,16 @@ import java.util.Calendar
 import java.util.Locale
 
 @AndroidEntryPoint
-class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
-    ActivityReviewMainBinding.inflate(it)
+class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
+    ActivityMainReviewBinding.inflate(it)
 }) {
 
     private val imageViews: List<View> by lazy {
-        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)
+        listOf(
+            binding.ivFirstImage,
+            binding.ivSecondImage,
+            binding.ivThirdImage,
+        )
     }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
@@ -37,7 +43,7 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
     }
 
     private fun initUploadDialog() {
-        binding.btnAddPhoto.setOnClickListener {
+        binding.btnAddImage.setOnClickListener {
             val uploadDialogFragment = UploadDialogFragment()
             uploadDialogFragment.show(supportFragmentManager, uploadDialogFragment.tag)
         }
@@ -48,7 +54,7 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
         val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
         with(binding) {
             tvDate.text = dateFormat.format(today.time)
-            layoutDate.setOnSingleClickListener {
+            layoutDatePicker.setOnSingleClickListener {
                 val datePickerDialogFragment = DatePickerDialogFragment().apply {
                     onDateSelected = { year, month, day ->
                         val selectedDate = Calendar.getInstance()
@@ -79,12 +85,15 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
 
     private fun updateImageViews() {
         with(binding) {
-            tvAddPhoto.isVisible = selectedImageUris.isEmpty()
+            layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
             for ((index, uri) in selectedImageUris.withIndex()) {
                 if (index < imageViews.size) {
                     val image = imageViews[index] as ImageView
                     image.isVisible = true
                     image.setImageURI(Uri.parse(uri))
+                    image.load(Uri.parse(uri)) {
+                        transformations(RoundedCornersTransformation(26f))
+                    }
                 }
             }
             for (index in selectedImageUris.size until imageViews.size) {
@@ -92,11 +101,9 @@ class ReviewMainActivity : BaseActivity<ActivityReviewMainBinding>({
                 image.isVisible = false
             }
             if (selectedImageUris.size == 3) {
-                svReviewPhoto.post {
-                    svReviewPhoto.fullScroll(View.FOCUS_RIGHT)
-                }
+                svAddImage.post { svAddImage.fullScroll(View.FOCUS_RIGHT) }
             }
-            btnAddPhoto.isVisible = selectedImageUris.size < imageViews.size
+            btnAddImage.isVisible = selectedImageUris.size < imageViews.size
         }
     }
 }
