@@ -1,20 +1,23 @@
 package com.depromeet.designsystem
 
 import android.content.Intent
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.depromeet.designsystem.databinding.SpotSnackbarBinding
 import com.google.android.material.snackbar.Snackbar
 
 class SpotSnackBar(
     view: View,
-    message: String,
+    private val message: String,
+    private val endMessage: String,
     private val onClick: () -> Unit
 ) {
     companion object {
-        fun make(view: View, message: String = "", onClick: () -> Unit) =
-            SpotSnackBar(view, message, onClick)
+        fun make(view: View, message: String = "", endMessage: String = "", onClick: () -> Unit) =
+            SpotSnackBar(view, message, endMessage, onClick)
     }
 
     private val context = view.context
@@ -34,6 +37,11 @@ class SpotSnackBar(
             setPadding(0, 0, 0, 0)
             setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
             addView(snackbarBinding.root, 0)
+        }
+        with(snackbarBinding) {
+            tvDescription.text = message
+            tvTrigger.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            tvTrigger.text = endMessage
         }
     }
 
