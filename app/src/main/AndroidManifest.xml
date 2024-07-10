@@ -31,7 +31,7 @@
 
         <activity
             android:name="com.depromeet.presentation.seatReview.ReviewMainActivity"
-            android:exported="true"/>
+            android:exported="false"/>
     </application>
 
 </manifest>
