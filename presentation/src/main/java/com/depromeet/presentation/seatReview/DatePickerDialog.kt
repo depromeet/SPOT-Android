@@ -5,23 +5,28 @@ import android.view.View
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentDatePickerBottomSheetBinding
-import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
-@AndroidEntryPoint
 class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetBinding>(
     R.layout.fragment_date_picker_bottom_sheet,
     FragmentDatePickerBottomSheetBinding::inflate,
 ) {
     var onDateSelected: ((year: Int, month: Int, day: Int) -> Unit)? = null
-    private var selectedYear: Int = Calendar.getInstance().get(Calendar.YEAR)
-    private var selectedMonth: Int = Calendar.getInstance().get(Calendar.MONTH)
-    private var selectedDay: Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+
+    companion object {
+        private val calendarInstance: Calendar by lazy {
+            Calendar.getInstance()
+        }
+    }
+
+    private var selectedYear: Int = calendarInstance.get(Calendar.YEAR)
+    private var selectedMonth: Int = calendarInstance.get(Calendar.MONTH)
+    private var selectedDay: Int = calendarInstance.get(Calendar.DAY_OF_MONTH)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.dpDatePicker.init(selectedYear, selectedMonth, selectedDay,) { _, year, month, day ->
+        binding.dpDatePicker.init(selectedYear, selectedMonth, selectedDay) { _, year, month, day ->
             selectedYear = year
             selectedMonth = month
             selectedDay = day
