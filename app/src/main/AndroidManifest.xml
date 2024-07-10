@@ -28,11 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="com.depromeet.presentation.seatReview.ReviewMainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true"/>
     </application>
 
 </manifest>
