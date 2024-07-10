@@ -7,4 +7,5 @@
     <dimen name="speech_bubble_padding_top">4dp</dimen>
     <dimen name="speech_bubble_padding_bottom">4dp</dimen>
     <dimen name="speech_bubble_triangle_height">6dp</dimen>
+    <dimen name="speech_bubble_triangle_width">6dp</dimen>
 </resources>

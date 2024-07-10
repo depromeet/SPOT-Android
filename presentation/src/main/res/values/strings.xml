@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DepromeetAndroid</string>
+    <string name="home_highlight_register">"<b>"하이라이트"</b>"를 남기면 그 자리의 <b>시야</b>도 <b>자동 등록</b>돼요</string>
+    <string name="home_find_sight">시야 찾기</string>
+    <string name="home_my_highlight">나의 하이라이트</string>
+    <string name="home_my_highlight_description">나만의 특별한\n직관 하이라이트를 모아요</string>
+    <string name="home_find_sight_description">원하는 자리의 시야를 쉽게 찾아봐요!</string>
+    <string name="highlight">하이라이트</string>
 </resources>
