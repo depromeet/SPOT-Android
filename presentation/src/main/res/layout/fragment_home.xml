@@ -1,8 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    
+    <View
+        android:id="@+id/view_home_area"
+        android:layout_width="0dp"
+        android:layout_height="320dp"
+        android:background="#AAD5D5D5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <ImageButton
+        android:id="@+id/ib_home_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_setting"
+        app:layout_constraintEnd_toStartOf="@id/gl_end"
+        app:layout_constraintTop_toBottomOf="@id/gl_top" />
+
+    <com.depromeet.presentation.home.CustomSpeechBubbleView
+        android:id="@+id/csbv_home_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        app:backgroundColor="#AFAFAF"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@+id/ib_home_setting"
+        app:text="Lv.1"
+        app:textColor="@color/white"
+        app:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_home_level_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="직관 첫걸음"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/csbv_home_level" />
+
+    <ProgressBar
+        android:id="@+id/pb_home_level"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="16dp"
+        android:max="36"
+        android:progress="30"
+        android:progressDrawable="@drawable/rect_white_fill_gray900_part_10"
+        app:layout_constraintEnd_toEndOf="@id/tv_home_level_name"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_level_name" />
+
+    <TextView
+        android:id="@+id/tv_home_highlight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/highlight"
+        android:textColor="#606060"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/pb_home_level" />
+
+    <TextView
+        android:id="@+id/tv_home_highlight_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/2"
+        app:layout_constraintEnd_toEndOf="@id/pb_home_level"
+        app:layout_constraintTop_toTopOf="@id/tv_home_highlight" />
+
+    <ImageView
+        android:id="@+id/iv_home_profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_default_profile"
+        app:layout_constraintEnd_toStartOf="@id/gl_end"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_home_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintBottom_toBottomOf="@id/iv_home_profile"
+        app:layout_constraintEnd_toEndOf="@id/gl_end" />
+
+    <TextView
+        android:id="@+id/tv_home_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#C8C8C8"
+        android:paddingHorizontal="22dp"
+        android:paddingVertical="7dp"
+        android:text="디자이너프로그래머"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_profile" />
+
+
+    <TextView
+        android:id="@+id/tv_home_highlight_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="야구 팬들이 나의 시야 후기를\n 기다리고 있어요!👀"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_highlight" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_main_sight"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/rect_gray100_fill_24"
+        android:padding="24dp"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintStart_toStartOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/view_home_area">
+
+        <ImageView
+            android:id="@+id/iv_home_sight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_stadium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_home_find_sight"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginEnd="21dp"
+            android:text="@string/home_find_sight"
+            android:textColor="#121212"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_home_sight_next"
+            app:layout_constraintEnd_toStartOf="@id/iv_home_sight_next"
+            app:layout_constraintTop_toTopOf="@id/iv_home_sight_next" />
+
+        <TextView
+            android:id="@+id/tv_home_find_sight_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/home_find_sight_description"
+            android:textColor="#606060"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_home_find_sight"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_find_sight" />
+
+        <ImageView
+            android:id="@+id/iv_home_sight_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_main_highlight"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/rect_gray100_fill_24"
+        android:padding="24dp"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintStart_toStartOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/cl_main_sight">
+
+        <ImageView
+            android:id="@+id/iv_home_my_highlight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_highlight_off"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_home_my_highlight"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginEnd="21dp"
+            android:text="@string/home_my_highlight"
+            android:textColor="#121212"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_home_highlight_next"
+            app:layout_constraintEnd_toStartOf="@id/iv_home_highlight_next"
+            app:layout_constraintTop_toTopOf="@id/iv_home_highlight_next" />
+
+        <TextView
+            android:id="@+id/tv_home_my_highlight_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/home_my_highlight_description"
+            android:textColor="#606060"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_home_my_highlight"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_my_highlight" />
+
+        <ImageView
+            android:id="@+id/iv_home_highlight_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.depromeet.presentation.home.CustomSpeechBubbleView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:backgroundColor="#4A4A4A"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/ibtn_home_register"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintStart_toStartOf="@id/gl_start"
+        app:paddingBottom="10dp"
+        app:paddingEnd="20dp"
+        app:paddingStart="20dp"
+        app:paddingTop="10dp"
+        app:text="@string/home_highlight_register"
+        app:textColor="@color/white"
+        app:triangleHeight="15dp"
+        app:triangleWidth="12dp" />
+
+    <ImageButton
+        android:id="@+id/ibtn_home_register"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circle_0c0c0c_fill"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintBottom_toTopOf="@id/gl_bottom"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintStart_toStartOf="@id/gl_start" />
 </androidx.constraintlayout.widget.ConstraintLayout>
