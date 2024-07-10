@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.designsystem.SpotSnackBar
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumSelectionBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.viewfinder.adapter.GridSpacingItemDecoration
@@ -51,9 +52,13 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             object : StadiumSelectionAdapter.OnItemStadiumClickListener {
                 override fun onItemStadiumClick(stadium: Stadium) {
                     if (stadium.lock) {
-                        SpotSnackBar.make(view = binding.root, onClick = {
-                            startStadiumActivity(stadium)
-                        }).show()
+                        SpotSnackBar.make(
+                            view = binding.root,
+                            message = getString(R.string.viewfinder_lock_warning_description),
+                            endMessage = getString(R.string.viewfinder_lock_warning_trigger),
+                            onClick = {
+                                startStadiumActivity(stadium)
+                            }).show()
                     } else {
                         startStadiumActivity(stadium)
                     }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SpotAppbar">
+        <attr name="android:text" format="string|reference"/>
+        <attr name="android:textSize" format="dimension|reference"/>
+        <attr name="android:textColor" format="color|reference"/>
+        <attr name="navigationIcon" format="reference"/>
+    </declare-styleable>
+</resources>
