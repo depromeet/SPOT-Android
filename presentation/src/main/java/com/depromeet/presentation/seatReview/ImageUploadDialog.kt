@@ -11,6 +11,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
@@ -48,9 +49,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         pickMultipleMediaLauncher =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
                 val uriList = uris.map { it.toString() }
-                val bundle = Bundle().apply {
-                    putStringArrayList(SELECTED_IMAGES, ArrayList(uriList))
-                }
+                val bundle = bundleOf(SELECTED_IMAGES to uriList)
                 setFragmentResult(REQUEST_KEY, bundle)
                 dismiss()
             }
