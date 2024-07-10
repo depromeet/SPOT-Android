@@ -76,18 +76,14 @@ class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
     }
 
     private fun addSelectedImages(newImageUris: List<String>) {
-        for (uri in newImageUris) {
-            if (!selectedImageUris.contains(uri)) {
-                selectedImageUris.add(uri)
-            }
-        }
+        selectedImageUris.addAll(newImageUris.filterNot { selectedImageUris.contains(it) })
         updateImageViews()
     }
 
     private fun updateImageViews() {
         with(binding) {
             layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
-            for ((index, uri) in selectedImageUris.withIndex()) {
+            selectedImageUris.forEachIndexed { index, uri ->
                 if (index < imageViews.size) {
                     val image = imageViews[index] as ImageView
                     image.isVisible = true
