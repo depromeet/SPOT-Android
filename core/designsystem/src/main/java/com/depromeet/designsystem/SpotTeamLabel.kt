@@ -55,11 +55,6 @@ class SpotTeamLabel @JvmOverloads constructor(
 
     init {
         initView()
-        context.theme.obtainStyledAttributes(
-            attributeSet, R.styleable.SpotTeamLabel, defStyleAttr, defStyleAttr
-        ).let { typedArray ->
-            typedArray.recycle()
-        }
     }
 
     private fun initView() {
