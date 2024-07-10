@@ -75,10 +75,10 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     }
 
     private fun setupUploadMethod() {
-        binding.btnGallery.setOnSingleClickListener {
+        binding.layoutGallery.setOnSingleClickListener {
             pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-        binding.btnTakePhoto.setOnSingleClickListener {
+        binding.layoutTakePhoto.setOnSingleClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePhotoLauncher.launch(takePictureIntent)
         }

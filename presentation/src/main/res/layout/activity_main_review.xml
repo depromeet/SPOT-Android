@@ -121,6 +121,7 @@
                             android:textStyle="normal" />
 
                         <TextView
+                            android:id="@+id/tv_add_image_warning"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -165,7 +166,7 @@
             android:background="#F4F4F4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btn_seat_info"
+            android:id="@+id/layout_seat_info_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -280,7 +281,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btn_review_my_seat"
+            android:id="@+id/layout_review_my_seat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -308,7 +309,7 @@
                 app:layout_goneMarginStart="16dp" />
 
             <LinearLayout
-                android:id="@+id/tv_review_number"
+                android:id="@+id/layout_review_number"
                 android:layout_width="0dp"
                 android:layout_marginEnd="2dp"
                 android:visibility="invisible"
@@ -352,7 +353,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/uploadButton"
+        android:id="@+id/tv_upload_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
