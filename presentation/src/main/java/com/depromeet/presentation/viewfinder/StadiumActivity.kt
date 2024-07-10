@@ -1,10 +1,7 @@
 package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
-import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -13,14 +10,12 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.designsystem.SpotTeamLabel
-import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.depromeet.presentation.extension.getCompatibleParcelableExtra
-import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.util.getHTMLBody
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumViewModel
-import kotlin.math.abs
+import com.depromeet.presentation.viewfinder.web.AndroidBridge
 
 class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     ActivityStadiumBinding.inflate(it)
@@ -32,31 +27,16 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private val viewModel: StadiumViewModel by viewModels()
-    private val stadiumDetailFragment by lazy {
-        StadiumDetailFragment.newInstance()
-    }
+//    private val stadiumDetailFragment by lazy {
+//        StadiumDetailFragment.newInstance()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setStadiumExtra()
         setUpWebClient()
 
-        val arg =
-            intent?.getCompatibleParcelableExtra<Stadium>(StadiumSelectionActivity.STADIUM_EXTRA)
-
-        with(binding) {
-            tvStadiumTitle.text = arg?.title
-            ivStadium.load(arg?.imageUrl) {
-                transformations(RoundedCornersTransformation(10f))
-            }
-            arg?.team?.forEach { label ->
-                llStadiumTeamLabel.addView(
-                    SpotTeamLabel(this@StadiumActivity).apply {
-                        teamType = label
-                    }
-                )
-            }
-        }
         binding.spotAppbar.setNavigationOnClickListener {
             finish()
         }
@@ -80,13 +60,33 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }
     }
 
+    private fun setStadiumExtra() {
+        intent?.getCompatibleParcelableExtra<Stadium>(StadiumSelectionActivity.STADIUM_EXTRA)
+            ?.let { stadium ->
+                binding.tvStadiumTitle.text = stadium.title
+                binding.ivStadium.load(stadium.imageUrl) {
+                    transformations(RoundedCornersTransformation(10f))
+                }
+                stadium.team.forEach { label ->
+                    binding.llStadiumTeamLabel.addView(
+                        SpotTeamLabel(this).apply {
+                            teamType = label
+                        }
+                    )
+                }
+            }
+    }
+
     private fun setUpWebClient() {
         binding.wvStadium.settings.builtInZoomControls = true
         binding.wvStadium.settings.displayZoomControls = false
         binding.wvStadium.settings.javaScriptEnabled = true
         binding.wvStadium.settings.domStorageEnabled = true
+        binding.wvStadium.settings.useWideViewPort = true
         binding.wvStadium.addJavascriptInterface(
-            JavaScriptInterface(),
+            AndroidBridge { fromWeb ->
+                startToStadiumDetailFragment()
+            },
             JAVASCRIPT_OBJ
         )
         binding.wvStadium.webViewClient = object : WebViewClient() {
@@ -110,6 +110,15 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.wvStadium.webChromeClient = WebChromeClient()
     }
 
+    private fun startToStadiumDetailFragment() {
+//        val bundle = Bundle()
+//        bundle.putString(STADIUM_AREA, fromWeb)
+//        stadiumDetailFragment.arguments = bundle
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.fcv_detail, stadiumDetailFragment, StadiumDetailFragment.TAG)
+//            .commit()
+    }
+
     private fun resetZoom() {
         binding.wvStadium.evaluateJavascript("javascript:resetZoom()", null)
     }
@@ -120,20 +129,15 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.wvStadium.loadUrl(textToAndroid)
     }
 
-    inner class JavaScriptInterface {
-        @JavascriptInterface
-        fun textFromWeb(fromWeb: String) {
-            val bundle = Bundle()
-            bundle.putString(STADIUM_AREA, fromWeb)
-            stadiumDetailFragment.arguments = bundle
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fcv_detail, stadiumDetailFragment, StadiumDetailFragment.TAG)
-                .commit()
-        }
-    }
-
     override fun onDestroy() {
-        binding.wvStadium.removeJavascriptInterface(JAVASCRIPT_OBJ)
+        binding.wvStadium.apply {
+            removeJavascriptInterface(JAVASCRIPT_OBJ)
+            webChromeClient = null
+            clearCache(true)
+            clearHistory()
+            removeAllViews()
+            destroy()
+        }
         super.onDestroy()
     }
 }
