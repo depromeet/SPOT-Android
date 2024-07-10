@@ -18,7 +18,7 @@ import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import java.io.ByteArrayOutputStream
 
-class UploadDialogFragment : BindingBottomSheetDialog<FragmentUploadBottomSheetBinding>(
+class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBinding>(
     R.layout.fragment_upload_bottom_sheet,
     FragmentUploadBottomSheetBinding::inflate,
 ) {
@@ -26,6 +26,7 @@ class UploadDialogFragment : BindingBottomSheetDialog<FragmentUploadBottomSheetB
     companion object {
         private const val REQUEST_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
+        private const val IMAGE_TITLE = "image"
     }
 
     private lateinit var pickMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
@@ -33,8 +34,14 @@ class UploadDialogFragment : BindingBottomSheetDialog<FragmentUploadBottomSheetB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
         setupPickMultipleMediaLauncher()
         setupTakePhotoLauncher()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupUploadMethod()
     }
 
     private fun setupPickMultipleMediaLauncher() {
@@ -67,16 +74,7 @@ class UploadDialogFragment : BindingBottomSheetDialog<FragmentUploadBottomSheetB
             }
     }
 
-    private fun getImageUri(context: Context, bitmap: Bitmap): Uri {
-        val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path =
-            MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Image", null)
-        return Uri.parse(path)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setupUploadMethod() {
         binding.btnGallery.setOnSingleClickListener {
             pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
@@ -84,5 +82,17 @@ class UploadDialogFragment : BindingBottomSheetDialog<FragmentUploadBottomSheetB
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePhotoLauncher.launch(takePictureIntent)
         }
+    }
+
+    private fun getImageUri(context: Context, bitmap: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            context.contentResolver,
+            bitmap,
+            IMAGE_TITLE,
+            null,
+        )
+        return Uri.parse(path)
     }
 }

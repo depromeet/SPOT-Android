@@ -143,7 +143,7 @@
                         android:id="@+id/iv_second_image"
                         android:layout_width="200dp"
                         android:clipToOutline="true"
-                        android:background="@drawable/shape_gray600_fill_radius12"
+                        android:background="@drawable/rect_gray600_fill_12"
                         android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
                         android:scaleType="centerCrop"

@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatReview
 
+import android.app.DatePickerDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -44,7 +45,7 @@ class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
 
     private fun initUploadDialog() {
         binding.btnAddImage.setOnClickListener {
-            val uploadDialogFragment = UploadDialogFragment()
+            val uploadDialogFragment = ImageUploadDialog()
             uploadDialogFragment.show(supportFragmentManager, uploadDialogFragment.tag)
         }
     }
@@ -55,7 +56,7 @@ class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
         with(binding) {
             tvDate.text = dateFormat.format(today.time)
             layoutDatePicker.setOnSingleClickListener {
-                val datePickerDialogFragment = DatePickerDialogFragment().apply {
+                val datePickerDialogFragment = DatePickerDialog().apply {
                     onDateSelected = { year, month, day ->
                         val selectedDate = Calendar.getInstance()
                         selectedDate.set(year, month, day)

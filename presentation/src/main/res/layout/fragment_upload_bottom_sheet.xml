@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_white_fill_top32">
+    android:background="@drawable/rect_white_fill_32">
 
     <View
         android:id="@+id/iv_handler"
         android:layout_width="36dp"
         android:layout_height="5dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/shape_gray600_fill_radius12"
+        android:background="@drawable/rect_gray600_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,9 @@
         android:layout_marginTop="24dp"
         android:gravity="center"
         android:text="업로드"
-        android:textColor="#333333"
+        android:textColor="#121212"
+        android:textFontWeight="700"
+        android:textStyle="normal"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="사진 촬영"
+                android:textFontWeight="500"
+                android:textStyle="normal"
                 android:gravity="center"
                 android:textColor="#4A4A4A"
                 android:textSize="16sp" />
@@ -84,6 +88,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="갤러리에서 선택"
+                android:textFontWeight="500"
+                android:textStyle="normal"
                 android:gravity="center"
                 android:textColor="#4A4A4A"
                 android:textSize="16sp" />

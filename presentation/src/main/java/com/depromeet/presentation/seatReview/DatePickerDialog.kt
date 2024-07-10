@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
 @AndroidEntryPoint
-class DatePickerDialogFragment : BindingBottomSheetDialog<FragmentDatePickerBottomSheetBinding>(
+class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetBinding>(
     R.layout.fragment_date_picker_bottom_sheet,
     FragmentDatePickerBottomSheetBinding::inflate,
 ) {
