@@ -52,7 +52,7 @@ fun StadiumSeatCheckBox(
             text = if (seat.selected) {
                 "${seat.column}열 ${seat.number}번"
             } else {
-                "?열 ??번"
+                "좌석 시야"
             },
             fontSize = 13.sp,
             color = if (seat.selected) {
