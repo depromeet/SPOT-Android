@@ -78,11 +78,13 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private fun setUpWebClient() {
-        binding.wvStadium.settings.builtInZoomControls = true
-        binding.wvStadium.settings.displayZoomControls = false
-        binding.wvStadium.settings.javaScriptEnabled = true
-        binding.wvStadium.settings.domStorageEnabled = true
-        binding.wvStadium.settings.useWideViewPort = true
+        binding.wvStadium.settings.apply {
+            builtInZoomControls = true
+            displayZoomControls = false
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            useWideViewPort = true
+        }
         binding.wvStadium.addJavascriptInterface(
             AndroidBridge { fromWeb ->
                 startToStadiumDetailFragment()
