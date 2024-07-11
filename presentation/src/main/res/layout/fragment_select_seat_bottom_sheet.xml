@@ -80,12 +80,14 @@
                 android:layout_width="59dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="27dp"
+                android:visibility="gone"
                 android:background="@drawable/rect_gray900_fill"
                 android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/sv_select_seat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/tv_next_btn"
@@ -157,18 +159,18 @@
     </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_seat_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/tv_next_btn"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
         <LinearLayout
-            android:id="@+id/layout_seat_number"
+            android:id="@+id/layout_seat_number_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -305,7 +307,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
 
-
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -325,12 +326,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="208dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/rect_gray200_fill_6"
         android:gravity="center"
         android:paddingVertical="16dp"
         android:text="저장 후 이동"
+        android:textColor="@color/white"
+        android:textFontWeight="700"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_complete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rect_gray200_fill_6"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="완료"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textStyle="normal"
