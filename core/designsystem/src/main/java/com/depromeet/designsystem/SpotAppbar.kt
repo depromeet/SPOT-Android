@@ -21,12 +21,14 @@ class SpotAppbar @JvmOverloads constructor(
         context.theme.obtainStyledAttributes(
             attributeSet, R.styleable.SpotAppbar, defStyleAttr, defStyleAttr
         ).let { typedArray ->
-            binding.tvTitle.text = typedArray.getString(R.styleable.SpotAppbar_android_text).toString()
-            binding.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, typedArray.getDimension(
-                R.styleable.SpotAppbar_android_textSize, 0f
-            ))
-            binding.tvTitle.setTextColor(typedArray.getColor(R.styleable.SpotAppbar_android_textColor, 0))
-            binding.ivNav.setBackgroundResource(typedArray.getResourceId(R.styleable.SpotAppbar_navigationIcon, 0))
+            with(binding) {
+                tvTitle.text = typedArray.getString(R.styleable.SpotAppbar_android_text).toString()
+                tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, typedArray.getDimension(
+                    R.styleable.SpotAppbar_android_textSize, 0f
+                ))
+                tvTitle.setTextColor(typedArray.getColor(R.styleable.SpotAppbar_android_textColor, 0))
+                ivNav.setBackgroundResource(typedArray.getResourceId(R.styleable.SpotAppbar_navigationIcon, 0))
+            }
             typedArray.recycle()
         }
     }
