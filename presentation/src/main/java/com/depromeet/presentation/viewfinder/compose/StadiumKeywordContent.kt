@@ -1,6 +1,5 @@
 package com.depromeet.presentation.viewfinder.compose
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,73 +31,76 @@ fun StadiumKeywordContent(
     modifier: Modifier = Modifier,
     onChangeIsMore: (isMore: Boolean) -> Unit,
 ) {
-    if (isMore) {
-        repeat(keywords.size) {
-            StadiumKeywordRow(
-                keyword = keywords[it],
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-        }
-        Spacer(modifier = Modifier.height(6.dp))
-        Text(
-            text = "가장 많이 선정된 ${keywords.size}개의 키워드만 보여줘요",
-            fontSize = 12.sp,
-            color = Color(0xFF606060),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.ic_up),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(12.dp)
-                .clickable { onChangeIsMore(false) }
-        )
-    } else {
-        when {
-            keywords.isEmpty() -> Unit
-
-            keywords.size in 1..3 -> {
-                repeat(keywords.size) {
-                    StadiumKeywordRow(
-                        keyword = keywords[it],
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                }
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = "가장 많이 선정된 ${keywords.size}개의 키워드만 보여줘요",
-                    fontSize = 12.sp,
-                    color = Color(0xFF606060),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
+    Column {
+        Spacer(modifier = Modifier.height(20.dp))
+        if (isMore) {
+            repeat(keywords.size) {
+                StadiumKeywordRow(
+                    keyword = keywords[it],
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
+                Spacer(modifier = Modifier.height(6.dp))
             }
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = "가장 많이 선정된 ${keywords.size}개의 키워드만 보여줘요",
+                fontSize = 12.sp,
+                color = Color(0xFF606060),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_up),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(12.dp)
+                    .clickable { onChangeIsMore(false) }
+            )
+        } else {
+            when {
+                keywords.isEmpty() -> Unit
 
-            keywords.size > 3 -> {
-                repeat(3) {
-                    if (it == 2) {
-                        Box(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            DownKeywordBlind(
-                                modifier = Modifier.zIndex(1f),
-                                onClickMore = { onChangeIsMore(true) }
-                            )
+                keywords.size in 1..3 -> {
+                    repeat(keywords.size) {
+                        StadiumKeywordRow(
+                            keyword = keywords[it],
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = "가장 많이 선정된 ${keywords.size}개의 키워드만 보여줘요",
+                        fontSize = 12.sp,
+                        color = Color(0xFF606060),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                keywords.size > 3 -> {
+                    repeat(3) {
+                        if (it == 2) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                DownKeywordBlind(
+                                    modifier = Modifier.zIndex(1f),
+                                    onClickMore = { onChangeIsMore(true) }
+                                )
+                                StadiumKeywordRow(
+                                    keyword = keywords[it],
+                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                )
+                            }
+                        } else {
                             StadiumKeywordRow(
                                 keyword = keywords[it],
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
                         }
-                    } else {
-                        StadiumKeywordRow(
-                            keyword = keywords[it],
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
+                        Spacer(modifier = Modifier.height(6.dp))
                     }
-                    Spacer(modifier = Modifier.height(6.dp))
                 }
             }
         }

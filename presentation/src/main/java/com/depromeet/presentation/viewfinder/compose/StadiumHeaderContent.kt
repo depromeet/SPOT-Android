@@ -2,6 +2,7 @@ package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.depromeet.presentation.viewfinder.sample.Keyword
 import com.depromeet.presentation.viewfinder.sample.Seat
 import com.depromeet.presentation.viewfinder.sample.Stadium
@@ -49,13 +51,17 @@ fun StadiumHeaderContent(
 
         StadiumSeatCheckBox(seat = Seat(100, 11, false))
 
-        Spacer(modifier = Modifier.height(20.dp))
-        StadiumKeywordContent(
-            isMore = isMore,
-            keywords = keywords,
-            onChangeIsMore = onChangeIsMore
-        )
-
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            StadiumKeywordContent(
+                isMore = isMore,
+                keywords = keywords,
+                onChangeIsMore = onChangeIsMore
+            )
+            CustomTooltip(modifier = Modifier.zIndex(1f))
+        }
         Divider(
             color = Color(0xFFF4F4F4),
             thickness = 10.dp,
