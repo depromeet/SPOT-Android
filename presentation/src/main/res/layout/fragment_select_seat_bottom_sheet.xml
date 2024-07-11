@@ -114,6 +114,7 @@
                 tools:listitem="@layout/item_select_seat" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_seat_again"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp"
@@ -145,6 +146,7 @@
                     app:layout_constraintTop_toTopOf="@+id/tv_seat_again" />
 
                 <ImageView
+                    android:id="@+id/iv_seat_again"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
                     android:layout_marginBottom="16dp"
@@ -287,36 +289,47 @@
                     app:layout_constraintStart_toEndOf="@+id/tv_what_column"
                     app:layout_constraintTop_toTopOf="@+id/tv_what_column" />
 
-                <TextView
-                    android:id="@+id/tv_description_one"
+                <LinearLayout
+                    android:id="@+id/layout_column_description"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요."
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_what_column" />
-
-                <TextView
-                    android:id="@+id/tv_description_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:paddingHorizontal="16dp"
-                    android:text="• ex. 2열 7번좌석"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="16dp"
-                    android:src="@drawable/ic_column_example"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_description_two" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_description_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="16dp"
+                        android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요."
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_what_column" />
+
+                    <TextView
+                        android:id="@+id/tv_description_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:paddingHorizontal="16dp"
+                        android:text="• ex. 2열 7번좌석"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_column_example"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_description_two" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
