@@ -67,7 +67,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_shadow_zone"
+                android:id="@+id/tv_good_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/sel_review_color_seat_review"
@@ -79,14 +79,14 @@
                 android:textStyle="normal" />
 
             <TextView
-                android:id="@+id/tv_at_glance"
+                android:id="@+id/tv_good_two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
-                android:text="👀 경기 전반을 한눈에"
+                android:text="🏟️ 좋은 시야각"
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
@@ -99,7 +99,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_cheer_fire"
+                android:id="@+id/tv_good_three"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/sel_review_color_seat_review"
@@ -111,14 +111,14 @@
                 android:textStyle="normal" />
 
             <TextView
-                android:id="@+id/tv_player_face"
+                android:id="@+id/tv_good_four"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
-                android:text="✨ 선수얼굴 관람석"
+                android:text="🚶 가까운 출입구"
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
@@ -131,14 +131,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_comfort"
+                android:id="@+id/tv_good_five"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
-                android:text="⚾️ 편안한 야구관람"
+                android:text="💺️ 충분한 다리 공간"
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
@@ -171,7 +171,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_all_sunshine"
+                android:id="@+id/tv_bad_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/sel_review_color_seat_review"
@@ -183,14 +183,14 @@
                 android:textStyle="normal" />
 
             <TextView
-                android:id="@+id/tv_obstacle"
+                android:id="@+id/tv_bad_two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
-                android:text="🛠️ 앞을 가리는 장애물"
+                android:text="🤢 벌레가 많은 자리"
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
@@ -203,9 +203,22 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_net"
+                android:id="@+id/tv_bad_three"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/sel_review_color_seat_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp"
+                android:text="🥤 컵홀더가 없는 자리"
+                android:textColor="#121212"
+                android:textFontWeight="500"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/tv_bad_four"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
@@ -213,33 +226,40 @@
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_noisy_speaker"
+                android:id="@+id/tv_bad_five"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_review_color_seat_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp"
+                android:text="🥲 너무 먼 시야"
+                android:textColor="#121212"
+                android:textFontWeight="500"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/tv_bad_six"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
-                android:text="📢 시끄러운 스피커"
+                android:text="🪟 앞을 가리는 유리판"
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_so_far"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/sel_review_color_seat_review"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="10dp"
-            android:text="🥲 너무 먼 시야"
-            android:textColor="#121212"
-            android:textFontWeight="500"
-            android:textStyle="normal" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
