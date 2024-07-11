@@ -15,6 +15,8 @@ import androidx.lifecycle.asLiveData
 import coil.load
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.databinding.ActivityHomeBinding
+import com.depromeet.presentation.home.viewmodel.HomeUiState
+import com.depromeet.presentation.home.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

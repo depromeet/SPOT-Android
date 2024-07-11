@@ -1,4 +1,4 @@
-package com.depromeet.presentation.home
+package com.depromeet.presentation.home.viewmodel
 
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel

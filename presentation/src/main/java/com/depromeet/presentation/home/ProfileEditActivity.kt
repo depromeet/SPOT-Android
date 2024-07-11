@@ -4,6 +4,9 @@ import android.os.Bundle
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
+import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
+import com.depromeet.presentation.home.adapter.ProfileEditTeamAdapter
+import com.depromeet.presentation.home.adapter.UITeamData
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

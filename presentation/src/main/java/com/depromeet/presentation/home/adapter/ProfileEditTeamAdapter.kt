@@ -1,4 +1,4 @@
-package com.depromeet.presentation.home
+package com.depromeet.presentation.home.adapter
 
 import android.graphics.Rect
 import android.view.LayoutInflater

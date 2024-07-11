@@ -1,7 +1,7 @@
 package com.depromeet.presentation.home.mockData
 
 import android.os.Parcelable
-import com.depromeet.presentation.home.HomeUiState
+import com.depromeet.presentation.home.viewmodel.HomeUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
