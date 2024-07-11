@@ -94,6 +94,7 @@ val Compose = listOf(
     "androidx.compose.material:material:${Versions.composeVersion}",
     "androidx.compose.animation:animation:${Versions.composeVersion}",
     "androidx.compose.ui:ui:${Versions.composeVersion}",
+    "androidx.compose.ui:ui-tooling:${Versions.composeVersion}",
     "androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}",
     "androidx.compose.foundation:foundation:${Versions.composeVersion}",
     "androidx.compose.material:material-icons-core:${Versions.composeVersion}",
@@ -102,7 +103,7 @@ val Compose = listOf(
     "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07",
     "androidx.hilt:hilt-navigation-compose:1.0.0",
     "androidx.paging:paging-compose:1.0.0-alpha14",
-    "io.coil-kt:coil-compose:1.4.0",
+    "io.coil-kt:coil-compose:2.6.0"
 )
 
 object ComposeDependency {

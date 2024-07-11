@@ -17,6 +17,9 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.6"
+    }
     compileOptions {
         sourceCompatibility = Versions.javaVersion
         targetCompatibility = Versions.javaVersion
@@ -29,6 +32,7 @@ android {
         dataBinding = true
         viewBinding = true
         buildConfig = true
+        compose = true
     }
 }
 
@@ -88,6 +92,10 @@ dependencies {
         debugImplementation(flipperLeakCanary)
         debugImplementation(leakCanary)
         debugImplementation(soloader)
+    }
+
+    Compose.forEach {
+        implementation(it)
     }
 }
 
