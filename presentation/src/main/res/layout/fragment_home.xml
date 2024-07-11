@@ -19,28 +19,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
+        app:layout_constraintGuide_end="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="16dp" />
+        app:layout_constraintGuide_end="20dp" />
 
     <ImageButton
         android:id="@+id/ib_home_setting"
@@ -92,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="@string/highlight"
+        android:text="하이라이트"
         android:textColor="#606060"
         app:layout_constraintStart_toEndOf="@id/gl_start"
         app:layout_constraintTop_toBottomOf="@id/pb_home_level" />
@@ -172,7 +172,7 @@
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_marginEnd="21dp"
-            android:text="@string/home_find_sight"
+            android:text="시야 찾기"
             android:textColor="#121212"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -185,7 +185,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/home_find_sight_description"
+            android:text="원하는 자리의 시야를\n쉽게 찾아봐요!"
             android:textColor="#606060"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_home_find_sight"
@@ -226,7 +226,7 @@
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_marginEnd="21dp"
-            android:text="@string/home_my_highlight"
+            android:text="나의 하이라이트"
             android:textColor="#121212"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -239,7 +239,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/home_my_highlight_description"
+            android:text="나만의 특별한\n직관 하이라이트를 모아요"
             android:textColor="#606060"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_home_my_highlight"
@@ -257,6 +257,7 @@
 
 
     <com.depromeet.presentation.home.CustomSpeechBubbleView
+        android:id="@+id/csbv_home_help"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -269,7 +270,7 @@
         app:paddingEnd="20dp"
         app:paddingStart="20dp"
         app:paddingTop="10dp"
-        app:text="@string/home_highlight_register"
+        app:text="하이라이트를 남기면 그 자리의 시야도 자동 등록돼요"
         app:textColor="@color/white"
         app:triangleHeight="15dp"
         app:triangleWidth="12dp" />

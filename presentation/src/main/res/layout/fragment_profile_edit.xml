@@ -38,7 +38,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/profile_edit"
+        android:text="프로필 수정"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/ib_profile_edit_close"
@@ -49,13 +49,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/complete"
+        android:text="완료"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/ib_profile_edit_close"
         app:layout_constraintEnd_toStartOf="@id/gl_end"
         app:layout_constraintTop_toTopOf="@id/ib_profile_edit_close" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="11dp"
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
-                android:text="@string/nickname"
+                android:text="닉네임"
                 android:textColor="#9F9F9F"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
-                android:text="@string/cheeringteam"
+                android:text="응원 팀"
                 android:textColor="#9F9F9F"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -143,14 +143,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/rect_gray100_line_6"
+                android:gravity="center"
                 android:paddingVertical="24dp"
-                android:text="@string/profile_edit_no_cheer_team"
+                android:text="응원하는 팀이 따로 없어요."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_team" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

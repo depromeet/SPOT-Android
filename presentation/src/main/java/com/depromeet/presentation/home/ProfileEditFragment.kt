@@ -1,7 +1,6 @@
 package com.depromeet.presentation.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import com.depromeet.core.base.BindingFragment
@@ -15,24 +14,16 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(
     bindingInflater = FragmentProfileEditBinding::inflate
 ) {
 
-    private val adapter = ProfileEditTeamAdapter()
+    private lateinit var adapter: ProfileEditTeamAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvProfileEditTeam.adapter = adapter
-        binding.rvProfileEditTeam.addItemDecoration(
-            GridSpacingItemDecoration(
-                spanCount = 2,
-                spacing = 40
-            )
-        )
 
+        setRecyclerView()
         val testData = mutableListOf<UITeamData>()
         for (i in 1..20) {
-            testData.add(UITeamData("LG 트윈스", R.drawable.ic_lg_team) {
-                Log.d("클릭", "테스트 $i")
-            })
+            testData.add(UITeamData("LG 트윈스", R.drawable.ic_lg_team, false))
         }
         adapter.submitList(testData)
 
@@ -42,6 +33,17 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun setRecyclerView() {
+        adapter = ProfileEditTeamAdapter()
+        binding.rvProfileEditTeam.adapter = adapter
+        binding.rvProfileEditTeam.addItemDecoration(
+            GridSpacingItemDecoration(
+                spanCount = 2,
+                spacing = 40
+            )
+        )
     }
 
 }
