@@ -14,8 +14,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     R.layout.fragment_select_seat_bottom_sheet,
     FragmentSelectSeatBottomSheetBinding::inflate,
 ) {
+
+    private lateinit var adapter: SelectSeatAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = SelectSeatAdapter()
+        binding.rvSelectSeat.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.rvSelectSeat.adapter = adapter
 
         binding.tvNextBtn.setOnSingleClickListener {
             binding.tvCompleteBtn.visibility = View.VISIBLE
@@ -23,17 +30,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             binding.svSelectSeat.visibility = View.GONE
             binding.layoutSeatNumber.visibility = View.VISIBLE
         }
+
         binding.tvCompleteBtn.setOnSingleClickListener {
             dismiss()
         }
-
-        binding.rvSelectSeat.layoutManager = GridLayoutManager(this.requireContext(), 3)
-        binding.rvSelectSeat.adapter = SelectSeatAdapter(getSampleData())
+        adapter.submitList(getSeatSample())
     }
 
-    private fun getSampleData(): List<String> {
-        // Replace with your actual data source
+    private fun getSeatSample(): List<String> {
         return List(9) { index -> "Seat ${index + 1}" }
     }
 }
-
