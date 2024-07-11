@@ -21,19 +21,16 @@ class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetB
     private val viewModel by activityViewModels<ReviewViewModel>()
 
     companion object {
-        private val calendarInstance: Calendar by lazy {
-            Calendar.getInstance()
-        }
+        private val calendarInstance: Calendar by lazy { Calendar.getInstance() }
         private const val DATE_FORMAT = "yyyy.MM.dd"
     }
 
     private var selectedYear: Int = calendarInstance.get(Calendar.YEAR)
     private var selectedMonth: Int = calendarInstance.get(Calendar.MONTH)
     private var selectedDay: Int = calendarInstance.get(Calendar.DAY_OF_MONTH)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
         binding.dpDatePicker.init(selectedYear, selectedMonth, selectedDay) { _, year, month, day ->
             selectedYear = year
             selectedMonth = month

@@ -19,6 +19,11 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private val viewModel by activityViewModels<ReviewViewModel>()
     private lateinit var adapter: SelectSeatAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,7 +51,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
         adapter.submitList(getSeatSample())
     }
-
     private fun getSeatSample(): List<String> {
         return List(9) { index -> "Seat ${index + 1}" }
     }
