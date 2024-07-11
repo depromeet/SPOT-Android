@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview
+package com.depromeet.presentation.seatReview.dialog
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
