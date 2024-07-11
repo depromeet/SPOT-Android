@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatReview
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
@@ -22,8 +23,17 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             binding.svSelectSeat.visibility = View.GONE
             binding.layoutSeatNumber.visibility = View.VISIBLE
         }
-        binding.tvCompleteBtn.setOnSingleClickListener{
+        binding.tvCompleteBtn.setOnSingleClickListener {
             dismiss()
         }
+
+        binding.rvSelectSeat.layoutManager = GridLayoutManager(this.requireContext(), 3)
+        binding.rvSelectSeat.adapter = SelectSeatAdapter(getSampleData())
+    }
+
+    private fun getSampleData(): List<String> {
+        // Replace with your actual data source
+        return List(9) { index -> "Seat ${index + 1}" }
     }
 }
+
