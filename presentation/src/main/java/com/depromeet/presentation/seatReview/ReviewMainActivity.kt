@@ -39,7 +39,7 @@ class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
         super.onCreate(savedInstanceState)
         initDatePickerDialog()
         initUploadDialog()
-        initReviewMySeatDialog()
+        initSeatReviewDialog()
         setupFragmentResultListener()
     }
 
@@ -50,10 +50,14 @@ class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
         }
     }
 
-    private fun initReviewMySeatDialog() {
+    private fun initSeatReviewDialog() {
         binding.layoutReviewMySeat.setOnSingleClickListener {
             val reviewMySeatDialogFragment = ReviewMySeatDialog()
             reviewMySeatDialogFragment.show(supportFragmentManager, reviewMySeatDialogFragment.tag)
+        }
+        binding.layoutSeatInfoNext.setOnSingleClickListener {
+            val selectSeatDialogFragment = SelectSeatDialog()
+            selectSeatDialogFragment.show(supportFragmentManager, selectSeatDialogFragment.tag)
         }
     }
 
