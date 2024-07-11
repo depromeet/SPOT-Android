@@ -9,23 +9,18 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemProfileEditTeamBinding
+import com.depromeet.presentation.home.mockdata.TeamData
 import com.depromeet.presentation.util.ItemDiffCallback
 
-//테스트용 UiData
-data class UITeamData(
-    val name: String,
-    val image: Int,
-    val isClicked: Boolean,
-)
 
-class ProfileEditTeamAdapter : ListAdapter<UITeamData, ProfileEditTeamViewHolder>(
+class ProfileEditTeamAdapter : ListAdapter<TeamData, ProfileEditTeamViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.name == newItem.name },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
     interface OnItemClubClickListener {
-        fun onItemClubClick(item: UITeamData)
+        fun onItemClubClick(item: TeamData)
     }
 
     var itemClubClickListener: OnItemClubClickListener? = null
@@ -51,13 +46,14 @@ class ProfileEditTeamAdapter : ListAdapter<UITeamData, ProfileEditTeamViewHolder
 class ProfileEditTeamViewHolder(
     private val binding: ItemProfileEditTeamBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: UITeamData) {
+    fun bind(item: TeamData) {
         with(binding) {
             ivTeamImage.load(item.image) {
                 placeholder(R.drawable.ic_lg_team)
                 error(R.drawable.ic_x_close)
             }
             tvTeamName.text = item.name
+            updateSelectState(item.isClicked)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.depromeet.presentation.home.custom
+package com.depromeet.presentation.home.customview
 
 import android.content.Context
 import android.graphics.Canvas

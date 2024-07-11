@@ -1,4 +1,4 @@
-package com.depromeet.presentation.home.mockData
+package com.depromeet.presentation.home.mockdata
 
 import android.os.Parcelable
 import com.depromeet.presentation.home.viewmodel.HomeUiState
@@ -86,7 +86,7 @@ fun mockDataProfile(): Flow<HomeUiState> = flow {
             )
         )
     )
-    delay(300)
+    delay(1000)
     val randomNumber = Random.nextInt(0, 4)
     emit(
         HomeUiState(
