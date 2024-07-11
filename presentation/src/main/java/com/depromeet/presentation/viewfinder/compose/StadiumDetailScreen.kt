@@ -56,10 +56,18 @@ fun StadiumDetailScreen(
             )
         }
 
-        itemsIndexed(review.reviewContents) { _, reviewContent ->
-            StadiumReviewContent(context = context, reviewContent = reviewContent)
-            Spacer(modifier = Modifier.height(40.dp))
+        if (review.reviewContents.isEmpty()) {
+            item {
+                StadiumEmptyReviewContent()
+                Spacer(modifier = Modifier.height(40.dp))
+            }
+        } else {
+            itemsIndexed(review.reviewContents) { _, reviewContent ->
+                StadiumReviewContent(context = context, reviewContent = reviewContent)
+                Spacer(modifier = Modifier.height(40.dp))
+            }
         }
+    }
 
     }
 }
