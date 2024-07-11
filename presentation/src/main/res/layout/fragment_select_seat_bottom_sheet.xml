@@ -164,7 +164,7 @@
         android:id="@+id/layout_seat_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/tv_next_btn"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
@@ -205,7 +205,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -266,8 +265,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="208dp"
-                android:background="@drawable/rect_white_fill_gray100_line_12"
-                android:orientation="horizontal">
+                android:background="@drawable/rect_white_fill_gray100_line_12">
 
                 <TextView
                     android:id="@+id/tv_what_column"
@@ -294,11 +292,12 @@
                 <LinearLayout
                     android:id="@+id/layout_column_description"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_what_column"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
@@ -326,6 +325,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="16dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_column_example"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

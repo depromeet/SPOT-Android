@@ -38,6 +38,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.layoutSeatAgain.setOnSingleClickListener {
             binding.ivSeatAgain.visibility = View.VISIBLE
         }
+
+        binding.tvWhatColumn.setOnSingleClickListener {
+            binding.layoutColumnDescription.visibility = View.VISIBLE
+        }
         adapter.submitList(getSeatSample())
     }
 
