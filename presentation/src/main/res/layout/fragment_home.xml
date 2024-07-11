@@ -81,7 +81,6 @@
                 android:background="@drawable/rect_action02_fill_6"
                 android:paddingHorizontal="22dp"
                 android:paddingVertical="6dp"
-                android:text="Lv.1 직관 첫 걸음"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/iv_home_profile"
@@ -93,10 +92,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="디프만님, 지금까지\n시야후기를\n0번 작성했어요!"
                 android:textColor="@color/white"
                 android:textSize="16dp"
-                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/tv_home_level"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_level"
                 tools:text="디프만님, 지금까지\n시야후기를\n0번 작성했어요!" />
@@ -106,6 +103,7 @@
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_marginEnd="20dp"
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="@id/tv_home_sight_chance"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_home_sight_chance"
@@ -291,17 +289,244 @@
                     app:layout_constraintEnd_toEndOf="@id/cl_home_sight_record"
                     app:layout_constraintTop_toTopOf="@id/tv_home_recent_sight_record" />
 
-                <include
-                    android:id="@+id/v_home_no_record"
-                    layout="@layout/item_home_no_record"
+
+                <!-- 추후 spannable로 합칠 예정 -->
+                <TextView
+                    android:id="@+id/tv_home_recent_record_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/gray700"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/tv_home_recent_sight_record"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_sight_record"
+                    tools:text="서울 잠실야구장" />
+
+                <TextView
+                    android:id="@+id/tv_home_recent_record_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/gray400"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_home_recent_record_name"
+                    app:layout_constraintStart_toEndOf="@id/tv_home_recent_record_name"
+                    app:layout_constraintTop_toTopOf="@id/tv_home_recent_record_name"
+                    tools:text="2024년 7월 7일" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_no_record"
                     android:layout_width="0dp"
                     android:layout_height="180dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="20dp"
+                    android:background="@drawable/rect_gray100_fill_8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_sight_record" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_sight_record">
+
+                    <ImageView
+                        android:id="@+id/iv_home_no_record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:src="@drawable/ic_folder_blank"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_home_no_record_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/home_no_record_description"
+                        android:textColor="@color/gray800"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/iv_home_no_record" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/bt_home_write_record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rect_gray800_fill_6"
+                        android:paddingHorizontal="23dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/home_write_record"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_home_no_record_description" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_one_record"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
+
+                    <ImageView
+                        android:id="@+id/iv_home_recent_one_record1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rect_no_16"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_stadium_test"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/ic_stadium_test" />
+
+                    <TextView
+                        android:id="@+id/tv_home_recent_one_section"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/rect_transparentblack01_fill_36"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_one_record1"
+                        app:layout_constraintStart_toStartOf="@id/iv_home_recent_one_record1"
+                        tools:text="1루 네이비석 3054블록" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_two_record"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
+
+                    <ImageView
+                        android:id="@+id/iv_home_recent_two_record1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rect_no_left16"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_stadium_test"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_home_recent_two_record2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/ic_stadium_test" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_recent_two_record2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:background="@drawable/rect_no_right16"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_stadium_test"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/iv_home_recent_two_record1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_home_recent_two_section"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/rect_transparentblack01_fill_36"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_two_record1"
+                        app:layout_constraintStart_toStartOf="@id/iv_home_recent_two_record1"
+                        tools:text="1루 네이비석 3054블록" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_three_record"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
+
+                    <ImageView
+                        android:id="@+id/iv_home_recent_three_record1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rect_no_left16"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_stadium_test"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_home_recent_three_record2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/ic_stadium_test" />
+
+                    <TextView
+                        android:id="@+id/tv_home_recent_three_section"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/rect_transparentblack01_fill_36"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_three_record1"
+                        app:layout_constraintStart_toStartOf="@id/iv_home_recent_three_record1"
+                        tools:text="1루 네이비석 3054블록" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_recent_three_record2"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/rect_no_topright16"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_stadium_test"
+                        app:layout_constraintBottom_toTopOf="@id/iv_home_recent_three_record3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/iv_home_recent_three_record1"
+                        app:layout_constraintTop_toTopOf="@id/iv_home_recent_three_record1" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_recent_three_record3"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="2dp"
+                        android:background="@drawable/rect_no_bottomright16"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_stadium_test"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_three_record1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/iv_home_recent_three_record1"
+                        app:layout_constraintTop_toBottomOf="@id/iv_home_recent_three_record2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
