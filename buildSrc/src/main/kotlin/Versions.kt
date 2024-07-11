@@ -32,7 +32,7 @@ object Versions {
     const val okHttpVersion = "4.11.0"
     const val timberVersion = "5.0.1"
     const val progressViewVersion = "1.1.3"
-    const val balloonVersion = "1.4.5"
+    const val balloonVersion = "1.6.5"
     const val lottieVersion = "6.0.0"
 
     const val gradleVersion = "8.0.2"

@@ -94,6 +94,10 @@ dependencies {
         debugImplementation(soloader)
     }
 
+    ComposeDependency.run {
+        implementation(balloonCompose)
+    }
+
     Compose.forEach {
         implementation(it)
     }
