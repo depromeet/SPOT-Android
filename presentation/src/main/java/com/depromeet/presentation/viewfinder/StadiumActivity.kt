@@ -41,6 +41,10 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             finish()
         }
 
+        binding.spotAppbar.setMenuOnClickListener {
+            // go to main activity
+        }
+
         binding.ivClose.setOnClickListener {
             binding.clZoomDescription.visibility = View.INVISIBLE
         }

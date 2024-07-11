@@ -31,6 +31,10 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
         configureRecyclerViewAdapter()
         onClickStadium()
         stadiumSelectionAdapter.submitList(stadiums)
+
+        binding.ivClose.setOnClickListener {
+            // go to main activity
+        }
     }
 
     private fun configureRecyclerViewAdapter() {

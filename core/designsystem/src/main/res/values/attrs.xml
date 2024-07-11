@@ -5,5 +5,7 @@
         <attr name="android:textSize" format="dimension|reference"/>
         <attr name="android:textColor" format="color|reference"/>
         <attr name="navigationIcon" format="reference"/>
+        <attr name="menuIcon" format="reference"/>
+        <attr name="menuIconColor" format="color"/>
     </declare-styleable>
 </resources>
