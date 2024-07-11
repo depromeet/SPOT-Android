@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import coil.load
 import coil.transform.RoundedCornersTransformation
@@ -20,7 +21,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     ActivityReviewBinding.inflate(it)
 }) {
 
-    private val imageViews: List<View> by lazy {
+    private val viewModel by viewModels<ReviewViewModel>()
+
+    private val imageViews: List<ImageView> by lazy {
         listOf(
             binding.ivFirstImage,
             binding.ivSecondImage,
@@ -41,6 +44,13 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         initUploadDialog()
         initSeatReviewDialog()
         setupFragmentResultListener()
+        observeUserDate()
+    }
+
+    private fun observeUserDate() {
+        viewModel.selectedDate.observe(this) { date ->
+            binding.tvDate.text = date
+        }
     }
 
     private fun initUploadDialog() {
@@ -69,9 +79,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             layoutDatePicker.setOnSingleClickListener {
                 val datePickerDialogFragment = DatePickerDialog().apply {
                     onDateSelected = { year, month, day ->
-                        val selectedDate = Calendar.getInstance()
-                        selectedDate.set(year, month, day)
-                        tvDate.text = dateFormat.format(selectedDate.time)
+                        val selectedDate = Calendar.getInstance().apply {
+                            set(year, month, day)
+                        }
+                        val formattedDate = dateFormat.format(selectedDate.time)
+                        viewModel.updateSelectedDate(formattedDate)
                     }
                 }
                 datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
@@ -96,7 +108,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
             selectedImageUris.forEachIndexed { index, uri ->
                 if (index < imageViews.size) {
-                    val image = imageViews[index] as ImageView
+                    val image = imageViews[index]
                     image.isVisible = true
                     image.setImageURI(Uri.parse(uri))
                     image.load(Uri.parse(uri)) {
@@ -105,7 +117,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 }
             }
             for (index in selectedImageUris.size until imageViews.size) {
-                val image = imageViews[index] as ImageView
+                val image = imageViews[index]
                 image.isVisible = false
             }
             if (selectedImageUris.size == 3) {
