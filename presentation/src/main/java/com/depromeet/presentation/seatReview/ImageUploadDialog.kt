@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
@@ -26,12 +27,13 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     FragmentUploadBottomSheetBinding::inflate,
 ) {
 
+
     companion object {
         private const val REQUEST_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val IMAGE_TITLE = "image"
     }
-
+    private val viewModel by activityViewModels<ReviewViewModel>()
     private lateinit var pickMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
 

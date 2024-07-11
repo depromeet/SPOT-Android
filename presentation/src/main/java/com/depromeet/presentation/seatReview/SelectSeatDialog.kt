@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatReview
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
@@ -14,7 +15,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     R.layout.fragment_select_seat_bottom_sheet,
     FragmentSelectSeatBottomSheetBinding::inflate,
 ) {
-
+    private val viewModel by activityViewModels<ReviewViewModel>()
     private lateinit var adapter: SelectSeatAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
