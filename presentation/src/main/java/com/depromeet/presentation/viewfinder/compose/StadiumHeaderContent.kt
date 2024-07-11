@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,10 +46,10 @@ fun StadiumHeaderContent(
             stadiumArea = stadiumArea
         )
         Spacer(modifier = Modifier.height(10.dp))
+
         StadiumSeatCheckBox(seat = Seat(100, 11, false))
 
         Spacer(modifier = Modifier.height(20.dp))
-
         StadiumKeywordContent(
             isMore = isMore,
             keywords = keywords,
@@ -65,7 +61,6 @@ fun StadiumHeaderContent(
             thickness = 10.dp,
             modifier = Modifier.fillMaxWidth()
         )
-
     }
 }
 

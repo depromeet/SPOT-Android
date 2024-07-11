@@ -1,20 +1,21 @@
 package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.fragment.app.viewModels
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailBinding
 import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
+import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class StadiumDetailFragment : BindingFragment<FragmentStadiumDetailBinding>(
     R.layout.fragment_stadium_detail, FragmentStadiumDetailBinding::inflate
 ) {
+    private val viewModel: StadiumDetailViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -28,8 +29,14 @@ class StadiumDetailFragment : BindingFragment<FragmentStadiumDetailBinding>(
             // go to home
         }
 
+        binding.btnUp.setOnClickListener {
+            viewModel.updateScrollState(true)
+        }
+
         binding.composeView.setContent {
-            StadiumDetailScreen()
+            StadiumDetailScreen(
+                viewModel = viewModel
+            )
         }
     }
 
