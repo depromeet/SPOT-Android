@@ -11,6 +11,10 @@ import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
+import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
+import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
+import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
+import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar

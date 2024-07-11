@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview
+package com.depromeet.presentation.seatReview.dialog
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentDatePickerBottomSheetBinding
+import com.depromeet.presentation.seatReview.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar

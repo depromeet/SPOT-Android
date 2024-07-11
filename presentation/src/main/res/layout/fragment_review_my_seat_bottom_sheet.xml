@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/rect_white_fill_32">
 
     <View
@@ -50,6 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이런 점이 좋아요"
+                android:textFontWeight="700"
+                android:textStyle="normal"
                 android:textColor="#606060" />
 
             <TextView
@@ -57,6 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="최대 3개 선택"
+                android:textFontWeight="500"
+                android:textStyle="normal"
                 android:textColor="#AFAFAF" />
         </LinearLayout>
 
@@ -73,7 +77,7 @@
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
-                android:text="🍃 신선한 그늘존"
+                android:text="🍃 선선한 그늘존"
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
@@ -154,6 +158,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이런 점이 아쉬워요"
+                android:textFontWeight="700"
+                android:textStyle="normal"
                 android:textColor="#606060" />
 
             <TextView
@@ -161,6 +167,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="최대 3개 선택"
+                android:textFontWeight="500"
+                android:textStyle="normal"
                 android:textColor="#AFAFAF" />
         </LinearLayout>
 
@@ -314,7 +322,6 @@
             android:visibility="gone"
             tools:text="최대 150자까지 입력 할 수 있어요" />
     </LinearLayout>
-
     <TextView
         android:id="@+id/tv_complete_btn"
         android:layout_width="match_parent"
@@ -327,6 +334,8 @@
         android:paddingVertical="16dp"
         android:text="완료"
         android:textColor="@color/white"
+        android:clickable="false"
+        android:enabled="false"
         android:textFontWeight="700"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
