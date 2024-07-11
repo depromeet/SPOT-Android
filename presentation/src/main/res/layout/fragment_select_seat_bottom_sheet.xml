@@ -222,6 +222,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     android:background="@drawable/rect_gray50_fill_gray200_line_12"
                     android:paddingVertical="12dp" />
 
@@ -241,6 +242,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_gray50_fill_gray200_line_12"
                     android:hint="ex)12"
+                    android:inputType="number"
                     android:paddingHorizontal="40dp"
                     android:paddingVertical="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
