@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">DepromeetAndroid</string>
+
+    <!-- home -->
+    <string name="home_sight_seeing">시야 찾기</string>
+    <string name="home_sight_seeing_description">어떤 곳에서\n응원할까요?</string>
+    <string name="home_register_sight">시야 후기 등록</string>
+    <string name="home_register_sight_description">어느 곳에\n앉으셨나요?</string>
+    <string name="home_my_sight_record">내 시야 기록</string>
+    <string name="home_my_sight_record_description">뜨거웠던\n순간의 모음</string>
+    <string name="home_my_recent_sight_record">내 최근 시야 기록</string>
+    <string name="home_more">더보기</string>
+    <string name="home_no_record_description">아직 작성한 시야 기록이 없어요.</string>
+    <string name="home_write_record">시야 기록 남기기</string>
 </resources>
