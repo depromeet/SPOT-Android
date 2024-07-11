@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name="com.depromeet.presentation.seatReview.ReviewMainActivity"
+            android:name="com.depromeet.presentation.seatReview.ReviewActivity"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
             android:exported="true"/>

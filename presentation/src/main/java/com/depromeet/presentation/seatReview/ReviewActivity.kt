@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
-import com.depromeet.presentation.databinding.ActivityMainReviewBinding
+import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -16,8 +16,8 @@ import java.util.Calendar
 import java.util.Locale
 
 @AndroidEntryPoint
-class ReviewMainActivity : BaseActivity<ActivityMainReviewBinding>({
-    ActivityMainReviewBinding.inflate(it)
+class ReviewActivity : BaseActivity<ActivityReviewBinding>({
+    ActivityReviewBinding.inflate(it)
 }) {
 
     private val imageViews: List<View> by lazy {
