@@ -15,6 +15,18 @@ import com.depromeet.presentation.viewfinder.sample.reviewContents
 class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictureBinding>(
     R.layout.fragment_stadium_detail_picture, FragmentStadiumDetailPictureBinding::inflate
 ) {
+    companion object {
+        const val TAG = "StadiumDetailPictureFragment"
+
+        fun newInstance(): StadiumDetailPictureFragment {
+            val args = Bundle()
+
+            val fragment = StadiumDetailPictureFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val area =
@@ -39,18 +51,6 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
             parentFragmentManager.commit {
                 remove(fragment)
             }
-        }
-    }
-
-    companion object {
-        const val TAG = "StadiumDetailPictureFragment"
-
-        fun newInstance(): StadiumDetailPictureFragment {
-            val args = Bundle()
-
-            val fragment = StadiumDetailPictureFragment()
-            fragment.arguments = args
-            return fragment
         }
     }
 }
