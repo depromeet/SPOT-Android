@@ -31,11 +31,11 @@
         <activity
             android:name="com.depromeet.presentation.viewfinder.StadiumActivity"
             android:exported="false"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.depromeet.presentation.viewfinder.StadiumSelectionActivity"
             android:exported="false"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.depromeet.presentation.MainActivity"
             android:exported="true"

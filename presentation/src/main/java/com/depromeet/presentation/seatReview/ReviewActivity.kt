@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
@@ -17,6 +18,7 @@ import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -25,6 +27,12 @@ import java.util.Locale
 class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     ActivityReviewBinding.inflate(it)
 }) {
+
+    companion object {
+        private const val DATE_FORMAT = "yy.MM.dd"
+        private const val FRAGMENT_RESULT_KEY = "requestKey"
+        private const val SELECTED_IMAGES = "selected_images"
+    }
 
     private val viewModel by viewModels<ReviewViewModel>()
 
@@ -46,12 +54,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
-    companion object {
-        private const val DATE_FORMAT = "yy.MM.dd"
-        private const val FRAGMENT_RESULT_KEY = "requestKey"
-        private const val SELECTED_IMAGES = "selected_images"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initDatePickerDialog()
@@ -63,8 +65,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun observeUserDate() {
-        viewModel.selectedDate.observe(this) { date ->
-            binding.tvDate.text = date
+        lifecycleScope.launch {
+            viewModel.selectedDate.collect { date ->
+                binding.tvDate.text = date
+            }
         }
     }
 

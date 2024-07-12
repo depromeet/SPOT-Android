@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
@@ -17,6 +18,7 @@ import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBindi
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.seatReview.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetBinding>(
@@ -43,16 +45,22 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeViewModel() {
-        viewModel.selectedBlock.observe(viewLifecycleOwner) {
-            updateCompleteButtonState()
+        lifecycleScope.launch {
+            viewModel.selectedBlock.collect {
+                updateCompleteButtonState()
+            }
         }
 
-        viewModel.selectedColumn.observe(viewLifecycleOwner) {
-            updateCompleteButtonState()
+        lifecycleScope.launch {
+            viewModel.selectedColumn.collect {
+                updateCompleteButtonState()
+            }
         }
 
-        viewModel.selectedNumber.observe(viewLifecycleOwner) {
-            updateCompleteButtonState()
+        lifecycleScope.launch {
+            viewModel.selectedNumber.collect {
+                updateCompleteButtonState()
+            }
         }
     }
 
@@ -115,7 +123,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
 
         binding.etNumber.addTextChangedListener { text: Editable? ->
-            viewModel.setSelctedNumber(text.toString())
+            viewModel.setSelectedNumber(text.toString())
         }
     }
 
@@ -128,9 +136,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun updateCompleteButtonState() {
-        val isBlockSelected = viewModel.selectedBlock.value?.isNotEmpty() == true
-        val isColumnFilled = viewModel.selectedColumn.value?.isNotEmpty() == true
-        val isNumberFilled = viewModel.selectedNumber.value?.isNotEmpty() == true
+        val isBlockSelected = viewModel.selectedBlock.value.isNotEmpty()
+        val isColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
+        val isNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvCompleteBtn) {
             isEnabled = isBlockSelected && isColumnFilled && isNumberFilled
