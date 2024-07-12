@@ -3,8 +3,10 @@ package com.depromeet.presentation.viewfinder
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
+import com.depromeet.presentation.viewfinder.sample.ReviewContent
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -12,6 +14,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     ActivityStadiumDetailBinding.inflate(it)
 }) {
+    companion object {
+        const val REVIEW_PICTURE_CONTENT = "review_picture_content"
+    }
+
     private val viewModel: StadiumDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +37,23 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 
         binding.composeView.setContent {
             StadiumDetailScreen(
-                viewModel = viewModel
+                viewModel = viewModel,
+                onClickReviewPicture = { reviewContent ->
+                    startToStadiumDetailPictureFragment(reviewContent)
+                }
             )
         }
+    }
+
+    private fun startToStadiumDetailPictureFragment(reviewContent: ReviewContent) {
+        val fragment = StadiumDetailPictureFragment.newInstance().apply {
+            arguments = Bundle().apply {
+                putParcelable(REVIEW_PICTURE_CONTENT, reviewContent)
+            }
+        }
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_detail_picture, fragment, StadiumDetailPictureFragment.TAG)
+            .commit()
     }
 }

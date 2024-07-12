@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
+import android.os.Bundle
 import android.os.Parcelable
 import kotlin.properties.ReadOnlyProperty
 
@@ -41,4 +42,9 @@ fun stringExtra(defaultValue: String? = null) =
 inline fun <reified T : Parcelable> Intent.getCompatibleParcelableExtra(key: String): T? = when {
     SDK_INT >= TIRAMISU -> getParcelableExtra(key, T::class.java)
     else -> getParcelableExtra(key) as? T
+}
+
+inline fun <reified T : Parcelable> Bundle.getCompatibleParcelableExtra(key: String): T? = when {
+    SDK_INT >= TIRAMISU -> getParcelable(key, T::class.java)
+    else -> getParcelable(key) as? T
 }
