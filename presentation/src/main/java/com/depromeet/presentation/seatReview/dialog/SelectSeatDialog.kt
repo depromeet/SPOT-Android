@@ -2,13 +2,13 @@ package com.depromeet.presentation.seatReview.dialog
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingBottomSheetDialog
@@ -102,42 +102,21 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 tvSelectNumberLine.visibility = View.VISIBLE
             }
 
-            tvCompleteBtn.setOnSingleClickListener {
-                dismiss()
-            }
-
-            layoutSeatAgain.setOnSingleClickListener {
-                ivSeatAgain.isVisible = !ivSeatAgain.isVisible
-            }
-
-            layoutColumnNumberDescription.setOnSingleClickListener {
-                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
-            }
-
-            tvWhatColumn.setOnSingleClickListener {
-                layoutColumnDescription.visibility = View.VISIBLE
-            }
+            tvCompleteBtn.setOnSingleClickListener { dismiss() }
+            layoutSeatAgain.setOnSingleClickListener { ivSeatAgain.isVisible = !ivSeatAgain.isVisible }
+            layoutColumnNumberDescription.setOnSingleClickListener { layoutColumnDescription.isGone = !layoutColumnDescription.isGone }
+            tvWhatColumn.setOnSingleClickListener { layoutColumnDescription.visibility = View.VISIBLE }
         }
     }
 
     private fun setupEditTextListeners() {
-        binding.etColumn.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.setSelectedColumn(s.toString())
-            }
+        binding.etColumn.addTextChangedListener { text: Editable? ->
+            viewModel.setSelectedColumn(text.toString())
+        }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-
-        binding.etNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.setSelctedNumber(s.toString())
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+        binding.etNumber.addTextChangedListener { text: Editable? ->
+            viewModel.setSelctedNumber(text.toString())
+        }
     }
 
     private fun updateNextButtonState() {
