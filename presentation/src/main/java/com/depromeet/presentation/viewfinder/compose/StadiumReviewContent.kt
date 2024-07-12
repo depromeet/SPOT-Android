@@ -1,7 +1,9 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,7 +43,8 @@ import com.depromeet.presentation.viewfinder.sample.reviewContents
 fun StadiumReviewContent(
     context: Context,
     reviewContent: ReviewContent,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (reviewContent: ReviewContent) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -114,6 +117,7 @@ fun StadiumReviewContent(
                     modifier = Modifier
                         .size(180.dp)
                         .clip(RoundedCornerShape(8.dp))
+                        .clickable { onClick(reviewContent) }
                 )
                 Spacer(modifier = Modifier.width(4.dp))
             }
@@ -143,7 +147,8 @@ private fun StadiumReviewContentPreview() {
     ) {
         StadiumReviewContent(
             context = LocalContext.current,
-            reviewContent = reviewContents[0]
+            reviewContent = reviewContents[0],
+            onClick = {}
         )
     }
 }

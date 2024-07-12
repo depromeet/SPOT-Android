@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.depromeet.presentation.viewfinder.sample.ReviewContent
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.sample.StadiumArea
 import com.depromeet.presentation.viewfinder.sample.keywords
@@ -33,7 +34,8 @@ import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 fun StadiumDetailScreen(
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
-    viewModel: StadiumDetailViewModel = viewModel()
+    viewModel: StadiumDetailViewModel = viewModel(),
+    onClickReviewPicture: (ReviewContent) -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
     val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
@@ -69,7 +71,11 @@ fun StadiumDetailScreen(
             }
         } else {
             itemsIndexed(review.reviewContents) { _, reviewContent ->
-                StadiumReviewContent(context = context, reviewContent = reviewContent)
+                StadiumReviewContent(
+                    context = context,
+                    reviewContent = reviewContent,
+                    onClick = onClickReviewPicture
+                )
                 Spacer(modifier = Modifier.height(40.dp))
             }
         }
@@ -87,6 +93,8 @@ fun StadiumDetailScreen(
 @Composable
 private fun StadiumDetailScreenPreview() {
     Box(modifier = Modifier.background(Color.White)) {
-        StadiumDetailScreen()
+        StadiumDetailScreen(
+            onClickReviewPicture = {}
+        )
     }
 }

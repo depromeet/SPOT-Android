@@ -24,7 +24,10 @@ import com.depromeet.presentation.viewfinder.sample.Keyword
 @Composable
 fun KeywordFlowRow(
     keywords: List<Keyword>,
-    modifier: Modifier = Modifier
+    overflowIndex: Int = 4,
+    isSelfExpanded: Boolean = true,
+    modifier: Modifier = Modifier,
+    onActionCallback: () -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -32,7 +35,7 @@ fun KeywordFlowRow(
         keywords
     } else {
         val maxLines = 2
-        val overflowIndex = 4
+        val overflowIndex = overflowIndex
         val displayedCount = if (overflowIndex != -1) overflowIndex else keywords.size
         keywords.take(displayedCount.coerceAtMost(maxLines * 3)) // 3개씩 2줄까지만 보여줌
     }
@@ -50,7 +53,13 @@ fun KeywordFlowRow(
                 modifier = Modifier
                     .padding(2.dp)
                     .background(Color(0xFFF4F4F4), shape = RoundedCornerShape(4.dp))
-                    .clickable { expanded = true }
+                    .clickable {
+                        if (isSelfExpanded) {
+                            expanded = true
+                        } else {
+                            onActionCallback()
+                        }
+                    }
                     .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Text(

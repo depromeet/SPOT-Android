@@ -31,7 +31,9 @@ fun StadiumKeywordContent(
     modifier: Modifier = Modifier,
     onChangeIsMore: (isMore: Boolean) -> Unit,
 ) {
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Spacer(modifier = Modifier.height(20.dp))
         if (isMore) {
             repeat(keywords.size) {
