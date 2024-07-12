@@ -33,15 +33,15 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         private const val SELECTED_IMAGES = "selected_images"
         private const val IMAGE_TITLE = "image"
     }
-    private val viewModel by activityViewModels<ReviewViewModel>()
-    private lateinit var pickMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
+
+    private val viewModel: ReviewViewModel by activityViewModels()
+    private lateinit var selectMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
-        setupPickMultipleMediaLauncher()
-        setupTakePhotoLauncher()
+        setupActivityResultLaunchers()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,53 +49,48 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         setupUploadMethod()
     }
 
-    private fun setupPickMultipleMediaLauncher() {
-        pickMultipleMediaLauncher =
+    private fun setupActivityResultLaunchers() {
+        selectMultipleMediaLauncher =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
                 val uriList = uris.map { it.toString() }
-                val bundle = bundleOf(SELECTED_IMAGES to uriList)
-                setFragmentResult(REQUEST_KEY, bundle)
+                setFragmentResult(REQUEST_KEY, bundleOf(SELECTED_IMAGES to uriList))
                 dismiss()
             }
-    }
 
-    private fun setupTakePhotoLauncher() {
         takePhotoLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
-                    val data: Intent? = result.data
-                    val bitmap = data?.extras?.get("data") as Bitmap?
-                    bitmap?.let {
-                        val uri = getImageUri(requireContext(), it)
-                        val bundle = Bundle().apply {
-                            putStringArrayList(SELECTED_IMAGES, arrayListOf(uri.toString()))
+                    result.data?.extras?.get("data")?.let { bitmap ->
+                        (bitmap as? Bitmap)?.let {
+                            val uri = it.toUri(requireContext())
+                            setFragmentResult(
+                                REQUEST_KEY,
+                                bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
+                            )
+                            dismiss()
                         }
-                        setFragmentResult(REQUEST_KEY, bundle)
-                        dismiss()
                     }
                 }
             }
     }
 
     private fun setupUploadMethod() {
-        binding.layoutGallery.setOnSingleClickListener {
-            pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-        binding.layoutTakePhoto.setOnSingleClickListener {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePhotoLauncher.launch(takePictureIntent)
+        binding.apply {
+            layoutGallery.setOnSingleClickListener {
+                selectMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+            layoutTakePhoto.setOnSingleClickListener {
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                takePhotoLauncher.launch(takePictureIntent)
+            }
         }
     }
 
-    private fun getImageUri(context: Context, bitmap: Bitmap): Uri {
-        val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(
-            context.contentResolver,
-            bitmap,
-            IMAGE_TITLE,
-            null,
-        )
+    private fun Bitmap.toUri(context: Context): Uri {
+        val bytes = ByteArrayOutputStream().apply {
+            compress(Bitmap.CompressFormat.JPEG, 100, this)
+        }
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, this, IMAGE_TITLE, null)
         return Uri.parse(path)
     }
 }

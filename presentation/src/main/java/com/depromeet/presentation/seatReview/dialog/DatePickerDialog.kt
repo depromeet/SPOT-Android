@@ -15,37 +15,41 @@ import java.util.Locale
 @AndroidEntryPoint
 class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetBinding>(
     R.layout.fragment_date_picker_bottom_sheet,
-    FragmentDatePickerBottomSheetBinding::inflate,
+    FragmentDatePickerBottomSheetBinding::inflate
 ) {
+    private val viewModel: ReviewViewModel by activityViewModels()
     var onDateSelected: ((year: Int, month: Int, day: Int) -> Unit)? = null
-    private val viewModel by activityViewModels<ReviewViewModel>()
 
     companion object {
         private val calendarInstance: Calendar by lazy { Calendar.getInstance() }
         private const val DATE_FORMAT = "yyyy.MM.dd"
     }
 
-    private var selectedYear: Int = calendarInstance.get(Calendar.YEAR)
-    private var selectedMonth: Int = calendarInstance.get(Calendar.MONTH)
-    private var selectedDay: Int = calendarInstance.get(Calendar.DAY_OF_MONTH)
+    private var selectedYear = calendarInstance.get(Calendar.YEAR)
+    private var selectedMonth = calendarInstance.get(Calendar.MONTH)
+    private var selectedDay = calendarInstance.get(Calendar.DAY_OF_MONTH)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
-        binding.dpDatePicker.init(selectedYear, selectedMonth, selectedDay) { _, year, month, day ->
-            selectedYear = year
-            selectedMonth = month
-            selectedDay = day
-            val selectedDate = formatDate(year, month, day)
-            viewModel.updateSelectedDate(selectedDate)
-            onDateSelected?.invoke(year, month, day)
+
+        with(binding.dpDatePicker) {
+            init(selectedYear, selectedMonth, selectedDay) { _, year, month, day ->
+                selectedYear = year
+                selectedMonth = month
+                selectedDay = day
+                val selectedDate = formatUserDate(year, month, day)
+                viewModel.updateSelectedDate(selectedDate)
+                onDateSelected?.invoke(year, month, day)
+            }
         }
     }
 
-    private fun formatDate(year: Int, month: Int, day: Int): String {
-        val calendar = Calendar.getInstance().apply {
+    private fun formatUserDate(year: Int, month: Int, day: Int): String {
+        return Calendar.getInstance().apply {
             set(year, month, day)
+        }.let { calendar ->
+            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(calendar.time)
         }
-        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        return dateFormat.format(calendar.time)
     }
 }

@@ -35,10 +35,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        adapter.submitList(getSeatMockData())
         setupRecyclerView()
         setupButtons()
-        adapter.submitList(getSeatSample())
         initSpinner()
         setupEditTextListeners()
         observeViewModel()
@@ -66,25 +65,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     private fun initSpinner() {
         val blockItems = listOf("블럭 1", "블럭 2", "블럭 3", "블럭 4", "블럭 5")
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerBlock.adapter = adapter
-        binding.spinnerBlock.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long,
-                ) {
-                    val selectedBlock = blockItems[position]
-                    viewModel.setSelectedBlock(selectedBlock)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
+        binding.spinnerBlock.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedBlock = blockItems[position]
+                viewModel.setSelectedBlock(selectedBlock)
             }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     private fun setupRecyclerView() {
@@ -109,7 +99,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 tvSelectSeatLine.visibility = View.INVISIBLE
                 tvSelectNumberLine.visibility = View.VISIBLE
             }
-
             tvCompleteBtn.setOnSingleClickListener { dismiss() }
             layoutSeatAgain.setOnSingleClickListener { ivSeatAgain.isVisible = !ivSeatAgain.isVisible }
             layoutColumnNumberDescription.setOnSingleClickListener { layoutColumnDescription.isGone = !layoutColumnDescription.isGone }
@@ -151,7 +140,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun getSeatSample(): List<SeatInfo> {
+    private fun getSeatMockData(): List<SeatInfo> {
         return listOf(
             SeatInfo("프리미엄석", "켈리존", "#FF5733"),
             SeatInfo("테이블석", "", "#3366FF"),

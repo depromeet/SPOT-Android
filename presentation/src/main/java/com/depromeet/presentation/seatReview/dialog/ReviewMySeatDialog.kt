@@ -21,9 +21,10 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     R.layout.fragment_review_my_seat_bottom_sheet,
     FragmentReviewMySeatBottomSheetBinding::inflate,
 ) {
-    private val viewModel by activityViewModels<ReviewViewModel>()
+    private val viewModel: ReviewViewModel by activityViewModels()
     private val maxLength = 150
-    private val buttons by lazy {
+
+    private val selectedButton by lazy {
         listOf(
             binding.tvGoodOne,
             binding.tvGoodTwo,
@@ -43,16 +44,17 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
         setupDetailReviewEditText()
-        changeReviewButton()
+        setupReviewButtons()
         setupCompleteButton()
     }
 
     private fun setupDetailReviewEditText() {
-        with(binding) {
+        binding.apply {
             btnDetailCheck.setOnSingleClickListener {
                 btnDetailCheck.isSelected = !btnDetailCheck.isSelected
                 etDetailReview.isVisible = btnDetailCheck.isSelected
@@ -72,37 +74,47 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         }
     }
 
-    private fun changeReviewButton() {
-        buttons.forEach { button ->
+    private fun setupReviewButtons() {
+        selectedButton.forEach { button ->
             button.setOnSingleClickListener {
                 button.isSelected = !button.isSelected
-                button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
-                val selectedButtonTexts = buttons.filter { it.isSelected }.map { it.text.toString() }
-                viewModel.setSelectedButtons(selectedButtonTexts)
-                with(binding.tvCompleteBtn) {
-                    isEnabled = selectedButtonTexts.isNotEmpty()
-                    setBackgroundResource(if (isEnabled) R.drawable.rect_gray900_fill_6 else R.drawable.rect_gray200_fill_6)
-                    setTextColor(colorOf(if (isEnabled) R.color.white else R.color.gray900))
-                }
+                updateButtonState(button.isSelected)
+                viewModel.setSelectedButtons(getSelectedButtonTexts())
             }
         }
+    }
+
+    private fun updateButtonState(isSelected: Boolean) {
+        val textColorRes = if (isSelected) R.color.white else R.color.gray900
+        val backgroundColorRes =
+            if (isSelected) R.drawable.rect_gray900_fill_6 else R.drawable.rect_gray200_fill_6
+
+        binding.tvCompleteBtn.apply {
+            isEnabled = getSelectedButtonTexts().isNotEmpty()
+            setBackgroundResource(backgroundColorRes)
+            setTextColor(colorOf(textColorRes))
+        }
+    }
+
+    private fun getSelectedButtonTexts(): List<String> {
+        return selectedButton.filter { it.isSelected }.map { it.text.toString() }
     }
 
     private fun setupCompleteButton() {
         binding.tvCompleteBtn.setOnSingleClickListener {
             if (binding.tvCompleteBtn.isEnabled) {
-                val detailReviewText = binding.etDetailReview.text.toString()
-                viewModel.setDetailReviewText(detailReviewText)
+                viewModel.setDetailReviewText(binding.etDetailReview.text.toString())
                 dismiss()
             }
         }
     }
+
     private fun setBottomSheetHeight(view: View) {
         view.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 view.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                view.layoutParams = view.layoutParams.apply {
+                view.layoutParams.apply {
                     height = (resources.displayMetrics.heightPixels * 0.8).toInt()
                 }
                 view.requestLayout()

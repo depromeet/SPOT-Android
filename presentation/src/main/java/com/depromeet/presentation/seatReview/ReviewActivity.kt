@@ -27,29 +27,23 @@ import java.util.Locale
 class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     ActivityReviewBinding.inflate(it)
 }) {
-
     companion object {
         private const val DATE_FORMAT = "yy.MM.dd"
         private const val FRAGMENT_RESULT_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
+        private const val MAX_SELECTED_IMAGES = 3
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-
     private val selectedImage: List<ImageView> by lazy {
         listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)
     }
-
     private val selectedImageLayout: List<FrameLayout> by lazy {
         listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage)
     }
 
     private val removeButtons: List<ImageView> by lazy {
-        listOf(
-            binding.ivRemoveFirstImage,
-            binding.ivRemoveSecondImage,
-            binding.ivRemoveThirdImage,
-        )
+        listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage)
     }
 
     private var selectedImageUris: MutableList<String> = mutableListOf()
@@ -143,7 +137,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 layout.isVisible = false
                 removeButtons[index].isVisible = false
             }
-            if (selectedImageUris.size == 3) {
+            if (selectedImageUris.size == MAX_SELECTED_IMAGES) {
                 svAddImage.post { svAddImage.fullScroll(View.FOCUS_RIGHT) }
             }
             btnAddImage.isVisible = selectedImageUris.size < selectedImage.size
