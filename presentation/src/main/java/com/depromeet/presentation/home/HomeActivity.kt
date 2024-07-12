@@ -1,6 +1,5 @@
 package com.depromeet.presentation.home
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -61,13 +60,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         viewModel.getInformation()
     }
 
-    @SuppressLint("SetTextI18n")
+    
     private fun updateUi(state: HomeUiState) {
         with(binding) {
             val profile = state.profile
             val recentSight = state.recentSight
 
-            tvHomeLevel.text = "Lv.${profile.level} ${profile.title}"
+            "Lv.${profile.level} ${profile.title}".also { tvHomeLevel.text = it }
             setSpannableString(profile.nickName, profile.writeCount)
             ivHomeCheerTeam.load(profile.cheerTeam)
             tvHomeRecentRecordName.text = recentSight.location
