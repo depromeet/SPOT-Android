@@ -2,9 +2,9 @@ package com.depromeet.presentation.home
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -70,13 +70,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     }
 
     private fun observeNickName() {
-        binding.etProfileEditNickname.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-            override fun onTextChanged(nickName: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.updateNickName(nickName.toString())
-            }
-        })
+        binding.etProfileEditNickname.addTextChangedListener { text: Editable? ->
+            viewModel.updateNickName(text.toString())
+        }
 
         viewModel.nickNameError.asLiveData().observe(this) { error ->
             when (error) {
