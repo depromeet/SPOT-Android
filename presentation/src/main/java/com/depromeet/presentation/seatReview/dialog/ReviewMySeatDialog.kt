@@ -27,6 +27,10 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         listOf(binding.tvGoodOne, binding.tvGoodTwo, binding.tvGoodThree, binding.tvGoodFour, binding.tvGoodFive, binding.tvBadOne, binding.tvBadTwo, binding.tvBadThree, binding.tvBadFour, binding.tvBadFive, binding.tvBadSix,)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
