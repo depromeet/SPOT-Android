@@ -43,7 +43,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         with(binding) {
             btnDetailCheck.setOnSingleClickListener {
                 btnDetailCheck.isSelected = !btnDetailCheck.isSelected
-                etDetailReview.isVisible = btnDetailCheck.isSelected }
+                etDetailReview.isVisible = btnDetailCheck.isSelected}
             etDetailReview.filters = arrayOf(InputFilter.LengthFilter(maxLength))
             etDetailReview.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
