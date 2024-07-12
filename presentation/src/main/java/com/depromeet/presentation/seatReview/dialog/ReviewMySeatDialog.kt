@@ -3,10 +3,10 @@ package com.depromeet.presentation.seatReview.dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
-import android.text.TextWatcher
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
@@ -24,7 +24,19 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     private val viewModel by activityViewModels<ReviewViewModel>()
     private val maxLength = 150
     private val buttons by lazy {
-        listOf(binding.tvGoodOne, binding.tvGoodTwo, binding.tvGoodThree, binding.tvGoodFour, binding.tvGoodFive, binding.tvBadOne, binding.tvBadTwo, binding.tvBadThree, binding.tvBadFour, binding.tvBadFive, binding.tvBadSix,)
+        listOf(
+            binding.tvGoodOne,
+            binding.tvGoodTwo,
+            binding.tvGoodThree,
+            binding.tvGoodFour,
+            binding.tvGoodFive,
+            binding.tvBadOne,
+            binding.tvBadTwo,
+            binding.tvBadThree,
+            binding.tvBadFour,
+            binding.tvBadFive,
+            binding.tvBadSix,
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,23 +55,20 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         with(binding) {
             btnDetailCheck.setOnSingleClickListener {
                 btnDetailCheck.isSelected = !btnDetailCheck.isSelected
-                etDetailReview.isVisible = btnDetailCheck.isSelected}
+                etDetailReview.isVisible = btnDetailCheck.isSelected
+            }
             etDetailReview.filters = arrayOf(InputFilter.LengthFilter(maxLength))
-            etDetailReview.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    s?.let {
-                        if (it.length >= maxLength) {
-                            etDetailReview.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-                            tvDetailReviewWarning.visibility = View.VISIBLE
-                        } else {
-                            etDetailReview.setBackgroundResource(R.drawable.rect_gray200_fill_12)
-                            tvDetailReviewWarning.visibility = View.GONE
-                        }
+            etDetailReview.addTextChangedListener { text: Editable? ->
+                text?.let {
+                    if (it.length >= maxLength) {
+                        etDetailReview.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                        tvDetailReviewWarning.visibility = View.VISIBLE
+                    } else {
+                        etDetailReview.setBackgroundResource(R.drawable.rect_gray200_fill_12)
+                        tvDetailReviewWarning.visibility = View.GONE
                     }
                 }
-                override fun afterTextChanged(s: Editable?) {}
-            })
+            }
         }
     }
 
