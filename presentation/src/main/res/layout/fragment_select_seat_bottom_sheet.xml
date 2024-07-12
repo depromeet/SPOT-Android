@@ -166,12 +166,13 @@
         </LinearLayout>
     </ScrollView>
 
+    <!--좌석 번호 -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_seat_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/tv_next_btn"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
         <LinearLayout
@@ -192,21 +193,32 @@
                 <Spinner
                     android:id="@+id/spinner_block"
                     android:layout_width="wrap_content"
+                    android:paddingEnd="220dp"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="100dp"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:paddingVertical="12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
-                    android:paddingVertical="12dp" />
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_chevron_up"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_block"
+                    app:layout_constraintEnd_toEndOf="@+id/spinner_block"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_block" />
 
                 <TextView
                     android:id="@+id/tv_block"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
                     android:gravity="center"
-                    android:text="블록"
+                    android:text="블럭"
+                    android:textColor="#606060"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -220,16 +232,19 @@
 
                 <EditText
                     android:id="@+id/et_column"
-                  android:layout_width="wrap_content"
-                    android:paddingHorizontal="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="13dp"
+                    android:paddingStart="16dp"
                     android:hint="ex)12"
+                    android:paddingEnd="64dp"
+                    android:textColor="#121212"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_height="wrap_content"
                     android:inputType="number"
                     android:background="@drawable/rect_gray50_fill_gray200_line_12"
-                    android:paddingVertical="12dp" />
+                    android:textColorHint="#C8C8C8" />
 
                 <TextView
                     android:id="@+id/tv_column"
@@ -237,6 +252,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="열"
+                    android:layout_marginStart="4dp"
+                    android:textColor="#606060"
                     app:layout_constraintStart_toEndOf="@+id/et_column"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -247,9 +264,13 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_gray50_fill_gray200_line_12"
                     android:hint="ex)12"
+                    android:layout_marginEnd="4dp"
+                    android:paddingVertical="13dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="64dp"
+                    android:textColor="#121212"
                     android:inputType="number"
-                    android:paddingHorizontal="40dp"
-                    android:paddingVertical="12dp"
+                    android:textColorHint="#C8C8C8"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/tv_number"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -260,6 +281,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="번"
+                    android:textColor="#606060"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -270,7 +292,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginBottom="208dp"
                 android:background="@drawable/rect_white_fill_gray100_line_12">
 
                 <TextView
@@ -281,6 +302,7 @@
                     android:layout_weight="1"
                     android:paddingVertical="12dp"
                     android:paddingStart="12dp"
+                    android:textColor="#7B7B7B"
                     android:text="열과 번이 무엇인가요?"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -311,6 +333,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="16dp"
+                        android:textColor="#AFAFAF"
                         android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요."
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -323,6 +346,7 @@
                         android:layout_marginTop="6dp"
                         android:paddingHorizontal="16dp"
                         android:text="• ex. 2열 7번좌석"
+                        android:textColor="#AFAFAF"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
 
@@ -355,6 +379,7 @@
         android:textColor="@color/white"
         android:clickable="false"
         android:enabled="false"
+        android:visibility="visible"
         android:textFontWeight="700"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
