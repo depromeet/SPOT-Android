@@ -13,9 +13,10 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DepromeetAndroid"
+rootProject.name = "SPOT-Android"
 include(":app")
 include(":data")
 include(":domain")
 include(":core")
 include(":presentation")
+include(":core:designsystem")

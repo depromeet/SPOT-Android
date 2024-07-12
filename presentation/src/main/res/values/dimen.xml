@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="speech_bubble_text_size">16sp</dimen>
+    <dimen name="speech_bubble_corner_radius">20dp</dimen>
+    <dimen name="speech_bubble_padding_left">10dp</dimen>
+    <dimen name="speech_bubble_padding_right">10dp</dimen>
+    <dimen name="speech_bubble_padding_top">4dp</dimen>
+    <dimen name="speech_bubble_padding_bottom">4dp</dimen>
+    <dimen name="speech_bubble_triangle_height">6dp</dimen>
+    <dimen name="speech_bubble_triangle_width">6dp</dimen>
+</resources>

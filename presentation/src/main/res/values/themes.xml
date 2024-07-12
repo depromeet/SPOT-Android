@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.DepromeetAndroid" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -8,4 +8,27 @@
     </style>
 
     <style name="Theme.DepromeetAndroid" parent="Base.Theme.DepromeetAndroid" />
+
+
+    <style name="SpinnerDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
+    </style>
+
+    <style name="SpinnerDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:calendarViewShown">false</item>
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
+    <style name="TransparentBottomSheetDialogFragment" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item> // Scrim이 있는 Modal
+        <item name="android:colorBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="TransparentDialogFragment" parent="Theme.Material3.Light.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>

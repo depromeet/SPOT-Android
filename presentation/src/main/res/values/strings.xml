@@ -1,3 +1,47 @@
 <resources>
     <string name="app_name">DepromeetAndroid</string>
+
+    <!-- home -->
+    <string name="home_sight_seeing">시야 찾기</string>
+    <string name="home_sight_seeing_description">어떤 곳에서\n응원할까요?</string>
+    <string name="home_register_sight">시야 후기 등록</string>
+    <string name="home_register_sight_description">어느 곳에\n앉으셨나요?</string>
+    <string name="home_my_sight_record">내 시야 기록</string>
+    <string name="home_my_sight_record_description">뜨거웠던\n순간의 모음</string>
+    <string name="home_my_recent_sight_record">내 최근 시야 기록</string>
+    <string name="home_more">더보기</string>
+    <string name="home_no_record_description">아직 작성한 시야 기록이 없어요.</string>
+    <string name="home_write_record">시야 기록 남기기</string>
+
+    <!-- profileEdit -->
+    <string name="profile_edit_select_album">앨범에서 선택</string>
+    <string name="profile_edit_delete_image">프로필 사진 삭제</string>
+    <string name="profile_edit_close">닫기</string>
+    <string name="profile_edit_title">프로필 수정</string>
+    <string name="profile_edit_complete">완료</string>
+    <string name="profile_edit_nickname">닉네임</string>
+    <string name="profile_edit_cheer_team">응원 팀</string>
+    <string name="profile_edit_cheer_none">응원하는 팀이 따로 없어요.</string>
+    <string name="profile_edit_error_duplicate">이미 사용중인 닉네임이에요.</string>
+    <string name="profile_edit_error_type">닉네임은 알파벳 대소문자, 숫자, 한글만 입력 가능합니다.</string>
+    <string name="profile_edit_error_length">닉네임은 최소 2글자에서 최대 10글자로 입력해 주세요.</string>
+    <string name="profile_edit_error_no">정상적으로 입력 완료!</string>
+
+    <!-- upload_error -->
+    <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>
+    <string name="upload_error_capacity_5MB">5MB에 맞게 다시 선택해주세요</string>
+    <string name="upload_error_check">확인</string>
+
+    <!-- viewfinder -->
+    <string name="viewfinder_find_view">시야찾기</string>
+    <string name="viewfinder_stadium_selection_description">어떤 야구장의\n시야가 궁금하신가요?</string>
+    <string name="viewfinder_stadium_selection_sub_description">꾸준히 다른 구장에 대한 정보가 추가될 예정이에요</string>
+    <string name="viewfinder_selection_area">구역 선택</string>
+    <string name="viewfinder_zoom_description">"<b>"화면을 손가락으로 확대하여"</b>" 구역을 더 크게 볼 수 있어요</string>
+    <string name="viewfinder_zoom_description_statement">화면을 손가락으로 확대하여\n 구역을 더 크게 보세요!</string>
+    <string name="viewfinder_lock_warning_description">아직 잠실야구장만 이용할 수 있어요!</string>
+    <string name="viewfinder_lock_warning_trigger">"<u>"잠실야구장 시야보기"</u>"</string>
+
+
+
 </resources>

@@ -2,6 +2,8 @@ package com.depromeet.presentation.extension
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import coil.load
 
 inline fun View.setOnSingleClickListener(
     delay: Long = 1000L,
@@ -23,4 +25,9 @@ fun View.setMargins(left: Int, top: Int, right: Int, bottom: Int) {
         p.setMargins(left, top, right, bottom)
         requestLayout()
     }
+}
+
+fun ImageView.loadAndClip(imageUrl: String) {
+    this.load(imageUrl)
+    this.clipToOutline = true
 }
