@@ -2,6 +2,8 @@ package com.depromeet.presentation.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.depromeet.presentation.extension.NickNameError
+import com.depromeet.presentation.extension.validateNickName
 import com.depromeet.presentation.home.mockdata.TeamData
 import com.depromeet.presentation.home.mockdata.mockDataProfileEdit
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,21 +20,9 @@ data class EditUiState(
     val teamList: List<TeamData> = emptyList(),
 )
 
-sealed class NickNameError {
-    object NoError : NickNameError()
-    object LengthError : NickNameError()
-    object InvalidCharacterError : NickNameError()
-    object DuplicateError : NickNameError()
-}
-
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor() : ViewModel() {
-    companion object {
-        private const val NICKNAME_PATTERN = "^[a-zA-Z0-9가-힣]+$"
-        private const val TEST_DUPLICATE_NICKNAME = "안드로이드"
-        /** 서버연동되면 삭제 */
-    }
 
     private val _uiState = MutableStateFlow(EditUiState())
     val uiState: StateFlow<EditUiState> = _uiState.asStateFlow()
@@ -82,15 +72,6 @@ class ProfileEditViewModel @Inject constructor() : ViewModel() {
 
     fun updateNickName(nickName: String) {
         _nickName.value = nickName
-        validateNickName(nickName)
-    }
-
-    private fun validateNickName(nickName: String) {
-        _nickNameError.value = when {
-            nickName.length !in 2..10 -> NickNameError.LengthError
-            !nickName.matches(Regex(NICKNAME_PATTERN)) -> NickNameError.InvalidCharacterError
-            nickName == TEST_DUPLICATE_NICKNAME -> NickNameError.DuplicateError
-            else -> NickNameError.NoError
-        }
+        _nickNameError.value = nickName.validateNickName()
     }
 }

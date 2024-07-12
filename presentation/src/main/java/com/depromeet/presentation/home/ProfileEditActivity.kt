@@ -11,11 +11,11 @@ import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
+import com.depromeet.presentation.extension.NickNameError
 import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.adapter.ProfileEditTeamAdapter
 import com.depromeet.presentation.home.mockdata.TeamData
 import com.depromeet.presentation.home.viewmodel.EditUiState
-import com.depromeet.presentation.home.viewmodel.NickNameError
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -2,23 +2,20 @@ package com.depromeet.presentation.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
 import android.view.View
-import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import coil.load
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.presentation.databinding.ActivityHomeBinding
+import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.viewmodel.HomeUiState
 import com.depromeet.presentation.home.viewmodel.HomeViewModel
+import com.depromeet.presentation.util.applyBoldAndSizeSpan
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,11 +39,22 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         binding.clMainSight.clipToOutline = true
 
         viewModel.uiState.asLiveData().observe(this) { state ->
-            when(state) {
-                is UiState.Loading  -> { toast("로딩중") }
-                is UiState.Empty -> { toast("빈값")}
-                is UiState.Success -> { updateUi(state.data)}
-                is UiState.Failure -> { toast("통신 실패")}
+            when (state) {
+                is UiState.Loading -> {
+                    toast("로딩중")
+                }
+
+                is UiState.Empty -> {
+                    toast("빈값")
+                }
+
+                is UiState.Success -> {
+                    updateUi(state.data)
+                }
+
+                is UiState.Failure -> {
+                    toast("통신 실패")
+                }
             }
         }
 
@@ -100,18 +108,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
     }
 
-    private fun ImageView.loadAndClip(imageUrl: String) {
-        this.load(imageUrl)
-        this.clipToOutline = true
-    }
-
-    @SuppressLint("CommitTransaction")
     private fun navigateToProfileEditActivity() {
-        val intent = Intent(
-            this@HomeActivity,
-            ProfileEditActivity::class.java
-        )
-        startActivity(intent)
+        Intent(this, ProfileEditActivity::class.java).apply { startActivity(this) }
     }
 
     private fun setSpannableString(
@@ -131,26 +129,5 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
         binding.tvHomeSightChance.text = spannableBuilder
     }
-
-    private fun applyBoldAndSizeSpan(
-        spannableBuilder: SpannableStringBuilder,
-        startIndex: Int,
-        endIndex: Int,
-    ) {
-        spannableBuilder.setSpan(
-            StyleSpan(Typeface.BOLD),
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        spannableBuilder.setSpan(
-            RelativeSizeSpan(1.3f),
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-    }
-
 
 }

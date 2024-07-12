@@ -63,35 +63,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_edit_down"
+    <TextView
+        android:id="@+id/tv_profile_edit_close"
         android:layout_width="0dp"
         android:layout_height="51dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/profile_edit_close"
         android:background="@drawable/rect_white_fill_12"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/gray900"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/cl_edit_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_edit_top">
-
-        <TextView
-            android:id="@+id/tv_profile_edit_close"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:text="@string/profile_edit_close"
-            android:textColor="@color/gray900"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

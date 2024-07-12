@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.depromeet.presentation.R
-import com.depromeet.presentation.databinding.ItemProfileEditTeamBinding
+import com.depromeet.presentation.databinding.ItemBaseballTeamBinding
 import com.depromeet.presentation.home.mockdata.TeamData
 import com.depromeet.presentation.util.ItemDiffCallback
 
@@ -27,7 +27,7 @@ class ProfileEditTeamAdapter : ListAdapter<TeamData, ProfileEditTeamViewHolder>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileEditTeamViewHolder {
         return ProfileEditTeamViewHolder(
-            ItemProfileEditTeamBinding.inflate(
+            ItemBaseballTeamBinding.inflate(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
@@ -44,7 +44,7 @@ class ProfileEditTeamAdapter : ListAdapter<TeamData, ProfileEditTeamViewHolder>(
 }
 
 class ProfileEditTeamViewHolder(
-    private val binding: ItemProfileEditTeamBinding,
+    private val binding: ItemBaseballTeamBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: TeamData) {
         with(binding) {

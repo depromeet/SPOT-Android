@@ -155,7 +155,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_team"
                 app:spanCount="2"
-                tools:listitem="@layout/item_profile_edit_team" />
+                tools:listitem="@layout/item_baseball_team" />
 
             <TextView
                 android:id="@+id/tv_profile_edit_no_team"
