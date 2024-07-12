@@ -1,7 +1,6 @@
 package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.commit
 import com.depromeet.core.base.BindingFragment
@@ -26,13 +25,11 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
             return fragment
         }
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val area =
             arguments?.getCompatibleParcelableExtra<ReviewContent>(StadiumDetailActivity.REVIEW_PICTURE_CONTENT)
-
-        Log.e("aaa", "area: $area")
 
         binding.spotAppbar.setNavigationOnClickListener {
             removeFragment()
