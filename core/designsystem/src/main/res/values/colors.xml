@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- 야구장 팀 색상 -->
+    <color name="color_lg">#B32753</color>
+    <color name="color_doosan">#1F1F52</color>
+    <color name="color_samsung">#1E4D9C</color>
+    <color name="color_kia">#D72E34</color>
+    <color name="color_ssg">#BE2C35</color>
+    <color name="color_heroes">#500E16</color>
+    <color name="color_kt">#000000</color>
+    <color name="color_lotte">#0A1E40</color>
+    <color name="color_hanwha">#EE6F2E</color>
+
+    <!-- 야구장 팀 글씨 색상 -->
+    <color name="color_lg_font">#FFFFFF</color>
+    <color name="color_doosan_font">#FFFFFF</color>
+    <color name="color_samsung_font">#C0C0C0</color>
+    <color name="color_kia_font">#000000</color>
+    <color name="color_ssg_font">#F5BA47</color>
+    <color name="color_heroes_font">#AA917D</color>
+    <color name="color_kt_font">#FFFFFF</color>
+    <color name="color_lotte_font">#DB3B48</color>
+    <color name="color_hanwha_font">#000000</color>
+
+    <!-- 투명도 -->
+    <color name="black_alpha60">#99000000</color>
+</resources>
