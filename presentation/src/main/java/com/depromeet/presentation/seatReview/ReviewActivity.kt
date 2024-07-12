@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatReview
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -56,6 +57,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         setupFragmentResultListener()
         observeUserDate()
         setupRemoveButtons()
+        navigateToReviewDoneActivity()
     }
 
     private fun observeUserDate() {
@@ -156,6 +158,12 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         if (index < selectedImageUris.size) {
             selectedImageUris.removeAt(index)
             updateImageViews()
+        }
+    }
+
+    private fun navigateToReviewDoneActivity() {
+        binding.tvUploadBtn.setOnSingleClickListener {
+            Intent(this, ReviewDoneActivity::class.java).apply { startActivity(this) }
         }
     }
 }

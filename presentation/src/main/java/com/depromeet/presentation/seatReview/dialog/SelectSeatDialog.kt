@@ -35,8 +35,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.submitList(getSeatMockData())
         setupRecyclerView()
+        adapter.submitList(getSeatMockData())
         setupButtons()
         initSpinner()
         setupEditTextListeners()

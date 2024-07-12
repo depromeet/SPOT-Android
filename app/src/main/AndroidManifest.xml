@@ -25,6 +25,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name="com.depromeet.presentation.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.depromeet.presentation.viewfinder.StadiumDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -37,15 +46,6 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.depromeet.presentation.MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="com.depromeet.presentation.home.HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -55,7 +55,11 @@
             android:screenOrientation="portrait" />
 
         <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
-            android:exported="true"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.depromeet.presentation.seatReview.ReviewDoneActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
     </application>
 </manifest>
