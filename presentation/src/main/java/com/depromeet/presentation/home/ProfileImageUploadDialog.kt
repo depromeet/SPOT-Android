@@ -57,20 +57,21 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
 
     @SuppressLint("Recycle")
     private fun handleSelectedImage(uri: Uri) {
-        val inputStream = requireContext().contentResolver.openInputStream(uri)
-        val sizeBytes = inputStream?.available() ?: 0
-        val sizeMB = sizeBytes / (1024f * 1024f)
+        requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
+            val sizeBytes = inputStream.available()
+            val sizeMB = sizeBytes / (1024f * 1024f)
 
-        if (sizeMB > 5) {
-            val fragment = UploadErrorDialog(
-                getString(R.string.upload_error_capacity_description),
-                getString(R.string.upload_error_capacity_5MB)
-            )
-            fragment.show(parentFragmentManager, fragment.tag)
-            dismiss()
-        } else {
-            viewModel.setProfileImage(uri.toString())
-            dismiss()
+            if (sizeMB > 5) {
+                val fragment = UploadErrorDialog(
+                    getString(R.string.upload_error_capacity_description),
+                    getString(R.string.upload_error_capacity_5MB)
+                )
+                fragment.show(parentFragmentManager, fragment.tag)
+                dismiss()
+            } else {
+                viewModel.setProfileImage(uri.toString())
+                dismiss()
+            }
         }
     }
 
