@@ -2,6 +2,7 @@ package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
@@ -47,9 +48,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 
     private fun startToStadiumDetailPictureFragment(reviewContent: ReviewContent) {
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
-            arguments = Bundle().apply {
-                putParcelable(REVIEW_PICTURE_CONTENT, reviewContent)
-            }
+            arguments = bundleOf(REVIEW_PICTURE_CONTENT to reviewContent)
         }
 
         supportFragmentManager.beginTransaction()
