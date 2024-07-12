@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview
+package com.depromeet.presentation.seatReview.dialog
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
@@ -12,11 +12,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
+import com.depromeet.presentation.seatReview.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 
@@ -31,7 +33,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         private const val SELECTED_IMAGES = "selected_images"
         private const val IMAGE_TITLE = "image"
     }
-
+    private val viewModel by activityViewModels<ReviewViewModel>()
     private lateinit var pickMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
 
