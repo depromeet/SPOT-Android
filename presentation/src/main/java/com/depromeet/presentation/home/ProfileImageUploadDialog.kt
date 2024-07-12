@@ -1,5 +1,6 @@
 package com.depromeet.presentation.home
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -49,10 +50,28 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
         pickSingleImageLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 uri?.let {
-                    viewModel.setProfileImage(uri.toString())
-                    dismiss()
+                    handleSelectedImage(uri)
                 }
             }
+    }
+
+    @SuppressLint("Recycle")
+    private fun handleSelectedImage(uri: Uri) {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val sizeBytes = inputStream?.available() ?: 0
+        val sizeMB = sizeBytes / (1024f * 1024f)
+
+        if (sizeMB > 5) {
+            val fragment = UploadErrorDialog(
+                getString(R.string.upload_error_capacity_description),
+                getString(R.string.upload_error_capacity_5MB)
+            )
+            fragment.show(parentFragmentManager, fragment.tag)
+            dismiss()
+        } else {
+            viewModel.setProfileImage(uri.toString())
+            dismiss()
+        }
     }
 
 

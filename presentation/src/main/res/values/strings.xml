@@ -27,6 +27,11 @@
     <string name="profile_edit_error_length">닉네임은 최소 2글자에서 최대 10글자로 입력해 주세요.</string>
     <string name="profile_edit_error_no">정상적으로 입력 완료!</string>
 
+    <!-- upload_error -->
+    <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>
+    <string name="upload_error_capacity_5MB">5MB에 맞게 다시 선택해주세요</string>
+    <string name="upload_error_check">확인</string>
+
     <!-- viewfinder -->
     <string name="viewfinder_find_view">시야찾기</string>
     <string name="viewfinder_stadium_selection_description">어떤 야구장의\n시야가 궁금하신가요?</string>
@@ -36,6 +41,7 @@
     <string name="viewfinder_zoom_description_statement">화면을 손가락으로 확대하여\n 구역을 더 크게 보세요!</string>
     <string name="viewfinder_lock_warning_description">아직 잠실야구장만 이용할 수 있어요!</string>
     <string name="viewfinder_lock_warning_trigger">"<u>"잠실야구장 시야보기"</u>"</string>
+
 
 
 </resources>
