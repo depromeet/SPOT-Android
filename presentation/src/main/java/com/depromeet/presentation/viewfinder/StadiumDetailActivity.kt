@@ -3,6 +3,7 @@ package com.depromeet.presentation.viewfinder
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
@@ -51,8 +52,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
             arguments = bundleOf(REVIEW_PICTURE_CONTENT to reviewContent)
         }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_detail_picture, fragment, StadiumDetailPictureFragment.TAG)
-            .commit()
+        supportFragmentManager.commit {
+            replace(R.id.fcv_detail_picture, fragment, StadiumDetailPictureFragment.TAG)
+        }
     }
 }
