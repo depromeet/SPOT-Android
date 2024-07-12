@@ -3,9 +3,10 @@ package com.depromeet.presentation.home.viewmodel
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.depromeet.presentation.home.mockData.Profile
-import com.depromeet.presentation.home.mockData.RecentSight
-import com.depromeet.presentation.home.mockData.mockDataProfile
+import com.depromeet.core.state.UiState
+import com.depromeet.presentation.home.mockdata.Profile
+import com.depromeet.presentation.home.mockdata.RecentSight
+import com.depromeet.presentation.home.mockdata.mockDataProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,12 +25,12 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<HomeUiState>>(UiState.Loading)
+    val uiState: StateFlow<UiState<HomeUiState>> = _uiState.asStateFlow()
 
     fun getInformation() {
         mockDataProfile().onEach {
-            _uiState.value = it
+            _uiState.value = UiState.Success(it)
         }.launchIn(viewModelScope)
     }
 }

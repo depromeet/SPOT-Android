@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="78dp"
     android:background="@drawable/rect_gray100_line_10"
     android:paddingHorizontal="20dp"
     android:paddingVertical="24dp">
@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="@id/iv_team_image"
         app:layout_constraintStart_toEndOf="@id/iv_team_image"
         app:layout_constraintTop_toTopOf="@id/iv_team_image"
-        tools:text="LG 트윈스"/>
+        tools:text="LG 트윈스" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

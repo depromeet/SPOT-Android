@@ -13,4 +13,6 @@
     <color name="transparent_black01">#40000000</color>
     <color name="gray700">#606060</color>
     <color name="gray400">#9F9F9F</color>
+    <color name="warning_red05">#FF5C5C</color>
+    <color name="warning_red01">#FF5C5C</color>
 </resources>

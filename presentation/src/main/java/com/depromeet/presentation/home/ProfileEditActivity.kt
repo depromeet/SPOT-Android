@@ -1,29 +1,60 @@
 package com.depromeet.presentation.home
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import androidx.activity.viewModels
+import androidx.lifecycle.asLiveData
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
 import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.adapter.ProfileEditTeamAdapter
-import com.depromeet.presentation.home.adapter.UITeamData
+import com.depromeet.presentation.home.mockdata.TeamData
+import com.depromeet.presentation.home.viewmodel.EditUiState
+import com.depromeet.presentation.home.viewmodel.NickNameError
+import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     ActivityProfileEditBinding::inflate
 ) {
+    companion object {
+        private const val GRID_SPAN_COUNT = 2
+        private const val GRID_SPACING = 40
+    }
 
     private lateinit var adapter: ProfileEditTeamAdapter
+    private val viewModel: ProfileEditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRecyclerView()
-        val testData = mutableListOf<UITeamData>()
-        for (i in 1..20) {
-            testData.add(UITeamData("LG 트윈스", R.drawable.ic_lg_team, false))
+        navigateToPhotoPicker()
+        onClickTeam()
+        observeNickName()
+        viewModel.getInformation()
+
+        viewModel.uiState.asLiveData().observe(this) { state ->
+            updateUI(state)
         }
-        adapter.submitList(testData)
+
+        binding.ibProfileEditClose.setOnClickListener { finish() }
+
+    }
+
+    private fun updateUI(state: EditUiState) {
+        binding.ivProfileEditImage.load(state.image) {
+            transformations(CircleCropTransformation())
+            placeholder(R.drawable.ic_default_profile)
+            error(R.drawable.ic_default_profile)
+        }
+        binding.etProfileEditNickname.setText(state.nickName)
+        adapter.submitList(state.teamList)
     }
 
     private fun setRecyclerView() {
@@ -31,10 +62,82 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         binding.rvProfileEditTeam.adapter = adapter
         binding.rvProfileEditTeam.addItemDecoration(
             GridSpacingItemDecoration(
-                spanCount = 2,
-                spacing = 40
+                GRID_SPAN_COUNT,
+                GRID_SPACING
             )
         )
+    }
+
+    private fun observeNickName() {
+        binding.etProfileEditNickname.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun onTextChanged(nickName: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.updateNickName(nickName.toString())
+            }
+        })
+
+        viewModel.nickNameError.asLiveData().observe(this) { error ->
+            when (error) {
+                is NickNameError.NoError -> {
+                    updateCompletionStatus(
+                        isError = false,
+                        getString(R.string.profile_edit_error_no)
+                    )
+                }
+
+                is NickNameError.LengthError -> {
+                    updateCompletionStatus(
+                        isError = true,
+                        getString(R.string.profile_edit_error_length)
+                    )
+                }
+
+                is NickNameError.InvalidCharacterError -> {
+                    updateCompletionStatus(
+                        isError = true,
+                        getString(R.string.profile_edit_error_type)
+                    )
+                }
+
+                is NickNameError.DuplicateError -> {
+                    updateCompletionStatus(
+                        isError = true,
+                        getString(R.string.profile_edit_error_duplicate)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun updateCompletionStatus(isError: Boolean, error: String) = if (isError) {
+        binding.etProfileEditNickname.setBackgroundResource(R.drawable.rect_warning01red_line_6)
+        binding.tvProfileEditNicknameError.visibility = View.VISIBLE
+        binding.tvProfileEditNicknameError.text = error
+        binding.tvProfileEditComplete.isClickable = false
+    } else {
+        binding.etProfileEditNickname.setBackgroundResource(R.drawable.rect_gray100_line_6)
+        binding.tvProfileEditNicknameError.visibility = View.GONE
+        binding.tvProfileEditNicknameError.text = error
+        binding.tvProfileEditComplete.isClickable = true
+    }
+
+    private fun onClickTeam() {
+        adapter.itemClubClickListener = object : ProfileEditTeamAdapter.OnItemClubClickListener {
+            override fun onItemClubClick(item: TeamData) {
+                viewModel.updateClickTeam(item)
+            }
+        }
+    }
+
+    private fun navigateToPhotoPicker() {
+        binding.ibProfileEditCamera.setOnClickListener { imageUpload() }
+        binding.ivProfileEditImage.setOnClickListener { imageUpload() }
+    }
+
+    private fun imageUpload() {
+        val fragment = ProfileImageUploadDialog()
+        fragment.show(supportFragmentManager, fragment.tag)
     }
 
 }

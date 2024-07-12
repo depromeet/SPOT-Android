@@ -14,7 +14,9 @@ import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import coil.load
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.core.state.UiState
 import com.depromeet.presentation.databinding.ActivityHomeBinding
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.viewmodel.HomeUiState
 import com.depromeet.presentation.home.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +42,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         binding.clMainSight.clipToOutline = true
 
         viewModel.uiState.asLiveData().observe(this) { state ->
-            updateUi(state)
+            when(state) {
+                is UiState.Loading  -> { toast("로딩중") }
+                is UiState.Empty -> { toast("빈값")}
+                is UiState.Success -> { updateUi(state.data)}
+                is UiState.Failure -> { toast("통신 실패")}
+            }
         }
 
         viewModel.getInformation()
