@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebChromeClient
@@ -90,7 +91,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }
         binding.wvStadium.addJavascriptInterface(
             AndroidBridge { fromWeb ->
-                startToStadiumDetailFragment(fromWeb)
+                startToStadiumDetailActivity(fromWeb)
             },
             JAVASCRIPT_OBJ
         )
@@ -115,16 +116,14 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.wvStadium.webChromeClient = WebChromeClient()
     }
 
-    private fun startToStadiumDetailFragment(fromWeb: String) {
-        val fragment = StadiumDetailFragment.newInstance().apply {
-            arguments = Bundle().apply {
-                putString(STADIUM_AREA, fromWeb)
-            }
+    private fun startToStadiumDetailActivity(fromWeb: String) {
+        val intent = Intent(
+            this,
+            StadiumDetailActivity::class.java
+        ).apply {
+            putExtra(STADIUM_AREA, fromWeb)
         }
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_detail, fragment, StadiumDetailFragment.TAG)
-            .commit()
+        startActivity(intent)
     }
 
     private fun resetZoom() {
