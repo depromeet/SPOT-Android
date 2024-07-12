@@ -2,6 +2,8 @@ package com.depromeet.presentation.seatReview.dialog
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingBottomSheetDialog
@@ -16,7 +18,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     R.layout.fragment_select_seat_bottom_sheet,
     FragmentSelectSeatBottomSheetBinding::inflate,
 ) {
-    private val viewModel by activityViewModels<ReviewViewModel>()
+    private val viewModel: ReviewViewModel by activityViewModels()
     private lateinit var adapter: SelectSeatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,31 +29,67 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = SelectSeatAdapter()
-        binding.rvSelectSeat.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.rvSelectSeat.adapter = adapter
-
-        binding.tvNextBtn.setOnSingleClickListener {
-            binding.tvCompleteBtn.visibility = View.VISIBLE
-            binding.tvNextBtn.visibility = View.GONE
-            binding.svSelectSeat.visibility = View.GONE
-            binding.layoutSeatNumber.visibility = View.VISIBLE
-        }
-
-        binding.tvCompleteBtn.setOnSingleClickListener {
-            dismiss()
-        }
-
-        binding.layoutSeatAgain.setOnSingleClickListener {
-            binding.ivSeatAgain.visibility = View.VISIBLE
-        }
-
-        binding.tvWhatColumn.setOnSingleClickListener {
-            binding.layoutColumnDescription.visibility = View.VISIBLE
-        }
+        setupRecyclerView()
+        setupButtons()
         adapter.submitList(getSeatSample())
     }
-    private fun getSeatSample(): List<String> {
-        return List(9) { index -> "Seat ${index + 1}" }
+
+    private fun setupRecyclerView() {
+        adapter = SelectSeatAdapter { position ->
+            adapter.setItemSelected(position)
+            updateNextButtonState()
+        }
+
+        binding.rvSelectSeat.apply {
+            layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = this@SelectSeatDialog.adapter
+        }
+    }
+
+    private fun setupButtons() {
+        with(binding) {
+            tvNextBtn.setOnSingleClickListener {
+                tvCompleteBtn.visibility = View.VISIBLE
+                tvNextBtn.visibility = View.GONE
+                svSelectSeat.visibility = View.GONE
+                tvSelectSeatLine.visibility = View.INVISIBLE
+                tvSelectNumberLine.visibility = View.VISIBLE
+                layoutSeatNumber.visibility = View.VISIBLE
+            }
+
+            tvCompleteBtn.setOnSingleClickListener {
+                dismiss()
+            }
+
+            layoutSeatAgain.setOnSingleClickListener {
+                ivSeatAgain.isVisible = !ivSeatAgain.isVisible
+            }
+
+            tvWhatColumn.setOnSingleClickListener {
+                layoutColumnDescription.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun getSeatSample(): List<SeatInfo> {
+        return listOf(
+            SeatInfo("프리미엄석", "켈리존", "#FF5733"),
+            SeatInfo("테이블석", "", "#3366FF"),
+            SeatInfo("오렌지석", "응원석", "#33FF33"),
+            SeatInfo("블루석", "", "#FFFF33"),
+            SeatInfo("레드석", "", "#FF33FF"),
+            SeatInfo("네이비석", "", "#33FFFF"),
+            SeatInfo("익사이팅석", "", "#FF6633"),
+            SeatInfo("외야그린석", "", "#6633FF"),
+            SeatInfo("휠체어석", "", "#33FF99"),
+        )
+    }
+
+    private fun updateNextButtonState() {
+        with(binding.tvNextBtn) {
+            setBackgroundResource(R.drawable.rect_gray900_fill_6)
+            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+            isEnabled = true
+        }
     }
 }
