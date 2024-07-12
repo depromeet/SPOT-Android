@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@color/white">
+    android:id="@+id/cl_spot_appbar">
 
     <ImageView
         android:id="@+id/iv_nav"

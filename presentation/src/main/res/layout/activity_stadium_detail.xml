@@ -9,12 +9,14 @@
         android:id="@+id/spot_appbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menuIcon="@drawable/ic_close"
         app:menuIconColor="@color/black"
-        app:navigationIcon="@drawable/ic_back" />
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconColor="@color/black" />
 
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/compose_view"
@@ -41,8 +43,8 @@
         android:id="@+id/cl_empty_review"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="invisible"
         android:background="@color/white"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,6 +109,7 @@
         android:id="@+id/fcv_detail_picture"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
