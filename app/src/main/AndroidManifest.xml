@@ -29,7 +29,7 @@
             android:exported="false">
         </activity>
         <activity
-            android:name="com.depromeet.presentation.home.HomeActivity"
+            android:name="com.depromeet.presentation.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.depromeet.presentation.MainActivity"
+            android:name="com.depromeet.presentation.home.HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
