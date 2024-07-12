@@ -94,19 +94,23 @@ val Compose = listOf(
     "androidx.compose.material:material:${Versions.composeVersion}",
     "androidx.compose.animation:animation:${Versions.composeVersion}",
     "androidx.compose.ui:ui:${Versions.composeVersion}",
+    "androidx.compose.ui:ui-tooling:${Versions.composeVersion}",
     "androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}",
     "androidx.compose.foundation:foundation:${Versions.composeVersion}",
     "androidx.compose.material:material-icons-core:${Versions.composeVersion}",
     "androidx.compose.material:material-icons-extended:${Versions.composeVersion}",
     "androidx.constraintlayout:constraintlayout-compose:1.0.0",
-    "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07",
+    "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1",
+    "androidx.lifecycle:lifecycle-runtime-compose:2.6.2",
     "androidx.hilt:hilt-navigation-compose:1.0.0",
     "androidx.paging:paging-compose:1.0.0-alpha14",
-    "io.coil-kt:coil-compose:1.4.0",
+    "io.coil-kt:coil-compose:2.6.0"
 )
 
 object ComposeDependency {
     const val glance = "androidx.glance:glance-appwidget:1.0.0-alpha03"
+    const val balloonCompose = "com.github.skydoves:balloon-compose:${Versions.balloonVersion}"
+    const val cloudy = "com.github.skydoves:cloudy:${Versions.cloudyVersion}"
 }
 
 val ComposeDebug = listOf(
