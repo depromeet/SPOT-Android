@@ -133,28 +133,74 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/iv_first_image"
+                    <FrameLayout
+                        android:id="@+id/layout_first_image"
                         android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/iv_second_image"
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="8dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/iv_first_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop" />
 
-                    <ImageView
-                        android:id="@+id/iv_third_image"
+                        <ImageView
+                            android:id="@+id/iv_remove_first_image"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="top|end"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/ic_remove_image" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/layout_second_image"
                         android:layout_width="200dp"
+                        android:visibility="gone"
                         android:layout_height="match_parent"
+                        android:layout_marginStart="8dp">
+
+                        <ImageView
+                            android:id="@+id/iv_second_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                         />
+
+                        <ImageView
+                            android:id="@+id/iv_remove_second_image"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="top|end"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/ic_remove_image"
+                         />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/layout_third_image"
+                        android:layout_width="200dp"
+                        android:visibility="gone"
                         android:layout_marginStart="8dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/iv_third_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                          />
+
+                        <ImageView
+                            android:id="@+id/iv_remove_third_image"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="top|end"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/ic_remove_image"
+                           />
+                    </FrameLayout>
                 </LinearLayout>
             </HorizontalScrollView>
         </LinearLayout>

@@ -3,6 +3,7 @@ package com.depromeet.presentation.seatReview
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -27,13 +28,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private val viewModel by viewModels<ReviewViewModel>()
 
-    private val imageViews: List<ImageView> by lazy {
+    private val selectedImage: List<ImageView> by lazy {
+        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)
+    }
+
+    private val selectedImageLayout: List<FrameLayout> by lazy {
+        listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage)
+    }
+
+    private val removeButtons: List<ImageView> by lazy {
         listOf(
-            binding.ivFirstImage,
-            binding.ivSecondImage,
-            binding.ivThirdImage,
+            binding.ivRemoveFirstImage,
+            binding.ivRemoveSecondImage,
+            binding.ivRemoveThirdImage,
         )
     }
+
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     companion object {
@@ -49,6 +59,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         initSeatReviewDialog()
         setupFragmentResultListener()
         observeUserDate()
+        setupRemoveButtons()
     }
 
     private fun observeUserDate() {
@@ -111,23 +122,42 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         with(binding) {
             layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
             selectedImageUris.forEachIndexed { index, uri ->
-                if (index < imageViews.size) {
-                    val image = imageViews[index]
-                    image.isVisible = true
+                if (index < selectedImage.size && index < selectedImageLayout.size) {
+                    val image = selectedImage[index]
+                    val layout = selectedImageLayout[index]
+                    layout.isVisible = true
                     image.setImageURI(Uri.parse(uri))
                     image.load(Uri.parse(uri)) {
                         transformations(RoundedCornersTransformation(26f))
                     }
+                    removeButtons[index].isVisible = true
                 }
             }
-            for (index in selectedImageUris.size until imageViews.size) {
-                val image = imageViews[index]
-                image.isVisible = false
+            for (index in selectedImageUris.size until selectedImage.size) {
+                val image = selectedImage[index]
+                val layout = selectedImageLayout[index]
+                layout.isVisible = false
+                removeButtons[index].isVisible = false
             }
             if (selectedImageUris.size == 3) {
                 svAddImage.post { svAddImage.fullScroll(View.FOCUS_RIGHT) }
             }
-            btnAddImage.isVisible = selectedImageUris.size < imageViews.size
+            btnAddImage.isVisible = selectedImageUris.size < selectedImage.size
+        }
+    }
+
+    private fun setupRemoveButtons() {
+        removeButtons.forEachIndexed { index, button ->
+            button.setOnSingleClickListener {
+                removeImageAt(index)
+            }
+        }
+    }
+
+    private fun removeImageAt(index: Int) {
+        if (index < selectedImageUris.size) {
+            selectedImageUris.removeAt(index)
+            updateImageViews()
         }
     }
 }
