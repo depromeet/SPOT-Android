@@ -45,7 +45,7 @@ fun StadiumDetailScreen(
         state = verticalScrollState,
         modifier = modifier
     ) {
-        item {
+        item("stadium_header") {
             StadiumHeaderContent(
                 context = context,
                 isMore = isMore,
@@ -65,12 +65,14 @@ fun StadiumDetailScreen(
         }
 
         if (review.reviewContents.isEmpty()) {
-            item {
+            item("stadium_review_content") {
                 StadiumEmptyReviewContent()
                 Spacer(modifier = Modifier.height(40.dp))
             }
         } else {
-            itemsIndexed(review.reviewContents) { _, reviewContent ->
+            itemsIndexed(
+                items = review.reviewContents
+            ) { _, reviewContent ->
                 StadiumReviewContent(
                     context = context,
                     reviewContent = reviewContent,
