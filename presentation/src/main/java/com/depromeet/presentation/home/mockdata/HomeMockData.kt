@@ -86,7 +86,7 @@ fun mockDataProfile(): Flow<HomeUiState> = flow {
             )
         )
     )
-    delay(1000)
+    delay(300)
     val randomNumber = Random.nextInt(0, 4)
     emit(
         HomeUiState(

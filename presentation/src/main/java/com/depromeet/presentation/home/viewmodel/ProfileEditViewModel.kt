@@ -75,6 +75,11 @@ class ProfileEditViewModel @Inject constructor() : ViewModel() {
         _uiState.value = _uiState.value.copy(teamList = currentTeamList)
     }
 
+    fun deleteCheerTeam() {
+        val currentTeamList = uiState.value.teamList.map { it.copy(isClicked = false) }
+        _uiState.value = _uiState.value.copy(teamList = currentTeamList)
+    }
+
     fun updateNickName(nickName: String) {
         _nickName.value = nickName
         validateNickName(nickName)

@@ -51,6 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/profile_edit_complete"
+        android:textColor="@drawable/text_color_selector"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/ib_profile_edit_close"
         app:layout_constraintEnd_toStartOf="@id/gl_end"
@@ -104,12 +105,13 @@
             <EditText
                 android:id="@+id/et_profile_edit_nickname"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/rect_gray100_line_6"
                 android:inputType="text"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="15dp"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_nickname"
@@ -124,11 +126,12 @@
                 android:drawableTint="@color/warning_red01"
                 android:textColor="@color/warning_red01"
                 android:textSize="11sp"
+                android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_warning"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_profile_edit_nickname"
-                tools:text="닉네임은 최소 2글자에서 최대 10글자로 입력해주세요."
-                tools:ignore="UseCompatTextViewDrawableXml" />
+                tools:ignore="UseCompatTextViewDrawableXml"
+                tools:text="닉네임은 최소 2글자에서 최대 10글자로 입력해주세요." />
 
 
             <TextView
@@ -159,7 +162,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/rect_gray100_line_6"
+                android:background="@drawable/rect_gray100_line_10"
                 android:gravity="center"
                 android:paddingVertical="24dp"
                 android:text="@string/profile_edit_cheer_none"

@@ -33,7 +33,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setRecyclerView()
+        setCheerTeamList()
         navigateToPhotoPicker()
         onClickTeam()
         observeNickName()
@@ -44,6 +44,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         }
 
         binding.ibProfileEditClose.setOnClickListener { finish() }
+        binding.tvProfileEditComplete.setOnClickListener { finish() }
 
     }
 
@@ -57,7 +58,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         adapter.submitList(state.teamList)
     }
 
-    private fun setRecyclerView() {
+    private fun setCheerTeamList() {
         adapter = ProfileEditTeamAdapter()
         binding.rvProfileEditTeam.adapter = adapter
         binding.rvProfileEditTeam.addItemDecoration(
@@ -111,22 +112,32 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     }
 
     private fun updateCompletionStatus(isError: Boolean, error: String) = if (isError) {
-        binding.etProfileEditNickname.setBackgroundResource(R.drawable.rect_warning01red_line_6)
-        binding.tvProfileEditNicknameError.visibility = View.VISIBLE
-        binding.tvProfileEditNicknameError.text = error
-        binding.tvProfileEditComplete.isClickable = false
+        with(binding) {
+            etProfileEditNickname.setBackgroundResource(R.drawable.rect_warning01red_line_6)
+            tvProfileEditNicknameError.visibility = View.VISIBLE
+            tvProfileEditNicknameError.text = error
+            tvProfileEditComplete.isEnabled = false
+        }
+
     } else {
-        binding.etProfileEditNickname.setBackgroundResource(R.drawable.rect_gray100_line_6)
-        binding.tvProfileEditNicknameError.visibility = View.GONE
-        binding.tvProfileEditNicknameError.text = error
-        binding.tvProfileEditComplete.isClickable = true
+        with(binding) {
+            etProfileEditNickname.setBackgroundResource(R.drawable.rect_gray100_line_6)
+            tvProfileEditNicknameError.visibility = View.GONE
+            tvProfileEditNicknameError.text = error
+            tvProfileEditComplete.isEnabled = true
+        }
     }
 
     private fun onClickTeam() {
         adapter.itemClubClickListener = object : ProfileEditTeamAdapter.OnItemClubClickListener {
             override fun onItemClubClick(item: TeamData) {
                 viewModel.updateClickTeam(item)
+                binding.tvProfileEditNoTeam.setBackgroundResource(R.drawable.rect_gray100_line_10)
             }
+        }
+        binding.tvProfileEditNoTeam.setOnClickListener {
+            viewModel.deleteCheerTeam()
+            binding.tvProfileEditNoTeam.setBackgroundResource(R.drawable.rect_gray50_fill_gray900_line_10)
         }
     }
 
