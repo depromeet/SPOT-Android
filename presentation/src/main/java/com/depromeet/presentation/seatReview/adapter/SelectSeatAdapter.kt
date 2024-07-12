@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview.dialog
+package com.depromeet.presentation.seatReview.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater

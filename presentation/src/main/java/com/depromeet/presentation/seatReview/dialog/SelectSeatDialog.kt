@@ -17,6 +17,8 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.seatReview.ReviewViewModel
+import com.depromeet.presentation.seatReview.adapter.SeatInfo
+import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
