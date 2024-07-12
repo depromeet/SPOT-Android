@@ -3,6 +3,7 @@ package com.depromeet.presentation.viewfinder
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.commit
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBinding
@@ -35,9 +36,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     private fun removeFragment() {
         val fragment = parentFragmentManager.findFragmentByTag(TAG)
         if (fragment != null) {
-            parentFragmentManager.beginTransaction()
-                .remove(fragment)
-                .commit()
+            parentFragmentManager.commit {
+                remove(fragment)
+            }
         }
     }
 
