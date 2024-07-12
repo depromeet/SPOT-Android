@@ -117,13 +117,9 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private fun startToStadiumDetailActivity(fromWeb: String) {
-        val intent = Intent(
-            this,
-            StadiumDetailActivity::class.java
-        ).apply {
+        Intent(this, StadiumDetailActivity::class.java).apply {
             putExtra(STADIUM_AREA, fromWeb)
-        }
-        startActivity(intent)
+        }.let(::startActivity)
     }
 
     private fun resetZoom() {
