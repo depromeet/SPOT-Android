@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -38,7 +39,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         adapter.submitList(getSeatSample())
         initSpinner()
         setupEditTextListeners()
-
         observeViewModel()
     }
 
@@ -75,7 +75,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // 선택 해제 시 처리할 내용이 있으면 여기에 추가
                 }
             }
     }
@@ -111,6 +110,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 ivSeatAgain.isVisible = !ivSeatAgain.isVisible
             }
 
+            layoutColumnNumberDescription.setOnSingleClickListener {
+                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
+            }
+
             tvWhatColumn.setOnSingleClickListener {
                 layoutColumnDescription.visibility = View.VISIBLE
             }
@@ -124,7 +127,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
@@ -134,7 +136,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
