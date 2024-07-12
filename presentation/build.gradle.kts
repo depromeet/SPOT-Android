@@ -96,6 +96,7 @@ dependencies {
 
     ComposeDependency.run {
         implementation(balloonCompose)
+        implementation(cloudy)
     }
 
     Compose.forEach {

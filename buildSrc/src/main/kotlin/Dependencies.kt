@@ -110,6 +110,7 @@ val Compose = listOf(
 object ComposeDependency {
     const val glance = "androidx.glance:glance-appwidget:1.0.0-alpha03"
     const val balloonCompose = "com.github.skydoves:balloon-compose:${Versions.balloonVersion}"
+    const val cloudy = "com.github.skydoves:cloudy:${Versions.cloudyVersion}"
 }
 
 val ComposeDebug = listOf(

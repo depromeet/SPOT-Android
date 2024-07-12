@@ -34,6 +34,7 @@ object Versions {
     const val progressViewVersion = "1.1.3"
     const val balloonVersion = "1.6.5"
     const val lottieVersion = "6.0.0"
+    const val cloudyVersion = "0.1.2"
 
     const val gradleVersion = "8.0.2"
 
