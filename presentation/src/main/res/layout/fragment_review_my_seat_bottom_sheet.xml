@@ -50,18 +50,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이런 점이 좋아요"
+                android:textColor="#606060"
                 android:textFontWeight="700"
-                android:textStyle="normal"
-                android:textColor="#606060" />
+                android:textStyle="normal" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="최대 3개 선택"
+                android:textColor="#AFAFAF"
                 android:textFontWeight="500"
-                android:textStyle="normal"
-                android:textColor="#AFAFAF" />
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -158,18 +158,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이런 점이 아쉬워요"
+                android:textColor="#606060"
                 android:textFontWeight="700"
-                android:textStyle="normal"
-                android:textColor="#606060" />
+                android:textStyle="normal" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="최대 3개 선택"
+                android:textColor="#AFAFAF"
                 android:textFontWeight="500"
-                android:textStyle="normal"
-                android:textColor="#AFAFAF" />
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -236,7 +236,6 @@
                 android:textStyle="normal" />
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -263,7 +262,7 @@
                 android:background="@drawable/sel_review_color_seat_review"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
-                android:text="🪟 앞을 가리는 유리판"
+                android:text="📢시끄러운 스피커"
                 android:textColor="#121212"
                 android:textFontWeight="500"
                 android:textStyle="normal" />
@@ -295,51 +294,62 @@
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <EditText
-            android:id="@+id/et_detail_review"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12.5dp"
-            android:background="@drawable/rect_gray200_fill_12"
-            android:inputType="textMultiLine"
-            android:maxLength="150"
-            android:minLines="2"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="12dp"
-            android:scrollbars="vertical"
-            android:textSize="14sp"
-            android:visibility="gone"
-            tools:text="더 자세한 후기를 남기세요" />
-
-        <TextView
-            android:id="@+id/tv_detail_review_warning"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="#FF5C5C"
-            android:textSize="13sp"
+            android:layout_marginTop="12.5dp">
+
+            <EditText
+                android:id="@+id/et_detail_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rect_gray200_fill_12"
+                android:hint="시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요"
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:singleLine="true"
+                android:textColor="#4A4A4A"
+                android:textColorHint="#C8C8C8"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="더 자세한 후기를 남기세요" />
+
+            <TextView
+                android:id="@+id/tv_detail_review_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FF5C5C"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="최대 150자까지 입력 할 수 있어요" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_complete_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rect_gray200_fill_6"
+            android:clickable="false"
+            android:enabled="false"
+            android:gravity="center"
+            android:paddingVertical="16dp"
+            android:text="완료"
+            android:textColor="@color/white"
+            android:textFontWeight="700"
             android:textStyle="normal"
-            android:visibility="gone"
-            tools:text="최대 150자까지 입력 할 수 있어요" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/tv_complete_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/rect_gray200_fill_6"
-        android:gravity="center"
-        android:paddingVertical="16dp"
-        android:text="완료"
-        android:textColor="@color/white"
-        android:clickable="false"
-        android:enabled="false"
-        android:textFontWeight="700"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_my_seat_review" />
 </androidx.constraintlayout.widget.ConstraintLayout>

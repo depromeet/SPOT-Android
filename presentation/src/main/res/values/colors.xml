@@ -16,4 +16,5 @@
     <color name="warning_red05">#FF5C5C</color>
     <color name="warning_red01">#FF5C5C</color>
     <color name="transparent">#00000000</color>
+    <color name="gray900">#121212</color>
 </resources>
