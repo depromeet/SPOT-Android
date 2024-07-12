@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebChromeClient
@@ -10,13 +11,16 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.designsystem.SpotTeamLabel
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.depromeet.presentation.extension.getCompatibleParcelableExtra
 import com.depromeet.presentation.util.getHTMLBody
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumViewModel
 import com.depromeet.presentation.viewfinder.web.AndroidBridge
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     ActivityStadiumBinding.inflate(it)
 }) {
@@ -27,13 +31,9 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private val viewModel: StadiumViewModel by viewModels()
-//    private val stadiumDetailFragment by lazy {
-//        StadiumDetailFragment.newInstance()
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setStadiumExtra()
         setUpWebClient()
 
@@ -91,7 +91,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }
         binding.wvStadium.addJavascriptInterface(
             AndroidBridge { fromWeb ->
-                startToStadiumDetailFragment()
+                startToStadiumDetailActivity(fromWeb)
             },
             JAVASCRIPT_OBJ
         )
@@ -116,13 +116,10 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.wvStadium.webChromeClient = WebChromeClient()
     }
 
-    private fun startToStadiumDetailFragment() {
-//        val bundle = Bundle()
-//        bundle.putString(STADIUM_AREA, fromWeb)
-//        stadiumDetailFragment.arguments = bundle
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.fcv_detail, stadiumDetailFragment, StadiumDetailFragment.TAG)
-//            .commit()
+    private fun startToStadiumDetailActivity(fromWeb: String) {
+        Intent(this, StadiumDetailActivity::class.java).apply {
+            putExtra(STADIUM_AREA, fromWeb)
+        }.let(::startActivity)
     }
 
     private fun resetZoom() {
