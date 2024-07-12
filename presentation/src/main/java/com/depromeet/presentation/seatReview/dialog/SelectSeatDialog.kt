@@ -1,7 +1,11 @@
 package com.depromeet.presentation.seatReview.dialog
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -32,6 +36,30 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         setupRecyclerView()
         setupButtons()
         adapter.submitList(getSeatSample())
+        initSpinner()
+        setupEditTextListeners()
+    }
+
+    private fun initSpinner() {
+        val blockItems = listOf("블럭 1", "블럭 2", "블럭 3", "블럭 4", "블럭 5")
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerBlock.adapter = adapter
+        binding.spinnerBlock.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    updateCompleteButtonState()
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
     }
 
     private fun setupRecyclerView() {
@@ -51,10 +79,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             tvNextBtn.setOnSingleClickListener {
                 tvCompleteBtn.visibility = View.VISIBLE
                 tvNextBtn.visibility = View.GONE
-                svSelectSeat.visibility = View.GONE
+                svSelectSeat.visibility = View.INVISIBLE
+                layoutSeatNumber.visibility = View.VISIBLE
                 tvSelectSeatLine.visibility = View.INVISIBLE
                 tvSelectNumberLine.visibility = View.VISIBLE
-                layoutSeatNumber.visibility = View.VISIBLE
             }
 
             tvCompleteBtn.setOnSingleClickListener {
@@ -71,6 +99,46 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
+    private fun setupEditTextListeners() {
+        binding.etColumn.addTextChangedListener(textWatcher)
+        binding.etNumber.addTextChangedListener(textWatcher)
+    }
+
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            updateCompleteButtonState()
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    }
+
+    private fun updateNextButtonState() {
+        with(binding.tvNextBtn) {
+            setBackgroundResource(R.drawable.rect_gray900_fill_6)
+            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+            isEnabled = true
+        }
+    }
+
+    private fun updateCompleteButtonState() {
+        val isBlockSelected =
+            binding.spinnerBlock.selectedItemPosition != AdapterView.INVALID_POSITION
+        val isColumnFilled = binding.etColumn.text.isNotEmpty()
+        val isNumberFilled = binding.etNumber.text.isNotEmpty()
+
+        with(binding.tvCompleteBtn) {
+            isEnabled = isBlockSelected && isColumnFilled && isNumberFilled
+            if (isEnabled) {
+                setBackgroundResource(R.drawable.rect_gray900_fill_6)
+                setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+            } else {
+                setBackgroundResource(R.drawable.rect_gray200_fill_6)
+            }
+        }
+    }
+
     private fun getSeatSample(): List<SeatInfo> {
         return listOf(
             SeatInfo("프리미엄석", "켈리존", "#FF5733"),
@@ -83,13 +151,5 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             SeatInfo("외야그린석", "", "#6633FF"),
             SeatInfo("휠체어석", "", "#33FF99"),
         )
-    }
-
-    private fun updateNextButtonState() {
-        with(binding.tvNextBtn) {
-            setBackgroundResource(R.drawable.rect_gray900_fill_6)
-            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
-            isEnabled = true
-        }
     }
 }
