@@ -14,6 +14,14 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
     private val _selectedButtons = MutableLiveData<List<String>>()
     val selectedButtons: LiveData<List<String>> get() = _selectedButtons
 
+    private val _selectedBlock = MutableLiveData<String>()
+    val selectedBlock: LiveData<String> get() = _selectedBlock
+
+    private val _selectedColumn = MutableLiveData<String>()
+    val selectedColumn: LiveData<String> get() = _selectedColumn
+
+    private val _selectedNumber = MutableLiveData<String>()
+    val selectedNumber: LiveData<String> get() = _selectedNumber
     fun updateSelectedDate(date: String) {
         _selectedDate.value = date
     }
@@ -24,5 +32,17 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
 
     fun setSelectedButtons(buttonTexts: List<String>) {
         _selectedButtons.value = buttonTexts
+    }
+
+    fun setSelectedBlock(block: String) {
+        _selectedBlock.value = block
+    }
+
+    fun setSelectedColumn(column: String) {
+        _selectedColumn.value = column
+    }
+
+    fun setSelctedNumber(number: String) {
+        _selectedNumber.value = number
     }
 }

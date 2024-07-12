@@ -38,6 +38,22 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         adapter.submitList(getSeatSample())
         initSpinner()
         setupEditTextListeners()
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.selectedBlock.observe(viewLifecycleOwner) {
+            updateCompleteButtonState()
+        }
+
+        viewModel.selectedColumn.observe(viewLifecycleOwner) {
+            updateCompleteButtonState()
+        }
+
+        viewModel.selectedNumber.observe(viewLifecycleOwner) {
+            updateCompleteButtonState()
+        }
     }
 
     private fun initSpinner() {
@@ -54,10 +70,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     position: Int,
                     id: Long,
                 ) {
-                    updateCompleteButtonState()
+                    val selectedBlock = blockItems[position]
+                    viewModel.setSelectedBlock(selectedBlock)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // 선택 해제 시 처리할 내용이 있으면 여기에 추가
                 }
             }
     }
@@ -100,18 +118,25 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun setupEditTextListeners() {
-        binding.etColumn.addTextChangedListener(textWatcher)
-        binding.etNumber.addTextChangedListener(textWatcher)
-    }
+        binding.etColumn.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.setSelectedColumn(s.toString())
+            }
 
-    private val textWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            updateCompleteButtonState()
-        }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        binding.etNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.setSelctedNumber(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     private fun updateNextButtonState() {
@@ -123,10 +148,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun updateCompleteButtonState() {
-        val isBlockSelected =
-            binding.spinnerBlock.selectedItemPosition != AdapterView.INVALID_POSITION
-        val isColumnFilled = binding.etColumn.text.isNotEmpty()
-        val isNumberFilled = binding.etNumber.text.isNotEmpty()
+        val isBlockSelected = viewModel.selectedBlock.value?.isNotEmpty() == true
+        val isColumnFilled = viewModel.selectedColumn.value?.isNotEmpty() == true
+        val isNumberFilled = viewModel.selectedNumber.value?.isNotEmpty() == true
 
         with(binding.tvCompleteBtn) {
             isEnabled = isBlockSelected && isColumnFilled && isNumberFilled
