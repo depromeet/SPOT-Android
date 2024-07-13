@@ -2,19 +2,21 @@ package com.depromeet.presentation.viewfinder
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.viewModels
+import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotTeamLabel
-import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.depromeet.presentation.extension.getCompatibleParcelableExtra
-import com.depromeet.presentation.util.getHTMLBody
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumViewModel
 import com.depromeet.presentation.viewfinder.web.AndroidBridge
@@ -27,16 +29,27 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     companion object {
         const val STADIUM_AREA = "stadium_area"
         private const val BASE_URL = "file:///android_asset/web/"
-        private const val JAVASCRIPT_OBJ = "javascript_obj"
+        private const val ENCODING_UTF8 = "UTF-8"
+        private const val MIME_TYPE_TEXT_HTML = "text/html"
+
+        /** @test */
+        private const val SVG_URL = "https://svgshare.com/i/18Br.svg"
     }
 
     private val viewModel: StadiumViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStadiumExtra()
-        setUpWebClient()
+        getStadiumExtra()
+        configureWebViewSetting()
+        interactionWebView()
+        initEvent()
 
+        viewModel.downloadFileFromServer(SVG_URL)
+        observeData()
+    }
+
+    private fun initEvent() {
         binding.spotAppbar.setNavigationOnClickListener {
             finish()
         }
@@ -48,23 +61,9 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.ivClose.setOnClickListener {
             binding.clZoomDescription.visibility = View.INVISIBLE
         }
-
-        binding.btnRefresh.setOnClickListener {
-            binding.btnRefresh.visibility = View.INVISIBLE
-//            resetZoom()
-        }
-
-        viewModel.downloadFileFromServer("https://svgshare.com/i/184q.svg")
-
-        viewModel.svgString.observe(this) { svgBody ->
-            binding.wvStadium.loadDataWithBaseURL(
-                BASE_URL, getHTMLBody(svgBody), "text/html",
-                "UTF-8", null
-            )
-        }
     }
 
-    private fun setStadiumExtra() {
+    private fun getStadiumExtra() {
         intent?.getCompatibleParcelableExtra<Stadium>(StadiumSelectionActivity.STADIUM_EXTRA)
             ?.let { stadium ->
                 binding.tvStadiumTitle.text = stadium.title
@@ -81,7 +80,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             }
     }
 
-    private fun setUpWebClient() {
+    private fun configureWebViewSetting() {
+        binding.wvStadium.setInitialScale(0)
         binding.wvStadium.settings.apply {
             builtInZoomControls = true
             displayZoomControls = false
@@ -90,30 +90,56 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             useWideViewPort = true
         }
         binding.wvStadium.addJavascriptInterface(
-            AndroidBridge { fromWeb ->
-                startToStadiumDetailActivity(fromWeb)
+            AndroidBridge { sectionId ->
+                val id = sectionId.split("_").last()
+                if (id.isEmpty()) return@AndroidBridge
+
+                startToStadiumDetailActivity(id)
             },
-            JAVASCRIPT_OBJ
+            AndroidBridge.JAVASCRIPT_OBJ
         )
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev?.action == MotionEvent.ACTION_UP) {
+            binding.tvZoomDescription.visibility = View.VISIBLE
+        } else {
+            if ((ev?.y ?: 0f) >= resources.displayMetrics.heightPixels * (1 / 6.0)) {
+                binding.tvZoomDescription.visibility = View.INVISIBLE
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private fun interactionWebView() {
         binding.wvStadium.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 injectJavaScriptFunction()
             }
+        }
+    }
 
-            override fun onScaleChanged(view: WebView?, oldScale: Float, newScale: Float) {
-//                binding.btnRefresh.visibility = View.VISIBLE
-//
-//                if (abs(oldScale - newScale) > 0.1) {
-//                    binding.tvZoomDescription.visibility = View.INVISIBLE
-//
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        binding.tvZoomDescription.visibility = View.VISIBLE
-//                    }, 500)
-//                }
+    private fun observeData() {
+        viewModel.htmlBody.asLiveData().observe(this) { uiState ->
+            when (uiState) {
+                is UiState.Empty -> Unit
+                is UiState.Failure -> {
+                    toast("실패")
+                }
+
+                is UiState.Loading -> {
+                    toast("로딩중")
+                }
+
+                is UiState.Success -> {
+                    binding.wvStadium.loadDataWithBaseURL(
+                        BASE_URL, uiState.data, MIME_TYPE_TEXT_HTML,
+                        ENCODING_UTF8, null
+                    )
+                    binding.wvStadium.webChromeClient = WebChromeClient()
+                }
             }
         }
-
-        binding.wvStadium.webChromeClient = WebChromeClient()
     }
 
     private fun startToStadiumDetailActivity(fromWeb: String) {
@@ -122,25 +148,23 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }.let(::startActivity)
     }
 
-    private fun resetZoom() {
-        binding.wvStadium.evaluateJavascript("javascript:resetZoom()", null)
-    }
-
     private fun injectJavaScriptFunction() {
-        val textToAndroid = "javascript: window.androidObj.textToAndroid = function(message) { " +
-                "javascript_obj" + ".textFromWeb(message) }"
-        binding.wvStadium.loadUrl(textToAndroid)
+        binding.wvStadium.loadUrl(AndroidBridge.INJECT_STADIUM_BLOCK_NUMBER)
     }
 
     override fun onDestroy() {
+        clearWebViewObject()
+        super.onDestroy()
+    }
+
+    private fun clearWebViewObject() {
         binding.wvStadium.apply {
-            removeJavascriptInterface(JAVASCRIPT_OBJ)
+            removeJavascriptInterface(AndroidBridge.JAVASCRIPT_OBJ)
             webChromeClient = null
             clearCache(true)
             clearHistory()
             removeAllViews()
             destroy()
         }
-        super.onDestroy()
     }
 }
