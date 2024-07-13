@@ -4,12 +4,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.designsystem.extension.dpToPx
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
+import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.mockdata.MonthData
+import com.depromeet.presentation.seatrecord.mockdata.groupByMonth
+import com.depromeet.presentation.seatrecord.mockdata.makeSeatRecordData
 import com.depromeet.presentation.seatrecord.mockdata.monthList
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +27,10 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         private const val BETWEEN_SPACING_DP = 8
     }
 
-    private lateinit var monthAdapter: DateMonthAdapter
+    private lateinit var dateMonthAdapter: DateMonthAdapter
+    private lateinit var monthRecordAdapter: MonthRecordAdapter
+
+    private val testData = makeSeatRecordData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +47,23 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             binding.ssvRecord.smoothScrollTo(0, 0)
         }
 
+        setProfile()
         initDateSpinner()
         setMonthAdapter()
+        setReviewAdapter()
 
+    }
+
+    private fun setProfile() {
+        with(binding) {
+            val data = testData.profileDetailData
+            "Lv.${data.level} ${data.titleName}".also { tvRecordLevel.text = it }
+            tvRecordNickname.text = data.nickName
+            tvRecordCount.text = data.recordCount.toString()
+            ivRecordProfile.load(data.profileImage) {
+                transformations(CircleCropTransformation())
+            }
+        }
     }
 
     private fun initDateSpinner() {
@@ -68,19 +90,28 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun setMonthAdapter() {
-        monthAdapter = DateMonthAdapter()
-        binding.rvRecordMonth.adapter = monthAdapter
+        dateMonthAdapter = DateMonthAdapter()
+        binding.rvRecordMonth.adapter = dateMonthAdapter
         binding.rvRecordMonth.addItemDecoration(
             LinearSpacingItemDecoration(
                 START_SPACING_DP.dpToPx(this),
                 BETWEEN_SPACING_DP.dpToPx(this)
             )
         )
-        monthAdapter.submitList(monthList)
-        monthAdapter.itemMonthClickListener = object : DateMonthAdapter.OnItemMonthClickListener {
-            override fun onItemMonthClick(item: MonthData) {
-                //뷰모델 처리
+        dateMonthAdapter.submitList(monthList)
+        dateMonthAdapter.itemMonthClickListener =
+            object : DateMonthAdapter.OnItemMonthClickListener {
+                override fun onItemMonthClick(item: MonthData) {
+                    //뷰모델 처리
+                }
             }
+    }
+
+    private fun setReviewAdapter() {
+        monthRecordAdapter = MonthRecordAdapter()
+        with(binding) {
+            rvRecordMonthDetail.adapter = monthRecordAdapter
         }
+        monthRecordAdapter.submitList(testData.reviews.groupByMonth())
     }
 }
