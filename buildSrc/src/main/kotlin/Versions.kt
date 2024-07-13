@@ -35,8 +35,6 @@ object Versions {
     const val balloonVersion = "1.6.5"
     const val lottieVersion = "6.0.0"
     const val cloudyVersion = "0.1.2"
-    const val stickyScrollVersion = "1.0.3"
-
     const val gradleVersion = "8.0.2"
 
     const val junitVersion = "4.13.2"
