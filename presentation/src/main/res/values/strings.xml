@@ -42,8 +42,10 @@
     <string name="viewfinder_lock_warning_description">아직 잠실야구장만 이용할 수 있어요!</string>
     <string name="viewfinder_lock_warning_trigger">"<u>"잠실야구장 시야보기"</u>"</string>
 
-    <!-- sightRecord -->
-    <string name="sight_record_my">내 시야 기록</string>
+    <!-- viewRecord -->
+    <string name="view_record_my">내 시야 기록</string>
+    <string name="view_record_whole">전체 기록</string>
+    <string name="view_record_all">전체</string>
 
 
 </resources>

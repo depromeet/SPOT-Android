@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_start"
@@ -19,90 +20,223 @@
         app:layout_constraintGuide_end="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_top"
+        android:id="@+id/gl_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
-
+        app:layout_constraintGuide_end="30dp" />
 
     <com.depromeet.designsystem.SpotAppbar
         android:id="@+id/record_spot_appbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/sight_record_my"
+        android:text="@string/view_record_my"
         android:textColor="@color/gray900"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:menuIcon="@drawable/ic_setting"
         app:menuIconColor="@color/gray900"
-        app:navigationIcon="@drawable/ic_back"/>
-    
-    <ScrollView
+        app:navigationIcon="@drawable/ic_back" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_record_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+        android:elevation="3dp"
+        android:src="@drawable/ic_up"
+        android:tint="@null"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:tint="@null"
+        tools:ignore="contentDescription" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_record_plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/gray900"
+        android:src="@drawable/ic_plus_24"
+        android:tint="@null"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:tint="@null"
+        tools:ignore="contentDescription" />
+
+    <com.depromeet.designsystem.StickyScrollView
+        android:id="@+id/ssv_record"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
-        
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_record_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="200sp"
-                android:text="test"
-                app:layout_constraintStart_toStartOf="parent"
+            <ImageView
+                android:id="@+id/iv_record_profile"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_default_profile"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <TextView
-                android:id="@+id/tv_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="200sp"
-                android:text="test"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_1"/>
-            <TextView
-                android:id="@+id/tv_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="200sp"
-                android:text="test"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_2"/>
-            <TextView
-                android:id="@+id/tv_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="200sp"
-                android:text="test"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_3"/>
-            <TextView
-                android:id="@+id/tv_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="200sp"
-                android:text="test"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_5"/>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="contentDescription" />
 
+            <TextView
+                android:id="@+id/tv_record_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="55dp"
+                android:background="@drawable/rect_action02_fill_6"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_record_profile"
+                app:layout_constraintStart_toStartOf="@id/iv_record_profile"
+                app:layout_constraintTop_toTopOf="@id/iv_record_profile"
+                tools:text="Lv.1 직관 첫 걸음" />
+
+            <TextView
+                android:id="@+id/tv_record_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:textColor="@color/gray900"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/tv_record_level"
+                app:layout_constraintStart_toStartOf="@id/tv_record_level"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_level"
+                tools:text="김영희" />
+
+            <TextView
+                android:id="@+id/tv_record_whole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/view_record_whole"
+                android:textColor="@color/gray900"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/tv_record_count"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@id/tv_record_nickname"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_nickname" />
+
+            <TextView
+                android:id="@+id/tv_record_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/gray500"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tv_record_whole"
+                app:layout_constraintEnd_toEndOf="@id/tv_record_nickname"
+                app:layout_constraintStart_toEndOf="@id/tv_record_whole"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_nickname"
+                tools:text="37" />
+
+            <View
+                android:id="@+id/v_record_division"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/gray50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_whole" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_record_none"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/v_record_division">
+
+                <TextView
+                    android:id="@+id/tv_record_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/gray900"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="2024년" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rect_gray900_fill_8"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="6dp"
+                    android:text="@string/view_record_all"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="@id/tv_record_year"
+                    app:layout_constraintTop_toBottomOf="@id/tv_record_year" />
+
+                <ImageView
+                    android:id="@+id/iv_record_no_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_folder_blank"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView"
+                    android:layout_marginTop="100dp"
+                    tools:ignore="contentDescription" />
+
+                <TextView
+                    android:id="@+id/tv_record_no_record_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/home_no_record_description"
+                    android:textColor="@color/gray800"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_record_no_record" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bt_record_write_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/rect_gray800_fill_6"
+                    android:paddingHorizontal="23dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/home_write_record"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_description" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        
-        
-        
-    </ScrollView>
 
+
+    </com.depromeet.designsystem.StickyScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
