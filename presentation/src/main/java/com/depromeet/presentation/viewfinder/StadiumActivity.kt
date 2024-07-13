@@ -8,6 +8,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.RoundedCornersTransformation
@@ -98,17 +99,22 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             },
             AndroidBridge.JAVASCRIPT_OBJ
         )
+
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if (ev?.action == MotionEvent.ACTION_UP) {
-            binding.tvZoomDescription.visibility = View.VISIBLE
+        return if (binding.clZoomDescription.isVisible) {
+            super.dispatchTouchEvent(ev)
         } else {
-            if ((ev?.y ?: 0f) >= resources.displayMetrics.heightPixels * (1 / 6.0)) {
-                binding.tvZoomDescription.visibility = View.INVISIBLE
+            if (ev?.action == MotionEvent.ACTION_UP) {
+                binding.tvZoomDescription.visibility = View.VISIBLE
+            } else {
+                if ((ev?.y ?: 0f) >= resources.displayMetrics.heightPixels * (1 / 6.0)) {
+                    binding.tvZoomDescription.visibility = View.INVISIBLE
+                }
             }
+            super.dispatchTouchEvent(ev)
         }
-        return super.dispatchTouchEvent(ev)
     }
 
     private fun interactionWebView() {
