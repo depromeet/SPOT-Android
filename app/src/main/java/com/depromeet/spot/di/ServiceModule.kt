@@ -1,6 +1,7 @@
 package com.depromeet.spot.di
 
 import com.depromeet.data.remote.ExampleService
+import com.depromeet.data.remote.WebSvgApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,4 +17,9 @@ object ServiceModule {
     @Singleton
     fun provideMockService(retrofit: Retrofit): ExampleService =
         retrofit.create(ExampleService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideWebSvgService(@WebSvg retrofit: Retrofit): WebSvgApiService =
+        retrofit.create(WebSvgApiService::class.java)
 }
