@@ -37,12 +37,13 @@ fun String.extractDay(): String {
 
 fun String.extractMonth(includeSuffixMonth: Boolean): String {
     val parts = this.split("-")
-    return if (parts.size == 3) {
-        val month = parts[1].toInt().toString()
-        if (includeSuffixMonth) "${month}월" else month
-    } else {
-        ""
+    if (parts.size == 3) {
+        val month = parts[1].toIntOrNull()?.toString() ?: return ""
+        return if (includeSuffixMonth) "${month}월" else month
+    } else if (this.length <= 2) {
+        return this.toIntOrNull()?.toString() ?: return ""
     }
+    return ""
 }
 
 //요일 확인
