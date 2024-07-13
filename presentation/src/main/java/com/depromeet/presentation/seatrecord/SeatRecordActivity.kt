@@ -2,7 +2,6 @@ package com.depromeet.presentation.seatrecord
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.depromeet.core.base.BaseActivity
@@ -50,7 +49,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, year)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(binding.spinnerRecordYear) {
-            dropDownWidth = ViewGroup.LayoutParams.MATCH_PARENT
             this.adapter = adapter
             onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
