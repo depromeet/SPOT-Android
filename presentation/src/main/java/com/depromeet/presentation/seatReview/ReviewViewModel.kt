@@ -1,6 +1,5 @@
 package com.depromeet.presentation.seatReview
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -50,7 +49,7 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setSelectedColumn(column: String) {
-        _selectedColumn.value = column)
+        _selectedColumn.value = column
     }
 
     fun setSelectedNumber(number: String) {
