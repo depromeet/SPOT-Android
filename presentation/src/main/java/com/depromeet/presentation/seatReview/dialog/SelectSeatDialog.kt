@@ -10,7 +10,6 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
@@ -19,7 +18,6 @@ import com.depromeet.presentation.seatReview.ReviewViewModel
 import com.depromeet.presentation.seatReview.adapter.SeatInfo
 import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetBinding>(
@@ -45,23 +43,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeViewModel() {
-        lifecycleScope.launch {
-            viewModel.selectedBlock.collect {
-                updateCompleteButtonState()
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.selectedColumn.collect {
-                updateCompleteButtonState()
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.selectedNumber.collect {
-                updateCompleteButtonState()
-            }
-        }
+        viewModel.selectedBlock.observe(this) { updateCompleteButtonState() }
+        viewModel.selectedColumn.observe(this) { updateCompleteButtonState() }
+        viewModel.selectedNumber.observe(this) { updateCompleteButtonState() }
     }
 
     private fun initSpinner() {
@@ -122,12 +106,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun updateCompleteButtonState() {
-        val isBlockSelected = viewModel.selectedBlock.value.isNotEmpty()
-        val isColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
-        val isNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
+        val isBlockSelected = viewModel.selectedBlock.value?.isNotEmpty()
+        val isColumnFilled = viewModel.selectedColumn.value?.isNotEmpty()
+        val isNumberFilled = viewModel.selectedNumber.value?.isNotEmpty()
 
         with(binding.tvCompleteBtn) {
-            isEnabled = isBlockSelected && isColumnFilled && isNumberFilled
+            isEnabled = isBlockSelected == true && isColumnFilled == true && isNumberFilled == true
             if (isEnabled) {
                 setBackgroundResource(R.drawable.rect_gray900_fill_6)
                 setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))

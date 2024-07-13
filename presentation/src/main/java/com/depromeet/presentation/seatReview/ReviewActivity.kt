@@ -8,7 +8,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
@@ -19,7 +18,6 @@ import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -61,10 +59,8 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun observeUserDate() {
-        lifecycleScope.launch {
-            viewModel.selectedDate.collect { date ->
-                binding.tvDate.text = date
-            }
+        viewModel.selectedDate.observe(this) { date ->
+            binding.tvDate.text = date
         }
     }
 
