@@ -37,7 +37,7 @@
             android:exported="false"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.depromeet.presentation.MainActivity"
+            android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -51,6 +51,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.depromeet.presentation.home.ProfileEditActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.depromeet.presentation.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.depromeet.presentation.seatrecord.SeatDetailRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>

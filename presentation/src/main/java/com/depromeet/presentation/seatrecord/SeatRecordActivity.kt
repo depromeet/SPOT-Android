@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatrecord
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,6 +15,7 @@ import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.mockdata.MonthData
+import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
 import com.depromeet.presentation.seatrecord.mockdata.groupByMonth
 import com.depromeet.presentation.seatrecord.mockdata.makeSeatRecordData
 import com.depromeet.presentation.seatrecord.mockdata.monthList
@@ -61,9 +63,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
         setProfile()
         initDateSpinner()
-        setMonthAdapter()
-        setReviewAdapter()
-
+        initMonthAdapter()
+        initRecentRecordAdapter()
 
     }
 
@@ -102,7 +103,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setMonthAdapter() {
+    private fun initMonthAdapter() {
         dateMonthAdapter = DateMonthAdapter()
         binding.rvRecordMonth.adapter = dateMonthAdapter
         binding.rvRecordMonth.addItemDecoration(
@@ -120,11 +121,23 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             }
     }
 
-    private fun setReviewAdapter() {
+    private fun initRecentRecordAdapter() {
         monthRecordAdapter = MonthRecordAdapter()
+
         with(binding) {
             rvRecordMonthDetail.adapter = monthRecordAdapter
         }
         monthRecordAdapter.submitList(testData.reviews.groupByMonth())
+
+        monthRecordAdapter.itemRecordClickListener =
+            object : MonthRecordAdapter.OnItemRecordClickListener {
+                override fun onItemRecordClick(item: ReviewMockData) {
+                    Intent(this@SeatRecordActivity, SeatDetailRecordActivity::class.java).apply {
+                        putExtra("seatData", item)
+                    }.let(this@SeatRecordActivity::startActivity)
+                }
+            }
+
+
     }
 }

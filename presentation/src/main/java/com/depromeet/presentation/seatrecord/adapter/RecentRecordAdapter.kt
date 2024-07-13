@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatrecord.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -14,12 +15,19 @@ import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.google.android.material.chip.Chip
 
-class RecentRecordAdapter : ListAdapter<ReviewMockData, RecentRecordViewHolder>(
+class RecentRecordAdapter(
+) : ListAdapter<ReviewMockData, RecentRecordViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
+    interface OnItemRecordClickListener {
+        fun onItemRecordClick(item: ReviewMockData)
+    }
+
+    var itemRecordClickListener: OnItemRecordClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentRecordViewHolder {
         return RecentRecordViewHolder(
             ItemRecentRecordBinding.inflate(
@@ -32,6 +40,10 @@ class RecentRecordAdapter : ListAdapter<ReviewMockData, RecentRecordViewHolder>(
 
     override fun onBindViewHolder(holder: RecentRecordViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            itemRecordClickListener?.onItemRecordClick(getItem(position))
+            Log.d("test", "click")
+        }
     }
 }
 
@@ -56,8 +68,6 @@ class RecentRecordViewHolder(
 
     private fun setChipGroup(items: List<String>) {
         with(binding.cgRecentKeyword) {
-            val otherCount = items.size - MAX_VISIBLE_CHIPS
-
             items.take(MAX_VISIBLE_CHIPS).forEachIndexed { index, item ->
                 val chip = createChip(item)
                 addView(chip)
@@ -81,9 +91,7 @@ class RecentRecordViewHolder(
             setBackgroundResource(R.drawable.rect_gray50_fill_4)
             setTextColor(ContextCompat.getColor(context, R.color.gray800))
             setPadding(0, 0, 0, 0)
-//            val paddingStartEnd = 8 //.dpToPx(itemView.context)
-//            val paddingTopBottom = 4 //.dpToPx(itemView.context)
-//            setPadding(paddingStartEnd, paddingTopBottom, paddingStartEnd, paddingTopBottom)
+            //TODO : 칩그룹 PADDING 고민 -> 커스텀?
         }
     }
 }
