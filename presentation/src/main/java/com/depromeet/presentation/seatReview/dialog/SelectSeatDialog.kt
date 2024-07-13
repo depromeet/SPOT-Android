@@ -11,7 +11,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
@@ -84,11 +83,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             adapter.setItemSelected(position)
             updateNextButtonState()
         }
-
-        binding.rvSelectSeat.apply {
-            layoutManager = GridLayoutManager(requireContext(), 3)
-            adapter = this@SelectSeatDialog.adapter
-        }
+        binding.rvSelectSeat.adapter = adapter
     }
 
     private fun setupButtons() {
