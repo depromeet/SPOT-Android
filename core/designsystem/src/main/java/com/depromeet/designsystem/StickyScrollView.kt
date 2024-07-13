@@ -2,11 +2,12 @@ package com.depromeet.designsystem
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.ScrollView
+import androidx.core.widget.NestedScrollView
 
-class StickyScrollView : ScrollView, ViewTreeObserver.OnGlobalLayoutListener {
+class StickyScrollView : NestedScrollView, ViewTreeObserver.OnGlobalLayoutListener {
 
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attr: AttributeSet?) : this(context, attr, 0)
@@ -27,13 +28,15 @@ class StickyScrollView : ScrollView, ViewTreeObserver.OnGlobalLayoutListener {
     var header: View? = null
         set(value) {
             field = value
-            field?.let {
-                it.translationZ = 1f //천장 뷰가 다른 뷰를 가리지 않게
-                it.setOnClickListener { _ ->
-                    //클릭 시, 헤더뷰가 최상단으로 오게 스크롤 이동
-                    this.smoothScrollTo(scrollX, it.top)
+            field?.let { newHeader ->
+                newHeader.translationZ = 1f // 천장 뷰가 다른 뷰 가리지 않게
+                newHeader.setOnClickListener { _ ->
+                    //smoothScrollTo(scrollX, newHeader.top)
                     callStickListener()
                 }
+                mHeaderInitPosition = newHeader.top.toFloat()
+            } ?: kotlin.run {
+                mHeaderInitPosition = 0f
             }
         }
 
@@ -44,7 +47,8 @@ class StickyScrollView : ScrollView, ViewTreeObserver.OnGlobalLayoutListener {
     override fun onScrollChanged(l: Int, scrollY: Int, oldl: Int, oldt: Int) {
         super.onScrollChanged(l, scrollY, oldl, oldt)
 
-        if (scrollY > mHeaderInitPosition) {
+        Log.d("test", "$scrollY $mHeaderInitPosition")
+        if (header != null && scrollY > mHeaderInitPosition) {
             stickHeader(scrollY - mHeaderInitPosition)
         } else {
             freeHeader()

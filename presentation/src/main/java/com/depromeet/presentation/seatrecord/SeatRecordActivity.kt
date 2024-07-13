@@ -1,6 +1,7 @@
 package com.depromeet.presentation.seatrecord
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -42,7 +43,18 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         binding.recordSpotAppbar.setMenuOnClickListener {
             //셋팅 이동
         }
-        binding.ssvRecord.header = binding.clRecordStickyHeader
+
+
+        binding.ssvRecord.run {
+            header = binding.clRecordStickyHeader
+            stickListener = {
+                Log.d("test", "붙었습니다~ ")
+            }
+            freeListener = {
+                Log.d("test", "떨어졌습니다~ ")
+            }
+        }
+
         binding.fabRecordUp.setOnClickListener {
             binding.ssvRecord.smoothScrollTo(0, 0)
         }
@@ -51,6 +63,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         initDateSpinner()
         setMonthAdapter()
         setReviewAdapter()
+
 
     }
 
