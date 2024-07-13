@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,8 +21,8 @@ import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
+import com.depromeet.presentation.extension.toUri
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.ByteArrayOutputStream
 
 @AndroidEntryPoint
 class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBinding>(
@@ -86,7 +85,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
                 if (result.resultCode == RESULT_OK) {
                     result.data?.extras?.get("data")?.let { bitmap ->
                         (bitmap as? Bitmap)?.let {
-                            val uri = it.toUri(requireContext())
+                            val uri = it.toUri(requireContext(), IMAGE_TITLE)
                             setFragmentResult(
                                 REQUEST_KEY,
                                 bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
@@ -120,14 +119,5 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     private fun navigateToCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         takePhotoLauncher.launch(takePictureIntent)
-    }
-
-    private fun Bitmap.toUri(context: Context): Uri {
-        val bytes = ByteArrayOutputStream().apply {
-            compress(Bitmap.CompressFormat.JPEG, 100, this)
-        }
-        val path =
-            MediaStore.Images.Media.insertImage(context.contentResolver, this, IMAGE_TITLE, null)
-        return Uri.parse(path)
     }
 }
