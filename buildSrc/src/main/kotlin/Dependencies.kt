@@ -74,6 +74,7 @@ object ThirdPartyDependencies {
     const val balloon = "com.github.skydoves:balloon:${Versions.balloonVersion}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
     const val lottieCompose = "com.airbnb.android:lottie-compose:${Versions.lottieVersion}"
+    const val stickyScroll = "'com.github.amarjain07:StickyScrollView:${Versions.stickyScrollVersion}"
 }
 
 object ClassPathPlugins {
