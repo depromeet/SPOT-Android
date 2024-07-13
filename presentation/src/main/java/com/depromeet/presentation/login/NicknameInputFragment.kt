@@ -3,6 +3,7 @@ package com.depromeet.presentation.login
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentNicknameInputBinding
@@ -61,24 +62,37 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
         }
     }
 
-    private fun initObserver() {
+    private fun initObserver() = with(binding) {
         signUpViewModel.nicknameInputState.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 NicknameInputState.EMPTY -> {
-                    binding.clNicknameInputWarning.visibility = View.GONE
+                    clNicknameInputWarning.visibility = View.GONE
+                    updateButtonEnabled(false)
                 }
                 NicknameInputState.VALID -> {
-                    binding.clNicknameInputWarning.visibility = View.GONE
+                    clNicknameInputWarning.visibility = View.GONE
+                    updateButtonEnabled(true)
                 }
                 NicknameInputState.INVALID_LENGTH -> {
-                    binding.clNicknameInputWarning.visibility = View.VISIBLE
-                    binding.tvNicknameWarning.text = getString(R.string.profile_edit_error_length)
+                    clNicknameInputWarning.visibility = View.VISIBLE
+                    tvNicknameWarning.text = getString(R.string.profile_edit_error_length)
+                    updateButtonEnabled(false)
                 }
                 NicknameInputState.INVALID_CHARACTER -> {
-                    binding.clNicknameInputWarning.visibility = View.VISIBLE
-                    binding.tvNicknameWarning.text = getString(R.string.profile_edit_error_type)
+                    clNicknameInputWarning.visibility = View.VISIBLE
+                    tvNicknameWarning.text = getString(R.string.profile_edit_error_type)
+                    updateButtonEnabled(false)
                 }
             }
+        }
+    }
+
+    private fun updateButtonEnabled(isEnabled: Boolean) = with(binding) {
+        tvNicknameNextBtn.isClickable = isEnabled
+        if (isEnabled) {
+            tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_gray800_fill_6)
+        } else {
+            tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
         }
     }
 }

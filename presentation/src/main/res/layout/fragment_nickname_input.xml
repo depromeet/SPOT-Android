@@ -100,6 +100,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/rect_gray200_fill_6"
         android:gravity="center"
+        android:clickable="false"
         android:paddingVertical="16dp"
         android:text="다음"
         android:textFontWeight="700"
