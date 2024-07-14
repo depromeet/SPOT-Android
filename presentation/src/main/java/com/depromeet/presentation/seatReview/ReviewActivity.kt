@@ -44,7 +44,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private val removeButtons: List<ImageView> by lazy {
         listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage)
     }
-
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {

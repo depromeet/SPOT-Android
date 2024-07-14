@@ -1,11 +1,13 @@
 package com.depromeet.presentation.seatReview.dialog
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,6 +24,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toUri
+import com.depromeet.presentation.home.UploadErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,25 +80,51 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     private fun setupActivityResultLaunchers() {
         selectMultipleMediaLauncher =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
-                val uriList = uris.map { it.toString() }
-                setFragmentResult(REQUEST_KEY, bundleOf(SELECTED_IMAGES to uriList))
+                val validUris = uris.filter { uri ->
+                    handleSelectedImage(uri)
+                }
+                if (validUris.isNotEmpty()) {
+                    val uriList = validUris.map { it.toString() }
+                    setFragmentResult(REQUEST_KEY, bundleOf(SELECTED_IMAGES to uriList))
+                }
                 dismiss()
             }
+
         takePhotoLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     result.data?.extras?.get("data")?.let { bitmap ->
                         (bitmap as? Bitmap)?.let {
                             val uri = it.toUri(requireContext(), IMAGE_TITLE)
-                            setFragmentResult(
-                                REQUEST_KEY,
-                                bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
-                            )
+                            if (handleSelectedImage(uri)) {
+                                setFragmentResult(
+                                    REQUEST_KEY,
+                                    bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
+                                )
+                            }
                             dismiss()
                         }
                     }
                 }
             }
+    }
+
+    @SuppressLint("Recycle")
+    private fun handleSelectedImage(uri: Uri): Boolean {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val sizeBytes = inputStream?.available() ?: 0
+        val sizeMB = sizeBytes / (1024f * 1024f)
+
+        return if (sizeMB > 15) {
+            val fragment = UploadErrorDialog(
+                getString(R.string.upload_error_capacity_description),
+                getString(R.string.upload_error_capacity_15MB),
+            )
+            fragment.show(parentFragmentManager, fragment.tag)
+            false
+        } else {
+            true
+        }
     }
 
     private fun setupUploadMethod() {
