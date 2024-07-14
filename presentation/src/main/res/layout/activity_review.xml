@@ -108,6 +108,7 @@
                         android:id="@+id/tv_image_count"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textColor="#AFAFAF"
                         android:text="0" />
 
                     <TextView
@@ -115,6 +116,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="/3"
+                        android:textColor="#AFAFAF"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_image_count"
                         app:layout_constraintStart_toEndOf="@id/tv_image_count"
                         app:layout_constraintTop_toTopOf="parent" />
