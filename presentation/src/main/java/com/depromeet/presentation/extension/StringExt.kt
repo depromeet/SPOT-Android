@@ -52,3 +52,8 @@ fun String.getDayOfWeek(): String {
     val date = LocalDate.parse(this, formatter)
     return date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
 }
+
+fun String.getYearMonthDay(): String {
+    return LocalDate.parse(this, DateTimeFormatter.ISO_LOCAL_DATE)
+        .format(DateTimeFormatter.ofPattern("yyyy년 M월 d일"))
+}
