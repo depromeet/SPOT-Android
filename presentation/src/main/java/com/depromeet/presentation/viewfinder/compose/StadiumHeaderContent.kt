@@ -31,7 +31,8 @@ fun StadiumHeaderContent(
     stadiumArea: StadiumArea,
     keywords: List<Keyword>,
     modifier: Modifier = Modifier,
-    onChangeIsMore: (Boolean) -> Unit
+    onChangeIsMore: (Boolean) -> Unit,
+    onClickSelectSeat: () -> Unit
 ) {
     Column(
         modifier = modifier.background(Color.White),
@@ -49,7 +50,10 @@ fun StadiumHeaderContent(
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        StadiumSeatCheckBox(seat = Seat(100, 11, false))
+        StadiumSeatCheckBox(
+            seat = Seat(100, 11, false),
+            onClick = onClickSelectSeat
+        )
 
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -80,7 +84,8 @@ private fun StadiumHeaderContentPreview() {
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = keywords,
-        onChangeIsMore = {}
+        onChangeIsMore = {},
+        onClickSelectSeat = {}
     )
 }
 
@@ -93,6 +98,7 @@ private fun StadiumHeaderContentIsMorePreview() {
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = keywords,
-        onChangeIsMore = {}
+        onChangeIsMore = {},
+        onClickSelectSeat = {}
     )
 }

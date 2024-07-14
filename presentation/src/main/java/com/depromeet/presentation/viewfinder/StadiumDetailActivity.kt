@@ -8,6 +8,7 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
+import com.depromeet.presentation.viewfinder.dialog.StadiumSelectSeatDialog
 import com.depromeet.presentation.viewfinder.sample.ReviewContent
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +19,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 }) {
     companion object {
         const val REVIEW_PICTURE_CONTENT = "review_picture_content"
+        const val STADIUM_HEADER = "stadium_header"
+        const val STADIUM_REVIEW_CONTENT = "stadium_review_content"
     }
 
     private val viewModel: StadiumDetailViewModel by viewModels()
@@ -42,6 +45,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                 viewModel = viewModel,
                 onClickReviewPicture = { reviewContent ->
                     startToStadiumDetailPictureFragment(reviewContent)
+                },
+                onClickSelectSeat = {
+                    StadiumSelectSeatDialog.newInstance()
+                        .show(supportFragmentManager, StadiumSelectSeatDialog.TAG)
+                },
                 }
             )
         }
