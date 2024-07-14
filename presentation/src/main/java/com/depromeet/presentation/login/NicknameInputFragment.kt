@@ -3,14 +3,13 @@ package com.depromeet.presentation.login
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentNicknameInputBinding
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.asLiveData
 
 @AndroidEntryPoint
 class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
