@@ -1,12 +1,12 @@
 package com.depromeet.presentation.login
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemBaseballTeamBinding
+import com.depromeet.presentation.databinding.ItemSelectTeamBinding
 import com.depromeet.presentation.home.adapter.ProfileEditTeamViewHolder
 import com.depromeet.presentation.home.mockdata.TeamData
 import com.depromeet.presentation.util.ItemDiffCallback
@@ -24,7 +24,6 @@ class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
 ) {
     interface OnItemClubClickListener {
         fun onItemClubClick(item: TeamData)
-        fun onAddButtonClick()
     }
 
     var itemClubClickListener: OnItemClubClickListener? = null
@@ -44,8 +43,8 @@ class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
                 ProfileEditTeamViewHolder(ItemBaseballTeamBinding.bind(view))
             }
             TeamSelectViewType.BUTTON_ITEM -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_baseball_team, parent, false)
-                ButtonViewHolder(view)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_select_team, parent, false)
+                ButtonViewHolder(ItemSelectTeamBinding.bind(view))
             }
         }
     }
@@ -59,9 +58,7 @@ class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
                 }
             }
             is ButtonViewHolder -> {
-                holder.itemView.setOnClickListener {
-                    itemClubClickListener?.onAddButtonClick()
-                }
+                holder.bind()
             }
         }
     }
@@ -71,6 +68,16 @@ class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
     }
 }
 
-class ButtonViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class ButtonViewHolder(
+    private val binding: ItemSelectTeamBinding
+): RecyclerView.ViewHolder(binding.root) {
 
+    fun bind() {
+        binding.tvSelectTeamNoTeam.setOnClickListener {
+
+        }
+        binding.tvSelectedTeamNextBtn.setOnClickListener {
+
+        }
+    }
 }
