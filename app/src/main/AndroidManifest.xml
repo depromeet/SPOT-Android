@@ -25,19 +25,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="com.depromeet.presentation.viewfinder.StadiumDetailActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.depromeet.presentation.viewfinder.StadiumActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name="com.depromeet.presentation.viewfinder.StadiumSelectionActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
+            android:name="com.depromeet.presentation.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -45,6 +33,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.depromeet.presentation.viewfinder.StadiumDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.depromeet.presentation.viewfinder.StadiumActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.depromeet.presentation.viewfinder.StadiumSelectionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.depromeet.presentation.home.HomeActivity"
             android:exported="false"
@@ -54,12 +54,20 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.depromeet.presentation.MainActivity"
+            android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.depromeet.presentation.seatrecord.SeatDetailRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.depromeet.presentation.seatReview.ReviewDoneActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>
