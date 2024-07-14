@@ -53,14 +53,51 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         initUploadDialog()
         initSeatReviewDialog()
         setupFragmentResultListener()
-        observeUserDate()
         setupRemoveButtons()
         navigateToReviewDoneActivity()
+        observeViewModel()
     }
 
-    private fun observeUserDate() {
+    private fun observeViewModel() {
         viewModel.selectedDate.observe(this) { date ->
             binding.tvDate.text = date
+        }
+        viewModel.reviewCount.observe(this) { count ->
+            binding.tvMySeatReviewCount.text = count.toString()
+            binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
+        }
+
+        viewModel.selectedSeatName.observe(this) { name ->
+            binding.tvSeatColor.text = name.toString()
+            updateLayoutSeatInfoVisibility()
+        }
+
+        viewModel.selectedBlock.observe(this) { block ->
+            binding.tvSeatBlock.text = block.toString()
+            updateLayoutSeatInfoVisibility()
+        }
+
+        viewModel.selectedColumn.observe(this) { column ->
+            binding.tvColumnNumber.text = column.toString()
+            updateLayoutSeatInfoVisibility()
+        }
+
+        viewModel.selectedNumber.observe(this) { number ->
+            binding.tvSeatNumber.text = number.toString()
+            updateLayoutSeatInfoVisibility()
+        }
+    }
+
+    private fun updateLayoutSeatInfoVisibility() {
+        val seatName = viewModel.selectedSeatName.value
+        val block = viewModel.selectedBlock.value
+        val column = viewModel.selectedColumn.value
+        val number = viewModel.selectedNumber.value
+        val isEmpty = seatName.isNullOrEmpty() || block.isNullOrEmpty() || column.isNullOrEmpty() || number.isNullOrEmpty()
+        if (isEmpty) {
+            binding.layoutSeatInfo.visibility = View.INVISIBLE
+        } else {
+            binding.layoutSeatInfo.visibility = View.VISIBLE
         }
     }
 
@@ -73,12 +110,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initSeatReviewDialog() {
         binding.layoutReviewMySeat.setOnSingleClickListener {
-            val reviewMySeatDialogFragment = ReviewMySeatDialog()
-            reviewMySeatDialogFragment.show(supportFragmentManager, reviewMySeatDialogFragment.tag)
+            ReviewMySeatDialog().show(supportFragmentManager, "ReviewMySeatDialog")
         }
         binding.layoutSeatInfoNext.setOnSingleClickListener {
-            val selectSeatDialogFragment = SelectSeatDialog()
-            selectSeatDialogFragment.show(supportFragmentManager, selectSeatDialogFragment.tag)
+            SelectSeatDialog().show(supportFragmentManager, "SelectSeatDialog")
         }
     }
 

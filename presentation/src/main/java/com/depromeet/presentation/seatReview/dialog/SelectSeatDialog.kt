@@ -46,6 +46,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         viewModel.selectedBlock.observe(this) { updateCompleteButtonState() }
         viewModel.selectedColumn.observe(this) { updateCompleteButtonState() }
         viewModel.selectedNumber.observe(this) { updateCompleteButtonState() }
+        viewModel.selectedSeatName.observe(this) { selectedSeatName ->
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun initSpinner() {
@@ -64,7 +67,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     private fun setupRecyclerView() {
         adapter = SelectSeatAdapter { position ->
+            val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
+            viewModel.setSelectedSeatName(selectedSeatInfo.seatName)
             updateNextButtonState()
         }
         binding.rvSelectSeat.adapter = adapter

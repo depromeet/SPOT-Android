@@ -43,12 +43,24 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
         setupDetailReviewEditText()
-        changeReviewButton()
         setupCompleteButton()
+        observeViewModel()
+        setupButtonClickListeners()
+    }
+
+    private fun observeViewModel() {
+        viewModel.selectedReviewBtn.observe(viewLifecycleOwner) { selectedButtonTexts ->
+            updateButtonStates(selectedButtonTexts)
+            updateCompleteButtonState(selectedButtonTexts.isNotEmpty())
+        }
+        viewModel.detailReviewText.observe(viewLifecycleOwner) { text ->
+            binding.etDetailReview.setText(text)
+        }
     }
 
     private fun setupDetailReviewEditText() {
@@ -68,22 +80,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                         tvDetailReviewWarning.visibility = View.GONE
                     }
                 }
-            }
-        }
-    }
-
-    private fun changeReviewButton() {
-        selectedButton.forEach { button ->
-            button.setOnSingleClickListener {
-                button.isSelected = !button.isSelected
-                button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
-                val selectedButtonTexts = selectedButton.filter { it.isSelected }.map { it.text.toString() }
-                viewModel.setSelectedButtons(selectedButtonTexts)
-                with(binding.tvCompleteBtn) {
-                    isEnabled = selectedButtonTexts.isNotEmpty()
-                    setBackgroundResource(if (isEnabled) R.drawable.rect_gray900_fill_6 else R.drawable.rect_gray200_fill_6)
-                    setTextColor(colorOf(if (isEnabled) R.color.white else R.color.gray900))
-                }
+                viewModel.setDetailReviewText(text.toString())
             }
         }
     }
@@ -91,12 +88,11 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     private fun setupCompleteButton() {
         binding.tvCompleteBtn.setOnSingleClickListener {
             if (binding.tvCompleteBtn.isEnabled) {
-                val detailReviewText = binding.etDetailReview.text.toString()
-                viewModel.setDetailReviewText(detailReviewText)
                 dismiss()
             }
         }
     }
+
     private fun setBottomSheetHeight(view: View) {
         view.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
@@ -108,5 +104,32 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                 view.requestLayout()
             }
         })
+    }
+
+    private fun setupButtonClickListeners() {
+        selectedButton.forEach { button ->
+            button.setOnSingleClickListener {
+                button.isSelected = !button.isSelected
+                button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
+                val selectedButtonText = selectedButton.filter { it.isSelected }.map { it.text.toString() }
+                viewModel.setSelectedButtons(selectedButtonText)
+                viewModel.setReviewCount(selectedButtonText.size)
+            }
+        }
+    }
+
+    private fun updateButtonStates(selectedButtonTexts: List<String>) {
+        selectedButton.forEach { button ->
+            button.isSelected = selectedButtonTexts.contains(button.text.toString())
+            button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
+        }
+    }
+
+    private fun updateCompleteButtonState(enable: Boolean) {
+        with(binding.tvCompleteBtn) {
+            isEnabled = enable
+            setBackgroundResource(if (isEnabled) R.drawable.rect_gray900_fill_6 else R.drawable.rect_gray200_fill_6)
+            setTextColor(colorOf(if (isEnabled) R.color.white else R.color.gray900))
+        }
     }
 }
