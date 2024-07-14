@@ -30,8 +30,10 @@ class SpotAppbar @JvmOverloads constructor(
                 ))
                 tvTitle.setTextColor(typedArray.getColor(R.styleable.SpotAppbar_android_textColor, 0))
                 ivNav.setBackgroundResource(typedArray.getResourceId(R.styleable.SpotAppbar_navigationIcon, 0))
+                ivNav.backgroundTintList = typedArray.getColorStateList(R.styleable.SpotAppbar_navigationIconColor)
                 ivMenu.setBackgroundResource(typedArray.getResourceId(R.styleable.SpotAppbar_menuIcon, 0))
                 ivMenu.backgroundTintList = typedArray.getColorStateList(R.styleable.SpotAppbar_menuIconColor)
+                clSpotAppbar.setBackgroundResource(typedArray.getResourceId(R.styleable.SpotAppbar_android_background, 0))
             }
             typedArray.recycle()
         }

@@ -1,6 +1,7 @@
 package com.depromeet.spot.di
 
 import com.depromeet.spot.BuildConfig.BASE_URL
+import com.depromeet.spot.BuildConfig.SVG_BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -12,8 +13,14 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
+import retrofit2.Converter.Factory
 import retrofit2.Retrofit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class WebSvg
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -51,4 +58,13 @@ object RetrofitModule {
         factory: Converter.Factory,
     ): Retrofit =
         Retrofit.Builder().baseUrl(BASE_URL).client(client).addConverterFactory(factory).build()
+
+    @WebSvg
+    @Provides
+    @Singleton
+    fun provideWebSvgRetrofit(
+        client: OkHttpClient,
+        factory: Factory
+    ): Retrofit =
+        Retrofit.Builder().baseUrl(SVG_BASE_URL).client(client).addConverterFactory(factory).build()
 }

@@ -21,6 +21,7 @@ android {
         versionName = Constants.versionName
 
         buildConfigField("String", "BASE_URL", getApiKey("base.url"))
+        buildConfigField("String", "SVG_BASE_URL", getApiKey("svg.base.url"))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
