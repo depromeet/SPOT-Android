@@ -25,6 +25,13 @@
         <item name="android:colorBackground">@android:color/transparent</item>
     </style>
 
+    <style name="TransparentMaterialDialogFragment" parent="Theme.Material3.Light.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <style name="TransparentDialogFragment" parent="Theme.Material3.Light.Dialog">
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>
