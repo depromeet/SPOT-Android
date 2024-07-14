@@ -97,7 +97,7 @@
         app:layout_constraintBottom_toTopOf="@id/tv_next_btn"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
         app:layout_constraintVertical_bias="0.0"
-        android:visibility="invisible"
+        android:visibility="visible"
         tools:layout_editor_absoluteX="0dp">
 
         <LinearLayout
@@ -171,7 +171,7 @@
         android:id="@+id/layout_seat_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
         <LinearLayout
@@ -274,6 +274,23 @@
                     android:inputType="number"
                     android:textColorHint="#C8C8C8"
                     app:layout_constraintEnd_toStartOf="@+id/tv_number"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/et_non_column_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="23dp"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:hint="ex)12"
+                    android:inputType="number"
+                    android:paddingVertical="13dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="64dp"
+                    android:textColor="#121212"
+                    android:textColorHint="#C8C8C8"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/et_number"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
