@@ -294,62 +294,62 @@
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/et_detail_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
             android:layout_marginTop="12.5dp">
 
             <EditText
                 android:id="@+id/et_detail_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:background="@drawable/rect_gray200_fill_12"
                 android:hint="시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요"
                 android:inputType="textMultiLine"
+                android:maxLines="5"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
-                android:singleLine="true"
                 android:textColor="#4A4A4A"
                 android:textColorHint="#C8C8C8"
                 android:textSize="14sp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="더 자세한 후기를 남기세요" />
+                tools:text="더 자세한 후기를 남기세요 dskfhdskfhsdkjfhdskjfhksdjfhkjdsfhkjsdhfdhskjfhsdjkfhdsjkfhdskjfhjkdsfhkjsdfhsdjkfhdsjkfjsd" />
 
             <TextView
                 android:id="@+id/tv_detail_review_warning"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FF5C5C"
                 android:textSize="13sp"
                 android:textStyle="normal"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="최대 150자까지 입력 할 수 있어요" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tv_complete_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rect_gray200_fill_6"
-            android:clickable="false"
-            android:enabled="false"
-            android:gravity="center"
-            android:paddingVertical="16dp"
-            android:text="완료"
-            android:textColor="@color/white"
-            android:textFontWeight="700"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+                android:layout_marginTop="4dp"
+                android:text="최대 150자까지 입력 할 수 있어요"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_complete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rect_gray200_fill_6"
+        android:clickable="false"
+        android:enabled="false"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="완료"
+        android:textColor="@color/white"
+        android:textFontWeight="700"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

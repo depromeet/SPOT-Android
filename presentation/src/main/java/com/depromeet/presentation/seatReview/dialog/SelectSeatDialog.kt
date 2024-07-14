@@ -52,7 +52,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun initSpinner() {
-        val blockItems = listOf("107", "108", "109", "110", "111", "112", "113", "114","115","116","117","118")
+        val blockItems = listOf("107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118")
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
