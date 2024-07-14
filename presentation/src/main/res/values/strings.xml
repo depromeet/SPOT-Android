@@ -47,9 +47,13 @@
     <string name="view_record_whole">전체 기록</string>
     <string name="view_record_all">전체</string>
 
-    <!-- viewDetail -->
+    <!-- viewDetail 관련-->
     <string name="record_edit">수정하기</string>
     <string name="record_delete">삭제하기</string>
+    <string name="confirm_delete_question">정말 삭제하시겠어요?</string>
+    <string name="confirm_delete_description">게시물 삭제시 복구가 불가능합니다</string>
+    <string name="confirm_delete_do">삭제하기</string>
+    <string name="confirm_delete_cancel">취소</string>
 
 
 </resources>
