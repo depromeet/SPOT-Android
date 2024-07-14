@@ -52,36 +52,29 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
 
     fun setSelectedButtons(buttonTexts: List<String>) {
         _selectedReviewBtn.value = buttonTexts
-        Log.d("minju", selectedReviewBtn.value.toString())
     }
 
     fun setReviewCount(count: Int) {
         _reviewCount.value = count
-        Log.d("minju", reviewCount.value.toString())
     }
 
     fun setDetailReviewText(text: String) {
         _detailReviewText.value = text
-        Log.d("minju", detailReviewText.value.toString())
     }
 
     fun setSelectedSeatName(name: String) {
         _selectedSeatName.value = name
-        Log.d("minju", selectedSeatName.value.toString())
     }
 
     fun setSelectedBlock(block: String) {
         _selectedBlock.value = block
-        Log.d("minju", selectedBlock.value.toString())
     }
 
     fun setSelectedColumn(column: String) {
         _selectedColumn.value = column
-        Log.d("minju", selectedColumn.value.toString())
     }
 
     fun setSelectedNumber(number: String) {
         _selectedNumber.value = number
-        Log.d("minju", selectedNumber.value.toString())
     }
 }
