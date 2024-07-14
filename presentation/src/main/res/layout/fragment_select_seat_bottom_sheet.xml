@@ -192,17 +192,20 @@
 
                 <Spinner
                     android:id="@+id/spinner_block"
-                    android:layout_width="wrap_content"
-                    android:paddingEnd="220dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    style="?attr/textInputStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:dropDownWidth="240dp"
+                    android:dropDownVerticalOffset="45dp"
                     android:paddingVertical="12dp"
+                    android:paddingStart="16dp"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:popupBackground="@drawable/rect_white_fill_gray100_line_12"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_block"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
@@ -218,6 +221,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="블럭"
+                    android:paddingStart="4dp"
                     android:textColor="#606060"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

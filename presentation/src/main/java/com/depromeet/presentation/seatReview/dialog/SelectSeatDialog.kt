@@ -46,22 +46,32 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         viewModel.selectedBlock.observe(this) { updateCompleteButtonState() }
         viewModel.selectedColumn.observe(this) { updateCompleteButtonState() }
         viewModel.selectedNumber.observe(this) { updateCompleteButtonState() }
-        viewModel.selectedSeatName.observe(this) { selectedSeatName ->
+        viewModel.selectedSeatName.observe(this) {
             adapter.notifyDataSetChanged()
         }
     }
 
     private fun initSpinner() {
-        val blockItems = listOf("블럭 1", "블럭 2", "블럭 3", "블럭 4", "블럭 5")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerBlock.adapter = adapter
-        binding.spinnerBlock.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedBlock = blockItems[position]
-                viewModel.setSelectedBlock(selectedBlock)
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        val blockItems = listOf("107", "108", "109", "110", "111", "112", "113", "114","115","116","117","118")
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
+        with(binding.spinnerBlock) {
+            this.adapter = adapter
+            this.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long,
+                    ) {
+                        val selectedBlock = blockItems[position]
+                        viewModel.setSelectedBlock(selectedBlock)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
         }
     }
 
