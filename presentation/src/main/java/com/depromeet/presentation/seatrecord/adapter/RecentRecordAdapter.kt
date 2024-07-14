@@ -2,17 +2,17 @@ package com.depromeet.presentation.seatrecord.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
 import com.depromeet.presentation.extension.extractDay
 import com.depromeet.presentation.extension.getDayOfWeek
 import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
 import com.depromeet.presentation.util.ItemDiffCallback
-import com.google.android.material.chip.Chip
+import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
 class RecentRecordAdapter(
 ) : ListAdapter<ReviewMockData, RecentRecordViewHolder>(
@@ -60,36 +60,17 @@ class RecentRecordViewHolder(
             tvRecentDay.text = item.date.getDayOfWeek()
             tvRecentBlockName.text = item.blockName
             tvRecentStadiumName.text = item.stadiumName
-            setChipGroup(item.keyword)
-        }
-    }
-
-    private fun setChipGroup(items: List<String>) {
-        with(binding.cgRecentKeyword) {
-            items.take(MAX_VISIBLE_CHIPS).forEachIndexed { index, item ->
-                val chip = createChip(item)
-                addView(chip)
-
-                if (index == MAX_VISIBLE_CHIPS - 1 && items.size > MAX_VISIBLE_CHIPS) {
-                    val remainingCount = items.size - MAX_VISIBLE_CHIPS
-                    val otherChip = createChip(count = remainingCount)
-                    addView(otherChip)
+            cvDetailKeyword.apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MaterialTheme {
+                        KeywordFlowRow(
+                            keywords = item.keyword,
+                            overflowIndex = MAX_VISIBLE_CHIPS
+                        )
+                    }
                 }
             }
-        }
-    }
-
-    private fun createChip(text: String? = "", count: Int? = null): Chip {
-        val chipText = count?.let { "+${it}개" } ?: text
-
-        return Chip(itemView.context).apply {
-            this.text = chipText
-            isClickable = false
-            textSize = 12f
-            setBackgroundResource(R.drawable.rect_gray50_fill_4)
-            setTextColor(ContextCompat.getColor(context, R.color.gray800))
-            setPadding(0, 0, 0, 0)
-            //TODO : 칩그룹 PADDING 고민 -> 커스텀?
         }
     }
 }

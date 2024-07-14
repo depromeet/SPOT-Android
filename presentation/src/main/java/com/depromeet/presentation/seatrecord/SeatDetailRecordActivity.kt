@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatrecord
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.DetailRecordAdapter
@@ -21,14 +22,13 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
 
         setDetailRecordAdapter()
         viewModel.getReviewData()
-        viewModel.uiState.observe(this) {
+        viewModel.uiState.asLiveData().observe(this) {
             detailRecordAdapter.submitList(it.list)
         }
 
-        viewModel.deleteClickedEvent.observe(this) { state ->
+        viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state) moveConfirmationDialog()
         }
-
 
     }
 

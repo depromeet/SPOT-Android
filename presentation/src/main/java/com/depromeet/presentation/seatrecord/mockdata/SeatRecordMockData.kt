@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatrecord.mockdata
 
 import android.os.Parcelable
 import com.depromeet.presentation.extension.extractMonth
+import com.depromeet.presentation.viewfinder.sample.Keyword
 import kotlinx.parcelize.Parcelize
 
 data class MonthData(
@@ -29,7 +30,7 @@ data class ReviewMockData(
     val image: String,
     val stadiumName: String,
     val blockName: String,
-    val keyword: List<String>,
+    val keyword: List<Keyword>,
 ) : Parcelable
 
 data class MonthReviewData(
@@ -68,13 +69,13 @@ fun makeRecordDetailData(): List<ReviewMockData> {
                 image = "https://picsum.photos/600/400",
                 stadiumName = "서울 잠실 야구장",
                 blockName = "1루 네이비석 304블록",
-                keyword = listOf<String>(
-                    "\uD83D\uDE4D\u200D서서 응원하는 존",
-                    "☀️ 온종일 햇빛 존",
-                    "\uD83D\uDE4D\u200D서서 응원하는 존",
-                    "☀️ 온종일 햇빛 존",
-                    "\uD83D\uDE4D\u200D서서 응원하는 존"
-                )
+                keyword = listOf<Keyword>(
+                    Keyword("🙍‍서서 응원하는 존", 44, 0),
+                    Keyword("☀️ 온종일 햇빛 존", 44, 1),
+                    Keyword("🙍‍서서 응원하는 존", 44, 1),
+                    Keyword("🙍‍서서 응원하는 존", 44, 0),
+                    Keyword("🙍‍서서 응원하는 존", 44, 0)
+                ),
             )
         )
     }

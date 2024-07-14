@@ -65,12 +65,12 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/white"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@id/cg_recent_keyword"
-        app:layout_constraintStart_toStartOf="@id/cg_recent_keyword"
+        app:layout_constraintBottom_toTopOf="@id/cv_detail_keyword"
+        app:layout_constraintStart_toStartOf="@id/cv_detail_keyword"
         tools:text="1루 네이비석 304블록" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cg_recent_keyword"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/cv_detail_keyword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -78,9 +78,6 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_recent_image"
         app:layout_constraintEnd_toEndOf="@id/iv_recent_image"
-        app:layout_constraintStart_toStartOf="@+id/iv_recent_image"
-        app:chipSpacing="0dp"
-        app:singleLine="false"
-        app:singleSelection="false" />
+        app:layout_constraintStart_toStartOf="@id/iv_recent_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

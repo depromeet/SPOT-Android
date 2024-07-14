@@ -3,6 +3,8 @@ package com.depromeet.presentation.seatrecord.adapter
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -12,6 +14,7 @@ import com.depromeet.presentation.databinding.ItemSeatReviewDetailBinding
 import com.depromeet.presentation.seatrecord.mockdata.ReviewDetailMockData
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.util.applyBoldSpan
+import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
 class DetailRecordAdapter() : ListAdapter<ReviewDetailMockData, ReviewDetailViewHolder>(
     ItemDiffCallback(
@@ -48,6 +51,10 @@ class DetailRecordAdapter() : ListAdapter<ReviewDetailMockData, ReviewDetailView
 class ReviewDetailViewHolder(
     internal val binding: ItemSeatReviewDetailBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        private const val MAX_VISIBLE_CHIPS = 3
+    }
+
     fun bind(item: ReviewDetailMockData) {
         with(binding) {
             ivDetailProfileImage.load(item.profileImage) {
@@ -60,6 +67,17 @@ class ReviewDetailViewHolder(
             tvDetailDate.text = item.createdAt
             tvDetailContent.text = item.content
             initImageViewPager(item.images)
+            cvDetailKeyword.apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MaterialTheme {
+                        KeywordFlowRow(
+                            keywords = item.keywords,
+                            overflowIndex = MAX_VISIBLE_CHIPS
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -86,5 +104,6 @@ class ReviewDetailViewHolder(
             }
         }
     }
+
 
 }
