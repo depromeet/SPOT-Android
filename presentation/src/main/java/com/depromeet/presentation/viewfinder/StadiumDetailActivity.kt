@@ -8,6 +8,7 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
+import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumSelectSeatDialog
 import com.depromeet.presentation.viewfinder.sample.ReviewContent
@@ -55,6 +56,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     StadiumFilterMonthsDialog.newInstance()
                         .show(supportFragmentManager, StadiumFilterMonthsDialog.TAG)
                 },
+                onClickReport = {
+                    ReportDialog.newInstance()
+                        .show(supportFragmentManager, ReportDialog.TAG)
                 }
             )
         }
