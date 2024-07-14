@@ -133,28 +133,74 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/iv_first_image"
+                    <FrameLayout
+                        android:id="@+id/layout_first_image"
                         android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/iv_second_image"
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="8dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/iv_first_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop" />
 
-                    <ImageView
-                        android:id="@+id/iv_third_image"
+                        <ImageView
+                            android:id="@+id/iv_remove_first_image"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="top|end"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/ic_remove_image" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/layout_second_image"
                         android:layout_width="200dp"
+                        android:visibility="gone"
                         android:layout_height="match_parent"
+                        android:layout_marginStart="8dp">
+
+                        <ImageView
+                            android:id="@+id/iv_second_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                         />
+
+                        <ImageView
+                            android:id="@+id/iv_remove_second_image"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="top|end"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/ic_remove_image"
+                         />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/layout_third_image"
+                        android:layout_width="200dp"
+                        android:visibility="gone"
                         android:layout_marginStart="8dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/iv_third_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                          />
+
+                        <ImageView
+                            android:id="@+id/iv_remove_third_image"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="top|end"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/ic_remove_image"
+                           />
+                    </FrameLayout>
                 </LinearLayout>
             </HorizontalScrollView>
         </LinearLayout>
@@ -274,7 +320,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="12dp"
-                android:src="@drawable/ic_chevron_down"
+                android:src="@drawable/ic_chevron_right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -297,7 +343,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="16dp"
                 android:layout_marginStart="16dp"
-                android:text="내 자리 후기"
+                android:text="내 시야 후기"
                 android:textSize="16sp"
                 android:lineHeight="145dp"
                 android:textColor="#121212"
@@ -345,7 +391,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="12dp"
-                android:src="@drawable/ic_chevron_down"
+                android:src="@drawable/ic_chevron_right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

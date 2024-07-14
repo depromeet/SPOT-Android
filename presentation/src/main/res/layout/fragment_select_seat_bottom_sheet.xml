@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rect_white_fill_32">
+
+    <View
+        android:id="@+id/view_handler"
+        android:layout_width="36dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/rect_gray600_fill_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layout_combined_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/view_handler"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/layout_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="26dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_select_zone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="구역 선택"
+                    android:textColor="#121212"
+                    android:textFontWeight="700"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_select_seat_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/rect_gray900_fill"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_select_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="좌석 번호"
+                    android:textColor="#121212"
+                    android:textFontWeight="700"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toEndOf="@id/tv_select_zone" />
+
+                <TextView
+                    android:id="@+id/tv_select_number_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="6dp"
+                    android:visibility="invisible"
+                    android:background="@drawable/rect_gray900_fill"
+                    android:gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/sv_select_seat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/tv_next_btn"
+        app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
+        app:layout_constraintVertical_bias="0.0"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:id="@+id/layout_select_seat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_select_seat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="13dp"
+                android:layout_marginTop="30dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/item_select_seat" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_seat_again"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="208dp"
+                android:background="@drawable/rect_white_fill_gray100_line_12"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_seat_again"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingVertical="12dp"
+                    android:paddingStart="12dp"
+                    android:textColor="#7B7B7B"
+                    android:text="구역을 다시 확인하고 싶어요!"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_chevron_up"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_seat_again"
+                    app:layout_constraintStart_toEndOf="@+id/tv_seat_again"
+                    app:layout_constraintTop_toTopOf="@+id/tv_seat_again" />
+
+                <ImageView
+                    android:id="@+id/iv_seat_again"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/ic_launcher_background"
+                    android:visibility="gone"
+                    android:layout_marginTop="13dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_seat_again" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!--좌석 번호 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_seat_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
+
+        <LinearLayout
+            android:id="@+id/layout_seat_number_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="30dp">
+
+                <Spinner
+                    android:id="@+id/spinner_block"
+                    android:layout_width="wrap_content"
+                    android:paddingEnd="220dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:paddingVertical="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_chevron_up"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_block"
+                    app:layout_constraintEnd_toEndOf="@+id/spinner_block"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_block" />
+
+                <TextView
+                    android:id="@+id/tv_block"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="블럭"
+                    android:textColor="#606060"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="30dp">
+
+                <EditText
+                    android:id="@+id/et_column"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="13dp"
+                    android:paddingStart="16dp"
+                    android:hint="ex)12"
+                    android:paddingEnd="64dp"
+                    android:textColor="#121212"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:inputType="number"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:textColorHint="#C8C8C8" />
+
+                <TextView
+                    android:id="@+id/tv_column"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="열"
+                    android:layout_marginStart="4dp"
+                    android:textColor="#606060"
+                    app:layout_constraintStart_toEndOf="@+id/et_column"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/et_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:hint="ex)12"
+                    android:layout_marginEnd="4dp"
+                    android:paddingVertical="13dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="64dp"
+                    android:textColor="#121212"
+                    android:inputType="number"
+                    android:textColorHint="#C8C8C8"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_number"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="번"
+                    android:textColor="#606060"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_column_number_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rect_white_fill_gray100_line_12">
+
+                <TextView
+                    android:id="@+id/tv_what_column"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="208dp"
+                    android:layout_weight="1"
+                    android:paddingVertical="12dp"
+                    android:paddingStart="12dp"
+                    android:textColor="#7B7B7B"
+                    android:text="열과 번이 무엇인가요?"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_what_column"
+                    app:layout_constraintStart_toEndOf="@+id/tv_what_column"
+                    app:layout_constraintTop_toTopOf="@+id/tv_what_column" />
+
+                <LinearLayout
+                    android:id="@+id/layout_column_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_what_column"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_description_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="#AFAFAF"
+                        android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요."
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_what_column" />
+
+                    <TextView
+                        android:id="@+id/tv_description_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:paddingHorizontal="16dp"
+                        android:text="• ex. 2열 7번좌석"
+                        android:textColor="#AFAFAF"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_column_example"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_description_two" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_next_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rect_gray200_fill_6"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="저장 후 이동"
+        android:textColor="@color/white"
+        android:clickable="false"
+        android:enabled="false"
+        android:visibility="visible"
+        android:textFontWeight="700"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_complete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rect_gray200_fill_6"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="완료"
+        android:visibility="gone"
+        android:clickable="false"
+        android:enabled="false"
+        android:textColor="@color/white"
+        android:textFontWeight="700"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
