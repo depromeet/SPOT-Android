@@ -1,15 +1,17 @@
 package com.depromeet.presentation.seatrecord.adapter
 
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import coil.load
-import coil.size.Scale
 import coil.transform.CircleCropTransformation
 import com.depromeet.presentation.databinding.ItemSeatReviewDetailBinding
 import com.depromeet.presentation.seatrecord.mockdata.ReviewDetailMockData
 import com.depromeet.presentation.util.ItemDiffCallback
+import com.depromeet.presentation.util.applyBoldSpan
 
 class DetailRecordAdapter() : ListAdapter<ReviewDetailMockData, ReviewDetailViewHolder>(
     ItemDiffCallback(
@@ -57,9 +59,26 @@ class ReviewDetailViewHolder(
             tvDetailBlock.text = item.stadiumName
             tvDetailDate.text = item.createdAt
             tvDetailContent.text = item.content
-
-            ivTest.load(item.profileImage) { scale(Scale.FILL) } // 테스트 후 삭제
-            //뷰페이저 연결하기
+            initImageViewPager(item.images)
         }
     }
+
+    private fun initImageViewPager(imageList: List<String>) {
+        val adapter = SeatImageAdapter()
+        with(binding) {
+            vpDetailImage.adapter = adapter
+            adapter.submitList(imageList)
+            "1/${imageList.size}".also { tvDetailImageCount.text = it }
+
+            vpDetailImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
+                    tvDetailImageCount.text = SpannableStringBuilder(text).apply {
+                        applyBoldSpan(this, 0, (position + 1).toString().toInt())
+                    }
+                }
+            })
+        }
+    }
+
 }

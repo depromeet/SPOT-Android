@@ -107,29 +107,6 @@
         tools:text="2024년 7월 7일" />
 
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_detail_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_detail_date" />
-
-    <ImageView
-        android:id="@+id/iv_test"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_detail_date"
-        tools:ignore="contentDescription"
-        tools:src="@color/gray100" />
-
     <TextView
         android:id="@+id/tv_detail_content"
         android:layout_width="0dp"
@@ -140,6 +117,30 @@
         app:layout_constraintStart_toStartOf="@id/gl_start"
         app:layout_constraintTop_toBottomOf="@id/vp_detail_image"
         tools:text="제일 앞열이라 시야는 아주 좋았어요. 다만, 앞쪽으로 사람들이 많이 다니면 조금 신경쓰일 수 있어요" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_detail_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_date" />
+
+    <TextView
+        android:id="@+id/tv_detail_image_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rect_transparentblack01_fill_36"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="6dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/vp_detail_image"
+        app:layout_constraintEnd_toEndOf="@id/vp_detail_image"
+        tools:text="1/3" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cg_detail_keyword"
