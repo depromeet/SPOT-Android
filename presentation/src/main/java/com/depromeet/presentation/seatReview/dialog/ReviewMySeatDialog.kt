@@ -22,7 +22,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     FragmentReviewMySeatBottomSheetBinding::inflate,
 ) {
     private val viewModel by activityViewModels<ReviewViewModel>()
-    private val maxLength = 5
+    private val maxLength = 150
     private val selectedButton by lazy {
         listOf(
             binding.tvGoodOne,
