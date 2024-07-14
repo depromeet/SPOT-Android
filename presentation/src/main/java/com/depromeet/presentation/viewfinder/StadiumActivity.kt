@@ -34,7 +34,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         private const val MIME_TYPE_TEXT_HTML = "text/html"
 
         /** @test */
-        private const val SVG_URL = "https://svgshare.com/i/18Br.svg"
+        private const val SVG_URL = "https://svgshare.com/i/18EQ.svg"
     }
 
     private val viewModel: StadiumViewModel by viewModels()
