@@ -1,33 +1,39 @@
 package com.depromeet.presentation.seatrecord.mockdata
 
 import android.os.Parcelable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
 data class ReviewDetailMockData(
-    val reviewId: Int,
-    val profileImage: String,
-    val nickName: String,
-    val level: Int,
-    val stadiumName: String,
-    val blockName: String,
-    val createdAt: String,
-    val images: List<String>,
-    val content: String,
-    val keywords: List<String>,
+    val reviewId: Int = 0,
+    val profileImage: String = "",
+    val nickName: String = "",
+    val level: Int = 0,
+    val stadiumName: String = "",
+    val blockName: String = "",
+    val createdAt: String = "",
+    val images: List<String> = emptyList(),
+    val content: String = "",
+    val keywords: List<String> = emptyList(),
 ) : Parcelable
 
-fun makeReviewDetailListData(): List<ReviewDetailMockData> {
+data class ReviewDetailMockResult(
+    val list: List<ReviewDetailMockData> = emptyList(),
+)
+
+fun mockReviewDetailListData(): Flow<List<ReviewDetailMockData>> = flow {
     val list = mutableListOf<ReviewDetailMockData>()
 
     for (i in 1..8) {
         list.add(
             ReviewDetailMockData(
-                reviewId = 1,
+                reviewId = i,
                 profileImage = "https://picsum.photos/600/400",
-                nickName = "노균욱",
-                level = 6,
+                nickName = "노균욱$i",
+                level = i,
                 stadiumName = "서울 잠실 야구장",
                 blockName = "1루 네이비석 304블록 3열 12번",
                 createdAt = "2024-07-12",
@@ -47,5 +53,5 @@ fun makeReviewDetailListData(): List<ReviewDetailMockData> {
             )
         )
     }
-    return list
+    emit(list)
 }

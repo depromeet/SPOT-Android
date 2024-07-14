@@ -47,5 +47,9 @@
     <string name="view_record_whole">전체 기록</string>
     <string name="view_record_all">전체</string>
 
+    <!-- viewDetail -->
+    <string name="record_edit">수정하기</string>
+    <string name="record_delete">삭제하기</string>
+
 
 </resources>
