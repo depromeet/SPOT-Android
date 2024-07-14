@@ -77,16 +77,45 @@
             android:orientation="horizontal"
             android:paddingEnd="16dp">
 
-            <ImageButton
-                android:id="@+id/btn_add_image"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/rect_gray50_fill_gray200_line_12"
-                android:visibility="visible"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="118dp"
-                android:src="@drawable/ic_plus" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/btn_add_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="118dp"
+                    android:src="@drawable/ic_plus"
+                    android:visibility="visible" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="100dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_add_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_image_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="0" />
+
+                    <TextView
+                        android:id="@+id/tv_image_total_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="/3"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_image_count"
+                        app:layout_constraintStart_toEndOf="@id/tv_image_count"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <HorizontalScrollView
                 android:id="@+id/sv_add_image"
