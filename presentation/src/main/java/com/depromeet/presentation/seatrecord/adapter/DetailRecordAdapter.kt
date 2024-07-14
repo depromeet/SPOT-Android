@@ -68,16 +68,22 @@ class ReviewDetailViewHolder(
         with(binding) {
             vpDetailImage.adapter = adapter
             adapter.submitList(imageList)
-            "1/${imageList.size}".also { tvDetailImageCount.text = it }
+            setViewPagerCountText(0)
 
             vpDetailImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
-                    tvDetailImageCount.text = SpannableStringBuilder(text).apply {
-                        applyBoldSpan(this, 0, (position + 1).toString().toInt())
-                    }
+                    setViewPagerCountText(position)
                 }
             })
+        }
+    }
+
+    private fun setViewPagerCountText(position: Int) {
+        with(binding) {
+            val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
+            tvDetailImageCount.text = SpannableStringBuilder(text).apply {
+                applyBoldSpan(this, 0, (position + 1).toString().length)
+            }
         }
     }
 
