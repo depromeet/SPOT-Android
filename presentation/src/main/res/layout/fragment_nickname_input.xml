@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_profile_edit_nickname">
 
@@ -99,13 +100,13 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/rect_gray200_fill_6"
-        android:gravity="center"
         android:clickable="false"
+        android:gravity="center"
         android:paddingVertical="16dp"
         android:text="다음"
+        android:textColor="@color/white"
         android:textFontWeight="700"
         android:textStyle="normal"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

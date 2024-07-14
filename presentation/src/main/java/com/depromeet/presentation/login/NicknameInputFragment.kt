@@ -5,6 +5,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
@@ -58,6 +59,10 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
         tvNicknameNextBtn.setOnClickListener {
             //Todo : 서버 API 연동 및 닉네임 중복 검사
             //임시로 응원하는 팀 선택 화면으로 이동
+            parentFragmentManager.commit {
+                replace(R.id.fl_signup_container, TeamSelectFragment())
+                addToBackStack(null)
+            }
         }
     }
 
