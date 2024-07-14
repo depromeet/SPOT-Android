@@ -22,7 +22,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     FragmentReviewMySeatBottomSheetBinding::inflate,
 ) {
     private val viewModel by activityViewModels<ReviewViewModel>()
-    private val maxLength = 150
+    private val maxLength = 5
     private val selectedButton by lazy {
         listOf(
             binding.tvGoodOne,
@@ -58,16 +58,13 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
             updateButtonStates(selectedButtonTexts)
             updateCompleteButtonState(selectedButtonTexts.isNotEmpty())
         }
-        viewModel.detailReviewText.observe(viewLifecycleOwner) { text ->
-            binding.etDetailReview.setText(text)
-        }
     }
 
     private fun setupDetailReviewEditText() {
         with(binding) {
             btnDetailCheck.setOnSingleClickListener {
                 btnDetailCheck.isSelected = !btnDetailCheck.isSelected
-                etDetailReview.isVisible = btnDetailCheck.isSelected
+                etDetailView.isVisible = btnDetailCheck.isSelected
             }
             etDetailReview.filters = arrayOf(InputFilter.LengthFilter(maxLength))
             etDetailReview.addTextChangedListener { text: Editable? ->
