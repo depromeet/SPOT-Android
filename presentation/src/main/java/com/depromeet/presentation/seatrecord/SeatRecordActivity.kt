@@ -2,7 +2,6 @@ package com.depromeet.presentation.seatrecord
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -38,28 +37,23 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.recordSpotAppbar.setNavigationOnClickListener {
-            finish()
-        }
 
-        binding.recordSpotAppbar.setMenuOnClickListener {
-            //셋팅 이동
-        }
-
-
-        binding.ssvRecord.run {
-            header = binding.clRecordStickyHeader
-            stickListener = {
-                Log.d("test", "붙었습니다~ ")
+        with(binding) {
+            recordSpotAppbar.setNavigationOnClickListener {
+                finish()
             }
-            freeListener = {
-                Log.d("test", "떨어졌습니다~ ")
+
+            recordSpotAppbar.setMenuOnClickListener {
+                //셋팅 이동
+            }
+
+            ssvRecord.header = binding.clRecordStickyHeader
+
+            fabRecordUp.setOnClickListener {
+                ssvRecord.smoothScrollTo(0, 0)
             }
         }
 
-        binding.fabRecordUp.setOnClickListener {
-            binding.ssvRecord.smoothScrollTo(0, 0)
-        }
 
         setProfile()
         initDateSpinner()
@@ -133,8 +127,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             object : MonthRecordAdapter.OnItemRecordClickListener {
                 override fun onItemRecordClick(item: ReviewMockData) {
                     Intent(this@SeatRecordActivity, SeatDetailRecordActivity::class.java).apply {
-                        putExtra("seatData", item)
-                    }.let(this@SeatRecordActivity::startActivity)
+                        startActivity(this)
+                    }
                 }
             }
 

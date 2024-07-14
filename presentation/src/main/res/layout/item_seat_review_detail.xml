@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.94910944" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
+
+    <ImageView
+        android:id="@+id/iv_detail_profile_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/gl_top"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_default_profile" />
+
+    <TextView
+        android:id="@+id/tv_detail_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/gray400"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_detail_profile_image"
+        app:layout_constraintStart_toEndOf="@id/iv_detail_profile_image"
+        app:layout_constraintTop_toTopOf="@id/iv_detail_profile_image"
+        tools:text="노균욱" />
+
+    <TextView
+        android:id="@+id/tv_detail_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:background="@drawable/rect_action01_fill_2"
+        android:paddingHorizontal="2dp"
+        android:paddingVertical="1dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/tv_detail_nickname"
+        app:layout_constraintStart_toEndOf="@id/tv_detail_nickname"
+        app:layout_constraintTop_toTopOf="@id/tv_detail_nickname"
+        tools:text="Lv.5" />
+
+    <ImageView
+        android:id="@+id/iv_detail_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_horizontal_dots"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintTop_toTopOf="@id/gl_top"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_detail_stadium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/iv_detail_profile_image"
+        app:layout_constraintTop_toBottomOf="@id/iv_detail_profile_image"
+        tools:text="서울 잠실 야구장" />
+
+    <TextView
+        android:id="@+id/tv_detail_block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray700"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tv_detail_stadium"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_stadium"
+        tools:text="1루 네이비석 304블록 3열 12번" />
+
+    <TextView
+        android:id="@+id/tv_detail_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray400"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_detail_block"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintTop_toTopOf="@id/tv_detail_block"
+        tools:text="2024년 7월 7일" />
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_detail_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_date" />
+
+    <ImageView
+        android:id="@+id/iv_test"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_date"
+        tools:ignore="contentDescription"
+        tools:src="@color/gray100" />
+
+    <TextView
+        android:id="@+id/tv_detail_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray900"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintStart_toStartOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/vp_detail_image"
+        tools:text="제일 앞열이라 시야는 아주 좋았어요. 다만, 앞쪽으로 사람들이 많이 다니면 조금 신경쓰일 수 있어요" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cg_detail_keyword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:chipSpacing="0dp"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintStart_toStartOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_content"
+        app:singleLine="false"
+        app:singleSelection="false" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

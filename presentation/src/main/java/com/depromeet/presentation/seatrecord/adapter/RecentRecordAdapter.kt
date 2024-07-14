@@ -1,6 +1,5 @@
 package com.depromeet.presentation.seatrecord.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -42,7 +41,6 @@ class RecentRecordAdapter(
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
             itemRecordClickListener?.onItemRecordClick(getItem(position))
-            Log.d("test", "click")
         }
     }
 }
