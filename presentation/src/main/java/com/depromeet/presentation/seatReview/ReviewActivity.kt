@@ -7,10 +7,12 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
@@ -55,6 +57,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         setupRemoveButtons()
         navigateToReviewDoneActivity()
         observeViewModel()
+        updateNextButtonState()
     }
 
     private fun observeViewModel() {
@@ -195,6 +198,24 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun navigateToReviewDoneActivity() {
         binding.tvUploadBtn.setOnSingleClickListener {
             Intent(this, ReviewDoneActivity::class.java).apply { startActivity(this) }
+        }
+    }
+
+    private fun updateNextButtonState() {
+        val isSelectedDateFilled = viewModel.selectedDate.value?.isNotEmpty()
+        val isSelectedReviewBtnFilled = viewModel.selectedReviewBtn.value?.isNotEmpty()
+        val isBlockFilled = viewModel.selectedBlock.value?.isNotEmpty()
+        val isColumnFilled = viewModel.selectedColumn.value?.isNotEmpty()
+        val isNumberFilled = viewModel.selectedNumber.value?.isNotEmpty()
+
+        with(binding.tvUploadBtn) {
+            isEnabled = isSelectedDateFilled == true && isSelectedReviewBtnFilled == true &&
+                isBlockFilled == true && isColumnFilled == true && isNumberFilled == true
+            if (isEnabled) {
+                setBackgroundResource(R.drawable.rect_gray900_fill_6)
+                setTextColor(ContextCompat.getColor(this@ReviewActivity, android.R.color.white))
+                isEnabled = true
+            }
         }
     }
 }
