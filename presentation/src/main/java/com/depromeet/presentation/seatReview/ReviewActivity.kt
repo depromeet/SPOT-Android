@@ -139,6 +139,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 svAddImage.post { svAddImage.fullScroll(View.FOCUS_RIGHT) }
             }
             btnAddImage.isVisible = selectedImageUris.size < selectedImage.size
+            tvImageCount.text = selectedImageUris.size.toString()
         }
     }
 
