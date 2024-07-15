@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.widget.NestedScrollView
 
-class StickyScrollView : NestedScrollView, ViewTreeObserver.OnGlobalLayoutListener {
+class StickyNestedScrollView @JvmOverloads constructor(
+    context: Context,
+    attr: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : NestedScrollView(context, attr, defStyleAttr), ViewTreeObserver.OnGlobalLayoutListener {
 
-    constructor(context: Context) : this(context, null, 0)
-    constructor(context: Context, attr: AttributeSet?) : this(context, attr, 0)
-    constructor(context: Context, attr: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attr,
-        defStyleAttr
-    ) {
+
+    init {
         overScrollMode = OVER_SCROLL_NEVER
         viewTreeObserver.addOnGlobalLayoutListener(this)
     }

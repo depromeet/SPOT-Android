@@ -69,7 +69,7 @@
         app:tint="@null"
         tools:ignore="contentDescription" />
 
-    <com.depromeet.designsystem.StickyScrollView
+    <com.depromeet.designsystem.StickyNestedScrollView
         android:id="@+id/ssv_record"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -295,7 +295,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </com.depromeet.designsystem.StickyScrollView>
+    </com.depromeet.designsystem.StickyNestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
