@@ -16,7 +16,6 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
     private val currentDate: String = LocalDate.now().format(dateFormatter)
 
     // 시야 후기
-
     private val _selectedDate = MutableStateFlow(currentDate)
     val selectedDate: StateFlow<String> = _selectedDate.asStateFlow()
 

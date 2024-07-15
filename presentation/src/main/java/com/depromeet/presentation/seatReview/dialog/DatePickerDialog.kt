@@ -17,7 +17,7 @@ class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetB
     FragmentDatePickerBottomSheetBinding::inflate,
 ) {
     private val viewModel: ReviewViewModel by activityViewModels()
-    var onDateSelected: ((year: Int, month: Int, day: Int) -> Unit)? = null
+    private var onDateSelected: ((year: Int, month: Int, day: Int) -> Unit)? = null
 
     private val calendarInstance: Calendar by lazy { CalendarUtil.getCurrentCalendar() }
 
