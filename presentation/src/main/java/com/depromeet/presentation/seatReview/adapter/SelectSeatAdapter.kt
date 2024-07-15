@@ -1,6 +1,8 @@
 package com.depromeet.presentation.seatReview.adapter
 
 import android.graphics.Color
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -42,7 +44,10 @@ class SelectSeatAdapter(private val onItemClick: (Int) -> Unit) :
             with(binding) {
                 tvSeatName.text = item.seatName
                 tvSubName.text = item.subName
-                tvSeatColor.setBackgroundColor(Color.parseColor(item.seatColor))
+                val shapeDrawable = ShapeDrawable(OvalShape())
+                shapeDrawable.paint.color = Color.parseColor(item.seatColor)
+                tvSeatColor.background = shapeDrawable
+
                 root.setBackgroundResource(if (isSelected) R.drawable.rect_gray100_fill_gray800_line_8 else R.drawable.rect_white_fill_gray100_line_8)
             }
         }

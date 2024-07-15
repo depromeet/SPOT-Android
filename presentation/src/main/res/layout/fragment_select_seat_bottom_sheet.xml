@@ -88,7 +88,6 @@
                     android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
     <ScrollView
@@ -192,17 +191,20 @@
 
                 <Spinner
                     android:id="@+id/spinner_block"
-                    android:layout_width="wrap_content"
-                    android:paddingEnd="220dp"
-                    android:layout_height="wrap_content"
+                    style="?attr/textInputStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:dropDownWidth="240dp"
+                    android:dropDownVerticalOffset="45dp"
+                    android:paddingVertical="13dp"
+                    android:paddingStart="16dp"
                     android:background="@drawable/rect_gray50_fill_gray200_line_12"
-                    android:paddingVertical="12dp"
+                    android:popupBackground="@drawable/rect_white_fill_gray100_line_12"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_block"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
@@ -218,6 +220,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="블럭"
+                    android:paddingStart="4dp"
                     android:textColor="#606060"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -240,7 +243,6 @@
                     android:paddingEnd="64dp"
                     android:textColor="#121212"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:inputType="number"
                     android:background="@drawable/rect_gray50_fill_gray200_line_12"
@@ -250,13 +252,13 @@
                     android:id="@+id/tv_column"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     android:gravity="center"
                     android:text="열"
-                    android:layout_marginStart="4dp"
                     android:textColor="#606060"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_column"
                     app:layout_constraintStart_toEndOf="@+id/et_column"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/et_column" />
 
                 <EditText
                     android:id="@+id/et_number"
@@ -271,8 +273,24 @@
                     android:textColor="#121212"
                     android:inputType="number"
                     android:textColorHint="#C8C8C8"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/tv_number"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/et_non_column_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="23dp"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:hint="ex)12"
+                    android:inputType="number"
+                    android:paddingVertical="13dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="64dp"
+                    android:textColor="#121212"
+                    android:textColorHint="#C8C8C8"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/et_number"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -282,9 +300,21 @@
                     android:gravity="center"
                     android:text="번"
                     android:textColor="#606060"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_number"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/et_number" />
+
+                <TextView
+                    android:id="@+id/tv_none_column_warning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:drawableStart="@drawable/ic_select_seat_error"
+                    android:text="존재하지 않는 열이에요"
+                    android:textColor="#FF5C5C"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="@+id/et_column"
+                    app:layout_constraintTop_toBottomOf="@+id/et_column" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -292,7 +322,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/rect_white_fill_gray100_line_12">
 
                 <TextView

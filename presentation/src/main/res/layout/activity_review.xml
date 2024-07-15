@@ -77,16 +77,51 @@
             android:orientation="horizontal"
             android:paddingEnd="16dp">
 
-            <ImageButton
-                android:id="@+id/btn_add_image"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/rect_gray50_fill_gray200_line_12"
-                android:visibility="visible"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="118dp"
-                android:src="@drawable/ic_plus" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/btn_add_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="118dp"
+                    android:src="@drawable/ic_plus"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="100dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_add_image"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_add_image"
+                    app:layout_constraintStart_toStartOf="@+id/btn_add_image">
+
+                    <TextView
+                        android:id="@+id/tv_image_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="#AFAFAF"
+                        android:text="0" />
+
+                    <TextView
+                        android:id="@+id/tv_image_total_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="/3"
+                        android:textColor="#AFAFAF"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_image_count"
+                        app:layout_constraintStart_toEndOf="@id/tv_image_count"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <HorizontalScrollView
                 android:id="@+id/sv_add_image"
@@ -228,14 +263,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="16dp"
                 android:layout_marginStart="16dp"
-                android:text="잠실 야구장"
                 android:lineHeight="145dp"
-                android:paddingEnd="50dp"
+                android:text="잠실 야구장"
                 android:textColor="#121212"
                 android:textFontWeight="700"
-                android:textStyle="normal"
                 android:textSize="16sp"
+                android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/layout_seat_info"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginStart="16dp" />
@@ -274,6 +309,7 @@
                     tools:text="304" />
 
                 <TextView
+                    android:id="@+id/tv_block"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
@@ -294,6 +330,7 @@
                     tools:text="2" />
 
                 <TextView
+                    android:id="@+id/tv_column"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
@@ -366,6 +403,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/tv_my_seat_review_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
@@ -376,6 +414,7 @@
                     tools:text="3" />
 
                 <TextView
+                    android:id="@+id/tv_my_seat_review_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
