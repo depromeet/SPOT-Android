@@ -25,6 +25,11 @@ class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetB
     private var selectedMonth = CalendarUtil.getMonth(calendarInstance)
     private var selectedDay = CalendarUtil.getDay(calendarInstance)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.TransparentMaterialDialogFragment)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)

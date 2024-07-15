@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.depromeet.presentation.viewfinder.StadiumDetailActivity
 import com.depromeet.presentation.viewfinder.sample.ReviewContent
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.sample.StadiumArea
@@ -35,7 +36,10 @@ fun StadiumDetailScreen(
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
-    onClickReviewPicture: (ReviewContent) -> Unit
+    onClickReviewPicture: (ReviewContent) -> Unit,
+    onClickSelectSeat: () -> Unit,
+    onClickFilterMonthly: () -> Unit,
+    onClickReport: () -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
     val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
@@ -45,14 +49,15 @@ fun StadiumDetailScreen(
         state = verticalScrollState,
         modifier = modifier
     ) {
-        item("stadium_header") {
+        item(StadiumDetailActivity.STADIUM_HEADER) {
             StadiumHeaderContent(
                 context = context,
                 isMore = isMore,
                 stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
                 stadiumArea = StadiumArea("1루", 207, "오렌지석"),
                 keywords = keywords,
-                onChangeIsMore = { isMore = it }
+                onChangeIsMore = { isMore = it },
+                onClickSelectSeat = onClickSelectSeat
             )
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -60,12 +65,12 @@ fun StadiumDetailScreen(
         stickyHeader {
             StadiumViewReviewHeader(
                 reviewCount = review.count,
-                onClickMonthly = {}
+                onClickMonthly = onClickFilterMonthly
             )
         }
 
         if (review.reviewContents.isEmpty()) {
-            item("stadium_review_content") {
+            item(StadiumDetailActivity.STADIUM_REVIEW_CONTENT) {
                 StadiumEmptyReviewContent()
                 Spacer(modifier = Modifier.height(40.dp))
             }
@@ -76,7 +81,8 @@ fun StadiumDetailScreen(
                 StadiumReviewContent(
                     context = context,
                     reviewContent = reviewContent,
-                    onClick = onClickReviewPicture
+                    onClick = onClickReviewPicture,
+                    onClickReport = onClickReport
                 )
                 Spacer(modifier = Modifier.height(40.dp))
             }
@@ -96,7 +102,10 @@ fun StadiumDetailScreen(
 private fun StadiumDetailScreenPreview() {
     Box(modifier = Modifier.background(Color.White)) {
         StadiumDetailScreen(
-            onClickReviewPicture = {}
+            onClickReviewPicture = {},
+            onClickSelectSeat = {},
+            onClickFilterMonthly = {},
+            onClickReport = {}
         )
     }
 }
