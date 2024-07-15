@@ -1,4 +1,4 @@
-package com.depromeet.presentation.login
+package com.depromeet.presentation.login.ui
 
 import android.os.Bundle
 import android.view.View
@@ -6,13 +6,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentTeamSelectBinding
-import com.depromeet.presentation.extension.dpToPx
-import com.depromeet.presentation.home.ProfileEditActivity
-import com.depromeet.presentation.home.adapter.ProfileEditTeamAdapter
-import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
-import com.depromeet.presentation.viewfinder.adapter.GridSpacingItemDecoration
-import com.depromeet.presentation.viewfinder.adapter.StadiumSelectionAdapter
-import com.depromeet.presentation.viewfinder.sample.stadiums
+import com.depromeet.presentation.login.TeamSelectAdapter
+import com.depromeet.presentation.login.TeamSelectViewType
+import com.depromeet.presentation.login.selectStadiums
 
 class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
     R.layout.fragment_team_select, { inflater, container, attachToRoot ->

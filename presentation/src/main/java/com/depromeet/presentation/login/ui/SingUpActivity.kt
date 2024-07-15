@@ -1,4 +1,4 @@
-package com.depromeet.presentation.login
+package com.depromeet.presentation.login.ui
 
 import android.os.Bundle
 import androidx.fragment.app.commit

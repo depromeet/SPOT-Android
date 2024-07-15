@@ -1,4 +1,4 @@
-package com.depromeet.presentation.login
+package com.depromeet.presentation.login.ui
 
 import android.os.Bundle
 import android.view.View
@@ -10,6 +10,8 @@ import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentNicknameInputBinding
+import com.depromeet.presentation.login.viewmodel.NicknameInputState
+import com.depromeet.presentation.login.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
