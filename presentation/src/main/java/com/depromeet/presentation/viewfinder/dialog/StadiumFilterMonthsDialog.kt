@@ -40,11 +40,13 @@ class StadiumFilterMonthsDialog :
         super.onViewCreated(view, savedInstanceState)
         setLayoutSizeRatio(widthPercent = 1f, heightPercent = 0.44f)
 
-        binding.npMonths.minValue = 0
-        binding.npMonths.maxValue = months.size - 1
-        binding.npMonths.value = viewModel.month.value
-        binding.npMonths.displayedValues = months
-        binding.npMonths.wrapSelectorWheel = false
+        with(binding.npMonths) {
+            minValue = 0
+            maxValue = months.size - 1
+            value = viewModel.month.value
+            displayedValues = months
+            wrapSelectorWheel = false
+        }
 
         binding.npMonths.setOnValueChangedListener { picker, oldVal, newVal ->
             viewModel.updateMonth(newVal)
