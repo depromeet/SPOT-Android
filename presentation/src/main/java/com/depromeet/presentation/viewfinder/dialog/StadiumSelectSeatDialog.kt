@@ -109,13 +109,4 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
             }
         }
     }
-
-    private fun setLayoutSizeRatio(widthPercent: Float, heightPercent: Float) {
-        context?.resources?.displayMetrics?.let { metrics ->
-            binding.root.layoutParams.apply {
-                width = ((metrics.widthPixels * widthPercent).toInt())
-                height = ((metrics.heightPixels * heightPercent).toInt())
-            }
-        }
-    }
 }
