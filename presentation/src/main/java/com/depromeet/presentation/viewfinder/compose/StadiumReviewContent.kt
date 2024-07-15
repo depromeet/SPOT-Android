@@ -44,7 +44,8 @@ fun StadiumReviewContent(
     context: Context,
     reviewContent: ReviewContent,
     modifier: Modifier = Modifier,
-    onClick: (reviewContent: ReviewContent) -> Unit
+    onClick: (reviewContent: ReviewContent) -> Unit,
+    onClickReport: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -82,7 +83,10 @@ fun StadiumReviewContent(
             Icon(
                 painter = painterResource(id = R.drawable.ic_horizontal_dots),
                 contentDescription = null,
-                tint = Color(0xFF9F9F9F)
+                tint = Color(0xFF9F9F9F),
+                modifier = Modifier.clickable {
+                    onClickReport()
+                }
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -148,7 +152,8 @@ private fun StadiumReviewContentPreview() {
         StadiumReviewContent(
             context = LocalContext.current,
             reviewContent = reviewContents[0],
-            onClick = {}
+            onClick = {},
+            onClickReport = {}
         )
     }
 }

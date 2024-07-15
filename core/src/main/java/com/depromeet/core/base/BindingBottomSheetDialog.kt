@@ -30,4 +30,13 @@ abstract class BindingBottomSheetDialog<B : ViewBinding>(
         super.onDestroyView()
         _binding = null
     }
+
+    protected fun setLayoutSizeRatio(widthPercent: Float, heightPercent: Float) {
+        context?.resources?.displayMetrics?.let { metrics ->
+            binding.root.layoutParams.apply {
+                width = ((metrics.widthPixels * widthPercent).toInt())
+                height = ((metrics.heightPixels * heightPercent).toInt())
+            }
+        }
+    }
 }

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rect_white_fill_32">
+
+    <View
+        android:id="@+id/view_handler"
+        android:layout_width="36dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/rect_gray600_fill_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_select_seat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="좌석 선택"
+        android:textColor="#121212"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_check_column"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/ic_uncheck"
+        app:layout_constraintBottom_toBottomOf="@id/tv_select_column"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_select_column"
+        app:layout_constraintTop_toTopOf="@id/tv_select_column" />
+
+    <TextView
+        android:id="@+id/tv_select_column"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="'열'만 선택하기"
+        android:textColor="#121212"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_select_seat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_select_seat" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_only_column"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_select_seat">
+
+        <EditText
+            android:id="@+id/et_only_column"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/rect_gray50_fill_gray200_line_12"
+            android:hint="ex)12"
+            android:inputType="number"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="13dp"
+            android:textColor="#121212"
+            android:textColorHint="#C8C8C8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_only_column"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_only_column"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="열"
+            android:textColor="#606060"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_only_column"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_column_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="20dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_select_seat">
+
+        <EditText
+            android:id="@+id/et_column"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_gray50_fill_gray200_line_12"
+            android:hint="ex)12"
+            android:inputType="number"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="13dp"
+            android:textColor="#121212"
+            android:textColorHint="#C8C8C8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_column"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_column"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="48dp"
+            android:gravity="center"
+            android:text="열"
+            android:textColor="#606060"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/et_number"
+            app:layout_constraintStart_toEndOf="@+id/et_column"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/rect_gray50_fill_gray200_line_12"
+            android:hint="ex)12"
+            android:inputType="number"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="13dp"
+            android:textColor="#121212"
+            android:textColorHint="#C8C8C8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_number"
+            app:layout_constraintStart_toEndOf="@id/tv_column"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="번"
+            android:textColor="#606060"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_number"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_warning"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:drawableStart="@drawable/ic_warning"
+        android:drawablePadding="4dp"
+        android:gravity="start"
+        android:text="존재하지 않는 열이에요"
+        android:textColor="#FF5C5C"
+        android:textSize="11sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/cl_column_number"
+        app:layout_constraintTop_toBottomOf="@id/cl_column_number" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_column_number_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/rect_white_fill_gray100_line_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_warning">
+
+        <TextView
+            android:id="@+id/tv_what_column"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="208dp"
+            android:layout_weight="1"
+            android:paddingVertical="12dp"
+            android:paddingStart="12dp"
+            android:text="열과 번이 무엇인가요?"
+            android:textColor="#7B7B7B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_up_down"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_chevron_down"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_what_column"
+            app:layout_constraintStart_toEndOf="@+id/tv_what_column"
+            app:layout_constraintTop_toTopOf="@+id/tv_what_column" />
+
+        <LinearLayout
+            android:id="@+id/layout_column_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_what_column">
+
+            <TextView
+                android:id="@+id/tv_description_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요."
+                android:textColor="#AFAFAF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_what_column" />
+
+            <TextView
+                android:id="@+id/tv_description_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:paddingHorizontal="16dp"
+                android:text="• ex. 2열 7번좌석"
+                android:textColor="#AFAFAF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_column_example"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_description_two" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_adapt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="21dp"
+        android:background="@drawable/sel_seat_button"
+        android:enabled="false"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="적용하기"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_column_number_description"
+        app:layout_constraintVertical_bias="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

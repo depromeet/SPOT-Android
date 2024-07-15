@@ -2,6 +2,7 @@ package com.depromeet.presentation.viewfinder.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +25,8 @@ import com.depromeet.presentation.viewfinder.sample.Seat
 @Composable
 fun StadiumSeatCheckBox(
     seat: Seat,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -43,6 +45,10 @@ fun StadiumSeatCheckBox(
                 } else {
                     Color(0xFFE5E5E5)
                 }, shape = RoundedCornerShape(100.dp)
+            )
+            .clickable(
+                enabled = true,
+                onClick = onClick
             )
             .padding(vertical = 10.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.Center,
@@ -75,7 +81,8 @@ fun StadiumSeatCheckBox(
 private fun StadiumSeatCheckBoxPreview() {
     StadiumSeatCheckBox(
         seat = Seat(100, 11, false),
-        modifier = Modifier
+        modifier = Modifier,
+        onClick = {}
 
     )
 }
@@ -85,6 +92,7 @@ private fun StadiumSeatCheckBoxPreview() {
 private fun StadiumSeatCheckBoxPreviewSelected() {
     StadiumSeatCheckBox(
         seat = Seat(100, 11, true),
-        modifier = Modifier
+        modifier = Modifier,
+        onClick = {}
     )
 }
