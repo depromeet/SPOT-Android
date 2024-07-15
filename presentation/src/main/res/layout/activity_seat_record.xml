@@ -172,13 +172,13 @@
 
                 <Spinner
                     android:id="@+id/spinner_record_year"
-                    style="?attr/textInputStyle"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/sel_year_drop_down"
                     android:dropDownWidth="103dp"
+                    android:gravity="bottom"
                     android:popupBackground="@drawable/rect_white_fill_16"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

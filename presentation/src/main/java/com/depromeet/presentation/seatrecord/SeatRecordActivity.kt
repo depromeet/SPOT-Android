@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.designsystem.SpotSpinner
 import com.depromeet.designsystem.extension.dpToPx
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
@@ -86,8 +86,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun initDateSpinner() {
         val year = listOf("2024년", "2023년", "2022년", "2021년")
-        val adapter = ArrayAdapter(this, R.layout.item_spinner_selected_item, year)
-        adapter.setDropDownViewResource(R.layout.item_spinner_item)
+//        val adapter = ArrayAdapter(this, R.layout.item_custom_month_spinner_view, year)
+//        adapter.setDropDownViewResource(R.layout.item_custom_month_spinner_dropdown)
+
+        val adapter = SpotSpinner(
+            this,
+            R.layout.item_custom_month_spinner_view,
+            R.layout.item_custom_month_spinner_dropdown,
+            year,
+            true,
+            R.color.gray900
+        )
         with(binding.spinnerRecordYear) {
             this.adapter = adapter
             onItemSelectedListener =
@@ -98,6 +107,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         position: Int,
                         id: Long,
                     ) {
+                        adapter.setSelectedItemPosition(position)
                         val selectedYear = year[position].filter { it.isDigit() }.toInt()
                         viewModel.setSelectedYear(selectedYear)
                     }
