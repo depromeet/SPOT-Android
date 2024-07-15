@@ -1,11 +1,13 @@
 package com.depromeet.presentation.seatReview.dialog
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,6 +24,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toUri
+import com.depromeet.presentation.home.UploadErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,32 +39,26 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         private const val IMAGE_TITLE = "image"
     }
 
-    private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
+    private var permissionRequired = arrayOf(Manifest.permission.CAMERA)
     private lateinit var selectMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
-        setupActivityResultLaunchers()
+        setuUserPermission()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUploadMethod()
-
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            val permissionList = PERMISSIONS_REQUIRED.toMutableList()
-            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            PERMISSIONS_REQUIRED = permissionList.toTypedArray()
-        }
     }
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             var permissionGranted = true
             permissions.entries.forEach {
-                if (it.key in PERMISSIONS_REQUIRED && !it.value) {
+                if (it.key in permissionRequired && !it.value) {
                     permissionGranted = false
                 }
             }
@@ -72,11 +69,24 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
             }
         }
 
+    private fun setuUserPermission() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            val permissionList = permissionRequired.toMutableList()
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            permissionRequired = permissionList.toTypedArray()
+        }
+    }
+
     private fun setupActivityResultLaunchers() {
         selectMultipleMediaLauncher =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
-                val uriList = uris.map { it.toString() }
-                setFragmentResult(REQUEST_KEY, bundleOf(SELECTED_IMAGES to uriList))
+                val validUris = uris.filter { uri ->
+                    handleSelectedImage(uri)
+                }
+                if (validUris.isNotEmpty()) {
+                    val uriList = validUris.map { it.toString() }
+                    setFragmentResult(REQUEST_KEY, bundleOf(SELECTED_IMAGES to uriList))
+                }
                 dismiss()
             }
 
@@ -86,15 +96,35 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
                     result.data?.extras?.get("data")?.let { bitmap ->
                         (bitmap as? Bitmap)?.let {
                             val uri = it.toUri(requireContext(), IMAGE_TITLE)
-                            setFragmentResult(
-                                REQUEST_KEY,
-                                bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
-                            )
+                            if (handleSelectedImage(uri)) {
+                                setFragmentResult(
+                                    REQUEST_KEY,
+                                    bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
+                                )
+                            }
                             dismiss()
                         }
                     }
                 }
             }
+    }
+
+    @SuppressLint("Recycle")
+    private fun handleSelectedImage(uri: Uri): Boolean {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val sizeBytes = inputStream?.available() ?: 0
+        val sizeMB = sizeBytes / (1024f * 1024f)
+
+        return if (sizeMB > 15) {
+            val fragment = UploadErrorDialog(
+                getString(R.string.upload_error_capacity_description),
+                getString(R.string.upload_error_capacity_15MB),
+            )
+            fragment.show(parentFragmentManager, fragment.tag)
+            false
+        } else {
+            true
+        }
     }
 
     private fun setupUploadMethod() {
@@ -104,15 +134,16 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
             }
             layoutTakePhoto.setOnSingleClickListener {
                 if (!hasPermissions(requireContext())) {
-                    activityResultLauncher.launch(PERMISSIONS_REQUIRED)
+                    activityResultLauncher.launch(permissionRequired)
                 } else {
                     navigateToCamera()
                 }
             }
         }
+        setupActivityResultLaunchers()
     }
 
-    private fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
+    private fun hasPermissions(context: Context) = permissionRequired.all {
         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
