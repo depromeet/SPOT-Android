@@ -91,6 +91,18 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
+    private fun initDatePickerDialog() {
+        val today = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+        with(binding) {
+            tvDate.text = dateFormat.format(today.time)
+            layoutDatePicker.setOnSingleClickListener {
+                val datePickerDialogFragment = DatePickerDialog()
+                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
+            }
+        }
+    }
+
     private fun updateLayoutSeatInfoVisibility() {
         val seatName = viewModel.selectedSeatName.value
         val block = viewModel.selectedBlock.value
@@ -117,26 +129,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
         binding.layoutSeatInfoNext.setOnSingleClickListener {
             SelectSeatDialog().show(supportFragmentManager, "SelectSeatDialog")
-        }
-    }
-
-    private fun initDatePickerDialog() {
-        val today = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        with(binding) {
-            tvDate.text = dateFormat.format(today.time)
-            layoutDatePicker.setOnSingleClickListener {
-                val datePickerDialogFragment = DatePickerDialog().apply {
-                    onDateSelected = { year, month, day ->
-                        val selectedDate = Calendar.getInstance().apply {
-                            set(year, month, day)
-                        }
-                        val formattedDate = dateFormat.format(selectedDate.time)
-                        viewModel.updateSelectedDate(formattedDate)
-                    }
-                }
-                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
-            }
         }
     }
 
