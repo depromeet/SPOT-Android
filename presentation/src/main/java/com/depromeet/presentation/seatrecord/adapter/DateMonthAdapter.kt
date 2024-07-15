@@ -47,7 +47,10 @@ class DateMonthViewHolder(
     private val binding: ItemDateMonthBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: MonthData) {
-        binding.tvMonth.text = item.month
+        binding.tvMonth.text = when (item.month) {
+            0 -> "전체"
+            else -> "${item.month}월"
+        }
         updateSelectedItem(item.isClicked)
     }
 

@@ -161,6 +161,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_record_sticky_header"
+                android:visibility="visible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -172,7 +173,7 @@
                 <Spinner
                     android:id="@+id/spinner_record_year"
                     style="?attr/textInputStyle"
-                    android:layout_width="100dp"
+                    android:layout_width="93dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
@@ -205,6 +206,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical"
+                android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

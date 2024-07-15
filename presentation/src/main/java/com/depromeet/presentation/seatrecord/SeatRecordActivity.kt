@@ -5,19 +5,23 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.viewModels
+import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.designsystem.extension.dpToPx
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.mockdata.MonthData
+import com.depromeet.presentation.seatrecord.mockdata.ProfileDetailData
 import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
 import com.depromeet.presentation.seatrecord.mockdata.groupByMonth
-import com.depromeet.presentation.seatrecord.mockdata.makeSeatRecordData
 import com.depromeet.presentation.seatrecord.mockdata.monthList
+import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,12 +35,26 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
     private lateinit var monthRecordAdapter: MonthRecordAdapter
-
-    private val testData = makeSeatRecordData()
+    private val viewModel: SeatRecordViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initDateSpinner()
+        initMonthAdapter()
+
+        viewModel.getSeatRecords()
+
+        viewModel.uiState.asLiveData().observe(this) {
+            setProfile(it.profileDetailData)
+            initReviewExist(it.reviews)
+        }
+        viewModel.selectedMonth.asLiveData().observe(this) {
+            val updatedMonthList = monthList.map { monthData ->
+                monthData.copy(isClicked = monthData.month == it)
+            }
+            dateMonthAdapter.submitList(updatedMonthList)
+        }
 
         with(binding) {
             recordSpotAppbar.setNavigationOnClickListener {
@@ -46,29 +64,20 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             recordSpotAppbar.setMenuOnClickListener {
                 //셋팅 이동
             }
-
-            ssvRecord.header = binding.clRecordStickyHeader
-
             fabRecordUp.setOnClickListener {
                 ssvRecord.smoothScrollTo(0, 0)
             }
         }
 
 
-        setProfile()
-        initDateSpinner()
-        initMonthAdapter()
-        initRecentRecordAdapter()
-
     }
 
-    private fun setProfile() {
+    private fun setProfile(profileData: ProfileDetailData) {
         with(binding) {
-            val data = testData.profileDetailData
-            "Lv.${data.level} ${data.titleName}".also { tvRecordLevel.text = it }
-            tvRecordNickname.text = data.nickName
-            tvRecordCount.text = data.recordCount.toString()
-            ivRecordProfile.load(data.profileImage) {
+            "Lv.${profileData.level} ${profileData.titleName}".also { tvRecordLevel.text = it }
+            tvRecordNickname.text = profileData.nickName
+            tvRecordCount.text = profileData.recordCount.toString()
+            ivRecordProfile.load(profileData.profileImage) {
                 transformations(CircleCropTransformation())
             }
         }
@@ -76,8 +85,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun initDateSpinner() {
         val year = listOf("2024년", "2023년", "2022년", "2021년")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, year)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(this, R.layout.item_spinner_selected_item, year)
+        adapter.setDropDownViewResource(R.layout.item_spinner_item)
         with(binding.spinnerRecordYear) {
             this.adapter = adapter
             onItemSelectedListener =
@@ -88,8 +97,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         position: Int,
                         id: Long,
                     ) {
-                        val selectedYear = year[position]
-                        //뷰모델 갱신
+                        val selectedYear = year[position].filter { it.isDigit() }.toInt()
+                        viewModel.setSelectedYear(selectedYear)
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -106,32 +115,47 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 BETWEEN_SPACING_DP.dpToPx(this)
             )
         )
-        dateMonthAdapter.submitList(monthList)
         dateMonthAdapter.itemMonthClickListener =
             object : DateMonthAdapter.OnItemMonthClickListener {
                 override fun onItemMonthClick(item: MonthData) {
-                    //뷰모델 처리
+                    val selectedMonth = item.month
+                    viewModel.setSelectedMonth(selectedMonth)
                 }
             }
     }
 
-    private fun initRecentRecordAdapter() {
-        monthRecordAdapter = MonthRecordAdapter()
+    private fun initReviewExist(reviews: List<ReviewMockData>) {
+        if (reviews.isEmpty()) {
+            with(binding) {
+                "${viewModel.selectedMonth.value}년".also { tvRecordYear.text = it }
+                clRecordNone.visibility = View.VISIBLE
+                clRecordStickyHeader.visibility = View.GONE
+                rvRecordMonthDetail.visibility = View.GONE
+            }
+        } else {
+            with(binding) {
+                clRecordNone.visibility = View.GONE
+                clRecordStickyHeader.visibility = View.VISIBLE
+                rvRecordMonthDetail.visibility = View.VISIBLE
 
-        with(binding) {
-            rvRecordMonthDetail.adapter = monthRecordAdapter
-        }
-        monthRecordAdapter.submitList(testData.reviews.groupByMonth())
+                monthRecordAdapter = MonthRecordAdapter()
+                rvRecordMonthDetail.adapter = monthRecordAdapter
+                ssvRecord.header = binding.clRecordStickyHeader
+            }
+            monthRecordAdapter.submitList(reviews.groupByMonth())
 
-        monthRecordAdapter.itemRecordClickListener =
-            object : MonthRecordAdapter.OnItemRecordClickListener {
-                override fun onItemRecordClick(item: ReviewMockData) {
-                    Intent(this@SeatRecordActivity, SeatDetailRecordActivity::class.java).apply {
-                        startActivity(this)
+            monthRecordAdapter.itemRecordClickListener =
+                object : MonthRecordAdapter.OnItemRecordClickListener {
+                    override fun onItemRecordClick(item: ReviewMockData) {
+                        Intent(
+                            this@SeatRecordActivity,
+                            SeatDetailRecordActivity::class.java
+                        ).apply {
+                            startActivity(this)
+                        }
                     }
                 }
-            }
 
-
+        }
     }
 }

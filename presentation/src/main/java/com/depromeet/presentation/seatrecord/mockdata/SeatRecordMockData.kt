@@ -3,34 +3,36 @@ package com.depromeet.presentation.seatrecord.mockdata
 import android.os.Parcelable
 import com.depromeet.presentation.extension.extractMonth
 import com.depromeet.presentation.viewfinder.sample.Keyword
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.parcelize.Parcelize
 
 data class MonthData(
-    val month: String, //int?
-    val isClicked: Boolean,
+    val month: Int = 0,
+    var isClicked: Boolean = false,
 )
 
 data class RecordDetailMockData(
-    val profileDetailData: ProfileDetailData,
-    val reviews: List<ReviewMockData>,
+    val profileDetailData: ProfileDetailData = ProfileDetailData(),
+    val reviews: List<ReviewMockData> = emptyList(),
 )
 
 data class ProfileDetailData(
-    val nickName: String,
-    val profileImage: String,
-    val level: Int,
-    val titleName: String,
-    val recordCount: Int,
+    val nickName: String= "",
+    val profileImage: String ="",
+    val level: Int =0,
+    val titleName: String = "",
+    val recordCount: Int = 0,
 )
 
 @Parcelize
 data class ReviewMockData(
-    val id: Int,
-    val date: String,
-    val image: String,
-    val stadiumName: String,
-    val blockName: String,
-    val keyword: List<Keyword>,
+    val id: Int =0,
+    val date: String ="",
+    val image: String ="",
+    val stadiumName: String ="",
+    val blockName: String ="",
+    val keyword: List<Keyword> = emptyList(),
 ) : Parcelable
 
 data class MonthReviewData(
@@ -45,16 +47,18 @@ fun List<ReviewMockData>.groupByMonth(): List<MonthReviewData> {
     }
 }
 
-fun makeSeatRecordData(): RecordDetailMockData {
-    return RecordDetailMockData(
-        profileDetailData = ProfileDetailData(
-            nickName = "노균욱",
-            profileImage = "https://picsum.photos/600/400",
-            level = 6,
-            titleName = "전설의 직관러",
-            recordCount = 37
-        ),
-        reviews = makeRecordDetailData()
+fun makeSeatRecordData(): Flow<RecordDetailMockData> = flow {
+    emit(
+        RecordDetailMockData(
+            profileDetailData = ProfileDetailData(
+                nickName = "노균욱",
+                profileImage = "https://picsum.photos/600/400",
+                level = 6,
+                titleName = "전설의 직관러",
+                recordCount = 37
+            ),
+            reviews = makeRecordDetailData()
+        )
     )
 }
 
@@ -83,13 +87,17 @@ fun makeRecordDetailData(): List<ReviewMockData> {
 }
 
 val monthList = listOf<MonthData>(
-    MonthData("전체", true),
-    MonthData("3월", false),
-    MonthData("4월", false),
-    MonthData("4월", false),
-    MonthData("5월", false),
-    MonthData("6월", false),
-    MonthData("7월", false),
-    MonthData("8월", false),
-    MonthData("9월", false),
+    MonthData(0, true),
+    MonthData(1, false),
+    MonthData(2, false),
+    MonthData(3, false),
+    MonthData(4, false),
+    MonthData(5, false),
+    MonthData(6, false),
+    MonthData(7, false),
+    MonthData(8, false),
+    MonthData(9, false),
+    MonthData(10, false),
+    MonthData(11, false),
+    MonthData(12, false),
 )

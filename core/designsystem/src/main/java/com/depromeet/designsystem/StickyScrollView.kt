@@ -2,7 +2,6 @@ package com.depromeet.designsystem
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.widget.NestedScrollView
@@ -47,7 +46,6 @@ class StickyScrollView : NestedScrollView, ViewTreeObserver.OnGlobalLayoutListen
     override fun onScrollChanged(l: Int, scrollY: Int, oldl: Int, oldt: Int) {
         super.onScrollChanged(l, scrollY, oldl, oldt)
 
-        Log.d("test", "$scrollY $mHeaderInitPosition")
         if (header != null && scrollY > mHeaderInitPosition) {
             stickHeader(scrollY - mHeaderInitPosition)
         } else {
