@@ -25,3 +25,16 @@ fun applyBoldAndSizeSpan(
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
     )
 }
+
+fun applyBoldSpan(
+    spannableBuilder: SpannableStringBuilder,
+    startIndex: Int,
+    endIndex: Int
+) {
+    spannableBuilder.setSpan(
+        StyleSpan(Typeface.BOLD),
+        startIndex,
+        endIndex,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+}

@@ -44,13 +44,21 @@
         <activity
             android:name="com.depromeet.presentation.viewfinder.StadiumSelectionActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.depromeet.presentation.home.HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.depromeet.presentation.home.ProfileEditActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.depromeet.presentation.seatrecord.SeatDetailRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
