@@ -8,6 +8,7 @@ import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReviewMySeatBottomSheetBinding
@@ -54,7 +55,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     }
 
     private fun observeViewModel() {
-        viewModel.selectedReviewBtn.observe(viewLifecycleOwner) { selectedButtonTexts ->
+        viewModel.selectedReviewBtn.asLiveData().observe(this) { selectedButtonTexts ->
             updateButtonStates(selectedButtonTexts)
             updateCompleteButtonState(selectedButtonTexts.isNotEmpty())
         }
