@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
@@ -43,10 +44,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeViewModel() {
-        viewModel.selectedBlock.observe(this) { updateCompleteButtonState() }
-        viewModel.selectedColumn.observe(this) { updateCompleteButtonState() }
-        viewModel.selectedNumber.observe(this) { updateCompleteButtonState() }
-        viewModel.selectedSeatName.observe(this) {
+        viewModel.selectedBlock.asLiveData().observe(this) { updateCompleteButtonState() }
+        viewModel.selectedColumn.asLiveData().observe(this) { updateCompleteButtonState() }
+        viewModel.selectedNumber.asLiveData().observe(this) { updateCompleteButtonState() }
+        viewModel.selectedSeatName.asLiveData().observe(this) {
             adapter.notifyDataSetChanged()
         }
     }

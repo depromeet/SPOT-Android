@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
@@ -61,30 +62,30 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun observeViewModel() {
-        viewModel.selectedDate.observe(this) { date ->
+        viewModel.selectedDate.asLiveData().observe(this) { date ->
             binding.tvDate.text = date
         }
-        viewModel.reviewCount.observe(this) { count ->
+        viewModel.reviewCount.asLiveData().observe(this) { count ->
             binding.tvMySeatReviewCount.text = count.toString()
             binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
         }
 
-        viewModel.selectedSeatName.observe(this) { name ->
+        viewModel.selectedSeatName.asLiveData().observe(this) { name ->
             binding.tvSeatColor.text = name.toString()
             updateLayoutSeatInfoVisibility()
         }
 
-        viewModel.selectedBlock.observe(this) { block ->
+        viewModel.selectedBlock.asLiveData().observe(this) { block ->
             binding.tvSeatBlock.text = block.toString()
             updateLayoutSeatInfoVisibility()
         }
 
-        viewModel.selectedColumn.observe(this) { column ->
+        viewModel.selectedColumn.asLiveData().observe(this) { column ->
             binding.tvColumnNumber.text = column.toString()
             updateLayoutSeatInfoVisibility()
         }
 
-        viewModel.selectedNumber.observe(this) { number ->
+        viewModel.selectedNumber.asLiveData().observe(this) { number ->
             binding.tvSeatNumber.text = number.toString()
             updateLayoutSeatInfoVisibility()
         }
