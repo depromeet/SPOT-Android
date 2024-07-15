@@ -3,6 +3,7 @@ package com.depromeet.presentation.viewfinder
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
@@ -49,16 +50,13 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     startToStadiumDetailPictureFragment(reviewContent)
                 },
                 onClickSelectSeat = {
-                    StadiumSelectSeatDialog.newInstance()
-                        .show(supportFragmentManager, StadiumSelectSeatDialog.TAG)
+                    startToBottomSheetDialog(StadiumSelectSeatDialog.newInstance(), StadiumSelectSeatDialog.TAG)
                 },
                 onClickFilterMonthly = {
-                    StadiumFilterMonthsDialog.newInstance()
-                        .show(supportFragmentManager, StadiumFilterMonthsDialog.TAG)
+                    startToBottomSheetDialog(StadiumFilterMonthsDialog.newInstance(), StadiumFilterMonthsDialog.TAG)
                 },
                 onClickReport = {
-                    ReportDialog.newInstance()
-                        .show(supportFragmentManager, ReportDialog.TAG)
+                    startToBottomSheetDialog(ReportDialog.newInstance(), ReportDialog.TAG)
                 }
             )
         }
@@ -72,5 +70,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         supportFragmentManager.commit {
             replace(R.id.fcv_detail_picture, fragment, StadiumDetailPictureFragment.TAG)
         }
+    }
+
+    private fun startToBottomSheetDialog(dialogInstance: DialogFragment, tag: String) {
+        dialogInstance.show(supportFragmentManager, tag)
     }
 }
