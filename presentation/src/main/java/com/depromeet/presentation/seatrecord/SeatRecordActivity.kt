@@ -56,11 +56,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             dateMonthAdapter.submitList(updatedMonthList)
         }
 
+        setClickListener()
+    }
+
+    private fun setClickListener() {
         with(binding) {
             recordSpotAppbar.setNavigationOnClickListener {
                 finish()
             }
-
             recordSpotAppbar.setMenuOnClickListener {
                 //셋팅 이동
             }
@@ -68,8 +71,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 ssvRecord.smoothScrollTo(0, 0)
             }
         }
-
-
     }
 
     private fun setProfile(profileData: ProfileDetailData) {
