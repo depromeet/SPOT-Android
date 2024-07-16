@@ -41,11 +41,18 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)
     }
     private val selectedImageLayout: List<FrameLayout> by lazy {
-        listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage)
+        listOf(
+            binding.layoutFirstImage,
+            binding.layoutSecondImage,
+            binding.layoutThirdImage,
+        )
     }
-
     private val removeButtons: List<ImageView> by lazy {
-        listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage)
+        listOf(
+            binding.ivRemoveFirstImage,
+            binding.ivRemoveSecondImage,
+            binding.ivRemoveThirdImage,
+        )
     }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
@@ -58,7 +65,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         setupRemoveButtons()
         navigateToReviewDoneActivity()
         observeReviewViewModel()
-        updateNextButtonState()
     }
 
     private fun initDatePickerDialog() {
@@ -75,20 +81,35 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun observeReviewViewModel() {
         viewModel.selectedDate.asLiveData().observe(this) { date ->
             binding.tvDate.text = date
+            updateNextButtonState()
         }
+        viewModel.selectedImages.asLiveData().observe(this) { image ->
+            updateNextButtonState()
+        }
+
         viewModel.reviewCount.asLiveData().observe(this) { count ->
             binding.tvMySeatReviewCount.text = count.toString()
             binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
         }
 
+        viewModel.selectedGoodReview.asLiveData().observe(this) { count ->
+            updateNextButtonState()
+        }
+
+        viewModel.selectedBadReview.asLiveData().observe(this) { count ->
+            updateNextButtonState()
+        }
+
         viewModel.selectedSeatZone.asLiveData().observe(this) { name ->
             binding.tvSeatColor.text = name.toString()
             updateLayoutSeatInfoVisibility()
+            updateNextButtonState()
         }
 
         viewModel.selectedBlock.asLiveData().observe(this) { block ->
             binding.tvSeatBlock.text = block.toString()
             updateLayoutSeatInfoVisibility()
+            updateNextButtonState()
         }
 
         viewModel.selectedColumn.asLiveData().observe(this) { column ->
@@ -99,6 +120,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.selectedNumber.asLiveData().observe(this) { number ->
             binding.tvSeatNumber.text = number.toString()
             updateLayoutSeatInfoVisibility()
+            updateNextButtonState()
         }
     }
 
@@ -140,6 +162,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun addSelectedImages(newImageUris: List<String>) {
         selectedImageUris.addAll(newImageUris.filterNot { selectedImageUris.contains(it) })
+        if (selectedImageUris.size > MAX_SELECTED_IMAGES) {
+            selectedImageUris = selectedImageUris.take(MAX_SELECTED_IMAGES).toMutableList()
+        }
+        viewModel.setSelectedImages(selectedImageUris)
         updateImageViews()
     }
 
@@ -184,6 +210,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         if (index < selectedImageUris.size) {
             selectedImageUris.removeAt(index)
             updateImageViews()
+            viewModel.setSelectedImages(selectedImageUris)
         }
     }
 
@@ -195,18 +222,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun updateNextButtonState() {
         val isSelectedDateFilled = viewModel.selectedDate.value.isNotEmpty()
-        val isSelectedReviewBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
-        val isBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
-        val isColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
-        val isNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
+        val isSelectedImageFilled = viewModel.selectedImages.value.isNotEmpty()
+        val isSelectedGoodBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
+        val isSelectedBadBtnFilled = viewModel.selectedBadReview.value.isNotEmpty()
+        val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
+        val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvUploadBtn) {
-            isEnabled = isSelectedDateFilled == true && isSelectedReviewBtnFilled == true &&
-                isBlockFilled == true && isColumnFilled == true && isNumberFilled == true
+            isEnabled =
+                isSelectedDateFilled && isSelectedImageFilled && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
+                isSelectedBlockFilled && isSelectedNumberFilled
             if (isEnabled) {
                 setBackgroundResource(R.drawable.rect_gray900_fill_6)
                 setTextColor(ContextCompat.getColor(this@ReviewActivity, android.R.color.white))
-                isEnabled = true
+            } else {
+                setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                setTextColor(ContextCompat.getColor(this@ReviewActivity, R.color.white))
             }
         }
     }
