@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SeatBlockResponseDto(
+data class ResponseSeatBlockDto(
     @SerialName("id")
     val id: Int,
     @SerialName("code")
