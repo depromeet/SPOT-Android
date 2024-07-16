@@ -36,9 +36,7 @@ class SeatReviewDataSourceImpl @Inject constructor(
         return seatReviewService.getSeatMax(stadiumId, sectionId)
     }
 
-    override suspend fun postSeatReviewData(
-        requestSeatReviewDto: RequestSeatReviewDto,
-    ) {
+    override suspend fun postSeatReviewData(requestSeatReviewDto: RequestSeatReviewDto) {
         return seatReviewService.postSeatReview(requestSeatReviewDto)
     }
 }

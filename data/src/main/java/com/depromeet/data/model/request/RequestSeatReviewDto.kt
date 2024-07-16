@@ -24,18 +24,16 @@ data class RequestSeatReviewDto(
     val bad: List<String>,
     @SerialName("content")
     val content: String,
-) {
-    fun toSeatReview(): SeatReviewModel {
-        return SeatReviewModel(
-            stadiumId = stadiumId,
-            blockId = blockId,
-            rowId = rowId,
-            seatNumber = seatNumber,
-            images = images,
-            date = date,
-            good = good,
-            bad = bad,
-            content = content,
-        )
-    }
-}
+)
+
+fun SeatReviewModel.toSeatReview() = RequestSeatReviewDto(
+    stadiumId = stadiumId,
+    blockId = blockId,
+    rowId = rowId,
+    seatNumber = seatNumber,
+    images = images,
+    date = date,
+    good = good,
+    bad = bad,
+    content = content,
+)

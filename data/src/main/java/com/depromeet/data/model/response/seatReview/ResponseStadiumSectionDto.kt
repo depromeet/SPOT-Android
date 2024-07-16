@@ -43,7 +43,7 @@ data class ResponseStadiumSectionDto(
         }
     }
 
-    fun toMyDepartment(): StadiumSectionModel {
+    fun toStadiumSection(): StadiumSectionModel {
         return StadiumSectionModel(seatChart, sectionList.map { it.toSelectionList() })
     }
 }
