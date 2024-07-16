@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class StadiumSectionResponseDto(
+data class ResponseStadiumSectionDto(
     @SerialName("seatChart")
     val seatChart: String,
     @SerialName("sectionList")

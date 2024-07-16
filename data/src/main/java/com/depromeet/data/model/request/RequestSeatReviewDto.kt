@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SeatReviewRequestDto(
+data class RequestSeatReviewDto(
     @SerialName("stadiumId")
     val stadiumId: Int,
     @SerialName("blockId")
