@@ -1,4 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
+
 
 plugins {
     id("com.android.application")
@@ -8,6 +11,12 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version Versions.kotlinVersion
 }
+
+val properties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
+}
+
+val kakaoApiKey = properties["kakaoApiKey"].toString()
 
 android {
     namespace = Constants.packageName
@@ -20,8 +29,17 @@ android {
         versionCode = Constants.versionCode
         versionName = Constants.versionName
 
+//        val properties = Properties()
+//        properties.load(FileInputStream(rootProject.file("local.properties")))
+
         buildConfigField("String", "BASE_URL", getApiKey("base.url"))
         buildConfigField("String", "SVG_BASE_URL", getApiKey("svg.base.url"))
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getApiKey("kakao.api.native.key"))
+//        val kakaoApiKey = properties.getProperty("kakaoApiKey")
+        manifestPlaceholders["kakaoApiKey"] = getApiKey("kakao.api.native.key")
+//        manifestPlaceholders["kakaoApiKey"] = kakaoApiKey
+//        manifestPlaceholders["kakaoApiKey"] = properties["kakao.api.native.key"] as String
+//        addManifestPlaceholders(mapOf("kakaoApiKey" to getApiKey("kakao.api.native.key")))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +51,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+        }
+        getByName("debug") {
+            manifestPlaceholders["kakaoApiKey"] = kakaoApiKey
         }
     }
 
@@ -110,6 +131,7 @@ dependencies {
         implementation(progressView)
         implementation(balloon)
         implementation(lottie)
+        implementation(kakaoLogin)
         debugImplementation(flipperLeakCanary)
         debugImplementation(leakCanary)
         debugImplementation(soloader)

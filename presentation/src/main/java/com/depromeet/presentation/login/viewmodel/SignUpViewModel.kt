@@ -1,17 +1,11 @@
 package com.depromeet.presentation.login.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.depromeet.presentation.extension.NICKNAME_PATTERN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +26,12 @@ class SignUpViewModel @Inject constructor(
                 NicknameInputState.INVALID_CHARACTER
             )
             else -> _nicknameInputState.tryEmit(NicknameInputState.VALID)
+        }
+    }
+
+    fun postKakaoSignup() {
+        viewModelScope.launch {
+
         }
     }
 }

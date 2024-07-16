@@ -89,6 +89,7 @@ dependencies {
         implementation(progressView)
         implementation(balloon)
         implementation(lottie)
+        implementation(kakaoLogin)
         debugImplementation(flipperLeakCanary)
         debugImplementation(leakCanary)
         debugImplementation(soloader)
