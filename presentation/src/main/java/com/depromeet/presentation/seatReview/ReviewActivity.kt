@@ -81,7 +81,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
         }
 
-        viewModel.selectedSeatName.asLiveData().observe(this) { name ->
+        viewModel.selectedSeatZone.asLiveData().observe(this) { name ->
             binding.tvSeatColor.text = name.toString()
             updateLayoutSeatInfoVisibility()
         }
@@ -103,7 +103,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun updateLayoutSeatInfoVisibility() {
-        val seatName = viewModel.selectedSeatName.value
+        val seatName = viewModel.selectedSeatZone.value
         val block = viewModel.selectedBlock.value
         val column = viewModel.selectedColumn.value
         val number = viewModel.selectedNumber.value
