@@ -13,12 +13,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ReviewViewModel @Inject constructor() : ViewModel() {
 
-    // 날짜 o------
+    // 날짜 및 이미지
     private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
     private val currentDate: String = LocalDate.now().format(dateFormatter)
 
     private val _selectedDate = MutableStateFlow(currentDate)
     val selectedDate: StateFlow<String> = _selectedDate.asStateFlow()
+
+    private val _selectedImages = MutableStateFlow<List<String>>(emptyList())
+    val selectedImages: StateFlow<List<String>> = _selectedImages.asStateFlow()
 
     // 시야 후기
 
@@ -53,9 +56,6 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
         _selectedDate.value = date
         Log.d("minju", selectedDate.value.toString())
     }
-
-    private val _selectedImages = MutableStateFlow<List<String>>(emptyList())
-    val selectedImages: StateFlow<List<String>> = _selectedImages.asStateFlow()
 
     fun setSelectedImages(image: List<String>) {
         _selectedImages.value = image
