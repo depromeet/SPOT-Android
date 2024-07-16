@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/rect_white_fill_32">
 
     <View
@@ -31,16 +31,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view_handler" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_review_my_seat">
-
         <LinearLayout
             android:id="@+id/layout_my_seat_review"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
@@ -273,73 +267,78 @@
                     android:textFontWeight="500"
                     android:textStyle="normal" />
             </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_write_detail_review"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="더 자세한 후기를 남길래요!"
-                    android:textColor="#121212"
-                    android:textFontWeight="700"
-                    android:textStyle="normal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/btn_detail_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/sel_review_check_write"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:id="@+id/et_detail_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12.5dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <EditText
-                    android:id="@+id/et_detail_review"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rect_gray200_fill_12"
-                    android:hint="시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요"
-                    android:inputType="textMultiLine"
-                    android:maxLines="5"
-                    android:layout_marginBottom="20dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp"
-                    android:textColor="#4A4A4A"
-                    android:textColorHint="#C8C8C8"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="더 자세한 후기를 남기세요 dskfhdskfhsdkjfhdskjfhksdjfhkjdsfhkjsdhfdhskjfhsdjkfhdsjkfhdskjfhjkdsfhkjsdfhsdjkfhdsjkfjsd" />
-
-                <TextView
-                    android:id="@+id/tv_detail_review_warning"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="최대 150자까지 입력 할 수 있어요"
-                    android:textColor="#FF5C5C"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
-            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/layout_my_seat_review">
+
+        <TextView
+            android:id="@+id/tv_write_detail_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="더 자세한 후기를 남길래요!"
+            android:textColor="#121212"
+            android:textFontWeight="700"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_detail_check"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/sel_review_check_write"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/et_detail_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tv_complete_btn"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <EditText
+            android:id="@+id/et_detail_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rect_gray200_fill_12"
+            android:hint="시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요"
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:textColor="#4A4A4A"
+            android:textColorHint="#C8C8C8"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="더 자세한 후기를 남기세요 dskfhdskfhsdkjfhdskjfhksdjfhkjdsfhkjsdhfdhskjfhsdjkfhdsjkfhdskjfhjkdsfhkjsdfhsdjkfhdsjkfjsd" />
+
+        <TextView
+            android:id="@+id/tv_detail_review_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="최대 150자까지 입력 할 수 있어요"
+            android:textColor="#FF5C5C"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_complete_btn"
@@ -351,7 +350,6 @@
         android:clickable="false"
         android:enabled="false"
         android:gravity="center"
-        android:layout_marginTop="20dp"
         android:paddingVertical="16dp"
         android:text="완료"
         android:textColor="@color/white"
@@ -359,5 +357,5 @@
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

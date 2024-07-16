@@ -57,11 +57,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         setupFragmentResultListener()
         setupRemoveButtons()
         navigateToReviewDoneActivity()
-        observeViewModel()
+        observeReviewViewModel()
         updateNextButtonState()
     }
 
-    private fun observeViewModel() {
+    private fun initDatePickerDialog() {
+        val today = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+        with(binding) {
+            tvDate.text = dateFormat.format(today.time)
+            layoutDatePicker.setOnSingleClickListener {
+                val datePickerDialogFragment = DatePickerDialog()
+                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
+            }
+        }
+    }
+    private fun observeReviewViewModel() {
         viewModel.selectedDate.asLiveData().observe(this) { date ->
             binding.tvDate.text = date
         }
@@ -88,18 +99,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.selectedNumber.asLiveData().observe(this) { number ->
             binding.tvSeatNumber.text = number.toString()
             updateLayoutSeatInfoVisibility()
-        }
-    }
-
-    private fun initDatePickerDialog() {
-        val today = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        with(binding) {
-            tvDate.text = dateFormat.format(today.time)
-            layoutDatePicker.setOnSingleClickListener {
-                val datePickerDialogFragment = DatePickerDialog()
-                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
-            }
         }
     }
 
@@ -195,11 +194,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun updateNextButtonState() {
-        val isSelectedDateFilled = viewModel.selectedDate.value?.isNotEmpty()
-        val isSelectedReviewBtnFilled = viewModel.selectedReviewBtn.value?.isNotEmpty()
-        val isBlockFilled = viewModel.selectedBlock.value?.isNotEmpty()
-        val isColumnFilled = viewModel.selectedColumn.value?.isNotEmpty()
-        val isNumberFilled = viewModel.selectedNumber.value?.isNotEmpty()
+        val isSelectedDateFilled = viewModel.selectedDate.value.isNotEmpty()
+        val isSelectedReviewBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
+        val isBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
+        val isColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
+        val isNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvUploadBtn) {
             isEnabled = isSelectedDateFilled == true && isSelectedReviewBtnFilled == true &&

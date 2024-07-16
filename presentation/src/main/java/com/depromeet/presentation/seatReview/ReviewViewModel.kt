@@ -12,18 +12,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReviewViewModel @Inject constructor() : ViewModel() {
+
+    // 날짜 o------
     private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
     private val currentDate: String = LocalDate.now().format(dateFormatter)
 
-    // 시야 후기
     private val _selectedDate = MutableStateFlow(currentDate)
     val selectedDate: StateFlow<String> = _selectedDate.asStateFlow()
+
+    // 시야 후기
 
     private val _reviewCount = MutableStateFlow(0)
     val reviewCount: StateFlow<Int> = _reviewCount.asStateFlow()
 
-    private val _selectedReviewBtn = MutableStateFlow<List<String>>(emptyList())
-    val selectedReviewBtn: StateFlow<List<String>> = _selectedReviewBtn.asStateFlow()
+    private val _selectedGoodReview = MutableStateFlow<List<String>>(emptyList())
+    val selectedGoodReview: StateFlow<List<String>> = _selectedGoodReview.asStateFlow()
+
+    private val _selectedBadReview = MutableStateFlow<List<String>>(emptyList())
+    val selectedBadReview: StateFlow<List<String>> = _selectedBadReview.asStateFlow()
 
     private val _detailReviewText = MutableStateFlow("")
     val detailReviewText: StateFlow<String> = _detailReviewText.asStateFlow()
@@ -50,20 +56,27 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
 
     // 시야 후기
 
-    fun setSelectedButtons(buttonTexts: List<String>) {
-        _selectedReviewBtn.value = buttonTexts
-        Log.d("minju", selectedReviewBtn.value.toString())
-    }
-
     fun setReviewCount(count: Int) {
         _reviewCount.value = count
         Log.d("minju", reviewCount.value.toString())
+    }
+
+    fun setSelectedGoodReview(buttonTexts: List<String>) {
+        _selectedGoodReview.value = buttonTexts
+        Log.d("minju", selectedGoodReview.value.toString())
+    }
+
+    fun setSelectedBadReview(buttonTexts: List<String>) {
+        _selectedBadReview.value = buttonTexts
+        Log.d("minju", selectedBadReview.value.toString())
     }
 
     fun setDetailReviewText(text: String) {
         _detailReviewText.value = text
         Log.d("minju", detailReviewText.value.toString())
     }
+
+    // 좌석 선택
 
     fun setSelectedSeatName(name: String) {
         _selectedSeatName.value = name
