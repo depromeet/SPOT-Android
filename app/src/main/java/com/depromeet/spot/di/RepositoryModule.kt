@@ -6,7 +6,6 @@ import com.depromeet.domain.repository.ExampleRepository
 import com.depromeet.domain.repository.WebSvgRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
