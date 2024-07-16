@@ -1,5 +1,6 @@
 package com.depromeet.data.model.response.seatReview
 
+import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,23 +13,37 @@ data class ResponseStadiumSectionDto(
 ) {
     @Serializable
     data class SectionListDto(
-        @SerialName("id")
-        val id: Int,
-        @SerialName("name")
-        val name: String,
-        @SerialName("alias")
-        val alias: String,
-        @SerialName("color")
-        val color: Color,
-    )
+        @SerialName("id") val id: Int,
+        @SerialName("name") val name: String,
+        @SerialName("alias") val alias: String,
+        @SerialName("color") val color: Color,
+    ) {
+        fun toSelectionList(): StadiumSectionModel.SectionListDto {
+            return StadiumSectionModel.SectionListDto(
+                id = id,
+                name = name,
+                alias = alias,
+                color = color.toColor(),
+            )
+        }
+    }
 
     @Serializable
     data class Color(
-        @SerialName("red")
-        val red: Int,
-        @SerialName("green")
-        val green: Int,
-        @SerialName("blue")
-        val blue: Int,
-    )
+        @SerialName("red") val red: Int,
+        @SerialName("green") val green: Int,
+        @SerialName("blue") val blue: Int,
+    ) {
+        fun toColor(): StadiumSectionModel.Color {
+            return StadiumSectionModel.Color(
+                red = red,
+                green = green,
+                blue = blue,
+            )
+        }
+    }
+
+    fun toMyDepartment(): StadiumSectionModel {
+        return StadiumSectionModel(seatChart, sectionList.map { it.toSelectionList() })
+    }
 }

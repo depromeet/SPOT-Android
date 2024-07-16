@@ -1,5 +1,6 @@
 package com.depromeet.data.model.response.seatReview
 
+import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,4 +10,11 @@ data class ResponseStadiumNameDto(
     val id: Int,
     @SerialName("name")
     val name: String,
-)
+) {
+    fun toStadiumName(): StadiumNameModel {
+        return StadiumNameModel(
+            id = id,
+            name = name,
+        )
+    }
+}
