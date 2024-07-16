@@ -54,6 +54,14 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
         Log.d("minju", selectedDate.value.toString())
     }
 
+    private val _selectedImages = MutableStateFlow<List<String>>(emptyList())
+    val selectedImages: StateFlow<List<String>> = _selectedImages.asStateFlow()
+
+    fun setSelectedImages(image: List<String>) {
+        _selectedImages.value = image
+        Log.d("minju", selectedImages.value.toString())
+    }
+
     // 시야 후기
 
     fun setReviewCount(count: Int) {
