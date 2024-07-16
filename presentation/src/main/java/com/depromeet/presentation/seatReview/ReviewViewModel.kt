@@ -36,8 +36,8 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
 
     // 좌석 선택
 
-    private val _selectedSeatName = MutableStateFlow("")
-    val selectedSeatName: StateFlow<String> = _selectedSeatName.asStateFlow()
+    private val _selectedSeatZone = MutableStateFlow("")
+    val selectedSeatZone: StateFlow<String> = _selectedSeatZone.asStateFlow()
 
     private val _selectedBlock = MutableStateFlow("")
     val selectedBlock: StateFlow<String> = _selectedBlock.asStateFlow()
@@ -78,9 +78,9 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
 
     // 좌석 선택
 
-    fun setSelectedSeatName(name: String) {
-        _selectedSeatName.value = name
-        Log.d("minju", selectedSeatName.value.toString())
+    fun setSelectedSeatZone(name: String) {
+        _selectedSeatZone.value = name
+        Log.d("minju", selectedSeatZone.value.toString())
     }
 
     fun setSelectedBlock(block: String) {

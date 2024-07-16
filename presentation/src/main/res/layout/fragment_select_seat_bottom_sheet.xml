@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/rect_white_fill_32">
 
     <View
@@ -93,8 +93,7 @@
     <ScrollView
         android:id="@+id/sv_select_seat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/tv_next_btn"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
         app:layout_constraintVertical_bias="0.0"
         android:visibility="visible"
@@ -107,9 +106,9 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_select_seat"
+                android:id="@+id/rv_select_seat_zone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="13dp"
                 android:layout_marginTop="30dp"
@@ -120,10 +119,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_seat_again"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginBottom="208dp"
                 android:background="@drawable/rect_white_fill_gray100_line_12"
                 android:orientation="horizontal">
 
@@ -153,10 +151,9 @@
                     android:id="@+id/iv_seat_again"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
-                    android:layout_marginBottom="16dp"
+                   android:layout_marginVertical="13dp"
                     android:src="@drawable/ic_launcher_background"
                     android:visibility="gone"
-                    android:layout_marginTop="13dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -355,6 +352,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:visibility="gone"
+                    android:layout_marginBottom="20dp"
                     app:layout_constraintTop_toBottomOf="@+id/tv_what_column"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:orientation="vertical">
@@ -402,37 +400,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/rect_gray200_fill_6"
+        android:clickable="false"
         android:gravity="center"
         android:paddingVertical="16dp"
         android:text="저장 후 이동"
         android:textColor="@color/white"
-        android:clickable="false"
         android:enabled="false"
-        android:visibility="visible"
+        android:layout_marginBottom="20dp"
         android:textFontWeight="700"
         android:textStyle="normal"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sv_select_seat" />
 
     <TextView
         android:id="@+id/tv_complete_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/rect_gray200_fill_6"
+        android:clickable="false"
         android:gravity="center"
         android:paddingVertical="16dp"
         android:text="완료"
-        android:visibility="gone"
-        android:clickable="false"
-        android:enabled="false"
         android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
         android:textFontWeight="700"
+        android:enabled="false"
         android:textStyle="normal"
+        app:layout_constraintTop_toBottomOf="@id/layout_seat_number"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
