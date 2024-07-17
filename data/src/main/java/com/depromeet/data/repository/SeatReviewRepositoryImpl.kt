@@ -33,14 +33,13 @@ class SeatReviewRepositoryImpl @Inject constructor(
     override suspend fun getSeatBlock(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<SeatBlockModel?> {
+    ): Result<List<SeatBlockModel>> {
         return runCatching {
-            seatReviewDataSource.getSeatBlockData(
-                stadiumId,
-                sectionId,
-            ).toSeatBlock()
+            val response = seatReviewDataSource.getSeatBlockData(stadiumId, sectionId)
+            response.map { it.toSeatBlock() }
         }
     }
+
 
     override suspend fun getSeatMax(
         stadiumId: Int,

@@ -16,7 +16,7 @@ interface SeatReviewRepository {
     suspend fun getSeatBlock(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<SeatBlockModel?>
+    ): Result<List<SeatBlockModel>>
 
     suspend fun getSeatMax(
         stadiumId: Int,
