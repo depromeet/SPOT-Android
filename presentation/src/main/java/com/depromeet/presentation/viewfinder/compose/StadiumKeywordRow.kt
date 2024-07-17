@@ -19,19 +19,18 @@ import com.depromeet.presentation.viewfinder.sample.Keyword
 
 @Composable
 fun StadiumKeywordRow(
-    keyword: BlockReviewResponse.KeywordResponse,
+    keyword: Keyword,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(
-//                color = if (keyword.type == 0) {
-//                    Color(0xFFF4F4F4)
-//                } else {
-//                    Color(0xFFFFEAEA)
-//                },
-                color = Color(0xFFF4F4F4),
+                color = if (keyword.type == 0) {
+                    Color(0xFFF4F4F4)
+                } else {
+                    Color(0xFFFFEAEA)
+                },
                 shape = RoundedCornerShape(6.dp)
             )
             .padding(
@@ -41,12 +40,12 @@ fun StadiumKeywordRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = keyword.content,
+            text = keyword.message,
             fontSize = 14.sp,
             color = Color(0xFF4A4A4A)
         )
         Text(
-            text = keyword.count.toString(),
+            text = keyword.like.toString(),
             fontSize = 14.sp,
             color = Color(0xFF9F9F9F)
         )
@@ -57,6 +56,6 @@ fun StadiumKeywordRow(
 @Composable
 private fun StadiumKeywordRowPreview() {
     StadiumKeywordRow(
-        keyword = BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44)
+        keyword = Keyword("🙍‍서서 응원하는 존", 44, 1)
     )
 }

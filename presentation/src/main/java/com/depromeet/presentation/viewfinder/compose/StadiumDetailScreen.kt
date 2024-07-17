@@ -62,7 +62,7 @@ fun StadiumDetailScreen(
                             isMore = isMore,
                             stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
                             stadiumArea = StadiumArea("1루", 207, "오렌지석"),
-                            keywords = state.data.keywords,
+                            keywords = state.data.keywords.map { it.toKeyword() },
                             onChangeIsMore = { isMore = it },
                             onClickSelectSeat = onClickSelectSeat
                         )

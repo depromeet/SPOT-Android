@@ -81,8 +81,7 @@ fun BlockReviewResponseDto.ReviewResponseDto.ReviewImageResponseDto.toReviewImag
     )
 
 fun BlockReviewResponseDto.ReviewResponseDto.ReviewKeywordResponseDto.toReviewKeywordResponse() =
-    BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
-        id = id,
+    BlockReviewResponse.KeywordResponse(
         content = content,
-        isPositive = isPositive
+        isPositive = isPositive,
     )

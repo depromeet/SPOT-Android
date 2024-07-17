@@ -28,7 +28,7 @@ import com.depromeet.presentation.viewfinder.sample.Keyword
 @Composable
 fun StadiumKeywordContent(
     isMore: Boolean,
-    keywords: List<BlockReviewResponse.KeywordResponse>,
+    keywords: List<Keyword>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (isMore: Boolean) -> Unit,
 ) {
@@ -142,7 +142,9 @@ private fun StadiumKeywordContentOnePreview() {
     ) {
         StadiumKeywordContent(
             isMore = false,
-            keywords = listOf(BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", count = 44))
+            keywords = listOf(
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+            )
         ) {}
     }
 }
@@ -154,8 +156,8 @@ private fun StadiumKeywordContentTwoPreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -168,9 +170,9 @@ private fun StadiumKeywordContentThreePreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -183,10 +185,10 @@ private fun StadiumKeywordContentFourPreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -199,11 +201,11 @@ private fun StadiumKeywordContentFivePreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -219,11 +221,12 @@ private fun StadiumKeywordContentFiveMorePreview() {
         StadiumKeywordContent(
             isMore = true,
             keywords = listOf(
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
-                BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }

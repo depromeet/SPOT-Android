@@ -1,5 +1,8 @@
 package com.depromeet.domain.entity.response.viewfinder
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 
 data class BlockReviewResponse(
     val keywords: List<KeywordResponse> = emptyList(),
@@ -13,7 +16,8 @@ data class BlockReviewResponse(
 ) {
     data class KeywordResponse(
         val content: String = "",
-        val count: Int = 0
+        val count: Int = 0,
+        val isPositive: Boolean = false
     )
 
     data class ReviewResponse(
@@ -28,19 +32,20 @@ data class BlockReviewResponse(
         val createdAt: String = "",
         val updatedAt: String = "",
         val images: List<ReviewImageResponse> = emptyList(),
-        val keywords: List<ReviewKeywordResponse> = emptyList(),
-
-        ) {
+        val keywords: List<KeywordResponse> = emptyList(),
+    ) {
         data class ReviewImageResponse(
             val id: Int = 0,
             val url: String = "",
         )
 
-        data class ReviewKeywordResponse(
-            val id: Int = 0,
-            val content: String = "",
-            val isPositive: Boolean = false,
-        )
+        fun formattedDate(): String {
+            val localDate = LocalDate.parse(date)
+
+            val formatter = DateTimeFormatter.ofPattern("M월d일")
+            val formattedDate = localDate.format(formatter)
+            return formattedDate
+        }
     }
 
     data class ReviewFilterResponse(
