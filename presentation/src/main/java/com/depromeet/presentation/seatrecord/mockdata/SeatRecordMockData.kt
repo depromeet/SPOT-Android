@@ -83,7 +83,7 @@ fun makeRecordDetailData(): List<ReviewMockData> {
             )
         )
     }
-    return list
+    return list.sortedBy { it.date }
 }
 
 val monthList = listOf<MonthData>(
