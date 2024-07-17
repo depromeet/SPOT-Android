@@ -14,6 +14,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
     ActivitySeatDetailRecordBinding::inflate
 ) {
+    companion object {
+        const val SEAT_DETAIL_TAG = "SEAT_DETAIL"
+    }
+
     private lateinit var detailRecordAdapter: DetailRecordAdapter
     private val viewModel: SeatDetailViewModel by viewModels()
 
@@ -40,13 +44,15 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
             object : DetailRecordAdapter.OnDetailItemClickListener {
                 override fun onItemMoreClickListener(item: ReviewDetailMockData) {
                     viewModel.setEditReviewId(item.reviewId)
-                    RecordEditDialog().apply { show(supportFragmentManager, this.tag) }
+                    RecordEditDialog.newInstance(SEAT_DETAIL_TAG)
+                        .apply { show(supportFragmentManager, this.tag) }
                 }
             }
     }
 
     private fun moveConfirmationDialog() {
-        ConfirmDeleteDialog().apply { show(supportFragmentManager, this.tag) }
+        ConfirmDeleteDialog.newInstance(SEAT_DETAIL_TAG)
+            .apply { show(supportFragmentManager, this.tag) }
     }
 
 }

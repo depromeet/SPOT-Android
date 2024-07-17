@@ -22,6 +22,12 @@ class SeatRecordViewModel @Inject constructor() : ViewModel() {
 
     private val _selectedYear = MutableStateFlow(2024)
 
+    private val _deleteClickedEvent = MutableStateFlow(false)
+    val deleteClickedEvent = _deleteClickedEvent.asStateFlow()
+
+    private val _editReviewId = MutableStateFlow(0)
+    val editReviewId = _editReviewId.asStateFlow()
+
 
     fun getSeatRecords() {
         makeSeatRecordData().onEach {
@@ -40,4 +46,20 @@ class SeatRecordViewModel @Inject constructor() : ViewModel() {
         _selectedMonth.value = month
     }
 
+    fun setEditReviewId(id: Int) {
+        _editReviewId.value = id
+    }
+
+    fun setDeleteEvent() {
+        _deleteClickedEvent.value = true
+    }
+
+    fun removeReviewData() {
+        val currentList = _uiState.value.reviews
+        val updatedList = currentList.filter { review ->
+            review.id != editReviewId.value
+        }
+        _uiState.value = uiState.value.copy(reviews = updatedList)
+        _deleteClickedEvent.value = false
+    }
 }

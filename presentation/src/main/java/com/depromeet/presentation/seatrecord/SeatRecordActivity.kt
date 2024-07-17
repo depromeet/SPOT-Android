@@ -31,6 +31,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     companion object {
         private const val START_SPACING_DP = 20
         private const val BETWEEN_SPACING_DP = 8
+        const val SEAT_RECORD_TAG = "seatRecord"
     }
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
@@ -54,6 +55,10 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 monthData.copy(isClicked = monthData.month == it)
             }
             dateMonthAdapter.submitList(updatedMonthList)
+        }
+
+        viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
+            if (state) moveConfirmationDialog()
         }
 
         setClickListener()
@@ -86,8 +91,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun initDateSpinner() {
         val year = listOf("2024년", "2023년", "2022년", "2021년")
-//        val adapter = ArrayAdapter(this, R.layout.item_custom_month_spinner_view, year)
-//        adapter.setDropDownViewResource(R.layout.item_custom_month_spinner_dropdown)
 
         val adapter = SpotSpinner(
             this,
@@ -167,11 +170,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     }
 
                     override fun onMoreRecordClick(item: ReviewMockData) {
-                        //TODO : 버튼은 있지만 동작 정의가 없어서 추후 생기면 진행 예정
-                        RecordEditDialog().apply { show(supportFragmentManager, this.tag) }
+                        viewModel.setEditReviewId(item.id)
+                        RecordEditDialog.newInstance(SEAT_RECORD_TAG)
+                            .apply { show(supportFragmentManager, this.tag) }
                     }
                 }
 
         }
+    }
+
+    private fun moveConfirmationDialog() {
+        ConfirmDeleteDialog.newInstance(SEAT_RECORD_TAG)
+            .apply { show(supportFragmentManager, this.tag) }
     }
 }
