@@ -21,8 +21,8 @@ data class BlockReviewResponse(
     )
 
     data class ReviewResponse(
-        val id: Long = 0,
-        val userId: Long = 0,
+        val id: Long,
+        val userId: Long,
         val blockId: Int = 0,
         val seatId: Int = 0,
         val rowId: Int = 0,
@@ -35,7 +35,7 @@ data class BlockReviewResponse(
         val keywords: List<KeywordResponse> = emptyList(),
     ) {
         data class ReviewImageResponse(
-            val id: Int = 0,
+            val id: Int,
             val url: String = "",
         )
 
