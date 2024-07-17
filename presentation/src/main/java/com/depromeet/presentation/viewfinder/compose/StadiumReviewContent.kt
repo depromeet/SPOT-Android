@@ -135,7 +135,7 @@ fun StadiumReviewContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         KeywordFlowRow(
-            keywords = reviewContent.keyword,
+            keywords = reviewContent.keywords.map { it.toKeyword() },
             modifier = Modifier.padding(start = 36.dp, end = 16.dp),
         )
     }
