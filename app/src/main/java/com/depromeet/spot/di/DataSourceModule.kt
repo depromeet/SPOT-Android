@@ -19,14 +19,20 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindExampleDataSource(
-        exampleDataSourcelmpl: ExampleDataSourcelmpl
+        exampleDataSourcelmpl: ExampleDataSourcelmpl,
     ): ExampleDataSource
 
     @Binds
     @Singleton
     abstract fun bindWebSvgDataSource(
-        webSvgDataSourceImpl: WebSvgDataSourceImpl
+        webSvgDataSourceImpl: WebSvgDataSourceImpl,
     ): WebSvgDataSource
+
+    @Binds
+    @Singleton
+    abstract fun seatReviewDataSource(
+        seatReviewDataSourceImpl: SeatReviewDataSourceImpl,
+    ): SeatReviewDataSource
 
     @Binds
     @Singleton
