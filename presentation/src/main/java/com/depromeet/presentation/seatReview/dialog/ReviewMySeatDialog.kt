@@ -24,8 +24,8 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
 ) {
     private val viewModel by activityViewModels<ReviewViewModel>()
     private val maxLength = 150
-    private val selectedGoodBtn by lazy { listOf(binding.tvGoodOne, binding.tvGoodTwo, binding.tvGoodThree, binding.tvGoodFour, binding.tvGoodFive,) }
-    private val selectedBadBtn by lazy { listOf(binding.tvBadOne, binding.tvBadTwo, binding.tvBadThree, binding.tvBadFour, binding.tvBadFive, binding.tvBadSix,) }
+    private val selectedGoodBtn by lazy { listOf(binding.tvGoodOne, binding.tvGoodTwo, binding.tvGoodThree, binding.tvGoodFour, binding.tvGoodFive) }
+    private val selectedBadBtn by lazy { listOf(binding.tvBadOne, binding.tvBadTwo, binding.tvBadThree, binding.tvBadFour, binding.tvBadFive, binding.tvBadSix) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
         observeReviewViewModel()
+
         setupReviewBtnClickListeners()
         setupDetailReviewEditText()
         setupCompleteButton()
@@ -79,20 +80,6 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         }
     }
 
-    private fun updateGoodReviewBtnState(selectedButtonText: List<String>) {
-        selectedGoodBtn.forEach { button ->
-            button.isSelected = selectedButtonText.contains(button.text.toString())
-            button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
-        }
-    }
-
-    private fun updateBadReviewBtnState(selectedButtonText: List<String>) {
-        selectedBadBtn.forEach { button ->
-            button.isSelected = selectedButtonText.contains(button.text.toString())
-            button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
-        }
-    }
-
     private fun setupDetailReviewEditText() {
         with(binding) {
             btnDetailCheck.setOnSingleClickListener {
@@ -120,6 +107,20 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
             if (binding.tvCompleteBtn.isEnabled) {
                 dismiss()
             }
+        }
+    }
+
+    private fun updateGoodReviewBtnState(selectedButtonText: List<String>) {
+        selectedGoodBtn.forEach { button ->
+            button.isSelected = selectedButtonText.contains(button.text.toString())
+            button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
+        }
+    }
+
+    private fun updateBadReviewBtnState(selectedButtonText: List<String>) {
+        selectedBadBtn.forEach { button ->
+            button.isSelected = selectedButtonText.contains(button.text.toString())
+            button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
         }
     }
 
