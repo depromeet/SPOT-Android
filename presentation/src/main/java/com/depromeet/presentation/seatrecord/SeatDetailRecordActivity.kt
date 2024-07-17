@@ -34,6 +34,8 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
             if (state) moveConfirmationDialog()
         }
 
+        setClickListener()
+
     }
 
     private fun setDetailRecordAdapter() {
@@ -53,6 +55,14 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
     private fun moveConfirmationDialog() {
         ConfirmDeleteDialog.newInstance(SEAT_DETAIL_TAG)
             .apply { show(supportFragmentManager, this.tag) }
+    }
+
+    private fun setClickListener() {
+        with(binding){
+            fabDetailUp.setOnClickListener {
+                rvDetailRecord.smoothScrollToPosition(0)
+            }
+        }
     }
 
 }

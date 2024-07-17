@@ -17,6 +17,37 @@
         app:menuIconColor="@color/gray900"
         app:navigationIcon="@drawable/ic_back" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_detail_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+        android:elevation="3dp"
+        android:src="@drawable/ic_up"
+        android:tint="@null"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@id/fab_detail_plus"
+        app:layout_constraintEnd_toEndOf="@id/fab_detail_plus"
+        app:tint="@null"
+        tools:ignore="contentDescription" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_detail_plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/gray900"
+        android:src="@drawable/ic_plus_24"
+        android:tint="@null"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@null"
+        tools:ignore="contentDescription" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_detail_record"
         android:layout_width="0dp"
