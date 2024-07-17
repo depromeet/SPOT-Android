@@ -69,6 +69,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
                         ivStadium.load(stadium.data.thumbnail) {
                             transformations(RoundedCornersTransformation(10f))
                         }
+                        llStadiumTeamLabel.removeAllViews()
                         stadium.data.homeTeams.forEach { homeTeam ->
                             llStadiumTeamLabel.addView(
                                 SpotTeamLabel(this@StadiumActivity).apply {
