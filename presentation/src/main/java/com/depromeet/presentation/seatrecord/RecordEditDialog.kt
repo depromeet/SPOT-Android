@@ -51,11 +51,6 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
     }
 
     private fun navigateEditMethod() {
-        /** 1차 MVP 보류 */
-//        binding.tvRecordEdit.setOnClickListener {
-//            /** 수정 이동 추후 합칠 때 추가하기*/
-//            dismiss()
-//        }
         binding.tvRecordDelete.setOnClickListener {
             when (viewModel) {
                 is SeatDetailViewModel -> (viewModel as SeatDetailViewModel).setDeleteEvent()
