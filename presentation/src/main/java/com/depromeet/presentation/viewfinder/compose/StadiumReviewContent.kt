@@ -30,21 +30,24 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
+import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.sample.ReviewContent
 import com.depromeet.presentation.viewfinder.sample.reviewContents
 
 @Composable
 fun StadiumReviewContent(
     context: Context,
-    reviewContent: ReviewContent,
+    reviewContent: BlockReviewResponse.ReviewResponse,
     modifier: Modifier = Modifier,
-    onClick: (reviewContent: ReviewContent) -> Unit,
+    onClick: (reviewContent: BlockReviewResponse.ReviewResponse) -> Unit,
     onClickReport: () -> Unit
 ) {
     Column(
@@ -62,7 +65,7 @@ fun StadiumReviewContent(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data(reviewContent.profile)
+//                        .data(reviewContent.profile)
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -73,12 +76,16 @@ fun StadiumReviewContent(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = reviewContent.user,
+//                    text = reviewContent.user,
+                    text = "test",
                     fontSize = 12.sp,
                     color = Color(0xFF9F9F9F)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                LevelCard(level = reviewContent.level)
+                LevelCard(
+//                    level = reviewContent.level
+                    level = 1
+                )
             }
             Icon(
                 painter = painterResource(id = R.drawable.ic_horizontal_dots),
@@ -95,13 +102,15 @@ fun StadiumReviewContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${reviewContent.seat}",
+//                text = "${reviewContent.seat}",
+                text = "207블럭 1열 12번",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF121212)
             )
             Text(
-                text = "・${reviewContent.date}",
+//                text = "・${reviewContent.date}",
+                text = "・${reviewContent.formattedDate()}",
                 fontSize = 12.sp,
                 color = Color(0xFF9F9F9F)
             )
@@ -113,7 +122,7 @@ fun StadiumReviewContent(
             items(reviewContent.images.size) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data(reviewContent.images[it])
+                        .data(reviewContent.images[it].url)
                         .build(),
                     contentDescription = null,
                     placeholder = ColorPainter(Color.LightGray),
@@ -131,11 +140,13 @@ fun StadiumReviewContent(
             text = reviewContent.content,
             fontSize = 14.sp,
             color = Color(0xFF121212),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 3,
             modifier = Modifier.padding(start = 36.dp, end = 16.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         KeywordFlowRow(
-            keywords = reviewContent.keyword,
+            keywords = reviewContent.keywords.map { it.toKeyword() },
             modifier = Modifier.padding(start = 36.dp, end = 16.dp),
         )
     }
@@ -151,9 +162,46 @@ private fun StadiumReviewContentPreview() {
     ) {
         StadiumReviewContent(
             context = LocalContext.current,
-            reviewContent = reviewContents[0],
+            reviewContent = BlockReviewResponse.ReviewResponse(
+                id = 1,
+                userId = 1,
+                blockId = 1,
+                seatId = 1,
+                rowId = 1,
+                seatNumber = 1,
+                date= "2024-07-13",
+                content = "전체적으로 좋은 경험이었습니다. 다음에 또 오고 싶어요!",
+                images = listOf(
+                    BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                        id = 1,
+                        url = "https://picsum.photos/200/300"
+                    ),
+                    BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                        id = 1,
+                        url = "https://picsum.photos/200/300"
+                    ),
+                ),
+                keywords = listOf(
+                    BlockReviewResponse.KeywordResponse(
+                        content = "",
+                        count = 1,
+                        isPositive = false
+                    ),
+                    BlockReviewResponse.KeywordResponse(
+                        content = "",
+                        count = 1,
+                        isPositive = false
+                    ),
+                    BlockReviewResponse.KeywordResponse(
+                        content = "",
+                        count = 1,
+                        isPositive = false
+                    )
+                )
+            ),
             onClick = {},
             onClickReport = {}
         )
+
     }
 }

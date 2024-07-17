@@ -7,10 +7,9 @@ import javax.inject.Inject
 class WebSvgRepositoryImpl @Inject constructor(
     private val webSvgDataSourceImpl: WebSvgDataSourceImpl
 ) : WebSvgRepository {
-    override suspend fun downloadFileWithDynamicUrlAsync(url: String): String = try {
-        val responseBody = webSvgDataSourceImpl.downloadFileWithDynamicUrlAsync(url)
-        responseBody.string()
-    } catch (e: Exception) {
-        e.message.toString()
-    }
+    override suspend fun downloadFileWithDynamicUrlAsync(url: String): Result<String> =
+        runCatching {
+            val responseBody = webSvgDataSourceImpl.downloadFileWithDynamicUrlAsync(url)
+            responseBody.string()
+        }
 }

@@ -2,15 +2,16 @@ package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBinding
-import com.depromeet.presentation.extension.getCompatibleParcelableExtra
 import com.depromeet.presentation.viewfinder.compose.detailpicture.StadiumDetailPictureScreen
-import com.depromeet.presentation.viewfinder.sample.ReviewContent
-import com.depromeet.presentation.viewfinder.sample.reviewContents
+import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictureBinding>(
     R.layout.fragment_stadium_detail_picture, FragmentStadiumDetailPictureBinding::inflate
 ) {
@@ -26,20 +27,35 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         }
     }
 
+    private val stadiumDetailViewModel: StadiumDetailViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val area =
-            arguments?.getCompatibleParcelableExtra<ReviewContent>(StadiumDetailActivity.REVIEW_PICTURE_CONTENT)
+        initView()
+        initEvent()
+    }
 
+    private fun initView() {
+        getReviewIdExtra { reviewId ->
+            binding.cvReviewContent.setContent {
+                StadiumDetailPictureScreen(
+                    reviewId = reviewId,
+                    stadiumDetailViewModel = stadiumDetailViewModel,
+                )
+            }
+        }
+    }
+
+    private fun initEvent() {
         binding.spotAppbar.setNavigationOnClickListener {
             removeFragment()
         }
 
-        binding.cvReviewContent.setContent {
-            StadiumDetailPictureScreen(
-                reviews = reviewContents,
-            )
-        }
+    }
+
+    private fun getReviewIdExtra(callback: (id: Long) -> Unit) {
+        val reviewId = arguments?.getLong(StadiumDetailActivity.REVIEW_ID) ?: return
+        callback(reviewId)
     }
 
     private fun removeFragment() {

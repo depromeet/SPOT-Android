@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
@@ -141,7 +142,9 @@ private fun StadiumKeywordContentOnePreview() {
     ) {
         StadiumKeywordContent(
             isMore = false,
-            keywords = listOf(Keyword("🙍‍서서 응원하는 존", 44, 0))
+            keywords = listOf(
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+            )
         ) {}
     }
 }
@@ -153,8 +156,8 @@ private fun StadiumKeywordContentTwoPreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -167,9 +170,9 @@ private fun StadiumKeywordContentThreePreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -182,10 +185,10 @@ private fun StadiumKeywordContentFourPreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -198,11 +201,11 @@ private fun StadiumKeywordContentFivePreview() {
         StadiumKeywordContent(
             isMore = false,
             keywords = listOf(
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
@@ -218,11 +221,12 @@ private fun StadiumKeywordContentFiveMorePreview() {
         StadiumKeywordContent(
             isMore = true,
             keywords = listOf(
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
-                Keyword("☀️ 온종일 햇빛 존", 44, 1),
-                Keyword("🙍‍서서 응원하는 존", 44, 0),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
+                Keyword("🙍‍서서 응원하는 존", 44, 1),
             )
         ) {}
     }
