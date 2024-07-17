@@ -65,6 +65,7 @@ fun StadiumHeaderContent(
             )
             CustomTooltip(modifier = Modifier.zIndex(1f))
         }
+        Spacer(modifier = Modifier.height(10.dp))
         Divider(
             color = Color(0xFFF4F4F4),
             thickness = 10.dp,

@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
@@ -86,7 +87,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         )
     }
 
-    private fun startToStadiumDetailPictureFragment(reviewContent: ReviewContent) {
+    private fun startToStadiumDetailPictureFragment(reviewContent: BlockReviewResponse.ReviewResponse) {
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
             arguments = bundleOf(REVIEW_PICTURE_CONTENT to reviewContent)
         }

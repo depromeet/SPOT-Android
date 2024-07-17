@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.StadiumDetailActivity
 import com.depromeet.presentation.viewfinder.sample.ReviewContent
 import com.depromeet.presentation.viewfinder.sample.Stadium
@@ -36,7 +38,7 @@ fun StadiumDetailScreen(
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
-    onClickReviewPicture: (ReviewContent) -> Unit,
+    onClickReviewPicture: (BlockReviewResponse.ReviewResponse) -> Unit,
     onClickSelectSeat: () -> Unit,
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit
@@ -76,14 +78,14 @@ fun StadiumDetailScreen(
                         )
                     }
 
-                    if (review.reviewContents.isEmpty()) {
+                    if (state.data.reviews.isEmpty()) {
                         item(StadiumDetailActivity.STADIUM_REVIEW_CONTENT) {
                             StadiumEmptyReviewContent()
                             Spacer(modifier = Modifier.height(40.dp))
                         }
                     } else {
                         itemsIndexed(
-                            items = review.reviewContents
+                            items = state.data.reviews
                         ) { _, reviewContent ->
                             StadiumReviewContent(
                                 context = context,
