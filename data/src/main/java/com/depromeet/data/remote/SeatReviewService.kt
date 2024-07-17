@@ -9,7 +9,6 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface SeatReviewService {
     @GET("/api/v1/stadiums/name")
@@ -22,8 +21,8 @@ interface SeatReviewService {
 
     @GET("/api/v1/stadiums/{stadiumId}/sections/{sectionId}/blocks")
     suspend fun getSeatBlock(
-        @Query("stadiumId") stadiumId: Int,
-        @Query("sectionId") sectionId: Int,
+        @Path("stadiumId") stadiumId: Int,
+        @Path("sectionId") sectionId: Int,
     ): ResponseSeatBlockDto
 
     @GET("/api/v1/stadiums/{stadiumId}/sections/{sectionId}/blocks/rows")
