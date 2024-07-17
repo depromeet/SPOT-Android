@@ -13,9 +13,11 @@ import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.core.state.UiState
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
 import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
@@ -65,6 +67,8 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         setupRemoveButtons()
         navigateToReviewDoneActivity()
         observeReviewViewModel()
+        viewModel.getStadiumName()
+        setupStadiumNameData()
     }
 
     private fun initDatePickerDialog() {
@@ -124,12 +128,35 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
+    // 경기장 이름 리스트
+    private fun setupStadiumNameData() {
+        viewModel.stadiumNameState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    binding.tvStadiumName.text = state.data.name
+                }
+
+                is UiState.Failure -> {
+                    toast("오류가 발생했습니다")
+                }
+
+                is UiState.Loading -> {
+                }
+
+                is UiState.Empty -> {
+                    toast("오류가 발생했습니다")
+                }
+            }
+        }
+    }
+
     private fun updateLayoutSeatInfoVisibility() {
         val seatName = viewModel.selectedSeatZone.value
         val block = viewModel.selectedBlock.value
         val column = viewModel.selectedColumn.value
         val number = viewModel.selectedNumber.value
-        val isEmpty = seatName.isNullOrEmpty() || block.isNullOrEmpty() || column.isNullOrEmpty() || number.isNullOrEmpty()
+        val isEmpty =
+            seatName.isNullOrEmpty() || block.isNullOrEmpty() || column.isNullOrEmpty() || number.isNullOrEmpty()
         if (isEmpty) {
             binding.layoutSeatInfo.visibility = View.INVISIBLE
         } else {

@@ -8,6 +8,7 @@ import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SeatReviewService {
@@ -16,7 +17,7 @@ interface SeatReviewService {
 
     @GET("/api/v1/stadiums/{stadiumId}/sections")
     suspend fun getStadiumSection(
-        @Query("stadiumId") stadiumId: Int,
+        @Path("stadiumId") stadiumId: Int,
     ): ResponseStadiumSectionDto
 
     @GET("/api/v1/stadiums/{stadiumId}/sections/{sectionId}/blocks")
@@ -27,8 +28,8 @@ interface SeatReviewService {
 
     @GET("/api/v1/stadiums/{stadiumId}/sections/{sectionId}/blocks/rows")
     suspend fun getSeatMax(
-        @Query("stadiumId") stadiumId: Int,
-        @Query("sectionId") sectionId: Int,
+        @Path("stadiumId") stadiumId: Int,
+        @Path("sectionId") sectionId: Int,
     ): ResponseSeatMaxDto
 
     @POST("/api/v1/reviews")
