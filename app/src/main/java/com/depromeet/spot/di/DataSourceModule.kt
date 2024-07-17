@@ -1,11 +1,8 @@
 package com.depromeet.spot.di
 
 import com.depromeet.data.datasource.ExampleDataSource
-import com.depromeet.data.datasource.SeatReviewDataSource
-import com.depromeet.data.datasource.ViewfinderDataSource
 import com.depromeet.data.datasource.WebSvgDataSource
 import com.depromeet.data.datasource.remote.ExampleDataSourcelmpl
-import com.depromeet.data.datasource.remote.SeatReviewDataSourceImpl
 import com.depromeet.data.datasource.remote.WebSvgDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -41,4 +38,10 @@ abstract class DataSourceModule {
     abstract fun bindViewfinderDataSource(
         viewfinderDataSourceImpl: ViewfinderDataSourceImpl1
     ): ViewfinderDataSource
+
+    @Binds
+    @Singleton
+    abstract fun seatReviewDataSource(
+        seatReviewDataSourceImpl: SeatReviewDataSourceImpl,
+    ): SeatReviewDataSource
 }
