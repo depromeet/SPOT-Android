@@ -206,7 +206,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         val block = viewModel.selectedBlock.value
         val column = viewModel.selectedColumn.value
         val number = viewModel.selectedNumber.value
-        if (seatName.isNullOrEmpty() || block.isNullOrEmpty() || column.isNullOrEmpty() || number.isNullOrEmpty()) {
+        if (listOf(seatName, block, column, number).any { it.isNullOrEmpty()}) {
             binding.layoutSeatInfo.visibility = INVISIBLE
         } else {
             binding.layoutSeatInfo.visibility = VISIBLE
