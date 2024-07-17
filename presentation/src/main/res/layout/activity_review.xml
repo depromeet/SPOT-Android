@@ -264,7 +264,7 @@
                 android:layout_marginVertical="16dp"
                 android:layout_marginStart="16dp"
                 android:lineHeight="145dp"
-                android:text="잠실 야구장"
+                tools:text="잠실 야구장"
                 android:textColor="#121212"
                 android:textFontWeight="700"
                 android:textSize="16sp"

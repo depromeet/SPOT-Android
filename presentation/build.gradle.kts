@@ -79,6 +79,7 @@ dependencies {
 
     ThirdPartyDependencies.run {
         implementation(coil)
+        implementation(coilSvg)
         implementation(platform(okHttpBom))
         implementation(okHttp)
         implementation(okHttpLoggingInterceptor)
