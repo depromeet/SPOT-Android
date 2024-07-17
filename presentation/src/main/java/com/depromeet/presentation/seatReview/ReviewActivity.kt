@@ -42,7 +42,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private val viewModel by viewModels<ReviewViewModel>()
     private val selectedImage: List<ImageView> by lazy {
-        listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage)
+        listOf(
+            binding.ivFirstImage,
+            binding.ivSecondImage,
+            binding.ivThirdImage,
+        )
     }
     private val selectedImageLayout: List<FrameLayout> by lazy {
         listOf(
@@ -62,28 +66,16 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getStadiumName()
+        observeStadiumName()
         initDatePickerDialog()
         initUploadDialog()
         initSeatReviewDialog()
         setupFragmentResultListener()
         setupRemoveButtons()
         navigateToReviewDoneActivity()
-        observeReviewViewModel()
-        viewModel.getStadiumName()
-        setupStadiumNameData()
     }
 
-    private fun initDatePickerDialog() {
-        val today = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        with(binding) {
-            tvDate.text = dateFormat.format(today.time)
-            layoutDatePicker.setOnSingleClickListener {
-                val datePickerDialogFragment = DatePickerDialog()
-                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
-            }
-        }
-    }
     private fun observeReviewViewModel() {
         viewModel.selectedDate.asLiveData().observe(this) { date ->
             binding.tvDate.text = date
@@ -129,37 +121,34 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             updateNextButtonState()
         }
     }
-    private fun setupStadiumNameData() {
+
+    private fun observeStadiumName() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     binding.tvStadiumName.text = state.data.name
                     viewModel.getStadiumSection(state.data.id)
                     viewModel.setSelectedStadiumId(state.data.id)
+                    observeReviewViewModel()
                 }
-                is UiState.Failure -> {
-                    toast("오류가 발생했습니다")
-                }
-                is UiState.Loading -> {
-                }
-                is UiState.Empty -> {
-                    toast("오류가 발생했습니다")
-                }
+
+                is UiState.Failure -> { toast("오류가 발생했습니다") }
+                is UiState.Loading -> {}
+                is UiState.Empty -> { toast("오류가 발생했습니다") }
                 else -> {}
             }
         }
     }
-    private fun updateLayoutSeatInfoVisibility() {
-        val seatName = viewModel.selectedSeatZone.value
-        val block = viewModel.selectedBlock.value
-        val column = viewModel.selectedColumn.value
-        val number = viewModel.selectedNumber.value
-        val isEmpty =
-            seatName.isNullOrEmpty() || block.isNullOrEmpty() || column.isNullOrEmpty() || number.isNullOrEmpty()
-        if (isEmpty) {
-            binding.layoutSeatInfo.visibility = INVISIBLE
-        } else {
-            binding.layoutSeatInfo.visibility = VISIBLE
+
+    private fun initDatePickerDialog() {
+        val today = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+        with(binding) {
+            tvDate.text = dateFormat.format(today.time)
+            layoutDatePicker.setOnSingleClickListener {
+                val datePickerDialogFragment = DatePickerDialog()
+                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
+            }
         }
     }
 
@@ -178,7 +167,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             SelectSeatDialog().show(supportFragmentManager, "SelectSeatDialog")
         }
     }
-
     private fun setupFragmentResultListener() {
         supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
             val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
@@ -192,10 +180,38 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             selectedImageUris = selectedImageUris.take(MAX_SELECTED_IMAGES).toMutableList()
         }
         viewModel.setSelectedImages(selectedImageUris)
-        updateImageViews()
+        updateSelectedImages()
     }
 
-    private fun updateImageViews() {
+    private fun setupRemoveButtons() {
+        removeButtons.forEachIndexed { index, button ->
+            button.setOnSingleClickListener {
+                removeImageAt(index)
+            }
+        }
+    }
+
+    private fun removeImageAt(index: Int) {
+        if (index < selectedImageUris.size) {
+            selectedImageUris.removeAt(index)
+            updateSelectedImages()
+            viewModel.setSelectedImages(selectedImageUris)
+        }
+    }
+
+    private fun updateLayoutSeatInfoVisibility() {
+        val seatName = viewModel.selectedSeatZone.value
+        val block = viewModel.selectedBlock.value
+        val column = viewModel.selectedColumn.value
+        val number = viewModel.selectedNumber.value
+        if (seatName.isNullOrEmpty() || block.isNullOrEmpty() || column.isNullOrEmpty() || number.isNullOrEmpty()) {
+            binding.layoutSeatInfo.visibility = INVISIBLE
+        } else {
+            binding.layoutSeatInfo.visibility = VISIBLE
+        }
+    }
+
+    private fun updateSelectedImages() {
         with(binding) {
             layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
             selectedImageUris.forEachIndexed { index, uri ->
@@ -223,29 +239,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             tvImageCount.text = selectedImageUris.size.toString()
         }
     }
-
-    private fun setupRemoveButtons() {
-        removeButtons.forEachIndexed { index, button ->
-            button.setOnSingleClickListener {
-                removeImageAt(index)
-            }
-        }
-    }
-
-    private fun removeImageAt(index: Int) {
-        if (index < selectedImageUris.size) {
-            selectedImageUris.removeAt(index)
-            updateImageViews()
-            viewModel.setSelectedImages(selectedImageUris)
-        }
-    }
-
-    private fun navigateToReviewDoneActivity() {
-        binding.tvUploadBtn.setOnSingleClickListener {
-            Intent(this, ReviewDoneActivity::class.java).apply { startActivity(this) }
-        }
-    }
-
     private fun updateNextButtonState() {
         val isSelectedDateFilled = viewModel.selectedDate.value.isNotEmpty()
         val isSelectedImageFilled = viewModel.selectedImages.value.isNotEmpty()
@@ -265,6 +258,12 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 setBackgroundResource(R.drawable.rect_gray200_fill_6)
                 setTextColor(ContextCompat.getColor(this@ReviewActivity, R.color.white))
             }
+        }
+    }
+
+    private fun navigateToReviewDoneActivity() {
+        binding.tvUploadBtn.setOnSingleClickListener {
+            Intent(this, ReviewDoneActivity::class.java).apply { startActivity(this) }
         }
     }
 }

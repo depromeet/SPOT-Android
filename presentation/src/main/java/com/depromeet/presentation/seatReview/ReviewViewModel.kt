@@ -61,6 +61,24 @@ class ReviewViewModel @Inject constructor(
     private val _selectedNumber = MutableStateFlow("")
     val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
 
+    // 서버 통신
+
+    private val _stadiumNameState = MutableStateFlow<UiState<StadiumNameModel>>(UiState.Empty)
+    val stadiumNameState: StateFlow<UiState<StadiumNameModel>> = _stadiumNameState
+
+    private val _selectedStadiumId = MutableStateFlow(0)
+    val selectedStadiumId: StateFlow<Int> get() = _selectedStadiumId
+
+    private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
+    val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState
+
+    private val _seatBlockState = MutableStateFlow<UiState<List<SeatBlockModel>>>(UiState.Empty)
+    val seatBlockState: StateFlow<UiState<List<SeatBlockModel>>> = _seatBlockState
+
+    fun setSelectedStadiumId(stadiumId: Int) {
+        _selectedStadiumId.value = stadiumId
+    }
+
     fun updateSelectedDate(date: String) {
         _selectedDate.value = date
     }
@@ -100,15 +118,6 @@ class ReviewViewModel @Inject constructor(
     fun setSelectedNumber(number: String) {
         _selectedNumber.value = number
     }
-
-    private val _stadiumNameState = MutableStateFlow<UiState<StadiumNameModel>>(UiState.Empty)
-    val stadiumNameState: StateFlow<UiState<StadiumNameModel>> = _stadiumNameState
-
-    private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
-    val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState
-
-    private val _seatBlockState = MutableStateFlow<UiState<List<SeatBlockModel>>>(UiState.Empty)
-    val seatBlockState: StateFlow<UiState<List<SeatBlockModel>>> = _seatBlockState
 
     fun getStadiumName() {
         viewModelScope.launch {
@@ -158,23 +167,14 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    private val _selectedStadiumId = MutableStateFlow(0)
-    val selectedStadiumId: StateFlow<Int> get() = _selectedStadiumId
-
-    fun setSelectedStadiumId(stadiumId: Int) {
-        _selectedStadiumId.value = stadiumId
-    }
-
     fun getSeatBlock(stadiumId: Int, sectionId: Int) {
         viewModelScope.launch {
-            Timber.d("getSeatBlock called with stadiumId: $stadiumId, sectionId: $sectionId")
             _seatBlockState.value = UiState.Loading
 
             seatReviewRepository.getSeatBlock(stadiumId, sectionId)
                 .onSuccess { blocks ->
-                    Timber.d("GET BLOCK SUCCESS : $blocks")
+                    Timber.e("GET BLOCK FAILURE : $blocks")
                     if (blocks.isEmpty()) {
-                        Timber.d("Block list is empty, setting state to Empty")
                         _seatBlockState.value = UiState.Empty
                     } else {
                         _seatBlockState.value = UiState.Success(blocks)
@@ -182,11 +182,8 @@ class ReviewViewModel @Inject constructor(
                 }
                 .onFailure { t ->
                     if (t is HttpException) {
-                        Timber.e("GET BLOCK FAILURE : $t, HTTP error code: ${t.code()}")
+                        Timber.e("GET BLOCK FAILURE : $t")
                         _seatBlockState.value = UiState.Failure(t.code().toString())
-                    } else {
-                        Timber.e("GET BLOCK FAILURE : $t, General error")
-                        _seatBlockState.value = UiState.Failure(t.message ?: "Unknown error")
                     }
                 }
         }
