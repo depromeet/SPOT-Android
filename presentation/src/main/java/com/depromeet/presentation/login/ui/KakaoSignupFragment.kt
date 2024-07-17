@@ -5,15 +5,19 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentKakaoSignupBinding
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.login.viewmodel.SignUpViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 @AndroidEntryPoint
 class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
@@ -27,6 +31,7 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         initClickListeners()
+        initObservers()
     }
 
     private fun initClickListeners() {
@@ -34,37 +39,35 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
                 UserApiClient.instance.loginWithKakaoTalk(requireContext()) { token, error ->
                     if (error != null) {
-                        Log.e("QQKAKAO", "로그인 실패 $error")
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled ) {
                             return@loginWithKakaoTalk
                         }
-
-                        else {
-                            UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = mCallback) // 카카오 이메일 로그인
-                        }
-                    }
-
-                    else if (token != null) {
-                        Log.e("QQKAKAO", "로그인 성공 ${token.accessToken}")
-                    }
-
-                     else {
-                        Log.e("QQKAKAO", "로그인 실패")
+                        UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
+                    } else if (token != null) {
+                        signUpViewModel.updateKakaoToken(token.accessToken)
                     }
                 }
             } else {
-                UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = mCallback)
+                UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
             }
         }
     }
 
-    private val mCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+    private val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            Log.e("QQKAKAO", "로그인 실패 $error")
+            toast("카카오 로그인에 실패하였습니다.")
         } else if (token != null) {
-            Log.e("QQKAKAO", "로그인 성공 ${token.accessToken}")
-        } else {
-            Log.e("QQKAKAO", "로그인 실패")
+            signUpViewModel.updateKakaoToken(token.accessToken)
+        }
+    }
+
+    private fun initObservers() {
+        signUpViewModel.kakaoToken.asLiveData().observe(viewLifecycleOwner) { token ->
+            if (token.isNotEmpty()) {
+                parentFragmentManager.commit {
+                    replace(R.id.fl_signup_container, NicknameInputFragment())
+                }
+            }
         }
     }
 }

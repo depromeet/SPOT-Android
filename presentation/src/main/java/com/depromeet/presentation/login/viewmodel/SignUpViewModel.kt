@@ -16,6 +16,9 @@ class SignUpViewModel @Inject constructor(
     private val _nicknameInputState = MutableStateFlow<NicknameInputState>(NicknameInputState.EMPTY)
     val nicknameInputState: StateFlow<NicknameInputState> = _nicknameInputState
 
+    private val _kakaoToken = MutableStateFlow<String>("")
+    val kakaoToken: StateFlow<String> = _kakaoToken
+
     fun validateNickname(nickname: String) {
         when {
             nickname.isEmpty() -> _nicknameInputState.tryEmit(NicknameInputState.EMPTY)
@@ -29,10 +32,8 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun postKakaoSignup() {
-        viewModelScope.launch {
-
-        }
+    fun updateKakaoToken(token: String) {
+        _kakaoToken.tryEmit(token)
     }
 }
 
