@@ -26,10 +26,8 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.StadiumDetailActivity
-import com.depromeet.presentation.viewfinder.sample.ReviewContent
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.sample.StadiumArea
-import com.depromeet.presentation.viewfinder.sample.review
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 
 @OptIn(ExperimentalFoundationApi::class)

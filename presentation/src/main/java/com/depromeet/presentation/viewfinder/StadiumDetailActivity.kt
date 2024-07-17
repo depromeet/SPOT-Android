@@ -13,8 +13,6 @@ import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumSelectSeatDialog
-import com.depromeet.presentation.viewfinder.sample.ReviewContent
-import com.depromeet.presentation.viewfinder.sample.stadiums
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +21,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     ActivityStadiumDetailBinding.inflate(it)
 }) {
     companion object {
-        const val REVIEW_PICTURE_CONTENT = "review_picture_content"
+        const val REVIEW_ID = "review_id"
         const val STADIUM_HEADER = "stadium_header"
         const val STADIUM_REVIEW_CONTENT = "stadium_review_content"
     }
@@ -89,7 +87,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 
     private fun startToStadiumDetailPictureFragment(reviewContent: BlockReviewResponse.ReviewResponse) {
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
-            arguments = bundleOf(REVIEW_PICTURE_CONTENT to reviewContent)
+            arguments = bundleOf(REVIEW_ID to reviewContent.id)
         }
 
         supportFragmentManager.commit {
