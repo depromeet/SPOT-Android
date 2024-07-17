@@ -19,6 +19,7 @@ import androidx.lifecycle.asLiveData
 import coil.load
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
@@ -43,12 +44,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
-        setupZoneRecyclerView()
-        setupSeatBLock()
-        setupButtons()
-        setupEditTextListeners()
-        setupStadiumSection()
         observeReviewViewModel()
+        observeStadiumSection()
+        observeSeatBLock()
+        setupSectionRecyclerView()
+        setupTransactionSelectSeat()
+        setupEditTextListeners()
     }
 
     private fun observeReviewViewModel() {
@@ -58,7 +59,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         viewModel.selectedNumber.asLiveData().observe(this) { updateCompleteBtnState() }
     }
 
-    private fun setupStadiumSection() {
+    private fun observeStadiumSection() {
         viewModel.stadiumSectionState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -71,9 +72,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     toast("오류가 발생했습니다")
                 }
 
-                is UiState.Loading -> {
-                }
-
+                is UiState.Loading -> {}
                 is UiState.Empty -> {
                     toast("오류가 발생했습니다")
                 }
@@ -83,7 +82,46 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun setupZoneRecyclerView() {
+    private fun observeSeatBLock() {
+        viewModel.seatBlockState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> { observeSuccessSeatBlock(state.data) }
+                is UiState.Failure -> { toast("오류가 발생했습니다") }
+                is UiState.Loading -> {}
+                is UiState.Empty -> {}
+                else -> {}
+            }
+        }
+    }
+
+    private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
+        val blockCodes = blockItems.map { it.code }
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
+
+        with(binding.spinnerBlock) {
+            this.adapter = adapter
+            this.setSelection(Adapter.NO_SELECTION, false)
+            this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    val selectedBlock = blockCodes[position]
+                    viewModel.setSelectedBlock(selectedBlock)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    viewModel.setSelectedBlock("")
+                }
+            }
+        }
+    }
+
+    private fun setupSectionRecyclerView() {
         adapter = SectionListAdapter { position, sectionId ->
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
@@ -92,48 +130,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             updateNextBtnState()
         }
         binding.rvSelectSeatZone.adapter = adapter
-    }
-
-    private fun setupSeatBLock() {
-        viewModel.seatBlockState.asLiveData().observe(this) { state ->
-            when (state) {
-                is UiState.Success -> {
-                    val blockItems = state.data.map { it.code }
-                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
-                    adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
-                    with(binding.spinnerBlock) {
-                        this.adapter = adapter
-                        this.setSelection(Adapter.NO_SELECTION, false)
-                        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long,
-                            ) {
-                                val selectedBlock = blockItems[position]
-                                viewModel.setSelectedBlock(selectedBlock)
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                viewModel.setSelectedBlock("")
-                            }
-                        }
-                    }
-                }
-                is UiState.Failure -> {
-                    toast("오류가 발생했습니다")
-                }
-
-                is UiState.Loading -> {
-                }
-
-                is UiState.Empty -> {
-                }
-
-                else -> {}
-            }
-        }
     }
 
     private fun setupEditTextListeners() {
@@ -146,7 +142,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun setupButtons() {
+    private fun setupTransactionSelectSeat() {
         with(binding) {
             layoutSeatAgain.setOnSingleClickListener {
                 ivSeatAgain.isVisible = !ivSeatAgain.isVisible
@@ -183,7 +179,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         val isNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvCompleteBtn) {
-            isEnabled = isBlockSelected == true && isColumnFilled == true && isNumberFilled == true
+            isEnabled = isBlockSelected && isColumnFilled && isNumberFilled
             if (isEnabled) {
                 setBackgroundResource(R.drawable.rect_gray900_fill_6)
                 setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
