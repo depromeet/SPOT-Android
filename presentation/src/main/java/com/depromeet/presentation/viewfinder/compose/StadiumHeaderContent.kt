@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
 import com.depromeet.presentation.viewfinder.sample.Seat
 import com.depromeet.presentation.viewfinder.sample.Stadium
@@ -29,7 +30,7 @@ fun StadiumHeaderContent(
     stadium: Stadium,
     isMore: Boolean,
     stadiumArea: StadiumArea,
-    keywords: List<Keyword>,
+    keywords: List<BlockReviewResponse.KeywordResponse>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
     onClickSelectSeat: () -> Unit
@@ -83,7 +84,20 @@ private fun StadiumHeaderContentPreview() {
         isMore = false,
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
-        keywords = keywords,
+        keywords = listOf(
+            BlockReviewResponse.KeywordResponse(
+                content = "서서 응원하는 존",
+                count = 5
+            ),
+            BlockReviewResponse.KeywordResponse(
+                content = "온종일 햇빛 존",
+                count = 4
+            ),
+            BlockReviewResponse.KeywordResponse(
+                content = "서서 응원하는 존",
+                count = 3
+            )
+        ),
         onChangeIsMore = {},
         onClickSelectSeat = {}
     )
@@ -97,7 +111,28 @@ private fun StadiumHeaderContentIsMorePreview() {
         isMore = true,
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
-        keywords = keywords,
+        keywords = listOf(
+            BlockReviewResponse.KeywordResponse(
+                content = "서서 응원하는 존",
+                count = 5
+            ),
+            BlockReviewResponse.KeywordResponse(
+                content = "온종일 햇빛 존",
+                count = 4
+            ),
+            BlockReviewResponse.KeywordResponse(
+                content = "서서 응원하는 존",
+                count = 3
+            ),
+            BlockReviewResponse.KeywordResponse(
+                content = "서서 응원하는 존",
+                count = 2
+            ),
+            BlockReviewResponse.KeywordResponse(
+                content = "서서 응원하는 존",
+                count = 1
+            )
+        ),
         onChangeIsMore = {},
         onClickSelectSeat = {}
     )

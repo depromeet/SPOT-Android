@@ -14,22 +14,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
 @Composable
 fun StadiumKeywordRow(
-    keyword: Keyword,
+    keyword: BlockReviewResponse.KeywordResponse,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = if (keyword.type == 0) {
-                    Color(0xFFF4F4F4)
-                } else {
-                    Color(0xFFFFEAEA)
-                }, shape = RoundedCornerShape(6.dp)
+//                color = if (keyword.type == 0) {
+//                    Color(0xFFF4F4F4)
+//                } else {
+//                    Color(0xFFFFEAEA)
+//                },
+                color = Color(0xFFF4F4F4),
+                shape = RoundedCornerShape(6.dp)
             )
             .padding(
                 vertical = 10.dp, horizontal = 16.dp
@@ -38,12 +41,12 @@ fun StadiumKeywordRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = keyword.message,
+            text = keyword.content,
             fontSize = 14.sp,
             color = Color(0xFF4A4A4A)
         )
         Text(
-            text = keyword.like.toString(),
+            text = keyword.count.toString(),
             fontSize = 14.sp,
             color = Color(0xFF9F9F9F)
         )
@@ -54,6 +57,6 @@ fun StadiumKeywordRow(
 @Composable
 private fun StadiumKeywordRowPreview() {
     StadiumKeywordRow(
-        keyword = Keyword("🙍‍서서 응원하는 존", 44, 0)
+        keyword = BlockReviewResponse.KeywordResponse("🙍‍서서 응원하는 존", 44)
     )
 }
