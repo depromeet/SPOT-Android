@@ -6,19 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 import com.depromeet.presentation.databinding.ItemStadiumSelectionBinding
 import com.depromeet.presentation.util.ItemDiffCallback
-import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.viewholder.StadiumSelectionViewHolder
 
-class StadiumSelectionAdapter : ListAdapter<Stadium, StadiumSelectionViewHolder>(
-    ItemDiffCallback<Stadium>(
+class StadiumSelectionAdapter : ListAdapter<StadiumsResponse, StadiumSelectionViewHolder>(
+    ItemDiffCallback<StadiumsResponse>(
         onItemsTheSame = { old, new -> old.id == new.id },
         onContentsTheSame = { old, new -> old == new }
     )
 ) {
     interface OnItemStadiumClickListener {
-        fun onItemStadiumClick(item: Stadium)
+        fun onItemStadiumClick(stadiums: StadiumsResponse)
     }
 
     var itemStadiumClickListener: OnItemStadiumClickListener? = null
