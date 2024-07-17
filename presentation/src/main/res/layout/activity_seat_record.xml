@@ -40,33 +40,32 @@
         app:menuIconColor="@color/gray900"
         app:navigationIcon="@drawable/ic_back" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/fab_record_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/white"
+        android:background="@drawable/circle_white_fill"
         android:elevation="3dp"
         android:src="@drawable/ic_up"
-        android:tint="@null"
-        app:fabSize="normal"
+        android:scaleType="center"
+        android:padding="12dp"
         app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
-        app:tint="@null"
         tools:ignore="contentDescription" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/fab_record_plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/gray900"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/circlr_gray900_fill"
         android:src="@drawable/ic_plus_24"
-        android:tint="@null"
-        app:fabSize="normal"
+        android:scaleType="center"
+        android:elevation="3dp"
+        android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
-        app:tint="@null"
         tools:ignore="contentDescription" />
 
     <com.depromeet.designsystem.StickyNestedScrollView
@@ -161,11 +160,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_record_sticky_header"
-                android:visibility="visible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/v_record_division">

@@ -17,35 +17,34 @@
         app:menuIconColor="@color/gray900"
         app:navigationIcon="@drawable/ic_back" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/fab_detail_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/white"
+        android:background="@drawable/circle_white_fill"
         android:elevation="3dp"
+        android:padding="12dp"
+        android:scaleType="center"
         android:src="@drawable/ic_up"
-        android:tint="@null"
-        app:fabSize="normal"
         app:layout_constraintBottom_toTopOf="@id/fab_detail_plus"
         app:layout_constraintEnd_toEndOf="@id/fab_detail_plus"
-        app:tint="@null"
         tools:ignore="contentDescription" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/fab_detail_plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/gray900"
+        android:background="@drawable/circlr_gray900_fill"
+        android:elevation="3dp"
+        android:padding="12dp"
+        android:scaleType="center"
         android:src="@drawable/ic_plus_24"
-        android:tint="@null"
-        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@null"
         tools:ignore="contentDescription" />
 
     <androidx.recyclerview.widget.RecyclerView
