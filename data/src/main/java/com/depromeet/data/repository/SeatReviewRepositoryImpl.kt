@@ -14,9 +14,10 @@ class SeatReviewRepositoryImpl @Inject constructor(
     private val seatReviewDataSource: SeatReviewDataSource,
 ) : SeatReviewRepository {
 
-    override suspend fun getStadiumName(): Result<StadiumNameModel?> {
+    override suspend fun getStadiumName(): Result<List<StadiumNameModel>> {
         return runCatching {
-            seatReviewDataSource.getStadiumNameData().toStadiumName()
+            val response = seatReviewDataSource.getStadiumNameData()
+            response.map { it.toStadiumName() }
         }
     }
 
@@ -39,7 +40,6 @@ class SeatReviewRepositoryImpl @Inject constructor(
             response.map { it.toSeatBlock() }
         }
     }
-
 
     override suspend fun getSeatMax(
         stadiumId: Int,

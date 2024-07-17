@@ -12,7 +12,7 @@ import javax.inject.Inject
 class SeatReviewDataSourceImpl @Inject constructor(
     private val seatReviewService: SeatReviewService,
 ) : SeatReviewDataSource {
-    override suspend fun getStadiumNameData(): ResponseStadiumNameDto {
+    override suspend fun getStadiumNameData(): List<ResponseStadiumNameDto> {
         return seatReviewService.getStadiumName()
     }
 

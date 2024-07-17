@@ -7,7 +7,7 @@ import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 
 interface SeatReviewRepository {
-    suspend fun getStadiumName(): Result<StadiumNameModel?>
+    suspend fun getStadiumName(): Result<List<StadiumNameModel>>
 
     suspend fun getStadiumSection(
         stadiumId: Int,

@@ -63,8 +63,8 @@ class ReviewViewModel @Inject constructor(
 
     // 서버 통신
 
-    private val _stadiumNameState = MutableStateFlow<UiState<StadiumNameModel>>(UiState.Empty)
-    val stadiumNameState: StateFlow<UiState<StadiumNameModel>> = _stadiumNameState
+    private val _stadiumNameState = MutableStateFlow<UiState<List<StadiumNameModel>>>(UiState.Empty)
+    val stadiumNameState: StateFlow<UiState<List<StadiumNameModel>>> = _stadiumNameState
 
     private val _selectedStadiumId = MutableStateFlow(0)
     val selectedStadiumId: StateFlow<Int> get() = _selectedStadiumId
@@ -122,21 +122,43 @@ class ReviewViewModel @Inject constructor(
     fun getStadiumName() {
         viewModelScope.launch {
             _stadiumNameState.value = UiState.Loading
-            seatReviewRepository.getStadiumName().onSuccess { stadium ->
-                Timber.d("GET NAME SUCCESS : $stadium")
-                if (stadium == null) {
-                    _stadiumNameState.value = UiState.Empty
-                    return@launch
+            seatReviewRepository.getStadiumName()
+                .onSuccess { stadium ->
+                    Timber.d("GET NAME SUCCESS : $stadium")
+                    if (stadium.isEmpty()) {
+                        _stadiumNameState.value = UiState.Empty
+                    } else {
+                        _stadiumNameState.value = UiState.Success(stadium)
+                    }
                 }
-                _stadiumNameState.value = when {
-                    stadium.name.isEmpty() -> UiState.Empty
-                    else -> UiState.Success(stadium)
+                .onFailure { t ->
+                    Timber.e("GET NAME FAILURE : ${t.message}", t)
+                    if (t is HttpException) {
+                        Timber.e("HTTP error code: ${t.code()}")
+                        _stadiumNameState.value = UiState.Failure(t.code().toString())
+                    } else {
+                        Timber.e("General error: ${t.message ?: "Unknown error"}")
+                    }
                 }
-            }
+        }
+    }
+
+    fun getSeatBlock(stadiumId: Int, sectionId: Int) {
+        viewModelScope.launch {
+            _seatBlockState.value = UiState.Loading
+            seatReviewRepository.getSeatBlock(stadiumId, sectionId)
+                .onSuccess { blocks ->
+                    Timber.e("GET BLOCK FAILURE : $blocks")
+                    if (blocks.isEmpty()) {
+                        _seatBlockState.value = UiState.Empty
+                    } else {
+                        _seatBlockState.value = UiState.Success(blocks)
+                    }
+                }
                 .onFailure { t ->
                     if (t is HttpException) {
-                        Timber.e("GET NAME FAILURE : $t")
-                        _stadiumNameState.value = UiState.Failure(t.code().toString())
+                        Timber.e("GET BLOCK FAILURE : $t")
+                        _seatBlockState.value = UiState.Failure(t.code().toString())
                     }
                 }
         }
@@ -162,28 +184,6 @@ class ReviewViewModel @Inject constructor(
                     if (t is HttpException) {
                         Timber.e("GET SECTION FAILURE : $t")
                         _stadiumSectionState.value = UiState.Failure(t.code().toString())
-                    }
-                }
-        }
-    }
-
-    fun getSeatBlock(stadiumId: Int, sectionId: Int) {
-        viewModelScope.launch {
-            _seatBlockState.value = UiState.Loading
-
-            seatReviewRepository.getSeatBlock(stadiumId, sectionId)
-                .onSuccess { blocks ->
-                    Timber.e("GET BLOCK FAILURE : $blocks")
-                    if (blocks.isEmpty()) {
-                        _seatBlockState.value = UiState.Empty
-                    } else {
-                        _seatBlockState.value = UiState.Success(blocks)
-                    }
-                }
-                .onFailure { t ->
-                    if (t is HttpException) {
-                        Timber.e("GET BLOCK FAILURE : $t")
-                        _seatBlockState.value = UiState.Failure(t.code().toString())
                     }
                 }
         }

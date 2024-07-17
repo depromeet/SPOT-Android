@@ -126,12 +126,14 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    binding.tvStadiumName.text = state.data.name
-                    viewModel.getStadiumSection(state.data.id)
-                    viewModel.setSelectedStadiumId(state.data.id)
+                    val firstStadium = state.data.firstOrNull()
+                    if (firstStadium != null) {
+                        binding.tvStadiumName.text = firstStadium.name
+                        viewModel.getStadiumSection(firstStadium.id)
+                        viewModel.setSelectedStadiumId(firstStadium.id)
+                    }
                     observeReviewViewModel()
                 }
-
                 is UiState.Failure -> { toast("오류가 발생했습니다") }
                 is UiState.Loading -> {}
                 is UiState.Empty -> { toast("오류가 발생했습니다") }

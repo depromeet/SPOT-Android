@@ -7,7 +7,7 @@ import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
 
 interface SeatReviewDataSource {
-    suspend fun getStadiumNameData(): ResponseStadiumNameDto
+    suspend fun getStadiumNameData(): List<ResponseStadiumNameDto>
 
     suspend fun getStadiumSectionData(
         stadiumId: Int,

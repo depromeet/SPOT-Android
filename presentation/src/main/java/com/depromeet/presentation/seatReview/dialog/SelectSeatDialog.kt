@@ -68,10 +68,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     binding.ivSeatAgain.load(state.data.seatChart)
                 }
 
-                is UiState.Failure -> {
-                    toast("오류가 발생했습니다")
-                }
-
+                is UiState.Failure -> { toast("이미지 오류") }
                 is UiState.Loading -> {}
                 is UiState.Empty -> {
                     toast("오류가 발생했습니다")
@@ -126,7 +123,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
             viewModel.setSelectedSeatZone(selectedSeatInfo.name)
-            viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
+            viewModel.getSeatBlock(1, sectionId)
             updateNextBtnState()
         }
         binding.rvSelectSeatZone.adapter = adapter

@@ -11,8 +11,8 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface SeatReviewService {
-    @GET("/api/v1/stadiums/name")
-    suspend fun getStadiumName(): ResponseStadiumNameDto
+    @GET("/api/v1/stadiums/names")
+    suspend fun getStadiumName(): List<ResponseStadiumNameDto>
 
     @GET("/api/v1/stadiums/{stadiumId}/sections")
     suspend fun getStadiumSection(
