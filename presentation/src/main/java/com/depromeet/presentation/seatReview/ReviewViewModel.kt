@@ -67,7 +67,7 @@ class ReviewViewModel @Inject constructor(
     val stadiumNameState: StateFlow<UiState<List<StadiumNameModel>>> = _stadiumNameState
 
     private val _selectedStadiumId = MutableStateFlow(0)
-    val selectedStadiumId: StateFlow<Int> get() = _selectedStadiumId
+    val selectedStadiumId: StateFlow<Int> = _selectedStadiumId.asStateFlow()
 
     private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState

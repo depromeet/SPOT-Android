@@ -73,7 +73,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 is UiState.Empty -> {
                     toast("오류가 발생했습니다")
                 }
-
                 else -> {}
             }
         }
@@ -93,8 +92,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
         val blockCodes = blockItems.map { it.code }
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
 
         with(binding.spinnerBlock) {
@@ -123,7 +121,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
             viewModel.setSelectedSeatZone(selectedSeatInfo.name)
-            viewModel.getSeatBlock(1, sectionId)
+            viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
             updateNextBtnState()
         }
         binding.rvSelectSeatZone.adapter = adapter

@@ -15,7 +15,7 @@ data class ResponseStadiumSectionDto(
     data class SectionListDto(
         @SerialName("id") val id: Int,
         @SerialName("name") val name: String,
-        @SerialName("alias") val alias: String,
+        @SerialName("alias") val alias: String?,
         @SerialName("color") val color: Color,
     ) {
         fun toSelectionList(): StadiumSectionModel.SectionListDto {

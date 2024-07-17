@@ -7,7 +7,7 @@ data class StadiumSectionModel(
     data class SectionListDto(
         val id: Int,
         val name: String,
-        val alias: String = "",
+        val alias: String?,
         val color: Color,
     )
 
