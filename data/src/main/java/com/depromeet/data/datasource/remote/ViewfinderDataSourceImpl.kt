@@ -1,8 +1,8 @@
 package com.depromeet.data.datasource.remote
 
 import com.depromeet.data.datasource.ViewfinderDataSource
-import com.depromeet.data.model.response.StadiumResponseDto
-import com.depromeet.data.model.response.StadiumsResponseDto
+import com.depromeet.data.model.response.viewfinder.StadiumResponseDto
+import com.depromeet.data.model.response.viewfinder.StadiumsResponseDto
 import com.depromeet.data.remote.ViewfinderService
 import javax.inject.Inject
 

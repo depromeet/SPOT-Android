@@ -1,4 +1,4 @@
-package com.depromeet.data.model.response
+package com.depromeet.data.model.response.viewfinder
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

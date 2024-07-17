@@ -1,7 +1,7 @@
 package com.depromeet.data.mapper
 
-import com.depromeet.data.model.response.StadiumResponseDto
-import com.depromeet.data.model.response.StadiumsResponseDto
+import com.depromeet.data.model.response.viewfinder.StadiumResponseDto
+import com.depromeet.data.model.response.viewfinder.StadiumsResponseDto
 import com.depromeet.domain.entity.response.viewfinder.StadiumResponse
 import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 

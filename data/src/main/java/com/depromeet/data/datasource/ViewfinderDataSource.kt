@@ -1,7 +1,7 @@
 package com.depromeet.data.datasource
 
-import com.depromeet.data.model.response.StadiumResponseDto
-import com.depromeet.data.model.response.StadiumsResponseDto
+import com.depromeet.data.model.response.viewfinder.StadiumResponseDto
+import com.depromeet.data.model.response.viewfinder.StadiumsResponseDto
 
 interface ViewfinderDataSource {
     suspend fun getStadiums(): List<StadiumsResponseDto>
