@@ -20,12 +20,10 @@ class StadiumSelectionViewModel @Inject constructor(
 
     fun getStadiums() {
         viewModelScope.launch {
-            _stadiums.value = viewfinderRepository.getStadiums().let { stadiums ->
-                if (stadiums.isEmpty()) {
-                    UiState.Failure("exception")
-                } else {
-                    UiState.Success(stadiums)
-                }
+            viewfinderRepository.getStadiums().onSuccess {
+                _stadiums.value = UiState.Success(it)
+            }.onFailure {
+                _stadiums.value = UiState.Failure(it.message.toString())
             }
         }
     }

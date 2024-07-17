@@ -29,9 +29,11 @@ class StadiumViewModel @Inject constructor(
     fun downloadFileFromServer(url: String) {
         viewModelScope.launch {
             webSvgRepository.downloadFileWithDynamicUrlAsync(url).let { svgString ->
-                _htmlBody.value = if (svgString.isEmpty()) UiState.Failure("") else UiState.Success(
-                    getHTMLBody(svgString)
-                )
+                svgString.onSuccess {
+                    _htmlBody.value = UiState.Success(it)
+                }.onFailure {
+                    _htmlBody.value = UiState.Failure(it.message.toString())
+                }
             }
         }
     }

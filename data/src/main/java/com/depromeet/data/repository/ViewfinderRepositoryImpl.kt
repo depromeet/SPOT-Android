@@ -13,19 +13,15 @@ import javax.inject.Inject
 class ViewfinderRepositoryImpl @Inject constructor(
     private val viewfinderDataSource: ViewfinderDataSource
 ) : ViewfinderRepository {
-    override suspend fun getStadiums(): List<StadiumsResponse> {
-        return try {
+    override suspend fun getStadiums(): Result<List<StadiumsResponse>> {
+        return runCatching {
             viewfinderDataSource.getStadiums().map { it.toStadiumsResponse() }
-        } catch (e: Exception) {
-            emptyList()
         }
     }
 
     override suspend fun getStadium(id: Int): Result<StadiumResponse> {
-        return try {
-            Result.success(viewfinderDataSource.getStadium(id).toStadiumResponse())
-        } catch (e: Exception) {
-            Result.failure(e)
+        return runCatching {
+            viewfinderDataSource.getStadium(id).toStadiumResponse()
         }
     }
 
@@ -33,12 +29,8 @@ class ViewfinderRepositoryImpl @Inject constructor(
         stadiumId: Int,
         blockId: String
     ): Result<BlockReviewResponse> {
-        return try {
-            Result.success(
-                viewfinderDataSource.getBlockReviews(stadiumId, blockId).toBlockReviewResponse()
-            )
-        } catch (e: Exception) {
-            Result.failure(e)
+        return runCatching {
+            viewfinderDataSource.getBlockReviews(stadiumId, blockId).toBlockReviewResponse()
         }
     }
 }
