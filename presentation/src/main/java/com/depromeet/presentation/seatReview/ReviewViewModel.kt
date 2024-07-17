@@ -1,17 +1,25 @@
 package com.depromeet.presentation.seatReview
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
+import com.depromeet.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class ReviewViewModel @Inject constructor() : ViewModel() {
+class ReviewViewModel @Inject constructor(
+    private val seatReviewRepository: SeatReviewRepository,
+) : ViewModel() {
 
     // 날짜 및 이미지
     private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
@@ -51,58 +59,69 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
     private val _selectedNumber = MutableStateFlow("")
     val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
 
-    // 날짜
     fun updateSelectedDate(date: String) {
         _selectedDate.value = date
-        Log.d("minju", selectedDate.value.toString())
     }
 
     fun setSelectedImages(image: List<String>) {
         _selectedImages.value = image
-        Log.d("minju", selectedImages.value.toString())
     }
-
-    // 시야 후기
 
     fun setReviewCount(count: Int) {
         _reviewCount.value = count
-        Log.d("minju", reviewCount.value.toString())
     }
 
     fun setSelectedGoodReview(buttonTexts: List<String>) {
         _selectedGoodReview.value = buttonTexts
-        Log.d("minju", selectedGoodReview.value.toString())
     }
 
     fun setSelectedBadReview(buttonTexts: List<String>) {
         _selectedBadReview.value = buttonTexts
-        Log.d("minju", selectedBadReview.value.toString())
     }
 
     fun setDetailReviewText(text: String) {
         _detailReviewText.value = text
-        Log.d("minju", detailReviewText.value.toString())
     }
-
-    // 좌석 선택
 
     fun setSelectedSeatZone(name: String) {
         _selectedSeatZone.value = name
-        Log.d("minju", selectedSeatZone.value.toString())
     }
 
     fun setSelectedBlock(block: String) {
         _selectedBlock.value = block
-        Log.d("minju", selectedBlock.value.toString())
     }
 
     fun setSelectedColumn(column: String) {
         _selectedColumn.value = column
-        Log.d("minju", selectedColumn.value.toString())
     }
 
     fun setSelectedNumber(number: String) {
         _selectedNumber.value = number
-        Log.d("minju", selectedNumber.value.toString())
+    }
+
+    private val _stadiumNameState = MutableStateFlow<UiState<StadiumNameModel>>(UiState.Empty)
+    val stadiumNameState: StateFlow<UiState<StadiumNameModel>> = _stadiumNameState
+
+    fun getStadiumName() {
+        viewModelScope.launch {
+            _stadiumNameState.value = UiState.Loading
+            seatReviewRepository.getStadiumName().onSuccess { stadium ->
+                Timber.d("GET NAME SUCCESS : $stadium")
+                if (stadium == null) {
+                    _stadiumNameState.value = UiState.Empty
+                    return@launch
+                }
+                _stadiumNameState.value = when {
+                    stadium.name.isEmpty() -> UiState.Empty
+                    else -> UiState.Success(stadium)
+                }
+            }
+                .onFailure { t ->
+                    if (t is HttpException) {
+                        Timber.e("GET NAME FAILURE : $t")
+                        _stadiumNameState.value = UiState.Failure(t.code().toString())
+                    }
+                }
+        }
     }
 }
