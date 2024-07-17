@@ -134,6 +134,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             when (state) {
                 is UiState.Success -> {
                     binding.tvStadiumName.text = state.data.name
+                    viewModel.getStadiumSection(state.data.id)
                 }
 
                 is UiState.Failure -> {
@@ -146,10 +147,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 is UiState.Empty -> {
                     toast("오류가 발생했습니다")
                 }
+
+                else -> {}
             }
         }
     }
-
     private fun updateLayoutSeatInfoVisibility() {
         val seatName = viewModel.selectedSeatZone.value
         val block = viewModel.selectedBlock.value

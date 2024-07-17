@@ -52,6 +52,7 @@ object KaptDependencies {
 
 object ThirdPartyDependencies {
     const val coil = "io.coil-kt:coil:${Versions.coilVersion}"
+    const val coilSvg = "io.coil-kt:coil-svg:${Versions.coilSvgVersion}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofitVersion}"
     const val retrofitJsonConverter =
         "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.kotlinSerializationConverterVersion}"

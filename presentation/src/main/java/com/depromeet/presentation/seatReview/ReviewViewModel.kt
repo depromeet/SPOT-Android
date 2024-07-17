@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
+import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 import com.depromeet.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -102,6 +103,9 @@ class ReviewViewModel @Inject constructor(
     private val _stadiumNameState = MutableStateFlow<UiState<StadiumNameModel>>(UiState.Empty)
     val stadiumNameState: StateFlow<UiState<StadiumNameModel>> = _stadiumNameState
 
+    private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
+    val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState
+
     fun getStadiumName() {
         viewModelScope.launch {
             _stadiumNameState.value = UiState.Loading
@@ -120,6 +124,31 @@ class ReviewViewModel @Inject constructor(
                     if (t is HttpException) {
                         Timber.e("GET NAME FAILURE : $t")
                         _stadiumNameState.value = UiState.Failure(t.code().toString())
+                    }
+                }
+        }
+    }
+
+    fun getStadiumSection(stadiumId: Int) {
+        viewModelScope.launch {
+            _stadiumSectionState.value = UiState.Loading
+            seatReviewRepository.getStadiumSection(
+                stadiumId,
+            ).onSuccess { section ->
+                Timber.d("GET SECTION SUCCESS : $section")
+                if (section == null) {
+                    _stadiumSectionState.value = UiState.Empty
+                    return@launch
+                }
+                _stadiumSectionState.value = when {
+                    section.sectionList.isEmpty() -> UiState.Empty
+                    else -> UiState.Success(section)
+                }
+            }
+                .onFailure { t ->
+                    if (t is HttpException) {
+                        Timber.e("GET SECTION FAILURE : $t")
+                        _stadiumSectionState.value = UiState.Failure(t.code().toString())
                     }
                 }
         }

@@ -13,13 +13,15 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
+import coil.load
 import com.depromeet.core.base.BindingBottomSheetDialog
+import com.depromeet.core.state.UiState
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
-import com.depromeet.presentation.seatReview.adapter.SeatInfo
-import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
+import com.depromeet.presentation.seatReview.adapter.SectionListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +30,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     FragmentSelectSeatBottomSheetBinding::inflate,
 ) {
     private val viewModel: ReviewViewModel by activityViewModels()
-    private lateinit var adapter: SelectSeatAdapter
+    private lateinit var adapter: SectionListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +41,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
         setupZoneRecyclerView()
-        adapter.submitList(getSeatMockData())
         setupButtons()
         initBlockSpinner()
         setupEditTextListeners()
+        setupStadiumSection()
         observeReviewViewModel()
     }
 
@@ -53,11 +55,35 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         viewModel.selectedNumber.asLiveData().observe(this) { updateCompleteBtnState() }
     }
 
+    private fun setupStadiumSection() {
+        viewModel.stadiumSectionState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    adapter.submitList(state.data.sectionList)
+                    binding.ivSeatAgain.load(state.data.seatChart)
+                }
+
+                is UiState.Failure -> {
+                    toast("오류가 발생했습니다")
+                }
+
+                is UiState.Loading -> {
+                }
+
+                is UiState.Empty -> {
+                    toast("오류가 발생했습니다")
+                }
+
+                else -> {}
+            }
+        }
+    }
+
     private fun setupZoneRecyclerView() {
-        adapter = SelectSeatAdapter { position ->
+        adapter = SectionListAdapter { position ->
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
-            viewModel.setSelectedSeatZone(selectedSeatInfo.seatName)
+            viewModel.setSelectedSeatZone(selectedSeatInfo.name)
             updateNextBtnState()
         }
         binding.rvSelectSeatZone.adapter = adapter
@@ -145,20 +171,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 setBackgroundResource(R.drawable.rect_gray200_fill_6)
             }
         }
-    }
-
-    private fun getSeatMockData(): List<SeatInfo> {
-        return listOf(
-            SeatInfo("프리미엄석", "켈리존", "#FF5733"),
-            SeatInfo("테이블석", "", "#3366FF"),
-            SeatInfo("오렌지석", "응원석", "#33FF33"),
-            SeatInfo("블루석", "", "#FFFF33"),
-            SeatInfo("레드석", "", "#FF33FF"),
-            SeatInfo("네이비석", "", "#33FFFF"),
-            SeatInfo("익사이팅석", "", "#FF6633"),
-            SeatInfo("외야그린석", "", "#6633FF"),
-            SeatInfo("휠체어석", "", "#33FF99"),
-        )
     }
 
     private fun setBottomSheetHeight(view: View) {
