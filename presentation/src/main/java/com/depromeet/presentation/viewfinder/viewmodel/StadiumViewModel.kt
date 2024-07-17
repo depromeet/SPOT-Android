@@ -3,6 +3,8 @@ package com.depromeet.presentation.viewfinder.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.viewfinder.StadiumResponse
+import com.depromeet.domain.repository.ViewfinderRepository
 import com.depromeet.domain.repository.WebSvgRepository
 import com.depromeet.presentation.util.getHTMLBody
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,10 +15,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StadiumViewModel @Inject constructor(
-    private val webSvgRepository: WebSvgRepository
+    private val webSvgRepository: WebSvgRepository,
+    private val viewfinderRepository: ViewfinderRepository
 ) : ViewModel() {
     private val _htmlBody = MutableStateFlow<UiState<String>>(UiState.Loading)
     val htmlBody = _htmlBody.asStateFlow()
+
+    private val _stadium = MutableStateFlow<UiState<StadiumResponse>>(UiState.Loading)
+    val stadium = _stadium.asStateFlow()
 
     fun downloadFileFromServer(url: String) {
         viewModelScope.launch {
@@ -24,6 +30,16 @@ class StadiumViewModel @Inject constructor(
                 _htmlBody.value = if (svgString.isEmpty()) UiState.Failure("") else UiState.Success(
                     getHTMLBody(svgString)
                 )
+            }
+        }
+    }
+
+    fun getStadium(id: Int) {
+        viewModelScope.launch {
+            viewfinderRepository.getStadium(id).onSuccess { stadium ->
+                _stadium.value = UiState.Success(stadium)
+            }.onFailure { e ->
+                _stadium.value = UiState.Failure(e.message ?: "")
             }
         }
     }

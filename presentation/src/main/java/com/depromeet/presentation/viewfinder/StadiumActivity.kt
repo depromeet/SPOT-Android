@@ -16,9 +16,7 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotTeamLabel
 import com.depromeet.presentation.databinding.ActivityStadiumBinding
-import com.depromeet.presentation.extension.getCompatibleParcelableExtra
 import com.depromeet.presentation.extension.toast
-import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumViewModel
 import com.depromeet.presentation.viewfinder.web.AndroidBridge
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,44 +39,72 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getStadiumExtra()
-        configureWebViewSetting()
-        interactionWebView()
+        initView()
         initEvent()
-
-        viewModel.downloadFileFromServer(SVG_URL)
         observeData()
     }
 
+    private fun initView() {
+        getStadiumIdExtra()
+        configureWebViewSetting()
+    }
+
     private fun initEvent() {
-        binding.spotAppbar.setNavigationOnClickListener {
-            finish()
-        }
+        interactionWebView()
+        onClickBack()
+        onClickClose()
+    }
 
-        binding.spotAppbar.setMenuOnClickListener {
-            // go to main activity
+    private fun observeData() {
+        viewModel.stadium.asLiveData().observe(this) { stadium ->
+            when (stadium) {
+                is UiState.Empty -> Unit
+                is UiState.Failure -> toast(stadium.msg)
+                is UiState.Loading -> toast("로딩 중")
+                is UiState.Success -> {
+                    with(binding) {
+                        tvStadiumTitle.text = stadium.data.name
+                        ivStadium.load(stadium.data.thumbnail) {
+                            transformations(RoundedCornersTransformation(10f))
+                        }
+                        stadium.data.homeTeams.forEach { homeTeam ->
+                            llStadiumTeamLabel.addView(
+                                SpotTeamLabel(this@StadiumActivity).apply {
+                                    teamType = homeTeam.alias
+                                }
+                            )
+                        }
+                    }
+                    viewModel.downloadFileFromServer(stadium.data.stadiumUrl)
+                }
+            }
         }
+        viewModel.htmlBody.asLiveData().observe(this) { uiState ->
+            when (uiState) {
+                is UiState.Empty -> Unit
+                is UiState.Failure -> {
+                    toast("실패")
+                }
 
-        binding.ivClose.setOnClickListener {
-            binding.clZoomDescription.visibility = View.INVISIBLE
+                is UiState.Loading -> {
+                    toast("로딩중")
+                }
+
+                is UiState.Success -> {
+                    binding.wvStadium.loadDataWithBaseURL(
+                        BASE_URL, uiState.data, MIME_TYPE_TEXT_HTML,
+                        ENCODING_UTF8, null
+                    )
+                    binding.wvStadium.webChromeClient = WebChromeClient()
+                }
+            }
         }
     }
 
-    private fun getStadiumExtra() {
-        intent?.getCompatibleParcelableExtra<Stadium>(StadiumSelectionActivity.STADIUM_EXTRA)
-            ?.let { stadium ->
-                binding.tvStadiumTitle.text = stadium.title
-                binding.ivStadium.load(stadium.imageUrl) {
-                    transformations(RoundedCornersTransformation(10f))
-                }
-                stadium.team.forEach { label ->
-                    binding.llStadiumTeamLabel.addView(
-                        SpotTeamLabel(this).apply {
-                            teamType = label
-                        }
-                    )
-                }
-            }
+    private fun getStadiumIdExtra() {
+        intent?.getIntExtra(StadiumSelectionActivity.STADIUM_EXTRA_ID, 0)?.let { stadiumId ->
+            viewModel.getStadium(stadiumId)
+        } ?: return
     }
 
     private fun configureWebViewSetting() {
@@ -125,26 +151,19 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }
     }
 
-    private fun observeData() {
-        viewModel.htmlBody.asLiveData().observe(this) { uiState ->
-            when (uiState) {
-                is UiState.Empty -> Unit
-                is UiState.Failure -> {
-                    toast("실패")
-                }
+    private fun onClickBack() {
+        binding.spotAppbar.setNavigationOnClickListener {
+            finish()
+        }
+    }
 
-                is UiState.Loading -> {
-                    toast("로딩중")
-                }
+    private fun onClickClose() {
+        binding.spotAppbar.setMenuOnClickListener {
+            // go to main activity
+        }
 
-                is UiState.Success -> {
-                    binding.wvStadium.loadDataWithBaseURL(
-                        BASE_URL, uiState.data, MIME_TYPE_TEXT_HTML,
-                        ENCODING_UTF8, null
-                    )
-                    binding.wvStadium.webChromeClient = WebChromeClient()
-                }
-            }
+        binding.ivClose.setOnClickListener {
+            binding.clZoomDescription.visibility = View.INVISIBLE
         }
     }
 
