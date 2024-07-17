@@ -2,6 +2,7 @@ package com.depromeet.spot.di
 
 import com.depromeet.data.remote.ExampleService
 import com.depromeet.data.remote.SeatReviewService
+import com.depromeet.data.remote.ViewfinderService
 import com.depromeet.data.remote.WebSvgApiService
 import dagger.Module
 import dagger.Provides
