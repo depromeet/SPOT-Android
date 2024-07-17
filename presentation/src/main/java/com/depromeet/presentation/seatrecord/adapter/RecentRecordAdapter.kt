@@ -23,6 +23,7 @@ class RecentRecordAdapter(
 ) {
     interface OnItemRecordClickListener {
         fun onItemRecordClick(item: ReviewMockData)
+        fun onItemMoreClick(item: ReviewMockData)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -38,9 +39,15 @@ class RecentRecordAdapter(
     }
 
     override fun onBindViewHolder(holder: RecentRecordViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-            itemRecordClickListener?.onItemRecordClick(getItem(position))
+        with(holder) {
+            bind(getItem(position))
+            itemView.setOnClickListener {
+                itemRecordClickListener?.onItemRecordClick(getItem(position))
+            }
+            binding.ibRecentStadiumMore.setOnClickListener {
+                itemRecordClickListener?.onItemMoreClick(getItem(position))
+            }
+
         }
     }
 }

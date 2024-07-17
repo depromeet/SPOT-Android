@@ -18,6 +18,7 @@ class MonthRecordAdapter() : ListAdapter<MonthReviewData, MonthRecordViewHolder>
 ) {
     interface OnItemRecordClickListener {
         fun onItemRecordClick(item: ReviewMockData)
+        fun onMoreRecordClick(item: ReviewMockData)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -55,6 +56,10 @@ class MonthRecordViewHolder(
                 object : RecentRecordAdapter.OnItemRecordClickListener {
                     override fun onItemRecordClick(item: ReviewMockData) {
                         itemRecordClickListener?.onItemRecordClick(item)
+                    }
+
+                    override fun onItemMoreClick(item: ReviewMockData) {
+                        itemRecordClickListener?.onMoreRecordClick(item)
                     }
                 }
         }

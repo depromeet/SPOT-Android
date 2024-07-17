@@ -165,6 +165,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                             startActivity(this)
                         }
                     }
+
+                    override fun onMoreRecordClick(item: ReviewMockData) {
+                        //TODO : 버튼은 있지만 동작 정의가 없어서 추후 생기면 진행 예정
+                        RecordEditDialog().apply { show(supportFragmentManager, this.tag) }
+                    }
                 }
 
         }

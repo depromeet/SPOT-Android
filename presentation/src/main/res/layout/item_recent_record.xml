@@ -46,6 +46,18 @@
         tools:ignore="contentDescription"
         tools:src="@drawable/ic_stadium_test" />
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/ib_recent_stadium_more"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_horizontal_dots"
+        android:tint="@color/white"
+        app:layout_constraintEnd_toEndOf="@id/iv_recent_image"
+        app:layout_constraintTop_toTopOf="@id/iv_recent_image" />
+
     <TextView
         android:id="@+id/tv_recent_stadium_name"
         android:layout_width="wrap_content"
