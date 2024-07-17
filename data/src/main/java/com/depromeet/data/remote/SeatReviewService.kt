@@ -23,7 +23,7 @@ interface SeatReviewService {
     suspend fun getSeatBlock(
         @Path("stadiumId") stadiumId: Int,
         @Path("sectionId") sectionId: Int,
-    ): ResponseSeatBlockDto
+    ): List<ResponseSeatBlockDto>
 
     @GET("/api/v1/stadiums/{stadiumId}/sections/{sectionId}/blocks/rows")
     suspend fun getSeatMax(

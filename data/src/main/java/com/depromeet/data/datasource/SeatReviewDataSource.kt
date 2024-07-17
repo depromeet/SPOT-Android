@@ -16,7 +16,7 @@ interface SeatReviewDataSource {
     suspend fun getSeatBlockData(
         stadiumId: Int,
         sectionId: Int,
-    ): ResponseSeatBlockDto
+    ): List<ResponseSeatBlockDto>
 
     suspend fun getSeatMaxData(
         stadiumId: Int,

@@ -3,6 +3,7 @@ package com.depromeet.presentation.seatReview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 import com.depromeet.domain.repository.SeatReviewRepository
@@ -106,6 +107,9 @@ class ReviewViewModel @Inject constructor(
     private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState
 
+    private val _seatBlockState = MutableStateFlow<UiState<List<SeatBlockModel>>>(UiState.Empty)
+    val seatBlockState: StateFlow<UiState<List<SeatBlockModel>>> = _seatBlockState
+
     fun getStadiumName() {
         viewModelScope.launch {
             _stadiumNameState.value = UiState.Loading
@@ -149,6 +153,40 @@ class ReviewViewModel @Inject constructor(
                     if (t is HttpException) {
                         Timber.e("GET SECTION FAILURE : $t")
                         _stadiumSectionState.value = UiState.Failure(t.code().toString())
+                    }
+                }
+        }
+    }
+
+    private val _selectedStadiumId = MutableStateFlow(0)
+    val selectedStadiumId: StateFlow<Int> get() = _selectedStadiumId
+
+    fun setSelectedStadiumId(stadiumId: Int) {
+        _selectedStadiumId.value = stadiumId
+    }
+
+    fun getSeatBlock(stadiumId: Int, sectionId: Int) {
+        viewModelScope.launch {
+            Timber.d("getSeatBlock called with stadiumId: $stadiumId, sectionId: $sectionId")
+            _seatBlockState.value = UiState.Loading
+
+            seatReviewRepository.getSeatBlock(stadiumId, sectionId)
+                .onSuccess { blocks ->
+                    Timber.d("GET BLOCK SUCCESS : $blocks")
+                    if (blocks.isEmpty()) {
+                        Timber.d("Block list is empty, setting state to Empty")
+                        _seatBlockState.value = UiState.Empty
+                    } else {
+                        _seatBlockState.value = UiState.Success(blocks)
+                    }
+                }
+                .onFailure { t ->
+                    if (t is HttpException) {
+                        Timber.e("GET BLOCK FAILURE : $t, HTTP error code: ${t.code()}")
+                        _seatBlockState.value = UiState.Failure(t.code().toString())
+                    } else {
+                        Timber.e("GET BLOCK FAILURE : $t, General error")
+                        _seatBlockState.value = UiState.Failure(t.message ?: "Unknown error")
                     }
                 }
         }

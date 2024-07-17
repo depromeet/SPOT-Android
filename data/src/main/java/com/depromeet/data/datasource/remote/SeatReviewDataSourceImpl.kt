@@ -25,7 +25,7 @@ class SeatReviewDataSourceImpl @Inject constructor(
     override suspend fun getSeatBlockData(
         stadiumId: Int,
         sectionId: Int,
-    ): ResponseSeatBlockDto {
+    ): List<ResponseSeatBlockDto> {
         return seatReviewService.getSeatBlock(stadiumId, sectionId)
     }
 

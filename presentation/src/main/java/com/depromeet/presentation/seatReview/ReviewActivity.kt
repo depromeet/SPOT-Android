@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -127,27 +129,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             updateNextButtonState()
         }
     }
-
-    // 경기장 이름 리스트
     private fun setupStadiumNameData() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     binding.tvStadiumName.text = state.data.name
                     viewModel.getStadiumSection(state.data.id)
+                    viewModel.setSelectedStadiumId(state.data.id)
                 }
-
                 is UiState.Failure -> {
                     toast("오류가 발생했습니다")
                 }
-
                 is UiState.Loading -> {
                 }
-
                 is UiState.Empty -> {
                     toast("오류가 발생했습니다")
                 }
-
                 else -> {}
             }
         }
@@ -160,9 +157,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         val isEmpty =
             seatName.isNullOrEmpty() || block.isNullOrEmpty() || column.isNullOrEmpty() || number.isNullOrEmpty()
         if (isEmpty) {
-            binding.layoutSeatInfo.visibility = View.INVISIBLE
+            binding.layoutSeatInfo.visibility = INVISIBLE
         } else {
-            binding.layoutSeatInfo.visibility = View.VISIBLE
+            binding.layoutSeatInfo.visibility = VISIBLE
         }
     }
 
