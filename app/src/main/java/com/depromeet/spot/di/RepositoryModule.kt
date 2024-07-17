@@ -41,10 +41,4 @@ abstract class RepositoryModule {
     abstract fun bindViewfinderRepository(
         viewfinderRepositoryImpl: ViewfinderRepositoryImpl,
     ): ViewfinderRepository
-
-    @Binds
-    @Singleton
-    abstract fun seatReviewRepository(
-        seatReviewRepositoryImpl: SeatReviewRepositoryImpl,
-    ): SeatReviewRepository
 }
