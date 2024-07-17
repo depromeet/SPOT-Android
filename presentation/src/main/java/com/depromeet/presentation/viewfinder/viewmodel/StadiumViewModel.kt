@@ -18,6 +18,8 @@ class StadiumViewModel @Inject constructor(
     private val webSvgRepository: WebSvgRepository,
     private val viewfinderRepository: ViewfinderRepository
 ) : ViewModel() {
+    var stadiumId: Int = 0
+
     private val _htmlBody = MutableStateFlow<UiState<String>>(UiState.Loading)
     val htmlBody = _htmlBody.asStateFlow()
 

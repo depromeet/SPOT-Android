@@ -26,7 +26,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     ActivityStadiumBinding.inflate(it)
 }) {
     companion object {
-        const val STADIUM_AREA = "stadium_area"
+        const val STADIUM_ID = "stadium_id"
+        const val STADIUM_BLOCK_ID = "stadium_block_id"
         private const val BASE_URL = "file:///android_asset/web/"
         private const val ENCODING_UTF8 = "UTF-8"
         private const val MIME_TYPE_TEXT_HTML = "text/html"
@@ -62,6 +63,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
                 is UiState.Failure -> toast(stadium.msg)
                 is UiState.Loading -> toast("로딩 중")
                 is UiState.Success -> {
+                    viewModel.stadiumId = stadium.data.id
                     with(binding) {
                         tvStadiumTitle.text = stadium.data.name
                         ivStadium.load(stadium.data.thumbnail) {
@@ -167,9 +169,10 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }
     }
 
-    private fun startToStadiumDetailActivity(fromWeb: String) {
+    private fun startToStadiumDetailActivity(id: String) {
         Intent(this, StadiumDetailActivity::class.java).apply {
-            putExtra(STADIUM_AREA, fromWeb)
+            putExtra(STADIUM_ID, viewModel.stadiumId)
+            putExtra(STADIUM_BLOCK_ID, id)
         }.let(::startActivity)
     }
 
