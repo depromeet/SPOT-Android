@@ -67,11 +67,15 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     fun removeReviewData() {
-//        val currentList = _uiState.value.
-//        val updatedList = currentList.filter { review ->
-//            review.id != editReviewId.value
-//        }
-//        _uiState.value = uiState.value.copy(reviews = updatedList)
-//        _deleteClickedEvent.value = false
+        val currentState = uiState.value
+        if (currentState is UiState.Success) {
+            val updatedList = currentState.data.reviews.filter { review ->
+                review.id != editReviewId.value
+            }
+            /** 여기서 서버에서 통신이 성공 -> uistate업로드 (api 명세 아직 없음)*/
+            _uiState.value = UiState.Success(currentState.data.copy(reviews = updatedList))
+            _deleteClickedEvent.value = false
+        }
+
     }
 }

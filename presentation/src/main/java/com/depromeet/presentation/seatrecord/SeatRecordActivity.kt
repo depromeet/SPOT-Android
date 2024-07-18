@@ -77,7 +77,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             val updatedMonthList = monthList.map { monthData ->
                 monthData.copy(isClicked = monthData.month == it)
             }
+            viewModel.getSeatRecords()
             dateMonthAdapter.submitList(updatedMonthList)
+        }
+        viewModel.selectedYear.asLiveData().observe(this) {
+            viewModel.getSeatRecords()
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
@@ -87,7 +91,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             when (state) {
                 is UiState.Success -> {
                     Timber.d("성공")
-                    //setProfile() //사용자 프로필 데이터 서버에서 아직 안내려줌
+                    /*** setProfile() ->사용자 프로필 데이터 아직 서버 api명세서에 없음 */
                     setReviewList(state.data.reviews)
                 }
 
