@@ -45,11 +45,44 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.getSeatRecords()
+        initView()
+        initEvent()
+        initObserver()
+
+
+    }
+
+    private fun initView() {
         initDateSpinner()
         initMonthAdapter()
+    }
 
-        viewModel.getSeatRecords()
+    private fun initEvent() {
+        with(binding) {
+            recordSpotAppbar.setNavigationOnClickListener {
+                finish()
+            }
+            recordSpotAppbar.setMenuOnClickListener {
+                //셋팅 이동
+            }
+            fabRecordUp.setOnClickListener {
+                ssvRecord.smoothScrollTo(0, 0)
+            }
+        }
+    }
 
+    private fun initObserver() {
+        viewModel.selectedMonth.asLiveData().observe(this) {
+            val updatedMonthList = monthList.map { monthData ->
+                monthData.copy(isClicked = monthData.month == it)
+            }
+            dateMonthAdapter.submitList(updatedMonthList)
+        }
+
+        viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
+            if (state) moveConfirmationDialog()
+        }
         viewModel.uiState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -69,33 +102,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Failure -> {
                     Timber.d("test : ${state.msg}")
                 }
-
-            }
-        }
-        viewModel.selectedMonth.asLiveData().observe(this) {
-            val updatedMonthList = monthList.map { monthData ->
-                monthData.copy(isClicked = monthData.month == it)
-            }
-            dateMonthAdapter.submitList(updatedMonthList)
-        }
-
-        viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
-            if (state) moveConfirmationDialog()
-        }
-
-        setClickListener()
-    }
-
-    private fun setClickListener() {
-        with(binding) {
-            recordSpotAppbar.setNavigationOnClickListener {
-                finish()
-            }
-            recordSpotAppbar.setMenuOnClickListener {
-                //셋팅 이동
-            }
-            fabRecordUp.setOnClickListener {
-                ssvRecord.smoothScrollTo(0, 0)
             }
         }
     }
@@ -182,7 +188,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 reviews.groupBy { it.date.extractMonth(false) }.map { (month, reviews) ->
                     MonthReviewData(month, reviews)
                 }
-//            monthRecordAdapter.submitList(reviews.groupByMonth())
             monthRecordAdapter.submitList(groupList)
 
             monthRecordAdapter.itemRecordClickListener =
