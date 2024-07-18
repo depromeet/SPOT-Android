@@ -33,7 +33,7 @@ interface SeatReviewService {
         @Path("sectionId") sectionId: Int,
     ): List<ResponseSeatRangeDto>
 
-    @POST("/api/v1/reviews")
+    @POST("/api/v1/seats/{seatId}/members/{memberId}/reviews")
     suspend fun postSeatReview(
         @Body requestPostSignupDto: RequestSeatReviewDto,
     )
