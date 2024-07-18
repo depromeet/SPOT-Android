@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:background="@drawable/rect_white_fill_32">
 
+    <View
+        android:id="@+id/view_handler"
+        android:layout_width="36dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/rect_gray600_fill_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <NumberPicker
         android:id="@+id/np_months"
         android:layout_width="wrap_content"
