@@ -20,6 +20,7 @@ import coil.load
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
+import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
@@ -68,11 +69,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     binding.ivSeatAgain.load(state.data.seatChart)
                 }
 
-                is UiState.Failure -> { toast("이미지 오류") }
+                is UiState.Failure -> {
+                    toast("오류가 발생했습니다")
+                }
+
                 is UiState.Loading -> {}
                 is UiState.Empty -> {
                     toast("오류가 발생했습니다")
                 }
+
                 else -> {}
             }
         }
@@ -81,8 +86,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private fun observeSeatBLock() {
         viewModel.seatBlockState.asLiveData().observe(this) { state ->
             when (state) {
-                is UiState.Success -> { observeSuccessSeatBlock(state.data) }
-                is UiState.Failure -> { toast("오류가 발생했습니다") }
+                is UiState.Success -> {
+                    observeSuccessSeatBlock(state.data)
+                }
+
+                is UiState.Failure -> {
+                    toast("오류가 발생했습니다")
+                }
+
                 is UiState.Loading -> {}
                 is UiState.Empty -> {}
                 else -> {}
@@ -90,9 +101,56 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
+    private fun observeSeatRange() {
+        viewModel.seatRangeState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    // TODO : 특정 구역의 열이 하나 일 때 UI 분기 처리
+                    state.data.forEach { range ->
+                        observeSeatRangeColumnUI(range.rowInfo)
+                    }
+                }
+
+                // TODO : Code(블록)에 포함된 number가 없을 때
+                // TODO : -> et_column 빨간색  / tv_none_column_warning - visible / 텍스트는 그대로
+
+                // TODO : 선택한 code(블록)에서 number(열) 입력 시 number에 포함된 minSeatNum -  maxSeatNum 에 포함 안될 시 et_column,et_number 빨강 / tv_none_column_warning - visible & 존재하지 않는 번이에요 /
+                // TODO : Code(블록)에 포함된 number가 없을 때
+
+                // TODO : 만약 둘 다 성립 X -> et_column, et_number 둘다 빨강 / 텍스트 존재하지 않는 열과 번이에요
+
+                is UiState.Failure -> {
+                    toast("오류가 발생했습니다")
+                }
+                is UiState.Loading -> {}
+                is UiState.Empty -> {}
+                else -> {}
+            }
+        }
+    }
+
+    private fun observeSeatRangeColumnUI(rowInfoList: List<SeatRangeModel.RowInfo>) {
+        if (rowInfoList.size == 1) {
+            with(binding) {
+                etColumn.visibility = INVISIBLE
+                tvColumn.visibility = INVISIBLE
+                etNumber.visibility = INVISIBLE
+                etNonColumnNumber.visibility = VISIBLE
+            }
+        } else {
+            with(binding) {
+                etColumn.visibility = VISIBLE
+                tvColumn.visibility = VISIBLE
+                etNumber.visibility = VISIBLE
+                etNonColumnNumber.visibility = INVISIBLE
+            }
+        }
+    }
+
     private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
         val blockCodes = blockItems.map { it.code }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
 
         with(binding.spinnerBlock) {
@@ -122,6 +180,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             adapter.setItemSelected(position)
             viewModel.setSelectedSeatZone(selectedSeatInfo.name)
             viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
+            viewModel.getSeatRange(viewModel.selectedStadiumId.value, sectionId)
             updateNextBtnState()
         }
         binding.rvSelectSeatZone.adapter = adapter

@@ -2,7 +2,7 @@ package com.depromeet.data.datasource
 
 import com.depromeet.data.model.request.RequestSeatReviewDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
-import com.depromeet.data.model.response.seatReview.ResponseSeatMaxDto
+import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
 
@@ -18,10 +18,10 @@ interface SeatReviewDataSource {
         sectionId: Int,
     ): List<ResponseSeatBlockDto>
 
-    suspend fun getSeatMaxData(
+    suspend fun getSeatRangeData(
         stadiumId: Int,
         sectionId: Int,
-    ): ResponseSeatMaxDto
+    ): List<ResponseSeatRangeDto>
 
     suspend fun postSeatReviewData(
         requestSeatReviewDto: RequestSeatReviewDto,
