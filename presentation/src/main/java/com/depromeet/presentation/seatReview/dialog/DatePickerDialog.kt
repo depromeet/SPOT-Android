@@ -17,10 +17,8 @@ class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetB
     FragmentDatePickerBottomSheetBinding::inflate,
 ) {
     private val viewModel: ReviewViewModel by activityViewModels()
-    var onDateSelected: ((year: Int, month: Int, day: Int) -> Unit)? = null
-
     private val calendarInstance: Calendar by lazy { CalendarUtil.getCurrentCalendar() }
-
+    private var onDateSelected: ((year: Int, month: Int, day: Int) -> Unit)? = null
     private var selectedYear = CalendarUtil.getYear(calendarInstance)
     private var selectedMonth = CalendarUtil.getMonth(calendarInstance)
     private var selectedDay = CalendarUtil.getDay(calendarInstance)
@@ -33,17 +31,18 @@ class DatePickerDialog : BindingBottomSheetDialog<FragmentDatePickerBottomSheetB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
+        setupDatePicker()
+    }
 
-        with(binding.dpDatePicker) {
-            init(selectedYear, selectedMonth, selectedDay) { _, year, month, day ->
-                selectedYear = year
-                selectedMonth = month
-                selectedDay = day
-                val selectedCalendar = CalendarUtil.getCalendar(year, month, day)
-                val selectedDate = CalendarUtil.formatCalendarDate(selectedCalendar)
-                viewModel.updateSelectedDate(selectedDate)
-                onDateSelected?.invoke(year, month, day)
-            }
+    private fun setupDatePicker() {
+        binding.dpDatePicker.init(selectedYear, selectedMonth, selectedDay) { _, year, month, day ->
+            selectedYear = year
+            selectedMonth = month
+            selectedDay = day
+            val selectedCalendar = CalendarUtil.getCalendar(year, month, day)
+            val selectedDate = CalendarUtil.formatCalendarDate(selectedCalendar)
+            viewModel.updateSelectedDate(selectedDate)
+            onDateSelected?.invoke(year, month, day)
         }
     }
 }

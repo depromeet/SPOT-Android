@@ -33,13 +33,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.airbnb.lottie.model.content.CircleShape
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.pictures
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumDetailPictureViewPager(
     context: Context,
-    pictures: List<String>,
+    pictures: List<BlockReviewResponse.ReviewResponse.ReviewImageResponse>,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { pictures.size })
@@ -60,7 +61,7 @@ fun StadiumDetailPictureViewPager(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data(pictures.getOrNull(page))
+                        .data(pictures.getOrNull(page)?.url)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.FillWidth,
@@ -97,6 +98,16 @@ fun StadiumDetailPictureViewPager(
 private fun StadiumDetailPictureViewPagerPreview() {
     StadiumDetailPictureViewPager(
         context = LocalContext.current,
-        pictures = pictures
+        pictures = listOf(
+            BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                id = 1 , url = ""
+            ),
+            BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                id = 1 , url = ""
+            ),
+            BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                id = 1 , url = ""
+            )
+        )
     )
 }

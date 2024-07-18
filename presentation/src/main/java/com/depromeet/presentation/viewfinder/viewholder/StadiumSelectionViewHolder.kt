@@ -1,27 +1,26 @@
 package com.depromeet.presentation.viewfinder.viewholder
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.depromeet.designsystem.SpotTeamLabel
+import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 import com.depromeet.presentation.databinding.ItemStadiumSelectionBinding
-import com.depromeet.presentation.viewfinder.sample.Stadium
 
 class StadiumSelectionViewHolder(
     private val binding: ItemStadiumSelectionBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: Stadium) {
+    fun bind(stadiums: StadiumsResponse) {
         with(binding) {
-            tvStadiumTitle.text = item.title
-            ivStadium.load(item.imageUrl)
-            if (item.lock) {
+            tvStadiumTitle.text = stadiums.name
+            ivStadium.load(stadiums.thumbnail)
+            if (stadiums.isActive) {
                 binding.cvStadiumLock.visibility = View.VISIBLE
             }
-            item.team.forEach { teamName ->
+            stadiums.homeTeams.forEach { teamName ->
                 binding.llStadiumTeamLabel.addView(
                     SpotTeamLabel(binding.root.context).apply {
-                        teamType = teamName
+                        teamType = teamName.alias
                     }
                 )
             }
