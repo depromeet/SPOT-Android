@@ -6,24 +6,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
 import com.depromeet.presentation.extension.extractDay
 import com.depromeet.presentation.extension.getDayOfWeek
 import com.depromeet.presentation.extension.loadAndClip
-import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
+import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
 class RecentRecordAdapter(
-) : ListAdapter<ReviewMockData, RecentRecordViewHolder>(
+) : ListAdapter<MySeatRecordResponse.ReviewResponse, RecentRecordViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
     interface OnItemRecordClickListener {
-        fun onItemRecordClick(item: ReviewMockData)
-        fun onItemMoreClick(item: ReviewMockData)
+        fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse)
+        fun onItemMoreClick(item: MySeatRecordResponse.ReviewResponse)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -60,9 +61,9 @@ class RecentRecordViewHolder(
     }
 
 
-    fun bind(item: ReviewMockData) {
+    fun bind(item: MySeatRecordResponse.ReviewResponse) {
         with(binding) {
-            ivRecentImage.loadAndClip(item.image)
+            ivRecentImage.loadAndClip(item.images[0].url)
             tvRecentDateDay.text = item.date.extractDay()
             tvRecentDay.text = item.date.getDayOfWeek()
             tvRecentBlockName.text = item.blockName
@@ -72,7 +73,7 @@ class RecentRecordViewHolder(
                 setContent {
                     MaterialTheme {
                         KeywordFlowRow(
-                            keywords = item.keyword,
+                            keywords = item.keywords.map { it.toUiKeyword() },
                             overflowIndex = MAX_VISIBLE_CHIPS
                         )
                     }
@@ -80,4 +81,5 @@ class RecentRecordViewHolder(
             }
         }
     }
+
 }

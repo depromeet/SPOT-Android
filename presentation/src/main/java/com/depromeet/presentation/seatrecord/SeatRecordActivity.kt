@@ -9,20 +9,24 @@ import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotSpinner
 import com.depromeet.designsystem.extension.dpToPx
+import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
+import com.depromeet.presentation.extension.extractMonth
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.mockdata.MonthData
 import com.depromeet.presentation.seatrecord.mockdata.ProfileDetailData
-import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
-import com.depromeet.presentation.seatrecord.mockdata.groupByMonth
 import com.depromeet.presentation.seatrecord.mockdata.monthList
+import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -46,9 +50,27 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
         viewModel.getSeatRecords()
 
-        viewModel.uiState.asLiveData().observe(this) {
-            setProfile(it.profileDetailData)
-            initReviewExist(it.reviews)
+        viewModel.uiState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    Timber.d("성공")
+                    //setProfile() //사용자 프로필 데이터 서버에서 아직 안내려줌
+                    setReviewList(state.data.reviews)
+                }
+
+                is UiState.Loading -> {
+                    toast("로딩중")
+                }
+
+                is UiState.Empty -> {
+                    toast("오류 발생 빈값")
+                }
+
+                is UiState.Failure -> {
+                    Timber.d("test : ${state.msg}")
+                }
+
+            }
         }
         viewModel.selectedMonth.asLiveData().observe(this) {
             val updatedMonthList = monthList.map { monthData ->
@@ -138,7 +160,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             }
     }
 
-    private fun initReviewExist(reviews: List<ReviewMockData>) {
+    private fun setReviewList(reviews: List<MySeatRecordResponse.ReviewResponse>) {
         if (reviews.isEmpty()) {
             with(binding) {
                 "${viewModel.selectedMonth.value}년".also { tvRecordYear.text = it }
@@ -156,11 +178,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 rvRecordMonthDetail.adapter = monthRecordAdapter
                 ssvRecord.header = binding.clRecordStickyHeader
             }
-            monthRecordAdapter.submitList(reviews.groupByMonth())
+            val groupList =
+                reviews.groupBy { it.date.extractMonth(false) }.map { (month, reviews) ->
+                    MonthReviewData(month, reviews)
+                }
+//            monthRecordAdapter.submitList(reviews.groupByMonth())
+            monthRecordAdapter.submitList(groupList)
 
             monthRecordAdapter.itemRecordClickListener =
                 object : MonthRecordAdapter.OnItemRecordClickListener {
-                    override fun onItemRecordClick(item: ReviewMockData) {
+
+                    override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
                         Intent(
                             this@SeatRecordActivity,
                             SeatDetailRecordActivity::class.java
@@ -169,11 +197,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         }
                     }
 
-                    override fun onMoreRecordClick(item: ReviewMockData) {
-                        viewModel.setEditReviewId(item.id)
+                    override fun onMoreRecordClick(reviewId: Int) {
+                        viewModel.setEditReviewId(reviewId)
                         RecordEditDialog.newInstance(SEAT_RECORD_TAG)
                             .apply { show(supportFragmentManager, this.tag) }
                     }
+
                 }
 
         }

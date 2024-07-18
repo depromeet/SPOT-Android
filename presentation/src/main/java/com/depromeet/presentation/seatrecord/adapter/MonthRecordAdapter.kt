@@ -4,21 +4,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.databinding.ItemRecentMonthBinding
-import com.depromeet.presentation.extension.extractMonth
-import com.depromeet.presentation.seatrecord.mockdata.MonthReviewData
-import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
+import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.util.ItemDiffCallback
 
-class MonthRecordAdapter() : ListAdapter<MonthReviewData, MonthRecordViewHolder>(
-    ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
-        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
-    )
-) {
+
+class MonthRecordAdapter() :
+    ListAdapter<MonthReviewData, MonthRecordViewHolder>(
+        ItemDiffCallback(
+            onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
+            onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        )
+    ) {
     interface OnItemRecordClickListener {
-        fun onItemRecordClick(item: ReviewMockData)
-        fun onMoreRecordClick(item: ReviewMockData)
+        fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse)
+        fun onMoreRecordClick(reviewId: Int)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -49,17 +50,17 @@ class MonthRecordViewHolder(
     fun bind(item: MonthReviewData) {
         with(binding) {
             adapter = RecentRecordAdapter()
-            tvRecentMonth.text = item.month.extractMonth(true)
+            "${item.month}월".also { tvRecentMonth.text = it }
             rvRecentPost.adapter = adapter
             adapter.submitList(item.reviews)
             adapter.itemRecordClickListener =
                 object : RecentRecordAdapter.OnItemRecordClickListener {
-                    override fun onItemRecordClick(item: ReviewMockData) {
+                    override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
                         itemRecordClickListener?.onItemRecordClick(item)
                     }
 
-                    override fun onItemMoreClick(item: ReviewMockData) {
-                        itemRecordClickListener?.onMoreRecordClick(item)
+                    override fun onItemMoreClick(item: MySeatRecordResponse.ReviewResponse) {
+                        itemRecordClickListener?.onMoreRecordClick(item.id)
                     }
                 }
         }

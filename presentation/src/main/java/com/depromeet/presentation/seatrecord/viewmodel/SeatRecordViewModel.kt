@@ -2,25 +2,30 @@ package com.depromeet.presentation.seatrecord.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.depromeet.presentation.seatrecord.mockdata.RecordDetailMockData
-import com.depromeet.presentation.seatrecord.mockdata.makeSeatRecordData
+import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.request.home.MySeatRecordRequest
+import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class SeatRecordViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState = MutableStateFlow(RecordDetailMockData())
+@HiltViewModel
+class SeatRecordViewModel @Inject constructor(
+    private val homeRepository: HomeRepository,
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState<MySeatRecordResponse>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     private val _selectedMonth = MutableStateFlow(0)
     val selectedMonth = _selectedMonth.asStateFlow()
 
     private val _selectedYear = MutableStateFlow(2024)
+    val selectedYear = _selectedYear.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(false)
     val deleteClickedEvent = _deleteClickedEvent.asStateFlow()
@@ -30,12 +35,19 @@ class SeatRecordViewModel @Inject constructor() : ViewModel() {
 
 
     fun getSeatRecords() {
-        makeSeatRecordData().onEach {
-            _uiState.value = _uiState.value.copy(
-                profileDetailData = it.profileDetailData,
-                reviews = it.reviews
-            )
-        }.launchIn(viewModelScope)
+        val month = if (selectedMonth.value == 0) null else selectedMonth.value
+        viewModelScope.launch {
+            homeRepository.getMySeatRecord(
+                MySeatRecordRequest(
+                    selectedYear.value,
+                    month
+                )
+            ).onSuccess { data ->
+                _uiState.value = UiState.Success(data)
+            }.onFailure {
+                _uiState.value = UiState.Failure(it.message ?: "실패")
+            }
+        }
     }
 
     fun setSelectedYear(year: Int) {
@@ -55,11 +67,11 @@ class SeatRecordViewModel @Inject constructor() : ViewModel() {
     }
 
     fun removeReviewData() {
-        val currentList = _uiState.value.reviews
-        val updatedList = currentList.filter { review ->
-            review.id != editReviewId.value
-        }
-        _uiState.value = uiState.value.copy(reviews = updatedList)
-        _deleteClickedEvent.value = false
+//        val currentList = _uiState.value.
+//        val updatedList = currentList.filter { review ->
+//            review.id != editReviewId.value
+//        }
+//        _uiState.value = uiState.value.copy(reviews = updatedList)
+//        _deleteClickedEvent.value = false
     }
 }
