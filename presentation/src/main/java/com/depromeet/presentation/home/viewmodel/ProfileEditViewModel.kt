@@ -10,6 +10,7 @@ import com.depromeet.presentation.extension.validateNickName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +33,27 @@ class ProfileEditViewModel @Inject constructor(
 
     private val _cheerTeam = MutableStateFlow(0)
     val cheerTeam = _cheerTeam.asStateFlow()
+
+    val changeEnabled = MutableStateFlow(false)
+    private var initialNickName: String = ""
+    private var initialProfileImage: String = ""
+    private var initialCheerTeam: Int = 0
+
+    init {
+        viewModelScope.launch {
+            combine(
+                nickName,
+                profileImage,
+                cheerTeam,
+                nickNameError
+            ) { nickName, profileImage, cheerTeam, nickNameError ->
+                (nickName != initialNickName || profileImage != initialProfileImage
+                        || cheerTeam != initialCheerTeam) && nickNameError == NickNameError.NoError
+            }.collect { isChanged ->
+                changeEnabled.value = isChanged
+            }
+        }
+    }
 
     fun getBaseballTeam() {
         viewModelScope.launch {
@@ -73,10 +95,16 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun setProfile(name: String, image: String, cheerTeam: Int) {
+    fun initProfile(name: String, image: String, cheerTeam: Int) {
+        initialNickName = name
+        initialProfileImage = image
+        initialCheerTeam = cheerTeam
+
         _nickName.value = name
         _profileImage.value = image
         _cheerTeam.value = cheerTeam
+
+        changeEnabled.value = false
     }
 
     fun updateNickName(nickName: String) {

@@ -43,7 +43,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun initView() {
         getDataExtra { name, image, cheerTeam ->
-            viewModel.setProfile(name, image, cheerTeam)
+            viewModel.initProfile(name, image, cheerTeam)
             binding.etProfileEditNickname.setText(name)
         }
         setCheerTeamList()
@@ -60,6 +60,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         observeNickName()
         observeTeam()
         observeProfileImage()
+        observeChange()
     }
 
 
@@ -120,6 +121,13 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         }
     }
 
+    private fun observeChange() {
+        viewModel.changeEnabled.asLiveData().observe(this) { state ->
+            binding.tvProfileEditComplete.isEnabled = state
+
+        }
+    }
+
     private fun observeTeam() {
         viewModel.team.asLiveData().observe(this) { state ->
             when (state) {
@@ -147,7 +155,6 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
             etProfileEditNickname.setBackgroundResource(R.drawable.rect_warning01red_line_6)
             tvProfileEditNicknameError.visibility = View.VISIBLE
             tvProfileEditNicknameError.text = error
-            tvProfileEditComplete.isEnabled = false
         }
 
     } else {
@@ -155,7 +162,6 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
             etProfileEditNickname.setBackgroundResource(R.drawable.rect_gray100_line_6)
             tvProfileEditNicknameError.visibility = View.GONE
             tvProfileEditNicknameError.text = error
-            tvProfileEditComplete.isEnabled = true
         }
     }
 
