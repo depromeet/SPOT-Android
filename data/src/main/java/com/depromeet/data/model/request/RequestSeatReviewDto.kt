@@ -6,18 +6,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RequestSeatReviewDto(
-    @SerialName("stadiumId")
-    val stadiumId: Int,
-    @SerialName("blockId")
-    val blockId: Int,
-    @SerialName("rowId")
-    val rowId: Int,
-    @SerialName("seatNumber")
-    val seatNumber: Int,
+    @SerialName("memberId")
+    val memberId: Int,
+    @SerialName("seatId")
+    val seatId: Int,
     @SerialName("images")
     val images: List<String>,
-    @SerialName("date")
-    val date: String,
+    @SerialName("dateTime")
+    val dateTime: String,
     @SerialName("good")
     val good: List<String>,
     @SerialName("bad")
@@ -27,12 +23,10 @@ data class RequestSeatReviewDto(
 )
 
 fun SeatReviewModel.toSeatReview() = RequestSeatReviewDto(
-    stadiumId = stadiumId,
-    blockId = blockId,
-    rowId = rowId,
-    seatNumber = seatNumber,
+    memberId = memberId,
+    seatId = seatId,
     images = images,
-    date = date,
+    dateTime = dateTime,
     good = good,
     bad = bad,
     content = content,
