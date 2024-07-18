@@ -1,5 +1,6 @@
 package com.depromeet.data.remote
 
+import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,4 +13,7 @@ interface HomeApiService {
         @Query("year") year: Int?,
         @Query("month") month: Int?,
     ): ResponseMySeatRecordDto
+
+    @GET("/api/v1/baseball-teams")
+    suspend fun getBaseballTeam(): List<ResponseBaseballTeamDto>
 }

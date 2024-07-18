@@ -1,8 +1,10 @@
 package com.depromeet.data.mapper
 
 import com.depromeet.data.model.request.RequestMySeatRecordDto
+import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
+import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 
 fun ResponseMySeatRecordDto.toMySeatRecordResponse() = MySeatRecordResponse(
@@ -60,4 +62,11 @@ fun MySeatRecordRequest.toMySeatRecordRequestDto() = RequestMySeatRecordDto(
     limit = limit,
     year = year,
     month = month
+)
+
+/** baseball team **/
+fun ResponseBaseballTeamDto.toBaseballTeamResponse() = BaseballTeamResponse(
+    id = id,
+    name = name,
+    logo = logo
 )
