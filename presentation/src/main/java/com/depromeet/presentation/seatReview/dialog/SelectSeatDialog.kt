@@ -27,6 +27,7 @@ import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
 import com.depromeet.presentation.seatReview.adapter.SectionListAdapter
+import com.depromeet.presentation.util.Utils.loadImageFromUrl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,8 +67,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             when (state) {
                 is UiState.Success -> {
                     adapter.submitList(state.data.sectionList)
-                    // TODO : SVG IMAGE LOAD
-                    binding.ivSeatAgain.load(state.data.seatChart)
+                    binding.ivSeatAgain.loadImageFromUrl(state.data.seatChart)
                 }
 
                 is UiState.Failure -> {
