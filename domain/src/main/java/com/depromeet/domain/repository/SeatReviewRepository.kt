@@ -1,7 +1,6 @@
 package com.depromeet.domain.repository
 
 import com.depromeet.domain.entity.request.SeatReviewModel
-import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
@@ -24,18 +23,7 @@ interface SeatReviewRepository {
         sectionId: Int,
     ): Result<List<SeatRangeModel>>
 
-    suspend fun postReviewImagePresigned(
-        fileExtension: String,
-    ): Result<ResponsePresignedUrlModel>
-
-    suspend fun putImagePreSignedUrl(
-        presignedUrl: String,
-        image: ByteArray,
-    ): Result<Unit>
-
     suspend fun postSeatReview(
-        seatId: Int,
-        seatNumber: Int,
         seatReviewInfo: SeatReviewModel,
     ): Result<Unit>
 }

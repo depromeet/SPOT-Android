@@ -3,7 +3,6 @@ package com.depromeet.data.repository
 import com.depromeet.data.datasource.SeatReviewDataSource
 import com.depromeet.data.model.request.toSeatReview
 import com.depromeet.domain.entity.request.SeatReviewModel
-import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
@@ -45,44 +44,18 @@ class SeatReviewRepositoryImpl @Inject constructor(
     override suspend fun getSeatRange(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<List<SeatRangeModel>> {
+    ): Result<List<SeatRangeModel?>> {
         return runCatching {
             val response = seatReviewDataSource.getSeatRangeData(stadiumId, sectionId)
             response.map { it.toSeatRange() }
         }
     }
 
-    override suspend fun postReviewImagePresigned(
-        fileExtension: String,
-    ): Result<ResponsePresignedUrlModel> {
-        return runCatching {
-            seatReviewDataSource.postImagePreSignedData(
-                fileExtension,
-            ).toResponsePreSignedUrl()
-        }
-    }
-
-    override suspend fun putImagePreSignedUrl(
-        presignedUrl: String,
-        image: ByteArray,
-    ): Result<Unit> {
-        return runCatching {
-            seatReviewDataSource.putReviewImageData(
-                presignedUrl,
-                image,
-            )
-        }
-    }
-
     override suspend fun postSeatReview(
-        blockId: Int,
-        seatNumber: Int,
         seatReviewInfo: SeatReviewModel,
     ): Result<Unit> {
         return runCatching {
             seatReviewDataSource.postSeatReviewData(
-                blockId,
-                seatNumber,
                 seatReviewInfo.toSeatReview(),
             )
         }

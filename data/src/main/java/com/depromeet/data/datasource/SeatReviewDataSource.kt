@@ -1,7 +1,6 @@
 package com.depromeet.data.datasource
 
 import com.depromeet.data.model.request.RequestSeatReviewDto
-import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
@@ -24,18 +23,7 @@ interface SeatReviewDataSource {
         sectionId: Int,
     ): List<ResponseSeatRangeDto>
 
-    suspend fun postImagePreSignedData(
-        fileExtension: String,
-    ): ResponsePreSignedUrlDto
-
-    suspend fun putReviewImageData(
-        presignedUrl: String,
-        image: ByteArray,
-    )
-
     suspend fun postSeatReviewData(
-        blockId: Int,
-        seatNumber: Int,
         requestSeatReviewDto: RequestSeatReviewDto,
     )
 }
