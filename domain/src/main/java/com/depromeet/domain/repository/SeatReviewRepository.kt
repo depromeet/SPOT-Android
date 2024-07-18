@@ -1,6 +1,8 @@
 package com.depromeet.domain.repository
 
+import com.depromeet.domain.entity.request.RequestUploadUrlModel
 import com.depromeet.domain.entity.request.SeatReviewModel
+import com.depromeet.domain.entity.response.seatReview.RecommendRequestModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
@@ -26,4 +28,9 @@ interface SeatReviewRepository {
     suspend fun postSeatReview(
         seatReviewInfo: SeatReviewModel,
     ): Result<Unit>
+
+    suspend fun postUploadUrl(
+        memberId: Int,
+        requestUploadUrlModel: RequestUploadUrlModel,
+    ): Result<RecommendRequestModel>
 }

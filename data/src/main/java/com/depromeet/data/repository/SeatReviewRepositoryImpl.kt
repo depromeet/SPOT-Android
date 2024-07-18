@@ -1,8 +1,11 @@
 package com.depromeet.data.repository
 
 import com.depromeet.data.datasource.SeatReviewDataSource
+import com.depromeet.data.model.request.toRequestUploadUrl
 import com.depromeet.data.model.request.toSeatReview
+import com.depromeet.domain.entity.request.RequestUploadUrlModel
 import com.depromeet.domain.entity.request.SeatReviewModel
+import com.depromeet.domain.entity.response.seatReview.RecommendRequestModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
@@ -58,6 +61,18 @@ class SeatReviewRepositoryImpl @Inject constructor(
             seatReviewDataSource.postSeatReviewData(
                 seatReviewInfo.toSeatReview(),
             )
+        }
+    }
+
+    override suspend fun postUploadUrl(
+        memberId: Int,
+        requestUploadUrlModel: RequestUploadUrlModel,
+    ): Result<RecommendRequestModel> {
+        return runCatching {
+            seatReviewDataSource.postUploadUrlData(
+                memberId,
+                requestUploadUrlModel.toRequestUploadUrl(),
+            ).toResponseUploadUrl()
         }
     }
 }
