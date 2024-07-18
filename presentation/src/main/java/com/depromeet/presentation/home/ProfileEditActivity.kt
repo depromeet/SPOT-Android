@@ -6,16 +6,15 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.asLiveData
-import coil.load
-import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
 import com.depromeet.presentation.extension.NickNameError
+import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.adapter.BaseballTeamAdapter
 import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
-import com.depromeet.presentation.home.adapter.ProfileEditTeamAdapter
-import com.depromeet.presentation.home.mockdata.TeamData
-import com.depromeet.presentation.home.viewmodel.EditUiState
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +27,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         private const val GRID_SPACING = 40
     }
 
-    private lateinit var adapter: ProfileEditTeamAdapter
+    private lateinit var adapter: BaseballTeamAdapter
     private val viewModel: ProfileEditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +36,26 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         navigateToPhotoPicker()
         onClickTeam()
         observeNickName()
-        viewModel.getInformation()
+        viewModel.getBaseballTeam()
 
-        viewModel.uiState.asLiveData().observe(this) { state ->
-            updateUI(state)
+        viewModel.team.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    adapter.submitList(state.data)
+                }
+
+                is UiState.Loading -> {
+                    toast("로딩 중")
+                }
+
+                is UiState.Empty -> {
+                    toast("빈값 에러")
+                }
+
+                is UiState.Failure -> {
+                    toast("통신 실패")
+                }
+            }
         }
 
         binding.ibProfileEditClose.setOnClickListener { finish() }
@@ -48,18 +63,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     }
 
-    private fun updateUI(state: EditUiState) {
-        binding.ivProfileEditImage.load(state.image) {
-            transformations(CircleCropTransformation())
-            placeholder(R.drawable.ic_default_profile)
-            error(R.drawable.ic_default_profile)
-        }
-        binding.etProfileEditNickname.setText(state.nickName)
-        adapter.submitList(state.teamList)
-    }
-
     private fun setCheerTeamList() {
-        adapter = ProfileEditTeamAdapter()
+        adapter = BaseballTeamAdapter()
         binding.rvProfileEditTeam.adapter = adapter
         binding.rvProfileEditTeam.addItemDecoration(
             GridSpacingItemDecoration(
@@ -125,9 +130,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     }
 
     private fun onClickTeam() {
-        adapter.itemClubClickListener = object : ProfileEditTeamAdapter.OnItemClubClickListener {
-            override fun onItemClubClick(item: TeamData) {
-                viewModel.updateClickTeam(item)
+        adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
+            override fun onItemClubClick(item: BaseballTeamResponse) {
+                viewModel.setClickedBaseballTeam(item.id)
                 binding.tvProfileEditNoTeam.setBackgroundResource(R.drawable.rect_gray100_line_10)
             }
         }
