@@ -59,8 +59,10 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun initView() {
-        getIdExtra { stadiumId, blockId ->
-            viewModel.getBlockReviews(stadiumId, blockId)
+        getIdExtra { stadiumId, blockCode ->
+            viewModel.updateRequestPathVariable(stadiumId, blockCode)
+            viewModel.getBlockReviews(stadiumId, blockCode)
+            viewModel.getBlockRow(stadiumId, blockCode)
         }
     }
 
@@ -78,7 +80,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
     }
 
-    private fun getIdExtra(callback: (stadiumId: Int, blockId: String) -> Unit) {
+    private fun getIdExtra(callback: (stadiumId: Int, blockCode: String) -> Unit) {
         callback(
             intent?.getIntExtra(StadiumActivity.STADIUM_ID, 0) ?: 0,
             intent?.getStringExtra(StadiumActivity.STADIUM_BLOCK_ID) ?: ""
