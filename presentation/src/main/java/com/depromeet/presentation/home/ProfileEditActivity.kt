@@ -34,48 +34,34 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setCheerTeamList()
-        navigateToPhotoPicker()
-        onClickTeam()
-        observeNickName()
 
+        viewModel.getBaseballTeam()
+        initView()
+        initEvent()
+        initObserver()
+    }
+
+    private fun initView() {
         getDataExtra { name, image, cheerTeam ->
             viewModel.setProfile(name, image, cheerTeam)
             binding.etProfileEditNickname.setText(name)
         }
+        setCheerTeamList()
+    }
 
-        viewModel.getBaseballTeam()
-
-        viewModel.profileImage.asLiveData().observe(this) { state ->
-            binding.ivProfileEditImage.load(state) {
-                transformations(CircleCropTransformation())
-            }
-        }
-
-        viewModel.team.asLiveData().observe(this) { state ->
-            when (state) {
-                is UiState.Success -> {
-                    adapter.submitList(state.data)
-                }
-
-                is UiState.Loading -> {
-                    toast("로딩 중")
-                }
-
-                is UiState.Empty -> {
-                    toast("빈값 에러")
-                }
-
-                is UiState.Failure -> {
-                    toast("통신 실패")
-                }
-            }
-        }
-
+    private fun initEvent() {
         binding.ibProfileEditClose.setOnClickListener { finish() }
         binding.tvProfileEditComplete.setOnClickListener { finish() }
-
+        navigateToPhotoPicker()
+        onClickTeam()
     }
+
+    private fun initObserver() {
+        observeNickName()
+        observeTeam()
+        observeProfileImage()
+    }
+
 
     private fun setCheerTeamList() {
         adapter = BaseballTeamAdapter()
@@ -121,6 +107,36 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                         isError = true,
                         getString(R.string.profile_edit_error_duplicate)
                     )
+                }
+            }
+        }
+    }
+
+    private fun observeProfileImage() {
+        viewModel.profileImage.asLiveData().observe(this) { state ->
+            binding.ivProfileEditImage.load(state) {
+                transformations(CircleCropTransformation())
+            }
+        }
+    }
+
+    private fun observeTeam() {
+        viewModel.team.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    adapter.submitList(state.data)
+                }
+
+                is UiState.Loading -> {
+                    toast("로딩 중")
+                }
+
+                is UiState.Empty -> {
+                    toast("빈값 에러")
+                }
+
+                is UiState.Failure -> {
+                    toast("통신 실패")
                 }
             }
         }
