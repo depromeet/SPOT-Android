@@ -33,9 +33,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     ActivitySeatRecordBinding::inflate
 ) {
     companion object {
+        const val SEAT_RECORD_TAG = "seatRecord"
+        const val RECORD_ID = "record_id"
+        const val RECORD_LIST = "record_list"
         private const val START_SPACING_DP = 20
         private const val BETWEEN_SPACING_DP = 8
-        const val SEAT_RECORD_TAG = "seatRecord"
     }
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
@@ -77,11 +79,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             val updatedMonthList = monthList.map { monthData ->
                 monthData.copy(isClicked = monthData.month == it)
             }
-            viewModel.getSeatRecords()
             dateMonthAdapter.submitList(updatedMonthList)
-        }
-        viewModel.selectedYear.asLiveData().observe(this) {
-            viewModel.getSeatRecords()
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
@@ -90,7 +88,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.uiState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    Timber.d("성공")
                     /*** setProfile() ->사용자 프로필 데이터 아직 서버 api명세서에 없음 */
                     setReviewList(state.data.reviews)
                 }
@@ -202,8 +199,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                             this@SeatRecordActivity,
                             SeatDetailRecordActivity::class.java
                         ).apply {
-                            startActivity(this)
-                        }
+                            putExtra(RECORD_ID, item.id)
+                            putParcelableArrayListExtra(RECORD_LIST, viewModel.getUiReviewsData())
+                        }.let(::startActivity)
                     }
 
                     override fun onMoreRecordClick(reviewId: Int) {

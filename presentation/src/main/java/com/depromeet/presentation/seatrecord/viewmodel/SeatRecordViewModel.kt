@@ -6,17 +6,19 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.repository.HomeRepository
+import com.depromeet.presentation.seatrecord.uiMapper.ReviewUiData
+import com.depromeet.presentation.seatrecord.uiMapper.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
 ) : ViewModel() {
+
 
     private val _uiState = MutableStateFlow<UiState<MySeatRecordResponse>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -52,10 +54,12 @@ class SeatRecordViewModel @Inject constructor(
 
     fun setSelectedYear(year: Int) {
         _selectedYear.value = year
+        getSeatRecords()
     }
 
     fun setSelectedMonth(month: Int) {
         _selectedMonth.value = month
+        getSeatRecords()
     }
 
     fun setEditReviewId(id: Int) {
@@ -77,5 +81,14 @@ class SeatRecordViewModel @Inject constructor(
             _deleteClickedEvent.value = false
         }
 
+    }
+
+    fun getUiReviewsData(): ArrayList<ReviewUiData> {
+        val currentState = uiState.value
+        return if (currentState is UiState.Success) {
+            ArrayList(currentState.data.reviews.map { it.toUiModel() })
+        } else {
+            arrayListOf()
+        }
     }
 }

@@ -1,20 +1,16 @@
 package com.depromeet.presentation.seatrecord.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.depromeet.presentation.seatrecord.mockdata.ReviewDetailMockResult
-import com.depromeet.presentation.seatrecord.mockdata.mockReviewDetailListData
+import com.depromeet.presentation.seatrecord.uiMapper.ReviewUiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class SeatDetailViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ReviewDetailMockResult())
+    private val _uiState = MutableStateFlow(emptyList<ReviewUiData>())
     val uiState = _uiState.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(false)
@@ -23,20 +19,18 @@ class SeatDetailViewModel @Inject constructor() : ViewModel() {
     private val _editReviewId = MutableStateFlow(0)
     val editReviewId = _editReviewId.asStateFlow()
 
-
-    fun getReviewData() {
-        mockReviewDetailListData().onEach {
-            _uiState.value = _uiState.value.copy(list = it)
-        }.launchIn(viewModelScope)
+    fun setReviewData(id: Int, reviews: List<ReviewUiData>) {
+        _uiState.value = reviews
     }
 
-
     fun removeReviewData() {
-        val currentList = _uiState.value.list
+        val currentList = _uiState.value
         val updatedList = currentList.filter { review ->
-            review.reviewId != _editReviewId.value
+            review.id != _editReviewId.value
         }
-        _uiState.value = _uiState.value.copy(list = updatedList)
+
+        /** 투두 : 삭제  api 연동 **/
+        _uiState.value = updatedList
         _deleteClickedEvent.value = false
     }
 

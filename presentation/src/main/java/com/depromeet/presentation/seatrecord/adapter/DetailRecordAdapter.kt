@@ -8,22 +8,21 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import coil.load
-import coil.transform.CircleCropTransformation
 import com.depromeet.presentation.databinding.ItemSeatReviewDetailBinding
-import com.depromeet.presentation.seatrecord.mockdata.ReviewDetailMockData
+import com.depromeet.presentation.seatrecord.uiMapper.ReviewUiData
+import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.util.applyBoldSpan
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
-class DetailRecordAdapter() : ListAdapter<ReviewDetailMockData, ReviewDetailViewHolder>(
+class DetailRecordAdapter() : ListAdapter<ReviewUiData, ReviewDetailViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.reviewId == newItem.reviewId },
+        onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
     interface OnDetailItemClickListener {
-        fun onItemMoreClickListener(item: ReviewDetailMockData)
+        fun onItemMoreClickListener(item: ReviewUiData)
     }
 
     var itemMoreClickListener: OnDetailItemClickListener? = null
@@ -55,24 +54,25 @@ class ReviewDetailViewHolder(
         private const val MAX_VISIBLE_CHIPS = 3
     }
 
-    fun bind(item: ReviewDetailMockData) {
+    fun bind(item: ReviewUiData) {
         with(binding) {
-            ivDetailProfileImage.load(item.profileImage) {
-                transformations(CircleCropTransformation())
-            }
-            tvDetailNickname.text = item.nickName
-            "Lv.${item.level}".also { tvDetailLevel.text = it }
+            //TODO : 서버 데이터 바뀔거니 기억해두기
+//            ivDetailProfileImage.load(item.profileImage) {
+//                transformations(CircleCropTransformation())
+//            }
+//            tvDetailNickname.text = item.nickName
+//            "Lv.${item.level}".also { tvDetailLevel.text = it }
             tvDetailStadium.text = item.stadiumName
-            tvDetailBlock.text = item.stadiumName
-            tvDetailDate.text = item.createdAt
+            tvDetailBlock.text = item.blockName
+            tvDetailDate.text = item.date
             tvDetailContent.text = item.content
-            initImageViewPager(item.images)
+            initImageViewPager(item.images.map { it.url })
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
                     MaterialTheme {
                         KeywordFlowRow(
-                            keywords = item.keywords,
+                            keywords = item.keywords.map { it.toUiKeyword() },
                             overflowIndex = MAX_VISIBLE_CHIPS
                         )
                     }

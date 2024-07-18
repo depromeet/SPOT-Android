@@ -1,12 +1,14 @@
 package com.depromeet.presentation.seatrecord
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.DetailRecordAdapter
-import com.depromeet.presentation.seatrecord.mockdata.ReviewDetailMockData
+import com.depromeet.presentation.seatrecord.uiMapper.ReviewUiData
 import com.depromeet.presentation.seatrecord.viewmodel.SeatDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,19 +25,36 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
+        initEvent()
+        initObserver()
 
+    }
+
+    private fun initView() {
+        getDataExtra { id, reviews ->
+            viewModel.setReviewData(id, reviews)
+        }
         setDetailRecordAdapter()
-        viewModel.getReviewData()
+    }
+
+    private fun initEvent() {
+        with(binding) {
+            fabDetailUp.setOnClickListener {
+                rvDetailRecord.smoothScrollToPosition(0)
+            }
+        }
+    }
+
+    private fun initObserver() {
+
         viewModel.uiState.asLiveData().observe(this) {
-            detailRecordAdapter.submitList(it.list)
+            detailRecordAdapter.submitList(it)
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state) moveConfirmationDialog()
         }
-
-        setClickListener()
-
     }
 
     private fun setDetailRecordAdapter() {
@@ -44,8 +63,8 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
 
         detailRecordAdapter.itemMoreClickListener =
             object : DetailRecordAdapter.OnDetailItemClickListener {
-                override fun onItemMoreClickListener(item: ReviewDetailMockData) {
-                    viewModel.setEditReviewId(item.reviewId)
+                override fun onItemMoreClickListener(item: ReviewUiData) {
+                    viewModel.setEditReviewId(item.id)
                     RecordEditDialog.newInstance(SEAT_DETAIL_TAG)
                         .apply { show(supportFragmentManager, this.tag) }
                 }
@@ -57,11 +76,21 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
             .apply { show(supportFragmentManager, this.tag) }
     }
 
-    private fun setClickListener() {
-        with(binding){
-            fabDetailUp.setOnClickListener {
-                rvDetailRecord.smoothScrollToPosition(0)
-            }
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU, lambda = 0)
+    private fun getDataExtra(callback: (recordId: Int, recordList: ArrayList<ReviewUiData>) -> Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            callback(
+                intent?.getIntExtra(SeatRecordActivity.RECORD_ID, 0) ?: 0,
+                intent?.getParcelableArrayListExtra(
+                    SeatRecordActivity.RECORD_LIST,
+                    ReviewUiData::class.java
+                ) ?: arrayListOf()
+            )
+        } else {
+            callback(
+                intent?.getIntExtra(SeatRecordActivity.RECORD_ID, 0) ?: 0,
+                intent?.getParcelableArrayListExtra(SeatRecordActivity.RECORD_LIST) ?: arrayListOf()
+            )
         }
     }
 
