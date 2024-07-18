@@ -1,10 +1,12 @@
 package com.depromeet.data.datasource
 
 import com.depromeet.data.model.request.RequestSeatReviewDto
+import com.depromeet.data.model.request.RequestUploadUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
+import com.depromeet.data.model.response.seatReview.ResponseUploadUrlDto
 
 interface SeatReviewDataSource {
     suspend fun getStadiumNameData(): List<ResponseStadiumNameDto>
@@ -26,4 +28,9 @@ interface SeatReviewDataSource {
     suspend fun postSeatReviewData(
         requestSeatReviewDto: RequestSeatReviewDto,
     )
+
+    suspend fun postUploadUrlData(
+        memberId: Int,
+        requestUploadUrlDto: RequestUploadUrlDto,
+    ): ResponseUploadUrlDto
 }

@@ -1,10 +1,12 @@
 package com.depromeet.data.remote
 
 import com.depromeet.data.model.request.RequestSeatReviewDto
+import com.depromeet.data.model.request.RequestUploadUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
+import com.depromeet.data.model.response.seatReview.ResponseUploadUrlDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -35,4 +37,10 @@ interface SeatReviewService {
     suspend fun postSeatReview(
         @Body requestPostSignupDto: RequestSeatReviewDto,
     )
+
+    @POST("/api/v1/members/{memberId}/reviews/images")
+    suspend fun postUploadUrl(
+        @Path("memberId") memberId: Int,
+        @Body requestUploadUrlDto: RequestUploadUrlDto,
+    ): ResponseUploadUrlDto
 }
