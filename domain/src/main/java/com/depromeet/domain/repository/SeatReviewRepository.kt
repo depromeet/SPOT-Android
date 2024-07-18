@@ -2,7 +2,7 @@ package com.depromeet.domain.repository
 
 import com.depromeet.domain.entity.request.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
-import com.depromeet.domain.entity.response.seatReview.SeatMaxModel
+import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 
@@ -18,10 +18,10 @@ interface SeatReviewRepository {
         sectionId: Int,
     ): Result<List<SeatBlockModel>>
 
-    suspend fun getSeatMax(
+    suspend fun getSeatRange(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<SeatMaxModel?>
+    ): Result<List<SeatRangeModel>>
 
     suspend fun postSeatReview(
         seatReviewInfo: SeatReviewModel,

@@ -4,7 +4,7 @@ import com.depromeet.data.datasource.SeatReviewDataSource
 import com.depromeet.data.model.request.toSeatReview
 import com.depromeet.domain.entity.request.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
-import com.depromeet.domain.entity.response.seatReview.SeatMaxModel
+import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 import com.depromeet.domain.repository.SeatReviewRepository
@@ -41,15 +41,13 @@ class SeatReviewRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSeatMax(
+    override suspend fun getSeatRange(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<SeatMaxModel?> {
+    ): Result<List<SeatRangeModel?>> {
         return runCatching {
-            seatReviewDataSource.getSeatMaxData(
-                stadiumId,
-                sectionId,
-            ).toSeatMax()
+            val response = seatReviewDataSource.getSeatRangeData(stadiumId, sectionId)
+            response.map { it.toSeatRange() }
         }
     }
 

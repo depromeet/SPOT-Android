@@ -2,7 +2,7 @@ package com.depromeet.data.remote
 
 import com.depromeet.data.model.request.RequestSeatReviewDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
-import com.depromeet.data.model.response.seatReview.ResponseSeatMaxDto
+import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
 import retrofit2.http.Body
@@ -26,10 +26,10 @@ interface SeatReviewService {
     ): List<ResponseSeatBlockDto>
 
     @GET("/api/v1/stadiums/{stadiumId}/sections/{sectionId}/blocks/rows")
-    suspend fun getSeatMax(
+    suspend fun getSeatRange(
         @Path("stadiumId") stadiumId: Int,
         @Path("sectionId") sectionId: Int,
-    ): ResponseSeatMaxDto
+    ): List<ResponseSeatRangeDto>
 
     @POST("/api/v1/reviews")
     suspend fun postSeatReview(
