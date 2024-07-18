@@ -10,4 +10,9 @@ interface HomeRepository {
     ): Result<MySeatRecordResponse>
 
     suspend fun getBaseballTeam() : Result<List<BaseballTeamResponse>>
+
+    suspend fun postProfileImagePresigned(
+        presignedUrl : String,
+        memberId : Int
+    ) : Result<String>
 }

@@ -25,4 +25,13 @@ class HomeRepositoryImpl @Inject constructor(
             homeDataSource.getBaseballTeamData().map { it.toBaseballTeamResponse() }
         }
     }
+
+    override suspend fun postProfileImagePresigned(
+        presignedUrl: String,
+        memberId: Int,
+    ): Result<String> {
+        return runCatching {
+            homeDataSource.postProfileImagePresigned(presignedUrl, memberId)
+        }
+    }
 }

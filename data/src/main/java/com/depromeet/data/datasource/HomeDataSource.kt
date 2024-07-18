@@ -10,4 +10,9 @@ interface HomeDataSource {
     ): ResponseMySeatRecordDto
 
     suspend fun getBaseballTeamData(): List<ResponseBaseballTeamDto>
+
+    suspend fun postProfileImagePresigned(
+        fileExtension : String,
+        memberId : Int
+    ) : String
 }

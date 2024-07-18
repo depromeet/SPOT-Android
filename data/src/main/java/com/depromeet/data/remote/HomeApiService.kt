@@ -3,6 +3,8 @@ package com.depromeet.data.remote
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface HomeApiService {
@@ -16,4 +18,10 @@ interface HomeApiService {
 
     @GET("/api/v1/baseball-teams")
     suspend fun getBaseballTeam(): List<ResponseBaseballTeamDto>
+
+    @POST("/api/v1/members/{memberId}/profile/images")
+    suspend fun postProfileImagePresigned(
+        @Path("fileExtension") fileExtension : String,
+        @Path("memberId") memberId : Int
+    ) : String
 }

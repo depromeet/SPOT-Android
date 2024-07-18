@@ -22,4 +22,9 @@ class HomeDataSourceImpl @Inject constructor(
     override suspend fun getBaseballTeamData(): List<ResponseBaseballTeamDto> {
         return homeApiService.getBaseballTeam()
     }
+
+    override suspend fun postProfileImagePresigned(fileExtension: String, memberId: Int): String {
+        return homeApiService.postProfileImagePresigned(fileExtension, memberId)
+    }
+
 }
