@@ -32,10 +32,15 @@ class SeatDetailRecordActivity : BaseActivity<ActivitySeatDetailRecordBinding>(
     }
 
     private fun initView() {
+        setDetailRecordAdapter()
         getDataExtra { id, reviews ->
+            val position = reviews.indexOfFirst { it.id == id }
+            if(position != -1){
+                binding.rvDetailRecord.scrollToPosition(position)
+            }
             viewModel.setReviewData(id, reviews)
         }
-        setDetailRecordAdapter()
+
     }
 
     private fun initEvent() {
