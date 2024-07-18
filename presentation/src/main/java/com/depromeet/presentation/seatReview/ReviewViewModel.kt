@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
+import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 import com.depromeet.domain.repository.SeatReviewRepository
@@ -75,6 +76,9 @@ class ReviewViewModel @Inject constructor(
     private val _seatBlockState = MutableStateFlow<UiState<List<SeatBlockModel>>>(UiState.Empty)
     val seatBlockState: StateFlow<UiState<List<SeatBlockModel>>> = _seatBlockState
 
+    private val _seatRangeState = MutableStateFlow<UiState<List<SeatRangeModel>>>(UiState.Empty)
+    val seatRangeState: StateFlow<UiState<List<SeatRangeModel>>> = _seatRangeState
+
     fun setSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
     }
@@ -142,7 +146,6 @@ class ReviewViewModel @Inject constructor(
                 }
         }
     }
-
     fun getSeatBlock(stadiumId: Int, sectionId: Int) {
         viewModelScope.launch {
             _seatBlockState.value = UiState.Loading
@@ -188,4 +191,30 @@ class ReviewViewModel @Inject constructor(
                 }
         }
     }
+
+    fun getSeatRange(stadiumId: Int, sectionId: Int) {
+        viewModelScope.launch {
+            _seatRangeState.value = UiState.Loading
+            seatReviewRepository.getSeatRange(
+                stadiumId,
+                sectionId,
+            ).onSuccess { range ->
+                Timber.d("GET RANGE SUCCESS : $range")
+                if (range.isEmpty()) {
+                    _seatRangeState.value = UiState.Empty
+                } else {
+                    _seatRangeState.value = UiState.Success(range)
+                }
+            }
+                .onFailure { t ->
+                    if (t is HttpException) {
+                        Timber.e("GET RANGE FAILURE : $t")
+                        _seatRangeState.value = UiState.Failure(t.code().toString())
+                    }
+                }
+        }
+    }
+
 }
+
+

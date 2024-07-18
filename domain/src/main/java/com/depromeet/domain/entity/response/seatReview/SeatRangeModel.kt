@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.response.seatReview
 
-data class SeatMaxModel(
+data class SeatRangeModel(
     val id: Int,
     val code: String,
     val rowInfo: List<RowInfo>,

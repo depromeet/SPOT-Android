@@ -3,7 +3,7 @@ package com.depromeet.data.datasource.remote
 import com.depromeet.data.datasource.SeatReviewDataSource
 import com.depromeet.data.model.request.RequestSeatReviewDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
-import com.depromeet.data.model.response.seatReview.ResponseSeatMaxDto
+import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
 import com.depromeet.data.remote.SeatReviewService
@@ -29,11 +29,11 @@ class SeatReviewDataSourceImpl @Inject constructor(
         return seatReviewService.getSeatBlock(stadiumId, sectionId)
     }
 
-    override suspend fun getSeatMaxData(
+    override suspend fun getSeatRangeData(
         stadiumId: Int,
         sectionId: Int,
-    ): ResponseSeatMaxDto {
-        return seatReviewService.getSeatMax(stadiumId, sectionId)
+    ): List<ResponseSeatRangeDto> {
+        return seatReviewService.getSeatRange(stadiumId, sectionId)
     }
 
     override suspend fun postSeatReviewData(requestSeatReviewDto: RequestSeatReviewDto) {
