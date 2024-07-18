@@ -24,14 +24,14 @@ import com.depromeet.presentation.viewfinder.sample.Seat
 
 @Composable
 fun StadiumSeatCheckBox(
-    seat: Seat,
+    seat: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .background(
-                color = if (seat.selected) {
+                color = if (seat.isNotEmpty()) {
                     Color(0xFF121212)
                 } else {
                     Color(0xFFFFFFFF)
@@ -40,7 +40,7 @@ fun StadiumSeatCheckBox(
             )
             .border(
                 1.dp,
-                color = if (seat.selected) {
+                color = if (seat.isNotEmpty()) {
                     Color(0xFF121212)
                 } else {
                     Color(0xFFE5E5E5)
@@ -55,13 +55,9 @@ fun StadiumSeatCheckBox(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = if (seat.selected) {
-                "${seat.column}열 ${seat.number}번"
-            } else {
-                "좌석 시야"
-            },
+            text = seat.ifEmpty { "좌석 시야" },
             fontSize = 13.sp,
-            color = if (seat.selected) {
+            color = if (seat.isNotEmpty()) {
                 Color(0xFFFFFFFF)
             } else {
                 Color(0xFF121212)
@@ -80,7 +76,7 @@ fun StadiumSeatCheckBox(
 @Composable
 private fun StadiumSeatCheckBoxPreview() {
     StadiumSeatCheckBox(
-        seat = Seat(100, 11, false),
+        seat = "",
         modifier = Modifier,
         onClick = {}
 
@@ -91,7 +87,7 @@ private fun StadiumSeatCheckBoxPreview() {
 @Composable
 private fun StadiumSeatCheckBoxPreviewSelected() {
     StadiumSeatCheckBox(
-        seat = Seat(100, 11, true),
+        seat = "1열 12번",
         modifier = Modifier,
         onClick = {}
     )

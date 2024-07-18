@@ -45,6 +45,7 @@ fun StadiumDetailScreen(
     val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
     val verticalScrollState = rememberLazyListState()
     val blockReviews by viewModel.blockReviews.collectAsStateWithLifecycle()
+    val seat by viewModel.seat.collectAsStateWithLifecycle()
 
     blockReviews.let { state ->
         when (state) {
@@ -60,6 +61,7 @@ fun StadiumDetailScreen(
                         StadiumHeaderContent(
                             context = context,
                             isMore = isMore,
+                            seat = seat,
                             stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
                             stadiumArea = StadiumArea("1루", 207, "오렌지석"),
                             keywords = state.data.keywords.map { it.toKeyword() },

@@ -27,6 +27,7 @@ fun StadiumHeaderContent(
     context: Context,
     stadium: Stadium,
     isMore: Boolean,
+    seat: String,
     stadiumArea: StadiumArea,
     keywords: List<Keyword>,
     modifier: Modifier = Modifier,
@@ -50,7 +51,7 @@ fun StadiumHeaderContent(
         Spacer(modifier = Modifier.height(10.dp))
 
         StadiumSeatCheckBox(
-            seat = Seat(100, 11, false),
+            seat = seat,
             onClick = onClickSelectSeat
         )
 
@@ -63,7 +64,10 @@ fun StadiumHeaderContent(
                 keywords = keywords,
                 onChangeIsMore = onChangeIsMore
             )
-            CustomTooltip(modifier = Modifier.zIndex(1f))
+            CustomTooltip(
+                seat = seat,
+                modifier = Modifier.zIndex(1f)
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
         Divider(
@@ -81,6 +85,7 @@ private fun StadiumHeaderContentPreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = false,
+        seat = "",
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = listOf(
@@ -99,6 +104,7 @@ private fun StadiumHeaderContentIsMorePreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = true,
+        seat = "1열 12번",
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = listOf(
