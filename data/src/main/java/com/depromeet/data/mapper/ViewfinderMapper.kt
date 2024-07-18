@@ -1,9 +1,13 @@
 package com.depromeet.data.mapper
 
+import com.depromeet.data.model.request.viewfinder.BlockReviewRequestQueryDto
 import com.depromeet.data.model.response.viewfinder.BlockReviewResponseDto
+import com.depromeet.data.model.response.viewfinder.BlockRowResponseDto
 import com.depromeet.data.model.response.viewfinder.StadiumResponseDto
 import com.depromeet.data.model.response.viewfinder.StadiumsResponseDto
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.response.viewfinder.BlockRowResponse
 import com.depromeet.domain.entity.response.viewfinder.StadiumResponse
 import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 
@@ -85,3 +89,23 @@ fun BlockReviewResponseDto.ReviewResponseDto.ReviewKeywordResponseDto.toReviewKe
         content = content,
         isPositive = isPositive,
     )
+
+fun BlockRowResponseDto.toBlockRowResponse() = BlockRowResponse(
+    id = id,
+    code = code,
+    rowInfo = rowInfo.map { it.toRowInfoResponse() }
+)
+
+fun BlockRowResponseDto.RowInfoResponseDto.toRowInfoResponse() = BlockRowResponse.RowInfoResponse(
+    id = id,
+    number = number,
+    minSeatNum = minSeatNum,
+    maxSeatNum = maxSeatNum
+)
+
+fun BlockReviewRequestQuery.toBlockReviewRequestQueryDto() = BlockReviewRequestQueryDto(
+    rowId = rowId,
+    seatNumber = seatNumber,
+    offset = offset,
+    limit = limit
+)
