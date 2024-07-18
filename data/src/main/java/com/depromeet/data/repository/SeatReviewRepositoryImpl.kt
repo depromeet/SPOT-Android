@@ -44,7 +44,7 @@ class SeatReviewRepositoryImpl @Inject constructor(
     override suspend fun getSeatRange(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<List<SeatRangeModel?>> {
+    ): Result<List<SeatRangeModel>> {
         return runCatching {
             val response = seatReviewDataSource.getSeatRangeData(stadiumId, sectionId)
             response.map { it.toSeatRange() }
