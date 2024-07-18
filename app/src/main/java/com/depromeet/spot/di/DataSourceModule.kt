@@ -6,6 +6,7 @@ import com.depromeet.data.datasource.SeatReviewDataSource
 import com.depromeet.data.datasource.ViewfinderDataSource
 import com.depromeet.data.datasource.WebSvgDataSource
 import com.depromeet.data.datasource.remote.ExampleDataSourcelmpl
+import com.depromeet.data.datasource.remote.HomeDataSourceImpl
 import com.depromeet.data.datasource.remote.SeatReviewDataSourceImpl
 import com.depromeet.data.datasource.remote.WebSvgDataSourceImpl
 import dagger.Binds
@@ -34,8 +35,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindHomeDataSource(
-        homeDataSourceImpl: WebSvgDataSourceImpl
-    ) : HomeDataSource
+        homeDataSourceImpl: HomeDataSourceImpl,
+    ): HomeDataSource
 
     @Binds
     @Singleton
