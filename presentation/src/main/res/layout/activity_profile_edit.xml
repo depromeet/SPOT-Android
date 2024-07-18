@@ -33,7 +33,8 @@
         android:background="@android:color/transparent"
         android:src="@drawable/ic_x_close"
         app:layout_constraintStart_toEndOf="@id/gl_start"
-        app:layout_constraintTop_toBottomOf="@id/gl_top" />
+        app:layout_constraintTop_toBottomOf="@id/gl_top"
+        tools:ignore="contentDescription"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,16 +81,18 @@
                 android:src="@drawable/ic_default_profile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="contentDescription"/>
 
             <ImageButton
                 android:id="@+id/ib_profile_edit_camera"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:background="@drawable/circle_0c0c0c_fill"
-                android:src="@drawable/ic_camera"
+                android:src="@drawable/ic_camera_14"
                 app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_image"
-                app:layout_constraintEnd_toEndOf="@id/iv_profile_edit_image" />
+                app:layout_constraintEnd_toEndOf="@id/iv_profile_edit_image"
+                tools:ignore="contentDescription"/>
 
             <TextView
                 android:id="@+id/tv_profile_edit_nickname"

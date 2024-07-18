@@ -30,11 +30,17 @@ class ProfileEditViewModel @Inject constructor(
     private val _profileImage = MutableStateFlow("")
     val profileImage = _profileImage.asStateFlow()
 
+    private val _cheerTeam = MutableStateFlow(0)
+    val cheerTeam = _cheerTeam.asStateFlow()
+
     fun getBaseballTeam() {
         viewModelScope.launch {
             homeRepository.getBaseballTeam()
-                .onSuccess {
-                    _team.value = UiState.Success(it)
+                .onSuccess { teams ->
+                    val updatedTeams = teams.map { team ->
+                        team.copy(isClicked = team.id == cheerTeam.value)
+                    }
+                    _team.value = UiState.Success(updatedTeams)
                 }.onFailure {
                     _team.value = UiState.Failure(it.message ?: "실패")
                 }
@@ -52,6 +58,7 @@ class ProfileEditViewModel @Inject constructor(
                 team.copy(isClicked = team.id == id)
             }
             _team.value = UiState.Success(updatedList)
+            _cheerTeam.value = id
         }
     }
 
@@ -62,7 +69,14 @@ class ProfileEditViewModel @Inject constructor(
                 team.copy(isClicked = false)
             }
             _team.value = UiState.Success(updatedList)
+            _cheerTeam.value = 0
         }
+    }
+
+    fun setProfile(name: String, image: String, cheerTeam: Int) {
+        _nickName.value = name
+        _profileImage.value = image
+        _cheerTeam.value = cheerTeam
     }
 
     fun updateNickName(nickName: String) {

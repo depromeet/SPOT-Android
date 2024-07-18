@@ -14,10 +14,12 @@ import kotlin.random.Random
 @Parcelize
 data class Profile(
     val nickName: String = "",
+    val image : String = "",
     val writeCount: Int = 0,
     val level: Int = 0,
     val title: String = "",
-    val cheerTeam: String = "",
+    val teamImage: String = "",
+    val teamId : Int = 0
 ) : Parcelable
 
 @Parcelize
@@ -59,10 +61,10 @@ fun mockDataProfile(): Flow<HomeUiState> = flow {
 
 
     val profileList = listOf(
-        Profile("노균욱", 23, 5, "야구장 VIP", "https://picsum.photos/600/400"),
-        Profile("윤성식", 12, 4, "응원 단장", "https://picsum.photos/600/400"),
-        Profile("박민주", 2, 2, "직관 첫 걸음", "https://picsum.photos/600/400"),
-        Profile("조관희", 7, 3, "직관의 여유", "https://picsum.photos/600/400"),
+        Profile("노균욱", "https://picsum.photos/600/400",23, 5, "야구장 VIP", "https://picsum.photos/600/400",1),
+        Profile("윤성식", "https://picsum.photos/600/400",12, 4, "응원 단장", "https://picsum.photos/600/400",1),
+        Profile("박민주", "https://picsum.photos/600/400",2, 2, "직관 첫 걸음", "https://picsum.photos/600/400",1),
+        Profile("조관희", "https://picsum.photos/600/400",7, 3, "직관의 여유", "https://picsum.photos/600/400",1),
     )
     val recentSightList = listOf<RecentSight>(
         RecentSight("서울 잠실 야구장", "2024년 7월 20일", "3루 네이비석 3054블럭", emptyList()),

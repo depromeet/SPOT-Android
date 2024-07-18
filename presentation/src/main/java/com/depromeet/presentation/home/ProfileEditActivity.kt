@@ -6,6 +6,8 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.asLiveData
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
@@ -36,7 +38,19 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         navigateToPhotoPicker()
         onClickTeam()
         observeNickName()
+
+        getDataExtra { name, image, cheerTeam ->
+            viewModel.setProfile(name, image, cheerTeam)
+            binding.etProfileEditNickname.setText(name)
+        }
+
         viewModel.getBaseballTeam()
+
+        viewModel.profileImage.asLiveData().observe(this) { state ->
+            binding.ivProfileEditImage.load(state) {
+                transformations(CircleCropTransformation())
+            }
+        }
 
         viewModel.team.asLiveData().observe(this) { state ->
             when (state) {
@@ -150,6 +164,14 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     private fun imageUpload() {
         val fragment = ProfileImageUploadDialog()
         fragment.show(supportFragmentManager, fragment.tag)
+    }
+
+    private fun getDataExtra(callback: (name: String, profileImage: String, cheerTeam: Int) -> Unit) {
+        callback(
+            intent?.getStringExtra(HomeActivity.PROFILE_NAME) ?: "",
+            intent?.getStringExtra(HomeActivity.PROFILE_IMAGE) ?: "",
+            intent?.getIntExtra(HomeActivity.PROFILE_CHEER_TEAM, 0) ?: 0
+        )
     }
 
 }

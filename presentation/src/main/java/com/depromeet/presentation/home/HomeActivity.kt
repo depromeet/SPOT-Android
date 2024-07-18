@@ -8,10 +8,8 @@ import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import coil.load
 import com.depromeet.core.base.BaseActivity
-import com.depromeet.core.state.UiState
 import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.loadAndClip
-import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.viewmodel.HomeUiState
 import com.depromeet.presentation.home.viewmodel.HomeViewModel
 import com.depromeet.presentation.util.applyBoldAndSizeSpan
@@ -21,6 +19,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding>(
     ActivityHomeBinding::inflate
 ) {
+    companion object {
+        const val PROFILE_NAME = "profile_name"
+        const val PROFILE_IMAGE = "profile_image"
+        const val PROFILE_CHEER_TEAM = "profile_cheer_team"
+    }
+
     private val viewModel: HomeViewModel by viewModels()
     private val sightList: List<View> by lazy {
         listOf(
@@ -38,29 +42,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         binding.clMainSight.clipToOutline = true
 
         viewModel.uiState.asLiveData().observe(this) { state ->
-            when (state) {
-                is UiState.Loading -> {
-                    toast("로딩중")
-                }
-
-                is UiState.Empty -> {
-                    toast("빈값")
-                }
-
-                is UiState.Success -> {
-                    updateUi(state.data)
-                }
-
-                is UiState.Failure -> {
-                    toast("통신 실패")
-                }
-            }
+            updateUi(state)
         }
 
         viewModel.getInformation()
     }
 
-    
+
     private fun updateUi(state: HomeUiState) {
         with(binding) {
             val profile = state.profile
@@ -68,7 +56,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
             "Lv.${profile.level} ${profile.title}".also { tvHomeLevel.text = it }
             setSpannableString(profile.nickName, profile.writeCount)
-            ivHomeCheerTeam.load(profile.cheerTeam)
+            ivHomeCheerTeam.load(profile.teamImage)
             tvHomeRecentRecordName.text = recentSight.location
             tvHomeRecentRecordDate.text = recentSight.date
 
@@ -108,7 +96,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun navigateToProfileEditActivity() {
-        Intent(this, ProfileEditActivity::class.java).apply { startActivity(this) }
+        Intent(this, ProfileEditActivity::class.java).apply {
+            with(viewModel.uiState.value.profile) {
+                putExtra(PROFILE_NAME, this.nickName)
+                putExtra(PROFILE_IMAGE, this.image)
+                putExtra(PROFILE_CHEER_TEAM, this.teamId)
+            }
+        }.let(::startActivity)
     }
 
     private fun setSpannableString(
