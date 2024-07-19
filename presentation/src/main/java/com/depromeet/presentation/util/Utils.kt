@@ -2,10 +2,6 @@ package com.depromeet.presentation.util
 
 import android.content.Context
 import android.content.Intent
-import android.widget.ImageView
-import coil.ImageLoader
-import coil.decode.SvgDecoder
-import coil.request.ImageRequest
 
 object Utils {
     fun restartApp(context: Context, toastMsg: String?) {
