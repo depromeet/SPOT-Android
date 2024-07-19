@@ -99,6 +99,9 @@ class ProfileEditViewModel @Inject constructor(
                 }
         }
     }
+    fun deleteProfileImage(){
+        _profileImage.value = ""
+    }
 
     fun setProfileImage(uri: String) {
         _profileImage.value = uri
@@ -231,4 +234,6 @@ class ProfileEditViewModel @Inject constructor(
                 }
         }
     }
+
+
 }

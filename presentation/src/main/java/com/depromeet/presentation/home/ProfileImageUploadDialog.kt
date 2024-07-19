@@ -40,7 +40,8 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
             dismiss()
         }
         binding.tvProfileDelete.setOnClickListener {
-            //삭제 요청
+            viewModel.deleteProfileImage()
+            dismiss()
         }
         binding.tvProfileSelectAlbum.setOnClickListener {
             pickSingleImageLauncher.launch("image/*")

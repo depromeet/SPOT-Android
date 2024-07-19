@@ -138,10 +138,17 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun observeProfileImage() {
         viewModel.profileImage.asLiveData().observe(this) { state ->
-            binding.ivProfileEditImage.load(state) {
-                transformations(CircleCropTransformation())
+            with(binding.ivProfileEditImage) {
+                if (state.isEmpty()) {
+                    setImageResource(R.drawable.ic_default_profile)
+                } else {
+                    load(state) {
+                        transformations(CircleCropTransformation())
+                    }
+                }
             }
         }
+
         viewModel.presignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Loading -> {}
