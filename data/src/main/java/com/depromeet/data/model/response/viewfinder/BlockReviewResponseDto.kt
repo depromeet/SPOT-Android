@@ -5,6 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BlockReviewResponseDto(
+    @SerialName("stadiumTitle")
+    val stadiumTitle: String,
+    @SerialName("seatContent")
+    val seatContent: String,
+    @SerialName("header")
+    val header: List<HeaderResponseDto>,
     @SerialName("keywords")
     val keywords: List<KeywordResponseDto>,
     @SerialName("reviews")
@@ -23,11 +29,21 @@ data class BlockReviewResponseDto(
     val filter: ReviewFilterResponseDto
 ) {
     @Serializable
+    data class HeaderResponseDto(
+        @SerialName("url")
+        val url: String,
+        @SerialName("content")
+        val content: String
+    )
+
+    @Serializable
     data class KeywordResponseDto(
         @SerialName("content")
         val content: String,
         @SerialName("count")
-        val count: Int
+        val count: Int,
+        @SerialName("isPositive")
+        val isPositive: Boolean
     )
 
     @Serializable
@@ -46,6 +62,8 @@ data class BlockReviewResponseDto(
         val seatNumber: Int,
         @SerialName("date")
         val date: String,
+        @SerialName("seatContent")
+        val seatContent: String,
         @SerialName("content")
         val content: String,
         @SerialName("createdAt")

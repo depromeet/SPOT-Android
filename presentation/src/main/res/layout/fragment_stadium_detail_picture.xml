@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:elevation="4dp"
-        android:text="잠실 야구장 1루 레드식"
+        android:text="잠실 야구장 오렌지석"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

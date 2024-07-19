@@ -66,6 +66,7 @@ fun StadiumReviewContent(
                 AsyncImage(
                     model = ImageRequest.Builder(context)
 //                        .data(reviewContent.profile)
+                        .data("https://picsum.photos/200/300")
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -77,7 +78,7 @@ fun StadiumReviewContent(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
 //                    text = reviewContent.user,
-                    text = "test",
+                    text = "엘지의 왕자",
                     fontSize = 12.sp,
                     color = Color(0xFF9F9F9F)
                 )
@@ -103,7 +104,8 @@ fun StadiumReviewContent(
         ) {
             Text(
 //                text = "${reviewContent.seat}",
-                text = "207블럭 1열 12번",
+//                text = "207블럭 1열 12번",
+                text = "${reviewContent.seatContent}",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF121212)

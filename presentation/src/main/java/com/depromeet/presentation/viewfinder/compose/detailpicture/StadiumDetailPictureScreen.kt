@@ -157,6 +157,7 @@ fun StadiumDetailPictureScreen(
                                 AsyncImage(
                                     model = ImageRequest.Builder(context)
 //                                        .data(reviews[page].profile)
+                                        .data("https://picsum.photos/200/300")
                                         .build(),
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
@@ -168,7 +169,7 @@ fun StadiumDetailPictureScreen(
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
 //                                    text = reviews[page].user,
-                                    text = "test",
+                                    text = "엘지의 왕자",
                                     fontSize = 12.sp,
                                     color = Color(0xFF9F9F9F)
                                 )
@@ -181,7 +182,8 @@ fun StadiumDetailPictureScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
 //                                text = reviews[page].seat,
-                                text = "207블럭 1열 12번",
+//                                text = "207블럭 1열 12번",
+                                text = reviews[page].seatContent,
                                 fontSize = 16.sp,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold

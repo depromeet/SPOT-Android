@@ -28,13 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.pictures
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumPictureViewPager(
     context: Context,
-    pictures: List<String>,
+//    pictures: List<String>,
+    pictures: List<BlockReviewResponse.HeaderResponse>,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { pictures.size })
@@ -49,7 +51,7 @@ fun StadiumPictureViewPager(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(context)
-                    .data(pictures.getOrNull(page))
+                    .data(pictures.getOrNull(page)?.url)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
@@ -63,7 +65,8 @@ fun StadiumPictureViewPager(
                 contentAlignment = Alignment.TopEnd
             ) {
                 Text(
-                    text = "207블록 3열 12반",
+//                    text = "207블록 3열 12반",
+                    text = "${pictures.getOrNull(page)?.content}",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -106,7 +109,16 @@ fun StadiumPictureViewPager(
 private fun StadiumPictureViewPagerPreview() {
     StadiumPictureViewPager(
         context = LocalContext.current,
-        pictures = pictures,
+        pictures = listOf(
+            BlockReviewResponse.HeaderResponse(
+                url = "",
+                content = "207블럭 3열 12번"
+            ),
+            BlockReviewResponse.HeaderResponse(
+                url = "",
+                content = "207블럭 3열 12번"
+            ),
+        ),
         modifier = Modifier.fillMaxWidth()
     )
 }

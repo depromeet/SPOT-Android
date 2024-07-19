@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
 import com.depromeet.presentation.viewfinder.sample.Seat
 import com.depromeet.presentation.viewfinder.sample.Stadium
@@ -25,10 +26,13 @@ import com.depromeet.presentation.viewfinder.sample.pictures
 @Composable
 fun StadiumHeaderContent(
     context: Context,
-    stadium: Stadium,
+//    stadium: Stadium,
+//    stadiumArea: StadiumArea,
+    header: List<BlockReviewResponse.HeaderResponse>,
+    stadiumTitle: String,
+    seatContent: String,
     isMore: Boolean,
     seat: String,
-    stadiumArea: StadiumArea,
     keywords: List<Keyword>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
@@ -40,13 +44,14 @@ fun StadiumHeaderContent(
     ) {
         StadiumPictureViewPager(
             context = context,
-            pictures = pictures,
+            pictures = header,
+//            pictures = pictures,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
         StadiumAreaText(
-            stadium = stadium,
-            stadiumArea = stadiumArea
+            stadium = stadiumTitle,
+            seatContent = seatContent
         )
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -85,9 +90,21 @@ private fun StadiumHeaderContentPreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = false,
+        header = listOf(
+            BlockReviewResponse.HeaderResponse(
+                url = "",
+                content = "207블럭 3열 12번"
+            ),
+            BlockReviewResponse.HeaderResponse(
+                url = "",
+                content = "207블럭 3열 12번"
+            ),
+        ),
         seat = "",
-        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
+        stadiumTitle = "서울 잠실 야구장",
+        seatContent = "오렌지석 207블럭",
+//        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
+//        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = listOf(
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
@@ -104,9 +121,21 @@ private fun StadiumHeaderContentIsMorePreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = true,
+        header = listOf(
+            BlockReviewResponse.HeaderResponse(
+                url = "",
+                content = "207블럭 3열 12번"
+            ),
+            BlockReviewResponse.HeaderResponse(
+                url = "",
+                content = "207블럭 3열 12번"
+            ),
+        ),
         seat = "1열 12번",
-        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
+        stadiumTitle = "서울 잠실 야구장",
+        seatContent = "오렌지석 207블럭",
+//        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
+//        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = listOf(
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),

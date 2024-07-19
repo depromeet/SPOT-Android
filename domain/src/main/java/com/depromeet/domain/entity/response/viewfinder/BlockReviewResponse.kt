@@ -5,6 +5,9 @@ import java.time.format.DateTimeFormatter
 
 
 data class BlockReviewResponse(
+    val stadiumTitle: String = "",
+    val seatContent: String = "",
+    val header: List<HeaderResponse>,
     val keywords: List<KeywordResponse> = emptyList(),
     val reviews: List<ReviewResponse> = emptyList(),
     val totalCount: Int = 0,
@@ -14,6 +17,10 @@ data class BlockReviewResponse(
     val hasMore: Boolean = false,
     val filter: ReviewFilterResponse = ReviewFilterResponse()
 ) {
+    data class HeaderResponse(
+        val url: String = "",
+        val content: String = ""
+    )
     data class KeywordResponse(
         val content: String = "",
         val count: Int = 0,
@@ -28,6 +35,7 @@ data class BlockReviewResponse(
         val rowId: Int = 0,
         val seatNumber: Int = 0,
         val date: String = "",
+        val seatContent: String = "",
         val content: String = "",
         val createdAt: String = "",
         val updatedAt: String = "",

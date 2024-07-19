@@ -40,6 +40,9 @@ fun StadiumResponseDto.toStadiumResponse() = StadiumResponse(
 )
 
 fun BlockReviewResponseDto.toBlockReviewResponse() = BlockReviewResponse(
+    stadiumTitle = stadiumTitle,
+    seatContent = seatContent,
+    header = header.map { it.toHeaderResponse() },
     keywords = keywords.map { it.toKeywordResponse() },
     reviews = reviews.map { it.toReviewResponse() },
     totalCount = totalCount,
@@ -53,8 +56,14 @@ fun BlockReviewResponseDto.toBlockReviewResponse() = BlockReviewResponse(
 fun BlockReviewResponseDto.KeywordResponseDto.toKeywordResponse() =
     BlockReviewResponse.KeywordResponse(
         content = content,
-        count = count
+        count = count,
+        isPositive = isPositive
     )
+
+fun BlockReviewResponseDto.HeaderResponseDto.toHeaderResponse() = BlockReviewResponse.HeaderResponse(
+    url = url,
+    content = content
+)
 
 fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =
     BlockReviewResponse.ReviewResponse(
@@ -65,6 +74,7 @@ fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =
         rowId = rowId,
         seatNumber = seatNumber,
         date = date,
+        seatContent = seatContent,
         content = content,
         createdAt = createdAt,
         updatedAt = updatedAt,
