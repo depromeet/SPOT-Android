@@ -3,6 +3,7 @@ package com.depromeet.presentation.seatReview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.request.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
@@ -84,6 +85,9 @@ class ReviewViewModel @Inject constructor(
         MutableStateFlow<UiState<ResponsePresignedUrlModel>>(UiState.Loading)
     val getPreSignedUrl = _getPreSignedUrl.asStateFlow()
 
+    private val _postReviewState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
+    val postReviewState: StateFlow<UiState<Unit>> = _postReviewState.asStateFlow()
+
     fun setSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
     }
@@ -151,6 +155,7 @@ class ReviewViewModel @Inject constructor(
                 }
         }
     }
+
     fun getSeatBlock(stadiumId: Int, sectionId: Int) {
         viewModelScope.launch {
             _seatBlockState.value = UiState.Loading
@@ -254,6 +259,33 @@ class ReviewViewModel @Inject constructor(
                     Timber.e("General error: ${t.message ?: "Unknown error"}")
                 }
             }
+        }
+    }
+
+    fun postSeatReview(memberId: Int) {
+        viewModelScope.launch {
+            val seatReviewModel = SeatReviewModel(
+                images = _selectedImages.value,
+                dateTime = _selectedDate.value,
+                good = _selectedGoodReview.value,
+                bad = _selectedBadReview.value,
+                content = _detailReviewText.value,
+            )
+
+            _postReviewState.value = UiState.Loading
+            seatReviewRepository.postSeatReview(memberId, _selectedStadiumId.value, seatReviewModel)
+                .onSuccess {
+                    _postReviewState.value = UiState.Success(Unit)
+                    Timber.d("POST REVIEW SUCCESS")
+                }
+                .onFailure { t ->
+                    Timber.e("POST REVIEW FAILURE : $t")
+                    if (t is HttpException) {
+                        _postReviewState.value = UiState.Failure(t.code().toString())
+                    } else {
+                        _postReviewState.value = UiState.Failure(t.message ?: "Unknown error")
+                    }
+                }
         }
     }
 }

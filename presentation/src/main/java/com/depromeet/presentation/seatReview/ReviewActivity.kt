@@ -37,7 +37,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     ActivityReviewBinding.inflate(it)
 }) {
     companion object {
-        private const val DATE_FORMAT = "yy.MM.dd"
+        private const val DATE_FORMAT = "yyyy.MM.dd"
         private const val FRAGMENT_RESULT_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val MAX_SELECTED_IMAGES = 3
