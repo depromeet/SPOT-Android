@@ -18,21 +18,4 @@ object Utils {
         }
         Runtime.getRuntime().exit(0)
     }
-
-    fun ImageView.loadImageFromUrl(url: String) {
-        val imageLoader = ImageLoader.Builder(this.context)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-
-        val request = ImageRequest.Builder(this.context)
-            .crossfade(true)
-            .crossfade(2)
-            .data(url)
-            .target(this)
-            .build()
-
-        imageLoader.enqueue(request)
-    }
 }
