@@ -1,4 +1,4 @@
-package com.depromeet.data.model.request
+package com.depromeet.data.model.request.home
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
