@@ -1,12 +1,12 @@
 package com.depromeet.data.remote
 
-import com.depromeet.data.model.request.RequestSeatReviewDto
 import com.depromeet.data.model.request.RequestPreSignedUrlDto
+import com.depromeet.data.model.request.RequestSeatReviewDto
+import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
-import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
