@@ -3,9 +3,11 @@ package com.depromeet.data.mapper
 import com.depromeet.data.model.request.RequestMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
+import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 
 fun ResponseMySeatRecordDto.toMySeatRecordResponse() = MySeatRecordResponse(
     reviews = reviews.map { it.toReviewResponse() },
@@ -69,4 +71,9 @@ fun ResponseBaseballTeamDto.toBaseballTeamResponse() = BaseballTeamResponse(
     id = id,
     name = name,
     logo = logo
+)
+
+/** PresignedUrl Mapper **/
+fun ResponsePresignedUrlDto.toPresignedUrlResponse() = PresignedUrlResponse(
+    presignedUrl = presignedUrl
 )

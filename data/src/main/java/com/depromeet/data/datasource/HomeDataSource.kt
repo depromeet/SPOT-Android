@@ -3,6 +3,7 @@ package com.depromeet.data.datasource
 import com.depromeet.data.model.request.RequestMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
+import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 
 interface HomeDataSource {
     suspend fun getMySeatRecordData(
@@ -12,7 +13,12 @@ interface HomeDataSource {
     suspend fun getBaseballTeamData(): List<ResponseBaseballTeamDto>
 
     suspend fun postProfileImagePresigned(
-        fileExtension : String,
-        memberId : Int
-    ) : String
+        fileExtension: String,
+        memberId: Int,
+    ): ResponsePresignedUrlDto
+
+    suspend fun putProfileImage(
+        presignedUrl: String,
+        image: ByteArray,
+    )
 }

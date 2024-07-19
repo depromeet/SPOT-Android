@@ -4,9 +4,11 @@ import com.depromeet.data.datasource.HomeDataSource
 import com.depromeet.data.mapper.toBaseballTeamResponse
 import com.depromeet.data.mapper.toMySeatRecordRequestDto
 import com.depromeet.data.mapper.toMySeatRecordResponse
+import com.depromeet.data.mapper.toPresignedUrlResponse
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.repository.HomeRepository
 import javax.inject.Inject
 
@@ -27,11 +29,18 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun postProfileImagePresigned(
-        presignedUrl: String,
+        fileExtension: String,
         memberId: Int,
-    ): Result<String> {
+    ): Result<PresignedUrlResponse> {
         return runCatching {
-            homeDataSource.postProfileImagePresigned(presignedUrl, memberId)
+            homeDataSource.postProfileImagePresigned(fileExtension, memberId)
+                .toPresignedUrlResponse()
+        }
+    }
+
+    override suspend fun putProfileImage(presignedUrl: String, image: ByteArray): Result<Unit> {
+        return runCatching {
+            homeDataSource.putProfileImage(presignedUrl, image)
         }
     }
 }
