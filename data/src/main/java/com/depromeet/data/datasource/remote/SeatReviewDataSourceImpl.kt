@@ -40,10 +40,6 @@ class SeatReviewDataSourceImpl @Inject constructor(
         return seatReviewService.getSeatRange(stadiumId, sectionId)
     }
 
-    override suspend fun postSeatReviewData(requestSeatReviewDto: RequestSeatReviewDto) {
-        return seatReviewService.postSeatReview(requestSeatReviewDto)
-    }
-
     override suspend fun postImagePreSignedData(
         fileExtension: String,
         memberId: Int,
@@ -54,8 +50,19 @@ class SeatReviewDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun putReviewImageData(presignedUrl: String, image: ByteArray) {
+    override suspend fun putReviewImageData(
+        presignedUrl: String,
+        image: ByteArray,
+    ) {
         val mediaType = "image/*".toMediaTypeOrNull()
         return seatReviewService.putProfileImage(presignedUrl, image.toRequestBody(mediaType))
+    }
+
+    override suspend fun postSeatReviewData(
+        memberId: Int,
+        seatId: Int,
+        requestSeatReviewDto: RequestSeatReviewDto
+    ) {
+        return seatReviewService.postSeatReview(requestSeatReviewDto)
     }
 }
