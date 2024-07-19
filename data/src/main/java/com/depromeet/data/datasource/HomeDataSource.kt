@@ -28,4 +28,8 @@ interface HomeDataSource {
         requestProfileEditDto: RequestProfileEditDto,
         memberId: Int,
     ) : ResponseProfileEditDto
+
+    suspend fun getDuplicateNickname(
+        nickname : String
+    )
 }

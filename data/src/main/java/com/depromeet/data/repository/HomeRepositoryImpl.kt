@@ -57,4 +57,10 @@ class HomeRepositoryImpl @Inject constructor(
                 .toProfileEditResponse()
         }
     }
+
+    override suspend fun getDuplicateNickname(nickname: String): Result<Unit> {
+        return runCatching {
+            homeDataSource.getDuplicateNickname(nickname)
+        }
+    }
 }

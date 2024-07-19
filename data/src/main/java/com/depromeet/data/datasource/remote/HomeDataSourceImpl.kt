@@ -50,4 +50,8 @@ class HomeDataSourceImpl @Inject constructor(
     ): ResponseProfileEditDto {
         return homeApiService.putProfileEdit(requestProfileEditDto, memberId)
     }
+
+    override suspend fun getDuplicateNickname(nickname: String) {
+        return homeApiService.getDuplicateNickname(nickname)
+    }
 }

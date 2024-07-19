@@ -43,5 +43,10 @@ interface HomeApiService {
     suspend fun putProfileEdit(
         @Body body: RequestProfileEditDto,
         @Path("memberId") memberId: Int,
-    ) : ResponseProfileEditDto
+    ): ResponseProfileEditDto
+
+    @GET("/api/v1/members/duplicatedNickname/{nickname}")
+    suspend fun getDuplicateNickname(
+        @Path("nickname") nickname: String,
+    )
 }
