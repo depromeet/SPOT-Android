@@ -27,7 +27,6 @@ import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
 import com.depromeet.presentation.seatReview.adapter.SectionListAdapter
-import com.depromeet.presentation.util.Utils.loadImageFromUrl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -122,6 +121,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
         }
     }
+
+    // TODO : 에러 처리 다시 하기
 
     private fun updateColumnNUmberUI(range: SeatRangeModel) {
         val selectedNumber = viewModel.selectedNumber.value.toIntOrNull()
