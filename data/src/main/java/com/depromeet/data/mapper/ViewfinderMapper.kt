@@ -104,7 +104,7 @@ fun BlockRowResponseDto.RowInfoResponseDto.toRowInfoResponse() = BlockRowRespons
 )
 
 fun BlockReviewRequestQuery.toBlockReviewRequestQueryDto() = BlockReviewRequestQueryDto(
-    rowId = rowId,
+    rowNumber = rowNumber,
     seatNumber = seatNumber,
     offset = offset,
     limit = limit

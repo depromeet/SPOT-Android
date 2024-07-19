@@ -121,7 +121,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                 stadiumDetailViewModel.handleColumNumber(
                     binding.etColumn.text.toString().toInt(),
                     binding.etNumber.text.toString().toInt()
-                ) { isSuccess, seat, rowId ->
+                ) { isSuccess, seat ->
                     when (seat) {
                         Seat.COLUMN -> {
                             if (!isSuccess) {
@@ -137,7 +137,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                                     stadiumDetailViewModel.stadiumId,
                                     stadiumDetailViewModel.blockCode,
                                     BlockReviewRequestQuery(
-                                        rowId = rowId,
+                                        rowNumber = binding.etColumn.text.toString().toInt(),
                                         seatNumber = binding.etNumber.text.toString().toInt()
                                     )
                                 )
@@ -155,13 +155,15 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
             if (binding.clOnlyColumn.isVisible) {
                 stadiumDetailViewModel.handleColumn(
                     binding.etOnlyColumn.text.toString().toInt()
-                ) { isSuccess, seat, rowId ->
+                ) { isSuccess, seat ->
                      if (isSuccess) {
                          stadiumDetailViewModel.updateSeat("${binding.etOnlyColumn.text}열")
                          stadiumDetailViewModel.getBlockReviews(
                              stadiumDetailViewModel.stadiumId,
                              stadiumDetailViewModel.blockCode,
-                             BlockReviewRequestQuery(rowId = rowId)
+                             BlockReviewRequestQuery(
+                                 rowNumber = binding.etOnlyColumn.text.toString().toInt()
+                             )
                          )
                          dismiss()
                      } else {

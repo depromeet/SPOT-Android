@@ -21,7 +21,7 @@ interface ViewfinderService {
     suspend fun getBlockReviews(
         @Path("stadiumId") stadiumId: Int,
         @Path("blockCode") blockCode: String,
-        @Query("rowId") rowId: Int?,
+        @Query("rowNumber") rowNumber: Int?,
         @Query("seatNumber") seatNumber: Int?,
         @Query("offset") offset: Int?,
         @Query("limit") limit: Int?,

@@ -28,7 +28,7 @@ class ViewfinderDataSourceImpl @Inject constructor(
         return viewfinderService.getBlockReviews(
             stadiumId,
             blockCode,
-            queryParam.rowId,
+            queryParam.rowNumber,
             queryParam.seatNumber,
             queryParam.offset,
             queryParam.limit

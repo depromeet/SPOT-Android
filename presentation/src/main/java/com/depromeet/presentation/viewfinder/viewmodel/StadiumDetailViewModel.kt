@@ -80,27 +80,27 @@ class StadiumDetailViewModel @Inject constructor(
     fun handleColumNumber(
         column: Int,
         number: Int,
-        response: (isSuccess: Boolean, seat: Seat, rowId: Int?) -> Unit
+        response: (isSuccess: Boolean, seat: Seat) -> Unit
     ) {
         if (blockRow?.checkColumnRange(column) == true) {
             if (blockRow?.checkNumberRange(column, number) == true) {
-                response(true, Seat.NUMBER, blockRow?.findRowId(column))
+                response(true, Seat.NUMBER)
                 return
             } else {
-                response(false, Seat.NUMBER, null)
+                response(false, Seat.NUMBER)
                 return
             }
         }
 
-        response(false, Seat.COLUMN, null)
+        response(false, Seat.COLUMN)
     }
 
-    fun handleColumn(column: Int, response: (isSuccess: Boolean, seat: Seat, rowId: Int?) -> Unit) {
+    fun handleColumn(column: Int, response: (isSuccess: Boolean, seat: Seat) -> Unit) {
         if (blockRow?.checkColumnRange(column) == true) {
-            response(true, Seat.COLUMN, blockRow?.findRowId(column))
+            response(true, Seat.COLUMN)
             return
         }
 
-        response(false, Seat.COLUMN, null)
+        response(false, Seat.COLUMN)
     }
 }
