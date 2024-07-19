@@ -31,6 +31,8 @@
     <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>
     <string name="upload_error_capacity_5MB">5MB에 맞게 다시 선택해주세요</string>
     <string name="upload_error_capacity_15MB">15MB에 맞게 다시 선택해주세요</string>
+    <string name="upload_error_extension_description">선택한 사진\n확장자가 맞지 않아요</string>
+    <string name="upload_error_extension_photo">jpg, jpeg, png 사진을 선택해주세요</string>
     <string name="upload_error_check">확인</string>
 
     <!-- viewfinder -->

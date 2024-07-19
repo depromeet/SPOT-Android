@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -69,11 +70,25 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                 fragment.show(parentFragmentManager, fragment.tag)
                 dismiss()
             } else {
-                viewModel.setProfileImage(uri.toString())
+                val fileExtension = getFileExtension(uri)
+                if(fileExtension != "png" && fileExtension != "jpeg" && fileExtension != "jpg"){
+                    val fragment = UploadErrorDialog(
+                        getString(R.string.upload_error_extension_description),
+                        getString(R.string.upload_error_extension_photo)
+                    )
+                    fragment.show(parentFragmentManager, fragment.tag)
+                    dismiss()
+                    return@use
+                }
+                val byteArray = inputStream.readBytes()
+                viewModel.setProfileImagePresigned(byteArray,fileExtension,1) //memberId
                 dismiss()
             }
         }
     }
 
-
+    private fun getFileExtension(uri: Uri): String {
+        val mimeType = requireContext().contentResolver.getType(uri)
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: ""
+    }
 }

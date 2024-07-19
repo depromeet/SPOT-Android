@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
+import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.extension.NickNameError
 import com.depromeet.presentation.extension.validateNickName
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +23,9 @@ class ProfileEditViewModel @Inject constructor(
 
     private val _team = MutableStateFlow<UiState<List<BaseballTeamResponse>>>(UiState.Loading)
     val team = _team.asStateFlow()
+
+    private val _presignedUrl = MutableStateFlow<UiState<PresignedUrlResponse>>(UiState.Loading)
+    val presignedUrl = _presignedUrl.asStateFlow()
 
     private val _nickName = MutableStateFlow("")
     val nickName = _nickName.asStateFlow()
@@ -35,6 +40,7 @@ class ProfileEditViewModel @Inject constructor(
     val cheerTeam = _cheerTeam.asStateFlow()
 
     val changeEnabled = MutableStateFlow(false)
+
     private var initialNickName: String = ""
     private var initialProfileImage: String = ""
     private var initialCheerTeam: Int = 0
@@ -72,6 +78,44 @@ class ProfileEditViewModel @Inject constructor(
     fun setProfileImage(uri: String) {
         _profileImage.value = uri
     }
+
+    fun setProfileImagePresigned(
+        profileByteArray: ByteArray,
+        fileExtension: String,
+        memberId: Int,
+    ) {
+        viewModelScope.launch {
+            homeRepository.postProfileImagePresigned(fileExtension, memberId)
+                .onSuccess { presignedUrl ->
+                    Timber.d("testSuccess = $presignedUrl")
+                    _presignedUrl.value = UiState.Success(presignedUrl)
+                    uploadProfileImage(profileByteArray)
+                }
+                .onFailure {
+                    _presignedUrl.value = UiState.Failure(it.message ?: "실패")
+                    Timber.e("testFail = 실패")
+                }
+        }
+    }
+
+    fun uploadProfileImage(profileByteArray: ByteArray) {
+        //여기서 성공하면 _profileImage.value = string하기
+        val currentState = presignedUrl.value
+        if (currentState is UiState.Success) {
+            viewModelScope.launch {
+                homeRepository.putProfileImage(currentState.data.presignedUrl, profileByteArray)
+                    .onSuccess {
+                        setProfileImage(currentState.data.presignedUrl)
+                        Timber.d("test_UPLOAD_PROFILE_SUCCESS")
+                    }
+                    .onFailure {
+                        Timber.d("test_UPLOAD_PROFILE_FAILURE : $it")
+                    }
+            }
+
+        }
+    }
+
 
     fun setClickedBaseballTeam(id: Int) {
         val currentState = team.value
