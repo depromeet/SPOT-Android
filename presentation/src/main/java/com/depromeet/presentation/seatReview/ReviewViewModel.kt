@@ -3,6 +3,7 @@ package com.depromeet.presentation.seatReview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
 import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
@@ -78,6 +79,10 @@ class ReviewViewModel @Inject constructor(
 
     private val _seatRangeState = MutableStateFlow<UiState<List<SeatRangeModel>>>(UiState.Empty)
     val seatRangeState: StateFlow<UiState<List<SeatRangeModel>>> = _seatRangeState
+
+    private val _getPreSignedUrl =
+        MutableStateFlow<UiState<ResponsePresignedUrlModel>>(UiState.Loading)
+    val getPreSignedUrl = _getPreSignedUrl.asStateFlow()
 
     fun setSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
@@ -215,6 +220,40 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
+    // presigned URL 요청
+    fun requestPresignedUrl(fileExtension: String, memberId: Int) {
+        viewModelScope.launch {
+            _getPreSignedUrl.value = UiState.Loading
+            seatReviewRepository.postReviewImagePresigned(fileExtension, memberId)
+                .onSuccess { response ->
+                    Timber.e("REQUEST PRESIGNED URL SUCCESS : $response")
+                    _getPreSignedUrl.value = UiState.Success(response)
+                }
+                .onFailure { t ->
+                    Timber.e("REQUEST PRESIGNED URL FAILURE : $t")
+                    if (t is HttpException) {
+                        _getPreSignedUrl.value = UiState.Failure(t.code().toString())
+                    } else {
+                        _getPreSignedUrl.value = UiState.Failure(t.message ?: "Unknown error")
+                    }
+                }
+        }
+    }
+
+    // 이미지 업로드
+    fun uploadImageToPreSignedUrl(presignedUrl: String, image: ByteArray) {
+        viewModelScope.launch {
+            val result = seatReviewRepository.putImagePreSignedUrl(presignedUrl, image)
+            result.onSuccess {
+                Timber.d("UPLOAD IMAGE SUCCESS")
+            }.onFailure { t ->
+                Timber.e("UPLOAD IMAGE FAILURE : $t")
+                if (t is HttpException) {
+                    Timber.e("HTTP error code: ${t.code()}")
+                } else {
+                    Timber.e("General error: ${t.message ?: "Unknown error"}")
+                }
+            }
+        }
+    }
 }
-
-

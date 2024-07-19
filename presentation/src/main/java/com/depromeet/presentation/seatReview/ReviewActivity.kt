@@ -1,6 +1,5 @@
 package com.depromeet.presentation.seatReview
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -27,8 +27,7 @@ import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.FileNotFoundException
-import java.io.InputStream
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -72,7 +71,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         super.onCreate(savedInstanceState)
         viewModel.getStadiumName()
         observeStadiumName()
-        observeUploadReview()
         initDatePickerDialog()
         initUploadDialog()
         initSeatReviewDialog()
@@ -135,7 +133,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     if (firstStadium != null) {
                         binding.tvStadiumName.text = firstStadium.name
                         viewModel.getStadiumSection(firstStadium.id)
-                        viewModel.updateSelectedStadiumId(firstStadium.id)
+                        viewModel.setSelectedStadiumId(firstStadium.id)
                     }
                     observeReviewViewModel()
                 }
@@ -234,6 +232,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 }
             }
             for (index in selectedImageUris.size until selectedImage.size) {
+                val image = selectedImage[index]
                 val layout = selectedImageLayout[index]
                 layout.isVisible = false
                 removeButtons[index].isVisible = false
@@ -267,73 +266,35 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun getFileExtension(context: Context, uri: Uri): String {
-        val mimeType = context.contentResolver.getType(uri)
-        return mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(it) } ?: ""
-    }
-
-    private fun getFileInputStream(context: Context, uri: Uri): InputStream? {
-        return try {
-            context.contentResolver.openInputStream(uri)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    private fun readImageData(context: Context, uri: Uri): ByteArray? {
-        val inputStream = getFileInputStream(context, uri)
-        return inputStream?.use { it.readBytes() }
-    }
-
-    private fun observePreSignedUrl(imageData: ByteArray) {
-        viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
-            when (state) {
-                is UiState.Success -> {
-                    val presignedUrl = state.data.presignedUrl
-                    viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
-                    viewModel.postSeatReview()
-                    Intent(this, ReviewDoneActivity::class.java).apply {
-                        startActivity(this)
-                    }
-                }
-
-                is UiState.Failure -> {
-                    toast("Presigned URL 요청 실패: $state")
-                }
-
-                else -> {}
-            }
-        }
-    }
-
-    private fun observeUploadReview() {
-        viewModel.postReviewState.asLiveData().observe(this) { state ->
-            when (state) {
-                is UiState.Success -> {
-                    navigateToReviewDoneActivity()
-                }
-
-                is UiState.Failure -> {
-                    toast("리뷰 등록 실패: $state")
-                }
-
-                else -> {}
-            }
-        }
-    }
-
     private fun navigateToReviewDoneActivity() {
         binding.tvUploadBtn.setOnSingleClickListener {
             selectedImageUris.forEach { imageUriString ->
                 val imageUri = Uri.parse(imageUriString)
-                val fileExtension = getFileExtension(this, imageUri)
-                val imageData = readImageData(this, imageUri)
-                if (imageData != null) {
-                    viewModel.requestPreSignedUrl(fileExtension)
-                    observePreSignedUrl(imageData)
-                } else {
-                    toast("파일을 읽을 수 없습니다.")
+                val imageFile = File(imageUri.path!!)
+                val fileExtension = MimeTypeMap.getFileExtensionFromUrl(imageUri.toString())
+
+                // presigned URL 요청
+                //TODO : MemberID 받기
+                viewModel.requestPresignedUrl(fileExtension, 1)
+
+                // presigned URL 응답을 관찰 후 업로드 후 이동
+                viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
+                    when (state) {
+                        is UiState.Success -> {
+                            val presignedUrl = state.data.presignedUrl
+                            val imageData = imageFile.readBytes()
+                            // 이미지 업로드
+                            viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
+                            Intent(this, ReviewDoneActivity::class.java).apply { startActivity(this) }
+                        }
+
+                        is UiState.Failure -> {
+                            Toast.makeText(this, "Presigned URL 요청 실패: $state", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        else -> {}
+                    }
                 }
             }
         }

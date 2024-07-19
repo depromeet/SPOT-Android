@@ -1,11 +1,11 @@
 package com.depromeet.data.datasource
 
 import com.depromeet.data.model.request.RequestSeatReviewDto
+import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
-import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
 
 interface SeatReviewDataSource {
     suspend fun getStadiumNameData(): List<ResponseStadiumNameDto>
