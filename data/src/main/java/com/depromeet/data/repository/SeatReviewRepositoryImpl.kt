@@ -52,16 +52,6 @@ class SeatReviewRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postSeatReview(
-        seatReviewInfo: SeatReviewModel,
-    ): Result<Unit> {
-        return runCatching {
-            seatReviewDataSource.postSeatReviewData(
-                seatReviewInfo.toSeatReview(),
-            )
-        }
-    }
-
     override suspend fun postReviewImagePresigned(
         fileExtension: String,
         memberId: Int,
@@ -82,6 +72,18 @@ class SeatReviewRepositoryImpl @Inject constructor(
             seatReviewDataSource.putReviewImageData(
                 presignedUrl,
                 image,
+            )
+        }
+    }
+
+    override suspend fun postSeatReview(
+        memberId: Int,
+        seatId: Int,
+        seatReviewInfo: SeatReviewModel
+    ): Result<Unit> {
+        return runCatching {
+            seatReviewDataSource.postSeatReviewData(
+                memberId,seatId,seatReviewInfo.toSeatReview()
             )
         }
     }
