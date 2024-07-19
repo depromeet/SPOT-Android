@@ -1,9 +1,11 @@
 package com.depromeet.data.datasource
 
-import com.depromeet.data.model.request.RequestMySeatRecordDto
+import com.depromeet.data.model.request.home.RequestMySeatRecordDto
+import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
+import com.depromeet.data.model.response.home.ResponseProfileEditDto
 
 interface HomeDataSource {
     suspend fun getMySeatRecordData(
@@ -21,4 +23,9 @@ interface HomeDataSource {
         presignedUrl: String,
         image: ByteArray,
     )
+
+    suspend fun putProfileEdit(
+        requestProfileEditDto: RequestProfileEditDto,
+        memberId: Int,
+    ) : ResponseProfileEditDto
 }

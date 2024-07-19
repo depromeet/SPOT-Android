@@ -1,9 +1,11 @@
 package com.depromeet.data.remote
 
-import com.depromeet.data.model.request.RequestFileExtensionDto
+import com.depromeet.data.model.request.home.RequestFileExtensionDto
+import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
+import com.depromeet.data.model.response.home.ResponseProfileEditDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -36,4 +38,10 @@ interface HomeApiService {
         @Url preSignedUrl: String,
         @Body image: RequestBody,
     )
+
+    @PUT("/api/v1/members/{memberId}")
+    suspend fun putProfileEdit(
+        @Body body: RequestProfileEditDto,
+        @Path("memberId") memberId: Int,
+    ) : ResponseProfileEditDto
 }

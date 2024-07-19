@@ -1,6 +1,6 @@
 package com.depromeet.data.mapper
 
-import com.depromeet.data.model.request.RequestMySeatRecordDto
+import com.depromeet.data.model.request.home.RequestMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
