@@ -12,6 +12,7 @@ import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.extension.NickNameError
 import com.depromeet.presentation.extension.validateNickName
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -46,6 +47,8 @@ class ProfileEditViewModel @Inject constructor(
     val cheerTeam = _cheerTeam.asStateFlow()
 
     val changeEnabled = MutableStateFlow(false)
+    private var profileImageJob: Job? = null
+    private var profilePresignedJob: Job? = null
 
     private var initialNickName: String = ""
     private var initialProfileImage: String = ""
@@ -90,7 +93,7 @@ class ProfileEditViewModel @Inject constructor(
         fileExtension: String,
         memberId: Int,
     ) {
-        viewModelScope.launch {
+        profilePresignedJob = viewModelScope.launch {
             homeRepository.postProfileImagePresigned(fileExtension, memberId)
                 .onSuccess { presignedUrl ->
                     _presignedUrl.value = UiState.Success(presignedUrl)
@@ -102,10 +105,10 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun uploadProfileImage(profileByteArray: ByteArray) {
+    private fun uploadProfileImage(profileByteArray: ByteArray) {
         val currentState = presignedUrl.value
         if (currentState is UiState.Success) {
-            viewModelScope.launch {
+            profileImageJob = viewModelScope.launch {
                 homeRepository.putProfileImage(
                     currentState.data.presignedUrl,
                     profileByteArray
@@ -122,6 +125,11 @@ class ProfileEditViewModel @Inject constructor(
 
     fun uploadProfileEdit() {
         viewModelScope.launch {
+            if ((profileImageJob?.isActive == true) || (profilePresignedJob?.isActive == true)) {
+                profileImageJob?.join()
+                profilePresignedJob?.join()
+            }
+
             homeRepository.putProfileEdit(
                 ProfileEditRequest(
                     url = getPresignedUrlOrNull(),
