@@ -24,10 +24,6 @@ interface SeatReviewRepository {
         sectionId: Int,
     ): Result<List<SeatRangeModel>>
 
-    suspend fun postSeatReview(
-        seatReviewInfo: SeatReviewModel,
-    ): Result<Unit>
-
     suspend fun postReviewImagePresigned(
         fileExtension: String,
         memberId: Int,
@@ -36,5 +32,11 @@ interface SeatReviewRepository {
     suspend fun putImagePreSignedUrl(
         presignedUrl: String,
         image: ByteArray,
+    ): Result<Unit>
+
+    suspend fun postSeatReview(
+        memberId: Int,
+        seatId: Int,
+        seatReviewInfo: SeatReviewModel,
     ): Result<Unit>
 }
