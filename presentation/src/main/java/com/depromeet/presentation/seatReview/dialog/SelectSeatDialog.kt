@@ -67,7 +67,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             when (state) {
                 is UiState.Success -> {
                     adapter.submitList(state.data.sectionList)
-                    binding.ivSeatAgain.loadImageFromUrl(state.data.seatChart)
+                    binding.ivSeatAgain.load(state.data.seatChart)
                 }
 
                 is UiState.Failure -> {
