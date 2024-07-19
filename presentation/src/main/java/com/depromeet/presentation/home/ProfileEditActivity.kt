@@ -119,6 +119,14 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 transformations(CircleCropTransformation())
             }
         }
+        viewModel.presignedUrl.asLiveData().observe(this) {state ->
+            when(state){
+                is UiState.Success -> {}
+                is UiState.Failure -> {toast("이미지 업로드를 실패하였습니다. 다시 선택해주세요.")}
+                is UiState.Empty -> {toast("실패")}
+                is UiState.Loading -> {}
+            }
+        }
     }
 
     private fun observeChange() {

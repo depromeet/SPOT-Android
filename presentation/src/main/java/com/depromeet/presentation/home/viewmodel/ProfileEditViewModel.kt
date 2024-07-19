@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -87,32 +86,27 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.postProfileImagePresigned(fileExtension, memberId)
                 .onSuccess { presignedUrl ->
-                    Timber.d("testSuccess = $presignedUrl")
                     _presignedUrl.value = UiState.Success(presignedUrl)
                     uploadProfileImage(profileByteArray)
                 }
                 .onFailure {
                     _presignedUrl.value = UiState.Failure(it.message ?: "실패")
-                    Timber.e("testFail = 실패")
                 }
         }
     }
 
     fun uploadProfileImage(profileByteArray: ByteArray) {
-        //여기서 성공하면 _profileImage.value = string하기
         val currentState = presignedUrl.value
         if (currentState is UiState.Success) {
             viewModelScope.launch {
                 homeRepository.putProfileImage(currentState.data.presignedUrl, profileByteArray)
                     .onSuccess {
-                        setProfileImage(currentState.data.presignedUrl)
-                        Timber.d("test_UPLOAD_PROFILE_SUCCESS")
+
                     }
                     .onFailure {
-                        Timber.d("test_UPLOAD_PROFILE_FAILURE : $it")
+                        setProfileImage("")
                     }
             }
-
         }
     }
 
