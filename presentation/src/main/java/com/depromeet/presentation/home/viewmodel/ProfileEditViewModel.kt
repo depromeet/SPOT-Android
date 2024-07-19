@@ -13,17 +13,33 @@ import com.depromeet.presentation.extension.NickNameError
 import com.depromeet.presentation.extension.validateNickName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
+
+sealed class ProfileEvents {
+    data class ShowSnackMessage(
+        val message: String,
+    ) : ProfileEvents()
+}
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
 ) : ViewModel() {
+
+    private val _events = MutableSharedFlow<ProfileEvents>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val events: SharedFlow<ProfileEvents> = _events.asSharedFlow()
 
     private val _team = MutableStateFlow<UiState<List<BaseballTeamResponse>>>(UiState.Loading)
     val team = _team.asStateFlow()
@@ -117,7 +133,8 @@ class ProfileEditViewModel @Inject constructor(
 
                     }
                     .onFailure {
-                        setProfileImage("")
+                        _events.emit(ProfileEvents.ShowSnackMessage("프로필 이미지 업로드에 실패하였습니다\n다시 시도해주세요~"))
+                        setProfileImage(initialProfileImage)
                     }
             }
         }
@@ -140,10 +157,9 @@ class ProfileEditViewModel @Inject constructor(
             )
                 .onSuccess {
                     _profileEdit.value = UiState.Success(it)
-                    Timber.d("test success -> $it")
                 }
                 .onFailure {
-                    Timber.d("test fail -> $it")
+                    _events.emit(ProfileEvents.ShowSnackMessage("프로필 업데이트에 실패하였습니다 다시 시도해주세요"))
                 }
         }
     }
@@ -198,5 +214,21 @@ class ProfileEditViewModel @Inject constructor(
     fun updateNickName(nickName: String) {
         _nickname.value = nickName
         _nickNameError.value = nickName.validateNickName()
+
+        if (_nickNameError.value == NickNameError.NoError && initialNickName != nickname.value) {
+            checkNickNameAvailability(nickName)
+        }
+    }
+
+    private fun checkNickNameAvailability(nickName: String) {
+        viewModelScope.launch {
+            homeRepository.getDuplicateNickname(nickName)
+                .onSuccess {
+                    _nickNameError.value = NickNameError.NoError
+                }
+                .onFailure {
+                    _nickNameError.value = NickNameError.DuplicateError
+                }
+        }
     }
 }

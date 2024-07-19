@@ -5,7 +5,10 @@ import android.text.Editable
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
@@ -18,7 +21,9 @@ import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.adapter.BaseballTeamAdapter
 import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
+import com.depromeet.presentation.home.viewmodel.ProfileEvents
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
@@ -59,6 +64,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     }
 
     private fun initObserver() {
+        observeEvent()
         observeNickName()
         observeTeam()
         observeProfileImage()
@@ -75,6 +81,21 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 GRID_SPACING
             )
         )
+    }
+
+    private fun observeEvent() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect { event ->
+                    when (event) {
+                        is ProfileEvents.ShowSnackMessage -> {
+                            toast(event.message)
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     private fun observeNickName() {
@@ -143,10 +164,19 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         }
 
         viewModel.profileEdit.asLiveData().observe(this) { state ->
-            when(state) {
-                is UiState.Success -> { finish() }
-                is UiState.Failure -> { toast("프로필 변경에 실패\n다시 시도바람") }
-                is UiState.Empty -> { toast("프로필 변경 실패\n다시 시도바람(빈값")}
+            when (state) {
+                is UiState.Success -> {
+                    finish()
+                }
+
+                is UiState.Failure -> {
+                    toast("프로필 변경에 실패\n다시 시도바람")
+                }
+
+                is UiState.Empty -> {
+                    toast("프로필 변경 실패\n다시 시도바람(빈값")
+                }
+
                 is UiState.Loading -> {}
             }
 

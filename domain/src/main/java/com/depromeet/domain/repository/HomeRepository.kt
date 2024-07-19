@@ -26,6 +26,10 @@ interface HomeRepository {
 
     suspend fun putProfileEdit(
         profileEditRequest: ProfileEditRequest,
-        memberId: Int
-    ) : Result<ProfileEditResponse>
+        memberId: Int,
+    ): Result<ProfileEditResponse>
+
+    suspend fun getDuplicateNickname(
+        nickname: String,
+    ): Result<Unit>
 }
