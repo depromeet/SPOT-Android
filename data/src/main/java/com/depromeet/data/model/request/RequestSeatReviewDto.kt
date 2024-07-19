@@ -15,7 +15,7 @@ data class RequestSeatReviewDto(
     @SerialName("bad")
     val bad: List<String>,
     @SerialName("content")
-    val content: String,
+    val content: String?,
 )
 
 fun SeatReviewModel.toSeatReview() = RequestSeatReviewDto(
