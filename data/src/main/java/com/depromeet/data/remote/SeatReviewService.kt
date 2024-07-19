@@ -1,16 +1,19 @@
 package com.depromeet.data.remote
 
 import com.depromeet.data.model.request.RequestSeatReviewDto
-import com.depromeet.data.model.request.RequestUploadUrlDto
+import com.depromeet.data.model.request.RequestPreSignedUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
-import com.depromeet.data.model.response.seatReview.ResponseUploadUrlDto
+import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Url
 
 interface SeatReviewService {
     @GET("/api/v1/stadiums/names")
@@ -39,8 +42,14 @@ interface SeatReviewService {
     )
 
     @POST("/api/v1/members/{memberId}/reviews/images")
-    suspend fun postUploadUrl(
+    suspend fun postImagePreSignedUrl(
+        @Body body: RequestPreSignedUrlDto,
         @Path("memberId") memberId: Int,
-        @Body requestUploadUrlDto: RequestUploadUrlDto,
-    ): ResponseUploadUrlDto
+    ): ResponsePreSignedUrlDto
+
+    @PUT
+    suspend fun putProfileImage(
+        @Url preSignedUrl: String,
+        @Body image: RequestBody,
+    )
 }
