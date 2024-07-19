@@ -1,6 +1,8 @@
 package com.depromeet.spot.di
 
 import com.depromeet.data.remote.ExampleService
+import com.depromeet.data.remote.SeatReviewService
+import com.depromeet.data.remote.ViewfinderService
 import com.depromeet.data.remote.WebSvgApiService
 import dagger.Module
 import dagger.Provides
@@ -20,6 +22,16 @@ object ServiceModule {
 
     @Provides
     @Singleton
+    fun provideViewfinderService(retrofit: Retrofit): ViewfinderService =
+        retrofit.create(ViewfinderService::class.java)
+
+    @Provides
+    @Singleton
     fun provideWebSvgService(@WebSvg retrofit: Retrofit): WebSvgApiService =
         retrofit.create(WebSvgApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSeatReviewService(retrofit: Retrofit): SeatReviewService =
+        retrofit.create(SeatReviewService::class.java)
 }

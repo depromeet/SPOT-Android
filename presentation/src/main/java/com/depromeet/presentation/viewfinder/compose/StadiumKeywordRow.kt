@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
 @Composable
@@ -29,7 +30,8 @@ fun StadiumKeywordRow(
                     Color(0xFFF4F4F4)
                 } else {
                     Color(0xFFFFEAEA)
-                }, shape = RoundedCornerShape(6.dp)
+                },
+                shape = RoundedCornerShape(6.dp)
             )
             .padding(
                 vertical = 10.dp, horizontal = 16.dp
@@ -54,6 +56,6 @@ fun StadiumKeywordRow(
 @Composable
 private fun StadiumKeywordRowPreview() {
     StadiumKeywordRow(
-        keyword = Keyword("🙍‍서서 응원하는 존", 44, 0)
+        keyword = Keyword("🙍‍서서 응원하는 존", 44, 1)
     )
 }

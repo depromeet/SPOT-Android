@@ -30,6 +30,7 @@
     <!-- upload_error -->
     <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>
     <string name="upload_error_capacity_5MB">5MB에 맞게 다시 선택해주세요</string>
+    <string name="upload_error_capacity_15MB">15MB에 맞게 다시 선택해주세요</string>
     <string name="upload_error_check">확인</string>
 
     <!-- viewfinder -->
@@ -42,6 +43,18 @@
     <string name="viewfinder_lock_warning_description">아직 잠실야구장만 이용할 수 있어요!</string>
     <string name="viewfinder_lock_warning_trigger">"<u>"잠실야구장 시야보기"</u>"</string>
 
+    <!-- viewRecord -->
+    <string name="view_record_my">내 시야 기록</string>
+    <string name="view_record_whole">전체 기록</string>
+    <string name="view_record_all">전체</string>
+
+    <!-- viewDetail 관련-->
+    <string name="record_edit">수정하기</string>
+    <string name="record_delete">삭제하기</string>
+    <string name="confirm_delete_question">정말 삭제하시겠어요?</string>
+    <string name="confirm_delete_description">게시물 삭제시 복구가 불가능합니다</string>
+    <string name="confirm_delete_do">삭제하기</string>
+    <string name="confirm_delete_cancel">취소</string>
 
 
 </resources>

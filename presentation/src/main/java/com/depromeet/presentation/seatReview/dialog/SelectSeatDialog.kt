@@ -3,6 +3,11 @@ package com.depromeet.presentation.seatReview.dialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.view.ViewTreeObserver
+import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
@@ -10,13 +15,17 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
+import coil.load
 import com.depromeet.core.base.BindingBottomSheetDialog
+import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
-import com.depromeet.presentation.seatReview.adapter.SeatInfo
-import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
+import com.depromeet.presentation.seatReview.adapter.SectionListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +34,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     FragmentSelectSeatBottomSheetBinding::inflate,
 ) {
     private val viewModel: ReviewViewModel by activityViewModels()
-    private lateinit var adapter: SelectSeatAdapter
+    private lateinit var adapter: SectionListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,57 +43,88 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        adapter.submitList(getSeatMockData())
-        setupButtons()
-        initSpinner()
+        setBottomSheetHeight(view)
+        observeReviewViewModel()
+        observeStadiumSection()
+        observeSeatBLock()
+        setupSectionRecyclerView()
+        setupTransactionSelectSeat()
         setupEditTextListeners()
-        observeViewModel()
     }
 
-    private fun observeViewModel() {
-        viewModel.selectedBlock.observe(this) { updateCompleteButtonState() }
-        viewModel.selectedColumn.observe(this) { updateCompleteButtonState() }
-        viewModel.selectedNumber.observe(this) { updateCompleteButtonState() }
+    private fun observeReviewViewModel() {
+        viewModel.selectedSeatZone.asLiveData().observe(this) { adapter.notifyDataSetChanged() }
+        viewModel.selectedBlock.asLiveData().observe(this) { updateCompleteBtnState() }
+        viewModel.selectedColumn.asLiveData().observe(this) { updateCompleteBtnState() }
+        viewModel.selectedNumber.asLiveData().observe(this) { updateCompleteBtnState() }
     }
 
-    private fun initSpinner() {
-        val blockItems = listOf("블럭 1", "블럭 2", "블럭 3", "블럭 4", "블럭 5")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockItems)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerBlock.adapter = adapter
-        binding.spinnerBlock.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedBlock = blockItems[position]
-                viewModel.setSelectedBlock(selectedBlock)
+    private fun observeStadiumSection() {
+        viewModel.stadiumSectionState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    adapter.submitList(state.data.sectionList)
+                    // TODO : SVG IMAGE LOAD
+                    binding.ivSeatAgain.load(state.data.seatChart)
+                }
+
+                is UiState.Failure -> { toast("이미지 오류") }
+                is UiState.Loading -> {}
+                is UiState.Empty -> {
+                    toast("오류가 발생했습니다")
+                }
+                else -> {}
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun setupRecyclerView() {
-        adapter = SelectSeatAdapter { position ->
+    private fun observeSeatBLock() {
+        viewModel.seatBlockState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> { observeSuccessSeatBlock(state.data) }
+                is UiState.Failure -> { toast("오류가 발생했습니다") }
+                is UiState.Loading -> {}
+                is UiState.Empty -> {}
+                else -> {}
+            }
+        }
+    }
+
+    private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
+        val blockCodes = blockItems.map { it.code }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
+
+        with(binding.spinnerBlock) {
+            this.adapter = adapter
+            this.setSelection(Adapter.NO_SELECTION, false)
+            this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    val selectedBlock = blockCodes[position]
+                    viewModel.setSelectedBlock(selectedBlock)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    viewModel.setSelectedBlock("")
+                }
+            }
+        }
+    }
+
+    private fun setupSectionRecyclerView() {
+        adapter = SectionListAdapter { position, sectionId ->
+            val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
-            updateNextButtonState()
+            viewModel.setSelectedSeatZone(selectedSeatInfo.name)
+            viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
+            updateNextBtnState()
         }
-        binding.rvSelectSeat.adapter = adapter
-    }
-
-    private fun setupButtons() {
-        with(binding) {
-            tvNextBtn.setOnSingleClickListener {
-                tvCompleteBtn.visibility = View.VISIBLE
-                tvNextBtn.visibility = View.GONE
-                svSelectSeat.visibility = View.INVISIBLE
-                layoutSeatNumber.visibility = View.VISIBLE
-                tvSelectSeatLine.visibility = View.INVISIBLE
-                tvSelectNumberLine.visibility = View.VISIBLE
-            }
-            tvCompleteBtn.setOnSingleClickListener { dismiss() }
-            layoutSeatAgain.setOnSingleClickListener { ivSeatAgain.isVisible = !ivSeatAgain.isVisible }
-            layoutColumnNumberDescription.setOnSingleClickListener { layoutColumnDescription.isGone = !layoutColumnDescription.isGone }
-            tvWhatColumn.setOnSingleClickListener { layoutColumnDescription.visibility = View.VISIBLE }
-        }
+        binding.rvSelectSeatZone.adapter = adapter
     }
 
     private fun setupEditTextListeners() {
@@ -97,7 +137,30 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun updateNextButtonState() {
+    private fun setupTransactionSelectSeat() {
+        with(binding) {
+            layoutSeatAgain.setOnSingleClickListener {
+                ivSeatAgain.isVisible = !ivSeatAgain.isVisible
+            }
+            layoutColumnNumberDescription.setOnSingleClickListener {
+                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
+            }
+            tvWhatColumn.setOnSingleClickListener {
+                layoutColumnDescription.visibility = VISIBLE
+            }
+            tvNextBtn.setOnSingleClickListener {
+                svSelectSeat.visibility = INVISIBLE
+                layoutSeatNumber.visibility = VISIBLE
+                tvSelectSeatLine.visibility = INVISIBLE
+                tvSelectNumberLine.visibility = VISIBLE
+                tvCompleteBtn.visibility = VISIBLE
+                tvNextBtn.visibility = GONE
+            }
+            tvCompleteBtn.setOnSingleClickListener { dismiss() }
+        }
+    }
+
+    private fun updateNextBtnState() {
         with(binding.tvNextBtn) {
             setBackgroundResource(R.drawable.rect_gray900_fill_6)
             setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
@@ -105,13 +168,13 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun updateCompleteButtonState() {
-        val isBlockSelected = viewModel.selectedBlock.value?.isNotEmpty()
-        val isColumnFilled = viewModel.selectedColumn.value?.isNotEmpty()
-        val isNumberFilled = viewModel.selectedNumber.value?.isNotEmpty()
+    private fun updateCompleteBtnState() {
+        val isBlockSelected = viewModel.selectedBlock.value.isNotEmpty()
+        val isColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
+        val isNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvCompleteBtn) {
-            isEnabled = isBlockSelected == true && isColumnFilled == true && isNumberFilled == true
+            isEnabled = isBlockSelected && isColumnFilled && isNumberFilled
             if (isEnabled) {
                 setBackgroundResource(R.drawable.rect_gray900_fill_6)
                 setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
@@ -121,17 +184,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun getSeatMockData(): List<SeatInfo> {
-        return listOf(
-            SeatInfo("프리미엄석", "켈리존", "#FF5733"),
-            SeatInfo("테이블석", "", "#3366FF"),
-            SeatInfo("오렌지석", "응원석", "#33FF33"),
-            SeatInfo("블루석", "", "#FFFF33"),
-            SeatInfo("레드석", "", "#FF33FF"),
-            SeatInfo("네이비석", "", "#33FFFF"),
-            SeatInfo("익사이팅석", "", "#FF6633"),
-            SeatInfo("외야그린석", "", "#6633FF"),
-            SeatInfo("휠체어석", "", "#33FF99"),
-        )
+    private fun setBottomSheetHeight(view: View) {
+        view.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                view.layoutParams = view.layoutParams.apply {
+                    height = (resources.displayMetrics.heightPixels * 0.8).toInt()
+                }
+                view.requestLayout()
+            }
+        })
     }
 }

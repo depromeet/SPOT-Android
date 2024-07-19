@@ -20,7 +20,6 @@ import com.depromeet.presentation.viewfinder.sample.Keyword
 import com.depromeet.presentation.viewfinder.sample.Seat
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.sample.StadiumArea
-import com.depromeet.presentation.viewfinder.sample.keywords
 import com.depromeet.presentation.viewfinder.sample.pictures
 
 @Composable
@@ -31,7 +30,8 @@ fun StadiumHeaderContent(
     stadiumArea: StadiumArea,
     keywords: List<Keyword>,
     modifier: Modifier = Modifier,
-    onChangeIsMore: (Boolean) -> Unit
+    onChangeIsMore: (Boolean) -> Unit,
+    onClickSelectSeat: () -> Unit
 ) {
     Column(
         modifier = modifier.background(Color.White),
@@ -49,7 +49,10 @@ fun StadiumHeaderContent(
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        StadiumSeatCheckBox(seat = Seat(100, 11, false))
+        StadiumSeatCheckBox(
+            seat = Seat(100, 11, false),
+            onClick = onClickSelectSeat
+        )
 
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -62,6 +65,7 @@ fun StadiumHeaderContent(
             )
             CustomTooltip(modifier = Modifier.zIndex(1f))
         }
+        Spacer(modifier = Modifier.height(10.dp))
         Divider(
             color = Color(0xFFF4F4F4),
             thickness = 10.dp,
@@ -79,8 +83,13 @@ private fun StadiumHeaderContentPreview() {
         isMore = false,
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
-        keywords = keywords,
-        onChangeIsMore = {}
+        keywords = listOf(
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+        ),
+        onChangeIsMore = {},
+        onClickSelectSeat = {}
     )
 }
 
@@ -92,7 +101,14 @@ private fun StadiumHeaderContentIsMorePreview() {
         isMore = true,
         stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
         stadiumArea = StadiumArea("1루", 207, "오렌지석"),
-        keywords = keywords,
-        onChangeIsMore = {}
+        keywords = listOf(
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+            Keyword(message = "서서 응원하는 존", like = 5, type = 0),
+        ),
+        onChangeIsMore = {},
+        onClickSelectSeat = {}
     )
 }

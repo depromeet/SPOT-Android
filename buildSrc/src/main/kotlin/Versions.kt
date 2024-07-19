@@ -27,6 +27,7 @@ object Versions {
     const val workManagerVersion = "2.8.1"
 
     const val coilVersion = "2.4.0"
+    const val coilSvgVersion = "2.4.0"
     const val retrofitVersion = "2.9.0"
     const val kotlinSerializationConverterVersion = "1.0.0"
     const val okHttpVersion = "4.11.0"
