@@ -14,7 +14,7 @@ class StadiumSelectionViewHolder(
         with(binding) {
             tvStadiumTitle.text = stadiums.name
             ivStadium.load(stadiums.thumbnail)
-            if (stadiums.isActive) {
+            if (!stadiums.isActive) {
                 binding.cvStadiumLock.visibility = View.VISIBLE
             }
             stadiums.homeTeams.forEach { teamName ->

@@ -79,7 +79,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
         stadiumSelectionAdapter.itemStadiumClickListener =
             object : StadiumSelectionAdapter.OnItemStadiumClickListener {
                 override fun onItemStadiumClick(stadium: StadiumsResponse) {
-                    if (stadium.isActive) {
+                    if (!stadium.isActive) {
                         SpotSnackBar.make(
                             view = binding.root,
                             message = getString(R.string.viewfinder_lock_warning_description),

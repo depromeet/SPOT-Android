@@ -13,6 +13,7 @@
     <color name="color_kt">#000000</color>
     <color name="color_lotte">#0A1E40</color>
     <color name="color_hanwha">#EE6F2E</color>
+    <color name="color_nc">#071B3A</color>
 
     <!-- 야구장 팀 글씨 색상 -->
     <color name="color_lg_font">#FFFFFF</color>
@@ -24,6 +25,7 @@
     <color name="color_kt_font">#FFFFFF</color>
     <color name="color_lotte_font">#DB3B48</color>
     <color name="color_hanwha_font">#000000</color>
+    <color name="color_nc_font">#C09B75</color>
 
     <!-- 투명도 -->
     <color name="black_alpha60">#99000000</color>
