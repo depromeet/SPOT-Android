@@ -154,7 +154,7 @@ class ProfileEditViewModel @Inject constructor(
                 ProfileEditRequest(
                     url = getPresignedUrlOrNull(),
                     nickname = nickname.value,
-                    teamId = cheerTeam.value
+                    teamId = if(cheerTeam.value == 0) null else cheerTeam.value
                 ), memberId = 1
                 /** memberId ->추후에 메인화면 api 나오면 연동해서 stateflow 업데이트*/
             )
