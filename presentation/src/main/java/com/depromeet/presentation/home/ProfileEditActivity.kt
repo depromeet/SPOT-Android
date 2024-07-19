@@ -51,7 +51,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun initEvent() {
         binding.ibProfileEditClose.setOnClickListener { finish() }
-        binding.tvProfileEditComplete.setOnClickListener { finish() }
+        binding.tvProfileEditComplete.setOnClickListener {
+            viewModel.uploadProfileEdit()
+        }
         navigateToPhotoPicker()
         onClickTeam()
     }
@@ -119,12 +121,17 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 transformations(CircleCropTransformation())
             }
         }
-        viewModel.presignedUrl.asLiveData().observe(this) {state ->
-            when(state){
-                is UiState.Success -> {}
-                is UiState.Failure -> {toast("이미지 업로드를 실패하였습니다. 다시 선택해주세요.")}
-                is UiState.Empty -> {toast("실패")}
+        viewModel.presignedUrl.asLiveData().observe(this) { state ->
+            when (state) {
                 is UiState.Loading -> {}
+                is UiState.Success -> {}
+                is UiState.Failure -> {
+                    toast("이미지 업로드를 실패하였습니다. 다시 선택해주세요.")
+                }
+
+                is UiState.Empty -> {
+                    toast("실패")
+                }
             }
         }
     }
@@ -132,6 +139,16 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     private fun observeChange() {
         viewModel.changeEnabled.asLiveData().observe(this) { state ->
             binding.tvProfileEditComplete.isEnabled = state
+
+        }
+
+        viewModel.profileEdit.asLiveData().observe(this) { state ->
+            when(state) {
+                is UiState.Success -> { finish() }
+                is UiState.Failure -> { toast("프로필 변경에 실패\n다시 시도바람") }
+                is UiState.Empty -> { toast("프로필 변경 실패\n다시 시도바람(빈값")}
+                is UiState.Loading -> {}
+            }
 
         }
     }

@@ -1,10 +1,13 @@
 package com.depromeet.presentation.home.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.request.home.ProfileEditRequest
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
+import com.depromeet.domain.entity.response.home.ProfileEditResponse
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.extension.NickNameError
 import com.depromeet.presentation.extension.validateNickName
@@ -13,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,8 +30,11 @@ class ProfileEditViewModel @Inject constructor(
     private val _presignedUrl = MutableStateFlow<UiState<PresignedUrlResponse>>(UiState.Loading)
     val presignedUrl = _presignedUrl.asStateFlow()
 
-    private val _nickName = MutableStateFlow("")
-    val nickName = _nickName.asStateFlow()
+    private val _profileEdit = MutableStateFlow<UiState<ProfileEditResponse>>(UiState.Loading)
+    val profileEdit = _profileEdit.asStateFlow()
+
+    private val _nickname = MutableStateFlow("")
+    val nickname = _nickname.asStateFlow()
 
     private val _nickNameError = MutableStateFlow<NickNameError>(NickNameError.NoError)
     val nickNameError = _nickNameError.asStateFlow()
@@ -47,7 +54,7 @@ class ProfileEditViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             combine(
-                nickName,
+                nickname,
                 profileImage,
                 cheerTeam,
                 nickNameError
@@ -99,7 +106,10 @@ class ProfileEditViewModel @Inject constructor(
         val currentState = presignedUrl.value
         if (currentState is UiState.Success) {
             viewModelScope.launch {
-                homeRepository.putProfileImage(currentState.data.presignedUrl, profileByteArray)
+                homeRepository.putProfileImage(
+                    currentState.data.presignedUrl,
+                    profileByteArray
+                )
                     .onSuccess {
 
                     }
@@ -108,6 +118,38 @@ class ProfileEditViewModel @Inject constructor(
                     }
             }
         }
+    }
+
+    fun uploadProfileEdit() {
+        viewModelScope.launch {
+            homeRepository.putProfileEdit(
+                ProfileEditRequest(
+                    url = getPresignedUrlOrNull(),
+                    nickname = nickname.value,
+                    teamId = cheerTeam.value
+                ), memberId = 1
+                /** memberId ->추후에 메인화면 api 나오면 연동해서 stateflow 업데이트*/
+            )
+                .onSuccess {
+                    _profileEdit.value = UiState.Success(it)
+                    Timber.d("test success -> $it")
+                }
+                .onFailure {
+                    Timber.d("test fail -> $it")
+                }
+        }
+    }
+
+    private fun getPresignedUrlOrNull(): String? {
+        val currentState = presignedUrl.value
+        return if (currentState is UiState.Success) {
+            removeQueryParameters(currentState.data.presignedUrl)
+        } else null
+    }
+
+    private fun removeQueryParameters(url: String): String {
+        val uri = Uri.parse(url)
+        return uri.buildUpon().clearQuery().build().toString()
     }
 
 
@@ -138,7 +180,7 @@ class ProfileEditViewModel @Inject constructor(
         initialProfileImage = image
         initialCheerTeam = cheerTeam
 
-        _nickName.value = name
+        _nickname.value = name
         _profileImage.value = image
         _cheerTeam.value = cheerTeam
 
@@ -146,7 +188,7 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateNickName(nickName: String) {
-        _nickName.value = nickName
+        _nickname.value = nickName
         _nickNameError.value = nickName.validateNickName()
     }
 }
