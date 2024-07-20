@@ -72,6 +72,9 @@ class ReviewViewModel @Inject constructor(
     private val _selectedStadiumId = MutableStateFlow(0)
     val selectedStadiumId: StateFlow<Int> = _selectedStadiumId.asStateFlow()
 
+    private val _selectedSectionId = MutableStateFlow(0)
+    val selectedSectionId: StateFlow<Int> = _selectedSectionId.asStateFlow()
+
     private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState
 
@@ -88,8 +91,12 @@ class ReviewViewModel @Inject constructor(
     private val _postReviewState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
     val postReviewState: StateFlow<UiState<Unit>> = _postReviewState.asStateFlow()
 
-    fun setSelectedStadiumId(stadiumId: Int) {
+    fun updateSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
+    }
+
+    fun updateSelectedSectionId(sectionId: Int) {
+        _selectedSectionId.value = sectionId
     }
 
     fun updateSelectedDate(date: String) {
@@ -148,6 +155,7 @@ class ReviewViewModel @Inject constructor(
                     Timber.e("GET NAME FAILURE : ${t.message}", t)
                     if (t is HttpException) {
                         Timber.e("HTTP error code: ${t.code()}")
+                        Timber.e("HTTP error response: ${t.response()?.errorBody()?.string()}")
                         _stadiumNameState.value = UiState.Failure(t.code().toString())
                     } else {
                         Timber.e("General error: ${t.message ?: "Unknown error"}")
@@ -161,7 +169,7 @@ class ReviewViewModel @Inject constructor(
             _seatBlockState.value = UiState.Loading
             seatReviewRepository.getSeatBlock(stadiumId, sectionId)
                 .onSuccess { blocks ->
-                    Timber.e("GET BLOCK FAILURE : $blocks")
+                    Timber.d("GET BLOCK SUCCESS : $blocks")
                     if (blocks.isEmpty()) {
                         _seatBlockState.value = UiState.Empty
                     } else {
@@ -212,8 +220,7 @@ class ReviewViewModel @Inject constructor(
                 Timber.d("GET RANGE SUCCESS : $range")
                 if (range.isEmpty()) {
                     _seatRangeState.value = UiState.Empty
-                } else {
-                    _seatRangeState.value = UiState.Success(range)
+                    return@launch
                 }
             }
                 .onFailure { t ->

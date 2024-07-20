@@ -26,6 +26,8 @@ annotation class WebSvg
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
     private const val APPLICATION_JSON = "application/json"
+    private const val ACCESS_TOKEN =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoiMyIsImlhdCI6MTc1MjkzNTM3MCwiZXhwIjoxNzUyOTM1MzcwfQ.fRdMnNz-bDzriVDQh1vJelJ3hLw1pSrzAQLcXKonB4I"
 
     @Provides
     @Singleton
@@ -41,15 +43,30 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideHttpLoggingInterceptor(): Interceptor = HttpLoggingInterceptor().apply {
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
     @Provides
     @Singleton
+    fun provideAuthInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $ACCESS_TOKEN")
+                .build()
+            chain.proceed(request)
+        }
+    }
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
-        loggingInterceptor: Interceptor,
-    ): OkHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: Interceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .addInterceptor(authInterceptor)
+        .build()
 
     @Provides
     @Singleton
@@ -64,7 +81,7 @@ object RetrofitModule {
     @Singleton
     fun provideWebSvgRetrofit(
         client: OkHttpClient,
-        factory: Factory
+        factory: Factory,
     ): Retrofit =
         Retrofit.Builder().baseUrl(SVG_BASE_URL).client(client).addConverterFactory(factory).build()
 }
