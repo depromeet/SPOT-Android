@@ -7,4 +7,8 @@ interface SignupRemoteDataSource {
     suspend fun postSignup(
         requestPostSignupDto: RequestPostSignupDto,
     ): ResponsePostSignupDto
+
+    suspend fun getSignup(
+        accessToken: String,
+    ): ResponsePostSignupDto
 }

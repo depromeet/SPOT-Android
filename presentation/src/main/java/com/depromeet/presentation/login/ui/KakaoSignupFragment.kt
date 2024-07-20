@@ -1,5 +1,6 @@
 package com.depromeet.presentation.login.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +11,8 @@ import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentKakaoSignupBinding
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.HomeActivity
+import com.depromeet.presentation.login.viewmodel.LoginUiState
 import com.depromeet.presentation.login.viewmodel.SignUpViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -67,6 +70,21 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
                 parentFragmentManager.commit {
                     replace(R.id.fl_signup_container, NicknameInputFragment())
                 }
+            }
+        }
+
+        signUpViewModel.loginUiState.asLiveData().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                LoginUiState.LoginSuccess -> {
+                    Intent(requireContext(), HomeActivity::class.java).apply {
+                        startActivity(this)
+                        requireActivity().finish()
+                    }
+                }
+                LoginUiState.Loading -> {
+
+                }
+                LoginUiState.Initial -> { }
             }
         }
     }

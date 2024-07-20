@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingFragment
@@ -31,7 +30,7 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
     }
 
     private fun initObserver() {
-        signupViewModel.uiState.asLiveData().observe(viewLifecycleOwner) {
+        signupViewModel.teamSelectUiState.asLiveData().observe(viewLifecycleOwner) {
             when (it) {
                 SignupUiState.Failure -> { }
                 SignupUiState.Initial -> {

@@ -3,13 +3,13 @@ package com.depromeet.presentation.login.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.domain.entity.request.signup.PostSignupModel
-import com.depromeet.domain.entity.response.signup.SignupTokenModel
 import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.SignupRepository
 import com.depromeet.presentation.extension.NICKNAME_PATTERN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +18,12 @@ sealed class SignupUiState {
     object Loading : SignupUiState()
     object SignUpSuccess : SignupUiState()
     object Failure : SignupUiState()
+}
+
+sealed class LoginUiState {
+    object Initial : LoginUiState()
+    object Loading : LoginUiState()
+    object LoginSuccess : LoginUiState()
 }
 
 @HiltViewModel
@@ -34,8 +40,11 @@ class SignUpViewModel @Inject constructor(
     private val _kakaoToken = MutableStateFlow<String>("")
     val kakaoToken: StateFlow<String> = _kakaoToken
 
-    private val _uiState = MutableStateFlow<SignupUiState>(SignupUiState.Initial)
-    val uiState: StateFlow<SignupUiState> = _uiState
+    private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
+    val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
+
+    private val _teamSelectUiState = MutableStateFlow<SignupUiState>(SignupUiState.Initial)
+    val teamSelectUiState: StateFlow<SignupUiState> = _teamSelectUiState.asStateFlow()
 
     fun validateNickname(nickname: String) {
         when {
@@ -52,7 +61,19 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun updateKakaoToken(token: String) {
-        _kakaoToken.tryEmit(token)
+        // 해당 토큰으로 로그인 시도
+        // JwtToken 이 정상적으로 발급되면 SharedPreference 에 저장하고 메인화면으로 이동
+        // 그게 아니고 신규 유저면 _kakaoToken 에 저장하고 닉네임 입력 화면으로 이동
+        viewModelScope.launch {
+            _loginUiState.emit(LoginUiState.Loading)
+            signupRepository.getSignup(token)
+                .onSuccess {
+                    sharedPreference.token = it.jwtToken
+                    _loginUiState.emit(LoginUiState.LoginSuccess)
+                }.onFailure {
+                    _kakaoToken.tryEmit(token)
+                }
+        }
     }
 
     fun signUp(teamId: Int) {
@@ -65,9 +86,9 @@ class SignUpViewModel @Inject constructor(
                 )
             ).onSuccess {
                 sharedPreference.token = it.jwtToken
-                _uiState.emit(SignupUiState.SignUpSuccess)
+                _teamSelectUiState.emit(SignupUiState.SignUpSuccess)
             }.onFailure {
-                _uiState.emit(SignupUiState.Failure)
+                _teamSelectUiState.emit(SignupUiState.Failure)
             }
         }
     }

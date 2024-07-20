@@ -7,4 +7,8 @@ interface SignupRepository {
     suspend fun postSignup(
         postSignupModel: PostSignupModel
     ): Result<SignupTokenModel>
+
+    suspend fun getSignup(
+        accessToken: String
+    ): Result<SignupTokenModel>
 }

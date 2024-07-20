@@ -16,4 +16,10 @@ class SignupRepositoryImpl @Inject constructor(
             signupRemoteDataSource.postSignup(postSignupModel.toRequestPostSignupDto()).toSignupTokenModel()
         }
     }
+
+    override suspend fun getSignup(accessToken: String): Result<SignupTokenModel> {
+        return runCatching {
+            signupRemoteDataSource.getSignup(accessToken).toSignupTokenModel()
+        }
+    }
 }

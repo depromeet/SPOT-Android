@@ -14,4 +14,8 @@ class SignupRemoteDataSourceImpl @Inject constructor(
     ): ResponsePostSignupDto {
         return signupService.postSignupMember(requestPostSignupDto)
     }
+
+    override suspend fun getSignup(accessToken: String): ResponsePostSignupDto {
+        return signupService.getSignupMember(accessToken)
+    }
 }
