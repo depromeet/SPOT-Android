@@ -107,14 +107,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 is UiState.Success -> {
                     state.data.forEach { range ->
                         updateIsExistedColumnUI(range.rowInfo)
-                        updateColumnNUmberUI(range)
+                        updateColumnNumberUI(range)
                     }
                 }
-
                 is UiState.Failure -> {
                     toast("오류가 발생했습니다")
                 }
-
                 is UiState.Loading -> {}
                 is UiState.Empty -> {}
                 else -> {}
@@ -122,26 +120,30 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    // TODO : 에러 처리 다시 하기
+    // TODO : 에러 처리 다시
 
-    private fun updateColumnNUmberUI(range: SeatRangeModel) {
-        val selectedNumber = viewModel.selectedNumber.value.toIntOrNull()
+    private fun updateColumnNumberUI(range: SeatRangeModel) {
         val selectedBlock = viewModel.selectedBlock.value
         val selectedColumn = viewModel.selectedColumn.value
+        val selectedNumber = viewModel.selectedNumber.value
+
+        if (selectedColumn.isNullOrEmpty() || selectedNumber.isNullOrEmpty()) {
+            return
+        }
 
         if (range.code == selectedBlock) {
             val matchingRowInfo = range.rowInfo.find { it.number.toString() == selectedColumn }
             if (matchingRowInfo == null) {
                 updateColumnWarning("존재하지 않는 열이에요")
             } else {
-                if (selectedNumber != null && (selectedNumber < matchingRowInfo.minSeatNum || selectedNumber > matchingRowInfo.maxSeatNum)) {
+                if (selectedNumber < matchingRowInfo.minSeatNum.toString() || selectedNumber > matchingRowInfo.maxSeatNum.toString()) {
                     updateNumberWarning("존재하지 않는 번이에요")
                 } else {
                     updateBackWarnings()
                 }
             }
         } else {
-            if (selectedNumber == null || range.rowInfo.none { it.minSeatNum <= selectedNumber && it.maxSeatNum >= selectedNumber }) {
+            if (range.rowInfo.none { it.minSeatNum.toString() <= selectedNumber && it.maxSeatNum.toString() >= selectedNumber }) {
                 updateBothWarnings("존재하지 않는 열과 번이에요")
             } else {
                 updateBackWarnings()

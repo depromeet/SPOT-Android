@@ -133,7 +133,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     if (firstStadium != null) {
                         binding.tvStadiumName.text = firstStadium.name
                         viewModel.getStadiumSection(firstStadium.id)
-                        viewModel.setSelectedStadiumId(firstStadium.id)
+                        viewModel.updateSelectedStadiumId(firstStadium.id)
                     }
                     observeReviewViewModel()
                 }
@@ -274,10 +274,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 val fileExtension = MimeTypeMap.getFileExtensionFromUrl(imageUri.toString())
 
                 // presigned URL 요청
-                //TODO : MemberID 받기
+                // TODO : MemberID 받기
                 viewModel.requestPresignedUrl(fileExtension, 1)
 
-                // presigned URL 응답을 관찰 후 업로드 후 이동
+                // presigned URL 응답 관찰  -> 업로드 -> ReviewDoneActivity 이동
                 viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
                     when (state) {
                         is UiState.Success -> {
