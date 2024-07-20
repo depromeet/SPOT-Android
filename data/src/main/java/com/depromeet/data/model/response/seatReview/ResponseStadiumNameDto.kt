@@ -10,11 +10,14 @@ data class ResponseStadiumNameDto(
     val id: Int,
     @SerialName("name")
     val name: String,
+    @SerialName("isActive")
+    val isActive: Boolean,
 ) {
     fun toStadiumName(): StadiumNameModel {
         return StadiumNameModel(
             id = id,
             name = name,
+            isActive = isActive,
         )
     }
 }
