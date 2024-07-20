@@ -16,18 +16,16 @@ enum class TeamSelectViewType {
     BUTTON_ITEM
 }
 
-class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
+class TeamSelectAdapter(
+    private val itemClubClick: (TeamData) -> Unit,
+    private val noTeamClick: () -> Unit,
+    private val nextClick: () -> Unit
+) : ListAdapter<TeamData, RecyclerView.ViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.name == newItem.name },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
-    interface OnItemClubClickListener {
-        fun onItemClubClick(item: TeamData)
-    }
-
-    var itemClubClickListener: OnItemClubClickListener? = null
-
     override fun getItemViewType(position: Int): Int {
         return if (position == currentList.size) {
             TeamSelectViewType.BUTTON_ITEM.ordinal
@@ -44,7 +42,11 @@ class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
             }
             TeamSelectViewType.BUTTON_ITEM -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_select_team, parent, false)
-                ButtonViewHolder(ItemSelectTeamBinding.bind(view))
+                ButtonViewHolder(
+                    binding = ItemSelectTeamBinding.bind(view),
+                    noTeamClick = noTeamClick,
+                    nextClick = nextClick
+                )
             }
         }
     }
@@ -53,9 +55,6 @@ class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
         when (holder) {
             is ProfileEditTeamViewHolder -> {
                 holder.bind(currentList[position])
-                holder.itemView.setOnClickListener {
-                    itemClubClickListener?.onItemClubClick(currentList[position])
-                }
             }
             is ButtonViewHolder -> {
                 holder.bind()
@@ -69,15 +68,17 @@ class TeamSelectAdapter : ListAdapter<TeamData, RecyclerView.ViewHolder>(
 }
 
 class ButtonViewHolder(
-    private val binding: ItemSelectTeamBinding
+    private val binding: ItemSelectTeamBinding,
+    private val noTeamClick: () -> Unit,
+    private val nextClick: () -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind() {
         binding.tvSelectTeamNoTeam.setOnClickListener {
-
+            noTeamClick()
         }
         binding.tvSelectedTeamNextBtn.setOnClickListener {
-
+            nextClick()
         }
     }
 }
