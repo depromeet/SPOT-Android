@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.domain.entity.request.signup.PostSignupModel
 import com.depromeet.domain.entity.response.signup.SignupTokenModel
+import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.SignupRepository
 import com.depromeet.presentation.extension.NICKNAME_PATTERN
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ sealed class SignupUiState {
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signupRepository: SignupRepository
+    private val signupRepository: SignupRepository,
+    private val sharedPreference: SharedPreference
 ) : ViewModel() {
     private val _nicknameInputState = MutableStateFlow<NicknameInputState>(NicknameInputState.EMPTY)
     val nicknameInputState: StateFlow<NicknameInputState> = _nicknameInputState
@@ -62,6 +64,7 @@ class SignUpViewModel @Inject constructor(
                     teamId = teamId
                 )
             ).onSuccess {
+                sharedPreference.token = it.jwtToken
                 _uiState.emit(SignupUiState.SignUpSuccess)
             }.onFailure {
                 _uiState.emit(SignupUiState.Failure)

@@ -3,7 +3,9 @@ package com.depromeet.presentation.login.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
@@ -12,6 +14,7 @@ import com.depromeet.presentation.login.TeamSelectAdapter
 import com.depromeet.presentation.login.TeamSelectViewType
 import com.depromeet.presentation.login.selectStadiums
 import com.depromeet.presentation.login.viewmodel.SignUpViewModel
+import com.depromeet.presentation.login.viewmodel.SignupUiState
 
 class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
     R.layout.fragment_team_select, { inflater, container, attachToRoot ->
@@ -24,11 +27,24 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initView()
+        initObserver()
     }
 
-    private fun initView() {
-        initRecyclerView()
+    private fun initObserver() {
+        signupViewModel.uiState.asLiveData().observe(viewLifecycleOwner) {
+            when (it) {
+                SignupUiState.Failure -> { }
+                SignupUiState.Initial -> {
+                    initRecyclerView()
+                }
+                SignupUiState.Loading -> { }
+                SignupUiState.SignUpSuccess -> {
+                    parentFragmentManager.commit {
+                        replace(R.id.fl_signup_container, SignUpCompleteFragment())
+                    }
+                }
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -65,5 +81,4 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
 
         adapter.submitList(selectStadiums)
     }
-
 }
