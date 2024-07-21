@@ -292,14 +292,14 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 val fileExtension = getFileExtension(this, imageUri)
                 val imageData = readImageData(this, imageUri)
                 if (imageData != null) {
-                    // TODO : MemberID 수정
-                    // TODO : postSeatReview() 호출 -> 이미지 업로드 완료
+                    // TODO : viewModel.uploadImageToPreSignedUrl 사진 업로드 서버 통신
+                    // TODO : postSeatReview() 시야 등록 후기 request -> ReviewDoneActivity 이동
                     viewModel.requestPreSignedUrl(fileExtension, 1)
                     viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
                         when (state) {
                             is UiState.Success -> {
                                 val presignedUrl = state.data.presignedUrl
-                                viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
+                                // viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
                                 Intent(this, ReviewDoneActivity::class.java).apply {
                                     startActivity(
                                         this,
