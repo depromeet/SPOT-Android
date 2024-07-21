@@ -58,10 +58,16 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                 if (selectedGoodBtn.filter { it.isSelected }.size < 3 || button.isSelected) {
                     button.isSelected = !button.isSelected
                     button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
-                    val selectedButtonText =
+
+                    val selectedGoodButtonText =
                         selectedGoodBtn.filter { it.isSelected }.map { it.text.toString() }
-                    viewModel.setReviewCount(selectedButtonText.size)
-                    viewModel.setSelectedGoodReview(selectedButtonText)
+                    val selectedBadButtonText =
+                        selectedBadBtn.filter { it.isSelected }.map { it.text.toString() }
+
+                    val totalSelectedCount =
+                        selectedGoodButtonText.size + selectedBadButtonText.size
+                    viewModel.setReviewCount(totalSelectedCount)
+                    viewModel.setSelectedGoodReview(selectedGoodButtonText)
                 }
             }
         }
@@ -71,10 +77,16 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                 if (selectedBadBtn.filter { it.isSelected }.size < 3 || button.isSelected) {
                     button.isSelected = !button.isSelected
                     button.setTextColor(colorOf(if (button.isSelected) R.color.white else R.color.gray900))
-                    val selectedButtonText =
+
+                    val selectedBadButtonText =
                         selectedBadBtn.filter { it.isSelected }.map { it.text.toString() }
-                    viewModel.setReviewCount(selectedButtonText.size)
-                    viewModel.setSelectedBadReview(selectedButtonText)
+                    val selectedGoodButtonText =
+                        selectedGoodBtn.filter { it.isSelected }.map { it.text.toString() }
+
+                    val totalSelectedCount =
+                        selectedGoodButtonText.size + selectedBadButtonText.size
+                    viewModel.setReviewCount(totalSelectedCount)
+                    viewModel.setSelectedBadReview(selectedBadButtonText)
                 }
             }
         }
