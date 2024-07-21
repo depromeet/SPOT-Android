@@ -68,8 +68,12 @@ class SignUpViewModel @Inject constructor(
             _loginUiState.emit(LoginUiState.Loading)
             signupRepository.getSignup(token)
                 .onSuccess {
-                    sharedPreference.token = it.jwtToken
-                    _loginUiState.emit(LoginUiState.LoginSuccess)
+                    if (it.jwtToken.isEmpty()) {
+                        _kakaoToken.tryEmit(token)
+                    } else {
+                        sharedPreference.token = it.jwtToken
+                        _loginUiState.emit(LoginUiState.LoginSuccess)
+                    }
                 }.onFailure {
                     _kakaoToken.tryEmit(token)
                 }

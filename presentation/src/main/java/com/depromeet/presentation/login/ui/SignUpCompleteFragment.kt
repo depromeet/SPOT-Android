@@ -1,10 +1,12 @@
 package com.depromeet.presentation.login.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSignupCompleteBinding
+import com.depromeet.presentation.home.HomeActivity
 
 class SignUpCompleteFragment : BindingFragment<FragmentSignupCompleteBinding>(
     R.layout.fragment_signup_complete, { inflater, container, attachToRoot ->
@@ -19,7 +21,10 @@ class SignUpCompleteFragment : BindingFragment<FragmentSignupCompleteBinding>(
 
     private fun initClickListener() {
         binding.tvSignupCompleteBtn.setOnClickListener {
-            //Todo Main 으로 이동
+            Intent(requireContext(), HomeActivity::class.java).apply {
+                startActivity(this)
+                requireActivity().finish()
+            }
         }
     }
 }
