@@ -1,6 +1,5 @@
 package com.depromeet.presentation.seatReview
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
@@ -233,23 +232,25 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-
     // presigned URL 요청
     fun requestPreSignedUrl(fileExtension: String, memberId: Int) {
         viewModelScope.launch {
             _getPreSignedUrl.value = UiState.Loading
             seatReviewRepository.postReviewImagePresigned(fileExtension, memberId)
                 .onSuccess { response ->
-                    Timber.e("REQUEST PRESIGNED URL SUCCESS : $response")
+                    Timber.d("REQUEST PRESIGNED URL SUCCESS : $response")
                     _getPreSignedUrl.value = UiState.Success(response)
                 }
                 .onFailure { t ->
                     Timber.e("REQUEST PRESIGNED URL FAILURE : $t")
-                    if (t is HttpException) {
-                        _getPreSignedUrl.value = UiState.Failure(t.code().toString())
+                    val errorMessage = if (t is HttpException) {
+                        val errorBody = t.response()?.errorBody()?.string()
+                        "HTTP Error ${t.code()}: ${errorBody ?: "Unknown error"}"
                     } else {
-                        _getPreSignedUrl.value = UiState.Failure(t.message ?: "Unknown error")
+                        t.message ?: "Unknown error"
                     }
+
+                    _getPreSignedUrl.value = UiState.Failure(errorMessage)
                 }
         }
     }
