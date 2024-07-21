@@ -3,6 +3,7 @@ package com.depromeet.spot.di
 import com.depromeet.data.remote.ExampleService
 import com.depromeet.data.remote.HomeApiService
 import com.depromeet.data.remote.SeatReviewService
+import com.depromeet.data.remote.SignupService
 import com.depromeet.data.remote.ViewfinderService
 import com.depromeet.data.remote.WebSvgApiService
 import dagger.Module
@@ -40,4 +41,9 @@ object ServiceModule {
     @Singleton
     fun provideSeatReviewService(retrofit: Retrofit): SeatReviewService =
         retrofit.create(SeatReviewService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSignupService(retrofit: Retrofit): SignupService =
+        retrofit.create(SignupService::class.java)
 }
