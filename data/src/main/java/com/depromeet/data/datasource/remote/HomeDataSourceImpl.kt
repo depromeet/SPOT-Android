@@ -8,6 +8,7 @@ import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
+import com.depromeet.data.model.response.home.ResponseReviewDateDto
 import com.depromeet.data.remote.HomeApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -53,5 +54,9 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getDuplicateNickname(nickname: String) {
         return homeApiService.getDuplicateNickname(nickname)
+    }
+
+    override suspend fun getReviewDate(): ResponseReviewDateDto {
+        return homeApiService.getReviewDate()
     }
 }

@@ -6,6 +6,7 @@ import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
+import com.depromeet.data.model.response.home.ResponseReviewDateDto
 
 interface HomeDataSource {
     suspend fun getMySeatRecordData(
@@ -27,9 +28,11 @@ interface HomeDataSource {
     suspend fun putProfileEdit(
         requestProfileEditDto: RequestProfileEditDto,
         memberId: Int,
-    ) : ResponseProfileEditDto
+    ): ResponseProfileEditDto
 
     suspend fun getDuplicateNickname(
-        nickname : String
+        nickname: String,
     )
+
+    suspend fun getReviewDate(): ResponseReviewDateDto
 }

@@ -6,6 +6,7 @@ import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
+import com.depromeet.data.model.response.home.ResponseReviewDateDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -49,4 +50,7 @@ interface HomeApiService {
     suspend fun getDuplicateNickname(
         @Path("nickname") nickname: String,
     )
+
+    @GET("/api/v1/reviews/months")
+    suspend fun getReviewDate(): ResponseReviewDateDto
 }
