@@ -40,6 +40,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.depromeet.presentation.login.ui.SignUpCompleteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.depromeet.presentation.viewfinder.StadiumDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

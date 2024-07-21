@@ -1,10 +1,9 @@
 package com.depromeet.presentation.login.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingFragment
@@ -40,9 +39,9 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
                 }
                 SignupUiState.Loading -> { }
                 SignupUiState.SignUpSuccess -> {
-                    parentFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    parentFragmentManager.commit {
-                        replace(R.id.fl_signup_container, SignUpCompleteFragment())
+                    Intent(requireContext(), SignUpCompleteActivity::class.java).apply {
+                        startActivity(this)
+                        requireActivity().finish()
                     }
                 }
             }
