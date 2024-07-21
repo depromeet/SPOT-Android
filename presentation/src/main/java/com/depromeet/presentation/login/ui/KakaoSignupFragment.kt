@@ -68,7 +68,8 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
         signUpViewModel.kakaoToken.asLiveData().observe(viewLifecycleOwner) { token ->
             if (token.isNotEmpty()) {
                 parentFragmentManager.commit {
-                    replace(R.id.fl_signup_container, NicknameInputFragment())
+                    addToBackStack(null)
+                    add(R.id.fl_signup_container, NicknameInputFragment())
                 }
             }
         }

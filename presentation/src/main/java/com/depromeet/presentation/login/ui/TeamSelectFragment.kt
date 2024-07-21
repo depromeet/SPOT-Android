@@ -2,6 +2,7 @@ package com.depromeet.presentation.login.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
@@ -35,14 +36,22 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
                 SignupUiState.Failure -> { }
                 SignupUiState.Initial -> {
                     initRecyclerView()
+                    initClickListener()
                 }
                 SignupUiState.Loading -> { }
                 SignupUiState.SignUpSuccess -> {
+                    parentFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     parentFragmentManager.commit {
                         replace(R.id.fl_signup_container, SignUpCompleteFragment())
                     }
                 }
             }
+        }
+    }
+
+    private fun initClickListener() {
+        binding.ivBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
     }
 

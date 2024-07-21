@@ -58,6 +58,10 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
             etProfileEditNickname.text.clear()
         }
 
+        ivBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         tvNicknameNextBtn.setOnClickListener {
             //Todo : 서버 API 연동 및 닉네임 중복 검사
             //임시로 응원하는 팀 선택 화면으로 이동
