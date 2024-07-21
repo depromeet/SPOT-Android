@@ -71,16 +71,41 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun initObserver() {
+        observeDates()
+        observeReviews()
+        observeEvents()
+    }
+
+    private fun observeDates() {
         viewModel.selectedYear.asLiveData().observe(this) { selectedYear ->
             viewModel.initMonths()
         }
         viewModel.months.asLiveData().observe(this) {
             dateMonthAdapter.submitList(it)
         }
+        viewModel.date.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    setReviewsVisibility(isExist = true)
+                    val year = state.data.yearMonths.map { it.year }
+                    initYearSpinner(year)
+                    viewModel.getSeatRecords()
+                }
 
-        viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
-            if (state) moveConfirmationDialog()
+                is UiState.Empty -> {
+                    setReviewsVisibility(isExist = false)
+                }
+
+                is UiState.Loading -> {}
+                is UiState.Failure -> {
+                    setReviewsVisibility(isExist = false)
+                }
+
+            }
         }
+    }
+
+    private fun observeReviews() {
         viewModel.reviews.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -101,26 +126,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
             }
         }
+    }
 
-        viewModel.date.asLiveData().observe(this) { state ->
-            when (state) {
-                is UiState.Success -> {
-                    setReviewsVisibility(isExist = true)
-                    val year = state.data.yearMonths.map { it.year }
-                    initYearSpinner(year)
-                    viewModel.getSeatRecords()
-                }
-
-                is UiState.Empty -> {
-                    setReviewsVisibility(isExist = false)
-                }
-
-                is UiState.Loading -> {}
-                is UiState.Failure -> {
-                    setReviewsVisibility(isExist = false)
-                }
-
-            }
+    private fun observeEvents() {
+        viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
+            if (state) moveConfirmationDialog()
         }
     }
 
