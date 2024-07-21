@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatReview
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -27,7 +28,8 @@ import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
+import java.io.FileNotFoundException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -232,7 +234,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 }
             }
             for (index in selectedImageUris.size until selectedImage.size) {
-                val image = selectedImage[index]
                 val layout = selectedImageLayout[index]
                 layout.isVisible = false
                 removeButtons[index].isVisible = false
@@ -266,35 +267,60 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
+    private fun getFileExtension(context: Context, uri: Uri): String {
+        val mimeType = context.contentResolver.getType(uri)
+        return mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(it) } ?: ""
+    }
+
+    private fun getFileInputStream(context: Context, uri: Uri): InputStream? {
+        return try {
+            context.contentResolver.openInputStream(uri)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun readImageData(context: Context, uri: Uri): ByteArray? {
+        val inputStream = getFileInputStream(context, uri)
+        return inputStream?.use { it.readBytes() }
+    }
+
     private fun navigateToReviewDoneActivity() {
         binding.tvUploadBtn.setOnSingleClickListener {
             selectedImageUris.forEach { imageUriString ->
                 val imageUri = Uri.parse(imageUriString)
-                val imageFile = File(imageUri.path!!)
-                val fileExtension = MimeTypeMap.getFileExtensionFromUrl(imageUri.toString())
+                val fileExtension = getFileExtension(this, imageUri)
+                val imageData = readImageData(this, imageUri)
+                if (imageData != null) {
+                    // TODO : MemberID 수정
+                    viewModel.requestPreSignedUrl(fileExtension, 1)
+                    viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
+                        when (state) {
+                            is UiState.Success -> {
+                                val presignedUrl = state.data.presignedUrl
+                                viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
+                                Intent(this, ReviewDoneActivity::class.java).apply {
+                                    startActivity(
+                                        this,
+                                    )
+                                }
+                            }
 
-                // presigned URL 요청
-                // TODO : MemberID 받기
-                viewModel.requestPreSignedUrl(fileExtension, 1)
+                            is UiState.Failure -> {
+                                Toast.makeText(
+                                    this,
+                                    "Presigned URL 요청 실패: $state",
+                                    Toast.LENGTH_SHORT,
+                                )
+                                    .show()
+                            }
 
-                // presigned URL 응답 관찰  -> 업로드 -> ReviewDoneActivity 이동
-                viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
-                    when (state) {
-                        is UiState.Success -> {
-                            val presignedUrl = state.data.presignedUrl
-                            val imageData = imageFile.readBytes()
-                            // 이미지 업로드
-                            viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
-                            Intent(this, ReviewDoneActivity::class.java).apply { startActivity(this) }
+                            else -> {}
                         }
-
-                        is UiState.Failure -> {
-                            Toast.makeText(this, "Presigned URL 요청 실패: $state", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-
-                        else -> {}
                     }
+                } else {
+                    Toast.makeText(this, "파일을 읽을 수 없습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }

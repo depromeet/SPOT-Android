@@ -44,7 +44,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
-        // observeReviewViewModel()
         observeStadiumSection()
         observeSeatBlock()
         observeSeatRange()
@@ -115,20 +114,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
                 else -> {}
             }
-        }
-    }
-
-    private fun observeReviewViewModel() {
-        viewModel.selectedSeatZone.asLiveData().observe(this) { adapter.notifyDataSetChanged() }
-        viewModel.selectedBlock.asLiveData().observe(this) { block ->
-            updateCompleteBtnState()
-        }
-        viewModel.selectedColumn.asLiveData().observe(this) { column ->
-            updateCompleteBtnState()
-        }
-
-        viewModel.selectedNumber.asLiveData().observe(this) { number ->
-            updateCompleteBtnState()
         }
     }
 
@@ -218,7 +203,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
                             etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
                             tvNoneColumnWarning.visibility = GONE
-                            binding.tvCompleteBtn.isEnabled
+                            binding.tvCompleteBtn.isEnabled = true
                             binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray900_fill_6)
                             binding.tvCompleteBtn.setTextColor(
                                 ContextCompat.getColor(
@@ -302,6 +287,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
         binding.rvSelectSeatZone.adapter = adapter
     }
+
     private fun setupTransactionSelectSeat() {
         with(binding) {
             layoutSeatAgain.setOnSingleClickListener {
@@ -330,22 +316,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             setBackgroundResource(R.drawable.rect_gray900_fill_6)
             setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
             isEnabled = true
-        }
-    }
-
-    private fun updateCompleteBtnState() {
-        val isBlockSelected = viewModel.selectedBlock.value.isNotEmpty()
-        val isColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
-        val isNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
-
-        with(binding.tvCompleteBtn) {
-            isEnabled = isBlockSelected && isColumnFilled && isNumberFilled
-            if (isEnabled) {
-                setBackgroundResource(R.drawable.rect_gray900_fill_6)
-                setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
-            } else {
-                setBackgroundResource(R.drawable.rect_gray200_fill_6)
-            }
         }
     }
 
