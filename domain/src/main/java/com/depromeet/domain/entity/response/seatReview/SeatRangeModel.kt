@@ -8,7 +8,6 @@ data class SeatRangeModel(
     data class RowInfo(
         val id: Int,
         val number: Int,
-        val minSeatNum: Int,
-        val maxSeatNum: Int,
+        val seatNumList: List<Int>,
     )
 }

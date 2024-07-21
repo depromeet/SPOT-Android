@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatReview.dialog
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -143,7 +144,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    // TODO : 추후 코드 개선 예정 (ㅠㅠ)
+    // TODO : 추후 코드 개선 예정 (if else 이슈 ㅠㅠ)
     private fun updateColumnNumberUI(range: SeatRangeModel) {
         if (viewModel.selectedColumn.value.isEmpty() && viewModel.selectedNumber.value.isEmpty()) {
             binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
@@ -153,7 +154,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         if (range.code == viewModel.selectedBlock.value) {
             val matchingRowInfo =
                 range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
-            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
+            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty() && viewModel.selectedColumn.value.isNotEmpty()) {
                 with(binding) {
                     etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
                     etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
@@ -166,6 +167,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             android.R.color.white,
                         ),
                     )
+                    binding.tvCompleteBtn.isEnabled = false
                 }
                 if (viewModel.selectedNumber.value.isNotEmpty()) {
                     // 열과 번호 모두 오류인 경우
@@ -180,38 +182,38 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                                 android.R.color.white,
                             ),
                         )
+                        binding.tvCompleteBtn.isEnabled = false
                     }
                 }
-            } else {
-                if (matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty()) {
-                    if (viewModel.selectedNumber.value < matchingRowInfo.minSeatNum.toString() || viewModel.selectedNumber.value > matchingRowInfo.maxSeatNum.toString()) {
-                        with(binding) {
-                            etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-                            etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-                            tvNoneColumnWarning.text = "존재하지 않는 번이에요"
-                            tvNoneColumnWarning.visibility = VISIBLE
-                            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                            binding.tvCompleteBtn.setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    android.R.color.white,
-                                ),
-                            )
-                        }
-                    } else {
-                        with(binding) {
-                            etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-                            etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-                            tvNoneColumnWarning.visibility = GONE
-                            binding.tvCompleteBtn.isEnabled = true
-                            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray900_fill_6)
-                            binding.tvCompleteBtn.setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    android.R.color.white,
-                                ),
-                            )
-                        }
+            } else if (matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty() && viewModel.selectedNumber.value.isNotBlank()) {
+                if (!matchingRowInfo.seatNumList.contains(viewModel.selectedNumber.value.toInt())) {
+                    with(binding) {
+                        etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                        etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                        tvNoneColumnWarning.text = "존재하지 않는 번이에요"
+                        tvNoneColumnWarning.visibility = VISIBLE
+                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                        binding.tvCompleteBtn.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                android.R.color.white,
+                            ),
+                        )
+                        binding.tvCompleteBtn.isEnabled = false
+                    }
+                } else {
+                    with(binding) {
+                        etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                        etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                        tvNoneColumnWarning.visibility = GONE
+                        binding.tvCompleteBtn.isEnabled = true
+                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray900_fill_6)
+                        binding.tvCompleteBtn.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                android.R.color.white,
+                            ),
+                        )
                     }
                 }
             }
