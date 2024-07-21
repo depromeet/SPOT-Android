@@ -19,17 +19,14 @@ data class ResponseSeatRangeDto(
         val id: Int,
         @SerialName("number")
         val number: Int,
-        @SerialName("minSeatNum")
-        val minSeatNum: Int,
-        @SerialName("maxSeatNum")
-        val maxSeatNum: Int,
+        @SerialName("seatNumList")
+        val seatNumList: List<Int>,
     ) {
         fun toRowInfo(): SeatRangeModel.RowInfo {
             return SeatRangeModel.RowInfo(
                 id = id,
                 number = number,
-                minSeatNum = minSeatNum,
-                maxSeatNum = maxSeatNum,
+                seatNumList = seatNumList,
             )
         }
     }
