@@ -1,5 +1,6 @@
 package com.depromeet.spot.di
 
+import com.depromeet.data.intercepter.AuthInterceptor
 import com.depromeet.spot.BuildConfig.BASE_URL
 import com.depromeet.spot.BuildConfig.SVG_BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -22,6 +23,10 @@ import javax.inject.Singleton
 @Retention(AnnotationRetention.RUNTIME)
 annotation class WebSvg
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class Auth
+
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
@@ -33,6 +38,11 @@ object RetrofitModule {
         ignoreUnknownKeys = true
         prettyPrint = true
     }
+
+    @Provides
+    @Singleton
+    @Auth
+    fun provideAuthInterceptor(interceptor: AuthInterceptor): Interceptor = interceptor
 
     @Provides
     @Singleton
@@ -48,8 +58,11 @@ object RetrofitModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
+        @Auth authInterceptor: Interceptor,
         loggingInterceptor: Interceptor,
-    ): OkHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)
+        .addInterceptor(loggingInterceptor).build()
 
     @Provides
     @Singleton
