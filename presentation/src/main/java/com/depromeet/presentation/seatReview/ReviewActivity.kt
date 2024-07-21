@@ -275,7 +275,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
                 // presigned URL 요청
                 // TODO : MemberID 받기
-                viewModel.requestPresignedUrl(fileExtension, 1)
+                viewModel.requestPreSignedUrl(fileExtension, 1)
 
                 // presigned URL 응답 관찰  -> 업로드 -> ReviewDoneActivity 이동
                 viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->

@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatReview
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
@@ -164,27 +165,6 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    fun getSeatBlock(stadiumId: Int, sectionId: Int) {
-        viewModelScope.launch {
-            _seatBlockState.value = UiState.Loading
-            seatReviewRepository.getSeatBlock(stadiumId, sectionId)
-                .onSuccess { blocks ->
-                    Timber.d("GET BLOCK SUCCESS : $blocks")
-                    if (blocks.isEmpty()) {
-                        _seatBlockState.value = UiState.Empty
-                    } else {
-                        _seatBlockState.value = UiState.Success(blocks)
-                    }
-                }
-                .onFailure { t ->
-                    if (t is HttpException) {
-                        Timber.e("GET BLOCK FAILURE : $t")
-                        _seatBlockState.value = UiState.Failure(t.code().toString())
-                    }
-                }
-        }
-    }
-
     fun getStadiumSection(stadiumId: Int) {
         viewModelScope.launch {
             _stadiumSectionState.value = UiState.Loading
@@ -210,6 +190,27 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
+    fun getSeatBlock(stadiumId: Int, sectionId: Int) {
+        viewModelScope.launch {
+            _seatBlockState.value = UiState.Loading
+            seatReviewRepository.getSeatBlock(stadiumId, sectionId)
+                .onSuccess { blocks ->
+                    Timber.d("GET BLOCK SUCCESS : $blocks")
+                    if (blocks.isEmpty()) {
+                        _seatBlockState.value = UiState.Empty
+                    } else {
+                        _seatBlockState.value = UiState.Success(blocks)
+                    }
+                }
+                .onFailure { t ->
+                    if (t is HttpException) {
+                        Timber.e("GET BLOCK FAILURE : $t")
+                        _seatBlockState.value = UiState.Failure(t.code().toString())
+                    }
+                }
+        }
+    }
+
     fun getSeatRange(stadiumId: Int, sectionId: Int) {
         viewModelScope.launch {
             _seatRangeState.value = UiState.Loading
@@ -220,20 +221,21 @@ class ReviewViewModel @Inject constructor(
                 Timber.d("GET RANGE SUCCESS : $range")
                 if (range.isEmpty()) {
                     _seatRangeState.value = UiState.Empty
-                    return@launch
+                } else {
+                    _seatRangeState.value = UiState.Success(range)
+                }
+            }.onFailure { t ->
+                if (t is HttpException) {
+                    Timber.e("GET RANGE FAILURE : $t")
+                    _seatRangeState.value = UiState.Failure(t.code().toString())
                 }
             }
-                .onFailure { t ->
-                    if (t is HttpException) {
-                        Timber.e("GET RANGE FAILURE : $t")
-                        _seatRangeState.value = UiState.Failure(t.code().toString())
-                    }
-                }
         }
     }
 
+
     // presigned URL 요청
-    fun requestPresignedUrl(fileExtension: String, memberId: Int) {
+    fun requestPreSignedUrl(fileExtension: String, memberId: Int) {
         viewModelScope.launch {
             _getPreSignedUrl.value = UiState.Loading
             seatReviewRepository.postReviewImagePresigned(fileExtension, memberId)
