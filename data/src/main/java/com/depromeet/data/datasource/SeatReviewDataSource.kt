@@ -35,7 +35,6 @@ interface SeatReviewDataSource {
     )
 
     suspend fun postSeatReviewData(
-        memberId: Int,
         seatId: Int,
         requestSeatReviewDto: RequestSeatReviewDto,
     )

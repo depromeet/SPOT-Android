@@ -59,12 +59,10 @@ class SeatReviewDataSourceImpl @Inject constructor(
     }
 
     override suspend fun postSeatReviewData(
-        memberId: Int,
         seatId: Int,
         requestSeatReviewDto: RequestSeatReviewDto,
     ) {
         return seatReviewService.postSeatReview(
-            memberId,
             seatId,
             requestSeatReviewDto,
         )
