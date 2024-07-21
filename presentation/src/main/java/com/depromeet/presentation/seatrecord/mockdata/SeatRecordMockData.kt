@@ -1,37 +1,9 @@
 package com.depromeet.presentation.seatrecord.mockdata
 
-import android.os.Parcelable
-import com.depromeet.presentation.extension.extractMonth
-import com.depromeet.presentation.viewfinder.sample.Keyword
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.parcelize.Parcelize
-
-data class MonthData(
-    val month: Int = 0,
-    var isClicked: Boolean = false,
-)
-
-val monthList = listOf<MonthData>(
-    MonthData(0, true),
-    MonthData(1, false),
-    MonthData(2, false),
-    MonthData(3, false),
-    MonthData(4, false),
-    MonthData(5, false),
-    MonthData(6, false),
-    MonthData(7, false),
-    MonthData(8, false),
-    MonthData(9, false),
-    MonthData(10, false),
-    MonthData(11, false),
-    MonthData(12, false),
-)
-
 data class ProfileDetailData(
-    val nickName: String= "",
-    val profileImage: String ="",
-    val level: Int =0,
+    val nickName: String = "",
+    val profileImage: String = "",
+    val level: Int = 0,
     val titleName: String = "",
     val recordCount: Int = 0,
 )

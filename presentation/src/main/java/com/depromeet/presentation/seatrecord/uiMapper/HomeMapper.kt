@@ -13,6 +13,11 @@ data class MonthReviewData(
     val reviews: List<MySeatRecordResponse.ReviewResponse>,
 )
 
+data class MonthUiData(
+    val month: Int = 0,
+    var isClicked: Boolean = false,
+)
+
 @Parcelize
 data class ReviewUiData(
     val id: Int,

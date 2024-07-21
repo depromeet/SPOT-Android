@@ -20,10 +20,9 @@ import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
-import com.depromeet.presentation.seatrecord.mockdata.MonthData
 import com.depromeet.presentation.seatrecord.mockdata.ProfileDetailData
-import com.depromeet.presentation.seatrecord.mockdata.monthList
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
+import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -47,17 +46,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getSeatRecords()
         initView()
         initEvent()
         initObserver()
-
-
     }
 
     private fun initView() {
-        initDateSpinner()
         initMonthAdapter()
+        viewModel.getReviewDate()
     }
 
     private fun initEvent() {
@@ -75,17 +71,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun initObserver() {
-        viewModel.selectedMonth.asLiveData().observe(this) {
-            val updatedMonthList = monthList.map { monthData ->
-                monthData.copy(isClicked = monthData.month == it)
-            }
-            dateMonthAdapter.submitList(updatedMonthList)
+        viewModel.selectedYear.asLiveData().observe(this) { selectedYear ->
+            viewModel.initMonths()
+        }
+        viewModel.months.asLiveData().observe(this) {
+            dateMonthAdapter.submitList(it)
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state) moveConfirmationDialog()
         }
-        viewModel.uiState.asLiveData().observe(this) { state ->
+        viewModel.reviews.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     /*** setProfile() ->사용자 프로필 데이터 아직 서버 api명세서에 없음 */
@@ -105,6 +101,27 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
             }
         }
+
+        viewModel.date.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    setReviewsVisibility(isExist = true)
+                    val year = state.data.yearMonths.map { it.year }
+                    initYearSpinner(year)
+                    viewModel.getSeatRecords()
+                }
+
+                is UiState.Empty -> {
+                    setReviewsVisibility(isExist = false)
+                }
+
+                is UiState.Loading -> {}
+                is UiState.Failure -> {
+                    setReviewsVisibility(isExist = false)
+                }
+
+            }
+        }
     }
 
     private fun setProfile(profileData: ProfileDetailData) {
@@ -118,14 +135,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun initDateSpinner() {
-        val year = listOf("2024년", "2023년", "2022년", "2021년")
+    private fun initYearSpinner(years: List<Int>) {
+        val yearList = years.map { "${it}년" }
 
         val adapter = SpotSpinner(
             this,
             R.layout.item_custom_month_spinner_view,
             R.layout.item_custom_month_spinner_dropdown,
-            year,
+            yearList,
             true,
             R.color.gray900
         )
@@ -140,7 +157,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         id: Long,
                     ) {
                         adapter.setSelectedItemPosition(position)
-                        val selectedYear = year[position].filter { it.isDigit() }.toInt()
+                        val selectedYear = yearList[position].filter { it.isDigit() }.toInt()
                         viewModel.setSelectedYear(selectedYear)
                     }
 
@@ -160,17 +177,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         )
         dateMonthAdapter.itemMonthClickListener =
             object : DateMonthAdapter.OnItemMonthClickListener {
-                override fun onItemMonthClick(item: MonthData) {
+                override fun onItemMonthClick(item: MonthUiData) {
                     val selectedMonth = item.month
                     viewModel.setSelectedMonth(selectedMonth)
                 }
             }
     }
 
-    private fun setReviewList(reviews: List<MySeatRecordResponse.ReviewResponse>) {
-        if (reviews.isEmpty()) {
+    private fun setReviewsVisibility(isExist: Boolean) {
+        if (!isExist) {
             with(binding) {
-                "${viewModel.selectedMonth.value}년".also { tvRecordYear.text = it }
+                "${viewModel.selectedYear.value}년".also { tvRecordYear.text = it }
                 clRecordNone.visibility = View.VISIBLE
                 clRecordStickyHeader.visibility = View.GONE
                 rvRecordMonthDetail.visibility = View.GONE
@@ -181,38 +198,40 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 clRecordStickyHeader.visibility = View.VISIBLE
                 rvRecordMonthDetail.visibility = View.VISIBLE
 
-                monthRecordAdapter = MonthRecordAdapter()
-                rvRecordMonthDetail.adapter = monthRecordAdapter
                 ssvRecord.header = binding.clRecordStickyHeader
             }
-            val groupList =
-                reviews.groupBy { it.date.extractMonth(false) }.map { (month, reviews) ->
-                    MonthReviewData(month, reviews)
-                }
-            monthRecordAdapter.submitList(groupList)
-
-            monthRecordAdapter.itemRecordClickListener =
-                object : MonthRecordAdapter.OnItemRecordClickListener {
-
-                    override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
-                        Intent(
-                            this@SeatRecordActivity,
-                            SeatDetailRecordActivity::class.java
-                        ).apply {
-                            putExtra(RECORD_ID, item.id)
-                            putParcelableArrayListExtra(RECORD_LIST, viewModel.getUiReviewsData())
-                        }.let(::startActivity)
-                    }
-
-                    override fun onMoreRecordClick(reviewId: Int) {
-                        viewModel.setEditReviewId(reviewId)
-                        RecordEditDialog.newInstance(SEAT_RECORD_TAG)
-                            .apply { show(supportFragmentManager, this.tag) }
-                    }
-
-                }
-
         }
+    }
+
+    private fun setReviewList(reviews: List<MySeatRecordResponse.ReviewResponse>) {
+        val groupList =
+            reviews.groupBy { it.date.extractMonth(false) }.map { (month, reviews) ->
+                MonthReviewData(month, reviews)
+            }
+        monthRecordAdapter = MonthRecordAdapter()
+        binding.rvRecordMonthDetail.adapter = monthRecordAdapter
+        monthRecordAdapter.submitList(groupList)
+
+        monthRecordAdapter.itemRecordClickListener =
+            object : MonthRecordAdapter.OnItemRecordClickListener {
+
+                override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
+                    Intent(
+                        this@SeatRecordActivity,
+                        SeatDetailRecordActivity::class.java
+                    ).apply {
+                        putExtra(RECORD_ID, item.id)
+                        putParcelableArrayListExtra(RECORD_LIST, viewModel.getUiReviewsData())
+                    }.let(::startActivity)
+                }
+
+                override fun onMoreRecordClick(reviewId: Int) {
+                    viewModel.setEditReviewId(reviewId)
+                    RecordEditDialog.newInstance(SEAT_RECORD_TAG)
+                        .apply { show(supportFragmentManager, this.tag) }
+                }
+
+            }
     }
 
     private fun moveConfirmationDialog() {

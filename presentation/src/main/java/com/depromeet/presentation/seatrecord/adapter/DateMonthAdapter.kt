@@ -9,17 +9,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemDateMonthBinding
-import com.depromeet.presentation.seatrecord.mockdata.MonthData
+import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.util.ItemDiffCallback
 
-class DateMonthAdapter : ListAdapter<MonthData, DateMonthViewHolder>(
+class DateMonthAdapter : ListAdapter<MonthUiData, DateMonthViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
     interface OnItemMonthClickListener {
-        fun onItemMonthClick(item: MonthData)
+        fun onItemMonthClick(item: MonthUiData)
     }
 
     var itemMonthClickListener: OnItemMonthClickListener? = null
@@ -46,7 +46,7 @@ class DateMonthAdapter : ListAdapter<MonthData, DateMonthViewHolder>(
 class DateMonthViewHolder(
     private val binding: ItemDateMonthBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: MonthData) {
+    fun bind(item: MonthUiData) {
         binding.tvMonth.text = when (item.month) {
             0 -> "전체"
             else -> "${item.month}월"
