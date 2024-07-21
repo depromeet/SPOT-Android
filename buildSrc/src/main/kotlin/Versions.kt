@@ -18,7 +18,7 @@ object Versions {
     const val fragmentKtxVersion = "1.5.7"
     const val coroutinesAndroidVersion = "1.7.1"
     const val pagingVersion = "3.1.1"
-    const val securityVersion = "1.0.0"
+    const val securityVersion = "1.1.0-alpha06"
     const val lifecycleVersion = "2.6.1"
     const val ossPluginVersion = "0.10.4"
     const val ossVersion = "17.0.0"
@@ -36,6 +36,8 @@ object Versions {
     const val balloonVersion = "1.6.5"
     const val lottieVersion = "6.0.0"
     const val cloudyVersion = "0.1.2"
+    const val kakaoVersion = "2.13.0"
+
     const val gradleVersion = "8.0.2"
 
     const val junitVersion = "4.13.2"
