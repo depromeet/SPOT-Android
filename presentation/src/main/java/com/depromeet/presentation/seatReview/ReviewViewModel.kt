@@ -11,6 +11,7 @@ import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 import com.depromeet.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -256,11 +257,16 @@ class ReviewViewModel @Inject constructor(
     }
 
     // 이미지 업로드
-    fun uploadImageToPreSignedUrl(presignedUrl: String, image: ByteArray) {
+    fun uploadImageToPreSignedUrl(
+        presignedUrl: String,
+        image: ByteArray,
+    ): CompletableDeferred<Boolean> {
+        val deferred = CompletableDeferred<Boolean>()
         viewModelScope.launch {
             val result = seatReviewRepository.putImagePreSignedUrl(presignedUrl, image)
             result.onSuccess {
                 Timber.d("UPLOAD IMAGE SUCCESS")
+                deferred.complete(true)
             }.onFailure { t ->
                 Timber.e("UPLOAD IMAGE FAILURE : $t")
                 if (t is HttpException) {
@@ -268,11 +274,13 @@ class ReviewViewModel @Inject constructor(
                 } else {
                     Timber.e("General error: ${t.message ?: "Unknown error"}")
                 }
+                deferred.complete(false)
             }
         }
+        return deferred
     }
 
-    fun postSeatReview(memberId: Int) {
+    fun postSeatReview() {
         viewModelScope.launch {
             val seatReviewModel = SeatReviewModel(
                 images = _selectedImages.value,
@@ -281,9 +289,8 @@ class ReviewViewModel @Inject constructor(
                 bad = _selectedBadReview.value,
                 content = _detailReviewText.value,
             )
-
             _postReviewState.value = UiState.Loading
-            seatReviewRepository.postSeatReview(memberId, _selectedStadiumId.value, seatReviewModel)
+            seatReviewRepository.postSeatReview(_selectedStadiumId.value, seatReviewModel)
                 .onSuccess {
                     _postReviewState.value = UiState.Success(Unit)
                     Timber.d("POST REVIEW SUCCESS")
