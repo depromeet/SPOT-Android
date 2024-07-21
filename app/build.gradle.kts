@@ -22,6 +22,9 @@ android {
 
         buildConfigField("String", "BASE_URL", getApiKey("base.url"))
         buildConfigField("String", "SVG_BASE_URL", getApiKey("svg.base.url"))
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${getApiKey("kakaoApiKey")}\"")
+
+        manifestPlaceholders["kakaoApiKey"] = getApiKey("kakaoApiKey")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -100,6 +103,7 @@ dependencies {
 
     ThirdPartyDependencies.run {
         implementation(coil)
+        implementation(coilSvg)
         implementation(platform(okHttpBom))
         implementation(okHttp)
         implementation(okHttpLoggingInterceptor)
@@ -110,6 +114,7 @@ dependencies {
         implementation(progressView)
         implementation(balloon)
         implementation(lottie)
+        implementation(kakaoLogin)
         debugImplementation(flipperLeakCanary)
         debugImplementation(leakCanary)
         debugImplementation(soloader)

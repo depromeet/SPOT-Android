@@ -46,42 +46,37 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
-        setuUserPermission()
+        setupUserPermission()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUploadMethod()
+        initUploadImageMethod()
     }
 
-    private val activityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in permissionRequired && !it.value) {
-                    permissionGranted = false
+    private fun initUploadImageMethod() {
+        with(binding) {
+            layoutGallery.setOnSingleClickListener {
+                selectMultipleMediaLauncher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                )
+            }
+            layoutTakePhoto.setOnSingleClickListener {
+                if (!checkUserPermission(requireContext())) {
+                    activityResultLauncher.launch(permissionRequired)
+                } else {
+                    initCameraLauncher()
                 }
             }
-            if (!permissionGranted) {
-                Toast.makeText(context, "권한 요청이 거부되었습니다.", Toast.LENGTH_LONG).show()
-            } else {
-                navigateToCamera()
-            }
         }
-
-    private fun setuUserPermission() {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            val permissionList = permissionRequired.toMutableList()
-            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            permissionRequired = permissionList.toTypedArray()
-        }
+        setupActivityResultLaunchers()
     }
 
     private fun setupActivityResultLaunchers() {
         selectMultipleMediaLauncher =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
                 val validUris = uris.filter { uri ->
-                    handleSelectedImage(uri)
+                    initCapacityLimitDialog(uri)
                 }
                 if (validUris.isNotEmpty()) {
                     val uriList = validUris.map { it.toString() }
@@ -96,7 +91,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
                     result.data?.extras?.get("data")?.let { bitmap ->
                         (bitmap as? Bitmap)?.let {
                             val uri = it.toUri(requireContext(), IMAGE_TITLE)
-                            if (handleSelectedImage(uri)) {
+                            if (initCapacityLimitDialog(uri)) {
                                 setFragmentResult(
                                     REQUEST_KEY,
                                     bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
@@ -109,8 +104,35 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
             }
     }
 
+    private fun setupUserPermission() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            val permissionList = permissionRequired.toMutableList()
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            permissionRequired = permissionList.toTypedArray()
+        }
+    }
+
+    private fun checkUserPermission(context: Context) = permissionRequired.all {
+        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in permissionRequired && !it.value) {
+                    permissionGranted = false
+                }
+            }
+            if (!permissionGranted) {
+                Toast.makeText(context, "권한 요청이 거부되었습니다.", Toast.LENGTH_LONG).show()
+            } else {
+                initCameraLauncher()
+            }
+        }
+
     @SuppressLint("Recycle")
-    private fun handleSelectedImage(uri: Uri): Boolean {
+    private fun initCapacityLimitDialog(uri: Uri): Boolean {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         val sizeBytes = inputStream?.available() ?: 0
         val sizeMB = sizeBytes / (1024f * 1024f)
@@ -127,27 +149,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         }
     }
 
-    private fun setupUploadMethod() {
-        with(binding) {
-            layoutGallery.setOnSingleClickListener {
-                selectMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
-            layoutTakePhoto.setOnSingleClickListener {
-                if (!hasPermissions(requireContext())) {
-                    activityResultLauncher.launch(permissionRequired)
-                } else {
-                    navigateToCamera()
-                }
-            }
-        }
-        setupActivityResultLaunchers()
-    }
-
-    private fun hasPermissions(context: Context) = permissionRequired.all {
-        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun navigateToCamera() {
+    private fun initCameraLauncher() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         takePhotoLauncher.launch(takePictureIntent)
     }

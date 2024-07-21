@@ -6,7 +6,7 @@ import java.util.Locale
 
 object CalendarUtil {
 
-    private const val DATE_FORMAT = "yyyy.MM.dd"
+    private const val DATE_FORMAT = "yy.MM.dd"
 
     fun formatCalendarDate(calendar: Calendar): String {
         return SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(calendar.time)

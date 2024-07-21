@@ -52,6 +52,7 @@ object KaptDependencies {
 
 object ThirdPartyDependencies {
     const val coil = "io.coil-kt:coil:${Versions.coilVersion}"
+    const val coilSvg = "io.coil-kt:coil-svg:${Versions.coilSvgVersion}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofitVersion}"
     const val retrofitJsonConverter =
         "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.kotlinSerializationConverterVersion}"
@@ -74,6 +75,7 @@ object ThirdPartyDependencies {
     const val balloon = "com.github.skydoves:balloon:${Versions.balloonVersion}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
     const val lottieCompose = "com.airbnb.android:lottie-compose:${Versions.lottieVersion}"
+    const val kakaoLogin = "com.kakao.sdk:v2-user:${Versions.kakaoVersion}"
 }
 
 object ClassPathPlugins {

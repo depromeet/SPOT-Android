@@ -79,6 +79,7 @@ dependencies {
 
     ThirdPartyDependencies.run {
         implementation(coil)
+        implementation(coilSvg)
         implementation(platform(okHttpBom))
         implementation(okHttp)
         implementation(okHttpLoggingInterceptor)
@@ -89,6 +90,7 @@ dependencies {
         implementation(progressView)
         implementation(balloon)
         implementation(lottie)
+        implementation(kakaoLogin)
         debugImplementation(flipperLeakCanary)
         debugImplementation(leakCanary)
         debugImplementation(soloader)
