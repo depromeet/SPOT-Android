@@ -10,7 +10,6 @@ import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -294,6 +293,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 val imageData = readImageData(this, imageUri)
                 if (imageData != null) {
                     // TODO : MemberID 수정
+                    // TODO : postSeatReview() 호출 -> 이미지 업로드 완료
                     viewModel.requestPreSignedUrl(fileExtension, 1)
                     viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
                         when (state) {
@@ -308,19 +308,14 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                             }
 
                             is UiState.Failure -> {
-                                Toast.makeText(
-                                    this,
-                                    "Presigned URL 요청 실패: $state",
-                                    Toast.LENGTH_SHORT,
-                                )
-                                    .show()
+                                toast("Presigned URL 요청 실패: $state")
                             }
 
                             else -> {}
                         }
                     }
                 } else {
-                    Toast.makeText(this, "파일을 읽을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    toast("파일을 읽을 수 없습니다.")
                 }
             }
         }
