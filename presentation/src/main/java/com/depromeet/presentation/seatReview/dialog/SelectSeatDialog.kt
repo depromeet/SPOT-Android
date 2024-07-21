@@ -7,7 +7,6 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewTreeObserver
-import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
@@ -45,20 +44,13 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetHeight(view)
-        observeReviewViewModel()
+        // observeReviewViewModel()
         observeStadiumSection()
-        observeSeatBLock()
+        observeSeatBlock()
         observeSeatRange()
         setupSectionRecyclerView()
         setupTransactionSelectSeat()
         setupEditTextListeners()
-    }
-
-    private fun observeReviewViewModel() {
-        viewModel.selectedSeatZone.asLiveData().observe(this) { adapter.notifyDataSetChanged() }
-        viewModel.selectedBlock.asLiveData().observe(this) { updateCompleteBtnState() }
-        viewModel.selectedColumn.asLiveData().observe(this) { updateCompleteBtnState() }
-        viewModel.selectedNumber.asLiveData().observe(this) { updateCompleteBtnState() }
     }
 
     private fun observeStadiumSection() {
@@ -83,7 +75,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun observeSeatBLock() {
+    private fun observeSeatBlock() {
         viewModel.seatBlockState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -110,43 +102,133 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         updateColumnNumberUI(range)
                     }
                 }
+
                 is UiState.Failure -> {
                     toast("오류가 발생했습니다")
                 }
-                is UiState.Loading -> {}
-                is UiState.Empty -> {}
+
+                is UiState.Loading -> {
+                }
+
+                is UiState.Empty -> {
+                }
+
                 else -> {}
             }
         }
     }
 
-    // TODO : 에러 처리 다시
-
-    private fun updateColumnNumberUI(range: SeatRangeModel) {
-        val selectedBlock = viewModel.selectedBlock.value
-        val selectedColumn = viewModel.selectedColumn.value
-        val selectedNumber = viewModel.selectedNumber.value
-
-        if (selectedColumn.isNullOrEmpty() || selectedNumber.isNullOrEmpty()) {
-            return
+    private fun observeReviewViewModel() {
+        viewModel.selectedSeatZone.asLiveData().observe(this) { adapter.notifyDataSetChanged() }
+        viewModel.selectedBlock.asLiveData().observe(this) { block ->
+            updateCompleteBtnState()
+        }
+        viewModel.selectedColumn.asLiveData().observe(this) { column ->
+            updateCompleteBtnState()
         }
 
-        if (range.code == selectedBlock) {
-            val matchingRowInfo = range.rowInfo.find { it.number.toString() == selectedColumn }
-            if (matchingRowInfo == null) {
-                updateColumnWarning("존재하지 않는 열이에요")
-            } else {
-                if (selectedNumber < matchingRowInfo.minSeatNum.toString() || selectedNumber > matchingRowInfo.maxSeatNum.toString()) {
-                    updateNumberWarning("존재하지 않는 번이에요")
-                } else {
-                    updateBackWarnings()
+        viewModel.selectedNumber.asLiveData().observe(this) { number ->
+            updateCompleteBtnState()
+        }
+    }
+
+    private fun setupEditTextListeners() {
+        binding.etColumn.addTextChangedListener { text: Editable? ->
+            val newColumn = text.toString()
+            viewModel.setSelectedColumn(newColumn)
+            viewModel.seatRangeState.value?.let { state ->
+                if (state is UiState.Success) {
+                    state.data.forEach { range ->
+                        updateColumnNumberUI(range)
+                    }
                 }
             }
-        } else {
-            if (range.rowInfo.none { it.minSeatNum.toString() <= selectedNumber && it.maxSeatNum.toString() >= selectedNumber }) {
-                updateBothWarnings("존재하지 않는 열과 번이에요")
+        }
+
+        binding.etNumber.addTextChangedListener { text: Editable? ->
+            val newNumber = text.toString()
+            viewModel.setSelectedNumber(newNumber)
+            viewModel.seatRangeState.value?.let { state ->
+                if (state is UiState.Success) {
+                    state.data.forEach { range ->
+                        updateColumnNumberUI(range)
+                    }
+                }
+            }
+        }
+    }
+
+    // TODO : 추후 코드 개선 예정 (ㅠㅠ)
+    private fun updateColumnNumberUI(range: SeatRangeModel) {
+        if (viewModel.selectedColumn.value.isEmpty() && viewModel.selectedNumber.value.isEmpty()) {
+            binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+            binding.etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+            binding.tvNoneColumnWarning.visibility = GONE
+        }
+        if (range.code == viewModel.selectedBlock.value) {
+            val matchingRowInfo =
+                range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
+            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
+                with(binding) {
+                    etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                    tvNoneColumnWarning.text = "존재하지 않는 열이에요"
+                    tvNoneColumnWarning.visibility = VISIBLE
+                    binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    binding.tvCompleteBtn.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            android.R.color.white,
+                        ),
+                    )
+                }
+                if (viewModel.selectedNumber.value.isNotEmpty()) {
+                    // 열과 번호 모두 오류인 경우
+                    with(binding) {
+                        etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                        etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                        tvNoneColumnWarning.text = "존재하지 않는 열과 번이에요"
+                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                        binding.tvCompleteBtn.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                android.R.color.white,
+                            ),
+                        )
+                    }
+                }
             } else {
-                updateBackWarnings()
+                if (matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty()) {
+                    if (viewModel.selectedNumber.value < matchingRowInfo.minSeatNum.toString() || viewModel.selectedNumber.value > matchingRowInfo.maxSeatNum.toString()) {
+                        with(binding) {
+                            etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                            etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                            tvNoneColumnWarning.text = "존재하지 않는 번이에요"
+                            tvNoneColumnWarning.visibility = VISIBLE
+                            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                            binding.tvCompleteBtn.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    android.R.color.white,
+                                ),
+                            )
+                        }
+                    } else {
+                        with(binding) {
+                            etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                            etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                            tvNoneColumnWarning.visibility = GONE
+                            binding.tvCompleteBtn.isEnabled
+                            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray900_fill_6)
+                            binding.tvCompleteBtn.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    android.R.color.white,
+                                ),
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -170,14 +252,19 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
-        val blockCodes = blockItems.map { it.code }
+        val blockCodes = mutableListOf<String>().apply {
+            add("")
+            addAll(blockItems.map { it.code })
+        }
+
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
 
         with(binding.spinnerBlock) {
             this.adapter = adapter
-            this.setSelection(Adapter.NO_SELECTION, false)
+            this.setSelection(0, false)
+
             this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -185,8 +272,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     position: Int,
                     id: Long,
                 ) {
-                    val selectedBlock = blockCodes[position]
-                    viewModel.setSelectedBlock(selectedBlock)
+                    if (position == 0) {
+                        viewModel.setSelectedBlock("")
+                    } else {
+                        val selectedBlock = blockCodes[position]
+                        viewModel.setSelectedBlock(selectedBlock)
+                        viewModel.getSeatRange(
+                            viewModel.selectedStadiumId.value,
+                            viewModel.selectedSectionId.value,
+                        )
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -202,22 +297,11 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             adapter.setItemSelected(position)
             viewModel.setSelectedSeatZone(selectedSeatInfo.name)
             viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
-            viewModel.getSeatRange(viewModel.selectedStadiumId.value, sectionId)
+            viewModel.updateSelectedSectionId(sectionId)
             updateNextBtnState()
         }
         binding.rvSelectSeatZone.adapter = adapter
     }
-
-    private fun setupEditTextListeners() {
-        binding.etColumn.addTextChangedListener { text: Editable? ->
-            viewModel.setSelectedColumn(text.toString())
-        }
-
-        binding.etNumber.addTextChangedListener { text: Editable? ->
-            viewModel.setSelectedNumber(text.toString())
-        }
-    }
-
     private fun setupTransactionSelectSeat() {
         with(binding) {
             layoutSeatAgain.setOnSingleClickListener {
@@ -276,38 +360,5 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 view.requestLayout()
             }
         })
-    }
-
-    private fun updateColumnWarning(message: String) {
-        with(binding) {
-            etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-            tvNoneColumnWarning.text = message
-            tvNoneColumnWarning.visibility = VISIBLE
-        }
-    }
-
-    private fun updateNumberWarning(message: String) {
-        with(binding) {
-            etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-            tvNoneColumnWarning.text = message
-            tvNoneColumnWarning.visibility = VISIBLE
-        }
-    }
-
-    private fun updateBothWarnings(message: String) {
-        with(binding) {
-            etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-            etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-            tvNoneColumnWarning.text = message
-            tvNoneColumnWarning.visibility = VISIBLE
-        }
-    }
-
-    private fun updateBackWarnings() {
-        with(binding) {
-            etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-            etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-            tvNoneColumnWarning.visibility = GONE
-        }
     }
 }
