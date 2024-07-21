@@ -6,6 +6,7 @@ import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
+import com.depromeet.domain.entity.response.home.ReviewDateResponse
 
 interface HomeRepository {
     suspend fun getMySeatRecord(
@@ -32,4 +33,6 @@ interface HomeRepository {
     suspend fun getDuplicateNickname(
         nickname: String,
     ): Result<Unit>
+
+    suspend fun getReviewDate(): Result<ReviewDateResponse>
 }
