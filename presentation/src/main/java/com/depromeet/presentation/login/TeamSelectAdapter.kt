@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemBaseballTeamBinding
 import com.depromeet.presentation.databinding.ItemSelectTeamBinding
-import com.depromeet.presentation.home.adapter.ProfileEditTeamViewHolder
 import com.depromeet.presentation.home.mockdata.TeamData
 import com.depromeet.presentation.util.ItemDiffCallback
 
@@ -80,5 +80,28 @@ class ButtonViewHolder(
         binding.tvSelectedTeamNextBtn.setOnClickListener {
             nextClick()
         }
+    }
+}
+
+class ProfileEditTeamViewHolder(
+    private val binding: ItemBaseballTeamBinding,
+) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: TeamData) {
+        with(binding) {
+            ivTeamImage.load(item.image) {
+                placeholder(R.drawable.ic_lg_team)
+                error(R.drawable.ic_x_close)
+            }
+            tvTeamName.text = item.name
+            updateSelectState(item.isClicked)
+        }
+    }
+
+    private fun updateSelectState(isSelected: Boolean) {
+        val backgroundRes = when (isSelected) {
+            true -> R.drawable.rect_gray50_fill_gray900_line_10
+            false -> R.drawable.rect_gray100_line_10
+        }
+        binding.root.setBackgroundResource(backgroundRes)
     }
 }
