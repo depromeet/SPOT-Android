@@ -18,17 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
-import com.depromeet.presentation.viewfinder.sample.Seat
-import com.depromeet.presentation.viewfinder.sample.Stadium
-import com.depromeet.presentation.viewfinder.sample.StadiumArea
-import com.depromeet.presentation.viewfinder.sample.pictures
 
 @Composable
 fun StadiumHeaderContent(
     context: Context,
-//    stadium: Stadium,
-//    stadiumArea: StadiumArea,
-    header: List<BlockReviewResponse.HeaderResponse>,
+    topReviewImages: List<BlockReviewResponse.TopReviewImagesResponse>,
     stadiumTitle: String,
     seatContent: String,
     isMore: Boolean,
@@ -44,7 +38,7 @@ fun StadiumHeaderContent(
     ) {
         StadiumPictureViewPager(
             context = context,
-            pictures = header,
+            topReviewImages = topReviewImages,
 //            pictures = pictures,
             modifier = Modifier.fillMaxWidth()
         )
@@ -90,14 +84,20 @@ private fun StadiumHeaderContentPreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = false,
-        header = listOf(
-            BlockReviewResponse.HeaderResponse(
+        topReviewImages = listOf(
+            BlockReviewResponse.TopReviewImagesResponse(
                 url = "",
-                content = "207블럭 3열 12번"
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
             ),
-            BlockReviewResponse.HeaderResponse(
+            BlockReviewResponse.TopReviewImagesResponse(
                 url = "",
-                content = "207블럭 3열 12번"
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
             ),
         ),
         seat = "",
@@ -121,21 +121,26 @@ private fun StadiumHeaderContentIsMorePreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = true,
-        header = listOf(
-            BlockReviewResponse.HeaderResponse(
+        topReviewImages = listOf(
+            BlockReviewResponse.TopReviewImagesResponse(
                 url = "",
-                content = "207블럭 3열 12번"
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
+
             ),
-            BlockReviewResponse.HeaderResponse(
+            BlockReviewResponse.TopReviewImagesResponse(
                 url = "",
-                content = "207블럭 3열 12번"
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
             ),
         ),
         seat = "1열 12번",
         stadiumTitle = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭",
-//        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-//        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = listOf(
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),

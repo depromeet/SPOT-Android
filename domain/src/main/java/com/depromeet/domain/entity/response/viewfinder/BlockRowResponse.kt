@@ -7,9 +7,8 @@ data class BlockRowResponse(
 ) {
     data class RowInfoResponse(
         val id: Int,
-        val number: Int,
-        val minSeatNum: Int,
-        val maxSeatNum: Int
+        val number: Int = 0,
+        val seatNumList: List<Int> = emptyList()
     )
 
     fun checkColumnRange(column: Int): Boolean {
@@ -24,7 +23,7 @@ data class BlockRowResponse(
 
     fun checkNumberRange(column: Int, number: Int): Boolean {
         rowInfo.filter { it.number == column }.getOrNull(0)?.let {
-            if (number in it.minSeatNum..it.maxSeatNum) {
+            if (number in it.seatNumList) {
                 return true
             }
         } ?: return false

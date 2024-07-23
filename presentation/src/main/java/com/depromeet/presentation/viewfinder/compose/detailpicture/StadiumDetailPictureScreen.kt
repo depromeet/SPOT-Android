@@ -156,8 +156,7 @@ fun StadiumDetailPictureScreen(
                             ) {
                                 AsyncImage(
                                     model = ImageRequest.Builder(context)
-//                                        .data(reviews[page].profile)
-                                        .data("https://picsum.photos/200/300")
+                                        .data(reviews[page].member.profileImage)
                                         .build(),
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
@@ -168,22 +167,18 @@ fun StadiumDetailPictureScreen(
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
-//                                    text = reviews[page].user,
-                                    text = "엘지의 왕자",
+                                    text = reviews[page].member.nickname,
                                     fontSize = 12.sp,
                                     color = Color(0xFF9F9F9F)
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 LevelCard(
-//                                    level = reviews[page].level,
-                                    level = 1
+                                    level = reviews[page].member.level,
                                 )
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-//                                text = reviews[page].seat,
-//                                text = "207블럭 1열 12번",
-                                text = reviews[page].seatContent,
+                                text = reviews[page].formattedNumber(),
                                 fontSize = 16.sp,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold

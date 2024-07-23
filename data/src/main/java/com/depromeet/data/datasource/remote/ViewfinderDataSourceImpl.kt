@@ -30,8 +30,10 @@ class ViewfinderDataSourceImpl @Inject constructor(
             blockCode,
             queryParam.rowNumber,
             queryParam.seatNumber,
-            queryParam.offset,
-            queryParam.limit
+            queryParam.year,
+            queryParam.month,
+            queryParam.page,
+            queryParam.size
         )
     }
 

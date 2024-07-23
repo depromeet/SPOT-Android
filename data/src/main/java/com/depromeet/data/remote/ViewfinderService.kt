@@ -23,8 +23,10 @@ interface ViewfinderService {
         @Path("blockCode") blockCode: String,
         @Query("rowNumber") rowNumber: Int?,
         @Query("seatNumber") seatNumber: Int?,
-        @Query("offset") offset: Int?,
-        @Query("limit") limit: Int?,
+        @Query("year") year: Int?,
+        @Query("month") month: Int?,
+        @Query("page") page: Int?,
+        @Query("size") size: Int?,
     ): BlockReviewResponseDto
 
     @GET("/api/v1/stadiums/{stadiumId}/blocks/{blockCode}/rows")

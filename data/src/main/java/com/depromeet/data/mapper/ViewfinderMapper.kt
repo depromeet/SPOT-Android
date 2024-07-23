@@ -39,17 +39,17 @@ fun StadiumResponseDto.toStadiumResponse() = StadiumResponse(
     stadiumUrl = seatChartWithLabel
 )
 
+
 fun BlockReviewResponseDto.toBlockReviewResponse() = BlockReviewResponse(
-    stadiumTitle = stadiumTitle,
-    seatContent = seatContent,
-    header = header.map { it.toHeaderResponse() },
     keywords = keywords.map { it.toKeywordResponse() },
     reviews = reviews.map { it.toReviewResponse() },
-    totalCount = totalCount,
-    filteredCount = filteredCount,
-    offset = offset,
-    limit = limit,
-    hasMore = hasMore,
+    topReviewImages = topReviewImages.map { it.toTopReviewImagesResponse() },
+    totalElements = totalElements,
+    totalPages = totalPages,
+    number = number,
+    size = size,
+    first = first,
+    last = last,
     filter = filter.toReviewFilterResponse()
 )
 
@@ -60,44 +60,34 @@ fun BlockReviewResponseDto.KeywordResponseDto.toKeywordResponse() =
         isPositive = isPositive
     )
 
-fun BlockReviewResponseDto.HeaderResponseDto.toHeaderResponse() = BlockReviewResponse.HeaderResponse(
-    url = url,
-    content = content
-)
-
-fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =
-    BlockReviewResponse.ReviewResponse(
-        id = id,
-        userId = userId,
-        blockId = blockId,
-        seatId = seatId,
-        rowId = rowId,
-        seatNumber = seatNumber,
-        date = date,
-        seatContent = seatContent,
-        content = content,
-        createdAt = createdAt,
-        updatedAt = updatedAt,
-        images = images.map { it.toReviewImageResponse() },
-        keywords = keywords.map { it.toReviewKeywordResponse() }
+fun BlockReviewResponseDto.TopReviewImagesResponseDto.toTopReviewImagesResponse() =
+    BlockReviewResponse.TopReviewImagesResponse(
+        url = url,
+        reviewId = reviewId,
+        blockCode = blockCode,
+        rowNumber = rowNumber,
+        seatNumber = seatNumber
     )
 
 fun BlockReviewResponseDto.ReviewFilterResponseDto.toReviewFilterResponse() =
     BlockReviewResponse.ReviewFilterResponse(
-        rowId = rowId,
-        seatNumber = seatNumber
+        rowNumber = rowNumber, seatNumber = seatNumber, year = year, month = month
     )
 
-fun BlockReviewResponseDto.ReviewResponseDto.ReviewImageResponseDto.toReviewImageResponse() =
-    BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =
+    BlockReviewResponse.ReviewResponse(
         id = id,
-        url = url
-    )
-
-fun BlockReviewResponseDto.ReviewResponseDto.ReviewKeywordResponseDto.toReviewKeywordResponse() =
-    BlockReviewResponse.KeywordResponse(
+        member = member.toReviewMemberResponse(),
+        stadium = stadium.toReviewStadiumResponse(),
+        section = section.toReviewSectionResponse(),
+        block = block.toReviewBlockResponse(),
+        row = row.toReviewRowResponse(),
+        seat = seat.toReviewSeatResponse(),
+        seatNumber = seatNumber,
+        dateTime = dateTime,
         content = content,
-        isPositive = isPositive,
+        images = images.map { it.toReviewImageResponse() },
+        keywords = keywords.map { it.toReviewKeywordResponse() }
     )
 
 fun BlockRowResponseDto.toBlockRowResponse() = BlockRowResponse(
@@ -106,16 +96,11 @@ fun BlockRowResponseDto.toBlockRowResponse() = BlockRowResponse(
     rowInfo = rowInfo.map { it.toRowInfoResponse() }
 )
 
-fun BlockRowResponseDto.RowInfoResponseDto.toRowInfoResponse() = BlockRowResponse.RowInfoResponse(
-    id = id,
-    number = number,
-    minSeatNum = minSeatNum,
-    maxSeatNum = maxSeatNum
-)
-
 fun BlockReviewRequestQuery.toBlockReviewRequestQueryDto() = BlockReviewRequestQueryDto(
     rowNumber = rowNumber,
     seatNumber = seatNumber,
-    offset = offset,
-    limit = limit
+    year = year,
+    month = month,
+    page = page,
+    size = size
 )

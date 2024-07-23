@@ -62,11 +62,9 @@ fun StadiumDetailScreen(
                             context = context,
                             isMore = isMore,
                             seat = seat,
-                            header = state.data.header,
-                            stadiumTitle = state.data.stadiumTitle,
-                            seatContent = state.data.seatContent,
-//                            stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-//                            stadiumArea = StadiumArea("1루", 207, "오렌지석"),
+                            topReviewImages = state.data.topReviewImages,
+                            stadiumTitle = state.data.formattedStadiumTitle(),
+                            seatContent = state.data.formattedStadiumBlock(),
                             keywords = state.data.keywords.map { it.toKeyword() },
                             onChangeIsMore = { isMore = it },
                             onClickSelectSeat = onClickSelectSeat
@@ -76,7 +74,7 @@ fun StadiumDetailScreen(
 
                     stickyHeader {
                         StadiumViewReviewHeader(
-                            reviewCount = state.data.totalCount,
+                            reviewCount = state.data.totalElements,
                             onClickMonthly = onClickFilterMonthly
                         )
                     }

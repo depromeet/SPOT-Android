@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun StadiumViewReviewHeader(
-    reviewCount: Int,
+    reviewCount: Long,
     modifier: Modifier = Modifier,
     onClickMonthly: () -> Unit
 ) {

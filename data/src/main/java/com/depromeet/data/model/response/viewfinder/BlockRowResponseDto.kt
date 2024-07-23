@@ -1,5 +1,6 @@
 package com.depromeet.data.model.response.viewfinder
 
+import com.depromeet.domain.entity.response.viewfinder.BlockRowResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,9 +19,13 @@ data class BlockRowResponseDto(
         val id: Int,
         @SerialName("number")
         val number: Int,
-        @SerialName("minSeatNum")
-        val minSeatNum: Int,
-        @SerialName("maxSeatNum")
-        val maxSeatNum: Int,
-    )
+        @SerialName("seatNumList")
+        val seatNumList: List<Int>
+    ) {
+        fun toRowInfoResponse() = BlockRowResponse.RowInfoResponse(
+            id  = id,
+            number = number,
+            seatNumList = seatNumList
+        )
+    }
 }
