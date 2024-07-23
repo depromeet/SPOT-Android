@@ -9,6 +9,7 @@ import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
+import com.depromeet.data.model.response.home.ResponseRecentReviewDto
 import com.depromeet.data.model.response.home.ResponseReviewDateDto
 import com.depromeet.data.remote.HomeApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -63,5 +64,9 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getProfile(): ResponseProfileDto {
         return homeApiService.getProfileInfo()
+    }
+
+    override suspend fun getRecentReview(): ResponseRecentReviewDto {
+        return homeApiService.getRecentReview()
     }
 }

@@ -7,6 +7,7 @@ import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
+import com.depromeet.data.model.response.home.ResponseRecentReviewDto
 import com.depromeet.data.model.response.home.ResponseReviewDateDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -57,4 +58,7 @@ interface HomeApiService {
 
     @GET("/api/v1/members/memberInfo")
     suspend fun getProfileInfo(): ResponseProfileDto
+
+    @GET("/api/v1/reviews/recentReview")
+    suspend fun getRecentReview(): ResponseRecentReviewDto
 }

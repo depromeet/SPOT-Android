@@ -7,6 +7,7 @@ import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
 import com.depromeet.domain.entity.response.home.ProfileResponse
+import com.depromeet.domain.entity.response.home.RecentReviewResponse
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 
 interface HomeRepository {
@@ -37,5 +38,7 @@ interface HomeRepository {
 
     suspend fun getReviewDate(): Result<ReviewDateResponse>
 
-    suspend fun getProfile() : Result<ProfileResponse>
+    suspend fun getProfile(): Result<ProfileResponse>
+
+    suspend fun getRecentReview(): Result<RecentReviewResponse>
 }

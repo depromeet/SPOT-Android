@@ -8,6 +8,7 @@ import com.depromeet.data.model.request.home.RequestProfileEditDto.Companion.toP
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto.Companion.toMySeatRecordResponse
 import com.depromeet.data.model.response.home.ResponseProfileDto.Companion.toProfileResponse
 import com.depromeet.data.model.response.home.ResponseProfileEditDto.Companion.toProfileEditResponse
+import com.depromeet.data.model.response.home.ResponseRecentReviewDto.Companion.toRecentReviewResponse
 import com.depromeet.data.model.response.home.ResponseReviewDateDto.Companion.toReviewDateResponse
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.request.home.ProfileEditRequest
@@ -16,6 +17,7 @@ import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
 import com.depromeet.domain.entity.response.home.ProfileResponse
+import com.depromeet.domain.entity.response.home.RecentReviewResponse
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.domain.repository.HomeRepository
 import javax.inject.Inject
@@ -75,8 +77,14 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getProfile(): Result<ProfileResponse> {
-        return kotlin.runCatching {
+        return runCatching {
             homeDataSource.getProfile().toProfileResponse()
+        }
+    }
+
+    override suspend fun getRecentReview(): Result<RecentReviewResponse> {
+        return runCatching {
+            homeDataSource.getRecentReview().toRecentReviewResponse()
         }
     }
 }
