@@ -6,6 +6,7 @@ import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
+import com.depromeet.data.model.response.home.ResponseProfileDto
 import com.depromeet.data.model.response.home.ResponseReviewDateDto
 
 interface HomeDataSource {
@@ -35,4 +36,6 @@ interface HomeDataSource {
     )
 
     suspend fun getReviewDate(): ResponseReviewDateDto
+
+    suspend fun getProfile() : ResponseProfileDto
 }

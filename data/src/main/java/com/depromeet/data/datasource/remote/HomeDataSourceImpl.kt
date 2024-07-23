@@ -7,6 +7,7 @@ import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
+import com.depromeet.data.model.response.home.ResponseProfileDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
 import com.depromeet.data.model.response.home.ResponseReviewDateDto
 import com.depromeet.data.remote.HomeApiService
@@ -58,5 +59,9 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getReviewDate(): ResponseReviewDateDto {
         return homeApiService.getReviewDate()
+    }
+
+    override suspend fun getProfile(): ResponseProfileDto {
+        return homeApiService.getProfileInfo()
     }
 }

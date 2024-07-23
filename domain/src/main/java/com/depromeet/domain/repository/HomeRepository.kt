@@ -6,6 +6,7 @@ import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
+import com.depromeet.domain.entity.response.home.ProfileResponse
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 
 interface HomeRepository {
@@ -35,4 +36,6 @@ interface HomeRepository {
     ): Result<Unit>
 
     suspend fun getReviewDate(): Result<ReviewDateResponse>
+
+    suspend fun getProfile() : Result<ProfileResponse>
 }

@@ -5,6 +5,7 @@ import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
+import com.depromeet.data.model.response.home.ResponseProfileDto
 import com.depromeet.data.model.response.home.ResponseProfileEditDto
 import com.depromeet.data.model.response.home.ResponseReviewDateDto
 import okhttp3.RequestBody
@@ -53,4 +54,7 @@ interface HomeApiService {
 
     @GET("/api/v1/reviews/months")
     suspend fun getReviewDate(): ResponseReviewDateDto
+
+    @GET("/api/v1/members/memberInfo")
+    suspend fun getProfileInfo(): ResponseProfileDto
 }
