@@ -1,5 +1,6 @@
 package com.depromeet.data.model.response.home
 
+import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -7,59 +8,53 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResponseMySeatRecordDto(
     @SerialName("reviews")
-    val reviews: List<ResponseReviewDto>,
-    @SerialName("totalCount")
-    val totalCount: Int,
-    @SerialName("filteredCount")
-    val filteredCount: Int,
-    @SerialName("offset")
-    val offset: Int,
-    @SerialName("limit")
-    val limit: Int,
-    @SerialName("hasMore")
-    val hasMore: Boolean,
-    @SerialName("filter")
-    val filter: ResponseFilterDto,
+    val reviews: List<ResponseReviewWrapperDto>,
+    @SerialName("totalElements")
+    val totalElements: Int,
+    @SerialName("totalPages")
+    val totalPages: Int,
+    @SerialName("number")
+    val number: Int,
+    @SerialName("size")
+    val size: Int,
 ) {
+    @Serializable
+    data class ResponseReviewWrapperDto(
+        @SerialName("baseReview")
+        val baseReview: ResponseReviewDto,
+        @SerialName("stadiumName")
+        val stadiumName: String,
+        @SerialName("sectionName")
+        val sectionName: String,
+        @SerialName("blockCode")
+        val blockCode: String,
+    )
+
     @Serializable
     data class ResponseReviewDto(
         @SerialName("id")
         val id: Int,
-        @SerialName("stadiumId")
-        val stadiumId: Int,
-        @SerialName("stadiumName")
-        val stadiumName: String,
-        @SerialName("blockId")
-        val blockId: Int,
-        @SerialName("blockName")
-        val blockName: String,
-        @SerialName("seatId")
-        val seatId: Int,
-        @SerialName("rowId")
-        val rowId: Int,
-        @SerialName("seatNumber")
-        val seatNumber: Int,
-        @SerialName("date")
-        val date: String,
+        @SerialName("member")
+        val member: ResponseMemberDto,
+        @SerialName("stadium")
+        val stadium: ResponseStadiumDto,
+        @SerialName("section")
+        val section: ResponseSectionDto,
+        @SerialName("block")
+        val block: ResponseBlockDto,
+        @SerialName("row")
+        val row: ResponseRowDto,
+        @SerialName("seat")
+        val seat: ResponseSeatDto,
+        @SerialName("dateTime")
+        val dateTime: String,
         @SerialName("content")
         val content: String,
-        @SerialName("createdAt")
-        val createdAt: String,
-        @SerialName("updatedAt")
-        val updatedAt: String,
         @SerialName("images")
         val images: List<ResponseReviewImageDto>,
         @SerialName("keywords")
         val keywords: List<ResponseReviewKeywordDto>,
     ) {
-        @Serializable
-        data class ResponseReviewImageDto(
-            @SerialName("id")
-            val id: Int,
-            @SerialName("url")
-            val url: String,
-        )
-
         @Serializable
         data class ResponseReviewKeywordDto(
             @SerialName("id")
@@ -69,15 +64,120 @@ data class ResponseMySeatRecordDto(
             @SerialName("isPositive")
             val isPositive: Boolean,
         )
+
+        @Serializable
+        data class ResponseMemberDto(
+            @SerialName("profileImage")
+            val profileImage: String,
+            @SerialName("nickname")
+            val nickname: String,
+            @SerialName("level")
+            val level: Int,
+        )
+
+        @Serializable
+        data class ResponseStadiumDto(
+            @SerialName("id")
+            val id: Int,
+            @SerialName("name")
+            val name: String,
+            @SerialName("mainImage")
+            val mainImage: String,
+            @SerialName("seatingChartImage")
+            val seatingChartImage: String,
+            @SerialName("labeledSeatingChartImage")
+            val labeledSeatingChartImage: String,
+            @SerialName("isActive")
+            val isActive: Boolean,
+        )
+
+        @Serializable
+        data class ResponseSectionDto(
+            @SerialName("id")
+            val id: Int,
+            @SerialName("name")
+            val name: String,
+            @SerialName("alias")
+            val alias: String,
+        )
+
+        @Serializable
+        data class ResponseBlockDto(
+            @SerialName("id")
+            val id: Int,
+            @SerialName("code")
+            val code: String,
+        )
+
+        @Serializable
+        data class ResponseRowDto(
+            @SerialName("id")
+            val id: Int,
+            @SerialName("number")
+            val number: Int,
+        )
+
+        @Serializable
+        data class ResponseSeatDto(
+            @SerialName("id")
+            val id: Int,
+            @SerialName("seatNumber")
+            val seatNumber: Int,
+        )
     }
 
     @Serializable
-    data class ResponseFilterDto(
-        @SerialName("stadiumId")
-        val stadiumId: Int,
-        @SerialName("year")
-        val year: Int,
-        @SerialName("month")
-        val month: Int,
+    data class ResponseReviewImageDto(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("url")
+        val url: String,
     )
+
+    companion object {
+        fun ResponseMySeatRecordDto.toMySeatRecordResponse() = MySeatRecordResponse(
+            reviews = reviews.map { it.baseReview.toReviewResponse() },
+            totalElements = totalElements,
+            totalPages = totalPages,
+            number = number,
+            size = size
+        )
+
+        private fun ResponseReviewDto.toReviewResponse() = MySeatRecordResponse.ReviewResponse(
+            id = id,
+            stadiumId = stadium.id,
+            stadiumName = stadium.name,
+            blockId = block.id,
+            blockName = block.code,
+            seatId = seat.id,
+            rowId = row.id,
+            rowNumber = row.number,
+            seatNumber = seat.seatNumber,
+            date = dateTime,
+            content = content,
+            member = member.toMemberResponse(),
+            images = images.map { it.toReviewImageResponse() },
+            keywords = keywords.map { it.toReviewKeywordResponse() }
+        )
+
+        private fun ResponseReviewDto.ResponseMemberDto.toMemberResponse() =
+            MySeatRecordResponse.ReviewResponse.MemberResponse(
+                profileImage = profileImage,
+                nickname = nickname,
+                level = level
+            )
+
+        private fun ResponseReviewDto.ResponseReviewKeywordDto.toReviewKeywordResponse() =
+            MySeatRecordResponse.ReviewResponse.ReviewKeywordResponse(
+                id = id,
+                content = content,
+                isPositive = isPositive
+            )
+
+        private fun ResponseReviewImageDto.toReviewImageResponse() =
+            MySeatRecordResponse.ReviewResponse.ReviewImageResponse(
+                id = id,
+                url = url
+            )
+    }
 }

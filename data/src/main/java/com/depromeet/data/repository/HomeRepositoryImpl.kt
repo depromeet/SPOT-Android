@@ -3,9 +3,9 @@ package com.depromeet.data.repository
 import com.depromeet.data.datasource.HomeDataSource
 import com.depromeet.data.mapper.toBaseballTeamResponse
 import com.depromeet.data.mapper.toMySeatRecordRequestDto
-import com.depromeet.data.mapper.toMySeatRecordResponse
 import com.depromeet.data.mapper.toPresignedUrlResponse
 import com.depromeet.data.model.request.home.RequestProfileEditDto.Companion.toProfileEditRequestDto
+import com.depromeet.data.model.response.home.ResponseMySeatRecordDto.Companion.toMySeatRecordResponse
 import com.depromeet.data.model.response.home.ResponseProfileEditDto.Companion.toProfileEditResponse
 import com.depromeet.data.model.response.home.ResponseReviewDateDto.Companion.toReviewDateResponse
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
