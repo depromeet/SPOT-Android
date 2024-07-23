@@ -9,8 +9,8 @@ import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
 import com.depromeet.domain.repository.HomeRepository
-import com.depromeet.presentation.extension.NickNameError
 import com.depromeet.presentation.extension.validateNickName
+import com.depromeet.presentation.login.viewmodel.NicknameInputState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
@@ -53,7 +53,7 @@ class ProfileEditViewModel @Inject constructor(
     private val _nickname = MutableStateFlow("")
     val nickname = _nickname.asStateFlow()
 
-    private val _nickNameError = MutableStateFlow<NickNameError>(NickNameError.NoError)
+    private val _nickNameError = MutableStateFlow(NicknameInputState.VALID)
     val nickNameError = _nickNameError.asStateFlow()
 
     private val _profileImage = MutableStateFlow("")
@@ -79,7 +79,7 @@ class ProfileEditViewModel @Inject constructor(
                 nickNameError
             ) { nickName, profileImage, cheerTeam, nickNameError ->
                 (nickName != initialNickName || profileImage != initialProfileImage
-                        || cheerTeam != initialCheerTeam) && nickNameError == NickNameError.NoError
+                        || cheerTeam != initialCheerTeam) && nickNameError == NicknameInputState.VALID
             }.collect { isChanged ->
                 changeEnabled.value = isChanged
             }
@@ -99,7 +99,8 @@ class ProfileEditViewModel @Inject constructor(
                 }
         }
     }
-    fun deleteProfileImage(){
+
+    fun deleteProfileImage() {
         _profileImage.value = ""
     }
 
@@ -154,7 +155,7 @@ class ProfileEditViewModel @Inject constructor(
                 ProfileEditRequest(
                     url = getPresignedUrlOrNull(),
                     nickname = nickname.value,
-                    teamId = if(cheerTeam.value == 0) null else cheerTeam.value
+                    teamId = if (cheerTeam.value == 0) null else cheerTeam.value
                 ), memberId = 1
                 /** memberId ->추후에 메인화면 api 나오면 연동해서 stateflow 업데이트*/
             )
@@ -218,7 +219,7 @@ class ProfileEditViewModel @Inject constructor(
         _nickname.value = nickName
         _nickNameError.value = nickName.validateNickName()
 
-        if (_nickNameError.value == NickNameError.NoError && initialNickName != nickname.value) {
+        if (_nickNameError.value == NicknameInputState.VALID && initialNickName != nickname.value) {
             checkNickNameAvailability(nickName)
         }
     }
@@ -227,10 +228,10 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getDuplicateNickname(nickName)
                 .onSuccess {
-                    _nickNameError.value = NickNameError.NoError
+                    _nickNameError.value = NicknameInputState.VALID
                 }
                 .onFailure {
-                    _nickNameError.value = NickNameError.DuplicateError
+                    _nickNameError.value = NicknameInputState.DUPLICATE
                 }
         }
     }

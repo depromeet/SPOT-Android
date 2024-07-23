@@ -25,6 +25,7 @@
     <string name="profile_edit_error_duplicate">이미 사용중인 닉네임이에요.</string>
     <string name="profile_edit_error_type">닉네임은 알파벳 대소문자, 숫자, 한글만 입력 가능합니다.</string>
     <string name="profile_edit_error_length">닉네임은 최소 2글자에서 최대 10글자로 입력해 주세요.</string>
+    <string name="profile_edit_empty">비어있습니다.</string>
     <string name="profile_edit_error_no">정상적으로 입력 완료!</string>
 
     <!-- upload_error -->

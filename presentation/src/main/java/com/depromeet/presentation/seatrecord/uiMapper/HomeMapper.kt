@@ -30,8 +30,6 @@ data class ReviewUiData(
     val seatNumber: Int,
     val date: String,
     val content: String,
-    val createdAt: String,
-    val updatedAt: String,
     val images: List<ReviewImageUiData>,
     val keywords: List<ReviewKeywordUiData>,
 ) : Parcelable {
@@ -79,8 +77,6 @@ fun MySeatRecordResponse.ReviewResponse.toUiModel(): ReviewUiData {
         seatNumber = seatNumber,
         date = date,
         content = content,
-        createdAt = createdAt,
-        updatedAt = updatedAt,
         images = images.map { it.toUiModel() },
         keywords = keywords.map { it.toUiModel() }
     )

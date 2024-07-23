@@ -16,12 +16,12 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
-import com.depromeet.presentation.extension.NickNameError
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.adapter.BaseballTeamAdapter
 import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import com.depromeet.presentation.home.viewmodel.ProfileEvents
+import com.depromeet.presentation.login.viewmodel.NicknameInputState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -103,30 +103,32 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
             viewModel.updateNickName(text.toString())
         }
 
-        viewModel.nickNameError.asLiveData().observe(this) { error ->
-            when (error) {
-                is NickNameError.NoError -> {
+        viewModel.nickNameError.asLiveData().observe(this) { state ->
+            when (state) {
+                NicknameInputState.EMPTY -> {}
+
+                NicknameInputState.VALID -> {
                     updateCompletionStatus(
                         isError = false,
                         getString(R.string.profile_edit_error_no)
                     )
                 }
 
-                is NickNameError.LengthError -> {
+                NicknameInputState.INVALID_LENGTH -> {
                     updateCompletionStatus(
                         isError = true,
                         getString(R.string.profile_edit_error_length)
                     )
                 }
 
-                is NickNameError.InvalidCharacterError -> {
+                NicknameInputState.INVALID_CHARACTER -> {
                     updateCompletionStatus(
                         isError = true,
                         getString(R.string.profile_edit_error_type)
                     )
                 }
 
-                is NickNameError.DuplicateError -> {
+                NicknameInputState.DUPLICATE -> {
                     updateCompletionStatus(
                         isError = true,
                         getString(R.string.profile_edit_error_duplicate)
