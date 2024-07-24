@@ -41,7 +41,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setLayoutSizeRatio(heightPercent = 0.54f, widthPercent = 1f)
+        setLayoutSizeRatio(heightPercent = 0.7f, widthPercent = 1f)
         initView()
         initEvent()
     }
