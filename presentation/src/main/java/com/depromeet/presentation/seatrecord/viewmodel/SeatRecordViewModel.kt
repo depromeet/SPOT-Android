@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,8 +69,10 @@ class SeatRecordViewModel @Inject constructor(
                     month = month
                 )
             ).onSuccess { data ->
+                Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
                 _reviews.value = UiState.Success(data)
             }.onFailure {
+                Timber.d("GET_SEAT_RECORDS_TEST FAIL : $it")
                 _reviews.value = UiState.Failure(it.message ?: "실패")
             }
         }

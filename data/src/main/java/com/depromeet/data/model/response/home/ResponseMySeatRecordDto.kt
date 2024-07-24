@@ -19,6 +19,12 @@ data class ResponseMySeatRecordDto(
     val number: Int,
     @SerialName("size")
     val size: Int,
+    @SerialName("first")
+    val first: Boolean,
+    @SerialName("last")
+    val last: Boolean,
+    @SerialName("filter")
+    val filter: ResponseFilterDto,
 ) {
     @Serializable
     data class ResponseMemberDto(
@@ -149,6 +155,18 @@ data class ResponseMySeatRecordDto(
         val id: Int,
         @SerialName("url")
         val url: String,
+    )
+
+    @Serializable
+    data class ResponseFilterDto(
+        @SerialName("rowNumber")
+        val rowNumber: Int,
+        @SerialName("seatNumber")
+        val seatNumber: Int,
+        @SerialName("year")
+        val year: Int,
+        @SerialName("month")
+        val month: Int,
     )
 
     companion object {
