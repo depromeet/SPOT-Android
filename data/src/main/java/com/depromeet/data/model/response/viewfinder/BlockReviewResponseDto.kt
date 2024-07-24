@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BlockReviewResponseDto(
+    @SerialName("location")
+    val location: LocationResponseDto,
     @SerialName("keywords")
     val keywords: List<KeywordResponseDto>,
     @SerialName("reviews")
@@ -27,6 +29,22 @@ data class BlockReviewResponseDto(
     @SerialName("filter")
     val filter: ReviewFilterResponseDto
 ) {
+    @Serializable
+    data class LocationResponseDto(
+        @SerialName("stadiumName")
+        val stadiumName: String,
+        @SerialName("sectionName")
+        val sectionName: String,
+        @SerialName("blockCode")
+        val blockCode: String
+    ) {
+        fun toLocationResponse() = BlockReviewResponse.LocationResponse(
+            stadiumName = stadiumName,
+            sectionName = sectionName,
+            blockCode = blockCode
+        )
+    }
+
     @Serializable
     data class KeywordResponseDto(
         @SerialName("content")

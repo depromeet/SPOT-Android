@@ -41,6 +41,7 @@ fun StadiumResponseDto.toStadiumResponse() = StadiumResponse(
 
 
 fun BlockReviewResponseDto.toBlockReviewResponse() = BlockReviewResponse(
+    location = location.toLocationResponse(),
     keywords = keywords.map { it.toKeywordResponse() },
     reviews = reviews.map { it.toReviewResponse() },
     topReviewImages = topReviewImages.map { it.toTopReviewImagesResponse() },

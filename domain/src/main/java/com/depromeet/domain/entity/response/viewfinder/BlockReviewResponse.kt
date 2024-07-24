@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 data class BlockReviewResponse(
+    val location: LocationResponse = LocationResponse(),
     val keywords: List<KeywordResponse> = emptyList(),
     val reviews: List<ReviewResponse> = emptyList(),
     val topReviewImages: List<TopReviewImagesResponse> = emptyList(),
@@ -18,6 +19,12 @@ data class BlockReviewResponse(
     val last: Boolean = false,
     val filter: ReviewFilterResponse = ReviewFilterResponse()
 ) {
+    data class LocationResponse(
+        val stadiumName: String = "",
+        val sectionName: String = "",
+        val blockCode: String = ""
+    )
+
     data class KeywordResponse(
         val content: String = "",
         val count: Int = 0,
@@ -146,9 +153,6 @@ data class BlockReviewResponse(
      * @example : 오렌지석•207블록
      */
     fun formattedStadiumBlock(): String {
-        var blockString = ""
-        blockString += (reviews.getOrNull(0)?.section?.alias + "•")
-        blockString += (reviews.getOrNull(0)?.block?.code + "블록")
-        return blockString
+        return location.sectionName + "•" + location.blockCode + "블록"
     }
 }
