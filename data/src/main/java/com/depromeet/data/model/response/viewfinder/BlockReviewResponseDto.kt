@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BlockReviewResponseDto(
     @SerialName("location")
-    val location: LocationResponseDto,
+    val location: LocationResponseDto?,
     @SerialName("keywords")
     val keywords: List<KeywordResponseDto>,
     @SerialName("reviews")
@@ -74,7 +74,7 @@ data class BlockReviewResponseDto(
         @SerialName("dateTime")
         val dateTime: String,
         @SerialName("content")
-        val content: String,
+        val content: String?,
         @SerialName("images")
         val images: List<ReviewImageResponseDto>,
         @SerialName("keywords")
@@ -114,14 +114,14 @@ data class BlockReviewResponseDto(
         @Serializable
         data class ReviewMemberResponseDto(
             @SerialName("profileImage")
-            val profileImage: String,
+            val profileImage: String?,
             @SerialName("nickname")
             val nickname: String,
             @SerialName("level")
             val level: Int,
         ) {
             fun toReviewMemberResponse() = BlockReviewResponse.ReviewResponse.ReviewMemberResponse(
-                profileImage = profileImage, nickname = nickname, level = level
+                profileImage = profileImage ?: "", nickname = nickname, level = level
             )
         }
 
@@ -130,24 +130,12 @@ data class BlockReviewResponseDto(
             @SerialName("id")
             val id: Int,
             @SerialName("name")
-            val name: String,
-            @SerialName("mainImage")
-            val mainImage: String,
-            @SerialName("seatingChartImage")
-            val seatingChartImage: String,
-            @SerialName("labeledSeatingChartImage")
-            val labeledSeatingChartImage: String,
-            @SerialName("isActive")
-            val isActive: Boolean,
+            val name: String
         ) {
             fun toReviewStadiumResponse() =
                 BlockReviewResponse.ReviewResponse.ReviewStadiumResponse(
                     id = id,
-                    name = name,
-                    mainImage = mainImage,
-                    seatingChartImage = seatingChartImage,
-                    labeledSeatingChartImage = labeledSeatingChartImage,
-                    isActive = isActive
+                    name = name
                 )
         }
 
@@ -158,13 +146,13 @@ data class BlockReviewResponseDto(
             @SerialName("name")
             val name: String,
             @SerialName("alias")
-            val alias: String,
+            val alias: String?,
         ) {
             fun toReviewSectionResponse() =
                 BlockReviewResponse.ReviewResponse.ReviewSectionResponse(
                     id = id,
                     name = name,
-                    alias = alias
+                    alias = alias ?: ""
                 )
         }
 

@@ -5,6 +5,6 @@ data class BlockReviewRequestQueryDto(
     val seatNumber: Int? = null,
     val year: Int? = null,
     val month: Int? = null,
-    val page: Int? = null,
-    val size: Int? = null
+    val page: Int = 0,
+    val size: Int = 20
 )

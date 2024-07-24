@@ -41,7 +41,7 @@ fun StadiumResponseDto.toStadiumResponse() = StadiumResponse(
 
 
 fun BlockReviewResponseDto.toBlockReviewResponse() = BlockReviewResponse(
-    location = location.toLocationResponse(),
+    location = location?.toLocationResponse() ?: BlockReviewResponse.LocationResponse(),
     keywords = keywords.map { it.toKeywordResponse() },
     reviews = reviews.map { it.toReviewResponse() },
     topReviewImages = topReviewImages.map { it.toTopReviewImagesResponse() },
@@ -85,7 +85,7 @@ fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =
         row = row.toReviewRowResponse(),
         seat = seat.toReviewSeatResponse(),
         dateTime = dateTime,
-        content = content,
+        content = content ?: "",
         images = images.map { it.toReviewImageResponse() },
         keywords = keywords.map { it.toReviewKeywordResponse() }
     )

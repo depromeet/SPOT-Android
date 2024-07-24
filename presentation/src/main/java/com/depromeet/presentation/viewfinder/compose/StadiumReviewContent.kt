@@ -176,11 +176,7 @@ private fun StadiumReviewContentPreview() {
                 ),
                 stadium = BlockReviewResponse.ReviewResponse.ReviewStadiumResponse(
                     id = 1,
-                    name = "서울 잠실 야구장",
-                    mainImage = "",
-                    seatingChartImage = "",
-                    labeledSeatingChartImage = "",
-                    isActive = false
+                    name = "서울 잠실 야구장"
                 ),
                 section = BlockReviewResponse.ReviewResponse.ReviewSectionResponse(
                     id = 1,

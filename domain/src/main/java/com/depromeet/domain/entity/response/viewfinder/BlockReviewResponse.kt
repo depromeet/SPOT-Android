@@ -2,6 +2,7 @@ package com.depromeet.domain.entity.response.viewfinder
 
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -64,11 +65,7 @@ data class BlockReviewResponse(
 
         data class ReviewStadiumResponse(
             val id: Int,
-            val name: String = "",
-            val mainImage: String = "",
-            val seatingChartImage: String = "",
-            val labeledSeatingChartImage: String = "",
-            val isActive: Boolean = false,
+            val name: String = ""
         )
 
         data class ReviewSectionResponse(
@@ -96,12 +93,9 @@ data class BlockReviewResponse(
          * @example : 2024-07-23T12:18:21.744Z -> 7월 23일
          */
         fun formattedDate(): String {
-            val instant = Instant.parse(dateTime)
-            val zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"))
-
             val formatter = DateTimeFormatter.ofPattern("M월d일")
-            val formattedDate = zonedDateTime.format(formatter)
-            return formattedDate
+            val dateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME)
+            return dateTime.format(formatter)
         }
 
         /**
