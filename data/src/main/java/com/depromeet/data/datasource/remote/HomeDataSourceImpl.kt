@@ -5,6 +5,7 @@ import com.depromeet.data.model.request.home.RequestFileExtensionDto
 import com.depromeet.data.model.request.home.RequestMySeatRecordDto
 import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
+import com.depromeet.data.model.response.home.ResponseDeleteReviewDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileDto
@@ -68,5 +69,11 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getRecentReview(): ResponseRecentReviewDto {
         return homeApiService.getRecentReview()
+    }
+
+    override suspend fun deleteReview(
+        reviewId: Int,
+    ): ResponseDeleteReviewDto {
+        return homeApiService.deleteReview(reviewId)
     }
 }

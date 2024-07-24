@@ -3,6 +3,7 @@ package com.depromeet.data.remote
 import com.depromeet.data.model.request.home.RequestFileExtensionDto
 import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
+import com.depromeet.data.model.response.home.ResponseDeleteReviewDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileDto
@@ -11,6 +12,7 @@ import com.depromeet.data.model.response.home.ResponseRecentReviewDto
 import com.depromeet.data.model.response.home.ResponseReviewDateDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -61,4 +63,9 @@ interface HomeApiService {
 
     @GET("/api/v1/reviews/recentReview")
     suspend fun getRecentReview(): ResponseRecentReviewDto
+
+    @DELETE("/api/v1/reviews/{reviewId}")
+    suspend fun deleteReview(
+        @Path("reviewId") reviewId: Int,
+    ): ResponseDeleteReviewDto
 }

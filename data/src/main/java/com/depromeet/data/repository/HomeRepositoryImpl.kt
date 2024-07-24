@@ -5,6 +5,7 @@ import com.depromeet.data.mapper.toBaseballTeamResponse
 import com.depromeet.data.mapper.toPresignedUrlResponse
 import com.depromeet.data.model.request.home.RequestMySeatRecordDto.Companion.toMySeatRecordRequestDto
 import com.depromeet.data.model.request.home.RequestProfileEditDto.Companion.toProfileEditRequestDto
+import com.depromeet.data.model.response.home.ResponseDeleteReviewDto.Companion.toDeleteReviewResponse
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto.Companion.toMySeatRecordResponse
 import com.depromeet.data.model.response.home.ResponseProfileDto.Companion.toProfileResponse
 import com.depromeet.data.model.response.home.ResponseProfileEditDto.Companion.toProfileEditResponse
@@ -13,6 +14,7 @@ import com.depromeet.data.model.response.home.ResponseReviewDateDto.Companion.to
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.request.home.ProfileEditRequest
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
+import com.depromeet.domain.entity.response.home.DeleteReviewResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
@@ -85,6 +87,12 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun getRecentReview(): Result<RecentReviewResponse> {
         return runCatching {
             homeDataSource.getRecentReview().toRecentReviewResponse()
+        }
+    }
+
+    override suspend fun deleteReview(reviewId: Int): Result<DeleteReviewResponse> {
+        return runCatching {
+            homeDataSource.deleteReview(reviewId).toDeleteReviewResponse()
         }
     }
 }
