@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
@@ -23,24 +24,27 @@ class StadiumDetailViewModel @Inject constructor(
     var blockCode: String = ""
     private var blockRow: BlockRowResponse? = null
 
+    private val _reviewFilter = MutableStateFlow<BlockReviewRequestQuery>(BlockReviewRequestQuery())
+    val reviewFilter = _reviewFilter.asStateFlow()
+
     private val _blockReviews = MutableStateFlow<UiState<BlockReviewResponse>>(UiState.Loading)
     val blockReviews: StateFlow<UiState<BlockReviewResponse>> = _blockReviews.asStateFlow()
 
     private val _scrollState = MutableStateFlow(false)
     val scrollState = _scrollState.asStateFlow()
 
-    private val _month = MutableStateFlow(0)
-    val month = _month.asStateFlow()
-
-    private val _seat = MutableStateFlow("")
-    val seat = _seat.asStateFlow()
-
     fun updateScrollState(state: Boolean) {
         _scrollState.value = state
     }
 
-    fun updateMonth(month: Int) {
-        _month.value = month
+    fun updateMonth(month: Int?) {
+        if (month != _reviewFilter.value.month) {
+            _reviewFilter.value = _reviewFilter.value.copy(year = 2024, month = month)
+        }
+    }
+
+    fun updateSeat(column: Int, number: Int? = null) {
+        _reviewFilter.value = _reviewFilter.value.copy(rowNumber = column, seatNumber = number)
     }
 
     fun getBlockReviews(
@@ -70,10 +74,6 @@ class StadiumDetailViewModel @Inject constructor(
                 this@StadiumDetailViewModel.blockRow = null
             }
         }
-    }
-
-    fun updateSeat(seat: String) {
-        _seat.value = seat
     }
 
     fun updateRequestPathVariable(stadiumId: Int, blockCode: String) {

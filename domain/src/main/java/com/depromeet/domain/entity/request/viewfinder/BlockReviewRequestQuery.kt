@@ -7,4 +7,12 @@ data class BlockReviewRequestQuery(
     val month: Int? = null,
     val page: Int? = null,
     val size: Int? = null
-)
+) {
+    fun rowNumberIsEmpty(): Boolean {
+        return rowNumber == null
+    }
+
+    fun seatNumberIsEmpty(): Boolean {
+        return seatNumber == null
+    }
+}

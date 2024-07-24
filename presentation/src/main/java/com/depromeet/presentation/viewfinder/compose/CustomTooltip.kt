@@ -16,13 +16,14 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 
 @Composable
 fun CustomTooltip(
-    seat: String,
+    reviewFilter: BlockReviewRequestQuery,
     modifier: Modifier = Modifier
 ) {
-    if (seat.isEmpty()) {
+    if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
         Column {
             Canvas(
                 modifier = Modifier,
@@ -61,14 +62,18 @@ fun CustomTooltip(
 @Composable
 private fun CustomTooltipPreview() {
     CustomTooltip(
-        seat = ""
-    )
+        reviewFilter = BlockReviewRequestQuery(),
+
+        )
 }
 
 @Preview
 @Composable
 private fun CustomTooltipSeatPreview() {
     CustomTooltip(
-        seat = "1열 12번"
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = 1,
+            seatNumber = 12
+        ),
     )
 }

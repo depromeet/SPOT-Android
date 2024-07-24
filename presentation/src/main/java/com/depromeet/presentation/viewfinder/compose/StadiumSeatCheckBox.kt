@@ -19,31 +19,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.presentation.R
 import com.depromeet.presentation.viewfinder.sample.Seat
 
 @Composable
 fun StadiumSeatCheckBox(
-    seat: String,
+    reviewFilter: BlockReviewRequestQuery,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .background(
-                color = if (seat.isNotEmpty()) {
-                    Color(0xFF121212)
-                } else {
+                color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                     Color(0xFFFFFFFF)
+                } else {
+                    Color(0xFF121212)
                 },
                 shape = RoundedCornerShape(100.dp)
             )
             .border(
                 1.dp,
-                color = if (seat.isNotEmpty()) {
-                    Color(0xFF121212)
-                } else {
+                color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                     Color(0xFFE5E5E5)
+                } else {
+                    Color(0xFF121212)
                 }, shape = RoundedCornerShape(100.dp)
             )
             .clickable(
@@ -55,12 +56,20 @@ fun StadiumSeatCheckBox(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = seat.ifEmpty { "좌석 시야" },
-            fontSize = 13.sp,
-            color = if (seat.isNotEmpty()) {
-                Color(0xFFFFFFFF)
+            text = if (reviewFilter.seatNumberIsEmpty()) {
+                if (reviewFilter.rowNumberIsEmpty()) {
+                    "좌석 선택"
+                } else {
+                    "${reviewFilter.rowNumber}열"
+                }
             } else {
+                "${reviewFilter.rowNumber}열 ${reviewFilter.seatNumber}번"
+            },
+            fontSize = 13.sp,
+            color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                 Color(0xFF121212)
+            } else {
+                Color(0xFFFFFFFF)
             }
         )
         Spacer(modifier = Modifier.width(6.dp))
@@ -76,7 +85,7 @@ fun StadiumSeatCheckBox(
 @Composable
 private fun StadiumSeatCheckBoxPreview() {
     StadiumSeatCheckBox(
-        seat = "",
+        reviewFilter = BlockReviewRequestQuery(),
         modifier = Modifier,
         onClick = {}
 
@@ -85,9 +94,24 @@ private fun StadiumSeatCheckBoxPreview() {
 
 @Preview
 @Composable
-private fun StadiumSeatCheckBoxPreviewSelected() {
+private fun StadiumSeatCheckBoxPreviewRowNumber() {
     StadiumSeatCheckBox(
-        seat = "1열 12번",
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = 1,
+        ),
+        modifier = Modifier,
+        onClick = {}
+    )
+}
+
+@Preview
+@Composable
+private fun StadiumSeatCheckBoxPreviewSeatNumber() {
+    StadiumSeatCheckBox(
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = 1,
+            seatNumber = 12
+        ),
         modifier = Modifier,
         onClick = {}
     )

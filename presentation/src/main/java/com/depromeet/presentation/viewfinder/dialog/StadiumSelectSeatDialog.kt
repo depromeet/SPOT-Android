@@ -130,9 +130,13 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                                 binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_warning01red_line_12)
                             }
                         }
+
                         Seat.NUMBER -> {
                             if (isSuccess) {
-                                stadiumDetailViewModel.updateSeat("${binding.etColumn.text}열 ${binding.etNumber.text}번")
+                                stadiumDetailViewModel.updateSeat(
+                                    binding.etColumn.text.toString().toInt(),
+                                    binding.etNumber.text.toString().toInt()
+                                )
                                 stadiumDetailViewModel.getBlockReviews(
                                     stadiumDetailViewModel.stadiumId,
                                     stadiumDetailViewModel.blockCode,
@@ -156,21 +160,23 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                 stadiumDetailViewModel.handleColumn(
                     binding.etOnlyColumn.text.toString().toInt()
                 ) { isSuccess, seat ->
-                     if (isSuccess) {
-                         stadiumDetailViewModel.updateSeat("${binding.etOnlyColumn.text}열")
-                         stadiumDetailViewModel.getBlockReviews(
-                             stadiumDetailViewModel.stadiumId,
-                             stadiumDetailViewModel.blockCode,
-                             BlockReviewRequestQuery(
-                                 rowNumber = binding.etOnlyColumn.text.toString().toInt()
-                             )
-                         )
-                         dismiss()
-                     } else {
-                         binding.tvWarning.visibility = View.VISIBLE
-                         binding.tvWarning.text = "존재하지 않는 열이에요"
-                         binding.etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_warning01red_line_12)
-                     }
+                    if (isSuccess) {
+                        stadiumDetailViewModel.updateSeat(
+                            column = binding.etOnlyColumn.text.toString().toInt()
+                        )
+                        stadiumDetailViewModel.getBlockReviews(
+                            stadiumDetailViewModel.stadiumId,
+                            stadiumDetailViewModel.blockCode,
+                            BlockReviewRequestQuery(
+                                rowNumber = binding.etOnlyColumn.text.toString().toInt()
+                            )
+                        )
+                        dismiss()
+                    } else {
+                        binding.tvWarning.visibility = View.VISIBLE
+                        binding.tvWarning.text = "존재하지 않는 열이에요"
+                        binding.etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_warning01red_line_12)
+                    }
                 }
             }
         }

@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
@@ -26,7 +27,7 @@ fun StadiumHeaderContent(
     stadiumTitle: String,
     seatContent: String,
     isMore: Boolean,
-    seat: String,
+    reviewFilter: BlockReviewRequestQuery,
     keywords: List<Keyword>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
@@ -39,7 +40,6 @@ fun StadiumHeaderContent(
         StadiumPictureViewPager(
             context = context,
             topReviewImages = topReviewImages,
-//            pictures = pictures,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -50,7 +50,7 @@ fun StadiumHeaderContent(
         Spacer(modifier = Modifier.height(10.dp))
 
         StadiumSeatCheckBox(
-            seat = seat,
+            reviewFilter = reviewFilter,
             onClick = onClickSelectSeat
         )
 
@@ -64,7 +64,7 @@ fun StadiumHeaderContent(
                 onChangeIsMore = onChangeIsMore
             )
             CustomTooltip(
-                seat = seat,
+                reviewFilter = reviewFilter,
                 modifier = Modifier.zIndex(1f)
             )
         }
@@ -100,11 +100,9 @@ private fun StadiumHeaderContentPreview() {
                 seatNumber = 12
             ),
         ),
-        seat = "",
+        reviewFilter = BlockReviewRequestQuery(),
         stadiumTitle = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭",
-//        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-//        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
         keywords = listOf(
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
@@ -138,8 +136,10 @@ private fun StadiumHeaderContentIsMorePreview() {
                 seatNumber = 12
             ),
         ),
-        seat = "1열 12번",
-        stadiumTitle = "서울 잠실 야구장",
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = 1,
+            seatNumber = 12
+        ), stadiumTitle = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭",
         keywords = listOf(
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),

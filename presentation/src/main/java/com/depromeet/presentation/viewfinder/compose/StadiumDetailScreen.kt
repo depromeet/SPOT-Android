@@ -1,7 +1,6 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,8 +26,6 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.StadiumDetailActivity
-import com.depromeet.presentation.viewfinder.sample.Stadium
-import com.depromeet.presentation.viewfinder.sample.StadiumArea
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -48,7 +45,7 @@ fun StadiumDetailScreen(
     val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
     val verticalScrollState = rememberLazyListState()
     val blockReviews by viewModel.blockReviews.collectAsStateWithLifecycle()
-    val seat by viewModel.seat.collectAsStateWithLifecycle()
+    val reviewFilter by viewModel.reviewFilter.collectAsStateWithLifecycle()
 
     blockReviews.let { state ->
         when (state) {
@@ -58,6 +55,7 @@ fun StadiumDetailScreen(
                     onGoBack = onClickGoBack
                 )
             }
+
             is UiState.Failure -> Unit
             is UiState.Loading -> Unit
             is UiState.Success -> {
@@ -69,7 +67,7 @@ fun StadiumDetailScreen(
                         StadiumHeaderContent(
                             context = context,
                             isMore = isMore,
-                            seat = seat,
+                            reviewFilter = reviewFilter,
                             topReviewImages = state.data.topReviewImages,
                             stadiumTitle = state.data.formattedStadiumTitle(),
                             seatContent = state.data.formattedStadiumBlock(),

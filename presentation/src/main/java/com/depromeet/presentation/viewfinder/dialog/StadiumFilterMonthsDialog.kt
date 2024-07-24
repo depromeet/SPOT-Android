@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.dialog
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -30,6 +31,7 @@ class StadiumFilterMonthsDialog :
     )
 
     private val viewModel: StadiumDetailViewModel by activityViewModels()
+    private var month: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +45,18 @@ class StadiumFilterMonthsDialog :
         with(binding.npMonths) {
             minValue = 0
             maxValue = months.size - 1
-            value = viewModel.month.value
+            value = viewModel.reviewFilter.value.month?.minus(1) ?: 0
             displayedValues = months
             wrapSelectorWheel = false
         }
 
         binding.npMonths.setOnValueChangedListener { picker, oldVal, newVal ->
-            viewModel.updateMonth(newVal)
+            month = newVal
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        viewModel.updateMonth(month?.plus(1) ?: viewModel.reviewFilter.value.month ?: 1)
+        super.onDismiss(dialog)
     }
 }
