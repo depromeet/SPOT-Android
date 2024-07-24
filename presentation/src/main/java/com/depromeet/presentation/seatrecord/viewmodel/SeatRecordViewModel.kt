@@ -10,7 +10,6 @@ import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.seatrecord.uiMapper.ReviewUiData
 import com.depromeet.presentation.seatrecord.uiMapper.toUiModel
-import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,7 +32,7 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow<List<MonthUiData>>(emptyList())
     val months = _months.asStateFlow()
 
-    private val _selectedYear = MutableStateFlow(CalendarUtil.getCurrentYear())
+    private val _selectedYear = MutableStateFlow(0)
     val selectedYear = _selectedYear.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(false)
@@ -114,11 +113,12 @@ class SeatRecordViewModel @Inject constructor(
             viewModelScope.launch {
                 homeRepository.deleteReview(editReviewId.value)
                     .onSuccess {
-                        if(it.reviewId == editReviewId.value){
+                        if (it.reviewId == editReviewId.value) {
                             val updatedList = currentState.data.reviews.filter { review ->
                                 review.id != editReviewId.value
                             }
-                            _reviews.value = UiState.Success(currentState.data.copy(reviews = updatedList))
+                            _reviews.value =
+                                UiState.Success(currentState.data.copy(reviews = updatedList))
                         }
                     }
                     .onFailure {

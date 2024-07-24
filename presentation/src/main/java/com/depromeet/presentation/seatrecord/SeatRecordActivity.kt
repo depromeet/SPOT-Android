@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -81,6 +82,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
         viewModel.months.asLiveData().observe(this) {
             dateMonthAdapter.submitList(it)
+            viewModel.getSeatRecords()
         }
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
@@ -88,12 +90,10 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setReviewsVisibility(isExist = true)
                     val year = state.data.yearMonths.map { it.year }
                     initYearSpinner(year)
-                    viewModel.getSeatRecords()
                 }
 
                 is UiState.Empty -> {
                     setReviewsVisibility(isExist = false)
-                    viewModel.getSeatRecords()
                 }
 
                 is UiState.Loading -> {}
@@ -136,7 +136,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
-            //TODO : 서버에서 칭호 넘겨주변 업데이트 해야함..
             "Lv.${data.level} ${data.levelTitle}".also { tvRecordLevel.text = it }
             tvRecordNickname.text = data.nickname
             tvRecordCount.text = data.reviewCount.toString()
@@ -202,7 +201,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun setReviewsVisibility(isExist: Boolean) {
         if (!isExist) {
             with(binding) {
-                "${viewModel.selectedYear.value}년".also { tvRecordYear.text = it }
+                "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
                 clRecordNone.visibility = View.VISIBLE
                 clRecordStickyHeader.visibility = View.GONE
                 rvRecordMonthDetail.visibility = View.GONE
@@ -232,13 +231,21 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             object : MonthRecordAdapter.OnItemRecordClickListener {
 
                 override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
-                    Intent(
-                        this@SeatRecordActivity,
-                        SeatDetailRecordActivity::class.java
-                    ).apply {
-                        putExtra(RECORD_ID, item.id)
-                        putParcelableArrayListExtra(RECORD_LIST, viewModel.getUiReviewsData())
-                    }.let(::startActivity)
+
+                    supportFragmentManager.commit {
+                        replace(
+                            R.id.fcv_record,
+                            SeatDetailRecordFragment(),
+                            SeatDetailRecordFragment.SEAT_RECORD_TAG
+                        )
+                    }
+//                    Intent(
+//                        this@SeatRecordActivity,
+//                        SeatDetailRecordActivity::class.java
+//                    ).apply {
+//                        putExtra(RECORD_ID, item.id)
+//                        putParcelableArrayListExtra(RECORD_LIST, viewModel.getUiReviewsData())
+//                    }.let(::startActivity)
                 }
 
                 override fun onMoreRecordClick(reviewId: Int) {
