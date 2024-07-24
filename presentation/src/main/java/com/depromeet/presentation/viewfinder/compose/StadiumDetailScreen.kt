@@ -1,6 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -33,13 +34,15 @@ import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumDetailScreen(
+    blockNumber: String,
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
     onClickReviewPicture: (BlockReviewResponse.ReviewResponse) -> Unit,
     onClickSelectSeat: () -> Unit,
     onClickFilterMonthly: () -> Unit,
-    onClickReport: () -> Unit
+    onClickReport: () -> Unit,
+    onClickGoBack: () -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
     val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
@@ -49,7 +52,12 @@ fun StadiumDetailScreen(
 
     blockReviews.let { state ->
         when (state) {
-            is UiState.Empty -> Unit
+            is UiState.Empty -> {
+                StadiumEmptyContent(
+                    blockNumber = blockNumber,
+                    onGoBack = onClickGoBack
+                )
+            }
             is UiState.Failure -> Unit
             is UiState.Loading -> Unit
             is UiState.Success -> {
@@ -115,10 +123,12 @@ fun StadiumDetailScreen(
 private fun StadiumDetailScreenPreview() {
     Box(modifier = Modifier.background(Color.White)) {
         StadiumDetailScreen(
+            blockNumber = "207",
             onClickReviewPicture = {},
             onClickSelectSeat = {},
             onClickFilterMonthly = {},
-            onClickReport = {}
+            onClickReport = {},
+            onClickGoBack = {}
         )
     }
 }
