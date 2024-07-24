@@ -10,6 +10,7 @@ import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.seatrecord.uiMapper.ReviewUiData
 import com.depromeet.presentation.seatrecord.uiMapper.toUiModel
+import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +22,6 @@ class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
 ) : ViewModel() {
 
-
     private val _reviews = MutableStateFlow<UiState<MySeatRecordResponse>>(UiState.Loading)
     val reviews = _reviews.asStateFlow()
 
@@ -32,7 +32,7 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow<List<MonthUiData>>(emptyList())
     val months = _months.asStateFlow()
 
-    private val _selectedYear = MutableStateFlow(0)
+    private val _selectedYear = MutableStateFlow(CalendarUtil.getCurrentYear())
     val selectedYear = _selectedYear.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(false)
@@ -64,8 +64,8 @@ class SeatRecordViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getMySeatRecord(
                 MySeatRecordRequest(
-                    selectedYear.value,
-                    month
+                    year = selectedYear.value,
+                    month = month
                 )
             ).onSuccess { data ->
                 _reviews.value = UiState.Success(data)

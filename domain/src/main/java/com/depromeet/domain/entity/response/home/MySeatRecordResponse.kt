@@ -1,12 +1,21 @@
 package com.depromeet.domain.entity.response.home
 
 data class MySeatRecordResponse(
+    val profile: MyProfileResponse,
     val reviews: List<ReviewResponse> = emptyList(),
-    val totalElements : Int = 0,
-    val totalPages : Int = 0,
-    val number : Int = 0,
-    val size : Int = 0,
+    val totalElements: Int = 0,
+    val totalPages: Int = 0,
+    val number: Int = 0,
+    val size: Int = 0,
 ) {
+    data class MyProfileResponse(
+        val userId: Int = 0,
+        val profileImage: String = "",
+        val level: Int = 0,
+        val nickname: String = "",
+        val reviewCount: Int = 0,
+    )
+
     data class ReviewResponse(
         val id: Int,
         val stadiumId: Int,
@@ -15,11 +24,11 @@ data class MySeatRecordResponse(
         val blockName: String = "",
         val seatId: Int = 0,
         val rowId: Int = 0,
-        val rowNumber : Int = 0,
+        val rowNumber: Int = 0,
         val seatNumber: Int = 0,
         val date: String = "",
         val content: String = "",
-        val member : MemberResponse = MemberResponse(),
+        val member: MemberResponse = MemberResponse(),
         val images: List<ReviewImageResponse> = emptyList(),
         val keywords: List<ReviewKeywordResponse> = emptyList(),
     ) {
@@ -35,9 +44,9 @@ data class MySeatRecordResponse(
         )
 
         data class MemberResponse(
-            val profileImage : String = "",
-            val nickname : String = "",
-            val level : Int = 0
+            val profileImage: String = "",
+            val nickname: String = "",
+            val level: Int = 0,
         )
     }
 

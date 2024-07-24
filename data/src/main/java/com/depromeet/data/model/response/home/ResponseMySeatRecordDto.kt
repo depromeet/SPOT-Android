@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponseMySeatRecordDto(
+    @SerialName("memberInfoOnMyReview")
+    val memberInfoOnMyReview: ResponseMemberDto,
     @SerialName("reviews")
     val reviews: List<ResponseReviewWrapperDto>,
     @SerialName("totalElements")
@@ -18,6 +20,21 @@ data class ResponseMySeatRecordDto(
     @SerialName("size")
     val size: Int,
 ) {
+    @Serializable
+    data class ResponseMemberDto(
+        @SerialName("userId")
+        val userId: Int,
+        @SerialName("profileImageUrl")
+        val profileImageUrl: String,
+        @SerialName("level")
+        val level: Int,
+        @SerialName("nickname")
+        val nickname: String,
+        @SerialName("reviewCount")
+        val reviewCount: Int,
+    )
+
+
     @Serializable
     data class ResponseReviewWrapperDto(
         @SerialName("baseReview")
@@ -136,12 +153,22 @@ data class ResponseMySeatRecordDto(
 
     companion object {
         fun ResponseMySeatRecordDto.toMySeatRecordResponse() = MySeatRecordResponse(
+            profile = memberInfoOnMyReview.toMyProfileResponse(),
             reviews = reviews.map { it.baseReview.toReviewResponse() },
             totalElements = totalElements,
             totalPages = totalPages,
             number = number,
-            size = size
+            size = size,
         )
+
+        private fun ResponseMemberDto.toMyProfileResponse() =
+            MySeatRecordResponse.MyProfileResponse(
+                userId = userId,
+                profileImage = profileImageUrl,
+                level = level,
+                nickname = nickname,
+                reviewCount = reviewCount
+            )
 
         private fun ResponseReviewDto.toReviewResponse() = MySeatRecordResponse.ReviewResponse(
             id = id,

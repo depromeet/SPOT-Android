@@ -20,7 +20,6 @@ import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
-import com.depromeet.presentation.seatrecord.mockdata.ProfileDetailData
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
@@ -94,6 +93,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
                 is UiState.Empty -> {
                     setReviewsVisibility(isExist = false)
+                    viewModel.getSeatRecords()
                 }
 
                 is UiState.Loading -> {}
@@ -134,12 +134,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setProfile(profileData: ProfileDetailData) {
+    private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
-            "Lv.${profileData.level} ${profileData.titleName}".also { tvRecordLevel.text = it }
-            tvRecordNickname.text = profileData.nickName
-            tvRecordCount.text = profileData.recordCount.toString()
-            ivRecordProfile.load(profileData.profileImage) {
+            //TODO : 서버에서 칭호 넘겨주변 업데이트 해야함..
+            "Lv.${data.level} 칭호".also { tvRecordLevel.text = it }
+            tvRecordNickname.text = data.nickname
+            tvRecordCount.text = data.reviewCount.toString()
+            ivRecordProfile.load(data.profileImage) {
                 transformations(CircleCropTransformation())
             }
         }

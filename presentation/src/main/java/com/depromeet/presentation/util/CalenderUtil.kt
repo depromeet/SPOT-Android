@@ -1,6 +1,7 @@
 package com.depromeet.presentation.util
 
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -61,6 +62,11 @@ object CalendarUtil {
         val parsedDate = LocalDateTime.parse(date, formatter)
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일", Locale.KOREAN)
         return parsedDate.format(outputFormatter)
+    }
+
+    fun getCurrentYear(): Int {
+        val today = LocalDate.now()
+        return today.year
     }
 
 }
