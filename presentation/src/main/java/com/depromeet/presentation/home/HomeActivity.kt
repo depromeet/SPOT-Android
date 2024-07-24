@@ -43,11 +43,24 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getInformation()
+        initView()
+        initEvent()
+        initObserver()
+
+    }
+
+    private fun initView(){
+        binding.clMainSight.clipToOutline = true
+    }
+
+    private fun initEvent(){
         binding.ivHomeProfile.setOnClickListener { navigateToProfileEditActivity() }
         binding.ibHomeEdit.setOnClickListener { navigateToProfileEditActivity() }
         binding.clHomeSightRecord.setOnClickListener { navigateToSeatRecordActivity() }
-        binding.clMainSight.clipToOutline = true
+    }
 
+    private fun initObserver() {
         viewModel.profile.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -76,8 +89,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 is UiState.Empty -> {}
             }
         }
-
-        viewModel.getInformation()
     }
 
     private fun updateRecentReview(review: RecentReviewResponse) = with(binding) {
@@ -118,7 +129,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun updateProfile(profile: ProfileResponse) = with(binding) {
-        setSpannableString(viewModel.nickname.value, viewModel.reviewCount.value)
         ivHomeProfile.load(profile.profileImage) { transformations(CircleCropTransformation()) }
         "Lv.${profile.level} ${profile.level.levelToTitle()}".also { tvHomeLevel.text = it }
         ivHomeCheerTeam.load(profile.teamImage)

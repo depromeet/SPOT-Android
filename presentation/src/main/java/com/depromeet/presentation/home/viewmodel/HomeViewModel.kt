@@ -41,6 +41,7 @@ class HomeViewModel @Inject constructor(
             val profileResult = profileDeferred.await()
             profileResult.onSuccess {
                 _profile.value = UiState.Success(it)
+                nickname.value = it.nickname
             }.onFailure {
                 _profile.value = UiState.Failure(it.message ?: "실패")
             }
@@ -48,6 +49,7 @@ class HomeViewModel @Inject constructor(
             val reviewResult = reviewDeferred.await()
             reviewResult.onSuccess {
                 _recentReview.value = UiState.Success(it)
+                reviewCount.value = it.totalReviewCount
             }.onFailure {
                 _recentReview.value = UiState.Failure(it.message ?: "실패")
             }
