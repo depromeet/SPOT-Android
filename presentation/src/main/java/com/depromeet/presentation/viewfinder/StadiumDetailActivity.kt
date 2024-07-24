@@ -1,11 +1,14 @@
 package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
@@ -32,9 +35,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         super.onCreate(savedInstanceState)
         initView()
         initEvent()
+        initObserver()
 
         binding.composeView.setContent {
             StadiumDetailScreen(
+                blockNumber = viewModel.blockCode,
                 viewModel = viewModel,
                 onClickReviewPicture = { reviewContent ->
                     startToStadiumDetailPictureFragment(reviewContent)
@@ -53,6 +58,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                 },
                 onClickReport = {
                     startToBottomSheetDialog(ReportDialog.newInstance(), ReportDialog.TAG)
+                },
+                onClickGoBack = {
+                    finish()
                 }
             )
         }
@@ -77,6 +85,15 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 
         binding.btnUp.setOnClickListener {
             viewModel.updateScrollState(true)
+        }
+    }
+
+    private fun initObserver() {
+        viewModel.blockReviews.asLiveData().observe(this) {
+            when (it) {
+                is UiState.Empty -> binding.btnUp.visibility = View.GONE
+                else -> Unit
+            }
         }
     }
 

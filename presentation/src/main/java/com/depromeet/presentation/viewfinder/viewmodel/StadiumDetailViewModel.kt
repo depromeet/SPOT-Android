@@ -51,7 +51,11 @@ class StadiumDetailViewModel @Inject constructor(
         viewModelScope.launch {
             viewfinderRepository.getBlockReviews(stadiumId, blockCode, query)
                 .onSuccess { blockReviews ->
-                    _blockReviews.value = UiState.Success(blockReviews)
+                    if (blockReviews.topReviewImages.isEmpty() && blockReviews.reviews.isEmpty()) {
+                        _blockReviews.value = UiState.Empty
+                    } else {
+                        _blockReviews.value = UiState.Success(blockReviews)
+                    }
                 }.onFailure { e ->
                     _blockReviews.value = UiState.Failure(e.message ?: "실패")
                 }
