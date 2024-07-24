@@ -70,7 +70,7 @@ class RecentRecordViewHolder(
             }
             tvRecentDateDay.text = CalendarUtil.getDayOfMonthFromDateFormat(item.date).toString()
             tvRecentDay.text = CalendarUtil.getDayOfWeekFromDateFormat(item.date)
-            tvRecentBlockName.text = item.blockName
+            "${item.sectionName} ${item.blockName}블록".also { tvRecentBlockName.text = it }
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)

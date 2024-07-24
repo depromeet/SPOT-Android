@@ -29,6 +29,7 @@ data class MySeatRecordResponse(
         val seatNumber: Int = 0,
         val date: String = "",
         val content: String = "",
+        val sectionName : String = "",
         val member: MemberResponse = MemberResponse(),
         val images: List<ReviewImageResponse> = emptyList(),
         val keywords: List<ReviewKeywordResponse> = emptyList(),

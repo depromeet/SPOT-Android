@@ -142,11 +142,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             tvRecordCount.text = data.reviewCount.toString()
             ivRecordProfile.load(data.profileImage) {
                 transformations(CircleCropTransformation())
+                error(R.drawable.ic_default_profile)
             }
         }
     }
 
     private fun initYearSpinner(years: List<Int>) {
+        viewModel.setSelectedYear(years[0])
         val yearList = years.map { "${it}년" }
 
         val adapter = SpotSpinner(
@@ -170,6 +172,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         adapter.setSelectedItemPosition(position)
                         val selectedYear = yearList[position].filter { it.isDigit() }.toInt()
                         viewModel.setSelectedYear(selectedYear)
+                        binding.ssvRecord.smoothScrollTo(0, 0)
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -191,6 +194,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 override fun onItemMonthClick(item: MonthUiData) {
                     val selectedMonth = item.month
                     viewModel.setSelectedMonth(selectedMonth)
+                    binding.ssvRecord.smoothScrollTo(0, 0)
                 }
             }
     }

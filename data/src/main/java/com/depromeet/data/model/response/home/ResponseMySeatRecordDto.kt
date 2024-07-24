@@ -196,6 +196,7 @@ data class ResponseMySeatRecordDto(
             seatNumber = seat.seatNumber,
             date = dateTime,
             content = content,
+            sectionName = section.name,
             member = member.toMemberResponse(),
             images = images.map { it.toReviewImageResponse() },
             keywords = keywords.map { it.toReviewKeywordResponse() }
