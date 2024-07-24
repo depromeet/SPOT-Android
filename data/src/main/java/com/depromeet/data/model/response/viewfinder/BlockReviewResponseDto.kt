@@ -53,8 +53,6 @@ data class BlockReviewResponseDto(
         val row: ReviewRowResponseDto,
         @SerialName("seat")
         val seat: ReviewSeatResponseDto,
-        @SerialName("seatNumber")
-        val seatNumber: Int,
         @SerialName("dateTime")
         val dateTime: String,
         @SerialName("content")
@@ -209,12 +207,12 @@ data class BlockReviewResponseDto(
     @Serializable
     data class ReviewFilterResponseDto(
         @SerialName("rowNumber")
-        val rowNumber: Int,
+        val rowNumber: Int?,
         @SerialName("seatNumber")
-        val seatNumber: Int,
+        val seatNumber: Int?,
         @SerialName("year")
-        val year: Int,
+        val year: Int?,
         @SerialName("month")
-        val month: Int
+        val month: Int?
     )
 }

@@ -71,7 +71,7 @@ fun BlockReviewResponseDto.TopReviewImagesResponseDto.toTopReviewImagesResponse(
 
 fun BlockReviewResponseDto.ReviewFilterResponseDto.toReviewFilterResponse() =
     BlockReviewResponse.ReviewFilterResponse(
-        rowNumber = rowNumber, seatNumber = seatNumber, year = year, month = month
+        rowNumber = rowNumber ?: 0, seatNumber = seatNumber ?: 0, year = year ?: 0, month = month ?: 0
     )
 
 fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =
@@ -83,7 +83,6 @@ fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =
         block = block.toReviewBlockResponse(),
         row = row.toReviewRowResponse(),
         seat = seat.toReviewSeatResponse(),
-        seatNumber = seatNumber,
         dateTime = dateTime,
         content = content,
         images = images.map { it.toReviewImageResponse() },

@@ -157,7 +157,6 @@ private fun StadiumReviewContentPreview() {
             context = LocalContext.current,
             reviewContent = BlockReviewResponse.ReviewResponse(
                 id = 1,
-                seatNumber = 1,
                 dateTime = "2024-07-13",
                 content = "전체적으로 좋은 경험이었습니다. 다음에 또 오고 싶어요!",
                 images = listOf(
