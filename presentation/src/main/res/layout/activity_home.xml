@@ -51,7 +51,8 @@
                 android:layout_marginTop="32dp"
                 android:src="@drawable/ic_default_profile"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="contentDescription" />
 
             <ImageButton
                 android:id="@+id/ib_home_edit"
@@ -60,7 +61,8 @@
                 android:background="@drawable/circle_t_black02_fill"
                 android:src="@drawable/ic_edit"
                 app:layout_constraintBottom_toBottomOf="@id/iv_home_profile"
-                app:layout_constraintEnd_toEndOf="@id/iv_home_profile" />
+                app:layout_constraintEnd_toEndOf="@id/iv_home_profile"
+                tools:ignore="contentDescription" />
 
             <ImageButton
                 android:id="@+id/ib_home_setting"
@@ -71,7 +73,8 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_setting"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="contentDescription" />
 
             <TextView
                 android:id="@+id/tv_home_level"
@@ -93,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@id/tv_home_level"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_level"
                 tools:text="디프만님, 지금까지\n시야후기를\n0번 작성했어요!" />
@@ -103,10 +106,11 @@
                 android:layout_width="114dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="20dp"
-                android:scaleType="fitXY"
                 android:adjustViewBounds="true"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="@id/tv_home_sight_chance"
                 app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="contentDescription"
                 tools:src="@drawable/ic_lg_team" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -141,7 +145,8 @@
                     android:src="@drawable/ic_chevron_right"
                     app:layout_constraintBottom_toBottomOf="@id/tv_home_find_sight"
                     app:layout_constraintStart_toEndOf="@id/tv_home_find_sight"
-                    app:layout_constraintTop_toTopOf="@id/tv_home_find_sight" />
+                    app:layout_constraintTop_toTopOf="@id/tv_home_find_sight"
+                    tools:ignore="contentDescription" />
 
                 <TextView
                     android:id="@+id/tv_home_find_sight_description"
@@ -160,7 +165,8 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_sight_seeing"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="contentDescription" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -203,7 +209,8 @@
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintBottom_toBottomOf="@id/tv_home_register_sight"
                         app:layout_constraintStart_toEndOf="@id/tv_home_register_sight"
-                        app:layout_constraintTop_toTopOf="@id/tv_home_register_sight" />
+                        app:layout_constraintTop_toTopOf="@id/tv_home_register_sight"
+                        tools:ignore="contentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -221,7 +228,8 @@
                         android:layout_marginBottom="4dp"
                         android:src="@drawable/ic_register_sight"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:ignore="contentDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -253,7 +261,8 @@
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintBottom_toBottomOf="@id/tv_home_sight_record"
                         app:layout_constraintStart_toEndOf="@id/tv_home_sight_record"
-                        app:layout_constraintTop_toTopOf="@id/tv_home_sight_record" />
+                        app:layout_constraintTop_toTopOf="@id/tv_home_sight_record"
+                        tools:ignore="contentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -323,6 +332,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/rect_gray100_fill_8"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_home_recent_sight_record">
@@ -335,7 +345,8 @@
                         android:src="@drawable/ic_folder_blank"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="contentDescription" />
 
                     <TextView
                         android:id="@+id/tv_home_no_record_description"
@@ -376,6 +387,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="20dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
@@ -390,6 +402,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="contentDescription"
                         tools:src="@drawable/ic_stadium_test" />
 
                     <TextView
@@ -416,6 +429,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="20dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
@@ -430,6 +444,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/iv_home_recent_two_record2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="contentDescription"
                         tools:src="@drawable/ic_stadium_test" />
 
                     <ImageView
@@ -442,7 +457,8 @@
                         android:src="@drawable/ic_stadium_test"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_home_recent_two_record1"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="contentDescription" />
 
                     <TextView
                         android:id="@+id/tv_home_recent_two_section"
@@ -468,6 +484,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="20dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
@@ -482,6 +499,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/iv_home_recent_three_record2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="contentDescription"
                         tools:src="@drawable/ic_stadium_test" />
 
                     <TextView
@@ -511,7 +529,8 @@
                         app:layout_constraintBottom_toTopOf="@id/iv_home_recent_three_record3"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_home_recent_three_record1"
-                        app:layout_constraintTop_toTopOf="@id/iv_home_recent_three_record1" />
+                        app:layout_constraintTop_toTopOf="@id/iv_home_recent_three_record1"
+                        tools:ignore="contentDescription" />
 
                     <ImageView
                         android:id="@+id/iv_home_recent_three_record3"
@@ -524,7 +543,8 @@
                         app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_three_record1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_home_recent_three_record1"
-                        app:layout_constraintTop_toBottomOf="@id/iv_home_recent_three_record2" />
+                        app:layout_constraintTop_toBottomOf="@id/iv_home_recent_three_record2"
+                        tools:ignore="contentDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

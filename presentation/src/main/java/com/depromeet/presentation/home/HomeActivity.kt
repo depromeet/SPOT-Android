@@ -16,8 +16,8 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.extension.toast
-import com.depromeet.presentation.home.viewmodel.HomeUiState
 import com.depromeet.presentation.home.viewmodel.HomeViewModel
+import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import com.depromeet.presentation.util.applyBoldAndSizeSpan
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,11 +45,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         super.onCreate(savedInstanceState)
         binding.ivHomeProfile.setOnClickListener { navigateToProfileEditActivity() }
         binding.ibHomeEdit.setOnClickListener { navigateToProfileEditActivity() }
+        binding.clHomeSightRecord.setOnClickListener { navigateToSeatRecordActivity() }
         binding.clMainSight.clipToOutline = true
-
-        viewModel.uiState.asLiveData().observe(this) { state ->
-            updateUi(state)
-        }
 
         viewModel.profile.asLiveData().observe(this) { state ->
             when (state) {
@@ -87,6 +84,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         setSpannableString(viewModel.nickname.value, viewModel.reviewCount.value)
         tvHomeRecentRecordName.text = review.stadiumName
         tvHomeRecentRecordDate.text = review.date //TODO : 여기 바꿔야함 CALENDER UTIL로
+
+        sightList.forEachIndexed { index, view ->
+            view.visibility =
+                if (index == review.reviewImages.size) View.VISIBLE else View.GONE
+        }
         when (review.reviewImages.size) {
             0 -> {
                 tvHomeRecentRecordDate.visibility = View.GONE
@@ -110,6 +112,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 ivHomeRecentThreeRecord3.loadAndClip(review.reviewImages[2])
                 "${review.blockName}${review.seatNumber}".also { tvHomeRecentOneSection.text = it }
             }
+
             else -> {}
         }
     }
@@ -135,61 +138,19 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
     }
 
-
-    private fun updateUi(state: HomeUiState) {
-        with(binding) {
-            val profile = state.profile
-            val recentSight = state.recentSight
-
-            "Lv.${profile.level} ${profile.title}".also { tvHomeLevel.text = it }
-            setSpannableString(profile.nickName, profile.writeCount)
-            ivHomeCheerTeam.load(profile.teamImage)
-            tvHomeRecentRecordName.text = recentSight.location
-            tvHomeRecentRecordDate.text = recentSight.date
-
-
-            sightList.forEachIndexed { index, view ->
-                view.visibility =
-                    if (index == recentSight.photoList.size) View.VISIBLE else View.GONE
-            }
-
-            when (recentSight.photoList.size) {
-                0 -> {
-                    tvHomeRecentRecordDate.visibility = View.GONE
-                    tvHomeRecentRecordName.visibility = View.GONE
-                }
-
-                1 -> {
-                    ivHomeRecentOneRecord1.loadAndClip(recentSight.photoList[0])
-                    tvHomeRecentOneSection.text = recentSight.section
-                }
-
-                2 -> {
-                    ivHomeRecentTwoRecord1.loadAndClip(recentSight.photoList[0])
-                    ivHomeRecentTwoRecord2.loadAndClip(recentSight.photoList[1])
-                    tvHomeRecentTwoSection.text = recentSight.section
-                }
-
-                3 -> {
-                    ivHomeRecentThreeRecord1.loadAndClip(recentSight.photoList[0])
-                    ivHomeRecentThreeRecord2.loadAndClip(recentSight.photoList[1])
-                    ivHomeRecentThreeRecord3.loadAndClip(recentSight.photoList[2])
-                    tvHomeRecentThreeSection.text = recentSight.section
-                }
-
-                else -> {}
-            }
-        }
-    }
-
     private fun navigateToProfileEditActivity() {
-        Intent(this, ProfileEditActivity::class.java).apply {
-            with(viewModel.uiState.value.profile) {
-                putExtra(PROFILE_NAME, this.nickName)
-                putExtra(PROFILE_IMAGE, this.image)
+        val currentState = viewModel.profile.value
+
+        if(currentState is UiState.Success){
+            Intent(this, ProfileEditActivity::class.java).apply {
+            with(currentState.data) {
+                putExtra(PROFILE_NAME, this.nickname)
+                putExtra(PROFILE_IMAGE, this.profileImage)
                 putExtra(PROFILE_CHEER_TEAM, this.teamId)
             }
-        }.let(::startActivity)
+            }.let(::startActivity)
+        }
+
     }
 
     private fun setSpannableString(
@@ -208,6 +169,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         applyBoldAndSizeSpan(spannableBuilder, startIndexWriteCount, endIndexWriteCount)
 
         binding.tvHomeSightChance.text = spannableBuilder
+    }
+
+    private fun navigateToSeatRecordActivity() {
+        Intent(this, SeatRecordActivity::class.java).apply { startActivity(this) }
     }
 
 }
