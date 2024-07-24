@@ -5,5 +5,6 @@ data class ProfileResponse(
     val profileImage : String = "",
     val nickname :String = "",
     val level : Int = 0,
+    val levelTitle : String = "",
     val teamImage : String = ""
 )

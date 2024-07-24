@@ -12,7 +12,6 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.ProfileResponse
 import com.depromeet.domain.entity.response.home.RecentReviewResponse
-import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.extension.toast
@@ -50,11 +49,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
     }
 
-    private fun initView(){
+    private fun initView() {
         binding.clMainSight.clipToOutline = true
     }
 
-    private fun initEvent(){
+    private fun initEvent() {
         binding.ivHomeProfile.setOnClickListener { navigateToProfileEditActivity() }
         binding.ibHomeEdit.setOnClickListener { navigateToProfileEditActivity() }
         binding.clHomeSightRecord.setOnClickListener { navigateToSeatRecordActivity() }
@@ -129,35 +128,29 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun updateProfile(profile: ProfileResponse) = with(binding) {
-        ivHomeProfile.load(profile.profileImage) { transformations(CircleCropTransformation()) }
-        "Lv.${profile.level} ${profile.level.levelToTitle()}".also { tvHomeLevel.text = it }
+        setSpannableString(viewModel.nickname.value, viewModel.reviewCount.value)
+        if (profile.profileImage.isEmpty()) {
+            ivHomeProfile.setImageResource(com.depromeet.presentation.R.drawable.ic_default_profile)
+        } else {
+            ivHomeProfile.load(profile.profileImage) {
+                transformations(CircleCropTransformation())
+            }
+        }
+        "Lv.${profile.level} ${profile.levelTitle}".also { tvHomeLevel.text = it }
         ivHomeCheerTeam.load(profile.teamImage)
 
-    }
-
-    /** 임시 처리 서버에서 내려주면 다시 바꿔주고 아니면 그대로 유지*/
-    private fun Int.levelToTitle(): String {
-        return when (this) {
-            1 -> getString(R.string.one_level_to_title)
-            2 -> getString(R.string.two_level_to_title)
-            3 -> getString(R.string.three_level_to_title)
-            4 -> getString(R.string.four_level_to_title)
-            5 -> getString(R.string.five_level_to_title)
-            6 -> getString(R.string.six_level_to_title)
-            else -> getString(R.string.unknown_level_to_title)
-        }
     }
 
     private fun navigateToProfileEditActivity() {
         val currentState = viewModel.profile.value
 
-        if(currentState is UiState.Success){
+        if (currentState is UiState.Success) {
             Intent(this, ProfileEditActivity::class.java).apply {
-            with(currentState.data) {
-                putExtra(PROFILE_NAME, this.nickname)
-                putExtra(PROFILE_IMAGE, this.profileImage)
-                putExtra(PROFILE_CHEER_TEAM, this.teamId)
-            }
+                with(currentState.data) {
+                    putExtra(PROFILE_NAME, this.nickname)
+                    putExtra(PROFILE_IMAGE, this.profileImage)
+                    putExtra(PROFILE_CHEER_TEAM, this.teamId)
+                }
             }.let(::startActivity)
         }
 
