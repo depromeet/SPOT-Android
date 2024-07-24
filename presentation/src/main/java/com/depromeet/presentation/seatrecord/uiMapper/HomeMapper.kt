@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
  *  리팩토링 예정
  */
 data class MonthReviewData(
-    val month: String,
+    val month: Int,
     val reviews: List<MySeatRecordResponse.ReviewResponse>,
 )
 

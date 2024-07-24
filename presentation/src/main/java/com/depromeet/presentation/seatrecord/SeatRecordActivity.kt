@@ -15,7 +15,6 @@ import com.depromeet.designsystem.extension.dpToPx
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
-import com.depromeet.presentation.extension.extractMonth
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
@@ -23,6 +22,7 @@ import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -76,7 +76,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun observeDates() {
-        viewModel.selectedYear.asLiveData().observe(this) { selectedYear ->
+        viewModel.selectedYear.asLiveData().observe(this) {
             viewModel.initMonths()
         }
         viewModel.months.asLiveData().observe(this) {
@@ -220,9 +220,10 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setReviewList(reviews: List<MySeatRecordResponse.ReviewResponse>) {
         val groupList =
-            reviews.groupBy { it.date.extractMonth(false) }.map { (month, reviews) ->
-                MonthReviewData(month, reviews)
-            }
+            reviews.groupBy { CalendarUtil.getMonthFromDateFormat(it.date) }
+                .map { (month, reviews) ->
+                    MonthReviewData(month, reviews)
+                }
         monthRecordAdapter = MonthRecordAdapter()
         binding.rvRecordMonthDetail.adapter = monthRecordAdapter
         monthRecordAdapter.submitList(groupList)

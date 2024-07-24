@@ -111,11 +111,20 @@ class SeatRecordViewModel @Inject constructor(
     fun removeReviewData() {
         val currentState = reviews.value
         if (currentState is UiState.Success) {
-            val updatedList = currentState.data.reviews.filter { review ->
-                review.id != editReviewId.value
+            viewModelScope.launch {
+                homeRepository.deleteReview(editReviewId.value)
+                    .onSuccess {
+                        if(it.reviewId == editReviewId.value){
+                            val updatedList = currentState.data.reviews.filter { review ->
+                                review.id != editReviewId.value
+                            }
+                            _reviews.value = UiState.Success(currentState.data.copy(reviews = updatedList))
+                        }
+                    }
+                    .onFailure {
+                        Timber.d("삭제 실패 : $it")
+                    }
             }
-            /** 여기서 서버에서 통신이 성공 -> uistate업로드 (api 명세 아직 없음)*/
-            _reviews.value = UiState.Success(currentState.data.copy(reviews = updatedList))
             _deleteClickedEvent.value = false
         }
 

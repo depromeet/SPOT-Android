@@ -14,7 +14,7 @@ class MonthRecordAdapter() :
     ListAdapter<MonthReviewData, MonthRecordViewHolder>(
         ItemDiffCallback(
             onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
-            onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+            onContentsTheSame = { oldItem, newItem -> oldItem.reviews == newItem.reviews }
         )
     ) {
     interface OnItemRecordClickListener {
