@@ -31,9 +31,11 @@ data class ResponseMySeatRecordDto(
         @SerialName("userId")
         val userId: Int,
         @SerialName("profileImageUrl")
-        val profileImageUrl: String,
+        val profileImageUrl: String?,
         @SerialName("level")
         val level: Int,
+        @SerialName("levelTitle")
+        val levelTitle: String,
         @SerialName("nickname")
         val nickname: String,
         @SerialName("reviewCount")
@@ -91,7 +93,7 @@ data class ResponseMySeatRecordDto(
         @Serializable
         data class ResponseMemberDto(
             @SerialName("profileImage")
-            val profileImage: String,
+            val profileImage: String?,
             @SerialName("nickname")
             val nickname: String,
             @SerialName("level")
@@ -104,14 +106,6 @@ data class ResponseMySeatRecordDto(
             val id: Int,
             @SerialName("name")
             val name: String,
-            @SerialName("mainImage")
-            val mainImage: String,
-            @SerialName("seatingChartImage")
-            val seatingChartImage: String,
-            @SerialName("labeledSeatingChartImage")
-            val labeledSeatingChartImage: String,
-            @SerialName("isActive")
-            val isActive: Boolean,
         )
 
         @Serializable
@@ -121,7 +115,7 @@ data class ResponseMySeatRecordDto(
             @SerialName("name")
             val name: String,
             @SerialName("alias")
-            val alias: String,
+            val alias: String?,
         )
 
         @Serializable
@@ -147,26 +141,27 @@ data class ResponseMySeatRecordDto(
             @SerialName("seatNumber")
             val seatNumber: Int,
         )
+
+        @Serializable
+        data class ResponseReviewImageDto(
+            @SerialName("id")
+            val id: Int,
+            @SerialName("url")
+            val url: String,
+        )
     }
 
-    @Serializable
-    data class ResponseReviewImageDto(
-        @SerialName("id")
-        val id: Int,
-        @SerialName("url")
-        val url: String,
-    )
 
     @Serializable
     data class ResponseFilterDto(
         @SerialName("rowNumber")
-        val rowNumber: Int,
+        val rowNumber: Int?,
         @SerialName("seatNumber")
-        val seatNumber: Int,
+        val seatNumber: Int?,
         @SerialName("year")
-        val year: Int,
+        val year: Int?,
         @SerialName("month")
-        val month: Int,
+        val month: Int?,
     )
 
     companion object {
@@ -182,8 +177,9 @@ data class ResponseMySeatRecordDto(
         private fun ResponseMemberDto.toMyProfileResponse() =
             MySeatRecordResponse.MyProfileResponse(
                 userId = userId,
-                profileImage = profileImageUrl,
+                profileImage = profileImageUrl ?: "",
                 level = level,
+                levelTitle = levelTitle,
                 nickname = nickname,
                 reviewCount = reviewCount
             )
@@ -207,7 +203,7 @@ data class ResponseMySeatRecordDto(
 
         private fun ResponseReviewDto.ResponseMemberDto.toMemberResponse() =
             MySeatRecordResponse.ReviewResponse.MemberResponse(
-                profileImage = profileImage,
+                profileImage = profileImage ?: "",
                 nickname = nickname,
                 level = level
             )
@@ -219,7 +215,7 @@ data class ResponseMySeatRecordDto(
                 isPositive = isPositive
             )
 
-        private fun ResponseReviewImageDto.toReviewImageResponse() =
+        private fun ResponseReviewDto.ResponseReviewImageDto.toReviewImageResponse() =
             MySeatRecordResponse.ReviewResponse.ReviewImageResponse(
                 id = id,
                 url = url

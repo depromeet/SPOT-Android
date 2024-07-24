@@ -10,7 +10,7 @@ import java.util.Locale
 
 object CalendarUtil {
 
-    private const val ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    private const val ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
     private const val DATE_FORMAT = "yy.MM.dd"
 
     fun formatCalendarDate(calendar: Calendar): String {

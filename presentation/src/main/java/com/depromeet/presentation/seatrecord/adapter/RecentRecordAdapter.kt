@@ -7,11 +7,11 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
-import com.depromeet.presentation.extension.extractDay
-import com.depromeet.presentation.extension.getDayOfWeek
 import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
+import com.depromeet.presentation.util.CalendarUtil
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
@@ -63,9 +63,13 @@ class RecentRecordViewHolder(
 
     fun bind(item: MySeatRecordResponse.ReviewResponse) {
         with(binding) {
-            ivRecentImage.loadAndClip(item.images[0].url)
-            tvRecentDateDay.text = item.date.extractDay()
-            tvRecentDay.text = item.date.getDayOfWeek()
+            if (item.images.isNotEmpty()) {
+                ivRecentImage.loadAndClip(item.images[0].url)
+            } else {
+                ivRecentImage.loadAndClip(R.drawable.ic_image_placeholder)
+            }
+            tvRecentDateDay.text = CalendarUtil.getDayOfMonthFromDateFormat(item.date).toString()
+            tvRecentDay.text = CalendarUtil.getDayOfWeekFromDateFormat(item.date)
             tvRecentBlockName.text = item.blockName
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {

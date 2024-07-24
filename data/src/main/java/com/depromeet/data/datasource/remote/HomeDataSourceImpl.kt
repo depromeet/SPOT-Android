@@ -21,10 +21,10 @@ class HomeDataSourceImpl @Inject constructor(
 ) : HomeDataSource {
     override suspend fun getMySeatRecordData(requestMySeatRecordDto: RequestMySeatRecordDto): ResponseMySeatRecordDto {
         return homeApiService.getMySeatRecord(
-            requestMySeatRecordDto.offset,
-            requestMySeatRecordDto.limit,
-            requestMySeatRecordDto.year,
-            requestMySeatRecordDto.month
+            page = requestMySeatRecordDto.page,
+            size = requestMySeatRecordDto.size,
+            year = requestMySeatRecordDto.year,
+            month = requestMySeatRecordDto.month
         )
     }
 

@@ -109,7 +109,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.reviews.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    /*** setProfile() ->사용자 프로필 데이터 아직 서버 api명세서에 없음 */
+                    setProfile(state.data.profile)
                     setReviewList(state.data.reviews)
                 }
 
@@ -137,7 +137,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
             //TODO : 서버에서 칭호 넘겨주변 업데이트 해야함..
-            "Lv.${data.level} 칭호".also { tvRecordLevel.text = it }
+            "Lv.${data.level} ${data.levelTitle}".also { tvRecordLevel.text = it }
             tvRecordNickname.text = data.nickname
             tvRecordCount.text = data.reviewCount.toString()
             ivRecordProfile.load(data.profileImage) {

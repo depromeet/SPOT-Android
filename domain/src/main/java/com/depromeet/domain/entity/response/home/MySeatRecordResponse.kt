@@ -1,7 +1,7 @@
 package com.depromeet.domain.entity.response.home
 
 data class MySeatRecordResponse(
-    val profile: MyProfileResponse,
+    val profile: MyProfileResponse = MyProfileResponse(),
     val reviews: List<ReviewResponse> = emptyList(),
     val totalElements: Int = 0,
     val totalPages: Int = 0,
@@ -12,6 +12,7 @@ data class MySeatRecordResponse(
         val userId: Int = 0,
         val profileImage: String = "",
         val level: Int = 0,
+        val levelTitle : String = "",
         val nickname: String = "",
         val reviewCount: Int = 0,
     )
