@@ -44,9 +44,12 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
         setLayoutSizeRatio(heightPercent = 0.7f, widthPercent = 1f)
         initView()
         initEvent()
+
     }
 
     private fun initView() {
+        initEditText()
+
         binding.etOnlyColumn.addTextChangedListener { editText ->
             binding.tvWarning.visibility = View.INVISIBLE
             binding.etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
@@ -82,6 +85,24 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
         readDescription()
         onClickCheckOnlyColumn()
         onClickSelectSeat()
+    }
+
+    private fun initEditText() {
+        if (stadiumDetailViewModel.reviewFilter.value.rowNumber == null && stadiumDetailViewModel.reviewFilter.value.seatNumber == null) return
+
+        if (stadiumDetailViewModel.reviewFilter.value.rowNumber != null && stadiumDetailViewModel.reviewFilter.value.seatNumber != null) {
+            binding.etColumn.setText(stadiumDetailViewModel.reviewFilter.value.rowNumber.toString())
+            binding.etNumber.setText(stadiumDetailViewModel.reviewFilter.value.seatNumber.toString())
+            return
+        }
+
+        if (stadiumDetailViewModel.reviewFilter.value.rowNumber != null && stadiumDetailViewModel.reviewFilter.value.seatNumber == null) {
+            binding.etOnlyColumn.setText(stadiumDetailViewModel.reviewFilter.value.rowNumber.toString())
+            binding.btnCheckColumn.setBackgroundResource(R.drawable.ic_check)
+            binding.clColumnNumber.visibility = View.INVISIBLE
+            binding.clOnlyColumn.visibility = View.VISIBLE
+            return
+        }
     }
 
     private fun readDescription() {

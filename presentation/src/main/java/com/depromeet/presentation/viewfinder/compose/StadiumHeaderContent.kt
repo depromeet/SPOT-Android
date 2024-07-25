@@ -31,7 +31,8 @@ fun StadiumHeaderContent(
     keywords: List<Keyword>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
-    onClickSelectSeat: () -> Unit
+    onClickSelectSeat: () -> Unit,
+    onCancelSeat: () -> Unit
 ) {
     Column(
         modifier = modifier.background(Color.White),
@@ -51,7 +52,8 @@ fun StadiumHeaderContent(
 
         StadiumSeatCheckBox(
             reviewFilter = reviewFilter,
-            onClick = onClickSelectSeat
+            onClick = onClickSelectSeat,
+            onCancel = onCancelSeat
         )
 
         Box(
@@ -109,7 +111,8 @@ private fun StadiumHeaderContentPreview() {
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
         ),
         onChangeIsMore = {},
-        onClickSelectSeat = {}
+        onClickSelectSeat = {},
+        onCancelSeat = {}
     )
 }
 
@@ -149,6 +152,7 @@ private fun StadiumHeaderContentIsMorePreview() {
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
         ),
         onChangeIsMore = {},
-        onClickSelectSeat = {}
+        onClickSelectSeat = {},
+        onCancelSeat = {}
     )
 }

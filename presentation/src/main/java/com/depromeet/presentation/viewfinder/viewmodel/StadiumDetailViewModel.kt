@@ -107,4 +107,9 @@ class StadiumDetailViewModel @Inject constructor(
 
         response(false, Seat.COLUMN)
     }
+
+    fun clearSeat() {
+        _reviewFilter.value = _reviewFilter.value.copy(rowNumber = null, seatNumber = null)
+        getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
+    }
 }

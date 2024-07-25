@@ -73,7 +73,8 @@ fun StadiumDetailScreen(
                             seatContent = state.data.formattedStadiumBlock(),
                             keywords = state.data.keywords.map { it.toKeyword() },
                             onChangeIsMore = { isMore = it },
-                            onClickSelectSeat = onClickSelectSeat
+                            onClickSelectSeat = onClickSelectSeat,
+                            onCancelSeat = viewModel::clearSeat
                         )
                         Spacer(modifier = Modifier.height(30.dp))
                     }

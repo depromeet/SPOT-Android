@@ -48,7 +48,5 @@ private fun StadiumAreaTextPreview() {
     StadiumAreaText(
         stadium = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭"
-//        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-//        seatContent = StadiumArea("1루", 207, "오렌지석")
     )
 }

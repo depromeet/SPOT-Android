@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -21,13 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.presentation.R
-import com.depromeet.presentation.viewfinder.sample.Seat
 
 @Composable
 fun StadiumSeatCheckBox(
     reviewFilter: BlockReviewRequestQuery,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onCancel: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -74,9 +75,26 @@ fun StadiumSeatCheckBox(
         )
         Spacer(modifier = Modifier.width(6.dp))
         Icon(
-            painter = painterResource(id = R.drawable.ic_down),
+            painter = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
+                painterResource(id = R.drawable.ic_down)
+            } else {
+                painterResource(id = R.drawable.ic_close)
+            },
             contentDescription = null,
-            tint = Color(0xFF878787)
+            tint = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
+                Color(0xFF878787)
+            } else {
+                Color(0xFFFFFFFF)
+            },
+            modifier = Modifier
+                .size(12.dp)
+                .clickable {
+                    if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
+                        onClick()
+                    } else {
+                        onCancel()
+                    }
+                }
         )
     }
 }
@@ -87,7 +105,8 @@ private fun StadiumSeatCheckBoxPreview() {
     StadiumSeatCheckBox(
         reviewFilter = BlockReviewRequestQuery(),
         modifier = Modifier,
-        onClick = {}
+        onClick = {},
+        onCancel = {}
 
     )
 }
@@ -100,7 +119,8 @@ private fun StadiumSeatCheckBoxPreviewRowNumber() {
             rowNumber = 1,
         ),
         modifier = Modifier,
-        onClick = {}
+        onClick = {},
+        onCancel = {}
     )
 }
 
@@ -113,6 +133,7 @@ private fun StadiumSeatCheckBoxPreviewSeatNumber() {
             seatNumber = 12
         ),
         modifier = Modifier,
-        onClick = {}
+        onClick = {},
+        onCancel = {}
     )
 }

@@ -136,7 +136,7 @@ data class BlockReviewResponse(
      * @example : 서울 잠실 야구장
      */
     fun formattedStadiumTitle(): String {
-        return reviews.getOrNull(0)?.stadium?.name ?: ""
+        return location.stadiumName
     }
 
     /**
