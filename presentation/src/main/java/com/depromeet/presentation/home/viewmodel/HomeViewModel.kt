@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
             val reviewResult = reviewDeferred.await()
             reviewResult.onSuccess {
                 _recentReview.value = UiState.Success(it)
-                reviewCount.value = it.totalReviewCount
+                reviewCount.value = it.reviewCount
             }.onFailure {
                 _recentReview.value = UiState.Failure(it.message ?: "실패")
             }

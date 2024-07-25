@@ -17,6 +17,7 @@ import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.viewmodel.HomeViewModel
 import com.depromeet.presentation.seatrecord.SeatRecordActivity
+import com.depromeet.presentation.util.CalendarUtil
 import com.depromeet.presentation.util.applyBoldAndSizeSpan
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -90,37 +91,43 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
     }
 
-    private fun updateRecentReview(review: RecentReviewResponse) = with(binding) {
+    private fun updateRecentReview(data: RecentReviewResponse) = with(binding) {
         setSpannableString(viewModel.nickname.value, viewModel.reviewCount.value)
-        tvHomeRecentRecordName.text = review.stadiumName
-        tvHomeRecentRecordDate.text = review.date //TODO : 여기 바꿔야함 CALENDER UTIL로
+        tvHomeRecentRecordName.text = data.review.stadiumName
+        tvHomeRecentRecordDate.text = CalendarUtil.getFormattedDate(data.review.baseReview.dateTime)
 
         sightList.forEachIndexed { index, view ->
             view.visibility =
-                if (index == review.reviewImages.size) View.VISIBLE else View.GONE
+                if (index == data.review.baseReview.images.size) View.VISIBLE else View.GONE
         }
-        when (review.reviewImages.size) {
+        when (data.review.baseReview.images.size) {
             0 -> {
                 tvHomeRecentRecordDate.visibility = View.GONE
                 tvHomeRecentRecordName.visibility = View.GONE
             }
 
             1 -> {
-                ivHomeRecentOneRecord1.loadAndClip(review.reviewImages[0])
-                "${review.blockName}${review.seatNumber}".also { tvHomeRecentOneSection.text = it }
+                ivHomeRecentOneRecord1.loadAndClip(data.review.baseReview.images[0])
+                "${data.review.sectionName} ${data.review.blockCode}블록".also {
+                    tvHomeRecentOneSection.text = it
+                }
             }
 
             2 -> {
-                ivHomeRecentTwoRecord1.loadAndClip(review.reviewImages[0])
-                ivHomeRecentTwoRecord2.loadAndClip(review.reviewImages[1])
-                "${review.blockName}${review.seatNumber}".also { tvHomeRecentOneSection.text = it }
+                ivHomeRecentTwoRecord1.loadAndClip(data.review.baseReview.images[0])
+                ivHomeRecentTwoRecord2.loadAndClip(data.review.baseReview.images[1])
+                "${data.review.sectionName} ${data.review.blockCode}블록".also {
+                    tvHomeRecentOneSection.text = it
+                }
             }
 
             3 -> {
-                ivHomeRecentThreeRecord1.loadAndClip(review.reviewImages[0])
-                ivHomeRecentThreeRecord2.loadAndClip(review.reviewImages[1])
-                ivHomeRecentThreeRecord3.loadAndClip(review.reviewImages[2])
-                "${review.blockName}${review.seatNumber}".also { tvHomeRecentOneSection.text = it }
+                ivHomeRecentThreeRecord1.loadAndClip(data.review.baseReview.images[0])
+                ivHomeRecentThreeRecord2.loadAndClip(data.review.baseReview.images[1])
+                ivHomeRecentThreeRecord3.loadAndClip(data.review.baseReview.images[2])
+                "${data.review.sectionName} ${data.review.blockCode}블록".also {
+                    tvHomeRecentOneSection.text = it
+                }
             }
 
             else -> {}
