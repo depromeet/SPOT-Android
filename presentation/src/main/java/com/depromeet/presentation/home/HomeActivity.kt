@@ -16,9 +16,11 @@ import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.viewmodel.HomeViewModel
+import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import com.depromeet.presentation.util.CalendarUtil
 import com.depromeet.presentation.util.applyBoldAndSizeSpan
+import com.depromeet.presentation.viewfinder.StadiumActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,13 +53,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initView() {
-        binding.clMainSight.clipToOutline = true
+        binding.clMainFindSight.clipToOutline = true
     }
 
-    private fun initEvent() {
-        binding.ivHomeProfile.setOnClickListener { navigateToProfileEditActivity() }
-        binding.ibHomeEdit.setOnClickListener { navigateToProfileEditActivity() }
-        binding.clHomeSightRecord.setOnClickListener { navigateToSeatRecordActivity() }
+    private fun initEvent() = with(binding) {
+
+        /** 프로필 수정 */
+        ivHomeProfile.setOnClickListener { navigateToProfileEditActivity() }
+        ibHomeEdit.setOnClickListener { navigateToProfileEditActivity() }
+        /** 내 시야 기록 */
+        clHomeSightRecord.setOnClickListener { navigateToSeatRecordActivity() }
+        tvHomeMore.setOnClickListener { navigateToSeatRecordActivity() }
+        clHomeOneRecord.setOnClickListener { navigateToSeatRecordActivity() }
+        clHomeTwoRecord.setOnClickListener { navigateToSeatRecordActivity() }
+        clHomeThreeRecord.setOnClickListener { navigateToSeatRecordActivity() }
+        /** 시야후기 등록*/
+        clHomeRegisterSight.setOnClickListener { navigateToReviewActivity() }
+        clHomeNoRecord.setOnClickListener { navigateToReviewActivity() }
+        /** 시야 찾기 */
+        clMainFindSight.setOnClickListener { navigateToStadiumActivity() }
+
     }
 
     private fun initObserver() {
@@ -148,21 +163,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
     }
 
-    private fun navigateToProfileEditActivity() {
-        val currentState = viewModel.profile.value
-
-        if (currentState is UiState.Success) {
-            Intent(this, ProfileEditActivity::class.java).apply {
-                with(currentState.data) {
-                    putExtra(PROFILE_NAME, this.nickname)
-                    putExtra(PROFILE_IMAGE, this.profileImage)
-                    putExtra(PROFILE_CHEER_TEAM, this.teamId)
-                }
-            }.let(::startActivity)
-        }
-
-    }
-
     private fun setSpannableString(
         nickName: String,
         writeCount: Int,
@@ -181,8 +181,31 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         binding.tvHomeSightChance.text = spannableBuilder
     }
 
+
+    private fun navigateToProfileEditActivity() {
+        val currentState = viewModel.profile.value
+
+        if (currentState is UiState.Success) {
+            Intent(this, ProfileEditActivity::class.java).apply {
+                with(currentState.data) {
+                    putExtra(PROFILE_NAME, this.nickname)
+                    putExtra(PROFILE_IMAGE, this.profileImage)
+                    putExtra(PROFILE_CHEER_TEAM, this.teamId)
+                }
+            }.let(::startActivity)
+        }
+
+    }
+
     private fun navigateToSeatRecordActivity() {
         Intent(this, SeatRecordActivity::class.java).apply { startActivity(this) }
     }
 
+    private fun navigateToReviewActivity() {
+        Intent(this, ReviewActivity::class.java).apply { startActivity(this) }
+    }
+
+    private fun navigateToStadiumActivity() {
+        Intent(this, StadiumActivity::class.java).apply { startActivity(this) }
+    }
 }

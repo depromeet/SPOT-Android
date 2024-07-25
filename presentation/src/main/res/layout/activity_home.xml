@@ -114,7 +114,7 @@
                 tools:src="@drawable/ic_lg_team" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_main_sight"
+                android:id="@+id/cl_main_find_sight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -179,7 +179,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_main_sight">
+                app:layout_constraintTop_toBottomOf="@id/cl_main_find_sight">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_register_sight"
