@@ -50,7 +50,8 @@ interface SeatReviewService {
 
     @POST("/api/v1/seats/{seatId}/members/{memberId}/reviews")
     suspend fun postSeatReview(
-        @Path("seatId") seatId: Int,
+        @Path("blockId") blockId: Int,
+        @Path("seatNumber") seatNumber: Int,
         @Body requestPostSignupDto: RequestSeatReviewDto,
     )
 }
