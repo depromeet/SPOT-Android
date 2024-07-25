@@ -20,41 +20,86 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 
 @Composable
 fun MonthlyViewCard(
+    reviewQuery: BlockReviewRequestQuery,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onCancel: () -> Unit
 ) {
     Row(
         modifier = modifier
             .background(color = Color.White, shape = RoundedCornerShape(100.dp))
-            .border(width = 1.dp, color = Color(0xFFE5E5E5), shape = RoundedCornerShape(100.dp))
+            .border(
+                width = 1.dp,
+                color = if (reviewQuery.month != null) {
+                    Color(0xFF212124)
+                } else {
+                    Color(0xFFE5E5E5)
+                }, shape = RoundedCornerShape(100.dp)
+            )
             .clickable { onClick() }
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "월별 시야",
+            text = if (reviewQuery.month != null) {
+                "${reviewQuery.month}월"
+            } else {
+                "월별 시야"
+            },
             fontSize = 13.sp,
             color = Color(0xFF121212)
         )
         Spacer(modifier = Modifier.width(4.dp))
         Icon(
-            painter = painterResource(id = R.drawable.ic_down),
+            painter = if (reviewQuery.month != null) {
+                painterResource(id = R.drawable.ic_close)
+            } else {
+                painterResource(id = R.drawable.ic_down)
+            },
             contentDescription = null,
-            tint = Color(0xFF9F9F9F),
-            modifier = Modifier.size(12.dp)
+            tint = if (reviewQuery.month != null) {
+                Color(0xFF212124)
+            } else {
+                Color(0xFF9F9F9F)
+            },
+            modifier = Modifier
+                .size(12.dp)
+                .clickable {
+                    if (reviewQuery.month != null) {
+                        onCancel()
+                    } else {
+                        onClick()
+                    }
+                }
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MonthlyViewCardPreview() {
     MonthlyViewCard(
-        onClick = {}
+        reviewQuery = BlockReviewRequestQuery(
+            month = 1
+        ),
+        onClick = {},
+        onCancel = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MonthlyViewCardNullPreview() {
+    MonthlyViewCard(
+        reviewQuery = BlockReviewRequestQuery(),
+        onClick = {},
+        onCancel = {}
     )
 }

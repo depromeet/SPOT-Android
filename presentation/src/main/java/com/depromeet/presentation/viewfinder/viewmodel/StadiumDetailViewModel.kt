@@ -112,4 +112,9 @@ class StadiumDetailViewModel @Inject constructor(
         _reviewFilter.value = _reviewFilter.value.copy(rowNumber = null, seatNumber = null)
         getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
     }
+
+    fun clearMonth() {
+        _reviewFilter.value = _reviewFilter.value.copy(month = null)
+        getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
+    }
 }

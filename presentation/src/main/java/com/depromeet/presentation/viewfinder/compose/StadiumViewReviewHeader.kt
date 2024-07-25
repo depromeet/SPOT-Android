@@ -18,12 +18,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 
 @Composable
 fun StadiumViewReviewHeader(
+    reviewQuery: BlockReviewRequestQuery,
     reviewCount: Long,
     modifier: Modifier = Modifier,
-    onClickMonthly: () -> Unit
+    onClickMonthly: () -> Unit,
+    onCancel: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -55,7 +58,9 @@ fun StadiumViewReviewHeader(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MonthlyViewCard(
-                onClick = onClickMonthly
+                reviewQuery = reviewQuery,
+                onClick = onClickMonthly,
+                onCancel = onCancel
             )
             Text(
                 text = "최신순",
@@ -74,8 +79,10 @@ private fun StadiumViewReviewHeaderPreview() {
         modifier = Modifier.background(Color.White)
     ) {
         StadiumViewReviewHeader(
+            reviewQuery = BlockReviewRequestQuery(),
             reviewCount = 100,
-            onClickMonthly = {}
+            onClickMonthly = {},
+            onCancel = {}
         )
     }
 }

@@ -81,8 +81,10 @@ fun StadiumDetailScreen(
 
                     stickyHeader {
                         StadiumViewReviewHeader(
+                            reviewQuery = reviewFilter,
                             reviewCount = state.data.totalElements,
-                            onClickMonthly = onClickFilterMonthly
+                            onClickMonthly = onClickFilterMonthly,
+                            onCancel = viewModel::clearMonth
                         )
                     }
 
