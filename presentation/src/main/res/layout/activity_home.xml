@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/rect_white_fill_top20"
-                android:paddingBottom="80dp"
+                android:paddingBottom="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -183,11 +183,14 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_register_sight"
-                    android:layout_width="160dp"
+                    android:layout_width="0dp"
                     android:layout_height="140dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="28dp"
+                    android:layout_marginEnd="6dp"
                     android:background="@drawable/rect_action03_fill_16"
+                    app:layout_constraintEnd_toStartOf="@+id/cl_home_sight_record"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -235,12 +238,15 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_sight_record"
-                    android:layout_width="160dp"
+                    android:layout_width="0dp"
                     android:layout_height="140dp"
+                    android:layout_marginStart="6dp"
                     android:layout_marginTop="28dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/ic_folder_blue"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/cl_home_register_sight"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
