@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatrecord
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -16,6 +17,7 @@ import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
@@ -64,6 +66,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             }
             fabRecordUp.setOnClickListener {
                 ssvRecord.smoothScrollTo(0, 0)
+            }
+            fabRecordPlus.setOnClickListener {
+                Intent(this@SeatRecordActivity, ReviewActivity::class.java).apply {
+                    startActivity(
+                        this
+                    )
+                }
             }
         }
     }

@@ -91,6 +91,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         /** 시야 찾기 */
         clMainFindSight.setOnClickListener { navigateToStadiumActivity() }
 
+        ibHomeSetting.setOnClickListener { /** 셋팅 이동 **/ }
+
     }
 
     private fun initObserver() {
