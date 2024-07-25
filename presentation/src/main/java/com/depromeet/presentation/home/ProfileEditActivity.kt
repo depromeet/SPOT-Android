@@ -24,6 +24,7 @@ import com.depromeet.presentation.home.viewmodel.ProfileEvents
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
@@ -49,6 +50,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     private fun initView() {
         getDataExtra { name, image, cheerTeam ->
             viewModel.initProfile(name, image, cheerTeam)
+            Timber.d("test = $name  /// $image /// $cheerTeam")
             binding.etProfileEditNickname.setText(name)
         }
         setCheerTeamList()

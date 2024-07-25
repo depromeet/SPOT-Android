@@ -166,11 +166,13 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    private fun getPresignedUrlOrNull(): String? {
+    private fun getPresignedUrlOrNull(): String {
         val currentState = presignedUrl.value
         return if (currentState is UiState.Success) {
             removeQueryParameters(currentState.data.presignedUrl)
-        } else null
+        } else {
+            profileImage.value
+        }
     }
 
     private fun removeQueryParameters(url: String): String {

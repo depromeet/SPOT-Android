@@ -103,7 +103,7 @@
 
             <ImageView
                 android:id="@+id/iv_home_cheer_team"
-                android:layout_width="114dp"
+                android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_marginEnd="20dp"
                 android:adjustViewBounds="true"

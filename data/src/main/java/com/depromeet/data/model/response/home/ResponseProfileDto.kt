@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponseProfileDto(
-    //TODO : 서버에서 팀 아이디 받아와서 넘겨줘야함
+    @SerialName("teamId")
+    val teamId : Int,
     @SerialName("profileImageUrl")
     val profileImageUrl: String?,
     @SerialName("nickname")
@@ -20,6 +21,7 @@ data class ResponseProfileDto(
 ) {
     companion object {
         fun ResponseProfileDto.toProfileResponse() = ProfileResponse(
+            teamId = teamId,
             profileImage = profileImageUrl ?: "",
             nickname = nickname,
             level = level,
