@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatrecord
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -59,6 +60,11 @@ class ConfirmDeleteDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBin
             dismiss()
         }
 
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        viewModel.cancelDeleteEvent()
     }
 
 
