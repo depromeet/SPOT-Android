@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -60,12 +61,9 @@ fun StadiumDetailPictureScreen(
     modifier: Modifier = Modifier
 ) {
     val blockReviews by stadiumDetailViewModel.blockReviews.collectAsStateWithLifecycle()
+    val minimumLineLength = 1
 
     var isMore by remember {
-        mutableStateOf(false)
-    }
-
-    var isMoreButton by remember {
         mutableStateOf(false)
     }
 
@@ -89,7 +87,6 @@ fun StadiumDetailPictureScreen(
                 LaunchedEffect(key1 = pagerState) {
                     snapshotFlow { pagerState.currentPage }.collect {
                         isMore = false
-                        isMoreButton = false
                         isDimmed = false
                     }
                 }
@@ -100,6 +97,9 @@ fun StadiumDetailPictureScreen(
                         .fillMaxSize()
                         .background(Color.White)
                 ) { page ->
+                    var showMoreButtonState by remember {
+                        mutableStateOf(false)
+                    }
                     Box(modifier = Modifier.fillMaxSize()) {
                         AsyncImage(
                             model = ImageRequest.Builder(context)
@@ -122,7 +122,7 @@ fun StadiumDetailPictureScreen(
                         ) {
                             StadiumDetailPictureViewPager(
                                 context = context,
-                                pictures = reviews[page].images
+                                pictures = reviews[pagerState.currentPage].images
                             )
                         }
 
@@ -135,7 +135,7 @@ fun StadiumDetailPictureScreen(
                                     onClick = {
                                         if (isDimmed) {
                                             isDimmed = false
-                                            isMoreButton = true
+                                            showMoreButtonState = false
                                             isMore = false
                                         }
                                     }
@@ -193,20 +193,23 @@ fun StadiumDetailPictureScreen(
                                     maxLines = if (isMore) {
                                         Int.MAX_VALUE
                                     } else {
-                                        1
+                                        minimumLineLength
                                     },
                                     overflow = TextOverflow.Ellipsis,
                                     color = Color.White,
                                     onTextLayout = {
-                                        if (!isMore) {
-                                            if (it.size.width > context.resources.displayMetrics.widthPixels * 0.75) {
-                                                isMoreButton = true
-                                            }
+                                        if (it.lineCount > minimumLineLength - 1) {
+                                            if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState =
+                                                true
                                         }
                                     },
-                                    modifier = Modifier.fillMaxWidth(if (isMoreButton) 0.8f else 1f)
+                                    modifier = if (showMoreButtonState) {
+                                        Modifier.fillMaxWidth(0.8f)
+                                    } else {
+                                        Modifier.wrapContentWidth()
+                                    }
                                 )
-                                if (isMoreButton) {
+                                if (showMoreButtonState) {
                                     Spacer(modifier = Modifier.width(10.dp))
                                     Text(
                                         text = "더보기",
@@ -215,7 +218,7 @@ fun StadiumDetailPictureScreen(
                                         fontWeight = FontWeight.Bold,
                                         textDecoration = TextDecoration.Underline,
                                         modifier = Modifier.clickable {
-                                            isMoreButton = false
+                                            showMoreButtonState = false
                                             isMore = true
                                             isDimmed = true
                                         }
@@ -232,7 +235,7 @@ fun StadiumDetailPictureScreen(
                                 },
                                 isSelfExpanded = false,
                                 onActionCallback = {
-                                    isMoreButton = false
+                                    showMoreButtonState = false
                                     isMore = true
                                     isDimmed = true
                                 }
@@ -243,8 +246,6 @@ fun StadiumDetailPictureScreen(
             }
         }
     }
-
-
 }
 
 @Preview
