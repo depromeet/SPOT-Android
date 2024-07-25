@@ -77,12 +77,14 @@ class SeatReviewRepositoryImpl @Inject constructor(
     }
 
     override suspend fun postSeatReview(
-        seatId: Int,
+        blockId: Int,
+        seatNumber: Int,
         seatReviewInfo: SeatReviewModel,
     ): Result<Unit> {
         return runCatching {
             seatReviewDataSource.postSeatReviewData(
-                seatId,
+                blockId,
+                seatNumber,
                 seatReviewInfo.toSeatReview(),
             )
         }
