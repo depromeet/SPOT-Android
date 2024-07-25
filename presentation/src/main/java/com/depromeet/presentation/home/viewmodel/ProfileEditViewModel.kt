@@ -132,9 +132,7 @@ class ProfileEditViewModel @Inject constructor(
                     currentState.data.presignedUrl,
                     profileByteArray
                 )
-                    .onSuccess {
-
-                    }
+                    .onSuccess {}
                     .onFailure {
                         _events.emit(ProfileEvents.ShowSnackMessage("프로필 이미지 업로드에 실패하였습니다\n다시 시도해주세요~"))
                         setProfileImage(initialProfileImage)
@@ -152,9 +150,9 @@ class ProfileEditViewModel @Inject constructor(
 
             homeRepository.putProfileEdit(
                 ProfileEditRequest(
-                    url = getPresignedUrlOrNull(),
+                    url = getPresignedUrlOrProfileImage(),
                     nickname = nickname.value,
-                    teamId = if (cheerTeam.value == 0) null else cheerTeam.value
+                    teamId = cheerTeam.value
                 )
             )
                 .onSuccess {
@@ -166,13 +164,18 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    private fun getPresignedUrlOrNull(): String {
+    fun getPresignedUrlOrProfileImage(): String {
         val currentState = presignedUrl.value
         return if (currentState is UiState.Success) {
             removeQueryParameters(currentState.data.presignedUrl)
         } else {
             profileImage.value
         }
+    }
+
+    fun getTeamUrl() : String {
+        if (cheerTeam.value == 0) return ""
+        return (team.value as UiState.Success).data.first { it.isClicked }.logo
     }
 
     private fun removeQueryParameters(url: String): String {

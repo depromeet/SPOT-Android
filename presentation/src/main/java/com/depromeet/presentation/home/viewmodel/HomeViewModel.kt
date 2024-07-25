@@ -55,4 +55,15 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateTest(name: String, image: String, cheerTeam: Int, cheerTeamUrl: String) {
+        _profile.value = UiState.Success(
+            (_profile.value as UiState.Success).data.copy(
+                nickname = name,
+                profileImage = image,
+                teamId = cheerTeam,
+                teamImage = cheerTeamUrl
+            )
+        )
+    }
 }

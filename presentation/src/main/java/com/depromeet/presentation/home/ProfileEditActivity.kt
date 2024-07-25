@@ -1,5 +1,7 @@
 package com.depromeet.presentation.home
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
@@ -24,7 +26,6 @@ import com.depromeet.presentation.home.viewmodel.ProfileEvents
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
@@ -33,6 +34,10 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     companion object {
         private const val GRID_SPAN_COUNT = 2
         private const val GRID_SPACING = 40
+        const val PROFILE_NAME = "profile_name"
+        const val PROFILE_IMAGE = "profile_image"
+        const val PROFILE_CHEER_TEAM = "profile_cheer_team"
+        const val PROFILE_CHEER_TEAM_URL = "profile_cheer_team_url"
     }
 
     private lateinit var adapter: BaseballTeamAdapter
@@ -50,7 +55,6 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     private fun initView() {
         getDataExtra { name, image, cheerTeam ->
             viewModel.initProfile(name, image, cheerTeam)
-            Timber.d("test = $name  /// $image /// $cheerTeam")
             binding.etProfileEditNickname.setText(name)
         }
         setCheerTeamList()
@@ -73,6 +77,16 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         observeChange()
     }
 
+    private fun saveProfile() {
+        val resultIntent = Intent().apply {
+            putExtra(PROFILE_NAME, viewModel.nickname.value)
+            putExtra(PROFILE_IMAGE, viewModel.getPresignedUrlOrProfileImage())
+            putExtra(PROFILE_CHEER_TEAM, viewModel.cheerTeam.value)
+            putExtra(PROFILE_CHEER_TEAM_URL, viewModel.getTeamUrl())
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
 
     private fun setCheerTeamList() {
         adapter = BaseballTeamAdapter()
@@ -177,7 +191,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         viewModel.profileEdit.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    finish()
+                    saveProfile()
                 }
 
                 is UiState.Failure -> {

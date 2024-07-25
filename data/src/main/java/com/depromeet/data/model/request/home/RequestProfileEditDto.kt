@@ -15,9 +15,9 @@ data class RequestProfileEditDto(
 ) {
     companion object {
         fun ProfileEditRequest.toProfileEditRequestDto() = RequestProfileEditDto(
-            profileImage = url,
-            nickname = nickname,
-            teamId = teamId
+            profileImage = url.ifEmpty { null },
+            nickname = nickname.ifEmpty { null },
+            teamId = teamId.takeIf { it !=0 }
         )
     }
 }

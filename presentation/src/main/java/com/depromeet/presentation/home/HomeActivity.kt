@@ -1,9 +1,11 @@
 package com.depromeet.presentation.home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import coil.load
@@ -43,6 +45,21 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         )
     }
 
+    private val editProfileLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
+                val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
+                val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM, 0) ?: 0
+                val teamIdUrl =
+                    data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_URL) ?: ""
+
+                viewModel.updateTest(nickname, profileImage, teamId, teamIdUrl)
+            }
+        }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getInformation()
@@ -55,6 +72,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun initView() {
         binding.clMainFindSight.clipToOutline = true
     }
+
 
     private fun initEvent() = with(binding) {
 
@@ -185,14 +203,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun navigateToProfileEditActivity() {
         val currentState = viewModel.profile.value
 
+        (Intent(this, ProfileEditActivity::class.java))
+
         if (currentState is UiState.Success) {
-            Intent(this, ProfileEditActivity::class.java).apply {
+            editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
                 with(currentState.data) {
                     putExtra(PROFILE_NAME, this.nickname)
                     putExtra(PROFILE_IMAGE, this.profileImage)
                     putExtra(PROFILE_CHEER_TEAM, this.teamId)
                 }
-            }.let(::startActivity)
+            })
         }
 
     }
