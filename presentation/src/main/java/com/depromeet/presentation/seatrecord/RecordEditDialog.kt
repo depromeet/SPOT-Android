@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentRecordEditBottomSheetBinding
+import com.depromeet.presentation.seatrecord.viewmodel.DeleteUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,6 +30,7 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
     }
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
+    private lateinit var ui : DeleteUi
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,12 +42,18 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        ui = if(parentFragment != null){
+            DeleteUi.SEAT_DETAIL
+        }else{
+            DeleteUi.SEAT_RECORD
+        }
+
         navigateEditMethod()
     }
 
     private fun navigateEditMethod() {
         binding.tvRecordDelete.setOnClickListener {
-            viewModel.setDeleteEvent()
+            viewModel.setDeleteEvent(ui)
             dismiss()
         }
     }

@@ -21,6 +21,7 @@ import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
+import com.depromeet.presentation.seatrecord.viewmodel.DeleteUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -127,7 +128,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeEvents() {
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
-            if (state) moveConfirmationDialog()
+            if (state == DeleteUi.SEAT_RECORD) moveConfirmationDialog()
         }
     }
 

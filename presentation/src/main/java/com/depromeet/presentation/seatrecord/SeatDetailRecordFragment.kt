@@ -10,6 +10,7 @@ import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.TestDetailRecordAdapter
+import com.depromeet.presentation.seatrecord.viewmodel.DeleteUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,7 +55,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state) moveConfirmationDialog()
+            if (state == DeleteUi.SEAT_DETAIL) moveConfirmationDialog()
         }
     }
 
