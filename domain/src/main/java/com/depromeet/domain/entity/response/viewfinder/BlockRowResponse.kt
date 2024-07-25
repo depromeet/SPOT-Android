@@ -12,8 +12,8 @@ data class BlockRowResponse(
     )
 
     fun checkColumnRange(column: Int): Boolean {
-        val min = rowInfo.getOrNull(0)?.number ?: return false
-        val max = rowInfo.getOrNull(rowInfo.size - 1)?.number ?: return false
+        val max = rowInfo.maxByOrNull { it.number }?.number ?: return false
+        val min = rowInfo.minByOrNull { it.number }?.number ?: return false
 
         if (column in min..max) {
             return true
