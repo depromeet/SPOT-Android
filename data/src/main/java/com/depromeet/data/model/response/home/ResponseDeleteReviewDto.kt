@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponseDeleteReviewDto(
-    @SerialName("deleteReviewId")
+    @SerialName("deletedReviewId")
     val deleteReviewId: Int,
 ) {
     companion object {
