@@ -1,6 +1,5 @@
 package com.depromeet.presentation.seatrecord
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -33,8 +32,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 ) {
     companion object {
         const val SEAT_RECORD_TAG = "seatRecord"
-        const val RECORD_ID = "record_id"
-        const val RECORD_LIST = "record_list"
         private const val START_SPACING_DP = 20
         private const val BETWEEN_SPACING_DP = 8
     }
@@ -238,14 +235,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                             SeatDetailRecordFragment(),
                             SeatDetailRecordFragment.SEAT_RECORD_TAG
                         )
+                        addToBackStack(null)
                     }
-//                    Intent(
-//                        this@SeatRecordActivity,
-//                        SeatDetailRecordActivity::class.java
-//                    ).apply {
-//                        putExtra(RECORD_ID, item.id)
-//                        putParcelableArrayListExtra(RECORD_LIST, viewModel.getUiReviewsData())
-//                    }.let(::startActivity)
                 }
 
                 override fun onMoreRecordClick(reviewId: Int) {

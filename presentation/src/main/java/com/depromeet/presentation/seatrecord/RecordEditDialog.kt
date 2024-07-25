@@ -2,12 +2,10 @@ package com.depromeet.presentation.seatrecord
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentRecordEditBottomSheetBinding
-import com.depromeet.presentation.seatrecord.viewmodel.SeatDetailViewModel
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,19 +28,13 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
         }
     }
 
-    private lateinit var viewModel: ViewModel
+    private val viewModel: SeatRecordViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
 
-        val viewModelTag = arguments?.getString(VIEW_MODEL_TAG)
-        viewModel = when (viewModelTag) {
-            SeatDetailRecordActivity.SEAT_DETAIL_TAG -> ViewModelProvider(requireActivity())[SeatDetailViewModel::class.java]
-            SeatRecordActivity.SEAT_RECORD_TAG -> ViewModelProvider(requireActivity())[SeatRecordViewModel::class.java]
-            else -> throw IllegalArgumentException("알수 없는 뷰모델 태그")
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,11 +45,7 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
 
     private fun navigateEditMethod() {
         binding.tvRecordDelete.setOnClickListener {
-            when (viewModel) {
-                is SeatDetailViewModel -> (viewModel as SeatDetailViewModel).setDeleteEvent()
-                is SeatRecordViewModel -> (viewModel as SeatRecordViewModel).setDeleteEvent()
-                else -> throw IllegalArgumentException("알 수 없는 뷰모델")
-            }
+            viewModel.setDeleteEvent()
             dismiss()
         }
     }

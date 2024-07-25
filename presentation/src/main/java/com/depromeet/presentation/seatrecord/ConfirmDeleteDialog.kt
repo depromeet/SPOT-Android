@@ -5,12 +5,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingDialogFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentConfirmDeleteDialogBinding
-import com.depromeet.presentation.seatrecord.viewmodel.SeatDetailViewModel
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,18 +31,12 @@ class ConfirmDeleteDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBin
         }
     }
 
-    private lateinit var viewModel: ViewModel
+    private val viewModel: SeatRecordViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentDialogFragment)
 
-        val viewModelTag = arguments?.getString(VIEW_MODEL_TAG)
-        viewModel = when (viewModelTag) {
-            SeatDetailRecordActivity.SEAT_DETAIL_TAG -> ViewModelProvider(requireActivity())[SeatDetailViewModel::class.java]
-            SeatRecordActivity.SEAT_RECORD_TAG -> ViewModelProvider(requireActivity())[SeatRecordViewModel::class.java]
-            else -> throw IllegalArgumentException("알수 없는 뷰모델 태그")
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,14 +51,11 @@ class ConfirmDeleteDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBin
         }
 
         binding.btConfirmCheck.setOnClickListener {
-            when (viewModel) {
-                is SeatDetailViewModel -> (viewModel as SeatDetailViewModel).removeReviewData()
-                is SeatRecordViewModel -> (viewModel as SeatRecordViewModel).removeReviewData()
-                else -> throw IllegalArgumentException("알 수 없는 뷰모델")
-            }
+            viewModel.removeReviewData()
             dismiss()
         }
         binding.btConfirmCancel.setOnClickListener {
+            viewModel.cancelDeleteEvent()
             dismiss()
         }
 

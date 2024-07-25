@@ -8,8 +8,6 @@ import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
-import com.depromeet.presentation.seatrecord.uiMapper.ReviewUiData
-import com.depromeet.presentation.seatrecord.uiMapper.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -107,6 +105,10 @@ class SeatRecordViewModel @Inject constructor(
         _deleteClickedEvent.value = true
     }
 
+    fun cancelDeleteEvent() {
+        _deleteClickedEvent.value = false
+    }
+
     fun removeReviewData() {
         val currentState = reviews.value
         if (currentState is UiState.Success) {
@@ -130,12 +132,4 @@ class SeatRecordViewModel @Inject constructor(
 
     }
 
-    fun getUiReviewsData(): ArrayList<ReviewUiData> {
-        val currentState = reviews.value
-        return if (currentState is UiState.Success) {
-            ArrayList(currentState.data.reviews.map { it.toUiModel() })
-        } else {
-            arrayListOf()
-        }
-    }
 }
