@@ -61,7 +61,6 @@ fun StadiumDetailPictureScreen(
     modifier: Modifier = Modifier
 ) {
     val blockReviews by stadiumDetailViewModel.blockReviews.collectAsStateWithLifecycle()
-    val minimumLineLength = 1
 
     var isMore by remember {
         mutableStateOf(false)
@@ -91,158 +90,20 @@ fun StadiumDetailPictureScreen(
                     }
                 }
 
-                VerticalPager(
-                    state = pagerState,
-                    modifier = modifier
-                        .fillMaxSize()
-                        .background(Color.White)
-                ) { page ->
-                    var showMoreButtonState by remember {
-                        mutableStateOf(false)
+                StadiumDetailReviewViewPager(
+                    context = context,
+                    reviews = reviews,
+                    pagerState = pagerState,
+                    modifier = modifier,
+                    isDimmed = isDimmed,
+                    isMore = isMore,
+                    onChangeIsDimmed = {
+                        isDimmed = it
+                    },
+                    onChangeIsMore = {
+                        isMore = it
                     }
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(context)
-                                .data(reviews[page].images.getOrNull(0)?.url)
-                                .build(),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .zIndex(1f)
-                                .blur(5.dp)
-                        )
-
-                        Column(
-                            modifier = Modifier
-                                .zIndex(if (isDimmed) 2f else 3f)
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            StadiumDetailPictureViewPager(
-                                context = context,
-                                pictures = reviews[pagerState.currentPage].images
-                            )
-                        }
-
-                        Column(
-                            modifier = Modifier
-                                .zIndex(if (isDimmed) 3f else 2f)
-                                .fillMaxSize()
-                                .clickable(
-                                    enabled = isDimmed,
-                                    onClick = {
-                                        if (isDimmed) {
-                                            isDimmed = false
-                                            showMoreButtonState = false
-                                            isMore = false
-                                        }
-                                    }
-                                )
-                                .background(
-                                    color = if (isDimmed) {
-                                        Color.Black.copy(alpha = 0.6f)
-                                    } else {
-                                        Color.Black.copy(alpha = 0.5f)
-                                    }
-                                )
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 30.dp),
-                            verticalArrangement = Arrangement.Bottom
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                AsyncImage(
-                                    model = ImageRequest.Builder(context)
-                                        .data(reviews[page].member.profileImage)
-                                        .build(),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    placeholder = ColorPainter(Color.LightGray),
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .clip(CircleShape)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = reviews[page].member.nickname,
-                                    fontSize = 12.sp,
-                                    color = Color(0xFF9F9F9F)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                LevelCard(
-                                    level = reviews[page].member.level,
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = reviews[page].formattedNumber(),
-                                fontSize = 16.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row(
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = reviews[page].content,
-                                    fontSize = 14.sp,
-                                    maxLines = if (isMore) {
-                                        Int.MAX_VALUE
-                                    } else {
-                                        minimumLineLength
-                                    },
-                                    overflow = TextOverflow.Ellipsis,
-                                    color = Color.White,
-                                    onTextLayout = {
-                                        if (it.lineCount > minimumLineLength - 1) {
-                                            if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState =
-                                                true
-                                        }
-                                    },
-                                    modifier = if (showMoreButtonState) {
-                                        Modifier.fillMaxWidth(0.8f)
-                                    } else {
-                                        Modifier.wrapContentWidth()
-                                    }
-                                )
-                                if (showMoreButtonState) {
-                                    Spacer(modifier = Modifier.width(10.dp))
-                                    Text(
-                                        text = "더보기",
-                                        fontSize = 13.sp,
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold,
-                                        textDecoration = TextDecoration.Underline,
-                                        modifier = Modifier.clickable {
-                                            showMoreButtonState = false
-                                            isMore = true
-                                            isDimmed = true
-                                        }
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(8.dp))
-                            KeywordFlowRow(
-                                keywords = reviews[page].keywords.map { it.toKeyword() },
-                                overflowIndex = if (isDimmed) {
-                                    Int.MAX_VALUE
-                                } else {
-                                    2
-                                },
-                                isSelfExpanded = false,
-                                onActionCallback = {
-                                    showMoreButtonState = false
-                                    isMore = true
-                                    isDimmed = true
-                                }
-                            )
-                        }
-                    }
-                }
+                )
             }
         }
     }
