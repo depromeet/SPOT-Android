@@ -32,10 +32,9 @@ interface HomeApiService {
     @GET("/api/v1/baseball-teams")
     suspend fun getBaseballTeam(): List<ResponseBaseballTeamDto>
 
-    @POST("/api/v1/members/{memberId}/profile/images")
+    @POST("/api/v1/members/profile/images")
     suspend fun postProfileImagePresigned(
         @Body body: RequestFileExtensionDto,
-        @Path("memberId") memberId: Int,
     ): ResponsePresignedUrlDto
 
     @PUT
@@ -44,10 +43,9 @@ interface HomeApiService {
         @Body image: RequestBody,
     )
 
-    @PUT("/api/v1/members/{memberId}")
+    @PUT("/api/v1/members")
     suspend fun putProfileEdit(
         @Body body: RequestProfileEditDto,
-        @Path("memberId") memberId: Int,
     ): ResponseProfileEditDto
 
     @GET("/api/v1/members/duplicatedNickname/{nickname}")

@@ -20,7 +20,6 @@ interface HomeDataSource {
 
     suspend fun postProfileImagePresigned(
         fileExtension: String,
-        memberId: Int,
     ): ResponsePresignedUrlDto
 
     suspend fun putProfileImage(
@@ -30,7 +29,6 @@ interface HomeDataSource {
 
     suspend fun putProfileEdit(
         requestProfileEditDto: RequestProfileEditDto,
-        memberId: Int,
     ): ResponseProfileEditDto
 
     suspend fun getDuplicateNickname(

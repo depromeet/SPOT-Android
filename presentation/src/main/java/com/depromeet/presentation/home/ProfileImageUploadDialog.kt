@@ -82,7 +82,7 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                     return@use
                 }
                 val byteArray = inputStream.readBytes()
-                viewModel.setProfileImagePresigned(byteArray,fileExtension,1) //memberId
+                viewModel.setProfileImagePresigned(byteArray,fileExtension)
                 viewModel.setProfileImage(uri.toString())
                 dismiss()
             }

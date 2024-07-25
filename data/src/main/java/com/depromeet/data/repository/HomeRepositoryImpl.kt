@@ -42,10 +42,9 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun postProfileImagePresigned(
         fileExtension: String,
-        memberId: Int,
     ): Result<PresignedUrlResponse> {
         return runCatching {
-            homeDataSource.postProfileImagePresigned(fileExtension, memberId)
+            homeDataSource.postProfileImagePresigned(fileExtension)
                 .toPresignedUrlResponse()
         }
     }
@@ -58,10 +57,9 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun putProfileEdit(
         profileEditRequest: ProfileEditRequest,
-        memberId: Int,
     ): Result<ProfileEditResponse> {
         return runCatching {
-            homeDataSource.putProfileEdit(profileEditRequest.toProfileEditRequestDto(), memberId)
+            homeDataSource.putProfileEdit(profileEditRequest.toProfileEditRequestDto())
                 .toProfileEditResponse()
         }
     }

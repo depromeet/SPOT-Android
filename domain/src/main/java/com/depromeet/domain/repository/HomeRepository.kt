@@ -20,7 +20,6 @@ interface HomeRepository {
 
     suspend fun postProfileImagePresigned(
         fileExtension: String,
-        memberId: Int,
     ): Result<PresignedUrlResponse>
 
     suspend fun putProfileImage(
@@ -30,7 +29,6 @@ interface HomeRepository {
 
     suspend fun putProfileEdit(
         profileEditRequest: ProfileEditRequest,
-        memberId: Int,
     ): Result<ProfileEditResponse>
 
     suspend fun getDuplicateNickname(

@@ -29,17 +29,16 @@ class HomeDataSourceImpl @Inject constructor(
         )
     }
 
+
     override suspend fun getBaseballTeamData(): List<ResponseBaseballTeamDto> {
         return homeApiService.getBaseballTeam()
     }
 
     override suspend fun postProfileImagePresigned(
         fileExtension: String,
-        memberId: Int,
     ): ResponsePresignedUrlDto {
         return homeApiService.postProfileImagePresigned(
             RequestFileExtensionDto(fileExtension),
-            memberId
         )
     }
 
@@ -50,9 +49,8 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun putProfileEdit(
         requestProfileEditDto: RequestProfileEditDto,
-        memberId: Int,
     ): ResponseProfileEditDto {
-        return homeApiService.putProfileEdit(requestProfileEditDto, memberId)
+        return homeApiService.putProfileEdit(requestProfileEditDto)
     }
 
     override suspend fun getDuplicateNickname(nickname: String) {

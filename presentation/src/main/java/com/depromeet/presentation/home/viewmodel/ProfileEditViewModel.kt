@@ -111,10 +111,9 @@ class ProfileEditViewModel @Inject constructor(
     fun setProfileImagePresigned(
         profileByteArray: ByteArray,
         fileExtension: String,
-        memberId: Int,
     ) {
         profilePresignedJob = viewModelScope.launch {
-            homeRepository.postProfileImagePresigned(fileExtension, memberId)
+            homeRepository.postProfileImagePresigned(fileExtension)
                 .onSuccess { presignedUrl ->
                     _presignedUrl.value = UiState.Success(presignedUrl)
                     uploadProfileImage(profileByteArray)
@@ -156,8 +155,7 @@ class ProfileEditViewModel @Inject constructor(
                     url = getPresignedUrlOrNull(),
                     nickname = nickname.value,
                     teamId = if (cheerTeam.value == 0) null else cheerTeam.value
-                ), memberId = 1
-                /** memberId ->추후에 메인화면 api 나오면 연동해서 stateflow 업데이트*/
+                )
             )
                 .onSuccess {
                     _profileEdit.value = UiState.Success(it)
