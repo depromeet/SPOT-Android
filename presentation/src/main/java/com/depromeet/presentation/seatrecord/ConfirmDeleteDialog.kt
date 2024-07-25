@@ -21,6 +21,7 @@ class ConfirmDeleteDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBin
 ) {
     companion object {
         private const val VIEW_MODEL_TAG = "viewModelTag"
+        const val TAG = "ConfirmDialog"
 
         fun newInstance(viewModelTag: String): ConfirmDeleteDialog {
             val args = Bundle()

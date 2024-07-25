@@ -18,6 +18,7 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
 ) {
     companion object {
         private const val VIEW_MODEL_TAG = "viewModelTag"
+        const val TAG = "RecordEditDialog"
 
         fun newInstance(viewModelTag: String): RecordEditDialog {
             val args = Bundle()
