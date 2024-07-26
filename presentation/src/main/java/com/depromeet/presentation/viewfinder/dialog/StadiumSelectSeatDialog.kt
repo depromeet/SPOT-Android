@@ -158,14 +158,6 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                                     binding.etColumn.text.toString().toInt(),
                                     binding.etNumber.text.toString().toInt()
                                 )
-                                stadiumDetailViewModel.getBlockReviews(
-                                    stadiumDetailViewModel.stadiumId,
-                                    stadiumDetailViewModel.blockCode,
-                                    BlockReviewRequestQuery(
-                                        rowNumber = binding.etColumn.text.toString().toInt(),
-                                        seatNumber = binding.etNumber.text.toString().toInt()
-                                    )
-                                )
                                 dismiss()
                             } else {
                                 binding.tvWarning.visibility = View.VISIBLE
@@ -184,13 +176,6 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                     if (isSuccess) {
                         stadiumDetailViewModel.updateSeat(
                             column = binding.etOnlyColumn.text.toString().toInt()
-                        )
-                        stadiumDetailViewModel.getBlockReviews(
-                            stadiumDetailViewModel.stadiumId,
-                            stadiumDetailViewModel.blockCode,
-                            BlockReviewRequestQuery(
-                                rowNumber = binding.etOnlyColumn.text.toString().toInt()
-                            )
                         )
                         dismiss()
                     } else {

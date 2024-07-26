@@ -51,7 +51,12 @@ fun StadiumDetailScreen(
         when (state) {
             is UiState.Empty -> {
                 StadiumEmptyContent(
-                    blockNumber = blockNumber,
+                    blockNumber = when (blockNumber) {
+                        "exciting1" -> "1루 익사이팅"
+                        "exciting3" -> "3루 익사이팅"
+                        "premium" -> "프리미엄"
+                        else -> blockNumber
+                    },
                     onGoBack = onClickGoBack
                 )
             }
