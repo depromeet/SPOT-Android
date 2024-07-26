@@ -94,7 +94,6 @@ class SeatRecordViewModel @Inject constructor(
         _months.value = months.value.map {
             it.copy(isClicked = it.month == month)
         }
-        getSeatRecords()
     }
 
     fun setEditReviewId(id: Int) {
