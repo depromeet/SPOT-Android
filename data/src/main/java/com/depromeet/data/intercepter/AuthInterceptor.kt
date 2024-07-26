@@ -1,5 +1,6 @@
 package com.depromeet.data.intercepter
 
+import com.depromeet.data.BuildConfig.S3_URL
 import com.depromeet.domain.preference.SharedPreference
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -39,8 +40,7 @@ class AuthInterceptor @Inject constructor(
     }
 
     private fun urlIsS3(url: String): Boolean {
-        /** S3에서는 Authrization(accesstoken)을 포함시키면 안되기 때문에 넣어놨는데 추후 aws로 옮기면 다시 수정해야함!*/
-        return url.contains("spot-image-bucket.kr.object.ncloudstorage.com")
+        return url.contains(S3_URL)
     }
 
 
