@@ -204,9 +204,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
     private fun navigateToProfileEditActivity() {
         val currentState = viewModel.profile.value
-
-        (Intent(this, ProfileEditActivity::class.java))
-
         if (currentState is UiState.Success) {
             editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
                 with(currentState.data) {
