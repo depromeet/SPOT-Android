@@ -233,10 +233,10 @@ class ReviewViewModel @Inject constructor(
     }
 
     // presigned URL 요청
-    fun requestPreSignedUrl(fileExtension: String, memberId: Int) {
+    fun requestPreSignedUrl(fileExtension: String) {
         viewModelScope.launch {
             _getPreSignedUrl.value = UiState.Loading
-            seatReviewRepository.postReviewImagePresigned(fileExtension, memberId)
+            seatReviewRepository.postReviewImagePresigned(fileExtension)
                 .onSuccess { response ->
                     Timber.d("REQUEST PRESIGNED URL SUCCESS : $response")
                     _getPreSignedUrl.value = UiState.Success(response)

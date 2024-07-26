@@ -26,7 +26,6 @@ interface SeatReviewRepository {
 
     suspend fun postReviewImagePresigned(
         fileExtension: String,
-        memberId: Int,
     ): Result<ResponsePresignedUrlModel>
 
     suspend fun putImagePreSignedUrl(
