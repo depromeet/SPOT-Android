@@ -36,10 +36,9 @@ interface SeatReviewService {
         @Path("sectionId") sectionId: Int,
     ): List<ResponseSeatRangeDto>
 
-    @POST("/api/v1/members/{memberId}/reviews/images")
+    @POST("/api/v1/reviews/images")
     suspend fun postImagePreSignedUrl(
         @Body body: RequestPreSignedUrlDto,
-        @Path("memberId") memberId: Int,
     ): ResponsePreSignedUrlDto
 
     @PUT

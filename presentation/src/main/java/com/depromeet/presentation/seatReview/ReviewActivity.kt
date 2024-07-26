@@ -294,7 +294,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 if (imageData != null) {
                     // TODO : viewModel.uploadImageToPreSignedUrl 사진 업로드 서버 통신
                     // TODO : postSeatReview() 시야 등록 후기 request -> ReviewDoneActivity 이동
-                    viewModel.requestPreSignedUrl(fileExtension, 1)
+                    viewModel.requestPreSignedUrl(fileExtension)
                     viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
                         when (state) {
                             is UiState.Success -> {

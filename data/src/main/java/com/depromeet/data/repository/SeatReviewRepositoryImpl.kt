@@ -54,12 +54,10 @@ class SeatReviewRepositoryImpl @Inject constructor(
 
     override suspend fun postReviewImagePresigned(
         fileExtension: String,
-        memberId: Int,
     ): Result<ResponsePresignedUrlModel> {
         return runCatching {
             seatReviewDataSource.postImagePreSignedData(
                 fileExtension,
-                memberId,
             ).toResponsePreSignedUrl()
         }
     }

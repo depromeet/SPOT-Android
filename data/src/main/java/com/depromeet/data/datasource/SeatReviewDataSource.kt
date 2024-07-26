@@ -26,7 +26,6 @@ interface SeatReviewDataSource {
 
     suspend fun postImagePreSignedData(
         fileExtension: String,
-        memberId: Int,
     ): ResponsePreSignedUrlDto
 
     suspend fun putReviewImageData(
