@@ -7,6 +7,9 @@ data class MySeatRecordResponse(
     val totalPages: Int = 0,
     val number: Int = 0,
     val size: Int = 0,
+    val first : Boolean = true,
+    val last : Boolean = true,
+    val isLoading : Boolean = true,
 ) {
     data class MyProfileResponse(
         val userId: Int = 0,

@@ -172,6 +172,9 @@ data class ResponseMySeatRecordDto(
             totalPages = totalPages,
             number = number,
             size = size,
+            first = first,
+            last = last,
+            isLoading = false
         )
 
         private fun ResponseMemberDto.toMyProfileResponse() =
