@@ -3,6 +3,7 @@ package com.depromeet.presentation.seatReview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.request.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
@@ -75,6 +76,9 @@ class ReviewViewModel @Inject constructor(
     private val _selectedSectionId = MutableStateFlow(0)
     val selectedSectionId: StateFlow<Int> = _selectedSectionId.asStateFlow()
 
+    private val _selectedBlockId = MutableStateFlow(0)
+    val selectedBlockId: StateFlow<Int> = _selectedBlockId.asStateFlow()
+
     private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState
 
@@ -97,6 +101,10 @@ class ReviewViewModel @Inject constructor(
 
     fun updateSelectedSectionId(sectionId: Int) {
         _selectedSectionId.value = sectionId
+    }
+
+    fun updateSelectedBlockId(blockId: Int) {
+        _selectedBlockId.value = blockId
     }
 
     fun updateSelectedDate(date: String) {
@@ -270,6 +278,7 @@ class ReviewViewModel @Inject constructor(
                 Timber.e("UPLOAD IMAGE FAILURE : $t")
                 if (t is HttpException) {
                     Timber.e("HTTP error code: ${t.code()}")
+                    Timber.e("HTTP error response: ${t.response()?.errorBody()?.string()}")
                 } else {
                     Timber.e("General error: ${t.message ?: "Unknown error"}")
                 }
@@ -279,7 +288,6 @@ class ReviewViewModel @Inject constructor(
         return deferred
     }
 
-    /*
     fun postSeatReview() {
         viewModelScope.launch {
             val seatReviewModel = SeatReviewModel(
@@ -289,20 +297,63 @@ class ReviewViewModel @Inject constructor(
                 bad = _selectedBadReview.value,
                 content = _detailReviewText.value,
             )
+
+            Timber.d("Selected Images: ${_selectedImages.value}")
+            Timber.d("Selected Date: ${_selectedDate.value}")
+            Timber.d("Good Review: ${_selectedGoodReview.value}")
+            Timber.d("Bad Review: ${_selectedBadReview.value}")
+            Timber.d("Detail Review Text: ${_detailReviewText.value}")
+            Timber.d("Selected Stadium ID: ${_selectedStadiumId.value}")
+            Timber.d("Selected Block ID: ${_selectedBlockId.value}")
+            Timber.d("Selected seatNumber: ${selectedNumber.value}")
+
+            val selectedNumberValue = selectedNumber.value
+            if (selectedNumberValue.isNullOrEmpty()) {
+                Timber.e("Selected Number is null or empty")
+                _postReviewState.value = UiState.Failure("Selected Number is required")
+                return@launch
+            }
+
+            val selectedNumberInt = try {
+                selectedNumberValue.toInt()
+            } catch (e: NumberFormatException) {
+                Timber.e("Selected Number is not a valid integer: $selectedNumberValue")
+                _postReviewState.value = UiState.Failure("Selected Number is not a valid integer")
+                return@launch
+            }
+
+            Timber.d("Selected Number: $selectedNumberInt")
+
             _postReviewState.value = UiState.Loading
-            seatReviewRepository.postSeatReview(_selectedStadiumId.value, seatReviewModel)
+
+            seatReviewRepository.postSeatReview(
+                _selectedBlockId.value,
+                selectedNumberInt,
+                seatReviewModel,
+            )
                 .onSuccess {
                     _postReviewState.value = UiState.Success(Unit)
                     Timber.d("POST REVIEW SUCCESS")
                 }
                 .onFailure { t ->
                     Timber.e("POST REVIEW FAILURE : $t")
+
                     if (t is HttpException) {
-                        _postReviewState.value = UiState.Failure(t.code().toString())
+                        val errorBody = t.response()?.errorBody()?.string()
+                        Timber.e("Error Body: $errorBody")
+
+                        val errorMessage = when {
+                            t.code() == 403 -> "권한이 없습니다. 요청을 확인하고 다시 시도해 주세요."
+                            errorBody.isNullOrEmpty() -> "HTTP ${t.code()} 에러 발생: ${t.message()}"
+                            else -> errorBody
+                        }
+
+                        _postReviewState.value = UiState.Failure(errorMessage)
                     } else {
-                        _postReviewState.value = UiState.Failure(t.message ?: "Unknown error")
+                        _postReviewState.value = UiState.Failure(t.message ?: "알 수 없는 오류")
                     }
                 }
         }
-    }*/
+    }
+
 }
