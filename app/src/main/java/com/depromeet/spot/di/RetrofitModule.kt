@@ -77,7 +77,7 @@ object RetrofitModule {
     @Singleton
     fun provideWebSvgRetrofit(
         client: OkHttpClient,
-        factory: Factory
+        factory: Factory,
     ): Retrofit =
         Retrofit.Builder().baseUrl(SVG_BASE_URL).client(client).addConverterFactory(factory).build()
 }
