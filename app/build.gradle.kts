@@ -94,7 +94,6 @@ dependencies {
     }
 
     implementation(MaterialDesignDependencies.materialDesign)
-    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
 
     TestDependencies.run {
         testImplementation(jUnit)
