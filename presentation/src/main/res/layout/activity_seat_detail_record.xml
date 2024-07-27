@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
 
     <com.depromeet.designsystem.SpotAppbar
@@ -16,6 +17,36 @@
         app:menuIcon="@drawable/ic_setting"
         app:menuIconColor="@color/gray900"
         app:navigationIcon="@drawable/ic_back" />
+
+    <ImageButton
+        android:id="@+id/fab_detail_up"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/circle_white_fill"
+        android:elevation="3dp"
+        android:padding="12dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_up"
+        app:layout_constraintBottom_toTopOf="@id/fab_detail_plus"
+        app:layout_constraintEnd_toEndOf="@id/fab_detail_plus"
+        tools:ignore="contentDescription" />
+
+
+    <ImageButton
+        android:id="@+id/fab_detail_plus"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/circlr_gray900_fill"
+        android:elevation="3dp"
+        android:padding="12dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_plus_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="contentDescription" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_detail_record"

@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import coil.load
+import com.depromeet.presentation.R
 
 inline fun View.setOnSingleClickListener(
     delay: Long = 1000L,
@@ -27,7 +28,10 @@ fun View.setMargins(left: Int, top: Int, right: Int, bottom: Int) {
     }
 }
 
-fun ImageView.loadAndClip(imageUrl: String) {
-    this.load(imageUrl)
+fun ImageView.loadAndClip(imageUrl: Any) {
+    this.load(imageUrl){
+        placeholder(R.drawable.ic_image_placeholder)
+        error(R.drawable.ic_image_error)
+    }
     this.clipToOutline = true
 }

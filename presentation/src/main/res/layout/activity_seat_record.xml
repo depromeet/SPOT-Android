@@ -40,34 +40,7 @@
         app:menuIconColor="@color/gray900"
         app:navigationIcon="@drawable/ic_back" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_record_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/white"
-        android:elevation="3dp"
-        android:src="@drawable/ic_up"
-        android:tint="@null"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
-        app:layout_constraintEnd_toEndOf="@id/gl_end"
-        app:tint="@null"
-        tools:ignore="contentDescription" />
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_record_plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/gray900"
-        android:src="@drawable/ic_plus_24"
-        android:tint="@null"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
-        app:layout_constraintEnd_toEndOf="@id/gl_end"
-        app:tint="@null"
-        tools:ignore="contentDescription" />
 
     <com.depromeet.designsystem.StickyNestedScrollView
         android:id="@+id/ssv_record"
@@ -161,11 +134,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_record_sticky_header"
-                android:visibility="visible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/v_record_division">
@@ -297,5 +270,39 @@
 
     </com.depromeet.designsystem.StickyNestedScrollView>
 
+    <ImageButton
+        android:id="@+id/fab_record_up"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/circle_white_fill"
+        android:src="@drawable/ic_up"
+        android:scaleType="center"
+        android:padding="12dp"
+        app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        tools:ignore="contentDescription" />
+
+
+    <ImageButton
+        android:id="@+id/fab_record_plus"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/circlr_gray900_fill"
+        android:src="@drawable/ic_plus_24"
+        android:scaleType="center"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        tools:ignore="contentDescription" />
+
+    <FrameLayout
+        android:id="@+id/fcv_record"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

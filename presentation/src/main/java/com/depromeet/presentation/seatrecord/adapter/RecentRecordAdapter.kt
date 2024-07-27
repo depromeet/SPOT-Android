@@ -6,23 +6,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
-import com.depromeet.presentation.extension.extractDay
-import com.depromeet.presentation.extension.getDayOfWeek
 import com.depromeet.presentation.extension.loadAndClip
-import com.depromeet.presentation.seatrecord.mockdata.ReviewMockData
+import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
+import com.depromeet.presentation.util.CalendarUtil
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
 class RecentRecordAdapter(
-) : ListAdapter<ReviewMockData, RecentRecordViewHolder>(
+) : ListAdapter<MySeatRecordResponse.ReviewResponse, RecentRecordViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
     interface OnItemRecordClickListener {
-        fun onItemRecordClick(item: ReviewMockData)
+        fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse)
+        fun onItemMoreClick(item: MySeatRecordResponse.ReviewResponse)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -38,9 +40,15 @@ class RecentRecordAdapter(
     }
 
     override fun onBindViewHolder(holder: RecentRecordViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-            itemRecordClickListener?.onItemRecordClick(getItem(position))
+        with(holder) {
+            bind(getItem(position))
+            itemView.setOnClickListener {
+                itemRecordClickListener?.onItemRecordClick(getItem(position))
+            }
+            binding.ibRecentStadiumMore.setOnClickListener {
+                itemRecordClickListener?.onItemMoreClick(getItem(position))
+            }
+
         }
     }
 }
@@ -53,19 +61,23 @@ class RecentRecordViewHolder(
     }
 
 
-    fun bind(item: ReviewMockData) {
+    fun bind(item: MySeatRecordResponse.ReviewResponse) {
         with(binding) {
-            ivRecentImage.loadAndClip(item.image)
-            tvRecentDateDay.text = item.date.extractDay()
-            tvRecentDay.text = item.date.getDayOfWeek()
-            tvRecentBlockName.text = item.blockName
+            if (item.images.isNotEmpty()) {
+                ivRecentImage.loadAndClip(item.images[0].url)
+            } else {
+                ivRecentImage.loadAndClip(R.drawable.ic_image_placeholder)
+            }
+            tvRecentDateDay.text = CalendarUtil.getDayOfMonthFromDateFormat(item.date).toString()
+            tvRecentDay.text = CalendarUtil.getDayOfWeekFromDateFormat(item.date)
+            "${item.sectionName} ${item.blockName}블록".also { tvRecentBlockName.text = it }
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
                     MaterialTheme {
                         KeywordFlowRow(
-                            keywords = item.keyword,
+                            keywords = item.keywords.map { it.toUiKeyword() },
                             overflowIndex = MAX_VISIBLE_CHIPS
                         )
                     }
@@ -73,4 +85,5 @@ class RecentRecordViewHolder(
             }
         }
     }
+
 }

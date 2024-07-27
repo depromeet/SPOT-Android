@@ -2,7 +2,6 @@ package com.depromeet.presentation.home.mockdata
 
 import android.os.Parcelable
 import com.depromeet.presentation.R
-import com.depromeet.presentation.home.viewmodel.EditUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.parcelize.Parcelize
@@ -27,3 +26,9 @@ fun mockDataProfileEdit(): Flow<EditUiState> = flow {
 
     emit(EditUiState("https://picsum.photos/600/400", "노균욱", testData))
 }
+
+data class EditUiState(
+    val image: String = "",
+    val nickName: String = "",
+    val teamList: List<TeamData> = emptyList(),
+)

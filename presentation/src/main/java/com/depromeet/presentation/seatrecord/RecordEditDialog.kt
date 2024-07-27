@@ -6,7 +6,8 @@ import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentRecordEditBottomSheetBinding
-import com.depromeet.presentation.seatrecord.viewmodel.SeatDetailViewModel
+import com.depromeet.presentation.seatrecord.viewmodel.DeleteUi
+import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,26 +15,45 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
     R.layout.fragment_record_edit_bottom_sheet,
     FragmentRecordEditBottomSheetBinding::inflate
 ) {
-    private val viewModel: SeatDetailViewModel by activityViewModels()
+    companion object {
+        private const val VIEW_MODEL_TAG = "viewModelTag"
+        const val TAG = "RecordEditDialog"
+
+        fun newInstance(viewModelTag: String): RecordEditDialog {
+            val args = Bundle()
+            args.putString(VIEW_MODEL_TAG, viewModelTag)
+
+            val fragment = RecordEditDialog()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private val viewModel: SeatRecordViewModel by activityViewModels()
+    private lateinit var ui : DeleteUi
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        ui = if(parentFragment != null){
+            DeleteUi.SEAT_DETAIL
+        }else{
+            DeleteUi.SEAT_RECORD
+        }
+
         navigateEditMethod()
     }
 
     private fun navigateEditMethod() {
-        binding.tvRecordEdit.setOnClickListener {
-            /** 수정 이동 추후 합칠 때 추가하기*/
-            dismiss()
-        }
         binding.tvRecordDelete.setOnClickListener {
-            viewModel.setDeleteEvent()
+            viewModel.setDeleteEvent(ui)
             dismiss()
         }
     }

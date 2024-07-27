@@ -1,8 +1,8 @@
 package com.depromeet.data.intercepter
 
+import com.depromeet.data.BuildConfig.S3_URL
 import com.depromeet.domain.preference.SharedPreference
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -17,7 +17,10 @@ class AuthInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        if (!shouldRequestAuthenticatedHeaders(originalRequest.url.encodedPath)) {
+        if (!shouldRequestAuthenticatedHeaders(originalRequest.url.encodedPath) || urlIsS3(
+                originalRequest.url.toString()
+            )
+        ) {
             return chain.proceed(originalRequest)
         }
 
@@ -36,13 +39,22 @@ class AuthInterceptor @Inject constructor(
         return response
     }
 
+    private fun urlIsS3(url: String): Boolean {
+        return url.contains(S3_URL)
+    }
+
+
     private fun shouldRequestAuthenticatedHeaders(encodedPath: String) = when (encodedPath) {
-        "/api/v1/members" -> false
+        "/api/v1/members" -> true // TODO : 프로필 수정과 URL이 겹쳐서 수정했습니다.
         "/api/v1/members/{accessToken}" -> false //TODO 추 후 변경 필요
         else -> true
     }
 
-    private fun proceedWithAuthorizationHeader(chain: Interceptor.Chain, request: Request, token: String): Response {
+    private fun proceedWithAuthorizationHeader(
+        chain: Interceptor.Chain,
+        request: Request,
+        token: String,
+    ): Response {
         val newRequest = request.newBuilder()
             .addHeader("Authorization", token)
             .build()

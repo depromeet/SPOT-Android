@@ -93,6 +93,11 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
                     tvNicknameWarning.text = getString(R.string.profile_edit_error_type)
                     updateButtonEnabled(false)
                 }
+                NicknameInputState.DUPLICATE -> {
+                    clNicknameInputWarning.visibility = View.VISIBLE
+                    tvNicknameWarning.text = getString(R.string.profile_edit_error_duplicate)
+                    updateButtonEnabled(false)
+                }
             }
         }
     }

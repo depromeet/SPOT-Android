@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -39,7 +40,8 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
             dismiss()
         }
         binding.tvProfileDelete.setOnClickListener {
-            //삭제 요청
+            viewModel.deleteProfileImage()
+            dismiss()
         }
         binding.tvProfileSelectAlbum.setOnClickListener {
             pickSingleImageLauncher.launch("image/*")
@@ -69,11 +71,26 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                 fragment.show(parentFragmentManager, fragment.tag)
                 dismiss()
             } else {
+                val fileExtension = getFileExtension(uri)
+                if(fileExtension != "png" && fileExtension != "jpeg" && fileExtension != "jpg"){
+                    val fragment = UploadErrorDialog(
+                        getString(R.string.upload_error_extension_description),
+                        getString(R.string.upload_error_extension_photo)
+                    )
+                    fragment.show(parentFragmentManager, fragment.tag)
+                    dismiss()
+                    return@use
+                }
+                val byteArray = inputStream.readBytes()
+                viewModel.setProfileImagePresigned(byteArray,fileExtension)
                 viewModel.setProfileImage(uri.toString())
                 dismiss()
             }
         }
     }
 
-
+    private fun getFileExtension(uri: Uri): String {
+        val mimeType = requireContext().contentResolver.getType(uri)
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: ""
+    }
 }

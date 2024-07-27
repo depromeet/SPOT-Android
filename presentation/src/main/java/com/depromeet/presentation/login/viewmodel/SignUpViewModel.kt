@@ -102,5 +102,6 @@ enum class NicknameInputState {
     EMPTY,
     VALID,
     INVALID_LENGTH,
-    INVALID_CHARACTER
+    INVALID_CHARACTER,
+    DUPLICATE
 }

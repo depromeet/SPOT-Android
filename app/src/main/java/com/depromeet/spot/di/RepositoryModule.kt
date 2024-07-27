@@ -1,11 +1,13 @@
 package com.depromeet.spot.di
 
 import com.depromeet.data.repository.ExampleRepositoryImpl
+import com.depromeet.data.repository.HomeRepositoryImpl
 import com.depromeet.data.repository.SeatReviewRepositoryImpl
 import com.depromeet.data.repository.SignupRepositoryImpl
 import com.depromeet.data.repository.ViewfinderRepositoryImpl
 import com.depromeet.data.repository.WebSvgRepositoryImpl
 import com.depromeet.domain.repository.ExampleRepository
+import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.domain.repository.SeatReviewRepository
 import com.depromeet.domain.repository.SignupRepository
 import com.depromeet.domain.repository.ViewfinderRepository
@@ -31,6 +33,12 @@ abstract class RepositoryModule {
     abstract fun bindWebSvgRepository(
         webSvgRepositoryImpl: WebSvgRepositoryImpl,
     ): WebSvgRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeRepository(
+        homeRepositoryImpl: HomeRepositoryImpl,
+    ): HomeRepository
 
     @Binds
     @Singleton
