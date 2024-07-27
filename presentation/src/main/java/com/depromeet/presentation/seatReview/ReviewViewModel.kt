@@ -325,7 +325,6 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Selected Number: $selectedNumberInt")
 
             _postReviewState.value = UiState.Loading
-
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
                 selectedNumberInt,
