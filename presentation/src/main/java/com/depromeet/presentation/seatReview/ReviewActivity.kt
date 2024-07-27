@@ -38,7 +38,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     ActivityReviewBinding.inflate(it)
 }) {
     companion object {
-        private const val DATE_FORMAT = "yyyy.MM.dd"
+        private const val DATE_FORMAT = "yy.MM.dd"
         private const val FRAGMENT_RESULT_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val MAX_SELECTED_IMAGES = 3
@@ -72,6 +72,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         super.onCreate(savedInstanceState)
         viewModel.getStadiumName()
         observeStadiumName()
+        observeUploadReview()
         initDatePickerDialog()
         initUploadDialog()
         initSeatReviewDialog()
@@ -285,6 +286,43 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         return inputStream?.use { it.readBytes() }
     }
 
+    private fun observePreSignedUrl(imageData: ByteArray) {
+        viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    val presignedUrl = state.data.presignedUrl
+                    viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
+                    viewModel.postSeatReview()
+                    Intent(this, ReviewDoneActivity::class.java).apply {
+                        startActivity(this)
+                    }
+                }
+
+                is UiState.Failure -> {
+                    toast("Presigned URL 요청 실패: $state")
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun observeUploadReview() {
+        viewModel.postReviewState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    navigateToReviewDoneActivity()
+                }
+
+                is UiState.Failure -> {
+                    toast("리뷰 등록 실패: $state")
+                }
+
+                else -> {}
+            }
+        }
+    }
+
     private fun navigateToReviewDoneActivity() {
         binding.tvUploadBtn.setOnSingleClickListener {
             selectedImageUris.forEach { imageUriString ->
@@ -292,28 +330,8 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 val fileExtension = getFileExtension(this, imageUri)
                 val imageData = readImageData(this, imageUri)
                 if (imageData != null) {
-                    // TODO : viewModel.uploadImageToPreSignedUrl 사진 업로드 서버 통신
-                    // TODO : postSeatReview() 시야 등록 후기 request -> ReviewDoneActivity 이동
                     viewModel.requestPreSignedUrl(fileExtension)
-                    viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
-                        when (state) {
-                            is UiState.Success -> {
-                                val presignedUrl = state.data.presignedUrl
-                                // viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
-                                Intent(this, ReviewDoneActivity::class.java).apply {
-                                    startActivity(
-                                        this,
-                                    )
-                                }
-                            }
-
-                            is UiState.Failure -> {
-                                toast("Presigned URL 요청 실패: $state")
-                            }
-
-                            else -> {}
-                        }
-                    }
+                    observePreSignedUrl(imageData)
                 } else {
                     toast("파일을 읽을 수 없습니다.")
                 }

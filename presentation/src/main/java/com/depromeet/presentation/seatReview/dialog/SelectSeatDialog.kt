@@ -243,6 +243,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             addAll(blockItems.map { it.code })
         }
 
+        val blockCodeToIdMap = blockItems.associate { it.code to it.id }
+
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
@@ -260,9 +262,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 ) {
                     if (position == 0) {
                         viewModel.setSelectedBlock("")
+                        viewModel.updateSelectedBlockId(0)
                     } else {
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)
+                        val selectedBlockId = blockCodeToIdMap[selectedBlock] ?: 0
+                        viewModel.updateSelectedBlockId(selectedBlockId)
                         viewModel.getSeatRange(
                             viewModel.selectedStadiumId.value,
                             viewModel.selectedSectionId.value,
@@ -272,6 +277,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     viewModel.setSelectedBlock("")
+                    viewModel.updateSelectedBlockId(0)
                 }
             }
         }
