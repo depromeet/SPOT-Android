@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -133,12 +135,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
         sightList.forEachIndexed { index, view ->
             view.visibility =
-                if (index == data.review.baseReview.images.size) View.VISIBLE else View.GONE
+                if (index == data.review.baseReview.images.size) VISIBLE else GONE
         }
         when (data.review.baseReview.images.size) {
             0 -> {
-                tvHomeRecentRecordDate.visibility = View.GONE
-                tvHomeRecentRecordName.visibility = View.GONE
+                tvHomeRecentRecordDate.visibility = GONE
+                tvHomeRecentRecordName.visibility = GONE
             }
 
             1 -> {

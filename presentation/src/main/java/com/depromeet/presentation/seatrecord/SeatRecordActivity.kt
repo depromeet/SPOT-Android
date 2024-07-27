@@ -3,6 +3,8 @@ package com.depromeet.presentation.seatrecord
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.AdapterView
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
@@ -209,15 +211,15 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         if (!isExist) {
             with(binding) {
                 "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
-                clRecordNone.visibility = View.VISIBLE
-                clRecordStickyHeader.visibility = View.GONE
-                rvRecordMonthDetail.visibility = View.GONE
+                clRecordNone.visibility = VISIBLE
+                clRecordStickyHeader.visibility = GONE
+                rvRecordMonthDetail.visibility = GONE
             }
         } else {
             with(binding) {
-                clRecordNone.visibility = View.GONE
-                clRecordStickyHeader.visibility = View.VISIBLE
-                rvRecordMonthDetail.visibility = View.VISIBLE
+                clRecordNone.visibility = GONE
+                clRecordStickyHeader.visibility = VISIBLE
+                rvRecordMonthDetail.visibility = VISIBLE
 
                 ssvRecord.header = binding.clRecordStickyHeader
             }

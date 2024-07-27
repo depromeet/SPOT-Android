@@ -4,7 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Lifecycle
@@ -233,14 +234,14 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     private fun updateCompletionStatus(isError: Boolean, error: String) = if (isError) {
         with(binding) {
             etProfileEditNickname.setBackgroundResource(R.drawable.rect_warning01red_line_6)
-            tvProfileEditNicknameError.visibility = View.VISIBLE
+            tvProfileEditNicknameError.visibility = VISIBLE
             tvProfileEditNicknameError.text = error
         }
 
     } else {
         with(binding) {
             etProfileEditNickname.setBackgroundResource(R.drawable.rect_gray100_line_6)
-            tvProfileEditNicknameError.visibility = View.GONE
+            tvProfileEditNicknameError.visibility = GONE
             tvProfileEditNicknameError.text = error
         }
     }
