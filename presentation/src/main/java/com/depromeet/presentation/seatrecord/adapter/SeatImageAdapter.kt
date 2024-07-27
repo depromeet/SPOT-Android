@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import coil.size.Scale
 import com.depromeet.presentation.databinding.ItemSeatImageBinding
+import com.depromeet.presentation.extension.loadAndClip
 import com.depromeet.presentation.util.ItemDiffCallback
 
 class SeatImageAdapter : ListAdapter<String, SeatImageViewHolder>(
@@ -35,6 +34,6 @@ class SeatImageViewHolder(
     private val binding: ItemSeatImageBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: String) {
-        binding.ivTest.load(item) { scale(Scale.FILL) }
+        binding.ivTest.loadAndClip(item)
     }
 }

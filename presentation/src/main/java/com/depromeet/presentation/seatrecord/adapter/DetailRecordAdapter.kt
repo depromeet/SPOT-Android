@@ -10,20 +10,26 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSeatReviewDetailBinding
-import com.depromeet.presentation.seatrecord.mockdata.ReviewDetailMockData
+import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
+import com.depromeet.presentation.util.CalendarUtil
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.util.applyBoldSpan
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
-class DetailRecordAdapter() : ListAdapter<ReviewDetailMockData, ReviewDetailViewHolder>(
-    ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.reviewId == newItem.reviewId },
-        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
-    )
-) {
+class TestDetailRecordAdapter(
+    private val myProfile: MySeatRecordResponse.MyProfileResponse,
+) :
+    ListAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
+        ItemDiffCallback(
+            onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
+            onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        )
+    ) {
     interface OnDetailItemClickListener {
-        fun onItemMoreClickListener(item: ReviewDetailMockData)
+        fun onItemMoreClickListener(item: MySeatRecordResponse.ReviewResponse)
     }
 
     var itemMoreClickListener: OnDetailItemClickListener? = null
@@ -40,7 +46,7 @@ class DetailRecordAdapter() : ListAdapter<ReviewDetailMockData, ReviewDetailView
     }
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), myProfile)
         holder.binding.ivDetailMore.setOnClickListener {
             itemMoreClickListener?.onItemMoreClickListener(getItem(position))
         }
@@ -55,24 +61,28 @@ class ReviewDetailViewHolder(
         private const val MAX_VISIBLE_CHIPS = 3
     }
 
-    fun bind(item: ReviewDetailMockData) {
+    fun bind(
+        item: MySeatRecordResponse.ReviewResponse,
+        profile: MySeatRecordResponse.MyProfileResponse,
+    ) {
         with(binding) {
-            ivDetailProfileImage.load(item.profileImage) {
+            ivDetailProfileImage.load(profile.profileImage) {
                 transformations(CircleCropTransformation())
+                error(R.drawable.ic_default_profile)
             }
-            tvDetailNickname.text = item.nickName
-            "Lv.${item.level}".also { tvDetailLevel.text = it }
+            tvDetailNickname.text = profile.nickname
+            "Lv.${profile.level}".also { tvDetailLevel.text = it }
             tvDetailStadium.text = item.stadiumName
-            tvDetailBlock.text = item.stadiumName
-            tvDetailDate.text = item.createdAt
+            "${item.sectionName} ${item.blockName}블록".also { tvDetailBlock.text = it }
+            tvDetailDate.text = CalendarUtil.getFormattedDate(item.date)
             tvDetailContent.text = item.content
-            initImageViewPager(item.images)
+            initImageViewPager(item.images.map { it.url })
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
                     MaterialTheme {
                         KeywordFlowRow(
-                            keywords = item.keywords,
+                            keywords = item.keywords.map { it.toUiKeyword() },
                             overflowIndex = MAX_VISIBLE_CHIPS
                         )
                     }

@@ -12,6 +12,8 @@
     <string name="home_more">더보기</string>
     <string name="home_no_record_description">아직 작성한 시야 기록이 없어요.</string>
     <string name="home_write_record">시야 기록 남기기</string>
+        <!-- level -->
+    <string name="one_level_to_title">직관 첫 걸음</string>
 
     <!-- profileEdit -->
     <string name="profile_edit_select_album">앨범에서 선택</string>
@@ -25,12 +27,15 @@
     <string name="profile_edit_error_duplicate">이미 사용중인 닉네임이에요.</string>
     <string name="profile_edit_error_type">닉네임은 알파벳 대소문자, 숫자, 한글만 입력 가능합니다.</string>
     <string name="profile_edit_error_length">닉네임은 최소 2글자에서 최대 10글자로 입력해 주세요.</string>
+    <string name="profile_edit_empty">비어있습니다.</string>
     <string name="profile_edit_error_no">정상적으로 입력 완료!</string>
 
     <!-- upload_error -->
     <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>
     <string name="upload_error_capacity_5MB">5MB에 맞게 다시 선택해주세요</string>
     <string name="upload_error_capacity_15MB">15MB에 맞게 다시 선택해주세요</string>
+    <string name="upload_error_extension_description">선택한 사진\n확장자가 맞지 않아요</string>
+    <string name="upload_error_extension_photo">jpg, jpeg, png 사진을 선택해주세요</string>
     <string name="upload_error_check">확인</string>
 
     <!-- viewfinder -->
@@ -55,6 +60,12 @@
     <string name="confirm_delete_description">게시물 삭제시 복구가 불가능합니다</string>
     <string name="confirm_delete_do">삭제하기</string>
     <string name="confirm_delete_cancel">취소</string>
+    <string name="two_level_to_title">경기장 탐험가</string>
+    <string name="three_level_to_title">직관의 여유</string>
+    <string name="four_level_to_title">응원 단장</string>
+    <string name="five_level_to_title">야구정 VIP</string>
+    <string name="six_level_to_title">전설의 직관러</string>
+    <string name="unknown_level_to_title">알 수 없음</string>
 
 
 </resources>

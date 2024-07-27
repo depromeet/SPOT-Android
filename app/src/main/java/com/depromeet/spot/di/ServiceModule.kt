@@ -1,6 +1,7 @@
 package com.depromeet.spot.di
 
 import com.depromeet.data.remote.ExampleService
+import com.depromeet.data.remote.HomeApiService
 import com.depromeet.data.remote.SeatReviewService
 import com.depromeet.data.remote.SignupService
 import com.depromeet.data.remote.ViewfinderService
@@ -30,6 +31,11 @@ object ServiceModule {
     @Singleton
     fun provideWebSvgService(@WebSvg retrofit: Retrofit): WebSvgApiService =
         retrofit.create(WebSvgApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideHomeService(retrofit: Retrofit): HomeApiService =
+        retrofit.create(HomeApiService::class.java)
 
     @Provides
     @Singleton
