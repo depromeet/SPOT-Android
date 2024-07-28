@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatReview
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import timber.log.Timber
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -27,12 +28,13 @@ class ReviewViewModel @Inject constructor(
     private val seatReviewRepository: SeatReviewRepository,
 ) : ViewModel() {
 
-    // 날짜 및 이미지
-    private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
-    private val currentDate: String = LocalDate.now().format(dateFormatter)
+    // 날짜
+    private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+    private val currentDate: String = LocalDateTime.now().format(dateFormatter)
 
     private val _selectedDate = MutableStateFlow(currentDate)
     val selectedDate: StateFlow<String> = _selectedDate.asStateFlow()
+    // 이미지
 
     private val _selectedImages = MutableStateFlow<List<String>>(emptyList())
     val selectedImages: StateFlow<List<String>> = _selectedImages.asStateFlow()
@@ -102,6 +104,7 @@ class ReviewViewModel @Inject constructor(
 
     fun updateSelectedDate(date: String) {
         _selectedDate.value = date
+        Log.d("mm", _selectedDate.value.toString())
     }
 
     fun setSelectedImages(image: List<String>) {
