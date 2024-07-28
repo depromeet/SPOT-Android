@@ -47,7 +47,7 @@
                 android:textSize="13sp"
                 android:textFontWeight="500"
                 android:textStyle="normal"
-                tools:text="24.06.30" />
+                tools:text="2024.06.30" />
 
             <ImageView
                 android:id="@+id/iv_edit_date"

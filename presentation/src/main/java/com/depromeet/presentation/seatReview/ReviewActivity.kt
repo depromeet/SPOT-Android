@@ -38,34 +38,17 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     ActivityReviewBinding.inflate(it)
 }) {
     companion object {
-        private const val DATE_FORMAT = "yy.MM.dd"
+        private const val DATE_FORMAT = "yyyy.MM.dd"
+        private const val ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm"
         private const val FRAGMENT_RESULT_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val MAX_SELECTED_IMAGES = 3
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-    private val selectedImage: List<ImageView> by lazy {
-        listOf(
-            binding.ivFirstImage,
-            binding.ivSecondImage,
-            binding.ivThirdImage,
-        )
-    }
-    private val selectedImageLayout: List<FrameLayout> by lazy {
-        listOf(
-            binding.layoutFirstImage,
-            binding.layoutSecondImage,
-            binding.layoutThirdImage,
-        )
-    }
-    private val removeButtons: List<ImageView> by lazy {
-        listOf(
-            binding.ivRemoveFirstImage,
-            binding.ivRemoveSecondImage,
-            binding.ivRemoveThirdImage,
-        )
-    }
+    private val selectedImage: List<ImageView> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage,) }
+    private val selectedImageLayout: List<FrameLayout> by lazy { listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage,) }
+    private val removeButtons: List<ImageView> by lazy { listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage,) }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,10 +65,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun observeReviewViewModel() {
-        viewModel.selectedDate.asLiveData().observe(this) { date ->
-            binding.tvDate.text = date
-            updateNextButtonState()
-        }
         viewModel.selectedImages.asLiveData().observe(this) { image ->
             updateNextButtonState()
         }
@@ -127,6 +106,19 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
+    private fun initDatePickerDialog() {
+        binding.layoutDatePicker.setOnSingleClickListener {
+            DatePickerDialog().show(supportFragmentManager, "DatePickerDialogTag")
+        }
+        viewModel.selectedDate.asLiveData().observe(this) { date ->
+            val originalFormat = SimpleDateFormat(ISO_DATE_FORMAT, Locale.getDefault())
+            val targetFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+            val dateOnly = originalFormat.parse(date)?.let { targetFormat.format(it) }
+            binding.tvDate.text = dateOnly ?: date.substring(0, 10)
+            updateNextButtonState()
+        }
+    }
+
     private fun observeStadiumName() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
@@ -146,19 +138,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             }
         }
     }
-
-    private fun initDatePickerDialog() {
-        val today = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        with(binding) {
-            tvDate.text = dateFormat.format(today.time)
-            layoutDatePicker.setOnSingleClickListener {
-                val datePickerDialogFragment = DatePickerDialog()
-                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
-            }
-        }
-    }
-
     private fun initUploadDialog() {
         binding.btnAddImage.setOnClickListener {
             val uploadDialogFragment = ImageUploadDialog()
