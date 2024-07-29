@@ -20,7 +20,14 @@ data class BlockReviewResponse(
         val stadiumName: String = "",
         val sectionName: String = "",
         val blockCode: String = ""
-    )
+    ) {
+        /**
+         * @example : 오렌지석•207블록
+         */
+        fun formattedStadiumBlock(): String {
+            return sectionName + "•" + blockCode + "블록"
+        }
+    }
 
     data class KeywordResponse(
         val content: String = "",
@@ -131,18 +138,4 @@ data class BlockReviewResponse(
         val year: Int = 0,
         val month: Int = 0
     )
-
-    /**
-     * @example : 서울 잠실 야구장
-     */
-    fun formattedStadiumTitle(): String {
-        return location.stadiumName
-    }
-
-    /**
-     * @example : 오렌지석•207블록
-     */
-    fun formattedStadiumBlock(): String {
-        return location.sectionName + "•" + location.blockCode + "블록"
-    }
 }
