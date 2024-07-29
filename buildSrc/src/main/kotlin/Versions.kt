@@ -17,7 +17,7 @@ object Versions {
     const val activityKtxVersion = "1.7.2"
     const val fragmentKtxVersion = "1.5.7"
     const val coroutinesAndroidVersion = "1.7.1"
-    const val pagingVersion = "3.1.1"
+    const val pagingVersion = "3.3.0"
     const val securityVersion = "1.1.0-alpha06"
     const val lifecycleVersion = "2.6.1"
     const val ossPluginVersion = "0.10.4"
