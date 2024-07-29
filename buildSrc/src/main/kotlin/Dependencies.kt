@@ -31,6 +31,7 @@ object AndroidXDependencies {
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutinesAndroidVersion}"
     const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManagerVersion}"
     const val hiltWorkManager = "androidx.hilt:hilt-work:1.0.0"
+    const val pagingCommon = "androidx.paging:paging-common:${Versions.pagingVersion}"
 }
 
 object TestDependencies {
@@ -105,7 +106,7 @@ val Compose = listOf(
     "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1",
     "androidx.lifecycle:lifecycle-runtime-compose:2.6.2",
     "androidx.hilt:hilt-navigation-compose:1.0.0",
-    "androidx.paging:paging-compose:1.0.0-alpha14",
+    "androidx.paging:paging-compose:${Versions.pagingVersion}",
     "io.coil-kt:coil-compose:2.6.0"
 )
 

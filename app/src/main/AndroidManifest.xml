@@ -91,5 +91,8 @@
                     android:scheme="kakao${kakaoApiKey}" />
             </intent-filter>
         </activity>
+        <activity android:name="com.depromeet.presentation.viewfinder.WebViewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>

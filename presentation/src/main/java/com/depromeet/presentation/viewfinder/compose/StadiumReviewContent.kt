@@ -1,7 +1,6 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,8 +38,6 @@ import coil.request.ImageRequest
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.mapper.toKeyword
-import com.depromeet.presentation.viewfinder.sample.ReviewContent
-import com.depromeet.presentation.viewfinder.sample.reviewContents
 
 @Composable
 fun StadiumReviewContent(
@@ -65,7 +62,7 @@ fun StadiumReviewContent(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-//                        .data(reviewContent.profile)
+                        .data(reviewContent.member.profileImage)
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -76,15 +73,13 @@ fun StadiumReviewContent(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-//                    text = reviewContent.user,
-                    text = "test",
+                    text = reviewContent.member.nickname,
                     fontSize = 12.sp,
                     color = Color(0xFF9F9F9F)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 LevelCard(
-//                    level = reviewContent.level
-                    level = 1
+                    level = reviewContent.member.level
                 )
             }
             Icon(
@@ -102,14 +97,12 @@ fun StadiumReviewContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-//                text = "${reviewContent.seat}",
-                text = "207블럭 1열 12번",
+                text = "${reviewContent.formattedNumber()}",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF121212)
             )
             Text(
-//                text = "・${reviewContent.date}",
                 text = "・${reviewContent.formattedDate()}",
                 fontSize = 12.sp,
                 color = Color(0xFF9F9F9F)
@@ -164,12 +157,7 @@ private fun StadiumReviewContentPreview() {
             context = LocalContext.current,
             reviewContent = BlockReviewResponse.ReviewResponse(
                 id = 1,
-                userId = 1,
-                blockId = 1,
-                seatId = 1,
-                rowId = 1,
-                seatNumber = 1,
-                date= "2024-07-13",
+                dateTime = "2023-03-01T19:00:00",
                 content = "전체적으로 좋은 경험이었습니다. 다음에 또 오고 싶어요!",
                 images = listOf(
                     BlockReviewResponse.ReviewResponse.ReviewImageResponse(
@@ -181,20 +169,46 @@ private fun StadiumReviewContentPreview() {
                         url = "https://picsum.photos/200/300"
                     ),
                 ),
+                member = BlockReviewResponse.ReviewResponse.ReviewMemberResponse(
+                    "https://picsum.photos/200/300",
+                    nickname = "엘지의 왕자",
+                    level = 0
+                ),
+                stadium = BlockReviewResponse.ReviewResponse.ReviewStadiumResponse(
+                    id = 1,
+                    name = "서울 잠실 야구장"
+                ),
+                section = BlockReviewResponse.ReviewResponse.ReviewSectionResponse(
+                    id = 1,
+                    name = "오렌지석",
+                    alias = "응원석"
+                ),
+                block = BlockReviewResponse.ReviewResponse.ReviewBlockResponse(
+                    id = 1,
+                    code = "207"
+                ),
+                row = BlockReviewResponse.ReviewResponse.ReviewRowResponse(
+                    id = 1,
+                    number = 1
+                ),
+                seat = BlockReviewResponse.ReviewResponse.ReviewSeatResponse(
+                    id = 1,
+                    seatNumber = 12
+                ),
                 keywords = listOf(
-                    BlockReviewResponse.KeywordResponse(
+                    BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                        id = 1,
                         content = "",
-                        count = 1,
                         isPositive = false
                     ),
-                    BlockReviewResponse.KeywordResponse(
+                    BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                        id = 1,
                         content = "",
-                        count = 1,
                         isPositive = false
                     ),
-                    BlockReviewResponse.KeywordResponse(
+                    BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                        id = 1,
                         content = "",
-                        count = 1,
                         isPositive = false
                     )
                 )

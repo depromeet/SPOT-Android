@@ -18,8 +18,8 @@ import com.depromeet.presentation.viewfinder.sample.StadiumArea
 
 @Composable
 fun StadiumAreaText(
-    stadium: Stadium,
-    stadiumArea: StadiumArea,
+    stadium: String,
+    seatContent: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -28,13 +28,13 @@ fun StadiumAreaText(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stadium.title,
+            text = stadium,
             fontSize = 12.sp,
             color = Color(0xFF606060)
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "${stadiumArea.prefix}•${stadiumArea.seat}•${stadiumArea.block}블록",
+            text = seatContent,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF121212)
@@ -46,7 +46,7 @@ fun StadiumAreaText(
 @Composable
 private fun StadiumAreaTextPreview() {
     StadiumAreaText(
-        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-        stadiumArea = StadiumArea("1루", 207, "오렌지석")
+        stadium = "서울 잠실 야구장",
+        seatContent = "오렌지석 207블럭"
     )
 }

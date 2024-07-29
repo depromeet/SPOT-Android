@@ -39,7 +39,7 @@ class SpotTeamLabel @JvmOverloads constructor(
                 "히어로즈" -> {
                     setTeamColor(R.color.color_heroes, R.color.color_heroes_font)
                 }
-                "kt" -> {
+                "KT" -> {
                     setTeamColor(R.color.color_kt, R.color.color_kt_font)
                 }
                 "롯데" -> {
@@ -47,6 +47,9 @@ class SpotTeamLabel @JvmOverloads constructor(
                 }
                 "한화" -> {
                     setTeamColor(R.color.color_hanwha, R.color.color_hanwha_font)
+                }
+                "NC" -> {
+                    setTeamColor(R.color.color_nc, R.color.color_nc_font)
                 }
             }
             binding.tvTeam.text = value

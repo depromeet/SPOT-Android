@@ -28,16 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.depromeet.presentation.viewfinder.sample.pictures
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumPictureViewPager(
     context: Context,
-    pictures: List<String>,
+    topReviewImages: List<BlockReviewResponse.TopReviewImagesResponse>,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState(pageCount = { pictures.size })
+    val pagerState = rememberPagerState(pageCount = { topReviewImages.size })
 
     HorizontalPager(
         modifier = modifier,
@@ -49,7 +49,7 @@ fun StadiumPictureViewPager(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(context)
-                    .data(pictures.getOrNull(page))
+                    .data(topReviewImages.getOrNull(page)?.url)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
@@ -63,7 +63,7 @@ fun StadiumPictureViewPager(
                 contentAlignment = Alignment.TopEnd
             ) {
                 Text(
-                    text = "207블록 3열 12반",
+                    text = "${topReviewImages.getOrNull(page)?.formattedNumber()}",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -83,7 +83,7 @@ fun StadiumPictureViewPager(
                 contentAlignment = Alignment.BottomEnd
             ) {
                 Text(
-                    text = "${page + 1}/${pictures.size}",
+                    text = "${page + 1}/${topReviewImages.size}",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -106,7 +106,22 @@ fun StadiumPictureViewPager(
 private fun StadiumPictureViewPagerPreview() {
     StadiumPictureViewPager(
         context = LocalContext.current,
-        pictures = pictures,
+        topReviewImages = listOf(
+            BlockReviewResponse.TopReviewImagesResponse(
+                url = "",
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
+            ),
+            BlockReviewResponse.TopReviewImagesResponse(
+                url = "",
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
+            ),
+        ),
         modifier = Modifier.fillMaxWidth()
     )
 }

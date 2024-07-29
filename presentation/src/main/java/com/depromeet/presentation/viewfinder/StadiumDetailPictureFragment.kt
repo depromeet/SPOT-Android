@@ -2,6 +2,7 @@ package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import com.depromeet.core.base.BindingFragment
@@ -47,10 +48,10 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initEvent() {
+        onBackPressed()
         binding.spotAppbar.setNavigationOnClickListener {
             removeFragment()
         }
-
     }
 
     private fun getReviewIdExtra(callback: (id: Long) -> Unit) {
@@ -65,5 +66,19 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                 remove(fragment)
             }
         }
+    }
+
+    private fun onBackPressed(){
+        requireActivity().onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true){
+                override fun handleOnBackPressed() {
+                    val fragment = parentFragmentManager.findFragmentByTag(TAG)
+                    if (fragment != null ){
+                        parentFragmentManager.beginTransaction()
+                            .remove(fragment)
+                            .commit()
+                    }
+                }
+            })
     }
 }

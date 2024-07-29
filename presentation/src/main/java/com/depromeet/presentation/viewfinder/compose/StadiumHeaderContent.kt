@@ -16,22 +16,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
+import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
-import com.depromeet.presentation.viewfinder.sample.Seat
-import com.depromeet.presentation.viewfinder.sample.Stadium
-import com.depromeet.presentation.viewfinder.sample.StadiumArea
-import com.depromeet.presentation.viewfinder.sample.pictures
 
 @Composable
 fun StadiumHeaderContent(
     context: Context,
-    stadium: Stadium,
+    topReviewImages: List<BlockReviewResponse.TopReviewImagesResponse>,
+    stadiumTitle: String,
+    seatContent: String,
     isMore: Boolean,
-    stadiumArea: StadiumArea,
+    reviewFilter: BlockReviewRequestQuery,
     keywords: List<Keyword>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
-    onClickSelectSeat: () -> Unit
+    onClickSelectSeat: () -> Unit,
+    onCancelSeat: () -> Unit
 ) {
     Column(
         modifier = modifier.background(Color.White),
@@ -39,19 +40,20 @@ fun StadiumHeaderContent(
     ) {
         StadiumPictureViewPager(
             context = context,
-            pictures = pictures,
+            topReviewImages = topReviewImages,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
         StadiumAreaText(
-            stadium = stadium,
-            stadiumArea = stadiumArea
+            stadium = stadiumTitle,
+            seatContent = seatContent
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         StadiumSeatCheckBox(
-            seat = Seat(100, 11, false),
-            onClick = onClickSelectSeat
+            reviewFilter = reviewFilter,
+            onClick = onClickSelectSeat,
+            onCancel = onCancelSeat
         )
 
         Box(
@@ -63,7 +65,10 @@ fun StadiumHeaderContent(
                 keywords = keywords,
                 onChangeIsMore = onChangeIsMore
             )
-            CustomTooltip(modifier = Modifier.zIndex(1f))
+            CustomTooltip(
+                reviewFilter = reviewFilter,
+                modifier = Modifier.zIndex(1f)
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
         Divider(
@@ -81,15 +86,40 @@ private fun StadiumHeaderContentPreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = false,
-        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
+        topReviewImages = listOf(
+            BlockReviewResponse.TopReviewImagesResponse(
+                url = "",
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
+            ),
+            BlockReviewResponse.TopReviewImagesResponse(
+                url = "",
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
+            ),
+        ),
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = null,
+            seatNumber = null,
+            year = null,
+            month = null,
+            page = 0,
+            size = 1
+        ),
+        stadiumTitle = "서울 잠실 야구장",
+        seatContent = "오렌지석 207블럭",
         keywords = listOf(
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
         ),
         onChangeIsMore = {},
-        onClickSelectSeat = {}
+        onClickSelectSeat = {},
+        onCancelSeat = {}
     )
 }
 
@@ -99,8 +129,32 @@ private fun StadiumHeaderContentIsMorePreview() {
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = true,
-        stadium = Stadium(1, "서울 잠실 야구장", emptyList(), "", false),
-        stadiumArea = StadiumArea("1루", 207, "오렌지석"),
+        topReviewImages = listOf(
+            BlockReviewResponse.TopReviewImagesResponse(
+                url = "",
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
+
+            ),
+            BlockReviewResponse.TopReviewImagesResponse(
+                url = "",
+                reviewId = 1,
+                blockCode = "207",
+                rowNumber = 1,
+                seatNumber = 12
+            ),
+        ),
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = 1,
+            seatNumber = 12,
+            year = null,
+            month = null,
+            page = 0,
+            size = 1
+        ), stadiumTitle = "서울 잠실 야구장",
+        seatContent = "오렌지석 207블럭",
         keywords = listOf(
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
@@ -109,6 +163,7 @@ private fun StadiumHeaderContentIsMorePreview() {
             Keyword(message = "서서 응원하는 존", like = 5, type = 0),
         ),
         onChangeIsMore = {},
-        onClickSelectSeat = {}
+        onClickSelectSeat = {},
+        onCancelSeat = {}
     )
 }

@@ -27,9 +27,9 @@ fun StadiumKeywordRow(
             .fillMaxWidth()
             .background(
                 color = if (keyword.type == 0) {
-                    Color(0xFFF4F4F4)
+                    Color(0xFFECFBF5)
                 } else {
-                    Color(0xFFFFEAEA)
+                    Color(0xFFFFF1EF)
                 },
                 shape = RoundedCornerShape(6.dp)
             )
@@ -42,12 +42,16 @@ fun StadiumKeywordRow(
         Text(
             text = keyword.message,
             fontSize = 14.sp,
-            color = Color(0xFF4A4A4A)
+            color = Color(0xFF222222)
         )
         Text(
             text = keyword.like.toString(),
             fontSize = 14.sp,
-            color = Color(0xFF9F9F9F)
+            color = if (keyword.type == 0) {
+                Color(0xFF43D596)
+            } else {
+                Color(0xFFFD7563)
+            }
         )
     }
 }
@@ -57,5 +61,13 @@ fun StadiumKeywordRow(
 private fun StadiumKeywordRowPreview() {
     StadiumKeywordRow(
         keyword = Keyword("🙍‍서서 응원하는 존", 44, 1)
+    )
+}
+
+@Preview
+@Composable
+private fun StadiumKeywordRowPositivePreview() {
+    StadiumKeywordRow(
+        keyword = Keyword("🙍‍서서 응원하는 존", 44, 0)
     )
 }

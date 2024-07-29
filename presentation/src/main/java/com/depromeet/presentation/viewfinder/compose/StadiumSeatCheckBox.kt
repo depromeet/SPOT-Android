@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -19,31 +20,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.presentation.R
-import com.depromeet.presentation.viewfinder.sample.Seat
 
 @Composable
 fun StadiumSeatCheckBox(
-    seat: Seat,
+    reviewFilter: BlockReviewRequestQuery,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onCancel: () -> Unit
 ) {
     Row(
         modifier = modifier
             .background(
-                color = if (seat.selected) {
-                    Color(0xFF121212)
-                } else {
+                color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                     Color(0xFFFFFFFF)
+                } else {
+                    Color(0xFF121212)
                 },
                 shape = RoundedCornerShape(100.dp)
             )
             .border(
                 1.dp,
-                color = if (seat.selected) {
-                    Color(0xFF121212)
-                } else {
+                color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                     Color(0xFFE5E5E5)
+                } else {
+                    Color(0xFF121212)
                 }, shape = RoundedCornerShape(100.dp)
             )
             .clickable(
@@ -55,23 +57,44 @@ fun StadiumSeatCheckBox(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = if (seat.selected) {
-                "${seat.column}열 ${seat.number}번"
+            text = if (reviewFilter.seatNumberIsEmpty()) {
+                if (reviewFilter.rowNumberIsEmpty()) {
+                    "좌석 선택"
+                } else {
+                    "${reviewFilter.rowNumber}열"
+                }
             } else {
-                "좌석 시야"
+                "${reviewFilter.rowNumber}열 ${reviewFilter.seatNumber}번"
             },
             fontSize = 13.sp,
-            color = if (seat.selected) {
-                Color(0xFFFFFFFF)
-            } else {
+            color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                 Color(0xFF121212)
+            } else {
+                Color(0xFFFFFFFF)
             }
         )
         Spacer(modifier = Modifier.width(6.dp))
         Icon(
-            painter = painterResource(id = R.drawable.ic_down),
+            painter = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
+                painterResource(id = R.drawable.ic_down)
+            } else {
+                painterResource(id = R.drawable.ic_close)
+            },
             contentDescription = null,
-            tint = Color(0xFF878787)
+            tint = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
+                Color(0xFF878787)
+            } else {
+                Color(0xFFFFFFFF)
+            },
+            modifier = Modifier
+                .size(12.dp)
+                .clickable {
+                    if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
+                        onClick()
+                    } else {
+                        onCancel()
+                    }
+                }
         )
     }
 }
@@ -80,19 +103,53 @@ fun StadiumSeatCheckBox(
 @Composable
 private fun StadiumSeatCheckBoxPreview() {
     StadiumSeatCheckBox(
-        seat = Seat(100, 11, false),
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = null,
+            seatNumber = null,
+            year = null,
+            month = null,
+            page = 0,
+            size = 10
+        ),
         modifier = Modifier,
-        onClick = {}
+        onClick = {},
+        onCancel = {}
 
     )
 }
 
 @Preview
 @Composable
-private fun StadiumSeatCheckBoxPreviewSelected() {
+private fun StadiumSeatCheckBoxPreviewRowNumber() {
     StadiumSeatCheckBox(
-        seat = Seat(100, 11, true),
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = 1,
+            seatNumber = null,
+            year = null,
+            month = null,
+            page = 0,
+            size = 10
+        ),
         modifier = Modifier,
-        onClick = {}
+        onClick = {},
+        onCancel = {}
+    )
+}
+
+@Preview
+@Composable
+private fun StadiumSeatCheckBoxPreviewSeatNumber() {
+    StadiumSeatCheckBox(
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = 1,
+            seatNumber = 12,
+            year = null,
+            month = null,
+            page = 0,
+            size = 10
+        ),
+        modifier = Modifier,
+        onClick = {},
+        onCancel = {}
     )
 }
