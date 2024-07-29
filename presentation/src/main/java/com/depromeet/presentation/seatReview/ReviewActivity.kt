@@ -22,6 +22,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
 import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
@@ -30,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 
 @AndroidEntryPoint
@@ -46,9 +46,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-    private val selectedImage: List<ImageView> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage,) }
-    private val selectedImageLayout: List<FrameLayout> by lazy { listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage,) }
-    private val removeButtons: List<ImageView> by lazy { listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage,) }
+    private val selectedImage: List<ImageView> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
+    private val selectedImageLayout: List<FrameLayout> by lazy { listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage) }
+    private val removeButtons: List<ImageView> by lazy { listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage) }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +61,8 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         initSeatReviewDialog()
         setupFragmentResultListener()
         setupRemoveButtons()
-        navigateToReviewDoneActivity()
+        uploadAllReviewDone()
+        navigateToHomeActivity()
     }
 
     private fun observeReviewViewModel() {
@@ -119,6 +120,18 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
+    private fun initUploadDialog() {
+        binding.btnAddImage.setOnClickListener {
+            ImageUploadDialog().show(supportFragmentManager, "ImageUploadDialog")
+        }
+    }
+
+    private fun navigateToHomeActivity() {
+        binding.btnBack.setOnSingleClickListener {
+            Intent(this, HomeActivity::class.java).apply { startActivity(this) }
+        }
+    }
+
     private fun observeStadiumName() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
@@ -136,12 +149,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 is UiState.Empty -> { toast("오류가 발생했습니다") }
                 else -> {}
             }
-        }
-    }
-    private fun initUploadDialog() {
-        binding.btnAddImage.setOnClickListener {
-            val uploadDialogFragment = ImageUploadDialog()
-            uploadDialogFragment.show(supportFragmentManager, uploadDialogFragment.tag)
         }
     }
 
@@ -269,18 +276,16 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    val presignedUrl = state.data.presignedUrl
-                    viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
+                    val preSignedUrl = state.data.presignedUrl
+                    viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData)
                     viewModel.postSeatReview()
                     Intent(this, ReviewDoneActivity::class.java).apply {
                         startActivity(this)
                     }
                 }
-
                 is UiState.Failure -> {
                     toast("Presigned URL 요청 실패: $state")
                 }
-
                 else -> {}
             }
         }
@@ -290,19 +295,17 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    navigateToReviewDoneActivity()
+                    uploadAllReviewDone()
                 }
-
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
                 }
-
                 else -> {}
             }
         }
     }
 
-    private fun navigateToReviewDoneActivity() {
+    private fun uploadAllReviewDone() {
         binding.tvUploadBtn.setOnSingleClickListener {
             selectedImageUris.forEach { imageUriString ->
                 val imageUri = Uri.parse(imageUriString)

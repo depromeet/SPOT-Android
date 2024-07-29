@@ -34,6 +34,7 @@ class ReviewViewModel @Inject constructor(
 
     private val _selectedDate = MutableStateFlow(currentDate)
     val selectedDate: StateFlow<String> = _selectedDate.asStateFlow()
+
     // 이미지
 
     private val _selectedImages = MutableStateFlow<List<String>>(emptyList())
@@ -51,7 +52,6 @@ class ReviewViewModel @Inject constructor(
     val selectedBadReview: StateFlow<List<String>> = _selectedBadReview.asStateFlow()
 
     private val _detailReviewText = MutableStateFlow("")
-    val detailReviewText: StateFlow<String> = _detailReviewText.asStateFlow()
 
     // 좌석 선택
 
@@ -111,7 +111,6 @@ class ReviewViewModel @Inject constructor(
 
     fun updateSelectedDate(date: String) {
         _selectedDate.value = date
-        Log.d("mm", _selectedDate.value.toString())
     }
 
     fun setSelectedImages(image: List<String>) {
@@ -301,6 +300,7 @@ class ReviewViewModel @Inject constructor(
                 content = _detailReviewText.value,
             )
 
+            // 추후 Timber 삭제 예정
             Timber.d("Selected Images: ${_selectedImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
             Timber.d("Good Review: ${_selectedGoodReview.value}")

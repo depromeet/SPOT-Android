@@ -25,7 +25,7 @@ import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBindi
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
-import com.depromeet.presentation.seatReview.adapter.SectionListAdapter
+import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +34,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     FragmentSelectSeatBottomSheetBinding::inflate,
 ) {
     private val viewModel: ReviewViewModel by activityViewModels()
-    private lateinit var adapter: SectionListAdapter
+    private lateinit var adapter: SelectSeatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -284,7 +284,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun setupSectionRecyclerView() {
-        adapter = SectionListAdapter { position, sectionId ->
+        adapter = SelectSeatAdapter { position, sectionId ->
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
             viewModel.setSelectedSeatZone(selectedSeatInfo.name)
