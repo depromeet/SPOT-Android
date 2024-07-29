@@ -53,14 +53,20 @@ import com.depromeet.presentation.viewfinder.compose.LevelCard
 fun StadiumDetailReviewViewPager(
     context: Context,
     reviews: List<BlockReviewResponse.ReviewResponse>,
+    page: Boolean,
     pagerState: PagerState,
     isDimmed: Boolean,
     isMore: Boolean,
     modifier: Modifier = Modifier,
     onChangeIsDimmed: (isDimmed: Boolean) -> Unit,
-    onChangeIsMore: (isMore: Boolean) -> Unit
+    onChangeIsMore: (isMore: Boolean) -> Unit,
+    onLoadPaging: () -> Unit
 ) {
     val minimumLineLength = 1
+
+    if (pagerState.currentPage == reviews.size - 1 && !page) {
+        onLoadPaging()
+    }
 
     VerticalPager(
         state = pagerState,
@@ -93,7 +99,7 @@ fun StadiumDetailReviewViewPager(
             ) {
                 StadiumDetailPictureViewPager(
                     context = context,
-                    pictures = reviews[pagerState.currentPage].images
+                    pictures = reviews[page].images
                 )
             }
 
@@ -272,10 +278,12 @@ private fun StadiumDetailReviewViewPagerPreview() {
     StadiumDetailReviewViewPager(
         context = LocalContext.current,
         reviews = reviews,
+        page = false,
         pagerState = pagerState,
         isDimmed = false,
         isMore = false,
         onChangeIsDimmed = {},
-        onChangeIsMore = {}
+        onChangeIsMore = {},
+        onLoadPaging = {}
     )
 }

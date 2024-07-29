@@ -8,7 +8,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
-import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
@@ -16,6 +15,7 @@ import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumSelectSeatDialog
+import com.depromeet.presentation.viewfinder.uistate.StadiumDetailUiState
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -89,9 +89,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun initObserver() {
-        viewModel.blockReviews.asLiveData().observe(this) {
-            when (it) {
-                is UiState.Empty -> binding.btnUp.visibility = View.GONE
+        viewModel.detailUiState.asLiveData().observe(this) { uiState ->
+            when (uiState) {
+                is StadiumDetailUiState.Empty -> binding.btnUp.visibility = View.GONE
                 else -> Unit
             }
         }

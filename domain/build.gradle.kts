@@ -15,4 +15,7 @@ dependencies {
         implementation(coroutines)
         implementation(dateTime)
     }
+    AndroidXDependencies.run {
+        implementation(pagingCommon)
+    }
 }
