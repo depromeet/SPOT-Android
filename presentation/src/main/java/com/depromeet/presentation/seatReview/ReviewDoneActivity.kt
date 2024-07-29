@@ -21,6 +21,7 @@ class ReviewDoneActivity : BaseActivity<ActivityReviewDoneBinding>({
         lifecycleScope.launch {
             delay(2000L)
             finish()
+            // TODO : 기록된 모든 정보 삭제
         }
     }
 }

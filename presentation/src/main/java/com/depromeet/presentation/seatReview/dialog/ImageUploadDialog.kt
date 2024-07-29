@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,6 +23,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toUri
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.UploadErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,18 +55,16 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     }
 
     private fun initUploadImageMethod() {
-        with(binding) {
-            layoutGallery.setOnSingleClickListener {
-                selectMultipleMediaLauncher.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-                )
-            }
-            layoutTakePhoto.setOnSingleClickListener {
-                if (!checkUserPermission(requireContext())) {
-                    activityResultLauncher.launch(permissionRequired)
-                } else {
-                    initCameraLauncher()
-                }
+        binding.layoutGallery.setOnSingleClickListener {
+            selectMultipleMediaLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+            )
+        }
+        binding.layoutTakePhoto.setOnSingleClickListener {
+            if (!checkUserPermission(requireContext())) {
+                activityResultLauncher.launch(permissionRequired)
+            } else {
+                initCameraLauncher()
             }
         }
         setupActivityResultLaunchers()
@@ -125,7 +123,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
                 }
             }
             if (!permissionGranted) {
-                Toast.makeText(context, "권한 요청이 거부되었습니다.", Toast.LENGTH_LONG).show()
+                toast("권한 요청이 거부되었습니다.")
             } else {
                 initCameraLauncher()
             }
@@ -136,7 +134,6 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         val sizeBytes = inputStream?.available() ?: 0
         val sizeMB = sizeBytes / (1024f * 1024f)
-
         return if (sizeMB > 15) {
             val fragment = UploadErrorDialog(
                 getString(R.string.upload_error_capacity_description),
