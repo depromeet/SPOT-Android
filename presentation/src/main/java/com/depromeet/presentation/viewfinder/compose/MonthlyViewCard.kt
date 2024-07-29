@@ -26,7 +26,7 @@ import com.depromeet.presentation.R
 
 @Composable
 fun MonthlyViewCard(
-    reviewQuery: BlockReviewRequestQuery,
+    month: Int?,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onCancel: () -> Unit
@@ -36,7 +36,7 @@ fun MonthlyViewCard(
             .background(color = Color.White, shape = RoundedCornerShape(100.dp))
             .border(
                 width = 1.dp,
-                color = if (reviewQuery.month != null) {
+                color = if (month != null) {
                     Color(0xFF212124)
                 } else {
                     Color(0xFFE5E5E5)
@@ -48,8 +48,8 @@ fun MonthlyViewCard(
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = if (reviewQuery.month != null) {
-                "${reviewQuery.month}월"
+            text = if (month != null) {
+                "${month}월"
             } else {
                 "월별 시야"
             },
@@ -58,13 +58,13 @@ fun MonthlyViewCard(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Icon(
-            painter = if (reviewQuery.month != null) {
+            painter = if (month != null) {
                 painterResource(id = R.drawable.ic_close)
             } else {
                 painterResource(id = R.drawable.ic_down)
             },
             contentDescription = null,
-            tint = if (reviewQuery.month != null) {
+            tint = if (month != null) {
                 Color(0xFF212124)
             } else {
                 Color(0xFF9F9F9F)
@@ -72,7 +72,7 @@ fun MonthlyViewCard(
             modifier = Modifier
                 .size(12.dp)
                 .clickable {
-                    if (reviewQuery.month != null) {
+                    if (month != null) {
                         onCancel()
                     } else {
                         onClick()
@@ -86,9 +86,7 @@ fun MonthlyViewCard(
 @Composable
 private fun MonthlyViewCardPreview() {
     MonthlyViewCard(
-        reviewQuery = BlockReviewRequestQuery(
-            month = 1
-        ),
+        month = 1,
         onClick = {},
         onCancel = {}
     )
@@ -98,7 +96,7 @@ private fun MonthlyViewCardPreview() {
 @Composable
 private fun MonthlyViewCardNullPreview() {
     MonthlyViewCard(
-        reviewQuery = BlockReviewRequestQuery(),
+        month = null,
         onClick = {},
         onCancel = {}
     )

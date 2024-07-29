@@ -58,7 +58,7 @@ fun StadiumViewReviewHeader(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MonthlyViewCard(
-                reviewQuery = reviewQuery,
+                month = reviewQuery.month,
                 onClick = onClickMonthly,
                 onCancel = onCancel
             )
@@ -79,7 +79,14 @@ private fun StadiumViewReviewHeaderPreview() {
         modifier = Modifier.background(Color.White)
     ) {
         StadiumViewReviewHeader(
-            reviewQuery = BlockReviewRequestQuery(),
+            reviewQuery = BlockReviewRequestQuery(
+                rowNumber = null,
+                seatNumber = null,
+                year = null,
+                month = null,
+                page = 0,
+                size = 10
+            ),
             reviewCount = 100,
             onClickMonthly = {},
             onCancel = {}

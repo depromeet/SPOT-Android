@@ -62,7 +62,14 @@ fun CustomTooltip(
 @Composable
 private fun CustomTooltipPreview() {
     CustomTooltip(
-        reviewFilter = BlockReviewRequestQuery(),
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = null,
+            seatNumber = null,
+            year = null,
+            month = null,
+            page = 0,
+            size = 10
+        ),
 
         )
 }
@@ -73,7 +80,11 @@ private fun CustomTooltipSeatPreview() {
     CustomTooltip(
         reviewFilter = BlockReviewRequestQuery(
             rowNumber = 1,
-            seatNumber = 12
+            seatNumber = 12,
+            year = null,
+            month = null,
+            page = 0,
+            size = 10
         ),
     )
 }

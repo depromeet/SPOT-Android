@@ -1,12 +1,12 @@
 package com.depromeet.domain.entity.request.viewfinder
 
 data class BlockReviewRequestQuery(
-    val rowNumber: Int? = null,
-    val seatNumber: Int? = null,
-    val year: Int? = null,
-    val month: Int? = null,
-    val page: Int = 0,
-    val size: Int = 10
+    val rowNumber: Int?,
+    val seatNumber: Int?,
+    val year: Int?,
+    val month: Int?,
+    val page: Int,
+    val size: Int
 ) {
     fun rowNumberIsEmpty(): Boolean {
         return rowNumber == null

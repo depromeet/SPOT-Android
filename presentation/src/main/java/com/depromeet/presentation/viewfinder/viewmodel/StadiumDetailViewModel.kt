@@ -28,7 +28,14 @@ class StadiumDetailViewModel @Inject constructor(
     private val _scrollState = MutableStateFlow(false)
     val scrollState = _scrollState.asStateFlow()
 
-    private val _reviewFilter = MutableStateFlow<BlockReviewRequestQuery>(BlockReviewRequestQuery())
+    private val _reviewFilter = MutableStateFlow<BlockReviewRequestQuery>(BlockReviewRequestQuery(
+        rowNumber = null,
+        seatNumber = null,
+        year = null,
+        month = null,
+        page = 0,
+        size = 10
+    ))
     val reviewFilter = _reviewFilter.asStateFlow()
 
 

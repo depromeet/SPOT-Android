@@ -102,7 +102,14 @@ private fun StadiumHeaderContentPreview() {
                 seatNumber = 12
             ),
         ),
-        reviewFilter = BlockReviewRequestQuery(),
+        reviewFilter = BlockReviewRequestQuery(
+            rowNumber = null,
+            seatNumber = null,
+            year = null,
+            month = null,
+            page = 0,
+            size = 1
+        ),
         stadiumTitle = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭",
         keywords = listOf(
@@ -141,7 +148,11 @@ private fun StadiumHeaderContentIsMorePreview() {
         ),
         reviewFilter = BlockReviewRequestQuery(
             rowNumber = 1,
-            seatNumber = 12
+            seatNumber = 12,
+            year = null,
+            month = null,
+            page = 0,
+            size = 1
         ), stadiumTitle = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭",
         keywords = listOf(
