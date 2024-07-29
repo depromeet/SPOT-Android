@@ -64,14 +64,6 @@ object RetrofitModule {
         .addInterceptor(authInterceptor)
         .addInterceptor(loggingInterceptor).build()
 
-    @WebSvg
-    @Provides
-    @Singleton
-    fun provideWebSvgOkHttpClient(
-        loggingInterceptor: Interceptor
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor).build()
-
     @Provides
     @Singleton
     fun provideRetrofit(
@@ -84,8 +76,8 @@ object RetrofitModule {
     @Provides
     @Singleton
     fun provideWebSvgRetrofit(
-        @WebSvg client: OkHttpClient,
-        factory: Factory
+        client: OkHttpClient,
+        factory: Factory,
     ): Retrofit =
         Retrofit.Builder().baseUrl(SVG_BASE_URL).client(client).addConverterFactory(factory).build()
 }
