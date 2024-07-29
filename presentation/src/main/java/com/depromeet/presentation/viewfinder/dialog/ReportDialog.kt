@@ -1,11 +1,13 @@
 package com.depromeet.presentation.viewfinder.dialog
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReportDialogBinding
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.viewfinder.WebViewActivity
 
 class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
     R.layout.fragment_report_dialog,
@@ -13,6 +15,7 @@ class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
 ) {
     companion object {
         const val TAG = "ReportDialog"
+        private const val GoogleReportFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeVCiFapLIvR3ZdbOE056CImlxohxryUUXISOlYoIodtOwZHQ/viewform"
 
         fun newInstance(): ReportDialog {
             val args = Bundle()
@@ -30,9 +33,14 @@ class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initEvent()
+    }
 
+    private fun initEvent() {
         binding.tvReport.setOnClickListener {
-            toast("구글폼 드가자")
+            Intent(requireContext(), WebViewActivity::class.java).apply {
+                putExtra(WebViewActivity.WEB_VIEW_URL, GoogleReportFormUrl)
+            }.let(::startActivity)
         }
     }
 }

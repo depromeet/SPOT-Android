@@ -1,10 +1,12 @@
 package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
@@ -13,6 +15,7 @@ import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumSelectSeatDialog
+import com.depromeet.presentation.viewfinder.uistate.StadiumDetailUiState
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,9 +35,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         super.onCreate(savedInstanceState)
         initView()
         initEvent()
+        initObserver()
 
         binding.composeView.setContent {
             StadiumDetailScreen(
+                blockNumber = viewModel.blockCode,
                 viewModel = viewModel,
                 onClickReviewPicture = { reviewContent ->
                     startToStadiumDetailPictureFragment(reviewContent)
@@ -53,14 +58,19 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                 },
                 onClickReport = {
                     startToBottomSheetDialog(ReportDialog.newInstance(), ReportDialog.TAG)
+                },
+                onClickGoBack = {
+                    finish()
                 }
             )
         }
     }
 
     private fun initView() {
-        getIdExtra { stadiumId, blockId ->
-            viewModel.getBlockReviews(stadiumId, blockId)
+        getIdExtra { stadiumId, blockCode ->
+            viewModel.updateRequestPathVariable(stadiumId, blockCode)
+            viewModel.getBlockReviews(stadiumId, blockCode)
+            viewModel.getBlockRow(stadiumId, blockCode)
         }
     }
 
@@ -78,7 +88,16 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
     }
 
-    private fun getIdExtra(callback: (stadiumId: Int, blockId: String) -> Unit) {
+    private fun initObserver() {
+        viewModel.detailUiState.asLiveData().observe(this) { uiState ->
+            when (uiState) {
+                is StadiumDetailUiState.Empty -> binding.btnUp.visibility = View.GONE
+                else -> Unit
+            }
+        }
+    }
+
+    private fun getIdExtra(callback: (stadiumId: Int, blockCode: String) -> Unit) {
         callback(
             intent?.getIntExtra(StadiumActivity.STADIUM_ID, 0) ?: 0,
             intent?.getStringExtra(StadiumActivity.STADIUM_BLOCK_ID) ?: ""

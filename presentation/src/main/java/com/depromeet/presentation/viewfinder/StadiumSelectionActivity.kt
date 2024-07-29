@@ -50,7 +50,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
 
     private fun observeData() {
         viewModel.stadiums.asLiveData().observe(this) { stadiums ->
-            when(stadiums) {
+            when (stadiums) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> toast(stadiums.msg)
                 is UiState.Loading -> toast("로딩중")
@@ -79,7 +79,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
         stadiumSelectionAdapter.itemStadiumClickListener =
             object : StadiumSelectionAdapter.OnItemStadiumClickListener {
                 override fun onItemStadiumClick(stadium: StadiumsResponse) {
-                    if (stadium.isActive) {
+                    if (!stadium.isActive) {
                         SpotSnackBar.make(
                             view = binding.root,
                             message = getString(R.string.viewfinder_lock_warning_description),
@@ -105,7 +105,11 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             this@StadiumSelectionActivity,
             StadiumActivity::class.java
         ).apply {
-            putExtra(STADIUM_EXTRA_ID, stadium.id)
+            if (stadium.id != 1) {
+                putExtra(STADIUM_EXTRA_ID, 1)
+            } else {
+                putExtra(STADIUM_EXTRA_ID, stadium.id)
+            }
         }
         startActivity(intent)
     }
