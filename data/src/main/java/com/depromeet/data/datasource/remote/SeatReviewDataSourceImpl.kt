@@ -1,12 +1,16 @@
 package com.depromeet.data.datasource.remote
 
 import com.depromeet.data.datasource.SeatReviewDataSource
+import com.depromeet.data.model.request.RequestPreSignedUrlDto
 import com.depromeet.data.model.request.RequestSeatReviewDto
+import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
-import com.depromeet.data.model.response.seatReview.ResponseSeatMaxDto
+import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
 import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
 import com.depromeet.data.remote.SeatReviewService
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 class SeatReviewDataSourceImpl @Inject constructor(
@@ -29,14 +33,38 @@ class SeatReviewDataSourceImpl @Inject constructor(
         return seatReviewService.getSeatBlock(stadiumId, sectionId)
     }
 
-    override suspend fun getSeatMaxData(
+    override suspend fun getSeatRangeData(
         stadiumId: Int,
         sectionId: Int,
-    ): ResponseSeatMaxDto {
-        return seatReviewService.getSeatMax(stadiumId, sectionId)
+    ): List<ResponseSeatRangeDto> {
+        return seatReviewService.getSeatRange(stadiumId, sectionId)
     }
 
-    override suspend fun postSeatReviewData(requestSeatReviewDto: RequestSeatReviewDto) {
-        return seatReviewService.postSeatReview(requestSeatReviewDto)
+    override suspend fun postImagePreSignedData(
+        fileExtension: String,
+    ): ResponsePreSignedUrlDto {
+        return seatReviewService.postImagePreSignedUrl(
+            RequestPreSignedUrlDto(fileExtension),
+        )
+    }
+
+    override suspend fun putReviewImageData(
+        presignedUrl: String,
+        image: ByteArray,
+    ) {
+        val mediaType = "image/*".toMediaTypeOrNull()
+        return seatReviewService.putProfileImage(presignedUrl, image.toRequestBody(mediaType))
+    }
+
+    override suspend fun postSeatReviewData(
+        blockId: Int,
+        seatNumber: Int,
+        requestSeatReviewDto: RequestSeatReviewDto,
+    ) {
+        return seatReviewService.postSeatReview(
+            blockId,
+            seatNumber,
+            requestSeatReviewDto,
+        )
     }
 }
