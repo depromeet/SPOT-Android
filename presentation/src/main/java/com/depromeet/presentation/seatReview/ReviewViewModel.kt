@@ -1,6 +1,6 @@
 package com.depromeet.presentation.seatReview
 
-import android.util.Log
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
@@ -39,6 +39,9 @@ class ReviewViewModel @Inject constructor(
 
     private val _selectedImages = MutableStateFlow<List<String>>(emptyList())
     val selectedImages: StateFlow<List<String>> = _selectedImages.asStateFlow()
+
+    private val _preSignedUrlImages = MutableStateFlow<List<String>>(emptyList())
+    val preSignedUrlImages: StateFlow<List<String>> = _preSignedUrlImages.asStateFlow()
 
     // 시야 후기
 
@@ -117,6 +120,12 @@ class ReviewViewModel @Inject constructor(
         _selectedImages.value = image
     }
 
+    fun setPreSignedUrlImages(image: String) {
+        val newImage = removeQueryParameters(image)
+        val currentImages = _preSignedUrlImages.value.toMutableSet()
+        currentImages.add(newImage)
+        _preSignedUrlImages.value = currentImages.toList()
+    }
     fun setReviewCount(count: Int) {
         _reviewCount.value = count
     }
@@ -290,10 +299,15 @@ class ReviewViewModel @Inject constructor(
         return deferred
     }
 
+    private fun removeQueryParameters(url: String): String {
+        val uri = Uri.parse(url)
+        return uri.buildUpon().clearQuery().build().toString()
+    }
+
     fun postSeatReview() {
         viewModelScope.launch {
             val seatReviewModel = SeatReviewModel(
-                images = _selectedImages.value,
+                images = _preSignedUrlImages.value,
                 dateTime = _selectedDate.value,
                 good = _selectedGoodReview.value,
                 bad = _selectedBadReview.value,
@@ -301,7 +315,7 @@ class ReviewViewModel @Inject constructor(
             )
 
             // 추후 Timber 삭제 예정
-            Timber.d("Selected Images: ${_selectedImages.value}")
+            Timber.d("Selected Images: ${_preSignedUrlImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
             Timber.d("Good Review: ${_selectedGoodReview.value}")
             Timber.d("Bad Review: ${_selectedBadReview.value}")

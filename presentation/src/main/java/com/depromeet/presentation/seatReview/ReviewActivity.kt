@@ -281,12 +281,17 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             when (state) {
                 is UiState.Success -> {
                     val preSignedUrl = state.data.presignedUrl
-                    viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData).invokeOnCompletion {
-                        if (it == null) {
-                            deferred.complete(true)
-                        } else {
-                            deferred.complete(false)
+                    if (viewModel.preSignedUrlImages.value.contains(preSignedUrl).not()) {
+                        viewModel.setPreSignedUrlImages(preSignedUrl)
+                        viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData).invokeOnCompletion {
+                            if (it == null) {
+                                deferred.complete(true)
+                            } else {
+                                deferred.complete(false)
+                            }
                         }
+                    } else {
+                        deferred.complete(false)
                     }
                 }
                 is UiState.Failure -> {
@@ -315,13 +320,16 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun uploadAllReviewDone() {
+    fun uploadAllReviewDone() {
         binding.tvUploadBtn.setOnSingleClickListener {
             val uploadResults = mutableListOf<CompletableDeferred<Boolean>>()
-            selectedImageUris.forEach { imageUriString ->
+            val uniqueImageUris = selectedImageUris.distinct() // 중복된 URI를 제거합니다.
+
+            uniqueImageUris.forEach { imageUriString ->
                 val imageUri = Uri.parse(imageUriString)
                 val fileExtension = getFileExtension(this, imageUri)
                 val imageData = readImageData(this, imageUri)
+
                 if (imageData != null) {
                     val deferred = CompletableDeferred<Boolean>()
                     uploadResults.add(deferred)
@@ -331,6 +339,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     toast("파일을 읽을 수 없습니다.")
                 }
             }
+
             CoroutineScope(Dispatchers.Main).launch {
                 val allUploadsCompleted = uploadResults.all { it.await() }
                 if (allUploadsCompleted) {
