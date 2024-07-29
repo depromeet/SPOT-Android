@@ -28,6 +28,10 @@ import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -272,19 +276,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         return inputStream?.use { it.readBytes() }
     }
 
-    private fun observePreSignedUrl(imageData: ByteArray) {
+    private fun observePreSignedUrl(deferred: CompletableDeferred<Boolean>, imageData: ByteArray) {
         viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     val preSignedUrl = state.data.presignedUrl
-                    viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData)
-                    viewModel.postSeatReview()
-                    Intent(this, ReviewDoneActivity::class.java).apply {
-                        startActivity(this)
+                    viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData).invokeOnCompletion {
+                        if (it == null) {
+                            deferred.complete(true)
+                        } else {
+                            deferred.complete(false)
+                        }
                     }
                 }
                 is UiState.Failure -> {
-                    toast("Presigned URL 요청 실패: $state")
+                    toast("Presigned URL 요청 실패")
+                    deferred.complete(false)
                 }
                 else -> {}
             }
@@ -296,6 +303,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             when (state) {
                 is UiState.Success -> {
                     uploadAllReviewDone()
+                    Intent(this, ReviewDoneActivity::class.java).apply {
+                        startActivity(this)
+                    }
                 }
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
@@ -307,17 +317,29 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun uploadAllReviewDone() {
         binding.tvUploadBtn.setOnSingleClickListener {
+            val uploadResults = mutableListOf<CompletableDeferred<Boolean>>()
             selectedImageUris.forEach { imageUriString ->
                 val imageUri = Uri.parse(imageUriString)
                 val fileExtension = getFileExtension(this, imageUri)
                 val imageData = readImageData(this, imageUri)
                 if (imageData != null) {
+                    val deferred = CompletableDeferred<Boolean>()
+                    uploadResults.add(deferred)
                     viewModel.requestPreSignedUrl(fileExtension)
-                    observePreSignedUrl(imageData)
+                    observePreSignedUrl(deferred, imageData)
                 } else {
                     toast("파일을 읽을 수 없습니다.")
                 }
             }
+            CoroutineScope(Dispatchers.Main).launch {
+                val allUploadsCompleted = uploadResults.all { it.await() }
+                if (allUploadsCompleted) {
+                    viewModel.postSeatReview()
+                } else {
+                    toast("이미지 업로드에 실패했습니다.")
+                }
+            }
         }
     }
+
 }
