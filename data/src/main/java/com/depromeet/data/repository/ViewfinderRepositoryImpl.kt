@@ -32,10 +32,10 @@ class ViewfinderRepositoryImpl @Inject constructor(
     override suspend fun getBlockReviews(
         stadiumId: Int,
         blockCode: String,
-        queryParam: BlockReviewRequestQuery
+        query: BlockReviewRequestQuery
     ): Result<BlockReviewResponse> {
         return runCatching {
-            viewfinderDataSource.getBlockReviews(stadiumId, blockCode, queryParam.toBlockReviewRequestQueryDto()).toBlockReviewResponse()
+            viewfinderDataSource.getBlockReviews(stadiumId, blockCode, query.toBlockReviewRequestQueryDto()).toBlockReviewResponse()
         }
     }
 
