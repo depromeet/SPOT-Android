@@ -26,7 +26,6 @@ interface SeatReviewRepository {
 
     suspend fun postReviewImagePresigned(
         fileExtension: String,
-        memberId: Int,
     ): Result<ResponsePresignedUrlModel>
 
     suspend fun putImagePreSignedUrl(
@@ -36,6 +35,7 @@ interface SeatReviewRepository {
 
     suspend fun postSeatReview(
         seatId: Int,
+        seatNumber: Int,
         seatReviewInfo: SeatReviewModel,
     ): Result<Unit>
 }

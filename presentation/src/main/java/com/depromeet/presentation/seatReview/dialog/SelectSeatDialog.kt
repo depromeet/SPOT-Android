@@ -25,7 +25,7 @@ import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBindi
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
-import com.depromeet.presentation.seatReview.adapter.SectionListAdapter
+import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +34,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     FragmentSelectSeatBottomSheetBinding::inflate,
 ) {
     private val viewModel: ReviewViewModel by activityViewModels()
-    private lateinit var adapter: SectionListAdapter
+    private lateinit var adapter: SelectSeatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -243,6 +243,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             addAll(blockItems.map { it.code })
         }
 
+        val blockCodeToIdMap = blockItems.associate { it.code to it.id }
+
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
@@ -260,9 +262,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 ) {
                     if (position == 0) {
                         viewModel.setSelectedBlock("")
+                        viewModel.updateSelectedBlockId(0)
                     } else {
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)
+                        val selectedBlockId = blockCodeToIdMap[selectedBlock] ?: 0
+                        viewModel.updateSelectedBlockId(selectedBlockId)
                         viewModel.getSeatRange(
                             viewModel.selectedStadiumId.value,
                             viewModel.selectedSectionId.value,
@@ -272,13 +277,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     viewModel.setSelectedBlock("")
+                    viewModel.updateSelectedBlockId(0)
                 }
             }
         }
     }
 
     private fun setupSectionRecyclerView() {
-        adapter = SectionListAdapter { position, sectionId ->
+        adapter = SelectSeatAdapter { position, sectionId ->
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
             viewModel.setSelectedSeatZone(selectedSeatInfo.name)

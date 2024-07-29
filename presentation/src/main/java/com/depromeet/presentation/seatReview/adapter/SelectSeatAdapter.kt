@@ -12,9 +12,9 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSelectSeatBinding
 import com.depromeet.presentation.util.ItemDiffCallback
 
-class SectionListAdapter(
+class SelectSeatAdapter(
     private val onItemClick: (Int, Int) -> Unit
-) : ListAdapter<StadiumSectionModel.SectionListDto, SectionListAdapter.SectionViewHolder>(diffUtil) {
+) : ListAdapter<StadiumSectionModel.SectionListDto, SelectSeatAdapter.SectionViewHolder>(diffUtil) {
 
     private var selectedPosition = RecyclerView.NO_POSITION
 

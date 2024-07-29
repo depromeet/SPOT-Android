@@ -22,15 +22,19 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
 import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 
 @AndroidEntryPoint
@@ -39,52 +43,33 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 }) {
     companion object {
         private const val DATE_FORMAT = "yyyy.MM.dd"
+        private const val ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm"
         private const val FRAGMENT_RESULT_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val MAX_SELECTED_IMAGES = 3
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-    private val selectedImage: List<ImageView> by lazy {
-        listOf(
-            binding.ivFirstImage,
-            binding.ivSecondImage,
-            binding.ivThirdImage,
-        )
-    }
-    private val selectedImageLayout: List<FrameLayout> by lazy {
-        listOf(
-            binding.layoutFirstImage,
-            binding.layoutSecondImage,
-            binding.layoutThirdImage,
-        )
-    }
-    private val removeButtons: List<ImageView> by lazy {
-        listOf(
-            binding.ivRemoveFirstImage,
-            binding.ivRemoveSecondImage,
-            binding.ivRemoveThirdImage,
-        )
-    }
+    private val selectedImage: List<ImageView> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
+    private val selectedImageLayout: List<FrameLayout> by lazy { listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage) }
+    private val removeButtons: List<ImageView> by lazy { listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage) }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getStadiumName()
         observeStadiumName()
+        observeUploadReview()
         initDatePickerDialog()
         initUploadDialog()
         initSeatReviewDialog()
         setupFragmentResultListener()
         setupRemoveButtons()
-        navigateToReviewDoneActivity()
+        uploadAllReviewDone()
+        navigateToHomeActivity()
     }
 
     private fun observeReviewViewModel() {
-        viewModel.selectedDate.asLiveData().observe(this) { date ->
-            binding.tvDate.text = date
-            updateNextButtonState()
-        }
         viewModel.selectedImages.asLiveData().observe(this) { image ->
             updateNextButtonState()
         }
@@ -126,6 +111,31 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
+    private fun initDatePickerDialog() {
+        binding.layoutDatePicker.setOnSingleClickListener {
+            DatePickerDialog().show(supportFragmentManager, "DatePickerDialogTag")
+        }
+        viewModel.selectedDate.asLiveData().observe(this) { date ->
+            val originalFormat = SimpleDateFormat(ISO_DATE_FORMAT, Locale.getDefault())
+            val targetFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+            val dateOnly = originalFormat.parse(date)?.let { targetFormat.format(it) }
+            binding.tvDate.text = dateOnly ?: date.substring(0, 10)
+            updateNextButtonState()
+        }
+    }
+
+    private fun initUploadDialog() {
+        binding.btnAddImage.setOnClickListener {
+            ImageUploadDialog().show(supportFragmentManager, "ImageUploadDialog")
+        }
+    }
+
+    private fun navigateToHomeActivity() {
+        binding.btnBack.setOnSingleClickListener {
+            Intent(this, HomeActivity::class.java).apply { startActivity(this) }
+        }
+    }
+
     private fun observeStadiumName() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
@@ -143,25 +153,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 is UiState.Empty -> { toast("오류가 발생했습니다") }
                 else -> {}
             }
-        }
-    }
-
-    private fun initDatePickerDialog() {
-        val today = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        with(binding) {
-            tvDate.text = dateFormat.format(today.time)
-            layoutDatePicker.setOnSingleClickListener {
-                val datePickerDialogFragment = DatePickerDialog()
-                datePickerDialogFragment.show(supportFragmentManager, datePickerDialogFragment.tag)
-            }
-        }
-    }
-
-    private fun initUploadDialog() {
-        binding.btnAddImage.setOnClickListener {
-            val uploadDialogFragment = ImageUploadDialog()
-            uploadDialogFragment.show(supportFragmentManager, uploadDialogFragment.tag)
         }
     }
 
@@ -285,39 +276,70 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         return inputStream?.use { it.readBytes() }
     }
 
-    private fun navigateToReviewDoneActivity() {
+    private fun observePreSignedUrl(deferred: CompletableDeferred<Boolean>, imageData: ByteArray) {
+        viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    val preSignedUrl = state.data.presignedUrl
+                    viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData).invokeOnCompletion {
+                        if (it == null) {
+                            deferred.complete(true)
+                        } else {
+                            deferred.complete(false)
+                        }
+                    }
+                }
+                is UiState.Failure -> {
+                    toast("Presigned URL 요청 실패")
+                    deferred.complete(false)
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun observeUploadReview() {
+        viewModel.postReviewState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    uploadAllReviewDone()
+                    Intent(this, ReviewDoneActivity::class.java).apply {
+                        startActivity(this)
+                    }
+                }
+                is UiState.Failure -> {
+                    toast("리뷰 등록 실패: $state")
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun uploadAllReviewDone() {
         binding.tvUploadBtn.setOnSingleClickListener {
+            val uploadResults = mutableListOf<CompletableDeferred<Boolean>>()
             selectedImageUris.forEach { imageUriString ->
                 val imageUri = Uri.parse(imageUriString)
                 val fileExtension = getFileExtension(this, imageUri)
                 val imageData = readImageData(this, imageUri)
                 if (imageData != null) {
-                    // TODO : viewModel.uploadImageToPreSignedUrl 사진 업로드 서버 통신
-                    // TODO : postSeatReview() 시야 등록 후기 request -> ReviewDoneActivity 이동
-                    viewModel.requestPreSignedUrl(fileExtension, 1)
-                    viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
-                        when (state) {
-                            is UiState.Success -> {
-                                val presignedUrl = state.data.presignedUrl
-                                // viewModel.uploadImageToPreSignedUrl(presignedUrl, imageData)
-                                Intent(this, ReviewDoneActivity::class.java).apply {
-                                    startActivity(
-                                        this,
-                                    )
-                                }
-                            }
-
-                            is UiState.Failure -> {
-                                toast("Presigned URL 요청 실패: $state")
-                            }
-
-                            else -> {}
-                        }
-                    }
+                    val deferred = CompletableDeferred<Boolean>()
+                    uploadResults.add(deferred)
+                    viewModel.requestPreSignedUrl(fileExtension)
+                    observePreSignedUrl(deferred, imageData)
                 } else {
                     toast("파일을 읽을 수 없습니다.")
                 }
             }
+            CoroutineScope(Dispatchers.Main).launch {
+                val allUploadsCompleted = uploadResults.all { it.await() }
+                if (allUploadsCompleted) {
+                    viewModel.postSeatReview()
+                } else {
+                    toast("이미지 업로드에 실패했습니다.")
+                }
+            }
         }
     }
+
 }

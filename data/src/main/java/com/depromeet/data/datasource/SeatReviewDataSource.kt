@@ -26,7 +26,6 @@ interface SeatReviewDataSource {
 
     suspend fun postImagePreSignedData(
         fileExtension: String,
-        memberId: Int,
     ): ResponsePreSignedUrlDto
 
     suspend fun putReviewImageData(
@@ -35,7 +34,8 @@ interface SeatReviewDataSource {
     )
 
     suspend fun postSeatReviewData(
-        seatId: Int,
+        blockId: Int,
+        seatNumber: Int,
         requestSeatReviewDto: RequestSeatReviewDto,
     )
 }

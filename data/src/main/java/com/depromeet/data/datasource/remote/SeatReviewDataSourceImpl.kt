@@ -42,11 +42,9 @@ class SeatReviewDataSourceImpl @Inject constructor(
 
     override suspend fun postImagePreSignedData(
         fileExtension: String,
-        memberId: Int,
     ): ResponsePreSignedUrlDto {
         return seatReviewService.postImagePreSignedUrl(
             RequestPreSignedUrlDto(fileExtension),
-            memberId,
         )
     }
 
@@ -59,11 +57,13 @@ class SeatReviewDataSourceImpl @Inject constructor(
     }
 
     override suspend fun postSeatReviewData(
-        seatId: Int,
+        blockId: Int,
+        seatNumber: Int,
         requestSeatReviewDto: RequestSeatReviewDto,
     ) {
         return seatReviewService.postSeatReview(
-            seatId,
+            blockId,
+            seatNumber,
             requestSeatReviewDto,
         )
     }
