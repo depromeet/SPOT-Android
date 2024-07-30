@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="72dp"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/iv_stadium"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/rect_gray100_fill_24"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,UnusedAttribute"
+        tools:src="@drawable/ic_stadium_test" />
+
+    <ImageView
+        android:id="@+id/iv_stadium_lock"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/rect_gray100_fill_24"
+        android:backgroundTint="@color/black_alpha60"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        android:src="@drawable/ic_lock"
+        tools:src="@drawable/ic_lock" />
+
+
+    <TextView
+        android:id="@+id/tv_stadium_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_stadium"
+        tools:text="서울\n잠실야구장" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

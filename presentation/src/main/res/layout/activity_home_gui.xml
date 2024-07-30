@@ -72,8 +72,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toStartOf="@id/gl_end"
         app:layout_constraintTop_toBottomOf="@id/csbv_home_title"
-        tools:src="@drawable/ic_default_profile"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_default_profile" />
 
     <TextView
         android:id="@+id/tv_home_level"
@@ -91,25 +91,27 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/tv_home_level"
         app:layout_constraintTop_toBottomOf="@id/tv_home_level"
-        tools:text="LG 트윈스의\n야구장 VIP"/>
+        tools:text="LG 트윈스의\n야구장 VIP" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home_stadium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_home_character"
-        tools:itemCount="10"/>
+        tools:itemCount="10"
+        tools:listitem="@layout/item_stadium_small_selection"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_home_archiving"
         android:layout_width="0dp"
         android:layout_height="223dp"
+        android:layout_marginTop="33dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/rect_white_fill_12"
         app:layout_constraintEnd_toStartOf="@+id/cl_home_scrap"
@@ -127,7 +129,7 @@
         android:background="@drawable/rect_white_fill_12"
         app:layout_constraintEnd_toStartOf="@id/gl_end"
         app:layout_constraintStart_toEndOf="@+id/cl_home_archiving"
-        app:layout_constraintTop_toBottomOf="@id/rv_home_stadium">
+        app:layout_constraintTop_toTopOf="@+id/cl_home_archiving">
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -161,7 +163,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_home_upload_description"
             app:layout_constraintTop_toTopOf="@id/tv_home_upload_description"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

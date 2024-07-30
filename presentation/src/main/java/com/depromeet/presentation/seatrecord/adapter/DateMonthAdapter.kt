@@ -83,7 +83,6 @@ internal class LinearSpacingItemDecoration(
         state: RecyclerView.State,
     ) {
         val position: Int = parent.getChildAdapterPosition(view)
-        val lastPosition = (parent.adapter?.itemCount ?: 0) - 1
 
         if (position >= 0) {
             when (position) {
@@ -91,8 +90,6 @@ internal class LinearSpacingItemDecoration(
                     outRect.left = startSpacing
                     outRect.right = betweenSpacing
                 }
-
-                lastPosition -> {}
                 else -> {
                     outRect.right = betweenSpacing
                 }
