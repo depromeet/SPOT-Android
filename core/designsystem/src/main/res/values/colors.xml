@@ -27,6 +27,100 @@
     <color name="color_hanwha_font">#000000</color>
     <color name="color_nc_font">#C09B75</color>
 
-    <!-- 투명도 -->
+    <!-- 투명도
+    100% : FF   95% : F2   90% : E6   85% : D9   80% : CC   75% : BF
+     70% : B3   65% : A6   60% : 99   55% : 8C   50% : 80   45% : 73
+     40% : 66   35% : 59   30% : 4D   25% : 40   20% : 33   15% : 26
+     10% : 1A    5% : 0D    0% : 00
+    -->
     <color name="black_alpha60">#99000000</color>
+    <color name="color_transfer_black_01">#4D000000</color>
+    <color name="color_transfer_black_02">#99000000</color>
+    <color name="color_transfer_black_03">#E6000000</color>
+
+
+    <!-- Color Token -->
+    <!-- Gray -->
+    <color name="color_gray_00">#FFFFFFFF</color>
+    <color name="color_gray_50">#FFF7F8FA</color>
+    <color name="color_gray_100">#FFF2F3F6</color>
+    <color name="color_gray_200">#FFEAEBEE</color>
+    <color name="color_gray_300">#FFDCDEE3</color>
+    <color name="color_gray_400">#FFD1D3D8</color>
+    <color name="color_gray_500">#FFADB1BA</color>
+    <color name="color_gray_600">#FF868B94</color>
+    <color name="color_gray_700">#FF4D5159</color>
+    <color name="color_gray_800">#FF393A3F</color>
+    <color name="color_gray_900">#FF212124</color>
+
+    <!-- Green -->
+    <color name="color_green_50">#FFF7F8FA</color>
+    <color name="color_green_100">#FFF2F3F6</color>
+    <color name="color_green_200">#FFEAEBEE</color>
+    <color name="color_green_300">#FFDCDEE3</color>
+    <color name="color_green_400">#FFD1D3D8</color>
+    <color name="color_green_500">#FFADB1BA</color>
+    <color name="color_green_600">#FF868B94</color>
+    <color name="color_green_700">#FF4D5159</color>
+    <color name="color_green_800">#FF393A3F</color>
+    <color name="color_green_900">#FF212124</color>
+
+    <!-- Orange -->
+    <color name="color_orange_50">#FFFFF1EF</color>
+    <color name="color_orange_100">#FFFED4CF</color>
+    <color name="color_orange_200">#FFFEC0B7</color>
+    <color name="color_orange_300">#FFFEA396</color>
+    <color name="color_orange_400">#FFFD9182</color>
+    <color name="color_orange_500">#FFFD7563</color>
+    <color name="color_orange_600">#FFE66A5A</color>
+    <color name="color_orange_700">#FFB45346</color>
+    <color name="color_orange_800">#FF8B4036</color>
+    <color name="color_orange_900">#FF6A312A</color>
+
+    <!-- Semantic Colors -->
+    <!-- foreground  -->
+    <color name="color_foreground_heading">@color/color_gray_900</color>
+    <color name="color_foreground_body_subtitle">@color/color_gray_800</color>
+    <color name="color_foreground_body_sebtext">@color/color_gray_700</color>
+    <color name="color_foreground_caption">@color/color_gray_600</color>
+    <color name="color_foreground_disabled">@color/color_gray_400</color>
+    <color name="color_foreground_white">@color/color_gray_00</color>
+
+    <!-- background  -->
+    <color name="color_background_white">@color/color_gray_00</color>
+    <color name="color_background_tertiary">@color/color_gray_50</color>
+    <color name="color_background_secondary">@color/color_gray_100</color>
+    <color name="color_background_primary">@color/color_gray_200</color>
+    <color name="color_background_positive">@color/color_green_50</color>
+    <color name="color_background_negative">@color/color_orange_50</color>
+
+    <!-- stroke -->
+    <color name="color_stroke_tertiary">@color/color_gray_200</color>
+    <color name="color_stroke_secondary">@color/color_gray_300</color>
+    <color name="color_stroke_primary">@color/color_gray_400</color>
+    <color name="color_stroke_positive_primary">@color/color_green_500</color>
+    <color name="color_stroke_positive_secondary">@color/color_green_300</color>
+    <color name="color_stroke_negative">@color/color_orange_300</color>
+
+    <!-- action -->
+    <color name="color_action_enabled">@color/color_green_500</color>
+    <color name="color_action_hover">@color/color_green_700</color>
+    <color name="color_action_disabled">@color/color_green_100</color>
+
+    <!-- error -->
+    <color name="color_error_primary">@color/color_orange_500</color>
+    <color name="color_error_secondary">@color/color_orange_200</color>
+    <color name="color_error_tertiary">@color/color_orange_50</color>
+
+    <!-- Seat -->
+    <color name="color_seat_outfield_green">#FF80C161</color>
+    <color name="color_seat_table">#FFCA53A9</color>
+    <color name="color_seat_wheelchair">#FFD9F63C</color>
+    <color name="color_seat_navy">#FF063A6A</color>
+    <color name="color_seat_red">#FFD41058</color>
+    <color name="color_seat_blue">#FF0E5EAD</color>
+    <color name="color_seat_exciting">#FFFDCE29</color>
+    <color name="color_seat_premium">#FFB3B248</color>
+    <color name="color_seat_orange">#FFFF8519</color>
+
 </resources>
