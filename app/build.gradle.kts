@@ -122,7 +122,7 @@ dependencies {
     }
 
     FirebaseDependencies.run {
-        implementation(bom)
+        implementation(platform(bom))
         implementation(analytics)
         implementation(crashlytics)
     }
