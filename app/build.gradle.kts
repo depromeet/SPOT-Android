@@ -8,6 +8,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version Versions.kotlinVersion
     id("com.google.gms.google-services")
+    id ("com.google.firebase.crashlytics")
 }
 
 android {
