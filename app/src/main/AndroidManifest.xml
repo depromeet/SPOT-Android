@@ -67,11 +67,6 @@
             android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.depromeet.presentation.seatrecord.SeatDetailRecordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
         <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"
