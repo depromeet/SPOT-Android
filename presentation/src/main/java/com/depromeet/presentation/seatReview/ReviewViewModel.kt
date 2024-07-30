@@ -127,6 +127,11 @@ class ReviewViewModel @Inject constructor(
         currentImages.add(newImage)
         _preSignedUrlImages.value = currentImages.toList()
     }
+    private fun removeQueryParameters(url: String): String {
+        val uri = Uri.parse(url)
+        return uri.buildUpon().clearQuery().build().toString()
+    }
+
     fun setReviewCount(count: Int) {
         _reviewCount.value = count
     }
@@ -290,19 +295,11 @@ class ReviewViewModel @Inject constructor(
                 Timber.e("UPLOAD IMAGE FAILURE : $t")
                 if (t is HttpException) {
                     Timber.e("HTTP error code: ${t.code()}")
-                    Timber.e("HTTP error response: ${t.response()?.errorBody()?.string()}")
-                } else {
-                    Timber.e("General error: ${t.message ?: "Unknown error"}")
+                    deferred.complete(false)
                 }
-                deferred.complete(false)
             }
         }
         return deferred
-    }
-
-    private fun removeQueryParameters(url: String): String {
-        val uri = Uri.parse(url)
-        return uri.buildUpon().clearQuery().build().toString()
     }
 
     fun postSeatReview() {
@@ -324,28 +321,12 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Selected Stadium ID: ${_selectedStadiumId.value}")
             Timber.d("Selected Block ID: ${_selectedBlockId.value}")
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
-
-            val selectedNumberValue = selectedNumber.value
-            if (selectedNumberValue.isNullOrEmpty()) {
-                Timber.e("Selected Number is null or empty")
-                _postReviewState.value = UiState.Failure("Selected Number is required")
-                return@launch
-            }
-
-            val selectedNumberInt = try {
-                selectedNumberValue.toInt()
-            } catch (e: NumberFormatException) {
-                Timber.e("Selected Number is not a valid integer: $selectedNumberValue")
-                _postReviewState.value = UiState.Failure("Selected Number is not a valid integer")
-                return@launch
-            }
-
-            Timber.d("Selected Number: $selectedNumberInt")
+            Timber.d("Selected Number: ${selectedNumber.value}")
 
             _postReviewState.value = UiState.Loading
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
-                selectedNumberInt,
+                selectedNumber.value.toInt(),
                 seatReviewModel,
             )
                 .onSuccess {
@@ -358,16 +339,6 @@ class ReviewViewModel @Inject constructor(
                     if (t is HttpException) {
                         val errorBody = t.response()?.errorBody()?.string()
                         Timber.e("Error Body: $errorBody")
-
-                        val errorMessage = when {
-                            t.code() == 403 -> "권한이 없습니다. 요청을 확인하고 다시 시도해 주세요."
-                            errorBody.isNullOrEmpty() -> "HTTP ${t.code()} 에러 발생: ${t.message()}"
-                            else -> errorBody
-                        }
-
-                        _postReviewState.value = UiState.Failure(errorMessage)
-                    } else {
-                        _postReviewState.value = UiState.Failure(t.message ?: "알 수 없는 오류")
                     }
                 }
         }

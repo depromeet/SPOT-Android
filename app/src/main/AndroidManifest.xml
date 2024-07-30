@@ -73,12 +73,12 @@
             android:screenOrientation="portrait" />
 
         <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.depromeet.presentation.seatReview.ReviewDoneActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

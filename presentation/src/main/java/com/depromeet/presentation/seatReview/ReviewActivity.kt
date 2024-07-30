@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -60,12 +61,12 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.getStadiumName()
         observeStadiumName()
         observeUploadReview()
+        uploadAllReviewDone()
         initDatePickerDialog()
         initUploadDialog()
         initSeatReviewDialog()
         setupFragmentResultListener()
         setupRemoveButtons()
-        uploadAllReviewDone()
         navigateToHomeActivity()
     }
 
@@ -307,7 +308,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    uploadAllReviewDone()
                     Intent(this, ReviewDoneActivity::class.java).apply {
                         startActivity(this)
                     }
@@ -320,12 +320,13 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    fun uploadAllReviewDone() {
+    private fun uploadAllReviewDone() {
         binding.tvUploadBtn.setOnSingleClickListener {
             val uploadResults = mutableListOf<CompletableDeferred<Boolean>>()
-            val uniqueImageUris = selectedImageUris.distinct() // 중복된 URI를 제거합니다.
+            val uniqueImageUris = selectedImageUris.distinct()
 
             uniqueImageUris.forEach { imageUriString ->
+
                 val imageUri = Uri.parse(imageUriString)
                 val fileExtension = getFileExtension(this, imageUri)
                 val imageData = readImageData(this, imageUri)
@@ -352,3 +353,4 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
 }
+
