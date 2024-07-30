@@ -77,6 +77,10 @@
     <color name="color_orange_800">#FF8B4036</color>
     <color name="color_orange_900">#FF6A312A</color>
 
+    <!-- Kakao -->
+    <color name="color_kakao_symbol">#D9000000</color>
+    <color name="color_kakao_button">#FFFEE500</color>
+    
     <!-- Semantic Colors -->
     <!-- foreground  -->
     <color name="color_foreground_heading">@color/color_gray_900</color>
