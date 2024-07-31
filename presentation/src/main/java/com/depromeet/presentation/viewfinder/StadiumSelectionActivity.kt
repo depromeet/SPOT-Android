@@ -25,6 +25,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     companion object {
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val STADIUM_GRID_SPAN_COUNT = 2
+        private const val STADIUM_GRID_SPACING = 8
     }
 
     private val viewModel: StadiumSelectionViewModel by viewModels()
@@ -53,7 +54,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             when (stadiums) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> toast(stadiums.msg)
-                is UiState.Loading -> toast("로딩중")
+                is UiState.Loading -> Unit
                 is UiState.Success -> {
                     stadiumSelectionAdapter.submitList(stadiums.data)
                 }
@@ -69,7 +70,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             addItemDecoration(
                 GridSpacingItemDecoration(
                     spanCount = STADIUM_GRID_SPAN_COUNT,
-                    spacing = 16.dpToPx(context)
+                    spacing = STADIUM_GRID_SPACING.dpToPx(context)
                 )
             )
         }

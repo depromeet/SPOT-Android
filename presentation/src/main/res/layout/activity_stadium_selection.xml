@@ -11,29 +11,27 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="13.5dp"
+        android:paddingBottom="13.5dp"
         android:text="@string/viewfinder_find_view"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Spot.Subtitle01"
+        android:textColor="@color/color_foreground_heading"
         app:layout_constraintEnd_toStartOf="@id/iv_close"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="시야찾기" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:padding="10dp"
-        android:src="@drawable/ic_close"
+        android:layout_marginEnd="4dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_x_close"
+        app:layout_constraintBottom_toBottomOf="@id/tv_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_header"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
+        app:layout_constraintTop_toTopOf="@id/tv_header"
+        app:tint="@color/color_foreground_body_sebtext" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -51,16 +49,15 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/font_pretendard_semibold"
                 android:gravity="center"
                 android:text="@string/viewfinder_stadium_selection_description"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
+                android:textColor="@color/color_foreground_heading"
+                android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="어떤 야구장의\n시야가 궁금하신가요?" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_sub_title"
@@ -68,24 +65,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="@string/viewfinder_stadium_selection_sub_description"
-                android:textSize="13sp"
+                android:textAppearance="@style/TextAppearance.Spot.Body03"
+                android:textColor="@color/color_foreground_caption"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title"
-                tools:text="꾸준히 다른 구장에 대한 정보가 추가될 예정이에요." />
+                app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_stadium"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="12dp"
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_title"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_stadium_selection" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
