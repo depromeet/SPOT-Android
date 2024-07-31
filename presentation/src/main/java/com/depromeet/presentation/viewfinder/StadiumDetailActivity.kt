@@ -3,11 +3,13 @@ package com.depromeet.presentation.viewfinder
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.compose.material.MaterialTheme
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
@@ -39,31 +41,33 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         initObserver()
 
         binding.composeView.setContent {
-            StadiumDetailScreen(
-                blockNumber = viewModel.blockCode,
-                viewModel = viewModel,
-                onClickReviewPicture = { reviewContent, index ->
-                    startToStadiumDetailPictureFragment(reviewContent, index)
-                },
-                onClickSelectSeat = {
-                    startToBottomSheetDialog(
-                        StadiumSelectSeatDialog.newInstance(),
-                        StadiumSelectSeatDialog.TAG
-                    )
-                },
-                onClickFilterMonthly = {
-                    startToBottomSheetDialog(
-                        StadiumFilterMonthsDialog.newInstance(),
-                        StadiumFilterMonthsDialog.TAG
-                    )
-                },
-                onClickReport = {
-                    startToBottomSheetDialog(ReportDialog.newInstance(), ReportDialog.TAG)
-                },
-                onClickGoBack = {
-                    finish()
-                }
-            )
+            MaterialTheme {
+                StadiumDetailScreen(
+                    blockNumber = viewModel.blockCode,
+                    viewModel = viewModel,
+                    onClickReviewPicture = { reviewContent, index ->
+                        startToStadiumDetailPictureFragment(reviewContent, index)
+                    },
+                    onClickSelectSeat = {
+                        startToBottomSheetDialog(
+                            StadiumSelectSeatDialog.newInstance(),
+                            StadiumSelectSeatDialog.TAG
+                        )
+                    },
+                    onClickFilterMonthly = {
+                        startToBottomSheetDialog(
+                            StadiumFilterMonthsDialog.newInstance(),
+                            StadiumFilterMonthsDialog.TAG
+                        )
+                    },
+                    onClickReport = {
+                        startToBottomSheetDialog(ReportDialog.newInstance(), ReportDialog.TAG)
+                    },
+                    onClickGoBack = {
+                        finish()
+                    }
+                )
+            }
         }
     }
 

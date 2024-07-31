@@ -5,23 +5,27 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.R
 
 @Composable
@@ -33,7 +37,7 @@ fun StadiumEmptyContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(SpotTheme.colors.backgroundWhite),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -43,31 +47,50 @@ fun StadiumEmptyContent(
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "$blockNumber 블록에 등록된\n시야 후기가 없습니다.",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            text = stringResource(
+                id = R.string.viewfinder_empty_block_review_description,
+                blockNumber
+            ),
+            style = SpotTheme.typography.title04,
+            color = SpotTheme.colors.foregroundHeading,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "다른 블록에서 새로운 시야를 찾아보세요!",
-            fontSize = 15.sp,
-            color = Color(0xFF606060),
+            text = stringResource(id = R.string.viewfinder_empty_block_description),
+            style = SpotTheme.typography.body02,
+            color = SpotTheme.colors.foregroundCaption,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = onGoBack,
-            shape = RoundedCornerShape(8.dp),
-            border = BorderStroke(width = 1.dp, color = Color(0xFFE5E5E5)),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFFFFFF)),
-        ) {
-            Text(
-                text = "돌아가기",
-                color = Color(0xFF121212),
-                fontSize = 14.sp
+            shape = RoundedCornerShape(999.dp),
+            border = BorderStroke(width = 1.dp, color = SpotTheme.colors.strokeTertiary),
+            colors = ButtonDefaults.buttonColors(backgroundColor = SpotTheme.colors.backgroundWhite),
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = 0.dp
             )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(
+                    vertical = 4.dp
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.viewfinder_go_back),
+                    style = SpotTheme.typography.label05,
+                    color = SpotTheme.colors.foregroundBodySubtitle,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(id = com.depromeet.designsystem.R.drawable.ic_refresh),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = SpotTheme.colors.foregroundDisabled
+                )
+            }
         }
     }
 }
