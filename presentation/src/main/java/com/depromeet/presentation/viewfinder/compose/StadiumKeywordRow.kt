@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
@@ -27,11 +28,11 @@ fun StadiumKeywordRow(
             .fillMaxWidth()
             .background(
                 color = if (keyword.type == 0) {
-                    Color(0xFFECFBF5)
+                    SpotTheme.colors.backgroundPositive
                 } else {
-                    Color(0xFFFFF1EF)
+                    SpotTheme.colors.backgroundNegative
                 },
-                shape = RoundedCornerShape(6.dp)
+                shape = RoundedCornerShape(8.dp)
             )
             .padding(
                 vertical = 10.dp, horizontal = 16.dp
@@ -41,16 +42,16 @@ fun StadiumKeywordRow(
     ) {
         Text(
             text = keyword.message,
-            fontSize = 14.sp,
-            color = Color(0xFF222222)
+            style = SpotTheme.typography.label08,
+            color = SpotTheme.colors.foregroundHeading
         )
         Text(
             text = keyword.like.toString(),
-            fontSize = 14.sp,
+            style = SpotTheme.typography.label08,
             color = if (keyword.type == 0) {
-                Color(0xFF43D596)
+                SpotTheme.colors.actionEnabled
             } else {
-                Color(0xFFFD7563)
+                SpotTheme.colors.errorPrimary
             }
         )
     }

@@ -84,5 +84,8 @@ data class SpotColor internal constructor(
     val seatBlue: Color = Color(R.color.color_seat_blue),
     val seatExciting: Color = Color(R.color.color_seat_exciting),
     val seatPremium: Color = Color(R.color.color_seat_premium),
-    val seatOrange: Color = Color(R.color.color_seat_orange)
+    val seatOrange: Color = Color(R.color.color_seat_orange),
+
+    val spotGreen2CD7A6: Color = Color(0xFF2CD7A6),
+    val spotGreen5DD281: Color = Color(0xFF5DD281)
 )

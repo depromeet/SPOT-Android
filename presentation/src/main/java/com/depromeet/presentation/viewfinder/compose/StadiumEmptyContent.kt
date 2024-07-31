@@ -42,10 +42,11 @@ fun StadiumEmptyContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_empty_review),
-            contentDescription = null
+            painter = painterResource(id = com.depromeet.designsystem.R.drawable.ic_empty_archiving),
+            contentDescription = null,
+            modifier = Modifier.size(100.dp)
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(
                 id = R.string.viewfinder_empty_block_review_description,
@@ -55,14 +56,14 @@ fun StadiumEmptyContent(
             color = SpotTheme.colors.foregroundHeading,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(id = R.string.viewfinder_empty_block_description),
             style = SpotTheme.typography.body02,
             color = SpotTheme.colors.foregroundCaption,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = onGoBack,
             shape = RoundedCornerShape(999.dp),

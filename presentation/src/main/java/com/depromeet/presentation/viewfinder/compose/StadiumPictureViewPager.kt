@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -64,17 +65,19 @@ fun StadiumPictureViewPager(
             ) {
                 Text(
                     text = "${topReviewImages.getOrNull(page)?.formattedNumber()}",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
+                    style = SpotTheme.typography.label11,
+                    color = SpotTheme.colors.foregroundWhite,
                     modifier = Modifier
                         .padding(end = 16.dp, top = 16.dp)
-                        .background(Color(0x40000000), shape = RoundedCornerShape(36.dp))
+                        .background(
+                            color = SpotTheme.colors.transferBlack01,
+                            shape = RoundedCornerShape(36.dp)
+                        )
                         .padding(
-                            horizontal = 8.dp,
-                            vertical = 6.dp
+                            horizontal = 10.dp,
+                            vertical = 10.dp
                         ),
                     textAlign = TextAlign.Center,
-                    fontSize = 12.sp
                 )
             }
             Box(
@@ -84,17 +87,19 @@ fun StadiumPictureViewPager(
             ) {
                 Text(
                     text = "${page + 1}/${topReviewImages.size}",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
+                    style = SpotTheme.typography.label09,
+                    color = SpotTheme.colors.foregroundWhite,
                     modifier = Modifier
                         .padding(end = 16.dp, bottom = 16.dp)
-                        .background(Color(0x40000000), shape = RoundedCornerShape(4.dp))
+                        .background(
+                            color = SpotTheme.colors.transferBlack01,
+                            shape = RoundedCornerShape(4.dp)
+                        )
                         .padding(
                             horizontal = 14.dp,
                             vertical = 6.dp
                         ),
                     textAlign = TextAlign.Center,
-                    fontSize = 12.sp
                 )
             }
         }
