@@ -12,15 +12,15 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:text="@string/viewfinder_selection_area"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="@color/color_foreground_heading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menuIcon="@drawable/ic_close"
-        app:menuIconColor="@color/black"
-        app:navigationIcon="@drawable/ic_back"
-        app:navigationIconColor="@color/black" />
+        app:menuIcon="@drawable/ic_x_close"
+        app:menuIconColor="@color/color_foreground_body_sebtext"
+        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIconColor="@color/color_foreground_body_sebtext"
+        app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />
 
     <ImageView
         android:id="@+id/iv_stadium"
@@ -37,7 +37,7 @@
         android:id="@+id/ll_stadium_team_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/tv_stadium_title"
         app:layout_constraintStart_toEndOf="@id/iv_stadium" />
@@ -46,9 +46,8 @@
         android:id="@+id/tv_stadium_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Spot.Caption02"
+        android:textColor="@color/color_foreground_heading"
         app:layout_constraintBottom_toBottomOf="@id/iv_stadium"
         app:layout_constraintStart_toStartOf="@id/ll_stadium_team_label"
         tools:text="서울 잠실 야구장" />
@@ -66,13 +65,14 @@
         android:id="@+id/tv_zoom_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="#F4F4F4"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_background_positive"
+        android:bufferType="spannable"
         android:gravity="center"
-        android:paddingVertical="11dp"
+        android:paddingVertical="13.5dp"
         android:text="@string/viewfinder_zoom_description"
-        android:textColor="@color/black"
-        android:textSize="13sp"
+        android:textAppearance="@style/TextAppearance.Spot.Label10"
+        android:textColor="@color/color_foreground_body_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_stadium" />
@@ -80,7 +80,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/gray100"
+        android:background="@color/color_stroke_tertiary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_zoom_description" />
@@ -115,12 +115,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:padding="10dp"
-            android:src="@drawable/ic_close"
+            android:layout_marginEnd="6dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_x_close"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/color_foreground_white" />
 
         <TextView
             android:id="@+id/tv_zoom_description_statement"

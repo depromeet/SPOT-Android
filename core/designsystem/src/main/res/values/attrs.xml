@@ -4,6 +4,7 @@
         <attr name="android:text" format="string|reference"/>
         <attr name="android:textSize" format="dimension|reference"/>
         <attr name="android:textColor" format="color|reference"/>
+        <attr name="titleTextAppearance" format="reference"/>
         <attr name="navigationIcon" format="reference"/>
         <attr name="navigationIconColor" format="color"/>
         <attr name="menuIcon" format="reference"/>

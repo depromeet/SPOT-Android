@@ -28,6 +28,7 @@ class SpotAppbar @JvmOverloads constructor(
                 tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, typedArray.getDimension(
                     R.styleable.SpotAppbar_android_textSize, 0f
                 ))
+                tvTitle.setTextAppearance(typedArray.getResourceId(R.styleable.SpotAppbar_titleTextAppearance, 0))
                 tvTitle.setTextColor(typedArray.getColor(R.styleable.SpotAppbar_android_textColor, 0))
                 ivNav.setBackgroundResource(typedArray.getResourceId(R.styleable.SpotAppbar_navigationIcon, 0))
                 ivNav.backgroundTintList = typedArray.getColorStateList(R.styleable.SpotAppbar_navigationIconColor)
