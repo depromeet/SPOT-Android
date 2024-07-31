@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.Spot" parent="">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Title01">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">130sp</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Title02">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">130sp</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Title03">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">130sp</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Title04">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">130sp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Subtitle01">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">140sp</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Subtitle02">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">145sp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Subtitle03">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">145sp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Subtitle04">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">150sp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Body01">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="lineHeight">150sp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Body02">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="lineHeight">150sp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Body03">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="lineHeight">150sp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label01">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label02">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label03">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label04">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label05">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label06">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label07">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label08">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label09">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label10">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label11">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="TextAppearance.Spot.Label12">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Label13">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">100sp</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Caption01">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="lineHeight">140sp</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Caption02">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="lineHeight">140sp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Caption03">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">140sp</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Caption04">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="lineHeight">140sp</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Caption05">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="lineHeight">120sp</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.Spot.Caption06">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="lineHeight">120sp</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+</resources>

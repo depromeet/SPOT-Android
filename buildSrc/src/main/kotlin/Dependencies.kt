@@ -85,7 +85,7 @@ object ClassPathPlugins {
 }
 
 object FirebaseDependencies {
-    const val bom = "com.google.firebase:firebase-bom:30.1.0"
+    const val bom = "com.google.firebase:firebase-bom:33.1.2"
     const val messaging = "com.google.firebase:firebase-messaging-ktx"
     const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
     const val analytics = "com.google.firebase:firebase-analytics-ktx"

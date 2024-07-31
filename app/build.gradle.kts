@@ -7,6 +7,8 @@ plugins {
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version Versions.kotlinVersion
+    id("com.google.gms.google-services")
+    id ("com.google.firebase.crashlytics")
 }
 
 android {
@@ -118,5 +120,11 @@ dependencies {
         debugImplementation(flipperLeakCanary)
         debugImplementation(leakCanary)
         debugImplementation(soloader)
+    }
+
+    FirebaseDependencies.run {
+        implementation(platform(bom))
+        implementation(analytics)
+        implementation(crashlytics)
     }
 }
