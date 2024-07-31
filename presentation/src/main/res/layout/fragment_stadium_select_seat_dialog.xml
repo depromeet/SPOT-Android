@@ -364,7 +364,7 @@
         android:enabled="false"
         android:gravity="center"
         android:paddingVertical="19dp"
-        android:text="완료"
+        android:text="@string/viewfinder_completed"
         android:textAppearance="@style/TextAppearance.Spot.Label02"
         android:textColor="@color/color_foreground_white"
         app:layout_constraintBottom_toBottomOf="parent"
