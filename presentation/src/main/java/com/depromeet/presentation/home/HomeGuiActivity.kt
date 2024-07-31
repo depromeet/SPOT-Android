@@ -11,9 +11,11 @@ import com.depromeet.presentation.databinding.ActivityHomeGuiBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.adapter.StadiumAdapter
+import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
+import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.viewfinder.StadiumActivity
-import com.depromeet.presentation.viewfinder.viewmodel.StadiumSelectionViewModel
+import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +28,7 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
         private const val BETWEEN_SPADING_DP = 8
     }
 
-    private val stadiumViewModel: StadiumSelectionViewModel by viewModels()
+    private val stadiumViewModel: HomeGuiViewModel by viewModels()
 
     private lateinit var stadiumAdapter: StadiumAdapter
 
@@ -36,6 +38,7 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
 
 
         initView()
+        initEvent()
         initObserver()
     }
 
@@ -44,28 +47,9 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
         setStadiumAdapter()
     }
 
-    private fun setStadiumAdapter() {
-        stadiumAdapter = StadiumAdapter(
-            searchClick = {
-                toast("선택 클릭")
-            },
-            stadiumClick = {
-                if (!it.isActive) {
-                    toast("아직 오픈되지 않았음")
-                } else {
-                    toast("오픈되어있나?")
-                    startStadiumActivity(it)
-                }
-            }
-        )
-        binding.rvHomeStadium.adapter = stadiumAdapter
-        binding.rvHomeStadium.addItemDecoration(
-            LinearSpacingItemDecoration(
-                START_SPACING_DP.dpToPx(this),
-                BETWEEN_SPADING_DP.dpToPx(this)
-            )
-        )
-
+    private fun initEvent() {
+        binding.clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
+        binding.clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
     }
 
     private fun initObserver() {
@@ -82,6 +66,41 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
         }
     }
 
+    private fun setStadiumAdapter() {
+        stadiumAdapter = StadiumAdapter(
+            searchClick = {
+                startStadiumSelectionActivity()
+            },
+            stadiumClick = {
+                if (!it.isActive) {
+                    toast("현재 잠실야구장만 이용할 수 있어요!")
+                } else {
+                    startStadiumActivity(it)
+                }
+            }
+        )
+        binding.rvHomeStadium.adapter = stadiumAdapter
+        binding.rvHomeStadium.addItemDecoration(
+            LinearSpacingItemDecoration(
+                START_SPACING_DP.dpToPx(this),
+                BETWEEN_SPADING_DP.dpToPx(this)
+            )
+        )
+
+    }
+
+
+    private fun startStadiumSelectionActivity() {
+        Intent(this@HomeGuiActivity, StadiumSelectionActivity::class.java).apply {
+            startActivity(
+                this
+            )
+        }
+    }
+
+    private fun startSeatRecordActivity() {
+        Intent(this, SeatRecordActivity::class.java).apply { startActivity(this) }
+    }
 
     private fun startStadiumActivity(stadium: StadiumsResponse) {
         val intent = Intent(

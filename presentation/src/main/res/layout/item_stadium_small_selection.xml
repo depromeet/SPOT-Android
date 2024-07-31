@@ -3,43 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="72dp"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_stadium"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:background="@drawable/rect_gray100_fill_24"
+        android:background="@drawable/rect_transparentblack01_fill_24"
         android:clipToOutline="true"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription,UnusedAttribute"
         tools:src="@drawable/ic_stadium_test" />
 
+    <View
+        android:id="@+id/v_stadium_lock_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rect_transparentblack01_fill_24"
+        app:layout_constraintBottom_toBottomOf="@id/iv_stadium"
+        app:layout_constraintEnd_toEndOf="@id/iv_stadium"
+        app:layout_constraintStart_toStartOf="@id/iv_stadium"
+        app:layout_constraintTop_toTopOf="@id/iv_stadium" />
+
     <ImageView
         android:id="@+id/iv_stadium_lock"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:background="@drawable/rect_gray100_fill_24"
-        android:backgroundTint="@color/black_alpha60"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"
         android:src="@drawable/ic_lock"
+        app:layout_constraintBottom_toBottomOf="@id/iv_stadium"
+        app:layout_constraintEnd_toEndOf="@id/iv_stadium"
+        app:layout_constraintStart_toStartOf="@id/iv_stadium"
+        app:layout_constraintTop_toTopOf="@id/iv_stadium"
+        app:tint="@color/color_foreground_disabled"
+        tools:ignore="ContentDescription"
         tools:src="@drawable/ic_lock" />
 
 
     <TextView
         android:id="@+id/tv_stadium_name"
+        style="@style/TextAppearance.Spot.Caption04"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
+        android:textColor="@color/color_foreground_body_sebtext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_stadium"

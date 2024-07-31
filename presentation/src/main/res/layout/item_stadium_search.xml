@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="72dp"
-    android:layout_height="72dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingVertical="10.5dp"
+    android:layout_width="72dp"
+    android:layout_height="72dp"
+    android:background="@drawable/rect_action_enabled_fill_24"
     android:paddingHorizontal="15dp"
-    android:background="@drawable/rect_gray100_fill_24">
+    android:paddingVertical="10.5dp">
 
     <ImageView
         android:id="@+id/iv_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_plus"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:src="@drawable/ic_search"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="contentDescription"
-        />
+        app:tint="@color/color_foreground_white"
+        tools:ignore="contentDescription" />
 
     <TextView
+        style="@style/TextAppearance.Spot.Caption02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/iv_search"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="3dp"
+        android:text="시야찾기"
+        android:textColor="@color/color_foreground_white"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="시야찾기"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_search" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

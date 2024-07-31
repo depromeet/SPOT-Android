@@ -81,7 +81,7 @@ class StadiumSearchViewHolder(
 
     fun bind() {
         binding.root.setOnClickListener {
-            searchClick
+            searchClick()
         }
     }
 }
@@ -92,13 +92,14 @@ class StadiumSmallSelectionViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: StadiumsResponse) {
         binding.root.setOnClickListener {
-            teamClick
+            teamClick(item)
         }
         binding.ivStadium.loadAndClip(item.thumbnail)
-        binding.tvStadiumName.text = item.name
+        binding.tvStadiumName.text = item.name.replaceFirst(" ", "\n")
         if (item.isActive) {
             binding.ivStadiumLock.visibility = GONE
-        }else{
+            binding.vStadiumLockBackground.visibility = GONE
+        } else {
             binding.ivStadiumLock.visibility = VISIBLE
         }
     }

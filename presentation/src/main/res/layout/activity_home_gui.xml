@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F3F6">
+    android:background="@color/color_background_secondary">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_start"
@@ -27,7 +27,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp" />
 
-
     <ImageView
         android:id="@+id/iv_home_app_bar"
         android:layout_width="wrap_content"
@@ -46,11 +45,12 @@
         android:src="@drawable/ic_setting"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
         app:layout_constraintTop_toBottomOf="@id/gl_top"
-        app:tint="#4D5159"
+        app:tint="@color/color_foreground_body_sebtext"
         tools:ignore="ContentDescription" />
 
     <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
         android:id="@+id/csbv_home_title"
+        style="@style/TextAppearance.Spot.Caption04"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
@@ -63,7 +63,7 @@
         app:paddingRight="10dp"
         app:paddingTop="8dp"
         app:text="시야 사진 1장 더 올리면 레벨업!"
-        app:textColor="#393A3F" />
+        app:textColor="@color/color_foreground_body_subtitle" />
 
     <ImageView
         android:id="@+id/iv_home_character"
@@ -81,23 +81,49 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="35dp"
+        android:background="@drawable/rect_action_enabled_line_20"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4.5dp"
+        android:textColor="@color/color_action_enabled"
         app:layout_constraintStart_toEndOf="@id/gl_start"
         app:layout_constraintTop_toBottomOf="@id/iv_home_app_bar"
         tools:text="Lv.5" />
 
     <TextView
-        android:id="@+id/tv_home_title"
+        android:id="@+id/tv_home_team"
+        style="@style/TextAppearance.Spot.Title03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         app:layout_constraintStart_toStartOf="@id/tv_home_level"
         app:layout_constraintTop_toBottomOf="@id/tv_home_level"
-        tools:text="LG 트윈스의\n야구장 VIP" />
+        tools:text="LG 트윈스의" />
+
+    <TextView
+        android:id="@+id/tv_home_title"
+        style="@style/TextAppearance.Spot.Title03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="@id/tv_home_team"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_team"
+        tools:text="야구장 VIP" />
+
+    <ImageView
+        android:id="@+id/iv_home_info"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_info_circle_line"
+        app:layout_constraintBottom_toBottomOf="@id/tv_home_title"
+        app:layout_constraintStart_toEndOf="@id/tv_home_title"
+        app:layout_constraintTop_toTopOf="@id/tv_home_title"
+        tools:ignore="contentDescription" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home_stadium"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -105,7 +131,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_home_character"
         tools:itemCount="10"
-        tools:listitem="@layout/item_stadium_small_selection"/>
+        tools:listitem="@layout/item_stadium_small_selection" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_home_archiving"
@@ -117,6 +143,40 @@
         app:layout_constraintEnd_toStartOf="@+id/cl_home_scrap"
         app:layout_constraintStart_toEndOf="@id/gl_start"
         app:layout_constraintTop_toBottomOf="@id/rv_home_stadium">
+
+        <TextView
+            android:id="@+id/tv_archiving_title"
+            style="@style/TextAppearance.Spot.Subtitle02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="시야 아카이빙"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_archiving_description"
+            style="@style/TextAppearance.Spot.Label10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="뜨거웠던 야구 직관 기록"
+            android:textColor="@color/color_foreground_caption"
+            app:layout_constraintStart_toStartOf="@id/tv_archiving_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_archiving_title" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_archiving_design"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="contentDescription" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -131,23 +191,71 @@
         app:layout_constraintStart_toEndOf="@+id/cl_home_archiving"
         app:layout_constraintTop_toTopOf="@+id/cl_home_archiving">
 
+        <TextView
+            android:id="@+id/tv_scrap_title"
+            style="@style/TextAppearance.Spot.Subtitle02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="스크랩"
+            android:textColor="@color/color_foreground_disabled"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_lock"
+            app:layout_constraintBottom_toBottomOf="@id/tv_scrap_title"
+            app:layout_constraintStart_toEndOf="@id/tv_scrap_title"
+            app:layout_constraintTop_toTopOf="@id/tv_scrap_title"
+            app:tint="@color/color_foreground_disabled"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            android:id="@+id/tv_scrap_description"
+            style="@style/TextAppearance.Spot.Label10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="내가 스크랩한 시야 정보"
+            android:textColor="@color/color_foreground_disabled"
+            app:layout_constraintStart_toStartOf="@id/tv_scrap_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_scrap_title" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_scrap_design"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="contentDescription" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_home_upload"
         android:layout_width="0dp"
         android:layout_height="74dp"
-        android:background="@drawable/rect_white_fill_top20"
+        android:background="@drawable/rect_spot_green_fill_top_36"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/tv_home_upload_description"
+            style="@style/TextAppearance.Spot.Title04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="시야 사진 올리기"
+            android:textColor="@color/color_foreground_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_home_upload_plus"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -158,11 +266,13 @@
             android:id="@+id/iv_home_upload_plus"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_plus"
+            android:layout_marginStart="9dp"
+            android:src="@drawable/ic_plus_circle"
             app:layout_constraintBottom_toBottomOf="@id/tv_home_upload_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_home_upload_description"
             app:layout_constraintTop_toTopOf="@id/tv_home_upload_description"
+            app:tint="@color/color_foreground_white"
             tools:ignore="ContentDescription" />
 
 
