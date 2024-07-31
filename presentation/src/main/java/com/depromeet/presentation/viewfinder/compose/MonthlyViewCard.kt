@@ -15,13 +15,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.R
 
 @Composable
@@ -31,16 +30,30 @@ fun MonthlyViewCard(
     onClick: () -> Unit,
     onCancel: () -> Unit
 ) {
+    val borderModifier = if (month != null) {
+        modifier.border(
+            width = 1.dp,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    SpotTheme.colors.spotGreen2CD7A6,
+                    SpotTheme.colors.spotGreen5DD281
+                )
+            ),
+            shape = RoundedCornerShape(999.dp)
+        )
+    } else {
+        modifier.border(
+            width = 1.dp,
+            color = SpotTheme.colors.strokeTertiary,
+            shape = RoundedCornerShape(999.dp)
+        )
+    }
+
     Row(
-        modifier = modifier
-            .background(color = Color.White, shape = RoundedCornerShape(100.dp))
-            .border(
-                width = 1.dp,
-                color = if (month != null) {
-                    Color(0xFF212124)
-                } else {
-                    Color(0xFFE5E5E5)
-                }, shape = RoundedCornerShape(100.dp)
+        modifier = borderModifier
+            .background(
+                color = SpotTheme.colors.backgroundWhite,
+                shape = RoundedCornerShape(999.dp)
             )
             .clickable { onClick() }
             .padding(10.dp),
@@ -49,28 +62,28 @@ fun MonthlyViewCard(
     ) {
         Text(
             text = if (month != null) {
-                "${month}월"
+                stringResource(id = R.string.viewfinder_month_format, month)
             } else {
-                "월별 시야"
+                stringResource(id = R.string.viewfinder_monthly_view)
             },
-            fontSize = 13.sp,
-            color = Color(0xFF121212)
+            style = SpotTheme.typography.label05,
+            color = SpotTheme.colors.foregroundBodySubtitle
         )
         Spacer(modifier = Modifier.width(4.dp))
         Icon(
             painter = if (month != null) {
-                painterResource(id = R.drawable.ic_close)
+                painterResource(id = R.drawable.ic_x_close)
             } else {
-                painterResource(id = R.drawable.ic_down)
+                painterResource(id = R.drawable.ic_chevron_down)
             },
             contentDescription = null,
             tint = if (month != null) {
-                Color(0xFF212124)
+                SpotTheme.colors.foregroundCaption
             } else {
-                Color(0xFF9F9F9F)
+                SpotTheme.colors.foregroundDisabled
             },
             modifier = Modifier
-                .size(12.dp)
+                .size(20.dp)
                 .clickable {
                     if (month != null) {
                         onCancel()

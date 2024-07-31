@@ -39,8 +39,11 @@
     <string name="upload_error_check">확인</string>
 
     <!-- viewfinder -->
+    <string name="viewfinder_latest">최신순</string>
     <string name="viewfinder_go_back">돌아가기</string>
     <string name="viewfinder_find_view">시야찾기</string>
+    <string name="viewfinder_review_view">시야 후기</string>
+    <string name="viewfinder_monthly_view">월별 시야</string>
     <string name="viewfinder_selection_seat">좌석선택</string>
     <string name="viewfinder_selection_area">구역 선택</string>
     <string name="viewfinder_stadium_selection_description">어떤 야구장의\n시야가 궁금하신가요?</string>
@@ -52,9 +55,10 @@
     <string name="viewfinder_empty_block_description">다른 블록에서 새로운 시야를 찾아보세요!</string>
     <string name="viewfinder_tooltip_description">열과 번을 선택해 빠르게 자리를 찾아보세요⚡</string>
 
+    <string name="viewfinder_month_format">%s월</string>
     <string name="viewfinder_seat_format">%s열</string>
     <string name="viewfinder_seat_number_format">%s열 %s번</string>
-    <string name="viewfinder_best_keyword_description_format">가장 많이 선정된 %d개의 키워드만 보여줘요</string>
+    <string name="viewfinder_best_keyword_description_format">가장 많이 선정된 %s개의 키워드만 보여줘요</string>
     <string name="viewfinder_empty_block_review_description">%s 블록에 등록된\n시야 후기가 없습니다.</string>
 
     <!-- viewRecord -->
