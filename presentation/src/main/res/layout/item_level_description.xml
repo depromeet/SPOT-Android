@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_level"
+        style="@style/TextAppearance.Spot.Label11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="17dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/rect_action_enabled_line_20"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4.5dp"
+        android:textColor="@color/color_action_enabled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="LV.0" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/TextAppearance.Spot.Body01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/color_foreground_body_sebtext"
+        app:layout_constraintBottom_toBottomOf="@id/tv_level"
+        app:layout_constraintStart_toEndOf="@id/tv_level"
+        app:layout_constraintTop_toTopOf="@id/tv_level"
+        tools:text="직관 꿈나무" />
+
+    <TextView
+        android:id="@+id/tv_count"
+        style="@style/TextAppearance.Spot.Body01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/color_foreground_body_sebtext"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        tools:text="0회" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

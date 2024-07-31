@@ -50,6 +50,7 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
     private fun initEvent() {
         binding.clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
         binding.clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
+        binding.ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
     }
 
     private fun initObserver() {
@@ -114,5 +115,9 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
             }
         }
         startActivity(intent)
+    }
+
+    private fun showLevelDescriptionDialog() {
+        LevelDescriptionDialog().apply { show(supportFragmentManager, this.tag) }
     }
 }
