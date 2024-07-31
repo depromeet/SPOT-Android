@@ -25,6 +25,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 }) {
     companion object {
         const val REVIEW_ID = "review_id"
+        const val REVIEW_INDEX = "review_index"
         const val STADIUM_HEADER = "stadium_header"
         const val STADIUM_REVIEW_CONTENT = "stadium_review_content"
     }
@@ -41,8 +42,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
             StadiumDetailScreen(
                 blockNumber = viewModel.blockCode,
                 viewModel = viewModel,
-                onClickReviewPicture = { reviewContent ->
-                    startToStadiumDetailPictureFragment(reviewContent)
+                onClickReviewPicture = { reviewContent, index ->
+                    startToStadiumDetailPictureFragment(reviewContent, index)
                 },
                 onClickSelectSeat = {
                     startToBottomSheetDialog(
@@ -104,9 +105,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         )
     }
 
-    private fun startToStadiumDetailPictureFragment(reviewContent: BlockReviewResponse.ReviewResponse) {
+    private fun startToStadiumDetailPictureFragment(reviewContent: BlockReviewResponse.ReviewResponse, index: Int) {
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
-            arguments = bundleOf(REVIEW_ID to reviewContent.id)
+            arguments = bundleOf(REVIEW_ID to reviewContent.id, REVIEW_INDEX to index)
         }
 
         supportFragmentManager.commit {

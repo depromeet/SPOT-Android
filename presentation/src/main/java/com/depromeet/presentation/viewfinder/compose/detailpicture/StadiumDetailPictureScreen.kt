@@ -6,6 +6,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,6 +25,7 @@ fun StadiumDetailPictureScreen(
     context: Context = LocalContext.current,
     stadiumDetailViewModel: StadiumDetailViewModel = viewModel(),
     reviewId: Long,
+    reviewIndex: Int,
     modifier: Modifier = Modifier
 ) {
     val reviews = stadiumDetailViewModel.detailUiState.collectAsStateWithLifecycle()
@@ -31,7 +33,19 @@ fun StadiumDetailPictureScreen(
     reviews.value.let { uiState ->
         when (uiState) {
             is StadiumDetailUiState.ReviewsData -> {
-                val initPage = uiState.reviews.indexOfFirst { it.id == reviewId }
+                val visited = remember {
+                    mutableStateListOf(
+                        *List(uiState.reviews.size) { false }.toTypedArray()
+                    )
+                }
+
+                if (uiState.reviews.size - visited.size > 0) {
+                    visited.addAll(List(uiState.reviews.size - visited.size) { false })
+                }
+
+                val initPage by remember {
+                    mutableStateOf(uiState.reviews.indexOfFirst { it.id == reviewId })
+                }
 
                 var isMore by remember {
                     mutableStateOf(false)
@@ -50,13 +64,24 @@ fun StadiumDetailPictureScreen(
                     snapshotFlow { pagerState.currentPage }.collect {
                         isMore = false
                         isDimmed = false
+                        if (visited[it]) return@collect
+
+                        if (it == initPage) {
+                            visited[it] = true
+                        }
+
+                        if (!visited[it]) {
+                            visited[it] = true
+                        }
                     }
                 }
 
                 StadiumDetailReviewViewPager(
                     context = context,
                     reviews = uiState.reviews,
-                    page = uiState.pageState,
+                    visited = visited,
+                    position = reviewIndex,
+                    pageState = uiState.pageState,
                     pagerState = pagerState,
                     modifier = modifier,
                     isDimmed = isDimmed,
@@ -71,7 +96,7 @@ fun StadiumDetailPictureScreen(
                         stadiumDetailViewModel.updateQueryPage { query ->
                             stadiumDetailViewModel.getBlockReviews(query = query)
                         }
-                    }
+                    },
                 )
             }
 
@@ -86,5 +111,6 @@ private fun StadiumDetailPictureScreenPreview() {
     StadiumDetailPictureScreen(
         context = LocalContext.current,
         reviewId = 1,
+        reviewIndex = 0
     )
 }

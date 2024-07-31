@@ -44,7 +44,7 @@ fun StadiumReviewContent(
     context: Context,
     reviewContent: BlockReviewResponse.ReviewResponse,
     modifier: Modifier = Modifier,
-    onClick: (reviewContent: BlockReviewResponse.ReviewResponse) -> Unit,
+    onClick: (reviewContent: BlockReviewResponse.ReviewResponse, index: Int) -> Unit,
     onClickReport: () -> Unit
 ) {
     Column(
@@ -112,10 +112,10 @@ fun StadiumReviewContent(
         LazyRow(
             modifier = Modifier.padding(start = 36.dp),
         ) {
-            items(reviewContent.images.size) {
+            items(reviewContent.images.size) { index ->
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data(reviewContent.images[it].url)
+                        .data(reviewContent.images[index].url)
                         .build(),
                     contentDescription = null,
                     placeholder = ColorPainter(Color.LightGray),
@@ -123,7 +123,9 @@ fun StadiumReviewContent(
                     modifier = Modifier
                         .size(180.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .clickable { onClick(reviewContent) }
+                        .clickable {
+                            onClick(reviewContent, index)
+                        }
                 )
                 Spacer(modifier = Modifier.width(4.dp))
             }
@@ -213,7 +215,7 @@ private fun StadiumReviewContentPreview() {
                     )
                 )
             ),
-            onClick = {},
+            onClick = { _, _ -> },
             onClickReport = {}
         )
 

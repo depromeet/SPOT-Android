@@ -34,7 +34,7 @@ fun StadiumDetailScreen(
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
-    onClickReviewPicture: (BlockReviewResponse.ReviewResponse) -> Unit,
+    onClickReviewPicture: (BlockReviewResponse.ReviewResponse, Int) -> Unit,
     onClickSelectSeat: () -> Unit,
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit,
@@ -134,7 +134,7 @@ private fun StadiumDetailScreenPreview() {
     Box(modifier = Modifier.background(Color.White)) {
         StadiumDetailScreen(
             blockNumber = "207",
-            onClickReviewPicture = {},
+            onClickReviewPicture = { _, _ -> },
             onClickSelectSeat = {},
             onClickFilterMonthly = {},
             onClickReport = {},

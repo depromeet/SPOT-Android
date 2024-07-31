@@ -22,6 +22,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,18 +54,20 @@ import com.depromeet.presentation.viewfinder.compose.LevelCard
 fun StadiumDetailReviewViewPager(
     context: Context,
     reviews: List<BlockReviewResponse.ReviewResponse>,
-    page: Boolean,
+    visited: List<Boolean>,
+    position: Int,
+    pageState: Boolean,
     pagerState: PagerState,
     isDimmed: Boolean,
     isMore: Boolean,
     modifier: Modifier = Modifier,
     onChangeIsDimmed: (isDimmed: Boolean) -> Unit,
     onChangeIsMore: (isMore: Boolean) -> Unit,
-    onLoadPaging: () -> Unit
+    onLoadPaging: () -> Unit,
 ) {
     val minimumLineLength = 1
 
-    if (pagerState.currentPage == reviews.size - 1 && !page) {
+    if (pagerState.currentPage == reviews.size - 1 && !pageState) {
         onLoadPaging()
     }
 
@@ -77,6 +80,18 @@ fun StadiumDetailReviewViewPager(
         var showMoreButtonState by remember {
             mutableStateOf(false)
         }
+
+        val verticalPagerState = rememberPagerState(
+            pageCount = { reviews[page].images.size },
+            initialPage = position
+        )
+
+        LaunchedEffect(key1 = Unit) {
+            if (!visited[page]) {
+                verticalPagerState.scrollToPage(0)
+            }
+        }
+
         Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
                 model = ImageRequest.Builder(context)
@@ -99,7 +114,8 @@ fun StadiumDetailReviewViewPager(
             ) {
                 StadiumDetailPictureViewPager(
                     context = context,
-                    pictures = reviews[page].images
+                    pictures = reviews[page].images,
+                    verticalPagerState = verticalPagerState,
                 )
             }
 
@@ -278,12 +294,14 @@ private fun StadiumDetailReviewViewPagerPreview() {
     StadiumDetailReviewViewPager(
         context = LocalContext.current,
         reviews = reviews,
-        page = false,
+        visited = emptyList(),
+        position = 1,
+        pageState = false,
         pagerState = pagerState,
         isDimmed = false,
         isMore = false,
         onChangeIsDimmed = {},
         onChangeIsMore = {},
-        onLoadPaging = {}
+        onLoadPaging = {},
     )
 }

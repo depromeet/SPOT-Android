@@ -1,6 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,10 +17,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
+import androidx.compose.material.FabPosition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,23 +43,23 @@ import coil.request.ImageRequest
 import com.airbnb.lottie.model.content.CircleShape
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.pictures
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumDetailPictureViewPager(
     context: Context,
+    verticalPagerState: PagerState,
     pictures: List<BlockReviewResponse.ReviewResponse.ReviewImageResponse>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val pagerState = rememberPagerState(pageCount = { pictures.size })
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalPager(
             modifier = Modifier,
-            state = pagerState,
+            state = verticalPagerState,
         ) { page ->
             Card(
                 modifier = Modifier
@@ -78,9 +86,9 @@ fun StadiumDetailPictureViewPager(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            repeat(pagerState.pageCount) { iteration ->
+            repeat(verticalPagerState.pageCount) { iteration ->
                 val color =
-                    if (pagerState.currentPage == iteration) Color.White else Color.LightGray
+                    if (verticalPagerState.currentPage == iteration) Color.White else Color.LightGray
                 Box(
                     modifier = Modifier
                         .padding(end = 8.dp)
@@ -93,21 +101,26 @@ fun StadiumDetailPictureViewPager(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 private fun StadiumDetailPictureViewPagerPreview() {
+    val pagerState = rememberPagerState {
+        1
+    }
     StadiumDetailPictureViewPager(
         context = LocalContext.current,
+        verticalPagerState = pagerState,
         pictures = listOf(
             BlockReviewResponse.ReviewResponse.ReviewImageResponse(
-                id = 1 , url = ""
+                id = 1, url = ""
             ),
             BlockReviewResponse.ReviewResponse.ReviewImageResponse(
-                id = 1 , url = ""
+                id = 1, url = ""
             ),
             BlockReviewResponse.ReviewResponse.ReviewImageResponse(
-                id = 1 , url = ""
+                id = 1, url = ""
             )
-        )
+        ),
     )
 }

@@ -37,10 +37,11 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initView() {
-        getReviewIdExtra { reviewId ->
+        getReviewExtra { reviewId, reviewIndex ->
             binding.cvReviewContent.setContent {
                 StadiumDetailPictureScreen(
                     reviewId = reviewId,
+                    reviewIndex = reviewIndex,
                     stadiumDetailViewModel = stadiumDetailViewModel,
                 )
             }
@@ -54,9 +55,10 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         }
     }
 
-    private fun getReviewIdExtra(callback: (id: Long) -> Unit) {
+    private fun getReviewExtra(callback: (id: Long, index: Int) -> Unit) {
         val reviewId = arguments?.getLong(StadiumDetailActivity.REVIEW_ID) ?: return
-        callback(reviewId)
+        val reviewIndex = arguments?.getInt(StadiumDetailActivity.REVIEW_INDEX) ?: return
+        callback(reviewId, reviewIndex)
     }
 
     private fun removeFragment() {
@@ -68,12 +70,12 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         }
     }
 
-    private fun onBackPressed(){
+    private fun onBackPressed() {
         requireActivity().onBackPressedDispatcher
-            .addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true){
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     val fragment = parentFragmentManager.findFragmentByTag(TAG)
-                    if (fragment != null ){
+                    if (fragment != null) {
                         parentFragmentManager.beginTransaction()
                             .remove(fragment)
                             .commit()
