@@ -114,6 +114,8 @@ object ComposeDependency {
     const val glance = "androidx.glance:glance-appwidget:1.0.0-alpha03"
     const val balloonCompose = "com.github.skydoves:balloon-compose:${Versions.balloonVersion}"
     const val cloudy = "com.github.skydoves:cloudy:${Versions.cloudyVersion}"
+    const val material = "androidx.compose.material:material:${Versions.composeVersion}"
+    const val ui = "androidx.compose.ui:ui:${Versions.composeVersion}"
 }
 
 val ComposeDebug = listOf(
