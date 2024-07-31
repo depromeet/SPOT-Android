@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
+import com.depromeet.designsystem.SpotImageSnackBar
 import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 import com.depromeet.presentation.databinding.ActivityHomeGuiBinding
 import com.depromeet.presentation.extension.dpToPx
@@ -51,6 +52,15 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
         binding.clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
         binding.clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         binding.ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
+        binding.clHomeScrap.setOnClickListener {
+            SpotImageSnackBar.make(
+                view = binding.root,
+                message = "스크랩이 잠겨있어요\uD83E\uDEE2 곧 업데이트 예정이에요",
+                messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+                icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+                iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+            ).show()
+        }
     }
 
     private fun initObserver() {
