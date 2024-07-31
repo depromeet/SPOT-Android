@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:elevation="1dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -34,7 +34,7 @@
         android:elevation="2dp"
         android:visibility="invisible"
         app:cardBackgroundColor="@color/color_transfer_black_01"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="@id/cv_stadium"
         app:layout_constraintEnd_toEndOf="@id/cv_stadium"
         app:layout_constraintStart_toStartOf="@id/cv_stadium"
