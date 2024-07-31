@@ -15,9 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
+import com.depromeet.presentation.R
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -44,7 +47,7 @@ fun KeywordFlowRow(
         modifier = modifier,
     ) {
         displayKeywords.forEach { keyword ->
-            KeywordCard(keyword = keyword, modifier = Modifier.padding(bottom = 4.dp, end = 4.dp))
+            KeywordCard(keyword = keyword, modifier = Modifier.padding(bottom = 6.dp, end = 6.dp))
         }
 
         if (!expanded && displayKeywords.size < keywords.size) {
@@ -52,7 +55,10 @@ fun KeywordFlowRow(
             Box(
                 modifier = Modifier
                     .padding(2.dp)
-                    .background(Color(0xFFF4F4F4), shape = RoundedCornerShape(4.dp))
+                    .background(
+                        color = SpotTheme.colors.backgroundSecondary,
+                        shape = RoundedCornerShape(4.dp)
+                    )
                     .clickable {
                         if (isSelfExpanded) {
                             expanded = true
@@ -60,12 +66,12 @@ fun KeywordFlowRow(
                             onActionCallback()
                         }
                     }
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                    .padding(7.dp),
             ) {
                 Text(
-                    text = "+$overflowCount",
-                    fontSize = 12.sp,
-                    color = Color.Black
+                    text = stringResource(id = R.string.viewfinder_plus_count, overflowCount),
+                    style = SpotTheme.typography.label10,
+                    color = SpotTheme.colors.foregroundBodySebtext
                 )
             }
         }

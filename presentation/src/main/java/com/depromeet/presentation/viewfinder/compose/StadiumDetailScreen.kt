@@ -99,7 +99,7 @@ fun StadiumDetailScreen(
                     if (uiState.reviews.isEmpty()) {
                         item(StadiumDetailActivity.STADIUM_REVIEW_CONTENT) {
                             StadiumEmptyReviewContent()
-                            Spacer(modifier = Modifier.height(40.dp))
+                            Spacer(modifier = Modifier.height(60.dp))
                         }
                     } else {
                         if (verticalScrollState.firstVisibleItemIndex == uiState.reviews.size - 1 && !uiState.pageState) {

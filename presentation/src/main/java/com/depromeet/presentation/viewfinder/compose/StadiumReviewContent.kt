@@ -28,13 +28,16 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.mapper.toKeyword
@@ -71,11 +74,11 @@ fun StadiumReviewContent(
                         .size(20.dp)
                         .clip(CircleShape)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = reviewContent.member.nickname,
-                    fontSize = 12.sp,
-                    color = Color(0xFF9F9F9F)
+                    style = SpotTheme.typography.caption02,
+                    color = SpotTheme.colors.foregroundBodySebtext
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 LevelCard(
@@ -83,34 +86,39 @@ fun StadiumReviewContent(
                 )
             }
             Icon(
-                painter = painterResource(id = R.drawable.ic_horizontal_dots),
+                painter = painterResource(id = com.depromeet.designsystem.R.drawable.ic_dots_horizontal),
                 contentDescription = null,
-                tint = Color(0xFF9F9F9F),
-                modifier = Modifier.clickable {
-                    onClickReport()
-                }
+                tint = SpotTheme.colors.foregroundDisabled,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable {
+                        onClickReport()
+                    }
             )
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Row(
-            modifier = Modifier.padding(start = 36.dp, end = 16.dp),
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${reviewContent.formattedNumber()}",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF121212)
+                text = reviewContent.formattedNumber(),
+                style = SpotTheme.typography.subtitle02,
+                color = SpotTheme.colors.foregroundHeading,
             )
+            Spacer(modifier = Modifier.width(3.dp))
             Text(
-                text = "・${reviewContent.formattedDate()}",
-                fontSize = 12.sp,
-                color = Color(0xFF9F9F9F)
+                text = stringResource(
+                    id = R.string.viewfinder_date_dot,
+                    reviewContent.formattedDate()
+                ),
+                style = SpotTheme.typography.caption02,
+                color = SpotTheme.colors.foregroundBodySebtext
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
         LazyRow(
-            modifier = Modifier.padding(start = 36.dp),
+            modifier = Modifier.padding(start = 32.dp),
         ) {
             items(reviewContent.images.size) { index ->
                 AsyncImage(
@@ -122,22 +130,25 @@ fun StadiumReviewContent(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(180.dp)
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(12.dp))
                         .clickable {
                             onClick(reviewContent, index)
                         }
                 )
                 Spacer(modifier = Modifier.width(4.dp))
+                if (index == reviewContent.images.size - 1) {
+                    Spacer(modifier = Modifier.width(32.dp))
+                }
             }
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = reviewContent.content,
-            fontSize = 14.sp,
-            color = Color(0xFF121212),
+            style = SpotTheme.typography.body03,
+            color = SpotTheme.colors.foregroundHeading,
             overflow = TextOverflow.Ellipsis,
             maxLines = 3,
-            modifier = Modifier.padding(start = 36.dp, end = 16.dp)
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         KeywordFlowRow(
@@ -160,7 +171,7 @@ private fun StadiumReviewContentPreview() {
             reviewContent = BlockReviewResponse.ReviewResponse(
                 id = 1,
                 dateTime = "2023-03-01T19:00:00",
-                content = "전체적으로 좋은 경험이었습니다. 다음에 또 오고 싶어요!",
+                content = "전체적으로 좋은 경험이었습니다. 다음에 또 오고 싶어요! 요요요요요요요요요요요요요요요요요요",
                 images = listOf(
                     BlockReviewResponse.ReviewResponse.ReviewImageResponse(
                         id = 1,
