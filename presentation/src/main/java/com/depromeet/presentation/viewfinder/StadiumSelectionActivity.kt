@@ -13,6 +13,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumSelectionBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.util.SpannableStringUtils
 import com.depromeet.presentation.viewfinder.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.viewfinder.adapter.StadiumSelectionAdapter
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumSelectionViewModel
@@ -41,6 +42,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
 
     private fun initView() {
         viewModel.getStadiums()
+        setTextTitleColor()
         configureRecyclerViewAdapter()
     }
 
@@ -60,6 +62,15 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
                 }
             }
         }
+    }
+
+    private fun setTextTitleColor() {
+        binding.tvTitle.text = SpannableStringUtils(this).toColorSpan(
+            color = com.depromeet.designsystem.R.color.color_stroke_positive_primary,
+            text = binding.tvTitle.text,
+            start = 0,
+            end = 6
+        )
     }
 
     private fun configureRecyclerViewAdapter() {
