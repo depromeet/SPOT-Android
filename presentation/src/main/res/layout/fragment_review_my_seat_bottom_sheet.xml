@@ -22,11 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="내 시야 후기"
-        android:textColor="#121212"
-        android:textFontWeight="700"
-        android:textSize="16sp"
-        android:textStyle="normal"
+        android:fontFamily="@font/font_pretendard_semibold"
+        android:text="시야 후기"
+        android:textAppearance="@style/TextAppearance.Spot.Label05"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view_handler" />
@@ -50,18 +48,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="이런 점이 좋아요"
-                    android:textColor="#606060"
-                    android:textFontWeight="700"
-                    android:textStyle="normal" />
+                    android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                    android:textColor="@color/color_foreground_heading" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="최대 3개 선택"
-                    android:textColor="#AFAFAF"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:text="최대"
+                    android:fontFamily="@font/font_pretendard_medium"
+                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                    android:textColor="@color/color_foreground_caption" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="3"
+                    android:fontFamily="@font/font_pretendard_medium"
+                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                    android:textColor="@color/color_action_enabled" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="개 선택"
+                    android:fontFamily="@font/font_pretendard_medium"
+                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                    android:textColor="@color/color_foreground_caption" />
             </LinearLayout>
 
             <LinearLayout
@@ -74,26 +89,26 @@
                     android:id="@+id/tv_good_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
-                    android:text="🍃 선선한 그늘존"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:fontFamily="@font/font_pretendard_regular"
+                    android:text="💺️ 충분한 다리 공간"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
 
                 <TextView
                     android:id="@+id/tv_good_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
+                    android:fontFamily="@font/font_pretendard_regular"
                     android:paddingVertical="10dp"
-                    android:text="🏟️ 좋은 시야각"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:text="🔥 생생한 응원 열기"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
             </LinearLayout>
 
             <LinearLayout
@@ -106,26 +121,26 @@
                     android:id="@+id/tv_good_three"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
-                    android:text="🔥 생생한 응원열기"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:fontFamily="@font/font_pretendard_regular"
+                    android:text="🏟️ 좋은 시야각"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
 
                 <TextView
                     android:id="@+id/tv_good_four"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
+                    android:text="🍃 선선한 그늘존"
+                    android:fontFamily="@font/font_pretendard_regular"
                     android:paddingVertical="10dp"
-                    android:text="🚶 가까운 출입구"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
             </LinearLayout>
 
             <LinearLayout
@@ -138,14 +153,13 @@
                     android:id="@+id/tv_good_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_good_review"
+                    android:text="🚶 가까운 출입구"
+                    android:fontFamily="@font/font_pretendard_regular"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
-                    android:text="💺️ 충분한 다리 공간"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
             </LinearLayout>
 
             <LinearLayout
@@ -157,19 +171,33 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이런 점이 아쉬워요"
-                    android:textColor="#606060"
-                    android:textFontWeight="700"
-                    android:textStyle="normal" />
+                    android:text="이런 점은 아쉬워요"
+                    android:fontFamily="@font/font_pretendard_semibold"
+                    android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                    android:textColor="@color/color_foreground_heading" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="최대 3개 선택"
-                    android:textColor="#AFAFAF"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:text="최대"
+                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                    android:textColor="@color/color_foreground_caption" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="3"
+                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                    android:textColor="@color/color_action_enabled" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="개 선택"
+                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                    android:textColor="@color/color_foreground_caption" />
             </LinearLayout>
 
             <LinearLayout
@@ -182,26 +210,24 @@
                     android:id="@+id/tv_bad_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
                     android:text="🌞 온종일 햇빛존"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
 
                 <TextView
                     android:id="@+id/tv_bad_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:text="🤢 벌레가 많은 자리"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:textColor="@color/color_foreground_body_subtitle" />
             </LinearLayout>
 
             <LinearLayout
@@ -214,26 +240,24 @@
                     android:id="@+id/tv_bad_three"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
-                    android:text="🥤 컵홀더가 없는 자리"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:text="🥅 신경쓰이는 그물망"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
 
                 <TextView
                     android:id="@+id/tv_bad_four"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
-                    android:text="🥅 신경쓰이는 그물망"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:text="🥲 시야방해 기둥"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
             </LinearLayout>
 
             <LinearLayout
@@ -246,26 +270,24 @@
                     android:id="@+id/tv_bad_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
-                    android:text="🥲 너무 먼 시야"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:text="🥤 컵홀더가 없는 자리"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_body_subtitle" />
 
                 <TextView
                     android:id="@+id/tv_bad_six"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/sel_review_color_seat_review"
+                    android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:text="📢시끄러운 스피커"
-                    android:textColor="#121212"
-                    android:textFontWeight="500"
-                    android:textStyle="normal" />
+                    android:textColor="@color/color_foreground_body_subtitle" />
             </LinearLayout>
         </LinearLayout>
 
@@ -280,24 +302,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_my_seat_review">
 
-        <TextView
-            android:id="@+id/tv_write_detail_review"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="더 자세한 후기를 남길래요!"
-            android:textColor="#121212"
-            android:textFontWeight="700"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageButton
             android:id="@+id/btn_detail_check"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/sel_review_check_write"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_write_detail_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="더 자세한 후기를 남길래요!"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.Spot.Subtitle04"
+            android:textColor="#222222"
+            android:textSize="14sp"
+            android:lineHeight="145sp"
+            android:fontFamily="@font/font_pretendard_semibold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_detail_check"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
