@@ -31,17 +31,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_x_close"
+        android:src="@drawable/ic_chevron_left"
         app:layout_constraintStart_toEndOf="@id/gl_start"
         app:layout_constraintTop_toBottomOf="@id/gl_top"
         tools:ignore="contentDescription" />
 
     <TextView
+        style="@style/TextAppearance.Spot.Label03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/profile_edit_title"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/color_foreground_heading"
         app:layout_constraintBottom_toBottomOf="@id/ib_profile_edit_close"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
         app:layout_constraintStart_toStartOf="@id/gl_start"
@@ -49,11 +49,11 @@
 
     <TextView
         android:id="@+id/tv_profile_edit_complete"
+        style="@style/TextAppearance.Spot.Label06"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/profile_edit_complete"
-        android:textColor="@drawable/sel_home_text_complete"
-        android:textSize="14sp"
+        android:textColor="@color/color_action_enabled"
         app:layout_constraintBottom_toBottomOf="@id/ib_profile_edit_close"
         app:layout_constraintEnd_toStartOf="@id/gl_end"
         app:layout_constraintTop_toTopOf="@id/ib_profile_edit_close" />
@@ -88,7 +88,7 @@
                 android:id="@+id/ib_profile_edit_camera"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:background="@drawable/circle_0c0c0c_fill"
+                android:background="@drawable/circle_spot_green_fill"
                 android:src="@drawable/ic_camera_14"
                 app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_image"
                 app:layout_constraintEnd_toEndOf="@id/iv_profile_edit_image"
@@ -96,25 +96,26 @@
 
             <TextView
                 android:id="@+id/tv_profile_edit_nickname"
+                style="@style/TextAppearance.Spot.Subtitle04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
                 android:text="@string/profile_edit_nickname"
-                android:textColor="#9F9F9F"
-                android:textStyle="bold"
+                android:textColor="@color/color_foreground_body_sebtext"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_image" />
 
             <EditText
                 android:id="@+id/et_profile_edit_nickname"
+                style="@style/TextAppearance.Spot.Label03"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/rect_gray100_line_6"
+                android:background="@drawable/rect_background_secondary_fill_8"
                 android:inputType="text"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="15dp"
-                android:textSize="15sp"
+                android:textColor="@color/color_foreground_heading"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_nickname"
@@ -122,13 +123,13 @@
 
             <TextView
                 android:id="@+id/tv_profile_edit_nickname_error"
+                style="@style/TextAppearance.Spot.Label12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/warning_red01"
-                android:textColor="@color/warning_red01"
-                android:textSize="11sp"
+                android:textColor="@color/color_error_primary"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_warning"
                 app:layout_constraintStart_toStartOf="parent"
@@ -139,12 +140,12 @@
 
             <TextView
                 android:id="@+id/tv_profile_edit_team"
+                style="@style/TextAppearance.Spot.Subtitle04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
                 android:text="@string/profile_edit_cheer_team"
-                android:textColor="#9F9F9F"
-                android:textStyle="bold"
+                android:textColor="@color/color_foreground_body_sebtext"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_profile_edit_nickname" />
 
@@ -162,14 +163,16 @@
 
             <TextView
                 android:id="@+id/tv_profile_edit_no_team"
+                style="@style/TextAppearance.Spot.Label06"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="50dp"
-                android:background="@drawable/rect_gray100_line_10"
+                android:background="@drawable/rect_background_tertiary_fill_8"
                 android:gravity="center"
                 android:paddingVertical="24dp"
-                android:text="@string/profile_edit_cheer_none"
+                android:text="@string/profile_edit_cheer_all"
+                android:textColor="@color/color_foreground_heading"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

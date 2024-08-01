@@ -233,7 +233,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun updateCompletionStatus(isError: Boolean, error: String) = if (isError) {
         with(binding) {
-            etProfileEditNickname.setBackgroundResource(R.drawable.rect_warning01red_line_6)
+            etProfileEditNickname.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_error_primary_stroke_6)
             tvProfileEditNicknameError.visibility = VISIBLE
             tvProfileEditNicknameError.text = error
         }

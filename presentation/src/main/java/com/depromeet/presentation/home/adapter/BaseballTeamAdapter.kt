@@ -59,8 +59,8 @@ class ProfileEditTeamViewHolder(
 
     private fun updateSelectState(isSelected: Boolean) {
         val backgroundRes = when (isSelected) {
-            true -> R.drawable.rect_gray50_fill_gray900_line_10
-            false -> R.drawable.rect_gray100_line_10
+            true -> com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8
+            false -> com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8
         }
         binding.root.setBackgroundResource(backgroundRes)
     }
