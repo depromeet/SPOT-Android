@@ -23,7 +23,8 @@ fun StadiumsResponseDto.HomeTeamsResponseDto.toHomeTeamsResponse() =
     StadiumsResponse.HomeTeamsResponse(
         id = id,
         alias = alias,
-        color = color
+        backgroundColor = backgroundColor,
+        fontColor = fontColor
     )
 
 

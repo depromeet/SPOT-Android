@@ -10,6 +10,7 @@ data class StadiumsResponse(
     data class HomeTeamsResponse(
         val id: Int,
         val alias: String = "",
-        val color: String = "",
+        val backgroundColor: String = "",
+        val fontColor: String = ""
     )
 }

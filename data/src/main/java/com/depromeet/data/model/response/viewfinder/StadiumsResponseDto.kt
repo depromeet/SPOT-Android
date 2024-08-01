@@ -22,8 +22,10 @@ data class StadiumsResponseDto(
         val id: Int,
         @SerialName("alias")
         val alias: String,
-        @SerialName("color")
-        val color: String,
+        @SerialName("backgroundColor")
+        val backgroundColor: String,
+        @SerialName("fontColor")
+        val fontColor: String,
     )
 }
 
