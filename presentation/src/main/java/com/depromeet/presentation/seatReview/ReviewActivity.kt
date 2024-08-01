@@ -230,7 +230,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             if (selectedImageUris.size == MAX_SELECTED_IMAGES) {
                 svAddImage.post { svAddImage.fullScroll(View.FOCUS_RIGHT) }
             }
-            btnAddImage.isVisible = selectedImageUris.size < selectedImage.size
+            layoutAddImageButton.isVisible = selectedImageUris.size < selectedImage.size
             tvImageCount.text = selectedImageUris.size.toString()
         }
     }
@@ -249,7 +249,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             if (isEnabled) {
                 setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             } else {
-                setBackgroundResource( R.drawable.rect_action_disabled_fill_8)
+                setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
             }
         }
     }
