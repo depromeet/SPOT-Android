@@ -29,6 +29,7 @@ import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -144,16 +145,15 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeEvents() {
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
-            if (state == EditUi.SEAT_DETAIL) {
+            if (state == EditUi.SEAT_RECORD) {
+                Timber.d("test seatdetail")
                 moveConfirmationDialog()
-                viewModel.setDeleteEvent(EditUi.NONE)
             }
         }
 
         viewModel.editClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
                 moveEditReview()
-                viewModel.setDeleteEvent(EditUi.NONE)
             }
         }
     }
@@ -256,7 +256,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             object : MonthRecordAdapter.OnItemRecordClickListener {
 
                 override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
-
+                    viewModel.setClickedReviewId(item.id)
                     supportFragmentManager.commit {
                         replace(
                             R.id.fcv_record,

@@ -42,6 +42,9 @@ class SeatRecordViewModel @Inject constructor(
     private val _editReviewId = MutableStateFlow(0)
     val editReviewId = _editReviewId.asStateFlow()
 
+    private val _clickedReviewId  = MutableStateFlow(0)
+    val clickedReviewId = _clickedReviewId.asStateFlow()
+
     fun getReviewDate() {
         viewModelScope.launch {
             homeRepository.getReviewDate()
@@ -111,6 +114,10 @@ class SeatRecordViewModel @Inject constructor(
 
     fun setDeleteEvent(editUi: EditUi) {
         _deleteClickedEvent.value = editUi
+    }
+
+    fun setClickedReviewId(id : Int){
+        _clickedReviewId.value = id
     }
 
     fun cancelDeleteEvent() {

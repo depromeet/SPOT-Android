@@ -20,7 +20,7 @@ import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.util.applyBoldSpan
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
-class TestDetailRecordAdapter(
+class DetailRecordAdapter(
     private val myProfile: MySeatRecordResponse.MyProfileResponse,
 ) :
     ListAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
@@ -76,7 +76,11 @@ class ReviewDetailViewHolder(
             tvDetailStadium.text = item.stadiumName
             "${item.sectionName} ${item.blockName}블록".also { tvDetailBlock.text = it }
             tvDetailDate.text = CalendarUtil.getFormattedDate(item.date)
-            tvDetailContent.text = item.content
+            if (item.content.isBlank()) {
+                tvDetailContent.visibility = GONE
+            } else {
+                tvDetailContent.text = item.content
+            }
             initImageViewPager(item.images.map { it.url })
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)

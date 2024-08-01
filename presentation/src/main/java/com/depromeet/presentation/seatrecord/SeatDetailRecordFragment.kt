@@ -9,10 +9,11 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
-import com.depromeet.presentation.seatrecord.adapter.TestDetailRecordAdapter
+import com.depromeet.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding>(
@@ -24,7 +25,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
-    private lateinit var testDetailRecordAdapter: TestDetailRecordAdapter
+    private lateinit var detailRecordAdapter: DetailRecordAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,34 +54,38 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     private fun initObserver() {
         viewModel.reviews.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state is UiState.Success) {
-                testDetailRecordAdapter.submitList(state.data.reviews)
+                detailRecordAdapter.submitList(state.data.reviews)
             }
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {
+                Timber.d("test")
                 moveConfirmationDialog()
-                viewModel.setDeleteEvent(EditUi.NONE)
             }
         }
 
         viewModel.editClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state == EditUi.SEAT_RECORD) {
+            if (state == EditUi.SEAT_DETAIL) {
                 moveEditReview()
-                viewModel.setDeleteEvent(EditUi.NONE)
             }
         }
     }
 
     private fun setDetailRecordAdapter() {
-        testDetailRecordAdapter = TestDetailRecordAdapter(
+        detailRecordAdapter = DetailRecordAdapter(
             (viewModel.reviews.value as UiState.Success).data.profile
         )
 
-        binding.rvDetailRecord.adapter = testDetailRecordAdapter
+        binding.rvDetailRecord.adapter = detailRecordAdapter
 
-        testDetailRecordAdapter.itemMoreClickListener =
-            object : TestDetailRecordAdapter.OnDetailItemClickListener {
+        val position =
+            (viewModel.reviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+        binding.rvDetailRecord.scrollToPosition(position)
+
+
+        detailRecordAdapter.itemMoreClickListener =
+            object : DetailRecordAdapter.OnDetailItemClickListener {
                 override fun onItemMoreClickListener(item: MySeatRecordResponse.ReviewResponse) {
                     viewModel.setEditReviewId(item.id)
                     RecordEditDialog.newInstance(SEAT_RECORD_TAG)

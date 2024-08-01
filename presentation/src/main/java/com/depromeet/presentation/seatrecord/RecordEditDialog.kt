@@ -30,7 +30,7 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
     }
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
-    private lateinit var ui : EditUi
+    private lateinit var ui: EditUi
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +42,9 @@ class RecordEditDialog : BindingBottomSheetDialog<FragmentRecordEditBottomSheetB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ui = if(parentFragment != null){
+        ui = if (parentFragment != null) {
             EditUi.SEAT_DETAIL
-        }else{
+        } else {
             EditUi.SEAT_RECORD
         }
 
