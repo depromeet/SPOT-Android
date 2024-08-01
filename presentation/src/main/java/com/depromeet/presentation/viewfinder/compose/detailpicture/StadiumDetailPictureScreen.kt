@@ -1,6 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -62,6 +63,7 @@ fun StadiumDetailPictureScreen(
 
                 LaunchedEffect(key1 = pagerState) {
                     snapshotFlow { pagerState.currentPage }.collect {
+                        Log.e("aaa", "main collect page : ${it}")
                         isMore = false
                         isDimmed = false
                         if (visited[it]) return@collect

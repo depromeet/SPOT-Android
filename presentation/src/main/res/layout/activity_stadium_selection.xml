@@ -85,6 +85,17 @@
                 tools:itemCount="2"
                 tools:listitem="@layout/item_stadium_selection" />
 
+            <include
+                android:id="@+id/layout_error_screen"
+                layout="@layout/layout_error_screen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

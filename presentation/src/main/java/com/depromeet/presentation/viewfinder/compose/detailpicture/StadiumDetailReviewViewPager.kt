@@ -84,6 +84,10 @@ fun StadiumDetailReviewViewPager(
             mutableStateOf(false)
         }
 
+        var isDimmed by remember {
+            mutableStateOf(false)
+        }
+
         val verticalPagerState = rememberPagerState(
             pageCount = { reviews[page].images.size },
             initialPage = position
@@ -130,7 +134,8 @@ fun StadiumDetailReviewViewPager(
                         enabled = isDimmed,
                         onClick = {
                             if (isDimmed) {
-                                onChangeIsDimmed(false)
+//                                onChangeIsDimmed(false)
+                                isDimmed = false
                                 onChangeIsMore(false)
                                 showMoreButtonState = false
                             }
@@ -215,7 +220,8 @@ fun StadiumDetailReviewViewPager(
                             modifier = Modifier.clickable {
                                 showMoreButtonState = false
                                 onChangeIsMore(true)
-                                onChangeIsDimmed(true)
+//                                onChangeIsDimmed(true)
+                                isDimmed = true
                             }
                         )
                     }
@@ -232,7 +238,8 @@ fun StadiumDetailReviewViewPager(
                     onActionCallback = {
                         showMoreButtonState = false
                         onChangeIsMore(true)
-                        onChangeIsDimmed(true)
+//                        onChangeIsDimmed(true)
+                        isDimmed = false
                     }
                 )
             }

@@ -96,5 +96,9 @@
     <string name="six_level_to_title">전설의 직관러</string>
     <string name="unknown_level_to_title">알 수 없음</string>
 
+    <!-- Error -->
+    <string name="error_reload">새로고침</string>
+    <string name="error_server_content_title">정보를 불러올 수 없습니다.</string>
+    <string name="error_server_content_description">새로고침하여 다시 시도해 주세요!</string>
 
 </resources>

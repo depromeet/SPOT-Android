@@ -23,18 +23,8 @@ data class StadiumsResponseDto(
         @SerialName("alias")
         val alias: String,
         @SerialName("color")
-        val color: ColorResponseDto,
-    ) {
-        @Serializable
-        data class ColorResponseDto(
-            @SerialName("red")
-            val red: Int,
-            @SerialName("green")
-            val green: Int,
-            @SerialName("blue")
-            val blue: Int,
-        )
-    }
+        val color: String,
+    )
 }
 
 

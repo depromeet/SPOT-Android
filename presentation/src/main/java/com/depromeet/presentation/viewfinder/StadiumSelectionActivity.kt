@@ -2,6 +2,7 @@ package com.depromeet.presentation.viewfinder
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -50,15 +51,19 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     private fun initEvent() {
         onClickStadium()
         onClickClose()
+        onClickReload()
     }
 
     private fun observeData() {
         viewModel.stadiums.asLiveData().observe(this) { uiState ->
             when (uiState) {
                 is UiState.Empty -> Unit
-                is UiState.Failure -> toast(uiState.msg)
+                is UiState.Failure -> {
+                    binding.layoutErrorScreen.root.visibility = View.VISIBLE
+                }
                 is UiState.Loading -> Unit
                 is UiState.Success -> {
+                    binding.layoutErrorScreen.root.visibility = View.INVISIBLE
                     stadiumSelectionAdapter.submitList(uiState.data)
                 }
             }
@@ -110,6 +115,12 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     private fun onClickClose() {
         binding.ivClose.setOnClickListener {
             startToHomeActivity()
+        }
+    }
+
+    private fun onClickReload() {
+        binding.layoutErrorScreen.btnReload.setOnClickListener {
+            viewModel.getStadiums()
         }
     }
 
