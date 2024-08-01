@@ -75,7 +75,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.reviewCount.asLiveData().observe(this) { count ->
-            binding.tvMySeatReviewCount.text = count.toString()
+            binding.tvMySeatReviewCount.text = "${count}개"
             binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
         }
 
@@ -247,11 +247,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 isSelectedDateFilled && isSelectedImageFilled && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
                 isSelectedBlockFilled && isSelectedNumberFilled
             if (isEnabled) {
-                setBackgroundResource(R.drawable.rect_gray900_fill_6)
-                setTextColor(ContextCompat.getColor(this@ReviewActivity, android.R.color.white))
+                setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             } else {
-                setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                setTextColor(ContextCompat.getColor(this@ReviewActivity, R.color.white))
+                setBackgroundResource( R.drawable.rect_action_disabled_fill_8)
             }
         }
     }
@@ -350,4 +348,3 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 }
-
