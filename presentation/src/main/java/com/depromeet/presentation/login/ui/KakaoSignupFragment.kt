@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.viewpager2.widget.ViewPager2
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentKakaoSignupBinding
@@ -33,8 +34,20 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
         initClickListeners()
         initObservers()
+    }
+
+    private fun initView() {
+        val texts = listOf(
+            "첫 번째 화면",
+            "두 번째 화면",
+            "세 번째 화면"
+        )
+        binding.vpSignupIntroduce.adapter = SignupViewPagerAdapter(texts)
+        binding.vpSignupIntroduce.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        binding.ciSignupIntroduceIndicator.setViewPager(binding.vpSignupIntroduce)
     }
 
     private fun initClickListeners() {
