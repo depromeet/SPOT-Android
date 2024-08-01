@@ -13,6 +13,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumSelectionBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.util.SpannableStringUtils
 import com.depromeet.presentation.viewfinder.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.viewfinder.adapter.StadiumSelectionAdapter
@@ -108,7 +109,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
 
     private fun onClickClose() {
         binding.ivClose.setOnClickListener {
-            // go to main activity
+            startToHomeActivity()
         }
     }
 
@@ -124,5 +125,15 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             }
         }
         startActivity(intent)
+    }
+
+    private fun startToHomeActivity() {
+        Intent(
+            this@StadiumSelectionActivity,
+            HomeActivity::class.java
+        ).apply {
+            startActivity(this)
+            finishAffinity()
+        }
     }
 }

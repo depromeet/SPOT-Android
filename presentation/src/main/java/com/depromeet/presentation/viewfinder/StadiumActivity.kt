@@ -23,6 +23,7 @@ import com.depromeet.designsystem.SpotTeamLabel
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.util.SpannableStringUtils
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumViewModel
 import com.depromeet.presentation.viewfinder.web.AndroidBridge
@@ -167,7 +168,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun onClickClose() {
         binding.spotAppbar.setMenuOnClickListener {
-            // go to main activity
+            startToHomeActivity()
         }
 
         binding.ivClose.setOnClickListener {
@@ -199,6 +200,16 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             clearHistory()
             removeAllViews()
             destroy()
+        }
+    }
+
+    private fun startToHomeActivity() {
+        Intent(
+            this,
+            HomeActivity::class.java
+        ).apply {
+            startActivity(this)
+            finishAffinity()
         }
     }
 }

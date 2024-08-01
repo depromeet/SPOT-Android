@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -13,6 +14,7 @@ import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
+import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
@@ -86,7 +88,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
 
         binding.spotAppbar.setMenuOnClickListener {
-            // go to home
+            startToHomeActivity()
         }
 
         binding.btnUp.setOnClickListener {
@@ -130,5 +132,15 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 
     private fun startToBottomSheetDialog(dialogInstance: DialogFragment, tag: String) {
         dialogInstance.show(supportFragmentManager, tag)
+    }
+
+    private fun startToHomeActivity() {
+        Intent(
+            this,
+            HomeActivity::class.java
+        ).apply {
+            startActivity(this)
+            finishAffinity()
+        }
     }
 }
