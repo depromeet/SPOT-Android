@@ -138,6 +138,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
             val fragment = UploadErrorDialog(
                 getString(R.string.upload_error_capacity_description),
                 getString(R.string.upload_error_capacity_15MB),
+                getString(R.string.upload_error_discipline),
             )
             fragment.show(parentFragmentManager, fragment.tag)
             false
