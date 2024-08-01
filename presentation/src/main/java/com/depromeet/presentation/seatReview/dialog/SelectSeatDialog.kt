@@ -100,10 +100,29 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         with(binding) {
             layoutSeatAgain.setOnSingleClickListener {
                 ivSeatAgain.isVisible = !ivSeatAgain.isVisible
-                if (ivSeatAgain.isVisible) { binding.ivChevronDown.setImageDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.ic_chevron_up)) } else { binding.ivChevronDown.setImageDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.ic_chevron_down)) }
+                if (ivSeatAgain.isVisible) {
+                    binding.ivChevronDown.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            binding.root.context,
+                            R.drawable.ic_chevron_up,
+                        ),
+                    )
+                } else {
+                    binding.ivChevronDown.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            binding.root.context,
+                            R.drawable.ic_chevron_down,
+                        ),
+                    )
+                }
             }
             layoutColumnNumberDescription.setOnSingleClickListener {
                 layoutColumnDescription.isGone = !layoutColumnDescription.isGone
+                if (layoutColumnDescription.isGone) {
+                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
+                } else {
+                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
+                }
             }
             tvWhatColumn.setOnSingleClickListener {
                 layoutColumnDescription.visibility = VISIBLE
@@ -115,8 +134,18 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 tvSelectNumberLine.visibility = VISIBLE
                 tvCompleteBtn.visibility = VISIBLE
                 tvNextBtn.visibility = GONE
-                tvSelectZone.setTextColor(ContextCompat.getColor(binding.root.context, com.depromeet.designsystem.R.color.color_foreground_caption))
-                tvSelectNumber.setTextColor(ContextCompat.getColor(binding.root.context, com.depromeet.designsystem.R.color.color_foreground_heading))
+                tvSelectZone.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_caption,
+                    ),
+                )
+                tvSelectNumber.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_heading,
+                    ),
+                )
             }
             tvCompleteBtn.setOnSingleClickListener { dismiss() }
         }
@@ -288,20 +317,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
-        val blockCodes = mutableListOf<String>().apply {
-            add("")
-            addAll(blockItems.map { it.code })
-        }
-
+        val blockCodes = mutableListOf("")
+        blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
-
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
 
         with(binding.spinnerBlock) {
             this.adapter = adapter
-            this.setSelection(0, false)
+            this.setSelection(-1)
 
             this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -310,10 +335,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     position: Int,
                     id: Long,
                 ) {
-                    if (position == 0) {
-                        viewModel.setSelectedBlock("")
-                        viewModel.updateSelectedBlockId(0)
-                    } else {
+                    if (position > 0) {
+                        binding.tvBlockDescription.visibility = INVISIBLE
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)
                         val selectedBlockId = blockCodeToIdMap[selectedBlock] ?: 0
@@ -322,14 +345,26 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             viewModel.selectedStadiumId.value,
                             viewModel.selectedSectionId.value,
                         )
+                    } else {
+                        binding.tvBlockDescription.visibility = VISIBLE
                     }
+                    updateChevronIcon(position)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    viewModel.setSelectedBlock("")
-                    viewModel.updateSelectedBlockId(0)
+                    binding.tvBlockDescription.visibility = VISIBLE
+                    updateChevronIcon(-1)
+                }
+
+                fun updateChevronIcon(position: Int) {
+                    if (position > 0) {
+                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
+                    } else {
+                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
+                    }
                 }
             }
+            binding.tvBlockDescription.visibility = VISIBLE
         }
     }
 }
