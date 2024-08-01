@@ -20,6 +20,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.FabPosition
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.airbnb.lottie.model.content.CircleShape
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.pictures
 import kotlinx.coroutines.flow.collect
@@ -79,7 +81,7 @@ fun StadiumDetailPictureViewPager(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
             Modifier
                 .wrapContentHeight()
@@ -87,15 +89,30 @@ fun StadiumDetailPictureViewPager(
             horizontalArrangement = Arrangement.Center
         ) {
             repeat(verticalPagerState.pageCount) { iteration ->
-                val color =
-                    if (verticalPagerState.currentPage == iteration) Color.White else Color.LightGray
-                Box(
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .size(6.dp)
-                )
+                if (verticalPagerState.currentPage == iteration) {
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(
+                                color = SpotTheme.colors.actionEnabled
+                            )
+                            .size(
+                                height = 6.dp,
+                                width = 15.dp
+                            )
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .clip(CircleShape)
+                            .background(
+                                color = SpotTheme.colors.backgroundPrimary
+                            )
+                            .size(6.dp)
+                    )
+                }
             }
         }
     }

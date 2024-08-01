@@ -37,7 +37,7 @@ fun KeywordFlowRow(
     val displayKeywords = if (expanded) {
         keywords
     } else {
-        val maxLines = 2
+        val maxLines = 10
         val overflowIndex = overflowIndex
         val displayedCount = if (overflowIndex != -1) overflowIndex else keywords.size
         keywords.take(displayedCount.coerceAtMost(maxLines * 3)) // 3개씩 2줄까지만 보여줌
@@ -66,7 +66,10 @@ fun KeywordFlowRow(
                             onActionCallback()
                         }
                     }
-                    .padding(7.dp),
+                    .padding(
+                        horizontal = 7.dp,
+                        vertical = 6.dp
+                    ),
             ) {
                 Text(
                     text = stringResource(id = R.string.viewfinder_plus_count, overflowCount),

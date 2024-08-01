@@ -3,12 +3,15 @@ package com.depromeet.presentation.viewfinder
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.material.MaterialTheme
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBinding
 import com.depromeet.presentation.viewfinder.compose.detailpicture.StadiumDetailPictureScreen
+import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,28 +40,30 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initView() {
-        getReviewExtra { reviewId, reviewIndex ->
+        getReviewExtra { reviewId, reviewIndex, title ->
+            binding.spotAppbar.setText(title)
             binding.cvReviewContent.setContent {
-                StadiumDetailPictureScreen(
-                    reviewId = reviewId,
-                    reviewIndex = reviewIndex,
-                    stadiumDetailViewModel = stadiumDetailViewModel,
-                )
+                MaterialTheme {
+                    StadiumDetailPictureScreen(
+                        reviewId = reviewId,
+                        reviewIndex = reviewIndex,
+                        stadiumDetailViewModel = stadiumDetailViewModel,
+                    )
+                }
             }
         }
     }
 
     private fun initEvent() {
         onBackPressed()
-        binding.spotAppbar.setNavigationOnClickListener {
-            removeFragment()
-        }
+        setOnClickSpotAppbar()
     }
 
-    private fun getReviewExtra(callback: (id: Long, index: Int) -> Unit) {
+    private fun getReviewExtra(callback: (id: Long, index: Int, title: String) -> Unit) {
         val reviewId = arguments?.getLong(StadiumDetailActivity.REVIEW_ID) ?: return
         val reviewIndex = arguments?.getInt(StadiumDetailActivity.REVIEW_INDEX) ?: return
-        callback(reviewId, reviewIndex)
+        val title = arguments?.getString(StadiumDetailActivity.REVIEW_TITLE_WITH_STADIUM) ?: return
+        callback(reviewId, reviewIndex, title)
     }
 
     private fun removeFragment() {
@@ -67,6 +72,19 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
             parentFragmentManager.commit {
                 remove(fragment)
             }
+        }
+    }
+
+    private fun startToBottomSheetReportDialog(dialogInstance: DialogFragment, tag: String) {
+        dialogInstance.show(parentFragmentManager, tag)
+    }
+
+    private fun setOnClickSpotAppbar() {
+        binding.spotAppbar.setNavigationOnClickListener {
+            removeFragment()
+        }
+        binding.spotAppbar.setMenuOnClickListener {
+            startToBottomSheetReportDialog(ReportDialog.newInstance(), ReportDialog.TAG)
         }
     }
 

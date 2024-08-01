@@ -58,6 +58,10 @@ class SpotAppbar @JvmOverloads constructor(
         }
     }
 
+    fun setText(text: String) {
+        binding.tvTitle.text = text
+    }
+
     inline fun setNavigationOnClickListener(crossinline onClick: (View) -> Unit) {
         this.onNavigationClickListener = OnClickListener { view -> onClick(view) }
     }
