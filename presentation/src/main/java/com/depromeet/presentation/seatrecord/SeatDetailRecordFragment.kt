@@ -1,6 +1,5 @@
 package com.depromeet.presentation.seatrecord
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -10,7 +9,6 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
-import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.adapter.TestDetailRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.DeleteUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
@@ -43,20 +41,11 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     private fun initEvent() {
         with(binding) {
-            fabDetailUp.setOnClickListener {
-                rvDetailRecord.smoothScrollToPosition(0)
-            }
             detailRecordAppbar.setNavigationOnClickListener {
                 parentFragmentManager.popBackStack()
             }
-            fabDetailPlus.setOnClickListener {
-                Intent(
-                    requireActivity(),
-                    ReviewActivity::class.java
-                ).apply { startActivity(this) }
-            }
             detailRecordAppbar.setMenuOnClickListener {
-                /** 셋팅 이동 **/
+                parentFragmentManager.popBackStack()
             }
         }
     }

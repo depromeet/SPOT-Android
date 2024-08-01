@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatrecord.adapter
 
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -58,7 +59,7 @@ class ReviewDetailViewHolder(
     internal val binding: ItemSeatReviewDetailBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     companion object {
-        private const val MAX_VISIBLE_CHIPS = 3
+        private const val MAX_VISIBLE_CHIPS = Int.MAX_VALUE
     }
 
     fun bind(
@@ -108,10 +109,16 @@ class ReviewDetailViewHolder(
 
     private fun setViewPagerCountText(position: Int) {
         with(binding) {
-            val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
-            tvDetailImageCount.text = SpannableStringBuilder(text).apply {
-                applyBoldSpan(this, 0, (position + 1).toString().length)
+            val itemCount = vpDetailImage.adapter?.itemCount ?: 0
+            if (itemCount <= 1) {
+                tvDetailImageCount.visibility = GONE
+            } else {
+                val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
+                tvDetailImageCount.text = SpannableStringBuilder(text).apply {
+                    applyBoldSpan(this, 0, (position + 1).toString().length)
+                }
             }
+
         }
     }
 
