@@ -56,8 +56,6 @@ import com.depromeet.presentation.viewfinder.compose.LevelCard
 @Composable
 fun StadiumDetailReviewViewPager(
     context: Context,
-    isMore: Boolean,
-    isDimmed: Boolean,
     position: Int,
     pageState: Boolean,
     pagerState: PagerState,
@@ -65,8 +63,6 @@ fun StadiumDetailReviewViewPager(
     visited: List<Boolean>,
     modifier: Modifier = Modifier,
     onLoadPaging: () -> Unit,
-    onChangeIsMore: (isMore: Boolean) -> Unit,
-    onChangeIsDimmed: (isDimmed: Boolean) -> Unit,
 ) {
     val minimumLineLength = 1
 
@@ -85,6 +81,10 @@ fun StadiumDetailReviewViewPager(
         }
 
         var isDimmed by remember {
+            mutableStateOf(false)
+        }
+
+        var isMore by remember {
             mutableStateOf(false)
         }
 
@@ -134,9 +134,8 @@ fun StadiumDetailReviewViewPager(
                         enabled = isDimmed,
                         onClick = {
                             if (isDimmed) {
-//                                onChangeIsDimmed(false)
                                 isDimmed = false
-                                onChangeIsMore(false)
+                                isMore = false
                                 showMoreButtonState = false
                             }
                         }
@@ -219,9 +218,8 @@ fun StadiumDetailReviewViewPager(
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier.clickable {
                                 showMoreButtonState = false
-                                onChangeIsMore(true)
-//                                onChangeIsDimmed(true)
                                 isDimmed = true
+                                isMore = true
                             }
                         )
                     }
@@ -237,9 +235,8 @@ fun StadiumDetailReviewViewPager(
                     isSelfExpanded = false,
                     onActionCallback = {
                         showMoreButtonState = false
-                        onChangeIsMore(true)
-//                        onChangeIsDimmed(true)
-                        isDimmed = false
+                        isDimmed = true
+                        isMore = true
                     }
                 )
             }
@@ -307,10 +304,6 @@ private fun StadiumDetailReviewViewPagerPreview() {
         position = 1,
         pageState = false,
         pagerState = pagerState,
-        isDimmed = false,
-        isMore = false,
-        onChangeIsDimmed = {},
-        onChangeIsMore = {},
         onLoadPaging = {},
     )
 }
@@ -387,10 +380,6 @@ private fun StadiumDetailReviewViewPagerMorePreview() {
         position = 1,
         pageState = false,
         pagerState = pagerState,
-        isDimmed = false,
-        isMore = false,
-        onChangeIsDimmed = {},
-        onChangeIsMore = {},
         onLoadPaging = {},
     )
 }

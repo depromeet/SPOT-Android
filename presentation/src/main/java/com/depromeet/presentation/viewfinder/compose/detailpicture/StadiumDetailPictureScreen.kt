@@ -48,14 +48,6 @@ fun StadiumDetailPictureScreen(
                     mutableStateOf(uiState.reviews.indexOfFirst { it.id == reviewId })
                 }
 
-                var isMore by remember {
-                    mutableStateOf(false)
-                }
-
-                var isDimmed by remember {
-                    mutableStateOf(false)
-                }
-
                 val pagerState = rememberPagerState(
                     pageCount = { uiState.reviews.size },
                     initialPage = initPage
@@ -63,9 +55,6 @@ fun StadiumDetailPictureScreen(
 
                 LaunchedEffect(key1 = pagerState) {
                     snapshotFlow { pagerState.currentPage }.collect {
-                        Log.e("aaa", "main collect page : ${it}")
-                        isMore = false
-                        isDimmed = false
                         if (visited[it]) return@collect
 
                         if (it == initPage) {
@@ -86,14 +75,6 @@ fun StadiumDetailPictureScreen(
                     pageState = uiState.pageState,
                     pagerState = pagerState,
                     modifier = modifier,
-                    isDimmed = isDimmed,
-                    isMore = isMore,
-                    onChangeIsDimmed = {
-                        isDimmed = it
-                    },
-                    onChangeIsMore = {
-                        isMore = it
-                    },
                     onLoadPaging = {
                         stadiumDetailViewModel.updateQueryPage { query ->
                             stadiumDetailViewModel.getBlockReviews(query = query)
