@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
-import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
@@ -68,6 +67,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     },
                     onClickGoBack = {
                         finish()
+                    },
+                    onRefresh = {
+                        viewModel.getBlockReviews()
                     }
                 )
             }
@@ -100,6 +102,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         viewModel.detailUiState.asLiveData().observe(this) { uiState ->
             when (uiState) {
                 is StadiumDetailUiState.Empty -> binding.btnUp.visibility = View.GONE
+                is StadiumDetailUiState.Failed -> binding.btnUp.visibility = View.GONE
+                is StadiumDetailUiState.ReviewsData -> binding.btnUp.visibility = View.VISIBLE
                 else -> Unit
             }
         }

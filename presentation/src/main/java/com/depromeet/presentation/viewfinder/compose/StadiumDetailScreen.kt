@@ -38,7 +38,8 @@ fun StadiumDetailScreen(
     onClickSelectSeat: () -> Unit,
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit,
-    onClickGoBack: () -> Unit
+    onClickGoBack: () -> Unit,
+    onRefresh: () -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
     val verticalScrollState = rememberLazyListState()
@@ -65,7 +66,11 @@ fun StadiumDetailScreen(
                 )
             }
 
-            is StadiumDetailUiState.Failed -> Unit
+            is StadiumDetailUiState.Failed -> {
+                ErrorScreen(
+                    onRefresh = onRefresh
+                )
+            }
             is StadiumDetailUiState.Loading -> Unit
             is StadiumDetailUiState.ReviewsData -> {
                 LazyColumn(
@@ -144,7 +149,8 @@ private fun StadiumDetailScreenPreview() {
             onClickSelectSeat = {},
             onClickFilterMonthly = {},
             onClickReport = {},
-            onClickGoBack = {}
+            onClickGoBack = {},
+            onRefresh = {}
         )
     }
 }
