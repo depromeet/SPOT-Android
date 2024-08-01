@@ -5,18 +5,23 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import com.depromeet.presentation.R
 
-class CustomSpeechBubbleView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
+class CustomSpeechBubbleView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyleAttr: Int = 0,
+) : View(context, attrs, defStyleAttr) {
 
     private val bubblePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val bubblePath: Path = Path()
     private val bubbleRect: RectF = RectF()
-    private val typedArray =
-        context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView)
+
     private var text: String = ""
     private var textSize: Float = 0f
     private var textColor: Int = 0
@@ -28,57 +33,74 @@ class CustomSpeechBubbleView(context: Context, attrs: AttributeSet?) : View(cont
     private var triangleHeight = 0f
     private var triangleWidth = 0f
     private var cornerRadius = 0f
+    private var textStyle: Int = 0
 
     init {
-        backgroundColor = typedArray.getColor(
-            R.styleable.CustomSpeechBubbleView_backgroundColor,
-            context.getColor(R.color.black)
-        )
-        textColor = typedArray.getColor(
-            R.styleable.CustomSpeechBubbleView_textColor,
-            context.getColor(R.color.white)
-        )
-        textSize = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_textSize,
-            resources.getDimension(R.dimen.speech_bubble_text_size)
-        )
-        text = typedArray.getString(R.styleable.CustomSpeechBubbleView_text) ?: ""
-        paddingLeftValue = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_paddingLeft,
-            resources.getDimension(R.dimen.speech_bubble_padding_left)
-        )
-        paddingRightValue = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_paddingRight,
-            resources.getDimension(R.dimen.speech_bubble_padding_right)
-        )
-        paddingTopValue = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_paddingTop,
-            resources.getDimension(R.dimen.speech_bubble_padding_top)
-        )
-        paddingBottomValue = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_paddingBottom,
-            resources.getDimension(R.dimen.speech_bubble_padding_bottom)
-        )
-        triangleHeight = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_triangleHeight,
-            resources.getDimension(R.dimen.speech_bubble_triangle_height)
-        )
-        triangleWidth = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_triangleWidth,
-            resources.getDimension(R.dimen.speech_bubble_triangle_width)
-        )
-        cornerRadius = typedArray.getDimension(
-            R.styleable.CustomSpeechBubbleView_cornerRadius,
-            resources.getDimension(R.dimen.speech_bubble_corner_radius)
-        )
-        typedArray.recycle()
+        context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView, defStyleAttr, 0)
+            .apply {
+                try {
+                    backgroundColor = getColor(
+                        R.styleable.CustomSpeechBubbleView_backgroundColor,
+                        context.getColor(R.color.black)
+                    )
+                    textColor = getColor(
+                        R.styleable.CustomSpeechBubbleView_textColor,
+                        context.getColor(R.color.white)
+                    )
+                    textSize = getDimension(
+                        R.styleable.CustomSpeechBubbleView_textSize,
+                        resources.getDimension(R.dimen.speech_bubble_text_size)
+                    )
+                    text = getString(R.styleable.CustomSpeechBubbleView_text) ?: ""
+                    paddingLeftValue = getDimension(
+                        R.styleable.CustomSpeechBubbleView_paddingLeft,
+                        resources.getDimension(R.dimen.speech_bubble_padding_left)
+                    )
+                    paddingRightValue = getDimension(
+                        R.styleable.CustomSpeechBubbleView_paddingRight,
+                        resources.getDimension(R.dimen.speech_bubble_padding_right)
+                    )
+                    paddingTopValue = getDimension(
+                        R.styleable.CustomSpeechBubbleView_paddingTop,
+                        resources.getDimension(R.dimen.speech_bubble_padding_top)
+                    )
+                    paddingBottomValue = getDimension(
+                        R.styleable.CustomSpeechBubbleView_paddingBottom,
+                        resources.getDimension(R.dimen.speech_bubble_padding_bottom)
+                    )
+                    triangleHeight = getDimension(
+                        R.styleable.CustomSpeechBubbleView_triangleHeight,
+                        resources.getDimension(R.dimen.speech_bubble_triangle_height)
+                    )
+                    triangleWidth = getDimension(
+                        R.styleable.CustomSpeechBubbleView_triangleWidth,
+                        resources.getDimension(R.dimen.speech_bubble_triangle_width)
+                    )
+                    cornerRadius = getDimension(
+                        R.styleable.CustomSpeechBubbleView_cornerRadius,
+                        resources.getDimension(R.dimen.speech_bubble_corner_radius)
+                    )
+                    textStyle =
+                        getInt(R.styleable.CustomSpeechBubbleView_textStyle, Typeface.NORMAL)
+                } finally {
+                    recycle()
+                }
+            }
 
         bubblePaint.color = backgroundColor
         bubblePaint.style = Paint.Style.FILL
         textPaint.color = textColor
         textPaint.textSize = textSize
         textPaint.textAlign = Paint.Align.CENTER
+
+        textPaint.typeface = when (textStyle) {
+            1 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_medium)
+            2 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_semibold)
+            3 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
+            else -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
+        }
     }
+
 
     fun setText(text: String) {
         this.text = text
