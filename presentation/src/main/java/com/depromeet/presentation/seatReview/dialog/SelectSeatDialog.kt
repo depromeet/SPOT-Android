@@ -100,6 +100,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         with(binding) {
             layoutSeatAgain.setOnSingleClickListener {
                 ivSeatAgain.isVisible = !ivSeatAgain.isVisible
+                if (ivSeatAgain.isVisible) { binding.ivChevronDown.setImageDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.ic_chevron_up)) } else { binding.ivChevronDown.setImageDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.ic_chevron_down)) }
             }
             layoutColumnNumberDescription.setOnSingleClickListener {
                 layoutColumnDescription.isGone = !layoutColumnDescription.isGone
@@ -114,6 +115,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 tvSelectNumberLine.visibility = VISIBLE
                 tvCompleteBtn.visibility = VISIBLE
                 tvNextBtn.visibility = GONE
+                tvSelectZone.setTextColor(ContextCompat.getColor(binding.root.context, com.depromeet.designsystem.R.color.color_foreground_caption))
+                tvSelectNumber.setTextColor(ContextCompat.getColor(binding.root.context, com.depromeet.designsystem.R.color.color_foreground_heading))
             }
             tvCompleteBtn.setOnSingleClickListener { dismiss() }
         }
@@ -121,8 +124,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     private fun updateNextBtnState() {
         with(binding.tvNextBtn) {
-            setBackgroundResource(R.drawable.rect_gray900_fill_6)
-            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+            setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             isEnabled = true
         }
     }
@@ -260,13 +262,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
                         tvNoneColumnWarning.visibility = GONE
                         binding.tvCompleteBtn.isEnabled = true
-                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray900_fill_6)
-                        binding.tvCompleteBtn.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                android.R.color.white,
-                            ),
-                        )
+                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
                     }
                 }
             }
