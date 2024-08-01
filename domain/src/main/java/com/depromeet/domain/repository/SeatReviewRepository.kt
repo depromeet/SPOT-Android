@@ -1,6 +1,6 @@
 package com.depromeet.domain.repository
 
-import com.depromeet.domain.entity.request.SeatReviewModel
+import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel

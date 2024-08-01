@@ -1,11 +1,10 @@
 package com.depromeet.presentation.seatReview
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.request.SeatReviewModel
+import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel

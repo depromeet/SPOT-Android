@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -143,7 +142,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 is UiState.Success -> {
                     val firstStadium = state.data.firstOrNull()
                     if (firstStadium != null) {
-                        binding.tvStadiumName.text = firstStadium.name
                         viewModel.getStadiumSection(firstStadium.id)
                         viewModel.updateSelectedStadiumId(firstStadium.id)
                     }
@@ -351,6 +349,5 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             }
         }
     }
-
 }
 

@@ -47,12 +47,11 @@ class SelectSeatAdapter(
             } else {
                 binding.tvSubName.visibility = VISIBLE
                 binding.tvSubName.text = section.alias
-                binding.tvSubName.setBackgroundResource(if (isSelected) { R.drawable.rect_green_fill_40 } else { R.drawable.rect_foreground_caption_fill_40})
+                binding.tvSubName.setBackgroundResource(if (isSelected) { R.drawable.rect_green_fill_40 } else { R.drawable.rect_foreground_caption_fill_40 })
             }
             val shapeDrawable = ShapeDrawable(OvalShape())
             binding.tvSeatColor.background = shapeDrawable
-            shapeDrawable.paint.color =
-                Color.rgb(section.color.red, section.color.green, section.color.blue)
+            shapeDrawable.paint.color = Color.parseColor(section.color)
             binding.layoutSelectSeat.setBackgroundResource(if (isSelected) R.drawable.rect_background_positive_fill_secondary_line_8 else R.drawable.rect_background_tertiary_fill_8)
         }
     }
