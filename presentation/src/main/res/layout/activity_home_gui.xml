@@ -48,32 +48,40 @@
         app:tint="@color/color_foreground_body_sebtext"
         tools:ignore="ContentDescription" />
 
-    <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
-        android:id="@+id/csbv_home_title"
-        style="@style/TextAppearance.Spot.Caption04"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:elevation="4dp"
-        app:backgroundColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@id/gl_end"
-        app:layout_constraintTop_toBottomOf="@id/iv_home_setting"
-        app:paddingBottom="8dp"
-        app:paddingLeft="10dp"
-        app:paddingRight="10dp"
-        app:paddingTop="8dp"
-        app:text="시야 사진 1장 더 올리면 레벨업!"
-        app:textColor="@color/color_foreground_body_subtitle" />
 
     <ImageView
         android:id="@+id/iv_home_character"
         android:layout_width="185dp"
         android:layout_height="185dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="3.5dp"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toStartOf="@id/gl_end"
-        app:layout_constraintTop_toBottomOf="@id/csbv_home_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/csbv_home_title"
         tools:ignore="ContentDescription"
         tools:src="@drawable/ic_default_profile" />
+
+    <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
+        android:id="@+id/csbv_home_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="5dp"
+        app:backgroundColor="@color/color_background_white"
+        app:layout_constraintEnd_toEndOf="@id/iv_home_character"
+        app:layout_constraintStart_toStartOf="@id/iv_home_character"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_setting"
+        app:paddingBottom="12dp"
+        app:paddingLeft="10dp"
+        app:paddingRight="10dp"
+        app:paddingTop="8dp"
+        app:text="시야 사진 1장 더 올리면 레벨업!"
+        app:textColor="@color/color_foreground_body_subtitle"
+        app:textSize="11sp"
+        app:textStyle="semiBold"
+        app:triangleHeight="4dp"
+        app:triangleWidth="7.5dp" />
+
 
     <TextView
         android:id="@+id/tv_home_level"
@@ -151,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="시야 아카이빙"
+            android:text="@string/home_seat_archiving"
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -162,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="뜨거웠던 야구 직관 기록"
+            android:text="@string/home_seat_archiving_description"
             android:textColor="@color/color_foreground_caption"
             app:layout_constraintStart_toStartOf="@id/tv_archiving_title"
             app:layout_constraintTop_toBottomOf="@id/tv_archiving_title" />
@@ -198,7 +206,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="스크랩"
+            android:text="@string/home_scrap"
             android:textColor="@color/color_foreground_disabled"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -220,7 +228,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="내가 스크랩한 시야 정보"
+            android:text="@string/home_scrap_description"
             android:textColor="@color/color_foreground_disabled"
             app:layout_constraintStart_toStartOf="@id/tv_scrap_title"
             app:layout_constraintTop_toBottomOf="@id/tv_scrap_title" />
@@ -254,7 +262,7 @@
             style="@style/TextAppearance.Spot.Title04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="시야 사진 올리기"
+            android:text="@string/home_upload_review"
             android:textColor="@color/color_foreground_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_home_upload_plus"

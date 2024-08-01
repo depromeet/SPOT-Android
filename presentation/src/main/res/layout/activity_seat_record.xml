@@ -66,6 +66,7 @@
                 android:layout_marginBottom="55dp"
                 android:elevation="4dp"
                 android:paddingRight="10dp"
+                app:textSize="11sp"
                 app:backgroundColor="@color/color_background_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,6 +74,7 @@
                 app:paddingBottom="8dp"
                 app:paddingLeft="10dp"
                 app:paddingTop="8dp"
+                app:textStyle="medium"
                 app:textColor="@color/color_foreground_body_sebtext"
                 tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
@@ -137,16 +139,6 @@
                 app:layout_constraintTop_toTopOf="@id/tv_record_whole"
                 tools:text="37" />
 
-            <View
-                android:id="@+id/v_record_division"
-                android:layout_width="0dp"
-                android:layout_height="7dp"
-                android:layout_marginTop="32dp"
-                android:background="@color/gray50"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_record_whole" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_record_sticky_header"
                 android:layout_width="0dp"
@@ -156,7 +148,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/v_record_division">
+                app:layout_constraintTop_toBottomOf="@id/tv_record_whole">
 
                 <Spinner
                     android:id="@+id/spinner_record_year"
@@ -207,11 +199,12 @@
                 android:id="@+id/cl_record_none"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@color/color_background_tertiary"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/v_record_division">
+                app:layout_constraintTop_toBottomOf="@id/tv_record_whole">
 
                 <TextView
                     android:id="@+id/tv_record_year"
@@ -241,10 +234,11 @@
 
                 <ImageView
                     android:id="@+id/iv_record_no_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="100dp"
-                    android:src="@drawable/ic_folder_blank"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="50dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_communication_empty"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -252,31 +246,118 @@
 
                 <TextView
                     android:id="@+id/tv_record_no_record_description"
+                    style="@style/TextAppearance.Spot.Title04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:gravity="center"
                     android:text="@string/home_no_record_description"
-                    android:textColor="@color/gray800"
-                    android:textSize="13sp"
+                    android:textColor="@color/color_foreground_heading"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_record_no_record" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_record_write_record"
+                <TextView
+                    android:id="@+id/tv_record_no_record_advice"
+                    style="@style/TextAppearance.Spot.Body02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/rect_gray800_fill_6"
-                    android:paddingHorizontal="23dp"
-                    android:paddingVertical="8dp"
-                    android:text="@string/home_write_record"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/home_no_record_advice"
+                    android:textColor="@color/color_foreground_caption"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_description" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bt_record_write_record"
+                    style="@style/TextAppearance.Spot.Label05"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/rect_background_white_fill_999"
+                    android:drawableEnd="@drawable/layer_list_plus_20"
+                    android:drawablePadding="4dp"
+                    android:drawableTint="@color/color_foreground_disabled"
+                    android:paddingHorizontal="11dp"
+                    android:paddingVertical="11dp"
+                    android:text="@string/home_write_record"
+                    android:textColor="@color/color_foreground_body_subtitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_advice" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_fail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_record_sticky_header">
+
+                <ImageView
+                    android:id="@+id/iv_record_fail"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="50dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_communication_error"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="contentDescription" />
+
+                <TextView
+                    android:id="@+id/tv_record_fail_description"
+                    style="@style/TextAppearance.Spot.Title04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/home_fail_description"
+                    android:textColor="@color/color_foreground_heading"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_record_fail" />
+
+                <TextView
+                    android:id="@+id/tv_record_fail_advice"
+                    style="@style/TextAppearance.Spot.Body02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/home_fail_advice"
+                    android:textColor="@color/color_foreground_caption"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_record_fail_description" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bt_record_fail_resfresh"
+                    style="@style/TextAppearance.Spot.Label05"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/rect_background_white_fill_999"
+                    android:drawableEnd="@drawable/layer_list_refresh_20"
+                    android:drawablePadding="4dp"
+                    android:drawableTint="@color/color_foreground_disabled"
+                    android:paddingHorizontal="11dp"
+                    android:paddingVertical="11dp"
+                    android:text="@string/refresh"
+                    android:textColor="@color/color_foreground_body_subtitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_record_fail_advice" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

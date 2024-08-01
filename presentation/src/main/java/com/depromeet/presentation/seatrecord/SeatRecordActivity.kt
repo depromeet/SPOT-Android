@@ -29,7 +29,6 @@ import com.depromeet.presentation.seatrecord.viewmodel.DeleteUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -73,6 +72,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     )
                 }
             }
+            btRecordFailResfresh.setOnClickListener {
+                viewModel.getSeatRecords()
+            }
         }
     }
 
@@ -102,9 +104,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setReviewsVisibility(isExist = false)
                 }
 
-                is UiState.Loading -> {}
+                is UiState.Loading -> {
+                    setReviewsVisibility(isExist = true)
+                }
+
                 is UiState.Failure -> {
-                    setReviewsVisibility(isExist = false)
+                    setReviewsVisibility(isExist = true)
                 }
 
             }
@@ -117,6 +122,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Success -> {
                     setProfile(state.data.profile)
                     setReviewList(state.data.reviews)
+                    binding.clHomeFail.visibility = GONE
+                    binding.rvRecordMonthDetail.visibility = VISIBLE
                 }
 
                 is UiState.Loading -> {
@@ -128,7 +135,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
-                    Timber.d("test : ${state.msg}")
+                    binding.clHomeFail.visibility = VISIBLE
+                    binding.rvRecordMonthDetail.visibility = GONE
                 }
             }
         }

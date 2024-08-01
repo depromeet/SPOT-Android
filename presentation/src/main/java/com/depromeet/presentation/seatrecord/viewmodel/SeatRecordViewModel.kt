@@ -59,6 +59,8 @@ class SeatRecordViewModel @Inject constructor(
 
     fun getSeatRecords() {
         val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
+        if(selectedYear.value == 0) return
+
         viewModelScope.launch {
             homeRepository.getMySeatRecord(
                 MySeatRecordRequest(
