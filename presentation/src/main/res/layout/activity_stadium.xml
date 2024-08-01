@@ -123,29 +123,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/color_foreground_white" />
 
-        <TextView
-            android:id="@+id/tv_zoom_description_statement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="168dp"
-            android:gravity="center"
-            android:text="@string/viewfinder_zoom_description_statement"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_close" />
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="39dp"
-            android:layout_marginEnd="18dp"
-            android:src="@drawable/ic_pinch_zoom"
-            app:layout_constraintEnd_toEndOf="@id/tv_zoom_description_statement"
-            app:layout_constraintTop_toBottomOf="@id/tv_zoom_description_statement" />
-
+            android:src="@drawable/ic_zoom_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
