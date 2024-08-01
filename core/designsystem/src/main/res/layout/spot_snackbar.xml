@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rect_black_fill_12_alpha_80">
+    android:background="@drawable/rect_transfer_black_03_fill_60">
 
     <TextView
         android:id="@+id/tv_description"
@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:paddingVertical="18dp"
         android:paddingStart="12dp"
-        android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.Spot.Label08"
+        android:textColor="@color/color_foreground_white"
         app:layout_constraintEnd_toStartOf="@id/tv_trigger"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +26,8 @@
         android:layout_height="wrap_content"
         android:paddingVertical="18dp"
         android:paddingEnd="12dp"
-        android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.Spot.Label08"
+        android:textColor="@color/color_foreground_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@id/tv_description"

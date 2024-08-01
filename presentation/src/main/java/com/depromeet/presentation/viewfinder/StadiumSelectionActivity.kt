@@ -52,13 +52,13 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     }
 
     private fun observeData() {
-        viewModel.stadiums.asLiveData().observe(this) { stadiums ->
-            when (stadiums) {
+        viewModel.stadiums.asLiveData().observe(this) { uiState ->
+            when (uiState) {
                 is UiState.Empty -> Unit
-                is UiState.Failure -> toast(stadiums.msg)
+                is UiState.Failure -> toast(uiState.msg)
                 is UiState.Loading -> Unit
                 is UiState.Success -> {
-                    stadiumSelectionAdapter.submitList(stadiums.data)
+                    stadiumSelectionAdapter.submitList(uiState.data)
                 }
             }
         }
