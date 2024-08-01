@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/color_background_tertiary"
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/tv_recent_date_day"
+        style="@style/TextAppearance.Spot.Subtitle02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/gray700"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/color_foreground_body_sebtext"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1" />
@@ -28,67 +29,81 @@
         app:layout_constraintTop_toBottomOf="@id/tv_recent_date_day"
         tools:text="금" />
 
-    <ImageView
-        android:id="@+id/iv_recent_image"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="10dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/rect_no_16"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
+        android:layout_height="match_parent"
+        android:layout_marginStart="13dp"
+        android:background="@drawable/rect_background_white_fill_16"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_recent_date_day"
-        app:layout_constraintTop_toTopOf="@id/tv_recent_date_day"
-        tools:ignore="contentDescription"
-        tools:src="@drawable/ic_stadium_test" />
+        app:layout_constraintStart_toEndOf="@id/tv_recent_day"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/ib_recent_stadium_more"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="24dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_horizontal_dots"
-        android:tint="@color/white"
-        app:layout_constraintEnd_toEndOf="@id/iv_recent_image"
-        app:layout_constraintTop_toTopOf="@id/iv_recent_image" />
 
-    <TextView
-        android:id="@+id/tv_recent_stadium_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tv_recent_blockName"
-        app:layout_constraintStart_toStartOf="@id/tv_recent_blockName"
-        tools:text="서울 잠실 야구장" />
+        <ImageView
+            android:id="@+id/iv_recent_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/rect_no_16"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="contentDescription"
+            tools:src="@drawable/ic_stadium_test" />
 
-    <TextView
-        android:id="@+id/tv_recent_blockName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@id/cv_detail_keyword"
-        app:layout_constraintStart_toStartOf="@id/cv_detail_keyword"
-        tools:text="1루 네이비석 304블록" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_recent_stadium_more"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="24dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_horizontal_dots"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/iv_recent_image"
+            app:layout_constraintTop_toTopOf="@id/iv_recent_image" />
 
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/cv_detail_keyword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="@id/iv_recent_image"
-        app:layout_constraintEnd_toEndOf="@id/iv_recent_image"
-        app:layout_constraintStart_toStartOf="@id/iv_recent_image" />
+        <TextView
+            android:id="@+id/tv_recent_stadium_name"
+            style="@style/TextAppearance.Spot.Subtitle02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintStart_toStartOf="@id/iv_recent_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_recent_image"
+            tools:text="서울 잠실 야구장" />
+
+        <TextView
+            android:id="@+id/tv_recent_blockName"
+            style="@style/TextAppearance.Spot.Body02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/color_foreground_body_sebtext"
+            app:layout_constraintStart_toStartOf="@id/tv_recent_stadium_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_recent_stadium_name"
+            tools:text="1루 네이비석 304블록" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/cv_detail_keyword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_recent_blockName"
+            app:layout_constraintTop_toBottomOf="@id/tv_recent_blockName" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

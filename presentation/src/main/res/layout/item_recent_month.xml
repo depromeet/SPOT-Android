@@ -10,9 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textColor="@color/gray900"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        style="@style/TextAppearance.Spot.Title02"
+        android:textColor="@color/color_foreground_heading"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="9월" />

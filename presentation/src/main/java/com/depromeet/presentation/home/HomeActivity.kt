@@ -174,7 +174,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun updateProfile(profile: ProfileResponse) = with(binding) {
         setSpannableString(viewModel.nickname.value, viewModel.reviewCount.value)
         if (profile.profileImage.isEmpty()) {
-            ivHomeProfile.setImageResource(com.depromeet.presentation.R.drawable.ic_default_profile)
+            ivHomeProfile.setImageResource(com.depromeet.designsystem.R.drawable.ic_default_profile)
         } else {
             ivHomeProfile.load(profile.profileImage) {
                 transformations(CircleCropTransformation())

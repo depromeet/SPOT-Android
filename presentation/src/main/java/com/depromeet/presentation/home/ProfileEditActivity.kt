@@ -159,7 +159,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         viewModel.profileImage.asLiveData().observe(this) { state ->
             with(binding.ivProfileEditImage) {
                 if (state.isEmpty()) {
-                    setImageResource(R.drawable.ic_default_profile)
+                    setImageResource(com.depromeet.designsystem.R.drawable.ic_default_profile)
                 } else {
                     load(state) {
                         transformations(CircleCropTransformation())

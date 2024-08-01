@@ -63,9 +63,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             recordSpotAppbar.setNavigationOnClickListener {
                 finish()
             }
-            recordSpotAppbar.setMenuOnClickListener {
-                //셋팅 이동
-            }
             fabRecordUp.setOnClickListener {
                 ssvRecord.smoothScrollTo(0, 0)
             }
@@ -145,7 +142,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
-            "Lv.${data.level} ${data.levelTitle}".also { tvRecordLevel.text = it }
+            //TODO : 여기 서버 API 바뀌면 "{team}의 ~ lV.{level} {title}" 로 바꿔야함
+            "Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
             tvRecordNickname.text = data.nickname
             tvRecordCount.text = data.reviewCount.toString()
             ivRecordProfile.load(data.profileImage) {
