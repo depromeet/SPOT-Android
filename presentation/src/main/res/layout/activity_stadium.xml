@@ -16,13 +16,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menuIcon="@drawable/ic_x_close"
+        app:menuIcon="@drawable/ic_x_close_big"
         app:menuIconColor="@color/color_foreground_body_sebtext"
-        app:navigationIcon="@drawable/ic_chevron_left"
+        app:menuIconSize="24"
+        app:navigationIcon="@drawable/ic_chevron_left_big"
         app:navigationIconColor="@color/color_foreground_body_sebtext"
+        app:navigationIconSize="24"
         app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_stadium"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -110,14 +112,13 @@
         android:focusableInTouchMode="true"
         android:visibility="visible">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="6dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_x_close"
+            android:src="@drawable/ic_x_close_big"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/color_foreground_white" />

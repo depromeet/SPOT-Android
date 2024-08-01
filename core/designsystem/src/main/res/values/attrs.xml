@@ -7,8 +7,10 @@
         <attr name="titleTextAppearance" format="reference"/>
         <attr name="navigationIcon" format="reference"/>
         <attr name="navigationIconColor" format="color"/>
+        <attr name="navigationIconSize" format="integer"/>
         <attr name="menuIcon" format="reference"/>
         <attr name="menuIconColor" format="color"/>
+        <attr name="menuIconSize" format="integer"/>
         <attr name="android:background" format="color"/>
     </declare-styleable>
 </resources>
