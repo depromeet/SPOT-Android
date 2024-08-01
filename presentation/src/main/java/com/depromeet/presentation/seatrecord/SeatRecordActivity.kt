@@ -111,6 +111,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
                 is UiState.Failure -> {
                     setReviewsVisibility(isExist = true)
+                    binding.clHomeFail.visibility = VISIBLE
+                    binding.rvRecordMonthDetail.visibility = GONE
                 }
 
             }
@@ -136,8 +138,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
-                    binding.clHomeFail.visibility = VISIBLE
-                    binding.rvRecordMonthDetail.visibility = GONE
+
                 }
             }
         }
@@ -146,7 +147,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun observeEvents() {
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
-                Timber.d("test seatdetail")
                 moveConfirmationDialog()
             }
         }
