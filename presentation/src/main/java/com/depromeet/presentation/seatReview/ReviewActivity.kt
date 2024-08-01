@@ -11,7 +11,6 @@ import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import coil.load

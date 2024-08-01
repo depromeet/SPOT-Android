@@ -6,7 +6,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,16 +15,17 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
-import com.depromeet.presentation.extension.toUri
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.UploadErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBinding>(
@@ -42,6 +42,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     private var permissionRequired = arrayOf(Manifest.permission.CAMERA)
     private lateinit var selectMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,17 +87,14 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
         takePhotoLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
-                    result.data?.extras?.get("data")?.let { bitmap ->
-                        (bitmap as? Bitmap)?.let {
-                            val uri = it.toUri(requireContext(), IMAGE_TITLE)
-                            if (initCapacityLimitDialog(uri)) {
-                                setFragmentResult(
-                                    REQUEST_KEY,
-                                    bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
-                                )
-                            }
-                            dismiss()
+                    imageUri?.let { uri ->
+                        if (initCapacityLimitDialog(uri)) {
+                            setFragmentResult(
+                                REQUEST_KEY,
+                                bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
+                            )
                         }
+                        dismiss()
                     }
                 }
             }
@@ -149,6 +147,22 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
 
     private fun initCameraLauncher() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val imageFile = createImageFile()
+        imageUri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.fileprovider",
+            imageFile,
+        )
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         takePhotoLauncher.launch(takePictureIntent)
+    }
+
+    private fun createImageFile(): File {
+        val storageDir: File? = requireContext().getExternalFilesDir(null)
+        return File.createTempFile(
+            "JPEG_${System.currentTimeMillis()}_",
+            ".jpg",
+            storageDir,
+        )
     }
 }
