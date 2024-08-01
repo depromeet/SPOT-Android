@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rect_white_fill_32">
+    android:background="@drawable/rect_background_white_fill_24">
 
     <View
         android:id="@+id/view_handler"
@@ -238,7 +238,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="11dp"
+                android:layout_marginTop="36dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_warning">
@@ -364,6 +364,7 @@
         android:enabled="false"
         android:gravity="center"
         android:paddingVertical="19dp"
+        android:stateListAnimator="@null"
         android:text="@string/viewfinder_completed"
         android:textAppearance="@style/TextAppearance.Spot.Label02"
         android:textColor="@color/color_foreground_white"

@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rect_white_fill_32">
+    android:background="@drawable/rect_background_white_fill_24">
 
     <View
         android:id="@+id/view_handler"
-        android:layout_width="36dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/rect_gray600_fill_12"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rect_background_primary_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

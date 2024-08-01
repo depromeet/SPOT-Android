@@ -42,6 +42,7 @@
     <string name="viewfinder_dot">•</string>
     <string name="viewfinder_column">열</string>
     <string name="viewfinder_number">번</string>
+    <string name="viewfinder_cancel">취소</string>
     <string name="viewfinder_completed">완료</string>
     <string name="viewfinder_input_example">ex) 12</string>
     <string name="viewfinder_latest">최신순</string>
