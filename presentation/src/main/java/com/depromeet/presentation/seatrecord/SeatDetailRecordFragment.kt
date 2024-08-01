@@ -10,7 +10,7 @@ import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.TestDetailRecordAdapter
-import com.depromeet.presentation.seatrecord.viewmodel.DeleteUi
+import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -58,7 +58,17 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state == DeleteUi.SEAT_DETAIL) moveConfirmationDialog()
+            if (state == EditUi.SEAT_DETAIL) {
+                moveConfirmationDialog()
+                viewModel.setDeleteEvent(EditUi.NONE)
+            }
+        }
+
+        viewModel.editClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
+            if (state == EditUi.SEAT_RECORD) {
+                moveEditReview()
+                viewModel.setDeleteEvent(EditUi.NONE)
+            }
         }
     }
 
@@ -82,5 +92,9 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     private fun moveConfirmationDialog() {
         ConfirmDeleteDialog.newInstance(SEAT_RECORD_TAG)
             .show(parentFragmentManager, ConfirmDeleteDialog.TAG)
+    }
+
+    private fun moveEditReview() {
+
     }
 }

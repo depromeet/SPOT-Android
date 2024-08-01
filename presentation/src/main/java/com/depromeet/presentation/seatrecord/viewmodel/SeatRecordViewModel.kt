@@ -33,8 +33,11 @@ class SeatRecordViewModel @Inject constructor(
     private val _selectedYear = MutableStateFlow(0)
     val selectedYear = _selectedYear.asStateFlow()
 
-    private val _deleteClickedEvent = MutableStateFlow(DeleteUi.NONE)
+    private val _deleteClickedEvent = MutableStateFlow(EditUi.NONE)
     val deleteClickedEvent = _deleteClickedEvent.asStateFlow()
+
+    private val _editClickedEvent = MutableStateFlow(EditUi.NONE)
+    val editClickedEvent = _editClickedEvent.asStateFlow()
 
     private val _editReviewId = MutableStateFlow(0)
     val editReviewId = _editReviewId.asStateFlow()
@@ -102,12 +105,16 @@ class SeatRecordViewModel @Inject constructor(
         _editReviewId.value = id
     }
 
-    fun setDeleteEvent(deleteUi: DeleteUi) {
-        _deleteClickedEvent.value = deleteUi
+    fun setEditEvent(editUi: EditUi){
+        _editClickedEvent.value = editUi
+    }
+
+    fun setDeleteEvent(editUi: EditUi) {
+        _deleteClickedEvent.value = editUi
     }
 
     fun cancelDeleteEvent() {
-        _deleteClickedEvent.value = DeleteUi.NONE
+        _deleteClickedEvent.value = EditUi.NONE
     }
 
     fun removeReviewData() {
@@ -128,14 +135,14 @@ class SeatRecordViewModel @Inject constructor(
                         Timber.d("삭제 실패 : $it")
                     }
             }
-            _deleteClickedEvent.value = DeleteUi.NONE
+            _deleteClickedEvent.value = EditUi.NONE
         }
 
     }
 
 }
 
-enum class DeleteUi {
+enum class EditUi {
     NONE,
     SEAT_RECORD,
     SEAT_DETAIL
