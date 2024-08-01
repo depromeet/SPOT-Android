@@ -206,6 +206,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.etColumn.addTextChangedListener { text: Editable? ->
             val newColumn = text.toString()
             viewModel.setSelectedColumn(newColumn)
+            binding.ivDeleteColumn.visibility = if (newColumn.isNotEmpty()) View.VISIBLE else View.GONE
             viewModel.seatRangeState.value?.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
@@ -214,10 +215,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
         }
-
         binding.etNumber.addTextChangedListener { text: Editable? ->
             val newNumber = text.toString()
             viewModel.setSelectedNumber(newNumber)
+            binding.ivDeleteNumber.visibility = if (newNumber.isNotEmpty()) View.VISIBLE else View.GONE
             viewModel.seatRangeState.value?.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
@@ -225,6 +226,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     }
                 }
             }
+        }
+        binding.ivDeleteColumn.setOnSingleClickListener() {
+            binding.etColumn.text.clear()
+            binding.ivDeleteColumn.visibility = GONE
+        }
+
+        binding.ivDeleteNumber.setOnSingleClickListener {
+            binding.etNumber.text.clear()
+            binding.ivDeleteNumber.visibility = GONE
         }
     }
 

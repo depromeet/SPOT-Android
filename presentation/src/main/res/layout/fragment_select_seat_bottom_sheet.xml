@@ -327,7 +327,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:inputType="number"
                     android:hint="ex) 12"
-                    android:textColorHint="#C8C8C8" />
+                    android:textColorHint="@color/color_foreground_disabled" />
+
+                <ImageView
+                    android:id="@+id/iv_delete_column"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_x_circle"
+                    android:layout_marginEnd="13dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_column"
+                    app:layout_constraintEnd_toEndOf="@+id/et_column"
+                    app:layout_constraintTop_toTopOf="@+id/et_column" />
 
                 <TextView
                     android:id="@+id/tv_column"
@@ -355,9 +366,20 @@
                     android:paddingEnd="64dp"
                     android:textColor="#121212"
                     android:inputType="number"
-                    android:textColorHint="#C8C8C8"
+                    android:textColorHint="@color/color_foreground_disabled"
                     app:layout_constraintEnd_toStartOf="@+id/tv_number"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_delete_number"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_x_circle"
+                    android:layout_marginEnd="13dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_number"
+                    app:layout_constraintEnd_toEndOf="@+id/et_number"
+                    app:layout_constraintTop_toTopOf="@+id/et_number" />
 
                 <EditText
                     android:id="@+id/et_non_column_number"
