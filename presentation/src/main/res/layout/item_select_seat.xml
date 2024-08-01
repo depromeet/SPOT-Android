@@ -1,50 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/rect_white_fill_gray100_line_8"
-    android:gravity="center"
-    android:padding="10dp"
-    android:layout_margin="4dp"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="4dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_seat_color"
-            android:layout_width="16dp"
-            android:layout_height="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginVertical="6dp"
+        android:layout_marginHorizontal="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/layout_select_seat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical">
+            android:background="@drawable/rect_background_tertiary_fill_8"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_seat_color"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginVertical="22dp"
+                android:layout_marginStart="13dp" />
 
             <TextView
                 android:id="@+id/tv_seat_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="프리미엄석"
+                android:layout_marginVertical="21dp"
+                android:layout_marginStart="4dp"
                 android:gravity="center"
-                android:textColor="#333333"
-                android:textFontWeight="700"
-                android:textSize="12sp"
-                android:textStyle="normal" />
-
-            <TextView
-                android:id="@+id/tv_sub_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               android:gravity="center"
-                android:text="켈리존"
-                android:textColor="#B0B0B0"
-                android:textSize="10sp" />
+                android:text="3루 테이블석"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_heading" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_sub_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_foreground_caption_fill_40"
+        android:padding="4dp"
+        android:text="켈리존"
+        android:textAppearance="@style/TextAppearance.Spot.Caption03"
+        android:textColor="@color/white"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

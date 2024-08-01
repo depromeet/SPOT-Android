@@ -4,6 +4,8 @@ import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,13 +15,14 @@ import com.depromeet.presentation.databinding.ItemSelectSeatBinding
 import com.depromeet.presentation.util.ItemDiffCallback
 
 class SelectSeatAdapter(
-    private val onItemClick: (Int, Int) -> Unit
+    private val onItemClick: (Int, Int) -> Unit,
 ) : ListAdapter<StadiumSectionModel.SectionListDto, SelectSeatAdapter.SectionViewHolder>(diffUtil) {
 
     private var selectedPosition = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
-        val binding = ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SectionViewHolder(binding)
     }
 
@@ -33,14 +36,24 @@ class SelectSeatAdapter(
         }
     }
 
-    class SectionViewHolder(private val binding: ItemSelectSeatBinding) : RecyclerView.ViewHolder(binding.root) {
+    class SectionViewHolder(private val binding: ItemSelectSeatBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(section: StadiumSectionModel.SectionListDto, isSelected: Boolean) {
             binding.tvSeatName.text = section.name
             binding.tvSubName.text = section.alias
+
+            if (section.alias.isNullOrEmpty()) {
+                binding.tvSubName.visibility = GONE
+            } else {
+                binding.tvSubName.visibility = VISIBLE
+                binding.tvSubName.text = section.alias
+                binding.tvSubName.setBackgroundResource(if (isSelected) { R.drawable.rect_green_fill_40 } else { R.drawable.rect_foreground_caption_fill_40})
+            }
             val shapeDrawable = ShapeDrawable(OvalShape())
             binding.tvSeatColor.background = shapeDrawable
-            shapeDrawable.paint.color = Color.rgb(section.color.red, section.color.green, section.color.blue)
-            binding.root.setBackgroundResource(if (isSelected) R.drawable.rect_gray100_fill_gray800_line_8 else R.drawable.rect_white_fill_gray100_line_8)
+            shapeDrawable.paint.color =
+                Color.rgb(section.color.red, section.color.green, section.color.blue)
+            binding.layoutSelectSeat.setBackgroundResource(if (isSelected) R.drawable.rect_background_positive_fill_secondary_line_8 else R.drawable.rect_background_tertiary_fill_8)
         }
     }
 

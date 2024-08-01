@@ -9,7 +9,7 @@
 
     <View
         android:id="@+id/view_handler"
-        android:layout_width="36dp"
+        android:layout_width="40dp"
         android:layout_height="5dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/rect_gray600_fill_12"
@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="구역 선택"
+                    android:text="구역선택"
                     android:textColor="#121212"
                     android:textFontWeight="700"
                     android:textSize="16sp"
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="좌석 번호"
+                    android:text="좌석번호"
                     android:textColor="#121212"
                     android:textFontWeight="700"
                     android:textSize="16sp"
@@ -89,6 +89,8 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <!-- 구역 선택 -->
 
     <ScrollView
         android:id="@+id/sv_select_seat"

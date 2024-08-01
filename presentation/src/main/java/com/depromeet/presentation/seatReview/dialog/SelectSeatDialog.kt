@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
@@ -26,6 +25,7 @@ import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
 import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,9 +41,18 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
     }
 
+    override fun onStart() {
+        super.onStart()
+        val bottomSheet =
+            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.let {
+            val behavior = BottomSheetBehavior.from(it)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBottomSheetHeight(view)
         observeStadiumSection()
         observeSeatBlock()
         observeSeatRange()
@@ -52,6 +61,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         setupEditTextListeners()
     }
 
+    // 구역 선택뷰
     private fun observeStadiumSection() {
         viewModel.stadiumSectionState.asLiveData().observe(this) { state ->
             when (state) {
@@ -74,6 +84,50 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
+    private fun setupSectionRecyclerView() {
+        adapter = SelectSeatAdapter { position, sectionId ->
+            val selectedSeatInfo = adapter.currentList[position]
+            adapter.setItemSelected(position)
+            viewModel.setSelectedSeatZone(selectedSeatInfo.name)
+            viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
+            viewModel.updateSelectedSectionId(sectionId)
+            updateNextBtnState()
+        }
+        binding.rvSelectSeatZone.adapter = adapter
+    }
+
+    private fun setupTransactionSelectSeat() {
+        with(binding) {
+            layoutSeatAgain.setOnSingleClickListener {
+                ivSeatAgain.isVisible = !ivSeatAgain.isVisible
+            }
+            layoutColumnNumberDescription.setOnSingleClickListener {
+                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
+            }
+            tvWhatColumn.setOnSingleClickListener {
+                layoutColumnDescription.visibility = VISIBLE
+            }
+            tvNextBtn.setOnSingleClickListener {
+                svSelectSeat.visibility = INVISIBLE
+                layoutSeatNumber.visibility = VISIBLE
+                tvSelectSeatLine.visibility = INVISIBLE
+                tvSelectNumberLine.visibility = VISIBLE
+                tvCompleteBtn.visibility = VISIBLE
+                tvNextBtn.visibility = GONE
+            }
+            tvCompleteBtn.setOnSingleClickListener { dismiss() }
+        }
+    }
+
+    private fun updateNextBtnState() {
+        with(binding.tvNextBtn) {
+            setBackgroundResource(R.drawable.rect_gray900_fill_6)
+            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+            isEnabled = true
+        }
+    }
+
+    // 좌석 번호 뷰
     private fun observeSeatBlock() {
         viewModel.seatBlockState.asLiveData().observe(this) { state ->
             when (state) {
@@ -281,61 +335,5 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
         }
-    }
-
-    private fun setupSectionRecyclerView() {
-        adapter = SelectSeatAdapter { position, sectionId ->
-            val selectedSeatInfo = adapter.currentList[position]
-            adapter.setItemSelected(position)
-            viewModel.setSelectedSeatZone(selectedSeatInfo.name)
-            viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
-            viewModel.updateSelectedSectionId(sectionId)
-            updateNextBtnState()
-        }
-        binding.rvSelectSeatZone.adapter = adapter
-    }
-
-    private fun setupTransactionSelectSeat() {
-        with(binding) {
-            layoutSeatAgain.setOnSingleClickListener {
-                ivSeatAgain.isVisible = !ivSeatAgain.isVisible
-            }
-            layoutColumnNumberDescription.setOnSingleClickListener {
-                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
-            }
-            tvWhatColumn.setOnSingleClickListener {
-                layoutColumnDescription.visibility = VISIBLE
-            }
-            tvNextBtn.setOnSingleClickListener {
-                svSelectSeat.visibility = INVISIBLE
-                layoutSeatNumber.visibility = VISIBLE
-                tvSelectSeatLine.visibility = INVISIBLE
-                tvSelectNumberLine.visibility = VISIBLE
-                tvCompleteBtn.visibility = VISIBLE
-                tvNextBtn.visibility = GONE
-            }
-            tvCompleteBtn.setOnSingleClickListener { dismiss() }
-        }
-    }
-
-    private fun updateNextBtnState() {
-        with(binding.tvNextBtn) {
-            setBackgroundResource(R.drawable.rect_gray900_fill_6)
-            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
-            isEnabled = true
-        }
-    }
-
-    private fun setBottomSheetHeight(view: View) {
-        view.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                view.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                view.layoutParams = view.layoutParams.apply {
-                    height = (resources.displayMetrics.heightPixels * 0.8).toInt()
-                }
-                view.requestLayout()
-            }
-        })
     }
 }
