@@ -59,10 +59,16 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             when (uiState) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> {
+                    stopShimmer()
                     binding.layoutErrorScreen.root.visibility = View.VISIBLE
                 }
-                is UiState.Loading -> Unit
+                is UiState.Loading -> {
+                    startShimmer()
+                    binding.rvStadium.visibility = View.INVISIBLE
+                }
                 is UiState.Success -> {
+                    stopShimmer()
+                    binding.rvStadium.visibility = View.VISIBLE
                     binding.layoutErrorScreen.root.visibility = View.INVISIBLE
                     stadiumSelectionAdapter.submitList(uiState.data)
                 }
@@ -91,6 +97,16 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
                 )
             )
         }
+    }
+
+    private fun startShimmer() {
+        binding.shimmerFrameLayout.startShimmer()
+        binding.shimmerFrameLayout.visibility = View.VISIBLE
+    }
+
+    private fun stopShimmer() {
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.shimmerFrameLayout.visibility = View.INVISIBLE
     }
 
     private fun onClickStadium() {
