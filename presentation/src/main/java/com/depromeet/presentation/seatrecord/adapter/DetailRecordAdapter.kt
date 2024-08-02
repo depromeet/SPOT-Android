@@ -22,6 +22,8 @@ import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
 class DetailRecordAdapter(
     private val myProfile: MySeatRecordResponse.MyProfileResponse,
+    private val moreClick : (Int) -> Unit
+
 ) :
     ListAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
         ItemDiffCallback(
@@ -29,11 +31,6 @@ class DetailRecordAdapter(
             onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
         )
     ) {
-    interface OnDetailItemClickListener {
-        fun onItemMoreClickListener(item: MySeatRecordResponse.ReviewResponse)
-    }
-
-    var itemMoreClickListener: OnDetailItemClickListener? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
@@ -42,21 +39,20 @@ class DetailRecordAdapter(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
-            )
+            ),
+            moreClick
         )
     }
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         holder.bind(getItem(position), myProfile)
-        holder.binding.ivDetailMore.setOnClickListener {
-            itemMoreClickListener?.onItemMoreClickListener(getItem(position))
-        }
     }
 }
 
 
 class ReviewDetailViewHolder(
     internal val binding: ItemSeatReviewDetailBinding,
+    private val moreClick : (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         private const val MAX_VISIBLE_CHIPS = Int.MAX_VALUE
@@ -67,6 +63,10 @@ class ReviewDetailViewHolder(
         profile: MySeatRecordResponse.MyProfileResponse,
     ) {
         with(binding) {
+            binding.ivDetailMore.setOnClickListener {
+                moreClick(item.id)
+            }
+
             ivDetailProfileImage.load(profile.profileImage) {
                 transformations(CircleCropTransformation())
                 error(R.drawable.ic_default_profile)

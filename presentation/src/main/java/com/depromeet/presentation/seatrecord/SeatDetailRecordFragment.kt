@@ -6,7 +6,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.DetailRecordAdapter
@@ -55,12 +54,12 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         viewModel.reviews.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state is UiState.Success) {
                 detailRecordAdapter.submitList(state.data.reviews)
+                Timber.d("test 여기 불러와지나?")
             }
         }
 
         viewModel.deleteClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {
-                Timber.d("test")
                 moveConfirmationDialog()
             }
         }
@@ -74,7 +73,12 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     private fun setDetailRecordAdapter() {
         detailRecordAdapter = DetailRecordAdapter(
-            (viewModel.reviews.value as UiState.Success).data.profile
+            (viewModel.reviews.value as UiState.Success).data.profile,
+            moreClick = { id ->
+                viewModel.setEditReviewId(id)
+                RecordEditDialog.newInstance(SEAT_RECORD_TAG)
+                    .show(parentFragmentManager, RecordEditDialog.TAG)
+            }
         )
 
         binding.rvDetailRecord.adapter = detailRecordAdapter
@@ -82,16 +86,6 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         val position =
             (viewModel.reviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
         binding.rvDetailRecord.scrollToPosition(position)
-
-
-        detailRecordAdapter.itemMoreClickListener =
-            object : DetailRecordAdapter.OnDetailItemClickListener {
-                override fun onItemMoreClickListener(item: MySeatRecordResponse.ReviewResponse) {
-                    viewModel.setEditReviewId(item.id)
-                    RecordEditDialog.newInstance(SEAT_RECORD_TAG)
-                        .show(parentFragmentManager, RecordEditDialog.TAG)
-                }
-            }
     }
 
     private fun moveConfirmationDialog() {

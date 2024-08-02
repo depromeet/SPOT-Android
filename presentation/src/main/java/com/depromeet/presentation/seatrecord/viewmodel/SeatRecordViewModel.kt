@@ -128,12 +128,14 @@ class SeatRecordViewModel @Inject constructor(
         val currentState = reviews.value
         if (currentState is UiState.Success) {
             viewModelScope.launch {
+                Timber.d("test -> 서버 통신 전  : ${editReviewId.value}")
                 homeRepository.deleteReview(editReviewId.value)
                     .onSuccess {
                         if (it.reviewId == editReviewId.value) {
                             val updatedList = currentState.data.reviews.filter { review ->
                                 review.id != editReviewId.value
                             }
+                            Timber.d("test -> 서버 통신 성공후 비교  : ${editReviewId.value}")
                             _reviews.value =
                                 UiState.Success(currentState.data.copy(reviews = updatedList))
                         }
