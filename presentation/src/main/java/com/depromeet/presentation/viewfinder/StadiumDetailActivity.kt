@@ -51,19 +51,25 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                         startToStadiumDetailPictureFragment(reviewContent, index, title)
                     },
                     onClickSelectSeat = {
-                        startToBottomSheetDialog(
-                            StadiumSelectSeatDialog.newInstance(),
-                            StadiumSelectSeatDialog.TAG
-                        )
+                        StadiumSelectSeatDialog.apply {
+                            newInstance().show(
+                                supportFragmentManager, TAG
+                            )
+                        }
                     },
                     onClickFilterMonthly = {
-                        startToBottomSheetDialog(
-                            StadiumFilterMonthsDialog.newInstance(),
-                            StadiumFilterMonthsDialog.TAG
-                        )
+                        StadiumFilterMonthsDialog.apply {
+                            newInstance().show(
+                                supportFragmentManager, TAG
+                            )
+                        }
                     },
                     onClickReport = {
-                        startToBottomSheetDialog(ReportDialog.newInstance(), ReportDialog.TAG)
+                        ReportDialog.apply {
+                            newInstance().show(
+                                supportFragmentManager, TAG
+                            )
+                        }
                     },
                     onClickGoBack = {
                         finish()
@@ -132,10 +138,6 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         supportFragmentManager.commit {
             replace(R.id.fcv_detail_picture, fragment, StadiumDetailPictureFragment.TAG)
         }
-    }
-
-    private fun startToBottomSheetDialog(dialogInstance: DialogFragment, tag: String) {
-        dialogInstance.show(supportFragmentManager, tag)
     }
 
     private fun startToHomeActivity() {
