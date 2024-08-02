@@ -67,7 +67,10 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             when (stadium) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> toast(stadium.msg)
-                is UiState.Loading -> Unit
+                is UiState.Loading -> {
+                    startShimmer()
+                }
+
                 is UiState.Success -> {
                     viewModel.stadiumId = stadium.data.id
                     with(binding) {
@@ -156,8 +159,21 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.wvStadium.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 injectJavaScriptFunction()
+                stopShimmer()
             }
         }
+    }
+
+    private fun startShimmer() {
+        binding.shimmerFrameLayout.startShimmer()
+        binding.shimmerFrameLayout.visibility = View.VISIBLE
+        binding.clMainContainer.visibility = View.INVISIBLE
+    }
+
+    private fun stopShimmer() {
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.shimmerFrameLayout.visibility = View.INVISIBLE
+        binding.clMainContainer.visibility = View.VISIBLE
     }
 
     private fun onClickBack() {
