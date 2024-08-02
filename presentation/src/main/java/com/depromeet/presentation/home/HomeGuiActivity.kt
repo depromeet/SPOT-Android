@@ -2,6 +2,7 @@ package com.depromeet.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
@@ -67,11 +68,19 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
         stadiumViewModel.stadiums.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Empty -> Unit
-                is UiState.Failure -> toast(state.msg)
-                is UiState.Loading -> toast("로딩중")
+                is UiState.Failure -> {
+                    toast(state.msg)
+                    setStadiumShimmer(true)
+                }
+
+                is UiState.Loading -> {
+                    setStadiumShimmer(true)
+                }
+
                 is UiState.Success -> {
                     stadiumAdapter.submitList(state.data)
                     binding.rvHomeStadium.scrollToPosition(0)
+                    setStadiumShimmer(false)
                 }
             }
         }
@@ -129,5 +138,17 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
 
     private fun showLevelDescriptionDialog() {
         LevelDescriptionDialog().apply { show(supportFragmentManager, this.tag) }
+    }
+
+    private fun setStadiumShimmer(isLoading: Boolean) = with(binding) {
+        if (isLoading) {
+            shimmerHomeStadium.startShimmer()
+            shimmerHomeStadium.visibility = View.VISIBLE
+            rvHomeStadium.visibility = View.INVISIBLE
+        } else {
+            shimmerHomeStadium.stopShimmer()
+            shimmerHomeStadium.visibility = View.GONE
+            rvHomeStadium.visibility = View.VISIBLE
+        }
     }
 }
