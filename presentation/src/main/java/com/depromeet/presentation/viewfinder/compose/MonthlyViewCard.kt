@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
 
 @Composable
 fun MonthlyViewCard(
@@ -55,7 +56,7 @@ fun MonthlyViewCard(
                 color = SpotTheme.colors.backgroundWhite,
                 shape = RoundedCornerShape(999.dp)
             )
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -84,7 +85,7 @@ fun MonthlyViewCard(
             },
             modifier = Modifier
                 .size(20.dp)
-                .clickable {
+                .noRippleClickable {
                     if (month != null) {
                         onCancel()
                     } else {

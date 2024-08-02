@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.viewfinder.sample.review
 
 @Composable
@@ -55,10 +56,9 @@ fun StadiumSeatCheckBox(
 
     Row(
         modifier = backgroundModifier
-            .clickable(
-                enabled = true,
-                onClick = onClick
-            )
+            .noRippleClickable {
+                onClick()
+            }
             .padding(vertical = 10.dp, horizontal = 12.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -102,7 +102,7 @@ fun StadiumSeatCheckBox(
             },
             modifier = Modifier
                 .size(20.dp)
-                .clickable {
+                .noRippleClickable {
                     if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                         onClick()
                     } else {

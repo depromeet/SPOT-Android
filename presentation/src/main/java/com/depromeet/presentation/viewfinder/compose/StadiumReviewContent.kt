@@ -40,6 +40,7 @@ import coil.request.ImageRequest
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.mapper.toKeyword
 
 @Composable
@@ -91,7 +92,7 @@ fun StadiumReviewContent(
                 tint = SpotTheme.colors.foregroundDisabled,
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable {
+                    .noRippleClickable {
                         onClickReport()
                     }
             )
@@ -131,7 +132,7 @@ fun StadiumReviewContent(
                     modifier = Modifier
                         .size(180.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .clickable {
+                        .noRippleClickable {
                             onClick(reviewContent, index)
                         }
                 )

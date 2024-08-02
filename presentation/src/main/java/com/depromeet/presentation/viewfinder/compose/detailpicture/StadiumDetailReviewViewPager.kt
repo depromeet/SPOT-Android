@@ -48,6 +48,7 @@ import coil.request.ImageRequest
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 import com.depromeet.presentation.viewfinder.compose.LevelCard
@@ -130,16 +131,13 @@ fun StadiumDetailReviewViewPager(
                 modifier = Modifier
                     .zIndex(if (isDimmed) 3f else 2f)
                     .fillMaxSize()
-                    .clickable(
-                        enabled = isDimmed,
-                        onClick = {
-                            if (isDimmed) {
-                                isDimmed = false
-                                isMore = false
-                                showMoreButtonState = false
-                            }
+                    .noRippleClickable(enabled = isDimmed) {
+                        if (isDimmed) {
+                            isDimmed = false
+                            isMore = false
+                            showMoreButtonState = false
                         }
-                    )
+                    }
                     .background(
                         color = if (isDimmed) {
                             Color.Black.copy(alpha = 0.6f)
@@ -216,7 +214,7 @@ fun StadiumDetailReviewViewPager(
                             style = SpotTheme.typography.label10,
                             color = SpotTheme.colors.foregroundDisabled,
                             textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.noRippleClickable {
                                 showMoreButtonState = false
                                 isDimmed = true
                                 isMore = true

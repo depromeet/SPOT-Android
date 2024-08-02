@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -59,7 +60,7 @@ fun KeywordFlowRow(
                         color = SpotTheme.colors.backgroundSecondary,
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .clickable {
+                    .noRippleClickable {
                         if (isSelfExpanded) {
                             expanded = true
                         } else {
