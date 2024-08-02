@@ -78,7 +78,6 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                 pickSingleImageLauncher.launch("image/*")
             }
             clProfileEditRemove.setOnClickListener {
-                viewModel.deleteProfileImage()
                 ProfileDeleteConfirmDialog().show(parentFragmentManager, ProfileDeleteConfirmDialog.TAG)
                 dismiss()
             }
