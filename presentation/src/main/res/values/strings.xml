@@ -21,6 +21,7 @@
     <string name="home_scrap_description">내가 스크랩한 시야 정보</string>
     <string name="home_upload_review">시야 사진 올리기</string>
     <string name="refresh">새로고침</string>
+    <string name="home_profile_image_delete">프로필 삭제시 복구하기 어려워요</string>
         <!-- level -->
     <string name="one_level_to_title">직관 첫 걸음</string>
 
