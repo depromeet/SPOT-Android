@@ -3,10 +3,8 @@ package com.depromeet.presentation.seatrecord
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.core.state.UiState
 import com.depromeet.presentation.R
@@ -15,7 +13,6 @@ import com.depromeet.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding>(
@@ -28,6 +25,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
     private lateinit var detailRecordAdapter: DetailRecordAdapter
+    private var isLoading: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,11 +52,10 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private fun initObserver() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.pagingData.collect { pagingData ->
-                    detailRecordAdapter.submitData(pagingData)
-                }
+        viewModel.reviews.asLiveData().observe(viewLifecycleOwner) { state ->
+            if (state is UiState.Success) {
+                detailRecordAdapter.submitList(state.data.reviews)
+                isLoading = false
             }
         }
 
@@ -86,11 +83,26 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             }
         )
 
-        binding.rvDetailRecord.adapter = detailRecordAdapter
+        with(binding) {
+            rvDetailRecord.adapter = detailRecordAdapter
 
-        val position =
-            (viewModel.reviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
-        binding.rvDetailRecord.scrollToPosition(position)
+            val position =
+                (viewModel.reviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+            rvDetailRecord.scrollToPosition(position)
+            rvDetailRecord.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val scrollBottom = !rvDetailRecord.canScrollVertically(1)
+                    val hasNextPage = !(viewModel.reviews.value as UiState.Success).data.last
+                    if (scrollBottom && hasNextPage && !isLoading) {
+                        isLoading = true
+                        viewModel.loadNextSeatRecords()
+                    }
+                }
+            })
+        }
+
     }
 
     private fun moveConfirmationDialog() {
