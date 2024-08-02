@@ -6,7 +6,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -22,10 +22,10 @@ import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
 class DetailRecordAdapter(
     private val myProfile: MySeatRecordResponse.MyProfileResponse,
-    private val moreClick : (Int) -> Unit
+    private val moreClick: (Int) -> Unit,
 
-) :
-    ListAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
+    ) :
+    PagingDataAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
         ItemDiffCallback(
             onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
             onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -45,14 +45,14 @@ class DetailRecordAdapter(
     }
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
-        holder.bind(getItem(position), myProfile)
+        getItem(position)?.let { holder.bind(it, myProfile) }
     }
 }
 
 
 class ReviewDetailViewHolder(
     internal val binding: ItemSeatReviewDetailBinding,
-    private val moreClick : (Int) -> Unit
+    private val moreClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         private const val MAX_VISIBLE_CHIPS = Int.MAX_VALUE

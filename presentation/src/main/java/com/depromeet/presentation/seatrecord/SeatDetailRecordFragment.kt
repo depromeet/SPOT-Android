@@ -3,7 +3,10 @@ package com.depromeet.presentation.seatrecord
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.core.state.UiState
 import com.depromeet.presentation.R
@@ -12,7 +15,7 @@ import com.depromeet.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding>(
@@ -51,12 +54,14 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private fun initObserver() {
-        viewModel.reviews.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state is UiState.Success) {
-                detailRecordAdapter.submitList(state.data.reviews)
-                Timber.d("test 여기 불러와지나?")
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.pagingData.collect { pagingData ->
+                    detailRecordAdapter.submitData(pagingData)
+                }
             }
         }
+
 
         viewModel.deleteClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {

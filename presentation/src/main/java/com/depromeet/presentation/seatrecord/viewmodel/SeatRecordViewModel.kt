@@ -2,19 +2,30 @@ package com.depromeet.presentation.seatrecord.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.domain.repository.HomeRepository
+import com.depromeet.presentation.seatrecord.paging.SeatRecordPagingSource
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
@@ -30,6 +41,8 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow<List<MonthUiData>>(emptyList())
     val months = _months.asStateFlow()
 
+    private val selectedMonth = MutableStateFlow(0)
+
     private val _selectedYear = MutableStateFlow(0)
     val selectedYear = _selectedYear.asStateFlow()
 
@@ -42,8 +55,35 @@ class SeatRecordViewModel @Inject constructor(
     private val _editReviewId = MutableStateFlow(0)
     val editReviewId = _editReviewId.asStateFlow()
 
-    private val _clickedReviewId  = MutableStateFlow(0)
+    private val _clickedReviewId = MutableStateFlow(0)
     val clickedReviewId = _clickedReviewId.asStateFlow()
+
+    private val _pagingData =
+        MutableStateFlow<PagingData<MySeatRecordResponse.ReviewResponse>>(PagingData.empty())
+    val pagingData = _pagingData.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            combine(selectedYear, selectedMonth, _months) { year, month, months ->
+                if (year != 0 && months.isNotEmpty()) {
+                    Pager(
+                        config = PagingConfig(pageSize = 10),
+                        pagingSourceFactory = { SeatRecordPagingSource(homeRepository, year, month) }
+                    ).flow.cachedIn(viewModelScope)
+                } else {
+                    emptyPagingData()
+                }
+            }.flatMapLatest {
+                it
+            }.collect { pagingData ->
+                _pagingData.value = pagingData
+            }
+        }
+    }
+
+    private fun emptyPagingData(): Flow<PagingData<MySeatRecordResponse.ReviewResponse>> {
+        return flowOf(PagingData.empty())
+    }
 
     fun getReviewDate() {
         viewModelScope.launch {
@@ -95,6 +135,7 @@ class SeatRecordViewModel @Inject constructor(
             _months.value = selectedYearMonths.mapIndexed { index, month ->
                 MonthUiData(month = month, isClicked = index == 0)
             }
+            selectedMonth.value = 0
         }
     }
 
@@ -102,13 +143,14 @@ class SeatRecordViewModel @Inject constructor(
         _months.value = months.value.map {
             it.copy(isClicked = it.month == month)
         }
+        selectedMonth.value = month
     }
 
     fun setEditReviewId(id: Int) {
         _editReviewId.value = id
     }
 
-    fun setEditEvent(editUi: EditUi){
+    fun setEditEvent(editUi: EditUi) {
         _editClickedEvent.value = editUi
     }
 
@@ -116,7 +158,7 @@ class SeatRecordViewModel @Inject constructor(
         _deleteClickedEvent.value = editUi
     }
 
-    fun setClickedReviewId(id : Int){
+    fun setClickedReviewId(id: Int) {
         _clickedReviewId.value = id
     }
 
