@@ -31,11 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding>(
     ActivityHomeBinding::inflate
 ) {
-    companion object {
-        const val PROFILE_NAME = "profile_name"
-        const val PROFILE_IMAGE = "profile_image"
-        const val PROFILE_CHEER_TEAM = "profile_cheer_team"
-    }
 
     private val viewModel: HomeViewModel by viewModels()
     private val sightList: List<View> by lazy {
@@ -47,19 +42,19 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         )
     }
 
-    private val editProfileLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
-                val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
-                val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM, 0) ?: 0
-                val teamIdUrl =
-                    data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_URL) ?: ""
-
-                viewModel.updateTest(nickname, profileImage, teamId, teamIdUrl)
-            }
-        }
+//    private val editProfileLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//            if (result.resultCode == Activity.RESULT_OK) {
+//                val data = result.data
+//                val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
+//                val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
+//                val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_ID, 0) ?: 0
+//                val teamIdUrl =
+//                    data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_URL) ?: ""
+//
+//                viewModel.updateTest(nickname, profileImage, teamId, teamIdUrl)
+//            }
+//        }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -205,16 +200,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
 
     private fun navigateToProfileEditActivity() {
-        val currentState = viewModel.profile.value
-        if (currentState is UiState.Success) {
-            editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
-                with(currentState.data) {
-                    putExtra(PROFILE_NAME, this.nickname)
-                    putExtra(PROFILE_IMAGE, this.profileImage)
-                    putExtra(PROFILE_CHEER_TEAM, this.teamId)
-                }
-            })
-        }
+//        val currentState = viewModel.profile.value
+//        if (currentState is UiState.Success) {
+//            editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
+//                with(currentState.data) {
+//                    putExtra(PROFILE_NAME, this.nickname)
+//                    putExtra(PROFILE_IMAGE, this.profileImage)
+//                    putExtra(PROFILE_CHEER_TEAM, this.teamId)
+//                }
+//            })
+//        }
 
     }
 

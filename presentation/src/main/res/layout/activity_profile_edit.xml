@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/profile_edit_complete"
-        android:textColor="@color/color_action_enabled"
+        android:textColor="@drawable/color_complete_state"
         app:layout_constraintBottom_toBottomOf="@id/ib_profile_edit_close"
         app:layout_constraintEnd_toStartOf="@id/gl_end"
         app:layout_constraintTop_toTopOf="@id/ib_profile_edit_close" />

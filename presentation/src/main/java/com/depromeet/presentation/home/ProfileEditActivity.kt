@@ -25,6 +25,7 @@ import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import com.depromeet.presentation.home.viewmodel.ProfileEvents
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
+import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -37,8 +38,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         private const val GRID_SPACING = 40
         const val PROFILE_NAME = "profile_name"
         const val PROFILE_IMAGE = "profile_image"
-        const val PROFILE_CHEER_TEAM = "profile_cheer_team"
-        const val PROFILE_CHEER_TEAM_URL = "profile_cheer_team_url"
+        const val PROFILE_CHEER_TEAM_ID = "profile_cheer_team_id"
+        const val PROFILE_CHEER_TEAM_NAME = "profile_cheer_team_name"
     }
 
     private lateinit var adapter: BaseballTeamAdapter
@@ -47,7 +48,6 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getBaseballTeam()
         initView()
         initEvent()
         initObserver()
@@ -58,6 +58,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
             viewModel.initProfile(name, image, cheerTeam)
             binding.etProfileEditNickname.setText(name)
         }
+        viewModel.getBaseballTeam()
         setCheerTeamList()
     }
 
@@ -82,8 +83,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         val resultIntent = Intent().apply {
             putExtra(PROFILE_NAME, viewModel.nickname.value)
             putExtra(PROFILE_IMAGE, viewModel.getPresignedUrlOrProfileImage())
-            putExtra(PROFILE_CHEER_TEAM, viewModel.cheerTeam.value)
-            putExtra(PROFILE_CHEER_TEAM_URL, viewModel.getTeamUrl())
+            putExtra(PROFILE_CHEER_TEAM_ID, viewModel.cheerTeam.value)
+            putExtra(PROFILE_CHEER_TEAM_NAME, viewModel.getTeamName())
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -213,6 +214,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         viewModel.team.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
+                    if (!state.data.any { it.isClicked }) {
+                        binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
+                    }
                     adapter.submitList(state.data)
                 }
 
@@ -271,9 +275,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun getDataExtra(callback: (name: String, profileImage: String, cheerTeam: Int) -> Unit) {
         callback(
-            intent?.getStringExtra(HomeActivity.PROFILE_NAME) ?: "",
-            intent?.getStringExtra(HomeActivity.PROFILE_IMAGE) ?: "",
-            intent?.getIntExtra(HomeActivity.PROFILE_CHEER_TEAM, 0) ?: 0
+            intent?.getStringExtra(SeatRecordActivity.PROFILE_NAME) ?: "",
+            intent?.getStringExtra(SeatRecordActivity.PROFILE_IMAGE) ?: "",
+            intent?.getIntExtra(SeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
         )
     }
 

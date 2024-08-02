@@ -173,9 +173,9 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun getTeamUrl() : String {
-        if (cheerTeam.value == 0) return ""
-        return (team.value as UiState.Success).data.first { it.isClicked }.logo
+    fun getTeamName() : String? {
+        if (cheerTeam.value == 0) return null
+        return (team.value as UiState.Success).data.first { it.isClicked }.name
     }
 
     private fun removeQueryParameters(url: String): String {
