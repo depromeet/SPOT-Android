@@ -38,6 +38,10 @@
     <string name="profile_edit_error_length">닉네임은 최소 2글자에서 최대 10글자로 입력해 주세요.</string>
     <string name="profile_edit_empty">비어있습니다.</string>
     <string name="profile_edit_error_no">정상적으로 입력 완료!</string>
+    <string name="profile_edit_remove">프로필 사진 삭제</string>
+    <string name="profile_edit_gallery">갤러리에서 선택</string>
+    <string name="profile_edit_camera">사진 촬영</string>
+    <string name="profile_edit_change_image">프로필 사진 변경</string>
 
     <!-- upload_error -->
     <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>

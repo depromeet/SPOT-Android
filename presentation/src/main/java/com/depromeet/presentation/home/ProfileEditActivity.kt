@@ -250,12 +250,12 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
             override fun onItemClubClick(item: BaseballTeamResponse) {
                 viewModel.setClickedBaseballTeam(item.id)
-                binding.tvProfileEditNoTeam.setBackgroundResource(R.drawable.rect_gray100_line_10)
+                binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
             }
         }
         binding.tvProfileEditNoTeam.setOnClickListener {
             viewModel.deleteCheerTeam()
-            binding.tvProfileEditNoTeam.setBackgroundResource(R.drawable.rect_gray50_fill_gray900_line_10)
+            binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
         }
     }
 

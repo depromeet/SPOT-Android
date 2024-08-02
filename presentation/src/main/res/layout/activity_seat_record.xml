@@ -90,6 +90,7 @@
                 tools:ignore="contentDescription" />
 
             <ImageView
+                android:id="@+id/iv_record_edit"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="47dp"

@@ -19,6 +19,7 @@ import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.ProfileEditActivity
 import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
@@ -74,6 +75,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             }
             btRecordFailResfresh.setOnClickListener {
                 viewModel.getSeatRecords()
+            }
+            ivRecordEdit.setOnClickListener {
+                Intent(this@SeatRecordActivity,ProfileEditActivity::class.java).apply {
+                    startActivity(this)
+                }
             }
         }
     }
