@@ -240,7 +240,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     } else {
         with(binding) {
-            etProfileEditNickname.setBackgroundResource(R.drawable.rect_gray100_line_6)
+            etProfileEditNickname.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_6)
             tvProfileEditNicknameError.visibility = GONE
             tvProfileEditNicknameError.text = error
         }
