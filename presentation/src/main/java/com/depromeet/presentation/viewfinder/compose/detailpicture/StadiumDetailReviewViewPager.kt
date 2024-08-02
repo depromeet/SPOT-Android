@@ -1,6 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,11 +28,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +56,7 @@ import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 import com.depromeet.presentation.viewfinder.compose.LevelCard
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -75,7 +80,7 @@ fun StadiumDetailReviewViewPager(
         state = pagerState,
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(SpotTheme.colors.backgroundWhite)
     ) { page ->
         var showMoreButtonState by remember {
             mutableStateOf(false)
@@ -103,14 +108,14 @@ fun StadiumDetailReviewViewPager(
         Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
                 model = ImageRequest.Builder(context)
-                    .data(reviews[page].images.getOrNull(0)?.url)
+                    .data(reviews[page].images.getOrNull(verticalPagerState.currentPage)?.url)
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
                     .zIndex(1f)
-                    .blur(5.dp)
+                    .blur(5.dp),
             )
 
             Column(
@@ -140,9 +145,9 @@ fun StadiumDetailReviewViewPager(
                     }
                     .background(
                         color = if (isDimmed) {
-                            Color.Black.copy(alpha = 0.6f)
+                            SpotTheme.colors.transferBlack01.copy(alpha = 0.6f)
                         } else {
-                            Color.Black.copy(alpha = 0.5f)
+                            SpotTheme.colors.transferBlack01.copy(alpha = 0.5f)
                         }
                     )
                     .padding(horizontal = 16.dp)
@@ -158,7 +163,14 @@ fun StadiumDetailReviewViewPager(
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        placeholder = ColorPainter(Color.LightGray),
+                        placeholder = BrushPainter(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color(0xFFE1E1E1),
+                                    Color(0x00E1E1E1),
+                                )
+                            )
+                        ),
                         modifier = Modifier
                             .size(20.dp)
                             .clip(CircleShape)

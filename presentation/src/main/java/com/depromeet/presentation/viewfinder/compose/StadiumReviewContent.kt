@@ -23,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -70,7 +72,14 @@ fun StadiumReviewContent(
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    placeholder = ColorPainter(Color.LightGray),
+                    placeholder = BrushPainter(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFFE1E1E1),
+                                Color(0x00E1E1E1),
+                            )
+                        )
+                    ),
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
@@ -127,7 +136,14 @@ fun StadiumReviewContent(
                         .data(reviewContent.images[index].url)
                         .build(),
                     contentDescription = null,
-                    placeholder = ColorPainter(Color.LightGray),
+                    placeholder = BrushPainter(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFFE1E1E1),
+                                Color(0x00E1E1E1),
+                            )
+                        )
+                    ),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(180.dp)
