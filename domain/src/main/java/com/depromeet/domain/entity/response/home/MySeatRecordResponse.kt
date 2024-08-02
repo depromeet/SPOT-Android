@@ -18,6 +18,8 @@ data class MySeatRecordResponse(
         val levelTitle : String = "",
         val nickname: String = "",
         val reviewCount: Int = 0,
+        val teamId : Int? = null,
+        val teamName : String? = "",
     )
 
     data class ReviewResponse(

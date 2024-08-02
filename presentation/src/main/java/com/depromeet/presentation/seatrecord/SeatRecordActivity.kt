@@ -2,6 +2,9 @@ package com.depromeet.presentation.seatrecord
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -77,7 +80,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 viewModel.getSeatRecords()
             }
             ivRecordEdit.setOnClickListener {
-                Intent(this@SeatRecordActivity,ProfileEditActivity::class.java).apply {
+                Intent(this@SeatRecordActivity, ProfileEditActivity::class.java).apply {
                     startActivity(this)
                 }
             }
@@ -166,8 +169,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
-            //TODO : 여기 서버 API 바뀌면 "{team}의 ~ lV.{level} {title}" 로 바꿔야함
-            "Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
+            if(data.teamId != null){
+                "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
+            }else{
+                "모두를 응원하는 Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
+            }
             tvRecordNickname.text = data.nickname
             tvRecordCount.text = data.reviewCount.toString()
             ivRecordProfile.load(data.profileImage) {
@@ -175,6 +181,28 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 error(R.drawable.ic_default_profile)
             }
         }
+    }
+
+    private fun createColoredLevelString(data: MySeatRecordResponse.MyProfileResponse): SpannableString {
+        /** 커스텀뷰에 또 spannable을 적용해야한다니... */
+        val fullText = if (data.teamId != null) {
+            "${data.teamName}의 Lv.${data.level} ${data.levelTitle}"
+        } else {
+            "모두를 응원하는 Lv.${data.level} ${data.levelTitle}"
+        }
+        val spannableString = SpannableString(fullText)
+
+        val levelStartIndex = fullText.indexOf(data.level.toString())
+        val levelEndIndex = levelStartIndex + data.level.toString().length
+
+        spannableString.setSpan(
+            ForegroundColorSpan(getColor(com.depromeet.designsystem.R.color.color_action_enabled)),
+            levelStartIndex,
+            levelEndIndex,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        return spannableString
     }
 
     private fun initYearSpinner(years: List<Int>) {

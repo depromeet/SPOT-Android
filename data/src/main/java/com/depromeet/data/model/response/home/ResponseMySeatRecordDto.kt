@@ -40,6 +40,10 @@ data class ResponseMySeatRecordDto(
         val nickname: String,
         @SerialName("reviewCount")
         val reviewCount: Int,
+        @SerialName("teamId")
+        val teamId: Int?,
+        @SerialName("teamName")
+        val teamName: String?,
     )
 
 
@@ -184,7 +188,9 @@ data class ResponseMySeatRecordDto(
                 level = level,
                 levelTitle = levelTitle,
                 nickname = nickname,
-                reviewCount = reviewCount
+                reviewCount = reviewCount,
+                teamId = teamId,
+                teamName = teamName
             )
 
         private fun ResponseReviewDto.toReviewResponse() = MySeatRecordResponse.ReviewResponse(
