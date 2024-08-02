@@ -285,6 +285,7 @@ class ReviewViewModel @Inject constructor(
         image: ByteArray,
     ): CompletableDeferred<Boolean> {
         val deferred = CompletableDeferred<Boolean>()
+        Timber.d("Attempting to upload image to URL: $presignedUrl") // URL 로그 출력
         viewModelScope.launch {
             val result = seatReviewRepository.putImagePreSignedUrl(presignedUrl, image)
             result.onSuccess {

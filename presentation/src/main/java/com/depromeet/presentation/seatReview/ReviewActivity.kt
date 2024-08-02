@@ -319,7 +319,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         binding.tvUploadBtn.setOnSingleClickListener {
             val uploadResults = mutableListOf<CompletableDeferred<Boolean>>()
             val uniqueImageUris = selectedImageUris.distinct()
-
             uniqueImageUris.forEach { imageUriString ->
 
                 val imageUri = Uri.parse(imageUriString)
@@ -329,6 +328,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 if (imageData != null) {
                     val deferred = CompletableDeferred<Boolean>()
                     uploadResults.add(deferred)
+                    // presignedurl 호출
                     viewModel.requestPreSignedUrl(fileExtension)
                     observePreSignedUrl(deferred, imageData)
                 } else {
