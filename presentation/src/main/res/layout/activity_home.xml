@@ -61,14 +61,13 @@
         tools:src="@drawable/ic_default_profile" />
 
 
-
-
     <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
         android:id="@+id/csbv_home_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="5dp"
+        android:elevation="3dp"
         app:backgroundColor="@color/color_background_white"
         app:layout_constraintEnd_toEndOf="@id/iv_home_character"
         app:layout_constraintStart_toStartOf="@id/iv_home_character"
@@ -80,8 +79,8 @@
         app:textColor="@color/color_foreground_body_subtitle"
         app:textSize="11sp"
         app:textStyle="semiBold"
-        app:triangleHeight="4dp"
-        app:triangleWidth="7.5dp" />
+        app:triangleHeight="5dp"
+        app:triangleWidth="7dp" />
 
 
     <TextView
@@ -90,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="35dp"
-        android:background="@drawable/rect_action_enabled_line_20"
+        android:background="@drawable/rect_action_enabled_line_background_secondary_fill_20"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4.5dp"
         android:textColor="@color/color_action_enabled"
@@ -122,6 +121,7 @@
         android:id="@+id/iv_home_info"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginStart="2dp"
         android:src="@drawable/ic_info_circle_line"
         app:layout_constraintBottom_toBottomOf="@id/tv_home_title"
         app:layout_constraintStart_toEndOf="@id/tv_home_title"
@@ -138,7 +138,7 @@
         app:layout_constraintTop_toBottomOf="@id/iv_home_app_bar">
 
 
-        <include layout="@layout/item_shimmer_profile"/>
+        <include layout="@layout/item_shimmer_profile" />
 
 
     </com.facebook.shimmer.ShimmerFrameLayout>
@@ -285,14 +285,14 @@
             app:layout_constraintTop_toBottomOf="@id/tv_scrap_title" />
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
+            android:layout_width="125dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginBottom="19dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_scrap_design"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="contentDescription" />
 
 

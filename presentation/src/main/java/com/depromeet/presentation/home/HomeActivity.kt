@@ -19,6 +19,7 @@ import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
 import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
+import com.depromeet.presentation.setting.SettingActivity
 import com.depromeet.presentation.viewfinder.StadiumActivity
 import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,9 +49,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         initObserver()
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.getHomeFeed()
+    }
+
     private fun initView() {
         homeViewModel.getStadiums()
-        homeViewModel.getHomeFeed()
+//        homeViewModel.getHomeFeed()
         setStadiumAdapter()
     }
 
@@ -68,6 +74,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             ).show()
         }
         clHomeUpload.setOnClickListener { navigateToReviewActivity() }
+        ivHomeSetting.setOnClickListener { navigatToSettingActivity() }
     }
 
     private fun initObserver() {
@@ -108,6 +115,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 }
             }
 
+        }
+
+        homeViewModel.levelState.asLiveData().observe(this) {
+            val currentState = homeViewModel.homeFeed.value
+            if (it && currentState is UiState.Success) {
+                LevelupDialog(
+                    currentState.data.levelTitle,
+                    currentState.data.level,
+                    currentState.data.mascotImageUrl
+                ).show(supportFragmentManager, LevelupDialog.TAG )
+            }
         }
     }
 
@@ -202,5 +220,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             shimmerHomeProfile.stopShimmer()
             shimmerHomeProfile.visibility = View.GONE
         }
+    }
+
+    private fun navigatToSettingActivity() {
+        Intent(this, SettingActivity::class.java).apply { startActivity(this) }
     }
 }
