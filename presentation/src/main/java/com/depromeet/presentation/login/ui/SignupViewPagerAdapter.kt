@@ -1,13 +1,19 @@
 package com.depromeet.presentation.login.ui
 
+import android.annotation.SuppressLint
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSignupTextBinding
 
 class SignupViewPagerAdapter(
-    private val texts: List<String>
+    private val texts: List<Triple<String, Int, Int>>
 ) : RecyclerView.Adapter<TextViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextViewHolder {
@@ -26,7 +32,14 @@ class TextViewHolder(
     private val binding: ItemSignupTextBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(text: String) {
-        binding.tvText.text = text
+    fun bind(text: Triple<String, Int, Int>) {
+        binding.tvText.text = SpannableStringBuilder(text.first).apply {
+            setSpan(
+                ForegroundColorSpan(android.graphics.Color.parseColor("#42D596")),
+                text.second,
+                text.third + 1,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
     }
 }
