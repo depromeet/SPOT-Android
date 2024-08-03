@@ -18,4 +18,8 @@ class SignupRemoteDataSourceImpl @Inject constructor(
     override suspend fun getSignup(accessToken: String): ResponsePostSignupDto {
         return signupService.getSignupMember(accessToken)
     }
+
+    override suspend fun deleteWithdraw(): Unit {
+        return signupService.deleteSignupMember()
+    }
 }
