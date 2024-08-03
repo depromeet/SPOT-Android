@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/v_home_shimmer_level"
+        android:layout_width="40dp"
+        android:layout_height="22dp"
+        android:background="@color/color_foreground_disabled"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="34dp"/>
+
+    <View
+        android:id="@+id/v_home_shimmer_title"
+        android:layout_width="144dp"
+        android:layout_height="58dp"
+        android:background="@color/color_foreground_disabled"
+        app:layout_constraintStart_toStartOf="@id/v_home_shimmer_level"
+        app:layout_constraintTop_toBottomOf="@id/v_home_shimmer_level"
+        android:layout_marginTop="2dp"/>
+    
+    <View
+        android:id="@+id/v_home_shimmer_image"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:background="@color/color_foreground_disabled"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="34dp"
+        />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,20 +5,24 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
+import coil.load
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotImageSnackBar
+import com.depromeet.domain.entity.response.home.HomeFeedResponse
 import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 import com.depromeet.presentation.databinding.ActivityHomeGuiBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.adapter.StadiumAdapter
 import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
+import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.viewfinder.StadiumActivity
 import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
@@ -30,7 +34,7 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
         private const val BETWEEN_SPADING_DP = 8
     }
 
-    private val stadiumViewModel: HomeGuiViewModel by viewModels()
+    private val homeViewModel: HomeGuiViewModel by viewModels()
 
     private lateinit var stadiumAdapter: StadiumAdapter
 
@@ -45,15 +49,16 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
     }
 
     private fun initView() {
-        stadiumViewModel.getStadiums()
+        homeViewModel.getStadiums()
+        homeViewModel.getHomeFeed()
         setStadiumAdapter()
     }
 
-    private fun initEvent() {
-        binding.clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
-        binding.clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
-        binding.ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
-        binding.clHomeScrap.setOnClickListener {
+    private fun initEvent() = with(binding) {
+        clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
+        clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
+        ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
+        clHomeScrap.setOnClickListener {
             SpotImageSnackBar.make(
                 view = binding.root,
                 message = "스크랩이 잠겨있어요\uD83E\uDEE2 곧 업데이트 예정이에요",
@@ -62,10 +67,11 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
                 iconColor = com.depromeet.designsystem.R.color.color_error_secondary
             ).show()
         }
+        clHomeUpload.setOnClickListener { navigateToReviewActivity() }
     }
 
     private fun initObserver() {
-        stadiumViewModel.stadiums.asLiveData().observe(this) { state ->
+        homeViewModel.stadiums.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> {
@@ -83,6 +89,25 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
                     setStadiumShimmer(false)
                 }
             }
+        }
+
+        homeViewModel.homeFeed.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Empty -> Unit
+                is UiState.Failure -> {
+                    toast("내 정보 불러오기 실패")
+                }
+
+                is UiState.Loading -> {
+                    setHomeFeedShimmer(true)
+                }
+
+                is UiState.Success -> {
+                    setHomeFeed(state.data)
+                    setHomeFeedShimmer(false)
+                }
+            }
+
         }
     }
 
@@ -149,6 +174,33 @@ class HomeGuiActivity : BaseActivity<ActivityHomeGuiBinding>(
             shimmerHomeStadium.stopShimmer()
             shimmerHomeStadium.visibility = View.GONE
             rvHomeStadium.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setHomeFeed(data: HomeFeedResponse) = with(binding) {
+        Timber.d("test ${data}")
+        "Lv.${data.level}".also { tvHomeLevel.text = it }
+        tvHomeTeam.text = if (data.teamId == null) {
+            "모두를 응원하는"
+        } else {
+            "${data.teamName}의"
+        }
+        tvHomeTitle.text = data.levelTitle
+        ivHomeCharacter.load(data.mascotImageUrl)
+        csbvHomeTitle.setText("시야 사진 ${data.reviewCntToLevelup}장 더 올리면 레벨업!")
+    }
+
+    private fun navigateToReviewActivity() {
+        Intent(this, ReviewActivity::class.java).apply { startActivity(this) }
+    }
+
+    private fun setHomeFeedShimmer(isLoading: Boolean) = with(binding) {
+        if (isLoading) {
+            shimmerHomeProfile.startShimmer()
+            shimmerHomeProfile.visibility = View.VISIBLE
+        } else {
+            shimmerHomeProfile.stopShimmer()
+            shimmerHomeProfile.visibility = View.GONE
         }
     }
 }

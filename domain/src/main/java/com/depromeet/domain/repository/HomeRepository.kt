@@ -4,6 +4,7 @@ import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.request.home.ProfileEditRequest
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.DeleteReviewResponse
+import com.depromeet.domain.entity.response.home.HomeFeedResponse
 import com.depromeet.domain.entity.response.home.LevelByPostResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
@@ -47,4 +48,6 @@ interface HomeRepository {
     ): Result<DeleteReviewResponse>
 
     suspend fun getLevelByPost() : Result<List<LevelByPostResponse>>
+
+    suspend fun getHomeFeed() : Result<HomeFeedResponse>
 }

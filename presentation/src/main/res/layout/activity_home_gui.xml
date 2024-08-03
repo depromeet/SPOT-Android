@@ -51,15 +51,16 @@
 
     <ImageView
         android:id="@+id/iv_home_character"
-        android:layout_width="185dp"
-        android:layout_height="185dp"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
         android:layout_marginTop="6dp"
-        android:layout_marginEnd="3.5dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/csbv_home_title"
         tools:ignore="ContentDescription"
         tools:src="@drawable/ic_default_profile" />
+
+
 
 
     <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
@@ -76,7 +77,6 @@
         app:paddingLeft="10dp"
         app:paddingRight="10dp"
         app:paddingTop="8dp"
-        app:text="시야 사진 1장 더 올리면 레벨업!"
         app:textColor="@color/color_foreground_body_subtitle"
         app:textSize="11sp"
         app:textStyle="semiBold"
@@ -129,27 +129,51 @@
         tools:ignore="contentDescription" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_home_profile"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/rv_home_stadium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_app_bar">
+
+
+        <include layout="@layout/item_shimmer_profile"/>
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_home_stadium"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:paddingStart="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_home_character"
         app:layout_constraintBottom_toBottomOf="@id/rv_home_stadium"
-        android:layout_marginTop="20dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_character">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <include layout="@layout/item_stadium_small_selection"/>
-            <include layout="@layout/item_stadium_small_selection"/>
-            <include layout="@layout/item_stadium_small_selection"/>
-            <include layout="@layout/item_stadium_small_selection"/>
-            <include layout="@layout/item_stadium_small_selection"/>
-            <include layout="@layout/item_stadium_small_selection"/>
-            <include layout="@layout/item_stadium_small_selection"/>
-            <include layout="@layout/item_stadium_small_selection"/>
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
         </LinearLayout>
 
 
@@ -159,7 +183,7 @@
         android:id="@+id/rv_home_stadium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"

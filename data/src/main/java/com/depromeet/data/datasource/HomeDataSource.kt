@@ -4,6 +4,7 @@ import com.depromeet.data.model.request.home.RequestMySeatRecordDto
 import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseDeleteReviewDto
+import com.depromeet.data.model.response.home.ResponseHomeFeedDto
 import com.depromeet.data.model.response.home.ResponseLevelByPostDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
@@ -47,4 +48,6 @@ interface HomeDataSource {
     ): ResponseDeleteReviewDto
 
     suspend fun getLevelByPost(): List<ResponseLevelByPostDto>
+
+    suspend fun getHomeFeed() : ResponseHomeFeedDto
 }
