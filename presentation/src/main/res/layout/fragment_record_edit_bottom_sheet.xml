@@ -1,26 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rect_white_fill_top20">
 
-    <TextView
-        android:id="@+id/tv_record_delete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingVertical="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/record_delete"
-        android:textColor="@color/warning_red01"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+
+    <View
+        android:id="@+id/v_record_edit"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rect_background_primary_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_record_edit_title"
+        style="@style/TextAppearance.Spot.Subtitle03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="@string/record_manage"
+        android:textColor="@color/color_foreground_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_record_edit" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_record_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_record_edit_title">
+
+        <ImageView
+            android:id="@+id/iv_record_edit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_pencil_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/color_foreground_caption"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            style="@style/TextAppearance.Spot.Body02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/record_edit"
+            android:textColor="@color/color_foreground_body_subtitle"
+            app:layout_constraintBottom_toBottomOf="@id/iv_record_edit"
+            app:layout_constraintStart_toEndOf="@id/iv_record_edit"
+            app:layout_constraintTop_toTopOf="@id/iv_record_edit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_record_remove"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_record_edit">
+
+        <ImageView
+            android:id="@+id/iv_record_edit_remove"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_trash"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/color_error_primary"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/TextAppearance.Spot.Body02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/record_remove"
+            android:textColor="@color/color_error_primary"
+            app:layout_constraintBottom_toBottomOf="@id/iv_record_edit_remove"
+            app:layout_constraintStart_toEndOf="@id/iv_record_edit_remove"
+            app:layout_constraintTop_toTopOf="@id/iv_record_edit_remove" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

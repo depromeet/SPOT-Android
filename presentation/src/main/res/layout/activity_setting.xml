@@ -73,7 +73,7 @@
             android:layout_height="108dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_setting_title_image" />
+            android:src="@drawable/ic_setting_title_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -248,17 +248,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_setting_terms" />
-
-    <ImageView
-        android:id="@+id/iv_setting_license"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_link_external"
-        app:layout_constraintBottom_toBottomOf="@id/tv_setting_license"
-        app:layout_constraintEnd_toEndOf="@id/tv_setting_license"
-        app:layout_constraintTop_toTopOf="@id/tv_setting_license"
-        app:tint="@color/color_foreground_disabled" />
 
     <View
         android:id="@+id/v_setting_service_management_divider"

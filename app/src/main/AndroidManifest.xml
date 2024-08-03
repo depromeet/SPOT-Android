@@ -17,9 +17,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_spot_logo_foreground"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_spot_logo_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.DepromeetAndroid"
         android:usesCleartextTraffic="true"
@@ -67,14 +67,8 @@
             android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.depromeet.presentation.seatrecord.SeatDetailRecordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
         <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.depromeet.presentation.seatReview.ReviewDoneActivity"
@@ -92,6 +86,22 @@
             </intent-filter>
         </activity>
         <activity android:name="com.depromeet.presentation.viewfinder.WebViewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.depromeet.presentation.setting.SettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.depromeet.presentation.login.ui.KakaoSignupActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.depromeet.presentation.login.ui.NicknameInputActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.depromeet.presentation.login.ui.TeamSelectActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 

@@ -28,500 +28,516 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_upload_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_top">
 
         <LinearLayout
-            android:id="@+id/layout_date_picker"
-            android:layout_width="wrap_content"
+            android:id="@+id/layout_bottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/rect_white_fill_stroke_tertiary_line_999">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_top">
 
-            <TextView
-                android:id="@+id/tv_date"
+            <LinearLayout
+                android:id="@+id/layout_date_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="12dp"
-                android:textAlignment="center"
-                android:layout_marginStart="12dp"
-                android:textAppearance="@style/TextAppearance.Spot.Label05"
-                android:textColor="@color/color_foreground_body_subtitle"
-                tools:text="2024.06.30" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rect_white_fill_stroke_tertiary_line_999"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_edit_date"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_chevron_down" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="4dp"
-            android:text="경기의 순간을 기록해보세요"
-            android:textAppearance="@style/TextAppearance.Spot.Title02" />
-
-        <LinearLayout
-            android:id="@+id/layout_add_image"
-            android:layout_width="wrap_content"
-            android:layout_height="306dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:paddingEnd="16dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_add_image_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageButton
-                    android:id="@+id/btn_add_image"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/ic_image_plus"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="118dp"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/btn_add_image"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_add_image">
+                    android:layout_marginVertical="12dp"
+                    android:layout_marginStart="12dp"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.Spot.Label05"
+                    android:textColor="@color/color_foreground_body_subtitle"
+                    tools:text="2024.06.30" />
 
-                    <TextView
-                        android:id="@+id/tv_image_count"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="0"
-                        android:textAppearance="@style/TextAppearance.Spot.Body03"
-                        android:textColor="@color/color_action_enabled" />
+                <ImageView
+                    android:id="@+id/iv_edit_date"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_chevron_down" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_image_total_count"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="/3"
-                        android:textAppearance="@style/TextAppearance.Spot.Body03"
-                        android:textColor="@color/color_foreground_body_sebtext"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_image_count"
-                        app:layout_constraintStart_toEndOf="@id/tv_image_count"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:text="경기의 순간을 기록해보세요"
+                android:textAppearance="@style/TextAppearance.Spot.Title02" />
+
+            <LinearLayout
+                android:id="@+id/layout_add_image"
+                android:layout_width="wrap_content"
+                android:layout_height="310dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:paddingEnd="16dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_add_image_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:id="@+id/btn_add_image"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="16dp"
+                        android:background="@drawable/ic_image_plus"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="118dp"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/btn_add_image"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_add_image">
+
+                        <TextView
+                            android:id="@+id/tv_image_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:textAppearance="@style/TextAppearance.Spot.Body03"
+                            android:textColor="@color/color_action_enabled" />
+
+                        <TextView
+                            android:id="@+id/tv_image_total_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="/3"
+                            android:textAppearance="@style/TextAppearance.Spot.Body03"
+                            android:textColor="@color/color_foreground_body_sebtext"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_image_count"
+                            app:layout_constraintStart_toEndOf="@id/tv_image_count"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <HorizontalScrollView
-                android:id="@+id/sv_add_image"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_weight="3">
-
-                <LinearLayout
+                <HorizontalScrollView
+                    android:id="@+id/sv_add_image"
                     android:layout_width="0dp"
-                    android:layout_height="320dp"
-                    android:layout_marginStart="16dp"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="3">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:background="@drawable/rect_white_fill_16"
-                        android:elevation="2dp">
+                        android:layout_height="320dp"
+                        android:layout_marginStart="16dp"
+                        android:paddingEnd="20dp"
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:id="@+id/layout_add_default_image"
-                            android:layout_width="190dp"
-                            android:layout_height="258dp"
-                            android:layout_marginHorizontal="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="27dp"
-                            android:background="@drawable/rect_white_fill_gray200_dash_12"
-                            android:orientation="vertical"
-                            android:visibility="visible">
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:layout_margin="4dp"
+                            android:background="@drawable/rect_white_fill_16"
+                            android:elevation="4dp">
 
-                            <TextView
-                                android:id="@+id/tv_add_image"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="98dp"
-                                android:gravity="center"
-                                android:text="야구장의 시야 사진을\n올려주세요"
-                                android:textAppearance="@style/TextAppearance.Spot.Subtitle01"
-                                android:textColor="@color/color_foreground_body_sebtext" />
+                            <LinearLayout
+                                android:id="@+id/layout_add_default_image"
+                                android:layout_width="190dp"
+                                android:layout_height="258dp"
+                                android:layout_marginHorizontal="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="27dp"
+                                android:background="@drawable/rect_white_fill_gray200_dash_12"
+                                android:orientation="vertical"
+                                android:visibility="visible">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center">
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/layout_description_line_one"
+                                <TextView
+                                    android:id="@+id/tv_add_image"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent">
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="98dp"
+                                    android:gravity="center"
+                                    android:text="야구장 시야 사진을\n올려주세요"
+                                    android:textAppearance="@style/TextAppearance.Spot.Subtitle01"
+                                    android:textColor="@color/color_foreground_body_sebtext" />
 
-                                    <TextView
-                                        android:id="@+id/tv_image_description1"
-                                        android:layout_width="match_parent"
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="4dp">
+
+                                    <androidx.constraintlayout.widget.ConstraintLayout
+                                        android:id="@+id/layout_description_line_one"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="사진은 최대"
-                                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                                        android:textColor="@color/color_foreground_caption"
-                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        android:layout_marginTop="4dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        app:layout_constraintTop_toTopOf="parent">
+
+                                        <TextView
+                                            android:id="@+id/tv_image_description1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            android:text="사진은 최대"
+                                            android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                                            android:textColor="@color/color_foreground_caption"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent" />
+
+                                        <TextView
+                                            android:id="@+id/tv_image_description2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            android:text=" 3"
+                                            android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                                            android:textColor="@color/color_action_enabled"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintStart_toEndOf="@id/tv_image_description1"
+                                            app:layout_constraintTop_toTopOf="parent" />
+
+                                        <TextView
+                                            android:id="@+id/ttv_image_description3"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            android:text="장,"
+                                            android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                                            android:textColor="@color/color_foreground_caption"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintStart_toEndOf="@id/tv_image_description2"
+                                            app:layout_constraintTop_toTopOf="parent" />
+                                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                                     <TextView
-                                        android:id="@+id/tv_image_description2"
+                                        android:id="@+id/tv_image_description4"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginTop="3dp"
                                         android:gravity="center"
-                                        android:text=" 3"
+                                        android:text="15mb"
                                         android:textAppearance="@style/TextAppearance.Spot.Caption01"
                                         android:textColor="@color/color_action_enabled"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toEndOf="@id/tv_image_description1"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        app:layout_constraintTop_toBottomOf="@+id/layout_description_line_one" />
 
                                     <TextView
-                                        android:id="@+id/ttv_image_description3"
+                                        android:id="@+id/tv_image_description5"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginTop="3dp"
                                         android:gravity="center"
-                                        android:text="장,"
+                                        android:text="까지 올릴 수 있어요"
                                         android:textAppearance="@style/TextAppearance.Spot.Caption01"
                                         android:textColor="@color/color_foreground_caption"
                                         app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toEndOf="@id/tv_image_description2"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        app:layout_constraintStart_toEndOf="@+id/tv_image_description4" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                                <TextView
-                                    android:id="@+id/tv_image_description4"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:text="15mb"
-                                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                                    android:textColor="@color/color_action_enabled"
-                                    app:layout_constraintTop_toBottomOf="@+id/layout_description_line_one" />
-
-                                <TextView
-                                    android:id="@+id/tv_image_description5"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:text="까지 올릴 수 있어요"
-                                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                                    android:textColor="@color/color_foreground_caption"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toEndOf="@+id/tv_image_description4" />
-                            </androidx.constraintlayout.widget.ConstraintLayout>
+                            </LinearLayout>
                         </LinearLayout>
+
+                        <FrameLayout
+                            android:id="@+id/layout_first_image"
+                            android:layout_width="200dp"
+                            android:layout_height="295dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="13dp"
+                            android:background="@drawable/rect_white_fill_16"
+                            android:elevation="1dp"
+                            android:orientation="horizontal"
+                            android:rotation="-3"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/iv_first_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="258dp"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="8dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginBottom="30dp"
+                                android:scaleType="centerCrop" />
+
+                            <ImageView
+                                android:id="@+id/iv_remove_first_image"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="top|end"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/ic_remove_image" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/layout_second_image"
+                            android:layout_width="200dp"
+                            android:layout_height="295dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="13dp"
+                            android:background="@drawable/rect_white_fill_16"
+                            android:elevation="1dp"
+                            android:orientation="horizontal"
+                            android:rotation="+3"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/iv_second_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="258dp"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="8dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginBottom="30dp"
+                                android:scaleType="centerCrop" />
+
+                            <ImageView
+                                android:id="@+id/iv_remove_second_image"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="top|end"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/ic_remove_image" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/layout_third_image"
+                            android:layout_width="200dp"
+                            android:layout_height="295dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="13dp"
+                            android:background="@drawable/rect_white_fill_16"
+                            android:elevation="1dp"
+                            android:orientation="horizontal"
+                            android:rotation="-3"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/iv_third_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="258dp"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="8dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginBottom="30dp"
+                                android:scaleType="centerCrop" />
+
+                            <ImageView
+                                android:id="@+id/iv_remove_third_image"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="top|end"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/ic_remove_image" />
+                        </FrameLayout>
                     </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
 
-                    <FrameLayout
-                        android:id="@+id/layout_first_image"
-                        android:layout_width="200dp"
-                        android:layout_height="293dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="13dp"
-                        android:background="@drawable/rect_white_fill_16"
-                        android:elevation="2dp"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        android:rotation="-3">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_seat_info_next"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="33dp"
+                android:background="@drawable/rect_white_fill_8"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                        <ImageView
-                            android:id="@+id/iv_first_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="258dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginHorizontal="8dp"
-                            android:layout_marginBottom="30dp"
-                            android:scaleType="centerCrop" />
+                <TextView
+                    android:id="@+id/tv_stadium_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="좌석 선택"
+                    android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                    android:textColor="@color/color_foreground_body_subtitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/layout_seat_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginStart="16dp" />
 
-                        <ImageView
-                            android:id="@+id/iv_remove_first_image"
-                            android:layout_width="24dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="top|end"
-                            android:src="@drawable/ic_remove_image" />
-                    </FrameLayout>
+                <LinearLayout
+                    android:id="@+id/layout_seat_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_next_stadium"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <FrameLayout
-                        android:id="@+id/layout_second_image"
-                        android:layout_width="200dp"
-                        android:layout_height="293dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="13dp"
-                        android:background="@drawable/rect_white_fill_16"
-                        android:elevation="2dp"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        android:rotation="+3">
+                    <TextView
+                        android:id="@+id/tv_seat_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled"
+                        tools:text="네이비석" />
 
-                        <ImageView
-                            android:id="@+id/iv_second_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="258dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginHorizontal="8dp"
-                            android:layout_marginBottom="30dp"
-                            android:scaleType="centerCrop" />
+                    <TextView
+                        android:id="@+id/tv_seat_block"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:layout_marginStart="3dp"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled"
+                        tools:text="304" />
 
-                        <ImageView
-                            android:id="@+id/iv_remove_second_image"
-                            android:layout_width="24dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="top|end"
-                            android:src="@drawable/ic_remove_image" />
-                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/tv_block"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:text="블럭"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled" />
 
-                    <FrameLayout
-                        android:id="@+id/layout_third_image"
-                        android:layout_width="200dp"
-                        android:layout_height="293dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="13dp"
-                        android:background="@drawable/rect_white_fill_16"
-                        android:elevation="2dp"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        android:rotation="-3">
+                    <TextView
+                        android:id="@+id/tv_column_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:layout_marginStart="3dp"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled"
+                        tools:text="2" />
 
-                        <ImageView
-                            android:id="@+id/iv_third_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="258dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginHorizontal="8dp"
-                            android:layout_marginBottom="30dp"
-                            android:scaleType="centerCrop" />
+                    <TextView
+                        android:id="@+id/tv_column"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:text="열"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled" />
 
-                        <ImageView
-                            android:id="@+id/iv_remove_third_image"
-                            android:layout_width="24dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="top|end"
-                            android:src="@drawable/ic_remove_image" />
-                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/tv_seat_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:layout_marginStart="3dp"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled"
+                        tools:text="19" />
                 </LinearLayout>
-            </HorizontalScrollView>
+
+                <ImageView
+                    android:id="@+id/iv_next_stadium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_review_my_seat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rect_white_fill_8"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_review_my_seat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="내 시야 후기"
+                    android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                    android:textColor="@color/color_foreground_body_subtitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginStart="16dp" />
+
+                <LinearLayout
+                    android:id="@+id/layout_review_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_next_my_seat"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_my_seat_review_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled"
+                        tools:text="3" />
+
+                    <TextView
+                        android:id="@+id/tv_my_seat_review_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:text="의 후기"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_foreground_body_sebtext" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_next_my_seat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_seat_info_next"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="33dp"
-            android:background="@drawable/rect_white_fill_8"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/tv_stadium_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="16dp"
-                android:text="좌석 선택"
-                android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
-                android:textColor="@color/color_foreground_body_subtitle"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/layout_seat_info"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_goneMarginStart="16dp" />
-
-            <LinearLayout
-                android:id="@+id/layout_seat_info"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:orientation="horizontal"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_next_stadium"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/tv_seat_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_action_enabled"
-                    tools:text="네이비석" />
-
-                <TextView
-                    android:id="@+id/tv_seat_block"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:layout_marginStart="3dp"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_action_enabled"
-                    tools:text="304" />
-
-                <TextView
-                    android:id="@+id/tv_block"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:text="블럭"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_action_enabled" />
-
-                <TextView
-                    android:id="@+id/tv_column_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:layout_marginStart="3dp"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_action_enabled"
-                    tools:text="2" />
-
-                <TextView
-                    android:id="@+id/tv_column"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:text="열"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_action_enabled" />
-
-                <TextView
-                    android:id="@+id/tv_seat_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:layout_marginStart="3dp"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_action_enabled"
-                    tools:text="19" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/iv_next_stadium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="12dp"
-                android:src="@drawable/ic_chevron_right"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_review_my_seat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/rect_white_fill_8"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/tv_review_my_seat"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="16dp"
-                android:text="내 시야 후기"
-                android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
-                android:textColor="@color/color_foreground_body_subtitle"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_goneMarginStart="16dp" />
-
-            <LinearLayout
-                android:id="@+id/layout_review_number"
-                android:layout_width="0dp"
-                android:layout_marginEnd="2dp"
-                android:visibility="invisible"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_next_my_seat"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/tv_my_seat_review_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_action_enabled"
-                    tools:text="3" />
-
-                <TextView
-                    android:id="@+id/tv_my_seat_review_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:text="의 후기"
-                    android:textAppearance="@style/TextAppearance.Spot.Caption01"
-                    android:textColor="@color/color_foreground_body_sebtext" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/iv_next_my_seat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="12dp"
-                android:src="@drawable/ic_chevron_right"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/tv_upload_btn"

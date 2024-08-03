@@ -3,82 +3,139 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/rect_background_white_top_12">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_edit_top"
-        android:layout_width="0dp"
-        android:layout_height="103dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rect_white_fill_12"
+    <View
+        android:id="@+id/v_profile_edit"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rect_background_primary_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_profile_select_album"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:paddingTop="8dp"
-            android:text="@string/profile_edit_select_album"
-            android:textColor="@color/gray900"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/tv_profile_delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_profile_edit_title"
+        style="@style/TextAppearance.Spot.Subtitle03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="@string/profile_edit_change_image"
+        android:textColor="@color/color_foreground_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_profile_edit" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_profile_edit_camera"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_title">
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_camera"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/gray100"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_select_album" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/color_foreground_caption"
+            tools:ignore="contentDescription" />
 
         <TextView
-            android:id="@+id/tv_profile_delete"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:paddingBottom="8dp"
-            android:text="@string/profile_edit_delete_image"
-            android:textColor="@color/warning_red05"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_profile_select_album" />
-
+            style="@style/TextAppearance.Spot.Body02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/profile_edit_camera"
+            android:textColor="@color/color_foreground_body_subtitle"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_camera"
+            app:layout_constraintStart_toEndOf="@id/iv_profile_edit_camera"
+            app:layout_constraintTop_toTopOf="@id/iv_profile_edit_camera" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tv_profile_edit_close"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_profile_edit_gallery"
         android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:text="@string/profile_edit_close"
-        android:background="@drawable/rect_white_fill_12"
-        android:textColor="@color/gray900"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/cl_edit_top"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/cl_profile_edit_camera">
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_gallery"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/color_foreground_caption"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/TextAppearance.Spot.Body02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/profile_edit_gallery"
+            android:textColor="@color/color_foreground_body_subtitle"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_gallery"
+            app:layout_constraintStart_toEndOf="@id/iv_profile_edit_gallery"
+            app:layout_constraintTop_toTopOf="@id/iv_profile_edit_gallery" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_profile_edit_remove"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_profile_edit_gallery">
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_remove"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_trash"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/color_error_primary"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/TextAppearance.Spot.Body02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/profile_edit_remove"
+            android:textColor="@color/color_error_primary"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_remove"
+            app:layout_constraintStart_toEndOf="@id/iv_profile_edit_remove"
+            app:layout_constraintTop_toTopOf="@id/iv_profile_edit_remove" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

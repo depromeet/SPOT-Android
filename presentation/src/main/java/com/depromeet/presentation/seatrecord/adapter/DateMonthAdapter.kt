@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemDateMonthBinding
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.util.ItemDiffCallback
@@ -58,13 +57,26 @@ class DateMonthViewHolder(
         with(binding.tvMonth) {
             when (isClicked) {
                 true -> {
-                    setBackgroundResource(R.drawable.rect_gray900_fill_6)
-                    setTextColor(ContextCompat.getColor(context, R.color.white))
+                    setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_999)
+                    setTextAppearance(com.depromeet.designsystem.R.style.TextAppearance_Spot_Subtitle03)
+                    setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            com.depromeet.designsystem.R.color.color_foreground_white
+                        )
+                    )
+
                 }
 
                 false -> {
-                    setBackgroundResource(R.drawable.rect_white_fill_gray100_line_8)
-                    setTextColor(ContextCompat.getColor(context, R.color.gray900))
+                    setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_foreground_white_fill_999)
+                    setTextAppearance(com.depromeet.designsystem.R.style.TextAppearance_Spot_Label06)
+                    setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            com.depromeet.designsystem.R.color.color_foreground_body_sebtext
+                        )
+                    )
                 }
             }
         }
@@ -83,7 +95,6 @@ internal class LinearSpacingItemDecoration(
         state: RecyclerView.State,
     ) {
         val position: Int = parent.getChildAdapterPosition(view)
-        val lastPosition = (parent.adapter?.itemCount ?: 0) - 1
 
         if (position >= 0) {
             when (position) {
@@ -92,7 +103,6 @@ internal class LinearSpacingItemDecoration(
                     outRect.right = betweenSpacing
                 }
 
-                lastPosition -> {}
                 else -> {
                     outRect.right = betweenSpacing
                 }

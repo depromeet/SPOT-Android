@@ -9,6 +9,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -27,6 +28,7 @@ import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
 import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,11 +45,21 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setCanceledOnTouchOutside(false)
-        return dialog
+        return BottomSheetDialog(requireContext(), theme).apply {
+            setOnShowListener {
+                val bottomSheet = (it as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as? View
+                bottomSheet?.let { sheet ->
+                    BottomSheetBehavior.from(sheet).apply {
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                        skipCollapsed = true
+                        peekHeight = 0
+                    }
+                }
+                window?.findViewById<View>(com.google.android.material.R.id.touch_outside)?.setOnClickListener(null)
+                window?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.layoutParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT)
+            }
+        }
     }
-
     override fun onStart() {
         super.onStart()
         val bottomSheet =
@@ -335,7 +347,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
-        val blockCodes = mutableListOf("")
+        val blockCodes = mutableListOf("블록을 선택해주세요")
         blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
         val adapter =
@@ -354,7 +366,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     id: Long,
                 ) {
                     if (position > 0) {
-                        binding.tvBlockDescription.visibility = INVISIBLE
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)
                         val selectedBlockId = blockCodeToIdMap[selectedBlock] ?: 0
@@ -363,26 +374,11 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             viewModel.selectedStadiumId.value,
                             viewModel.selectedSectionId.value,
                         )
-                    } else {
-                        binding.tvBlockDescription.visibility = VISIBLE
                     }
-                    updateChevronIcon(position)
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    binding.tvBlockDescription.visibility = VISIBLE
-                    updateChevronIcon(-1)
-                }
-
-                fun updateChevronIcon(position: Int) {
-                    if (position > 0) {
-                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
-                    } else {
-                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
-                    }
                 }
             }
-            binding.tvBlockDescription.visibility = VISIBLE
         }
     }
 }

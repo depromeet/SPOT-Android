@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatrecord.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
@@ -30,14 +31,28 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow<List<MonthUiData>>(emptyList())
     val months = _months.asStateFlow()
 
+    private val selectedMonth = MutableStateFlow(0)
+
     private val _selectedYear = MutableStateFlow(0)
     val selectedYear = _selectedYear.asStateFlow()
 
-    private val _deleteClickedEvent = MutableStateFlow(DeleteUi.NONE)
+    private val _deleteClickedEvent = MutableStateFlow(EditUi.NONE)
     val deleteClickedEvent = _deleteClickedEvent.asStateFlow()
+
+    private val _editClickedEvent = MutableStateFlow(EditUi.NONE)
+    val editClickedEvent = _editClickedEvent.asStateFlow()
 
     private val _editReviewId = MutableStateFlow(0)
     val editReviewId = _editReviewId.asStateFlow()
+
+    private val _clickedReviewId = MutableStateFlow(0)
+    val clickedReviewId = _clickedReviewId.asStateFlow()
+
+    private val _pagingData =
+        MutableStateFlow<PagingData<MySeatRecordResponse.ReviewResponse>>(PagingData.empty())
+    val pagingData = _pagingData.asStateFlow()
+
+    private val page = MutableStateFlow(0)
 
     fun getReviewDate() {
         viewModelScope.launch {
@@ -59,18 +74,49 @@ class SeatRecordViewModel @Inject constructor(
 
     fun getSeatRecords() {
         val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
+        if (selectedYear.value == 0) return
+        page.value = 0
+
         viewModelScope.launch {
             homeRepository.getMySeatRecord(
                 MySeatRecordRequest(
                     year = selectedYear.value,
-                    month = month
+                    month = month,
+                    page = page.value
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
-                _reviews.value = UiState.Success(data)
+                if (data.reviews.isEmpty()) {
+                    _reviews.value = UiState.Empty
+                } else {
+                    _reviews.value = UiState.Success(data)
+                    page.value += 1
+                }
+
             }.onFailure {
                 Timber.d("GET_SEAT_RECORDS_TEST FAIL : $it")
                 _reviews.value = UiState.Failure(it.message ?: "실패")
+            }
+        }
+    }
+
+    fun loadNextSeatRecords() {
+        viewModelScope.launch {
+            val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
+            homeRepository.getMySeatRecord(
+                MySeatRecordRequest(
+                    year = selectedYear.value,
+                    month = month,
+                    page = page.value
+                )
+            ).onSuccess { data ->
+                Timber.d("NEXT_SEAT_RECORDS_SUCCESS : $data")
+                val updatedReviewList =
+                    (_reviews.value as UiState.Success).data.reviews + data.reviews
+                page.value += 1
+                _reviews.value = UiState.Success(data.copy(reviews = updatedReviewList))
+            }.onFailure {
+                Timber.d("NEXT_SEAT_RECORDS_FAIL : $it")
             }
         }
     }
@@ -87,6 +133,7 @@ class SeatRecordViewModel @Inject constructor(
             _months.value = selectedYearMonths.mapIndexed { index, month ->
                 MonthUiData(month = month, isClicked = index == 0)
             }
+            selectedMonth.value = 0
         }
     }
 
@@ -94,18 +141,45 @@ class SeatRecordViewModel @Inject constructor(
         _months.value = months.value.map {
             it.copy(isClicked = it.month == month)
         }
+        selectedMonth.value = month
     }
 
     fun setEditReviewId(id: Int) {
         _editReviewId.value = id
     }
 
-    fun setDeleteEvent(deleteUi: DeleteUi) {
-        _deleteClickedEvent.value = deleteUi
+    fun setEditEvent(editUi: EditUi) {
+        _editClickedEvent.value = editUi
+    }
+
+    fun setDeleteEvent(editUi: EditUi) {
+        _deleteClickedEvent.value = editUi
+    }
+
+    fun setClickedReviewId(id: Int) {
+        _clickedReviewId.value = id
     }
 
     fun cancelDeleteEvent() {
-        _deleteClickedEvent.value = DeleteUi.NONE
+        _deleteClickedEvent.value = EditUi.NONE
+    }
+
+    fun updateProfile(nickname: String, profileImage: String, teamId: Int, teamName: String?) {
+        val currentState = _reviews.value
+        if (currentState is UiState.Success) {
+            val updatedProfile = currentState.data.profile.copy(
+                nickname = nickname,
+                profileImage = profileImage,
+                teamId = teamId,
+                teamName = teamName
+            )
+
+            val updatedData = currentState.data.copy(
+                profile = updatedProfile
+            )
+
+            _reviews.value = UiState.Success(updatedData)
+        }
     }
 
     fun removeReviewData() {
@@ -126,14 +200,14 @@ class SeatRecordViewModel @Inject constructor(
                         Timber.d("삭제 실패 : $it")
                     }
             }
-            _deleteClickedEvent.value = DeleteUi.NONE
+            _deleteClickedEvent.value = EditUi.NONE
         }
 
     }
 
 }
 
-enum class DeleteUi {
+enum class EditUi {
     NONE,
     SEAT_RECORD,
     SEAT_DETAIL

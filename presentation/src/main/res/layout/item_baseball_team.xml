@@ -4,18 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="78dp"
-    android:background="@drawable/rect_gray100_line_10">
+    android:background="@drawable/rect_background_tertiary_fill_8">
 
     <ImageView
         android:id="@+id/iv_team_image"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_team_name"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="11.5dp"
         tools:ignore="contentDescription"
         tools:src="@drawable/ic_lg_team" />
 
@@ -23,13 +21,11 @@
         android:id="@+id/tv_team_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/gray300"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/iv_team_image"
+        android:layout_marginStart="6dp"
+        style="@style/TextAppearance.Spot.Label06"
+        app:layout_constraintStart_toEndOf="@id/iv_team_image"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="LG 트윈스" />
 
 

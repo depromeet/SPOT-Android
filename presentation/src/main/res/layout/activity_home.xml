@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@color/color_background_secondary">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_begin="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="20dp" />
+        app:layout_constraintGuide_end="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_top"
@@ -27,540 +27,315 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_bottom"
+    <ImageView
+        android:id="@+id/iv_home_app_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="20dp" />
+        android:layout_marginTop="9dp"
+        android:src="@drawable/ic_home_spot_text"
+        app:layout_constraintStart_toStartOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/gl_top"
+        tools:ignore="ContentDescription" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iv_home_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_setting"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintTop_toBottomOf="@id/gl_top"
+        app:tint="@color/color_foreground_body_sebtext"
+        tools:ignore="ContentDescription" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+    <ImageView
+        android:id="@+id/iv_home_character"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:layout_marginTop="6dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/csbv_home_title"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_default_profile" />
+
+
+
+
+    <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
+        android:id="@+id/csbv_home_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="5dp"
+        app:backgroundColor="@color/color_background_white"
+        app:layout_constraintEnd_toEndOf="@id/iv_home_character"
+        app:layout_constraintStart_toStartOf="@id/iv_home_character"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_setting"
+        app:paddingBottom="12dp"
+        app:paddingLeft="10dp"
+        app:paddingRight="10dp"
+        app:paddingTop="8dp"
+        app:textColor="@color/color_foreground_body_subtitle"
+        app:textSize="11sp"
+        app:textStyle="semiBold"
+        app:triangleHeight="4dp"
+        app:triangleWidth="7.5dp" />
+
+
+    <TextView
+        android:id="@+id/tv_home_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/rect_action_enabled_line_20"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4.5dp"
+        android:textColor="@color/color_action_enabled"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_app_bar"
+        tools:text="Lv.5" />
+
+    <TextView
+        android:id="@+id/tv_home_team"
+        style="@style/TextAppearance.Spot.Title03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="@id/tv_home_level"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_level"
+        tools:text="LG 트윈스의" />
+
+    <TextView
+        android:id="@+id/tv_home_title"
+        style="@style/TextAppearance.Spot.Title03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="@id/tv_home_team"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_team"
+        tools:text="야구장 VIP" />
+
+    <ImageView
+        android:id="@+id/iv_home_info"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_info_circle_line"
+        app:layout_constraintBottom_toBottomOf="@id/tv_home_title"
+        app:layout_constraintStart_toEndOf="@id/tv_home_title"
+        app:layout_constraintTop_toTopOf="@id/tv_home_title"
+        tools:ignore="contentDescription" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_home_profile"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/rv_home_stadium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_app_bar">
+
+
+        <include layout="@layout/item_shimmer_profile"/>
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_home_stadium"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:paddingStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/rv_home_stadium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_character">
+
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+
+            <include layout="@layout/item_stadium_small_selection" />
+        </LinearLayout>
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_home_stadium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_home_character"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_stadium_small_selection" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_home_archiving"
+        android:layout_width="0dp"
+        android:layout_height="223dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/rect_white_fill_12"
+        app:layout_constraintEnd_toStartOf="@+id/cl_home_scrap"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/rv_home_stadium">
+
+        <TextView
+            android:id="@+id/tv_archiving_title"
+            style="@style/TextAppearance.Spot.Subtitle02"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/action01">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/home_seat_archiving"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_home_profile"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="32dp"
-                android:src="@drawable/ic_default_profile"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="contentDescription" />
+        <TextView
+            android:id="@+id/tv_archiving_description"
+            style="@style/TextAppearance.Spot.Label10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/home_seat_archiving_description"
+            android:textColor="@color/color_foreground_caption"
+            app:layout_constraintStart_toStartOf="@id/tv_archiving_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_archiving_title" />
 
-            <ImageButton
-                android:id="@+id/ib_home_edit"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:background="@drawable/circle_t_black02_fill"
-                android:src="@drawable/ic_edit"
-                app:layout_constraintBottom_toBottomOf="@id/iv_home_profile"
-                app:layout_constraintEnd_toEndOf="@id/iv_home_profile"
-                tools:ignore="contentDescription" />
-
-            <ImageButton
-                android:id="@+id/ib_home_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_setting"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="contentDescription" />
-
-            <TextView
-                android:id="@+id/tv_home_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/rect_action02_fill_6"
-                android:paddingHorizontal="22dp"
-                android:paddingVertical="6dp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/iv_home_profile"
-                app:layout_constraintTop_toBottomOf="@id/iv_home_profile"
-                tools:text="Lv.1 직관 첫 걸음" />
-
-            <TextView
-                android:id="@+id/tv_home_sight_chance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@id/tv_home_level"
-                app:layout_constraintTop_toBottomOf="@id/tv_home_level"
-                tools:text="디프만님, 지금까지\n시야후기를\n0번 작성했어요!" />
-
-            <ImageView
-                android:id="@+id/iv_home_cheer_team"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:layout_marginEnd="20dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="@id/tv_home_sight_chance"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="contentDescription"
-                tools:src="@drawable/ic_lg_team" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_main_find_sight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="48dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/rect_white_fill_16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_home_sight_chance">
-
-                <TextView
-                    android:id="@+id/tv_home_find_sight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="17dp"
-                    android:layout_marginEnd="21dp"
-                    android:text="@string/home_sight_seeing"
-                    android:textColor="@color/gray900"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_chevron_right"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_home_find_sight"
-                    app:layout_constraintStart_toEndOf="@id/tv_home_find_sight"
-                    app:layout_constraintTop_toTopOf="@id/tv_home_find_sight"
-                    tools:ignore="contentDescription" />
-
-                <TextView
-                    android:id="@+id/tv_home_find_sight_description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="13dp"
-                    android:text="@string/home_sight_seeing_description"
-                    android:textColor="#606060"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/tv_home_find_sight"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_find_sight" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_sight_seeing"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:ignore="contentDescription" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/rect_white_fill_top20"
-                android:paddingBottom="60dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_main_find_sight">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_register_sight"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/rect_action03_fill_16"
-                    app:layout_constraintEnd_toStartOf="@+id/cl_home_sight_record"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tv_home_register_sight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="41dp"
-                        android:text="@string/home_register_sight"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_chevron_right"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_home_register_sight"
-                        app:layout_constraintStart_toEndOf="@id/tv_home_register_sight"
-                        app:layout_constraintTop_toTopOf="@id/tv_home_register_sight"
-                        tools:ignore="contentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_register_sight_description"
-                        android:textColor="@color/gray800"
-                        app:layout_constraintStart_toStartOf="@id/tv_home_register_sight"
-                        app:layout_constraintTop_toBottomOf="@id/tv_home_register_sight" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="4dp"
-                        android:src="@drawable/ic_register_sight"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        tools:ignore="contentDescription" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_sight_record"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/ic_folder_blue"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/cl_home_register_sight"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tv_home_sight_record"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="41dp"
-                        android:text="@string/home_my_sight_record"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_chevron_right"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_home_sight_record"
-                        app:layout_constraintStart_toEndOf="@id/tv_home_sight_record"
-                        app:layout_constraintTop_toTopOf="@id/tv_home_sight_record"
-                        tools:ignore="contentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_my_sight_record_description"
-                        android:textColor="@color/gray800"
-                        app:layout_constraintStart_toStartOf="@id/tv_home_sight_record"
-                        app:layout_constraintTop_toBottomOf="@id/tv_home_sight_record" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/tv_home_recent_sight_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
-                    android:text="@string/home_my_recent_sight_record"
-                    android:textColor="@color/gray800"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/cl_home_register_sight"
-                    app:layout_constraintTop_toBottomOf="@id/cl_home_register_sight" />
-
-                <TextView
-                    android:id="@+id/tv_home_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_more"
-                    android:textColor="@color/action01"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_home_recent_sight_record"
-                    app:layout_constraintEnd_toEndOf="@id/cl_home_sight_record"
-                    app:layout_constraintTop_toTopOf="@id/tv_home_recent_sight_record" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_archiving_design"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="contentDescription" />
 
 
-                <!-- 추후 spannable로 합칠 예정 -->
-                <TextView
-                    android:id="@+id/tv_home_recent_record_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:textColor="@color/gray700"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/tv_home_recent_sight_record"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_sight_record"
-                    tools:text="서울 잠실야구장" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/tv_home_recent_record_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:textColor="@color/gray400"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_home_recent_record_name"
-                    app:layout_constraintStart_toEndOf="@id/tv_home_recent_record_name"
-                    app:layout_constraintTop_toTopOf="@id/tv_home_recent_record_name"
-                    tools:text="2024년 7월 7일" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_home_scrap"
+        android:layout_width="0dp"
+        android:layout_height="223dp"
+        android:layout_marginStart="4dp"
+        android:background="@drawable/rect_white_fill_12"
+        app:layout_constraintEnd_toStartOf="@id/gl_end"
+        app:layout_constraintStart_toEndOf="@+id/cl_home_archiving"
+        app:layout_constraintTop_toTopOf="@+id/cl_home_archiving">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_no_record"
-                    android:layout_width="0dp"
-                    android:layout_height="180dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/rect_gray100_fill_8"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_sight_record">
+        <TextView
+            android:id="@+id/tv_scrap_title"
+            style="@style/TextAppearance.Spot.Subtitle02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/home_scrap"
+            android:textColor="@color/color_foreground_disabled"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/iv_home_no_record"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:src="@drawable/ic_folder_blank"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="contentDescription" />
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_lock"
+            app:layout_constraintBottom_toBottomOf="@id/tv_scrap_title"
+            app:layout_constraintStart_toEndOf="@id/tv_scrap_title"
+            app:layout_constraintTop_toTopOf="@id/tv_scrap_title"
+            app:tint="@color/color_foreground_disabled"
+            tools:ignore="contentDescription" />
 
-                    <TextView
-                        android:id="@+id/tv_home_no_record_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_no_record_description"
-                        android:textColor="@color/gray800"
-                        android:textSize="13sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/iv_home_no_record" />
+        <TextView
+            android:id="@+id/tv_scrap_description"
+            style="@style/TextAppearance.Spot.Label10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/home_scrap_description"
+            android:textColor="@color/color_foreground_disabled"
+            app:layout_constraintStart_toStartOf="@id/tv_scrap_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_scrap_title" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/bt_home_write_record"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@drawable/rect_gray800_fill_6"
-                        android:paddingHorizontal="23dp"
-                        android:paddingVertical="8dp"
-                        android:text="@string/home_write_record"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_home_no_record_description" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_one_record"
-                    android:layout_width="0dp"
-                    android:layout_height="180dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="20dp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
-
-                    <ImageView
-                        android:id="@+id/iv_home_recent_one_record1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rect_no_16"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_stadium_test"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="contentDescription"
-                        tools:src="@drawable/ic_stadium_test" />
-
-                    <TextView
-                        android:id="@+id/tv_home_recent_one_section"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rect_transparentblack01_fill_36"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_one_record1"
-                        app:layout_constraintStart_toStartOf="@id/iv_home_recent_one_record1"
-                        tools:text="1루 네이비석 3054블록" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_two_record"
-                    android:layout_width="0dp"
-                    android:layout_height="180dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="20dp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
-
-                    <ImageView
-                        android:id="@+id/iv_home_recent_two_record1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rect_no_left16"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_stadium_test"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_home_recent_two_record2"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="contentDescription"
-                        tools:src="@drawable/ic_stadium_test" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_recent_two_record2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="2dp"
-                        android:background="@drawable/rect_no_right16"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_stadium_test"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/iv_home_recent_two_record1"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="contentDescription" />
-
-                    <TextView
-                        android:id="@+id/tv_home_recent_two_section"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rect_transparentblack01_fill_36"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_two_record1"
-                        app:layout_constraintStart_toStartOf="@id/iv_home_recent_two_record1"
-                        tools:text="1루 네이비석 3054블록" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_three_record"
-                    android:layout_width="0dp"
-                    android:layout_height="180dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="20dp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_recent_record_name">
-
-                    <ImageView
-                        android:id="@+id/iv_home_recent_three_record1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rect_no_left16"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_stadium_test"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_home_recent_three_record2"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="contentDescription"
-                        tools:src="@drawable/ic_stadium_test" />
-
-                    <TextView
-                        android:id="@+id/tv_home_recent_three_section"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rect_transparentblack01_fill_36"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_three_record1"
-                        app:layout_constraintStart_toStartOf="@id/iv_home_recent_three_record1"
-                        tools:text="1루 네이비석 3054블록" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_recent_three_record2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/rect_no_topright16"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_stadium_test"
-                        app:layout_constraintBottom_toTopOf="@id/iv_home_recent_three_record3"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/iv_home_recent_three_record1"
-                        app:layout_constraintTop_toTopOf="@id/iv_home_recent_three_record1"
-                        tools:ignore="contentDescription" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_recent_three_record3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="2dp"
-                        android:background="@drawable/rect_no_bottomright16"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_stadium_test"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_home_recent_three_record1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/iv_home_recent_three_record1"
-                        app:layout_constraintTop_toBottomOf="@id/iv_home_recent_three_record2"
-                        tools:ignore="contentDescription" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_scrap_design"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="contentDescription" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.core.widget.NestedScrollView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_home_upload"
+        android:layout_width="0dp"
+        android:layout_height="74dp"
+        android:background="@drawable/rect_spot_green_fill_top_36"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_home_upload_description"
+            style="@style/TextAppearance.Spot.Title04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_upload_review"
+            android:textColor="@color/color_foreground_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_home_upload_plus"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_home_upload_plus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="9dp"
+            android:src="@drawable/ic_plus_circle"
+            app:layout_constraintBottom_toBottomOf="@id/tv_home_upload_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_home_upload_description"
+            app:layout_constraintTop_toTopOf="@id/tv_home_upload_description"
+            app:tint="@color/color_foreground_white"
+            tools:ignore="ContentDescription" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

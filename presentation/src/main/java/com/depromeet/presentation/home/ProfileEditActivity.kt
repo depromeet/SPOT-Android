@@ -25,6 +25,7 @@ import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import com.depromeet.presentation.home.viewmodel.ProfileEvents
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
+import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -37,8 +38,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         private const val GRID_SPACING = 40
         const val PROFILE_NAME = "profile_name"
         const val PROFILE_IMAGE = "profile_image"
-        const val PROFILE_CHEER_TEAM = "profile_cheer_team"
-        const val PROFILE_CHEER_TEAM_URL = "profile_cheer_team_url"
+        const val PROFILE_CHEER_TEAM_ID = "profile_cheer_team_id"
+        const val PROFILE_CHEER_TEAM_NAME = "profile_cheer_team_name"
     }
 
     private lateinit var adapter: BaseballTeamAdapter
@@ -47,7 +48,6 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getBaseballTeam()
         initView()
         initEvent()
         initObserver()
@@ -58,6 +58,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
             viewModel.initProfile(name, image, cheerTeam)
             binding.etProfileEditNickname.setText(name)
         }
+        viewModel.getBaseballTeam()
         setCheerTeamList()
     }
 
@@ -82,8 +83,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         val resultIntent = Intent().apply {
             putExtra(PROFILE_NAME, viewModel.nickname.value)
             putExtra(PROFILE_IMAGE, viewModel.getPresignedUrlOrProfileImage())
-            putExtra(PROFILE_CHEER_TEAM, viewModel.cheerTeam.value)
-            putExtra(PROFILE_CHEER_TEAM_URL, viewModel.getTeamUrl())
+            putExtra(PROFILE_CHEER_TEAM_ID, viewModel.cheerTeam.value)
+            putExtra(PROFILE_CHEER_TEAM_NAME, viewModel.getTeamName())
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -159,7 +160,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         viewModel.profileImage.asLiveData().observe(this) { state ->
             with(binding.ivProfileEditImage) {
                 if (state.isEmpty()) {
-                    setImageResource(R.drawable.ic_default_profile)
+                    setImageResource(com.depromeet.designsystem.R.drawable.ic_default_profile)
                 } else {
                     load(state) {
                         transformations(CircleCropTransformation())
@@ -213,6 +214,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         viewModel.team.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
+                    if (!state.data.any { it.isClicked }) {
+                        binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
+                    }
                     adapter.submitList(state.data)
                 }
 
@@ -233,14 +237,14 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun updateCompletionStatus(isError: Boolean, error: String) = if (isError) {
         with(binding) {
-            etProfileEditNickname.setBackgroundResource(R.drawable.rect_warning01red_line_6)
+            etProfileEditNickname.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_error_primary_stroke_6)
             tvProfileEditNicknameError.visibility = VISIBLE
             tvProfileEditNicknameError.text = error
         }
 
     } else {
         with(binding) {
-            etProfileEditNickname.setBackgroundResource(R.drawable.rect_gray100_line_6)
+            etProfileEditNickname.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_6)
             tvProfileEditNicknameError.visibility = GONE
             tvProfileEditNicknameError.text = error
         }
@@ -250,12 +254,12 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
             override fun onItemClubClick(item: BaseballTeamResponse) {
                 viewModel.setClickedBaseballTeam(item.id)
-                binding.tvProfileEditNoTeam.setBackgroundResource(R.drawable.rect_gray100_line_10)
+                binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
             }
         }
         binding.tvProfileEditNoTeam.setOnClickListener {
             viewModel.deleteCheerTeam()
-            binding.tvProfileEditNoTeam.setBackgroundResource(R.drawable.rect_gray50_fill_gray900_line_10)
+            binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
         }
     }
 
@@ -271,9 +275,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun getDataExtra(callback: (name: String, profileImage: String, cheerTeam: Int) -> Unit) {
         callback(
-            intent?.getStringExtra(HomeActivity.PROFILE_NAME) ?: "",
-            intent?.getStringExtra(HomeActivity.PROFILE_IMAGE) ?: "",
-            intent?.getIntExtra(HomeActivity.PROFILE_CHEER_TEAM, 0) ?: 0
+            intent?.getStringExtra(SeatRecordActivity.PROFILE_NAME) ?: "",
+            intent?.getStringExtra(SeatRecordActivity.PROFILE_IMAGE) ?: "",
+            intent?.getIntExtra(SeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
         )
     }
 

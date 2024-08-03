@@ -2,12 +2,14 @@ package com.depromeet.presentation.seatrecord.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.databinding.ItemRecentMonthBinding
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.util.ItemDiffCallback
+import timber.log.Timber
 
 
 class MonthRecordAdapter() :
@@ -63,6 +65,18 @@ class MonthRecordViewHolder(
                         itemRecordClickListener?.onMoreRecordClick(item.id)
                     }
                 }
+            binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val scrollBottom = !binding.rvRecentPost.canScrollVertically(1)
+                    val layoutManager = binding.rvRecentPost.layoutManager as LinearLayoutManager
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    val itemCount = layoutManager.itemCount - 1
+
+                    Timber.d("test scroll $scrollBottom / $lastVisibleItemPosition / $itemCount")
+                }
+            })
         }
     }
 }

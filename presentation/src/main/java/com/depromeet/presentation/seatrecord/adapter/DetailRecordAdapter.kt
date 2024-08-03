@@ -2,6 +2,7 @@ package com.depromeet.presentation.seatrecord.adapter
 
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -19,20 +20,15 @@ import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.util.applyBoldSpan
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
-class TestDetailRecordAdapter(
+class DetailRecordAdapter(
     private val myProfile: MySeatRecordResponse.MyProfileResponse,
-) :
-    ListAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
-        ItemDiffCallback(
-            onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
-            onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
-        )
-    ) {
-    interface OnDetailItemClickListener {
-        fun onItemMoreClickListener(item: MySeatRecordResponse.ReviewResponse)
-    }
-
-    var itemMoreClickListener: OnDetailItemClickListener? = null
+    private val moreClick: (Int) -> Unit,
+) : ListAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
+    ItemDiffCallback(
+        onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
+        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+    )
+) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
@@ -41,24 +37,23 @@ class TestDetailRecordAdapter(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
-            )
+            ),
+            moreClick
         )
     }
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         holder.bind(getItem(position), myProfile)
-        holder.binding.ivDetailMore.setOnClickListener {
-            itemMoreClickListener?.onItemMoreClickListener(getItem(position))
-        }
     }
 }
 
 
 class ReviewDetailViewHolder(
     internal val binding: ItemSeatReviewDetailBinding,
+    private val moreClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     companion object {
-        private const val MAX_VISIBLE_CHIPS = 3
+        private const val MAX_VISIBLE_CHIPS = Int.MAX_VALUE
     }
 
     fun bind(
@@ -66,6 +61,10 @@ class ReviewDetailViewHolder(
         profile: MySeatRecordResponse.MyProfileResponse,
     ) {
         with(binding) {
+            binding.ivDetailMore.setOnClickListener {
+                moreClick(item.id)
+            }
+
             ivDetailProfileImage.load(profile.profileImage) {
                 transformations(CircleCropTransformation())
                 error(R.drawable.ic_default_profile)
@@ -75,7 +74,11 @@ class ReviewDetailViewHolder(
             tvDetailStadium.text = item.stadiumName
             "${item.sectionName} ${item.blockName}블록".also { tvDetailBlock.text = it }
             tvDetailDate.text = CalendarUtil.getFormattedDate(item.date)
-            tvDetailContent.text = item.content
+            if (item.content.isBlank()) {
+                tvDetailContent.visibility = GONE
+            } else {
+                tvDetailContent.text = item.content
+            }
             initImageViewPager(item.images.map { it.url })
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -108,10 +111,16 @@ class ReviewDetailViewHolder(
 
     private fun setViewPagerCountText(position: Int) {
         with(binding) {
-            val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
-            tvDetailImageCount.text = SpannableStringBuilder(text).apply {
-                applyBoldSpan(this, 0, (position + 1).toString().length)
+            val itemCount = vpDetailImage.adapter?.itemCount ?: 0
+            if (itemCount <= 1) {
+                tvDetailImageCount.visibility = GONE
+            } else {
+                val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
+                tvDetailImageCount.text = SpannableStringBuilder(text).apply {
+                    applyBoldSpan(this, 0, (position + 1).toString().length)
+                }
             }
+
         }
     }
 
