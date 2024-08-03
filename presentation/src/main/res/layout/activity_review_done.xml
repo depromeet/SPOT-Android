@@ -6,35 +6,39 @@
     android:background="@color/white">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="259dp"
-        android:src="@drawable/ic_review_done"
+        android:layout_marginTop="220dp"
+        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_round_check_box"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="시야 등록 완료!"
-        android:textColor="#121212"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
+        android:id="@+id/tv_seat_review_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="이제 나의 시야 후기를 검색해서 볼 수 있어요."
+        android:text="시야 등록 완료!"
+        android:textAppearance="@style/TextAppearance.Spot.Title04"
+        android:textColor="@color/color_foreground_heading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_check_box" />
+
+    <TextView
+        android:id="@+id/tv_seat_Review_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="이제 나의 후기를 시야찾기에서 볼 수 있어요."
+        android:textAppearance="@style/TextAppearance.Spot.Body02"
+        android:textColor="@color/color_foreground_caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_seat_review_title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

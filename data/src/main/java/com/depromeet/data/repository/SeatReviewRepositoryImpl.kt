@@ -1,8 +1,8 @@
 package com.depromeet.data.repository
 
 import com.depromeet.data.datasource.SeatReviewDataSource
-import com.depromeet.data.model.request.toSeatReview
-import com.depromeet.domain.entity.request.SeatReviewModel
+import com.depromeet.data.model.request.seatReview.toSeatReview
+import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel

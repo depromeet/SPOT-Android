@@ -8,12 +8,6 @@ data class StadiumSectionModel(
         val id: Int,
         val name: String,
         val alias: String?,
-        val color: Color,
-    )
-
-    data class Color(
-        val red: Int,
-        val green: Int,
-        val blue: Int,
+        val color: String,
     )
 }

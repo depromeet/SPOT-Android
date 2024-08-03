@@ -48,4 +48,13 @@
         <item name="android:colorBackground">@android:color/transparent</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="AppTheme.NumberPicker" parent="android:Widget.Material.NumberPicker">
+        <item name="colorControlNormal">@color/color_action_enabled</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontWeight">600</item>
+        <item name="android:paddingVertical">16dp</item>
+        <item name="fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:lineHeight">130sp</item>
+    </style>
 </resources>
