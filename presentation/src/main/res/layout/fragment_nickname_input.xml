@@ -24,7 +24,7 @@
         android:layout_marginTop="48dp"
         android:text="닉네임을 입력해주세요."
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_back" />
@@ -102,7 +102,7 @@
         android:background="@drawable/rect_gray200_fill_6"
         android:clickable="false"
         android:gravity="center"
-        android:paddingVertical="16dp"
+        android:paddingVertical="19dp"
         android:text="다음"
         android:textColor="@color/white"
         android:textFontWeight="700"
