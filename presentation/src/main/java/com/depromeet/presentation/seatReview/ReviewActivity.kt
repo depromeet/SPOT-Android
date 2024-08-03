@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -90,7 +91,8 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.selectedSeatZone.asLiveData().observe(this) { name ->
-            binding.tvSeatColor.text = name.toString()
+            val formattedName = name.toString().replace("\n", "").replace("\r", "") // 개행 문자를 제거
+            binding.tvSeatColor.text = formattedName
             updateLayoutSeatInfoVisibility()
             updateNextButtonState()
         }
