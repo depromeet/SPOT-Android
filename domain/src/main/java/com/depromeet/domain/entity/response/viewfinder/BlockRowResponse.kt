@@ -1,5 +1,7 @@
 package com.depromeet.domain.entity.response.viewfinder
 
+import com.depromeet.domain.model.viewfinder.Seat
+
 data class BlockRowResponse(
     val id: Int,
     val code: String = "",
@@ -10,6 +12,25 @@ data class BlockRowResponse(
         val number: Int = 0,
         val seatNumList: List<Int> = emptyList()
     )
+
+    fun isCheck(column: Int, number: Int): Seat {
+        val isNumberExists = rowInfo.any { it.number == column }
+        val isSeatNumExistsInAll = rowInfo.any { it.seatNumList.contains(number) }
+
+        if (!isNumberExists && !isSeatNumExistsInAll) {
+            return Seat.COLUMN_NUMBER
+        }
+
+        if (isNumberExists && !isSeatNumExistsInAll) {
+            return Seat.NUMBER
+        }
+
+        if (!isNumberExists && isSeatNumExistsInAll) {
+            return Seat.COLUMN
+        }
+
+        return Seat.CHECK
+    }
 
     fun checkColumnRange(column: Int): Boolean {
         val max = rowInfo.maxByOrNull { it.number }?.number ?: return false

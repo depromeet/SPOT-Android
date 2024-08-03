@@ -25,11 +25,23 @@ data class BlockReviewResponse(
          * @example : 오렌지석•207블록
          */
         fun formattedStadiumBlock(): String {
-            return sectionName + "•" + blockCode + "블록"
+            val sectionNameSplits = sectionName.split("\n")
+            var section = if (sectionNameSplits.size >= 2) {
+                sectionNameSplits[0] + " " + sectionNameSplits[1]
+            } else {
+                sectionName.trim()
+            }
+            return section + "•" + blockCode + "블록"
         }
 
         fun toTitle(): String {
-            return "$stadiumName $sectionName"
+            val sectionNameSplits = sectionName.split("\n")
+            var section = if (sectionNameSplits.size >= 2) {
+                sectionNameSplits[0] + " " + sectionNameSplits[1]
+            } else {
+                sectionName.trim()
+            }
+            return "$stadiumName $section"
         }
     }
 

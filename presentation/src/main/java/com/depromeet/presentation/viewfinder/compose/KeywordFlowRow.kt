@@ -55,7 +55,6 @@ fun KeywordFlowRow(
             val overflowCount = keywords.size - displayKeywords.size
             Box(
                 modifier = Modifier
-                    .padding(2.dp)
                     .background(
                         color = SpotTheme.colors.backgroundSecondary,
                         shape = RoundedCornerShape(4.dp)
@@ -69,7 +68,7 @@ fun KeywordFlowRow(
                     }
                     .padding(
                         horizontal = 7.dp,
-                        vertical = 6.dp
+                        vertical = 7.dp
                     ),
             ) {
                 Text(

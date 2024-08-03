@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -48,14 +49,15 @@ fun StadiumPictureViewPager(
 ) {
     val pagerState = rememberPagerState(pageCount = { topReviewImages.size })
 
-    HorizontalPager(
-        modifier = modifier,
-        state = pagerState,
-    ) { page ->
-        Card(
-            modifier = Modifier.height(375.dp),
-            shape = RectangleShape
-        ) {
+    Box(
+        modifier = modifier
+            .height(375.dp)
+            .fillMaxWidth()
+    ) {
+        HorizontalPager(
+            modifier = modifier,
+            state = pagerState,
+        ) { page ->
             AsyncImage(
                 model = ImageRequest.Builder(context)
                     .data(topReviewImages.getOrNull(page)?.url)
@@ -71,58 +73,56 @@ fun StadiumPictureViewPager(
                         )
                     )
                 ),
-                modifier = Modifier.fillMaxWidth(),
-                onLoading = {
-
-                },
-                onSuccess = {
-
-                }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RectangleShape),
             )
-            Box(
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopEnd
+        ) {
+            Text(
+                text = "${topReviewImages.getOrNull(pagerState.currentPage)?.formattedNumber()}",
+                style = SpotTheme.typography.label11,
+                color = SpotTheme.colors.foregroundWhite,
                 modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.TopEnd
-            ) {
-                Text(
-                    text = "${topReviewImages.getOrNull(page)?.formattedNumber()}",
-                    style = SpotTheme.typography.label11,
-                    color = SpotTheme.colors.foregroundWhite,
-                    modifier = Modifier
-                        .padding(end = 16.dp, top = 16.dp)
-                        .background(
-                            color = SpotTheme.colors.transferBlack01,
-                            shape = RoundedCornerShape(36.dp)
-                        )
-                        .padding(
-                            horizontal = 10.dp,
-                            vertical = 10.dp
-                        ),
-                    textAlign = TextAlign.Center,
-                )
-            }
-            Box(
+                    .padding(end = 16.dp, top = 16.dp)
+                    .background(
+                        color = SpotTheme.colors.transferBlack01,
+                        shape = RoundedCornerShape(36.dp)
+                    )
+                    .padding(
+                        horizontal = 10.dp,
+                        vertical = 10.dp
+                    ),
+                textAlign = TextAlign.Center,
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            Text(
+                text = "${pagerState.currentPage + 1}/${topReviewImages.size}",
+                style = SpotTheme.typography.label09,
+                color = SpotTheme.colors.foregroundWhite,
                 modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.BottomEnd
-            ) {
-                Text(
-                    text = "${page + 1}/${topReviewImages.size}",
-                    style = SpotTheme.typography.label09,
-                    color = SpotTheme.colors.foregroundWhite,
-                    modifier = Modifier
-                        .padding(end = 16.dp, bottom = 16.dp)
-                        .background(
-                            color = SpotTheme.colors.transferBlack01,
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                        .padding(
-                            horizontal = 14.dp,
-                            vertical = 6.dp
-                        ),
-                    textAlign = TextAlign.Center,
-                )
-            }
+                    .padding(end = 16.dp, bottom = 16.dp)
+                    .background(
+                        color = SpotTheme.colors.transferBlack01,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .padding(
+                        horizontal = 14.dp,
+                        vertical = 6.dp
+                    ),
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }
