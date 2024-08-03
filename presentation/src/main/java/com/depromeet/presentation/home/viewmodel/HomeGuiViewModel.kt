@@ -13,14 +13,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeGuiViewModel @Inject constructor(
     private val viewfinderRepository: ViewfinderRepository,
     private val homeRepository: HomeRepository,
-    private val sharedPreference: SharedPreference
+    private val sharedPreference: SharedPreference,
 ) : ViewModel() {
     private val _stadiums = MutableStateFlow<UiState<List<StadiumsResponse>>>(UiState.Loading)
     val stadiums = _stadiums.asStateFlow()
@@ -31,6 +30,11 @@ class HomeGuiViewModel @Inject constructor(
 
     private val _homeFeed = MutableStateFlow<UiState<HomeFeedResponse>>(UiState.Loading)
     val homeFeed = _homeFeed.asStateFlow()
+
+    private val _level = MutableStateFlow(0)
+    val level = _level.asStateFlow()
+
+    val levelState = MutableStateFlow(false)
 
     fun getStadiums() {
         viewModelScope.launch {
@@ -45,6 +49,7 @@ class HomeGuiViewModel @Inject constructor(
     fun getLevelDescription() {
         viewModelScope.launch {
             homeRepository.getLevelByPost().onSuccess {
+
                 _levelDescriptions.value = UiState.Success(it)
             }.onFailure {
                 _levelDescriptions.value = UiState.Failure(it.message.toString())
@@ -55,16 +60,19 @@ class HomeGuiViewModel @Inject constructor(
     fun getHomeFeed() {
         viewModelScope.launch {
             homeRepository.getHomeFeed().onSuccess {
-                Timber.d("test success $it")
                 _homeFeed.value = UiState.Success(it)
-            }.onFailure{
-                Timber.d("test failuire $it")
+                checkLevelUp(it.level)
+
+            }.onFailure {
                 _homeFeed.value = UiState.Failure(it.message.toString())
             }
         }
     }
 
-    fun checkLevelUp(){
-
+    private fun checkLevelUp(level: Int) {
+        if (sharedPreference.level < level) {
+            levelState.value = true
+        }
+        sharedPreference.level = level
     }
 }
