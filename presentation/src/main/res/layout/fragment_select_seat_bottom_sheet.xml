@@ -87,7 +87,6 @@
     </LinearLayout>
 
     <!-- 구역 선택 -->
-
     <ScrollView
         android:id="@+id/sv_select_seat"
         android:layout_width="0dp"

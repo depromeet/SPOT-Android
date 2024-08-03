@@ -9,6 +9,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -27,6 +28,7 @@ import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
 import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,11 +45,21 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setCanceledOnTouchOutside(false)
-        return dialog
+        return BottomSheetDialog(requireContext(), theme).apply {
+            setOnShowListener {
+                val bottomSheet = (it as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as? View
+                bottomSheet?.let { sheet ->
+                    BottomSheetBehavior.from(sheet).apply {
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                        skipCollapsed = true
+                        peekHeight = 0
+                    }
+                }
+                window?.findViewById<View>(com.google.android.material.R.id.touch_outside)?.setOnClickListener(null)
+                window?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.layoutParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT)
+            }
+        }
     }
-
     override fun onStart() {
         super.onStart()
         val bottomSheet =
