@@ -11,4 +11,6 @@ interface SignupRemoteDataSource {
     suspend fun getSignup(
         accessToken: String,
     ): ResponsePostSignupDto
+
+    suspend fun deleteWithdraw(): Unit
 }

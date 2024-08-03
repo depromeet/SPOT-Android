@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -11,7 +12,6 @@ import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import coil.load
@@ -27,11 +27,8 @@ import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
 import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
+import com.depromeet.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -57,15 +54,21 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+        }
+
         viewModel.getStadiumName()
         observeStadiumName()
+        observePreSignedUrl()
+        observeUploadImageToS3()
         observeUploadReview()
+        navigateToUploadBtn()
         initDatePickerDialog()
         initUploadDialog()
         initSeatReviewDialog()
         setupFragmentResultListener()
         setupRemoveButtons()
-        uploadAllReviewDone()
         navigateToHomeActivity()
     }
 
@@ -75,7 +78,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.reviewCount.asLiveData().observe(this) { count ->
-            binding.tvMySeatReviewCount.text = count.toString()
+            binding.tvMySeatReviewCount.text = "${count}개"
             binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
         }
 
@@ -142,7 +145,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 is UiState.Success -> {
                     val firstStadium = state.data.firstOrNull()
                     if (firstStadium != null) {
-                        binding.tvStadiumName.text = firstStadium.name
                         viewModel.getStadiumSection(firstStadium.id)
                         viewModel.updateSelectedStadiumId(firstStadium.id)
                     }
@@ -150,7 +152,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 }
                 is UiState.Failure -> { toast("오류가 발생했습니다") }
                 is UiState.Loading -> {}
-                is UiState.Empty -> { toast("오류가 발생했습니다") }
+                is UiState.Empty -> {}
                 else -> {}
             }
         }
@@ -231,7 +233,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             if (selectedImageUris.size == MAX_SELECTED_IMAGES) {
                 svAddImage.post { svAddImage.fullScroll(View.FOCUS_RIGHT) }
             }
-            btnAddImage.isVisible = selectedImageUris.size < selectedImage.size
+            layoutAddImageButton.isVisible = selectedImageUris.size < selectedImage.size
             tvImageCount.text = selectedImageUris.size.toString()
         }
     }
@@ -248,11 +250,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 isSelectedDateFilled && isSelectedImageFilled && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
                 isSelectedBlockFilled && isSelectedNumberFilled
             if (isEnabled) {
-                setBackgroundResource(R.drawable.rect_gray900_fill_6)
-                setTextColor(ContextCompat.getColor(this@ReviewActivity, android.R.color.white))
+                setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             } else {
-                setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                setTextColor(ContextCompat.getColor(this@ReviewActivity, R.color.white))
+                setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
             }
         }
     }
@@ -276,29 +276,51 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         return inputStream?.use { it.readBytes() }
     }
 
-    private fun observePreSignedUrl(deferred: CompletableDeferred<Boolean>, imageData: ByteArray) {
+    private fun navigateToUploadBtn() {
+        binding.tvUploadBtn.setOnSingleClickListener {
+            val uniqueImageUris = selectedImageUris.distinct()
+            uniqueImageUris.forEach { imageUriString ->
+                val imageUri = Uri.parse(imageUriString)
+                val fileExtension = getFileExtension(this, imageUri)
+                val imageData = readImageData(this, imageUri)
+                if (imageData != null) {
+                    viewModel.requestPreSignedUrl(fileExtension)
+                } else {
+                    toast("파일을 읽을 수 없습니다.")
+                }
+            }
+        }
+    }
+
+    private fun observePreSignedUrl() {
         viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    val preSignedUrl = state.data.presignedUrl
-                    if (viewModel.preSignedUrlImages.value.contains(preSignedUrl).not()) {
-                        viewModel.setPreSignedUrlImages(preSignedUrl)
-                        viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData).invokeOnCompletion {
-                            if (it == null) {
-                                deferred.complete(true)
-                            } else {
-                                deferred.complete(false)
-                            }
-                        }
-                    } else {
-                        deferred.complete(false)
+                    val presignedUrl = state.data.presignedUrl
+                    val imageDataList = selectedImageUris.mapNotNull { imageUriString ->
+                        val imageUri = Uri.parse(imageUriString)
+                        val imageData = readImageData(this, imageUri)
+                        imageData
                     }
+                    if (viewModel.preSignedUrlImages.value.contains(presignedUrl).not()) {
+                        viewModel.setPreSignedUrlImages(listOf(presignedUrl))
+                    }
+                    viewModel.uploadImagesSequentially(presignedUrl, imageDataList)
                 }
+
                 is UiState.Failure -> {
                     toast("Presigned URL 요청 실패")
-                    deferred.complete(false)
                 }
+
                 else -> {}
+            }
+        }
+    }
+
+    private fun observeUploadImageToS3() {
+        viewModel.count.asLiveData().observe(this) {
+            if (it == selectedImageUris.size && it != 0) {
+                viewModel.postSeatReview()
             }
         }
     }
@@ -307,7 +329,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    uploadAllReviewDone()
                     Intent(this, ReviewDoneActivity::class.java).apply {
                         startActivity(this)
                     }
@@ -319,36 +340,4 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             }
         }
     }
-
-    fun uploadAllReviewDone() {
-        binding.tvUploadBtn.setOnSingleClickListener {
-            val uploadResults = mutableListOf<CompletableDeferred<Boolean>>()
-            val uniqueImageUris = selectedImageUris.distinct() // 중복된 URI를 제거합니다.
-
-            uniqueImageUris.forEach { imageUriString ->
-                val imageUri = Uri.parse(imageUriString)
-                val fileExtension = getFileExtension(this, imageUri)
-                val imageData = readImageData(this, imageUri)
-
-                if (imageData != null) {
-                    val deferred = CompletableDeferred<Boolean>()
-                    uploadResults.add(deferred)
-                    viewModel.requestPreSignedUrl(fileExtension)
-                    observePreSignedUrl(deferred, imageData)
-                } else {
-                    toast("파일을 읽을 수 없습니다.")
-                }
-            }
-
-            CoroutineScope(Dispatchers.Main).launch {
-                val allUploadsCompleted = uploadResults.all { it.await() }
-                if (allUploadsCompleted) {
-                    viewModel.postSeatReview()
-                } else {
-                    toast("이미지 업로드에 실패했습니다.")
-                }
-            }
-        }
-    }
-
 }

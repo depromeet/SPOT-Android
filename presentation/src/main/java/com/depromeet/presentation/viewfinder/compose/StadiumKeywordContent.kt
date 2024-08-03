@@ -16,11 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.viewfinder.sample.Keyword
@@ -33,31 +35,36 @@ fun StadiumKeywordContent(
     onChangeIsMore: (isMore: Boolean) -> Unit,
 ) {
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         if (isMore) {
             repeat(keywords.size) {
                 StadiumKeywordRow(
                     keyword = keywords[it],
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(4.dp))
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "가장 많이 선정된 ${keywords.size}개의 키워드만 보여줘요",
-                fontSize = 12.sp,
-                color = Color(0xFF606060),
+                text = stringResource(
+                    id = R.string.viewfinder_best_keyword_description_format,
+                    keywords.size
+                ),
+                style = SpotTheme.typography.label11,
+                color = SpotTheme.colors.foregroundBodySebtext,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
             Icon(
-                painter = painterResource(id = R.drawable.ic_up),
+                painter = painterResource(id = R.drawable.ic_chevron_up),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(12.dp)
-                    .clickable { onChangeIsMore(false) }
+                    .clickable { onChangeIsMore(false) },
+                tint = SpotTheme.colors.foregroundCaption
             )
         } else {
             when {
@@ -69,11 +76,14 @@ fun StadiumKeywordContent(
                             keyword = keywords[it],
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
                     }
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "가장 많이 선정된 ${keywords.size}개의 키워드만 보여줘요",
+                        text = stringResource(
+                            id = R.string.viewfinder_best_keyword_description_format,
+                            keywords.size
+                        ),
                         fontSize = 12.sp,
                         color = Color(0xFF606060),
                         modifier = Modifier.fillMaxWidth(),
@@ -102,7 +112,7 @@ fun StadiumKeywordContent(
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
                     }
                 }
             }
@@ -119,17 +129,24 @@ private fun DownKeywordBlind(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                brush = Brush.verticalGradient(listOf(Color.Transparent, Color.White)),
+                brush = Brush.verticalGradient(
+                    listOf(
+                        Color.Transparent,
+                        SpotTheme.colors.foregroundWhite
+                    )
+                ),
                 alpha = 1f
             )
             .clickable { onClickMore() }, contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_down),
+            painter = painterResource(id = R.drawable.ic_chevron_down),
             contentDescription = null,
             modifier = Modifier.padding(
-                vertical = 25.dp
-            )
+                top = 24.dp,
+                bottom = 16.dp,
+            ),
+            tint = SpotTheme.colors.foregroundCaption
         )
     }
 }

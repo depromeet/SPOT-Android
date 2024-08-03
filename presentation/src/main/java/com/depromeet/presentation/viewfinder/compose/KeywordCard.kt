@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.viewfinder.sample.Keyword
 import com.depromeet.presentation.viewfinder.sample.keywords
 
@@ -23,16 +24,17 @@ fun KeywordCard(
 ) {
     Box(
         modifier = modifier
-            .background(Color(0xFFF4F4F4), shape = RoundedCornerShape(4.dp))
-            .padding(
-                vertical = 4.dp,
-                horizontal = 12.dp
-            ),
+            .background(
+                color = SpotTheme.colors.backgroundSecondary,
+                shape = RoundedCornerShape(4.dp)
+            )
+            .padding(7.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = keyword.message,
-            fontSize = 12.sp,
+            style = SpotTheme.typography.label10,
+            color = SpotTheme.colors.foregroundBodySebtext
         )
     }
 }

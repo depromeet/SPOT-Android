@@ -12,6 +12,7 @@ import com.depromeet.domain.entity.response.viewfinder.BlockRowResponse
 import com.depromeet.domain.entity.response.viewfinder.StadiumResponse
 import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 import com.depromeet.domain.repository.ViewfinderRepository
+import java.lang.Exception
 import javax.inject.Inject
 
 class ViewfinderRepositoryImpl @Inject constructor(

@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.compose
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.viewfinder.sample.Stadium
 import com.depromeet.presentation.viewfinder.sample.StadiumArea
 
@@ -29,15 +31,14 @@ fun StadiumAreaText(
     ) {
         Text(
             text = stadium,
-            fontSize = 12.sp,
-            color = Color(0xFF606060)
+            style = SpotTheme.typography.caption02,
+            color = SpotTheme.colors.foregroundCaption
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = seatContent,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF121212)
+            style = SpotTheme.typography.title04,
+            color = SpotTheme.colors.foregroundHeading
         )
     }
 }
@@ -47,6 +48,7 @@ fun StadiumAreaText(
 private fun StadiumAreaTextPreview() {
     StadiumAreaText(
         stadium = "서울 잠실 야구장",
-        seatContent = "오렌지석 207블럭"
+        seatContent = "오렌지석 207블럭",
+        modifier = Modifier.background(SpotTheme.colors.backgroundWhite)
     )
 }

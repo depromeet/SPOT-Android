@@ -1,6 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,18 +23,23 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,28 +49,30 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 import com.depromeet.presentation.viewfinder.compose.LevelCard
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumDetailReviewViewPager(
     context: Context,
-    reviews: List<BlockReviewResponse.ReviewResponse>,
-    page: Boolean,
+    position: Int,
+    pageState: Boolean,
     pagerState: PagerState,
-    isDimmed: Boolean,
-    isMore: Boolean,
+    reviews: List<BlockReviewResponse.ReviewResponse>,
+    visited: List<Boolean>,
     modifier: Modifier = Modifier,
-    onChangeIsDimmed: (isDimmed: Boolean) -> Unit,
-    onChangeIsMore: (isMore: Boolean) -> Unit,
-    onLoadPaging: () -> Unit
+    onLoadPaging: () -> Unit,
 ) {
     val minimumLineLength = 1
 
-    if (pagerState.currentPage == reviews.size - 1 && !page) {
+    if (pagerState.currentPage == reviews.size - 1 && !pageState) {
         onLoadPaging()
     }
 
@@ -72,22 +80,42 @@ fun StadiumDetailReviewViewPager(
         state = pagerState,
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(SpotTheme.colors.backgroundWhite)
     ) { page ->
         var showMoreButtonState by remember {
             mutableStateOf(false)
         }
+
+        var isDimmed by remember {
+            mutableStateOf(false)
+        }
+
+        var isMore by remember {
+            mutableStateOf(false)
+        }
+
+        val verticalPagerState = rememberPagerState(
+            pageCount = { reviews[page].images.size },
+            initialPage = position
+        )
+
+        LaunchedEffect(key1 = Unit) {
+            if (!visited[page]) {
+                verticalPagerState.scrollToPage(0)
+            }
+        }
+
         Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
                 model = ImageRequest.Builder(context)
-                    .data(reviews[page].images.getOrNull(0)?.url)
+                    .data(reviews[page].images.getOrNull(verticalPagerState.currentPage)?.url)
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
                     .zIndex(1f)
-                    .blur(5.dp)
+                    .blur(5.dp),
             )
 
             Column(
@@ -99,7 +127,8 @@ fun StadiumDetailReviewViewPager(
             ) {
                 StadiumDetailPictureViewPager(
                     context = context,
-                    pictures = reviews[page].images
+                    pictures = reviews[page].images,
+                    verticalPagerState = verticalPagerState,
                 )
             }
 
@@ -107,25 +136,22 @@ fun StadiumDetailReviewViewPager(
                 modifier = Modifier
                     .zIndex(if (isDimmed) 3f else 2f)
                     .fillMaxSize()
-                    .clickable(
-                        enabled = isDimmed,
-                        onClick = {
-                            if (isDimmed) {
-                                onChangeIsDimmed(false)
-                                onChangeIsMore(false)
-                                showMoreButtonState = false
-                            }
+                    .noRippleClickable(enabled = isDimmed) {
+                        if (isDimmed) {
+                            isDimmed = false
+                            isMore = false
+                            showMoreButtonState = false
                         }
-                    )
+                    }
                     .background(
                         color = if (isDimmed) {
-                            Color.Black.copy(alpha = 0.6f)
+                            SpotTheme.colors.transferBlack01.copy(alpha = 0.6f)
                         } else {
-                            Color.Black.copy(alpha = 0.5f)
+                            SpotTheme.colors.transferBlack01.copy(alpha = 0.5f)
                         }
                     )
                     .padding(horizontal = 16.dp)
-                    .padding(bottom = 30.dp),
+                    .padding(bottom = 24.dp),
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Row(
@@ -137,43 +163,50 @@ fun StadiumDetailReviewViewPager(
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        placeholder = ColorPainter(Color.LightGray),
+                        placeholder = BrushPainter(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color(0xFFE1E1E1),
+                                    Color(0x00E1E1E1),
+                                )
+                            )
+                        ),
                         modifier = Modifier
                             .size(20.dp)
                             .clip(CircleShape)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = reviews[page].member.nickname,
-                        fontSize = 12.sp,
-                        color = Color(0xFF9F9F9F)
+                        style = SpotTheme.typography.caption02,
+                        color = SpotTheme.colors.foregroundDisabled
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     LevelCard(
                         level = reviews[page].member.level,
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = reviews[page].formattedNumber(),
-                    fontSize = 16.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
+                    style = SpotTheme.typography.subtitle02,
+                    color = SpotTheme.colors.foregroundWhite,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = reviews[page].content,
-                        fontSize = 14.sp,
+                        style = SpotTheme.typography.body03,
                         maxLines = if (isMore) {
                             Int.MAX_VALUE
                         } else {
                             minimumLineLength
                         },
                         overflow = TextOverflow.Ellipsis,
-                        color = Color.White,
+                        color = SpotTheme.colors.foregroundWhite,
                         onTextLayout = {
                             if (it.lineCount > minimumLineLength - 1) {
                                 if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState =
@@ -189,15 +222,14 @@ fun StadiumDetailReviewViewPager(
                     if (showMoreButtonState) {
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "더보기",
-                            fontSize = 13.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
+                            text = stringResource(id = R.string.viewfinder_more),
+                            style = SpotTheme.typography.label10,
+                            color = SpotTheme.colors.foregroundDisabled,
                             textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.noRippleClickable {
                                 showMoreButtonState = false
-                                onChangeIsMore(true)
-                                onChangeIsDimmed(true)
+                                isDimmed = true
+                                isMore = true
                             }
                         )
                     }
@@ -206,15 +238,15 @@ fun StadiumDetailReviewViewPager(
                 KeywordFlowRow(
                     keywords = reviews[page].keywords.map { it.toKeyword() },
                     overflowIndex = if (isDimmed) {
-                        Int.MAX_VALUE
+                        -1
                     } else {
                         2
                     },
                     isSelfExpanded = false,
                     onActionCallback = {
                         showMoreButtonState = false
-                        onChangeIsMore(true)
-                        onChangeIsDimmed(true)
+                        isDimmed = true
+                        isMore = true
                     }
                 )
             }
@@ -278,12 +310,86 @@ private fun StadiumDetailReviewViewPagerPreview() {
     StadiumDetailReviewViewPager(
         context = LocalContext.current,
         reviews = reviews,
-        page = false,
+        visited = emptyList(),
+        position = 1,
+        pageState = false,
         pagerState = pagerState,
-        isDimmed = false,
-        isMore = false,
-        onChangeIsDimmed = {},
-        onChangeIsMore = {},
-        onLoadPaging = {}
+        onLoadPaging = {},
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Preview
+@Composable
+private fun StadiumDetailReviewViewPagerMorePreview() {
+    val reviews = listOf(
+        BlockReviewResponse.ReviewResponse(
+            id = 1,
+            member = BlockReviewResponse.ReviewResponse.ReviewMemberResponse(
+                "https://picsum.photos/600/400",
+                "조관희",
+                1
+            ),
+            stadium = BlockReviewResponse.ReviewResponse.ReviewStadiumResponse(
+                1, "서울 잠실 야구장"
+            ),
+            section = BlockReviewResponse.ReviewResponse.ReviewSectionResponse(
+                1, "오렌지석", "응원석"
+            ),
+            block = BlockReviewResponse.ReviewResponse.ReviewBlockResponse(
+                id = 1, code = "207"
+            ),
+            row = BlockReviewResponse.ReviewResponse.ReviewRowResponse(
+                id = 1, number = 1
+            ),
+            seat = BlockReviewResponse.ReviewResponse.ReviewSeatResponse(
+                id = 1, seatNumber = 12
+            ),
+            dateTime = "2023-03-01T19:00:00",
+            content = "좋은 경기였습니다! 경기였습니다!경기였습니다!경기였습니다!경기였습니다!경기였습니다!",
+            images = listOf(
+                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                    id = 1, "https://picsum.photos/600/400"
+                ),
+                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                    id = 2, "https://picsum.photos/600/400"
+                ),
+                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                    id = 3, "https://picsum.photos/600/400"
+                )
+            ),
+            keywords = listOf(
+                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    id = 1, content = "좋아요", isPositive = true
+                ),
+                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    id = 2, content = "싫어요", isPositive = false
+                ),
+                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    id = 1, content = "좋아요", isPositive = true
+                ),
+                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    id = 2, content = "싫어요", isPositive = false
+                ),
+                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    id = 1, content = "좋아요", isPositive = true
+                ),
+                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    id = 2, content = "싫어요", isPositive = false
+                )
+            )
+        )
+    )
+    val pagerState = rememberPagerState(
+        pageCount = { reviews.size },
+    )
+    StadiumDetailReviewViewPager(
+        context = LocalContext.current,
+        reviews = reviews,
+        visited = emptyList(),
+        position = 1,
+        pageState = false,
+        pagerState = pagerState,
+        onLoadPaging = {},
     )
 }
