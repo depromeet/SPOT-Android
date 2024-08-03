@@ -42,18 +42,23 @@ class DatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
             npMonth.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
             npDay.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
             npYear.minValue = 2000
-            npYear.maxValue = 2050
+            npYear.maxValue = currentYear
             npYear.value = selectedYear
+            npYear.wrapSelectorWheel = false
 
             npMonth.minValue = 1
             npMonth.maxValue = 12
             npMonth.value = selectedMonth + 1
+            npMonth.wrapSelectorWheel = false
 
             npDay.minValue = 1
             npDay.maxValue = calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH)
             npDay.value = selectedDay
-            npMonth.wrapSelectorWheel = false
+            npDay.wrapSelectorWheel = false
+
             updateDisplayedValues()
 
             npMonth.setOnValueChangedListener { _, _, newVal ->
@@ -79,6 +84,8 @@ class DatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
     }
 
     private fun updateDisplayedValues() {
+        binding.npYear.displayedValues = Array(binding.npYear.maxValue - binding.npYear.minValue + 1) { i -> "${i + binding.npYear.minValue}년" }
         binding.npMonth.displayedValues = Array(12) { i -> "${i + 1}월" }
+        binding.npDay.displayedValues = Array(binding.npDay.maxValue) { i -> "${i + 1}일" }
     }
 }
