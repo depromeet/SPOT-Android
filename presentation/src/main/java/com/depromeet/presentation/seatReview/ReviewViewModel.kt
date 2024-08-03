@@ -93,14 +93,12 @@ class ReviewViewModel @Inject constructor(
     private val _seatRangeState = MutableStateFlow<UiState<List<SeatRangeModel>>>(UiState.Empty)
     val seatRangeState: StateFlow<UiState<List<SeatRangeModel>>> = _seatRangeState
 
-    private val _getPreSignedUrl = MutableStateFlow<UiState<ResponsePresignedUrlModel>>(UiState.Loading)
+    private val _getPreSignedUrl =
+        MutableStateFlow<UiState<ResponsePresignedUrlModel>>(UiState.Loading)
     val getPreSignedUrl = _getPreSignedUrl.asStateFlow()
 
     private val _postReviewState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
     val postReviewState: StateFlow<UiState<Unit>> = _postReviewState.asStateFlow()
-
-    private val _uploadImageState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
-    val uploadImageState: StateFlow<UiState<Unit>> = _uploadImageState.asStateFlow()
 
     fun updateSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
@@ -124,12 +122,10 @@ class ReviewViewModel @Inject constructor(
 
     fun setPreSignedUrlImages(images: List<String>) {
         val newImages = images.map { removeQueryParameters(it) }.toSet()
-        Log.d("minju6", newImages.toString())
         val currentImages = _preSignedUrlImages.value.map { removeQueryParameters(it) }.toSet()
 
         val updatedImages = (currentImages + newImages).toList()
         _preSignedUrlImages.value = updatedImages
-        Log.d("minju7", _preSignedUrlImages.value.toString())
     }
 
     private fun removeQueryParameters(url: String): String {
@@ -261,12 +257,12 @@ class ReviewViewModel @Inject constructor(
             }
         }
     }
+
     fun requestPreSignedUrl(fileExtension: String) {
         viewModelScope.launch {
             _getPreSignedUrl.value = UiState.Loading
             seatReviewRepository.postReviewImagePresigned(fileExtension)
                 .onSuccess { response ->
-                    Log.d("minju2", getPreSignedUrl.toString())
                     Timber.d("REQUEST PRESIGNED URL SUCCESS : $response")
                     _getPreSignedUrl.value = UiState.Success(response)
                 }
@@ -279,24 +275,30 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
+
+    private var index = -1
+
+    private var _count = MutableStateFlow(0)
+    val count = _count.asStateFlow()
+
     private fun uploadImageToPreSignedUrl(
         presignedUrl: String,
-        image: ByteArray,
-        onComplete: () -> Unit,
+        imageDataList: List<ByteArray>,
     ) {
+        index++
         viewModelScope.launch {
-            val result = seatReviewRepository.putImagePreSignedUrl(presignedUrl, image)
+            val result =
+                seatReviewRepository.putImagePreSignedUrl(presignedUrl, imageDataList[index])
             result.onSuccess {
-                Timber.d("uploadImageToPreSignedUrl called with presignedUrl: $presignedUrl")
-                onComplete()
+                _count.value += 1
             }.onFailure { t ->
                 if (t is HttpException) {
                     Timber.e("UPLOAD IMAGE FAILURE for presignedUrl: $presignedUrl with error: $t")
                 }
-                onComplete()
             }
         }
     }
+
     fun postSeatReview() {
         viewModelScope.launch {
             val seatReviewModel = SeatReviewModel(
@@ -332,29 +334,13 @@ class ReviewViewModel @Inject constructor(
                 }
         }
     }
+
     fun uploadImagesSequentially(
         presignedUrl: String,
         imageDataList: List<ByteArray>,
-        onComplete: () -> Unit,
     ) {
-        var currentIndex = 0
-        _uploadImageState.value = UiState.Loading
-        fun uploadNextImages() {
-            if (currentIndex < imageDataList.size) {
-                val imageData = imageDataList[currentIndex]
-                Log.d("minju8", "Uploading image $currentIndex: $imageData")
-                uploadImageToPreSignedUrl(presignedUrl, imageData) {
-                    currentIndex++
-                    if (currentIndex < imageDataList.size) {
-                        uploadNextImages()
-                    } else {
-                        _uploadImageState.value = UiState.Success(Unit)
-                        Log.d("minju9", "All images uploaded successfully")
-                        onComplete()
-                    }
-                }
-            }
-        }
-        uploadNextImages()
+        uploadImageToPreSignedUrl(
+            presignedUrl, imageDataList
+        )
     }
 }

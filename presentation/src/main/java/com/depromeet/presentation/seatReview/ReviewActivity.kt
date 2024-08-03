@@ -27,6 +27,7 @@ import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
 import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
+import com.depromeet.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -53,6 +54,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+        }
+
         viewModel.getStadiumName()
         observeStadiumName()
         observePreSignedUrl()
@@ -279,7 +284,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 val fileExtension = getFileExtension(this, imageUri)
                 val imageData = readImageData(this, imageUri)
                 if (imageData != null) {
-                    Log.d("minju1", fileExtension)
                     viewModel.requestPreSignedUrl(fileExtension)
                 } else {
                     toast("파일을 읽을 수 없습니다.")
@@ -293,22 +297,15 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             when (state) {
                 is UiState.Success -> {
                     val presignedUrl = state.data.presignedUrl
-                    Log.d("minju3", "Presigned URL: $presignedUrl")
-                    val uniqueImageUris = selectedImageUris.distinct()
-                    Log.d("minju4", "Unique Image URIs: $uniqueImageUris")
-                    val imageDataList = uniqueImageUris.mapNotNull { imageUriString ->
+                    val imageDataList = selectedImageUris.mapNotNull { imageUriString ->
                         val imageUri = Uri.parse(imageUriString)
                         val imageData = readImageData(this, imageUri)
-                        Log.d("minju5", "Image Data for $imageUriString: $imageData")
                         imageData
                     }
-
                     if (viewModel.preSignedUrlImages.value.contains(presignedUrl).not()) {
                         viewModel.setPreSignedUrlImages(listOf(presignedUrl))
                     }
-                    viewModel.uploadImagesSequentially(presignedUrl, imageDataList) {
-                        Log.d("minju10", "Upload images complete")
-                    }
+                    viewModel.uploadImagesSequentially(presignedUrl, imageDataList)
                 }
 
                 is UiState.Failure -> {
@@ -321,18 +318,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun observeUploadImageToS3() {
-        viewModel.uploadImageState.asLiveData().observe(this) { state ->
-            when (state) {
-                is UiState.Success -> {
-                    viewModel.postSeatReview()
-                    Log.d("minju11", viewModel.preSignedUrlImages.value.toString())
-                }
-
-                is UiState.Failure -> {
-                    toast("이미지 업로드 실패")
-                }
-
-                else -> {}
+        viewModel.count.asLiveData().observe(this) {
+            if (it == selectedImageUris.size && it != 0) {
+                viewModel.postSeatReview()
             }
         }
     }

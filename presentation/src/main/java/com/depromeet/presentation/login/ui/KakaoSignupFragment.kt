@@ -2,11 +2,11 @@ package com.depromeet.presentation.login.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.viewpager2.widget.ViewPager2
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentKakaoSignupBinding
@@ -19,8 +19,6 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 @AndroidEntryPoint
 class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
@@ -33,8 +31,40 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
         initClickListeners()
         initObservers()
+    }
+
+    private fun initView() {
+        val signUpTextAndPoint = listOf(
+            Triple("시야찾기로 원하는 야구장\n" +
+                    "자리를 빠르게 알아봐요!", 0, 3),
+            Triple("내 시야 후기를 올려서\n" +
+                    "캐릭터를 성장시켜요!", 0, 6),
+            Triple("내 소중한 시야 기록을\n" +
+                    "한 자리에서 봐요!", 6, 10),
+        )
+        binding.vpSignupIntroduce.adapter = SignupViewPagerAdapter(signUpTextAndPoint)
+        binding.vpSignupIntroduce.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        binding.ciSignupIntroduceIndicator.setViewPager(binding.vpSignupIntroduce)
+        binding.vpSignupIntroduce.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    0 -> {
+                        binding.ivSpotSignupImage.setImageResource(R.drawable.ic_signup_image_1)
+                    }
+
+                    1 -> {
+                        binding.ivSpotSignupImage.setImageResource(R.drawable.ic_signup_image_3)
+                    }
+
+                    2 -> {
+                        binding.ivSpotSignupImage.setImageResource(R.drawable.ic_signup_image_2)
+                    }
+                }
+            }
+        })
     }
 
     private fun initClickListeners() {

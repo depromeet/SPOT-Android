@@ -3,6 +3,8 @@ package com.depromeet.presentation.login.ui
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.content.res.AppCompatResources.getColorStateList
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
@@ -37,8 +39,16 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
         etProfileEditNickname.addTextChangedListener { text ->
             if (text.isNullOrEmpty()) {
                 ivNicknameClear.visibility = View.GONE
+                etProfileEditNickname.backgroundTintList = getColorStateList(
+                    context ?: return@addTextChangedListener,
+                    com.depromeet.designsystem.R.color.color_gray_200
+                )
             } else {
                 ivNicknameClear.visibility = View.VISIBLE
+                etProfileEditNickname.backgroundTintList = getColorStateList(
+                    context ?: return@addTextChangedListener,
+                    com.depromeet.designsystem.R.color.color_green_600
+                )
             }
             signUpViewModel.validateNickname(text.toString())
         }
@@ -105,7 +115,7 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
     private fun updateButtonEnabled(isEnabled: Boolean) = with(binding) {
         tvNicknameNextBtn.isClickable = isEnabled
         if (isEnabled) {
-            tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_gray800_fill_6)
+            tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
         } else {
             tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
         }
