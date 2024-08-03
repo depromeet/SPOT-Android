@@ -42,8 +42,10 @@ class DatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
             npMonth.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
             npDay.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
             npYear.minValue = 2000
-            npYear.maxValue = 2050
+            npYear.maxValue = currentYear
             npYear.value = selectedYear
             npYear.wrapSelectorWheel = false
 
