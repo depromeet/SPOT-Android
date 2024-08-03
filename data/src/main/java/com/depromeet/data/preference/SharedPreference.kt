@@ -24,6 +24,13 @@ class DefaultSharedPreference @Inject constructor(
                 putString("refresh_token", value)
             }
         }
+    override var nickname: String
+        get() = preferences.getString("nickname", "").orEmpty()
+        set(value) {
+            preferences.edit(commit = true) {
+                putString("nickname", value)
+            }
+        }
 
     override fun clear() {
         preferences.edit(commit = true) {

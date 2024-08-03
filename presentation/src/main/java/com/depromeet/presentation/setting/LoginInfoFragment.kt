@@ -6,14 +6,21 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingFragment
+import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentLoginInfoBinding
 import com.depromeet.presentation.login.ui.SignUpActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginInfoFragment : BindingFragment<FragmentLoginInfoBinding>(
     layoutResId = R.layout.fragment_login_info,
     FragmentLoginInfoBinding::inflate
 ) {
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
     private val viewModel by activityViewModels<SettingViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +49,7 @@ class LoginInfoFragment : BindingFragment<FragmentLoginInfoBinding>(
     }
 
     private fun initView() {
-
+        binding.tvSettingNickname.text = sharedPreference.nickname
     }
 
     private fun initClickListener() {
