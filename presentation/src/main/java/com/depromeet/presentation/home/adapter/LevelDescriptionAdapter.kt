@@ -4,16 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.domain.entity.response.home.LevelByPostResponse
 import com.depromeet.presentation.databinding.ItemLevelDescriptionBinding
 import com.depromeet.presentation.util.ItemDiffCallback
 
-data class LevelDescriptionTest(
-    val level: Int,
-    val title: String,
-    val count: Pair<Int, Int>,
-)
-
-class LevelDescriptionAdapter : ListAdapter<LevelDescriptionTest, LevelDescriptionViewHolder>(
+class LevelDescriptionAdapter : ListAdapter<LevelByPostResponse, LevelDescriptionViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.level == newItem.level },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -37,18 +32,18 @@ class LevelDescriptionAdapter : ListAdapter<LevelDescriptionTest, LevelDescripti
 class LevelDescriptionViewHolder(
     private val binding: ItemLevelDescriptionBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: LevelDescriptionTest) {
+    fun bind(item: LevelByPostResponse) {
         with(binding) {
             "Lv.${item.level}".also { tvLevel.text = it }
             tvTitle.text = item.title
-            tvCount.text = countToString(item.count)
+            tvCount.text = countToString(item.minimum, item.maximum)
         }
     }
 
-    private fun countToString(count: Pair<Int, Int>): String = when (count.second) {
+    private fun countToString(minimum: Int, maximum: Int?): String = when (maximum) {
         0 -> "0회"
-        Int.MAX_VALUE -> "${count.first}회 이상"
-        else -> "${count.first}~${count.second}회"
+        null -> "${maximum}회 이상"
+        else -> "${minimum}~${maximum}회"
     }
 
 }

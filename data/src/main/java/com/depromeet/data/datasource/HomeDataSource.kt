@@ -4,6 +4,7 @@ import com.depromeet.data.model.request.home.RequestMySeatRecordDto
 import com.depromeet.data.model.request.home.RequestProfileEditDto
 import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseDeleteReviewDto
+import com.depromeet.data.model.response.home.ResponseLevelByPostDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileDto
@@ -42,6 +43,8 @@ interface HomeDataSource {
     suspend fun getRecentReview(): ResponseRecentReviewDto
 
     suspend fun deleteReview(
-        reviewId : Int
+        reviewId: Int,
     ): ResponseDeleteReviewDto
+
+    suspend fun getLevelByPost(): List<ResponseLevelByPostDto>
 }
