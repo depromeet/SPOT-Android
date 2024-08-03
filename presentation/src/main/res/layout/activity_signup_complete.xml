@@ -5,41 +5,15 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/tv_signup_complete_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="120dp"
-        android:text="야구왕님 반가워요!"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_signup_complete_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:text="SPOT에서 직관후기를\n둘러보세요!"
-        android:textColor="@color/gray300"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_signup_complete_title" />
-
     <ImageView
         android:id="@+id/iv_signup_complete"
-        android:layout_width="170dp"
-        android:layout_height="162dp"
-        android:layout_marginTop="56dp"
-        android:src="@drawable/ic_signup_complete_main"
+        android:layout_width="200dp"
+        android:layout_height="245dp"
+        android:layout_marginTop="90dp"
+        android:src="@drawable/ic_signup_complete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_signup_complete_message" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_signup_complete_btn"
@@ -47,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/rect_gray800_fill_6"
+        android:background="@drawable/rect_main_fill_6"
         android:clickable="false"
         android:gravity="center"
         android:paddingVertical="16dp"
@@ -58,5 +32,34 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_signup_complete_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="32dp"
+        android:text="야구왕님 반가워요!"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_signup_complete" />
+
+    <TextView
+        android:id="@+id/tv_signup_complete_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="SPOT!에서 야구장 시야 정보를\n간편하게 둘러보세요!"
+        android:textColor="@color/gray300"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signup_complete_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
