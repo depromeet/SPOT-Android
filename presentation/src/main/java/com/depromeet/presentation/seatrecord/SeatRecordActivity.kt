@@ -167,10 +167,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     binding.clHomeFail.visibility = GONE
                     binding.rvRecordMonthDetail.visibility = VISIBLE
                     isLoading = false
+                    setShimmer(false)
                 }
 
                 is UiState.Loading -> {
-                    //TODO : 여기에 이제 skelton 보여주면 됨(shimmer)
+                    setShimmer(true)
                 }
 
                 is UiState.Empty -> {
@@ -179,6 +180,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
+                    setShimmer(false)
                     binding.clHomeFail.visibility = VISIBLE
                     binding.rvRecordMonthDetail.visibility = GONE
                 }
@@ -390,5 +392,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun moveEditReview() {
 
+    }
+
+    private fun setShimmer(isLoading: Boolean) = with(binding) {
+        if (isLoading) {
+            shimmerRecord.startShimmer()
+            shimmerRecord.visibility = VISIBLE
+            shimmerRecordProfile.visibility = VISIBLE
+        } else {
+            shimmerRecord.stopShimmer()
+            shimmerRecord.visibility = GONE
+            shimmerRecordProfile.visibility = GONE
+        }
     }
 }
