@@ -7,8 +7,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingFragment
+import com.depromeet.core.state.UiState
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentTeamSelectBinding
+import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.ProfileEditActivity
+import com.depromeet.presentation.home.adapter.BaseballTeamAdapter
+import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.login.TeamSelectAdapter
 import com.depromeet.presentation.login.TeamSelectViewType
 import com.depromeet.presentation.login.selectStadiums
@@ -21,11 +26,12 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
     }
 ) {
     private val signupViewModel: SignUpViewModel by activityViewModels()
-    private lateinit var adapter: TeamSelectAdapter
+    private lateinit var adapter: BaseballTeamAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        signupViewModel.getBaseballTeam()
         initObserver()
     }
 
@@ -46,6 +52,29 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
                 }
             }
         }
+
+        signupViewModel.team.asLiveData().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> {
+//                    if (!state.data.any { it.isClicked }) {
+//                        binding.tvTeamSelectTitle.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
+//                    }
+                    adapter.submitList(state.data)
+                }
+
+                is UiState.Loading -> {
+                    toast("로딩 중")
+                }
+
+                is UiState.Empty -> {
+                    toast("빈값 에러")
+                }
+
+                is UiState.Failure -> {
+                    toast("통신 실패")
+                }
+            }
+        }
     }
 
     private fun initClickListener() {
@@ -55,17 +84,7 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
     }
 
     private fun initRecyclerView() {
-        adapter = TeamSelectAdapter(
-            itemClubClick = {
-                // TODO: 팀 선택
-            },
-            noTeamClick = {
-                // TODO: 팀 선택 안함
-            },
-            nextClick = {
-                signupViewModel.signUp(1)
-            }
-        )
+        adapter = BaseballTeamAdapter()
         binding.rvTeamSelectStadium.adapter = adapter
         val layoutManager = GridLayoutManager(requireContext(), 2)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -80,12 +99,10 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
 
         binding.rvTeamSelectStadium.layoutManager = layoutManager
         binding.rvTeamSelectStadium.addItemDecoration(
-            com.depromeet.presentation.home.adapter.GridSpacingItemDecoration(
+            GridSpacingItemDecoration(
                 2,
                 40
             )
         )
-
-        adapter.submitList(selectStadiums)
     }
 }

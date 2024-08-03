@@ -2,8 +2,11 @@ package com.depromeet.presentation.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.request.signup.PostSignupModel
+import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.preference.SharedPreference
+import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.domain.repository.SignupRepository
 import com.depromeet.presentation.extension.NICKNAME_PATTERN
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +32,7 @@ sealed class LoginUiState {
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signupRepository: SignupRepository,
+    private val homeRepository: HomeRepository,
     private val sharedPreference: SharedPreference
 ) : ViewModel() {
     private val _nicknameInputState = MutableStateFlow<NicknameInputState>(NicknameInputState.EMPTY)
@@ -49,6 +53,11 @@ class SignUpViewModel @Inject constructor(
     private val _initKakaoLoginFragment = MutableStateFlow<Boolean>(true)
     val initKakaoLoginFragment: StateFlow<Boolean> = _initKakaoLoginFragment.asStateFlow()
 
+    private val _team = MutableStateFlow<UiState<List<BaseballTeamResponse>>>(UiState.Loading)
+    val team = _team.asStateFlow()
+
+    private val _cheerTeam = MutableStateFlow(0)
+    val cheerTeam = _cheerTeam.asStateFlow()
 
     fun validateNickname(nickname: String) {
         when {
@@ -80,6 +89,20 @@ class SignUpViewModel @Inject constructor(
                     }
                 }.onFailure {
                     _kakaoToken.tryEmit(token)
+                }
+        }
+    }
+
+    fun getBaseballTeam() {
+        viewModelScope.launch {
+            homeRepository.getBaseballTeam()
+                .onSuccess { teams ->
+                    val updatedTeams = teams.map { team ->
+                        team.copy(isClicked = team.id == cheerTeam.value)
+                    }
+                    _team.value = UiState.Success(updatedTeams)
+                }.onFailure {
+                    _team.value = UiState.Failure(it.message ?: "실패")
                 }
         }
     }
