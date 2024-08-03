@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.HomeFeedResponse
 import com.depromeet.domain.entity.response.home.LevelByPostResponse
+import com.depromeet.domain.entity.response.home.LevelUpInfoResponse
 import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
@@ -33,6 +34,9 @@ class HomeGuiViewModel @Inject constructor(
 
     private val _level = MutableStateFlow(0)
     val level = _level.asStateFlow()
+
+    private val _levelUpInfo = MutableStateFlow<UiState<LevelUpInfoResponse>>(UiState.Loading)
+    val levelUpInfo = _levelUpInfo.asStateFlow()
 
     val levelState = MutableStateFlow(false)
 
@@ -65,6 +69,16 @@ class HomeGuiViewModel @Inject constructor(
 
             }.onFailure {
                 _homeFeed.value = UiState.Failure(it.message.toString())
+            }
+        }
+    }
+
+    fun getLevelUpInfo(nextLevel : Int) {
+        viewModelScope.launch {
+            homeRepository.getLevelUpInfo(nextLevel).onSuccess {
+                _levelUpInfo.value = UiState.Success(it)
+            }.onFailure {
+                _levelUpInfo.value = UiState.Failure(it.message.toString())
             }
         }
     }

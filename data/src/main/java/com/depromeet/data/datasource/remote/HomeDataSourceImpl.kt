@@ -8,6 +8,7 @@ import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseDeleteReviewDto
 import com.depromeet.data.model.response.home.ResponseHomeFeedDto
 import com.depromeet.data.model.response.home.ResponseLevelByPostDto
+import com.depromeet.data.model.response.home.ResponseLevelUpInfoDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileDto
@@ -83,5 +84,9 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getHomeFeed(): ResponseHomeFeedDto {
         return homeApiService.getHomeFeed()
+    }
+
+    override suspend fun getLevelUpInfo(nextLevel: Int): ResponseLevelUpInfoDto {
+        return homeApiService.getLevelUpInfo(nextLevel)
     }
 }

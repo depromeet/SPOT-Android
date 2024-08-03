@@ -71,7 +71,7 @@ class RecentRecordViewHolder(
             }
             tvRecentDateDay.text = CalendarUtil.getDayOfMonthFromDateFormat(item.date).toString()
             tvRecentDay.text = CalendarUtil.getDayOfWeekFromDateFormat(item.date)
-            "${item.sectionName} ${item.blockName}블록".also { tvRecentBlockName.text = it }
+            "${item.sectionName} ${item.blockName}블록".trimStart().also { tvRecentBlockName.text = it }
             Timber.d("test ${item.sectionName} / ${item.blockName}")
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {

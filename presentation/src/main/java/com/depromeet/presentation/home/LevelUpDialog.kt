@@ -6,10 +6,14 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingDialogFragment
+import com.depromeet.core.state.UiState
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentLevelupDialogBinding
 import com.depromeet.presentation.extension.loadAndClip
+import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,15 +29,19 @@ class LevelupDialog(
         const val TAG = "LevelupDialog"
     }
 
+    private val viewModel: HomeGuiViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.TransparentDialogFragment)
+
+        viewModel.getLevelUpInfo(nextLevel = level)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeData()
         dialog?.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val params = attributes
@@ -55,9 +63,22 @@ class LevelupDialog(
                     tvLevelupDescription.text = "두근두근 ${title}를 갖게 되었어요!"
                 }
             }
-            ivLevelupMascotImage.loadAndClip(mascotImage)
             btErrorCheck.setOnClickListener {
                 dismiss()
+            }
+        }
+    }
+
+    private fun observeData() {
+        viewModel.levelUpInfo.asLiveData().observe(this) {
+            when (it) {
+                is UiState.Success -> {
+                    binding.ivLevelupMascotImage.loadAndClip(it.data.levelUpImage)
+                }
+
+                is UiState.Failure -> {}
+                is UiState.Loading -> {}
+                is UiState.Empty -> {}
             }
         }
     }

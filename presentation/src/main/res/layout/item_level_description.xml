@@ -15,6 +15,7 @@
         android:background="@drawable/rect_action_enabled_line_20"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4.5dp"
+        android:gravity="center"
         android:textColor="@color/color_action_enabled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

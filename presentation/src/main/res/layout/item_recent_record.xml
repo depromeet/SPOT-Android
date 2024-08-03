@@ -36,7 +36,6 @@
         android:layout_height="match_parent"
         android:layout_marginStart="13dp"
         android:background="@drawable/rect_background_white_fill_16"
-        android:elevation="2p"
         android:paddingHorizontal="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="16dp"
