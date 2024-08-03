@@ -10,6 +10,8 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySettingBinding
 import com.depromeet.presentation.login.ui.SignUpActivity
+import com.depromeet.presentation.seatrecord.ConfirmDeleteDialog
+import com.depromeet.presentation.seatrecord.SeatDetailRecordFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -90,7 +92,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
         }
 
         tvSettingLogout.setOnClickListener {
-            viewModel.logout()
+            LogoutDialog.newInstance("tag")
+                .show(supportFragmentManager, "tag")
         }
     }
 }
