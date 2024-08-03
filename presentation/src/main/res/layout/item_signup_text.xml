@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="44dp"
+    android:paddingBottom="20dp">
+
+    <TextView
+        android:id="@+id/tv_text"
+        style="@style/TextAppearance.Spot.Title03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        tools:text="시야찾기로 원하는 야구장\n자리를 빠르게 알아봐요!" />
+
+</LinearLayout>
