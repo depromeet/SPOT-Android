@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="645dp"
     android:background="@drawable/rect_white_fill_32">
 
     <View
@@ -90,17 +90,17 @@
 
     <ScrollView
         android:id="@+id/sv_select_seat"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
-        app:layout_constraintVertical_bias="0.0"
+        android:layout_width="0dp"
+        android:layout_height="458dp"
         android:visibility="visible"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/layout_select_seat"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -232,287 +232,297 @@
 
     <!--좌석 번호 -->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_seat_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:id="@+id/sv_seat_number"
+        android:layout_width="0dp"
+        android:layout_height="556dp"
         android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
-        <LinearLayout
-            android:id="@+id/layout_seat_number_button"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_seat_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/layout_seat_number_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="30dp">
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <Spinner
-                    android:id="@+id/spinner_block"
-                    style="?attr/textInputStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:dropDownWidth="240dp"
-                    android:dropDownVerticalOffset="45dp"
-                    android:paddingVertical="13dp"
-                    android:paddingStart="16dp"
-                    android:background="@drawable/rect_white_fill_stroke_tertiary_line_8"
-                    android:popupBackground="@drawable/rect_white_fill_gray100_line_12"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_block"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_block_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginVertical="20dp"
-                    android:layout_marginStart="16dp"
-                    android:text="블록을 선택해주세요"
-                    android:textAppearance="@style/TextAppearance.Spot.Label04"
-                    android:textColor="@color/color_foreground_caption"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_block"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_block" />
-
-                <ImageView
-                    android:id="@+id/iv_select_block_chevron"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="12dp"
-                    android:src="@drawable/ic_chevron_down"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_block"
-                    app:layout_constraintEnd_toEndOf="@+id/spinner_block"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_block" />
-
-                <TextView
-                    android:id="@+id/tv_block"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="블록"
-                    android:textAppearance="@style/TextAppearance.Spot.Label05"
-                    android:paddingStart="4dp"
-                    android:textColor="@color/color_foreground_heading"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="30dp">
-
-                <EditText
-                    android:id="@+id/et_column"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="13dp"
-                    android:paddingStart="16dp"
-                    android:background="@drawable/rect_background_secondary_fill_8"
-                    android:maxLength="4"
-                    android:paddingEnd="64dp"
-                    android:textColor="#121212"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:inputType="number"
-                    android:hint="ex) 12"
-                    android:textColorHint="@color/color_foreground_disabled" />
-
-                <ImageView
-                    android:id="@+id/iv_delete_column"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_x_circle"
-                    android:layout_marginEnd="13dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_column"
-                    app:layout_constraintEnd_toEndOf="@+id/et_column"
-                    app:layout_constraintTop_toTopOf="@+id/et_column" />
-
-                <TextView
-                    android:id="@+id/tv_column"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:gravity="center"
-                    android:text="열"
-                    android:textAppearance="@style/TextAppearance.Spot.Label05"
-                    android:textColor="@color/color_foreground_heading"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_column"
-                    app:layout_constraintStart_toEndOf="@+id/et_column"
-                    app:layout_constraintTop_toTopOf="@+id/et_column" />
-
-                <EditText
-                    android:id="@+id/et_number"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rect_background_secondary_fill_8"
-                    android:hint="ex) 12"
-                    android:maxLength="4"
-                    android:layout_marginEnd="4dp"
-                    android:paddingVertical="13dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="64dp"
-                    android:textColor="#121212"
-                    android:inputType="number"
-                    android:textColorHint="@color/color_foreground_disabled"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_number"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_delete_number"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_x_circle"
-                    android:layout_marginEnd="13dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_number"
-                    app:layout_constraintEnd_toEndOf="@+id/et_number"
-                    app:layout_constraintTop_toTopOf="@+id/et_number" />
-
-                <EditText
-                    android:id="@+id/et_non_column_number"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="23dp"
-                    android:background="@drawable/rect_gray50_fill_gray200_line_12"
-                    android:hint="ex)12"
-                    android:inputType="number"
-                    android:paddingVertical="13dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="64dp"
-                    android:textColor="#121212"
-                    android:textColorHint="#C8C8C8"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@+id/et_number"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="30dp">
 
-                <TextView
-                    android:id="@+id/tv_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="번"
-                    android:textAppearance="@style/TextAppearance.Spot.Label05"
-                    android:textColor="@color/color_foreground_heading"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_number"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_number" />
-
-                <TextView
-                    android:id="@+id/tv_none_column_warning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:drawableStart="@drawable/ic_select_seat_error"
-                    android:text="존재하지 않는 열이에요"
-                    android:textColor="#FF5C5C"
-                    android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="@+id/et_column"
-                    app:layout_constraintTop_toBottomOf="@+id/et_column" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_column_number_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="24dp">
-
-                <ImageView
-                    android:id="@+id/iv_help_circle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="12dp"
-                    android:src="@drawable/ic_help_circle2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_what_column"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="208dp"
-                    android:layout_weight="1"
-                    android:paddingVertical="12dp"
-                    android:layout_marginStart="6dp"
-                    android:textAppearance="@style/TextAppearance.Spot.Label07"
-                    android:textColor="@color/color_foreground_caption"
-                    android:text="열과 번이 무엇인가요?"
-                    app:layout_constraintStart_toEndOf="@id/iv_help_circle"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_what_column_chevron"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="4dp"
-                    android:src="@drawable/ic_chevron_down"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_what_column"
-                    app:layout_constraintStart_toEndOf="@+id/tv_what_column"
-                    app:layout_constraintTop_toTopOf="@+id/tv_what_column" />
-
-                <LinearLayout
-                    android:id="@+id/layout_column_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_what_column">
+                    <Spinner
+                        android:id="@+id/spinner_block"
+                        style="?attr/textInputStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/rect_white_fill_stroke_tertiary_line_8"
+                        android:dropDownWidth="240dp"
+                        android:dropDownVerticalOffset="45dp"
+                        android:paddingVertical="13dp"
+                        android:paddingStart="16dp"
+                        android:popupBackground="@drawable/rect_white_fill_gray100_line_12"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_block"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_description_one"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한\n  고유 번호를 뜻해요."
-                        android:textAppearance="@style/TextAppearance.Spot.Caption03"
-                        android:textColor="@color/color_foreground_caption"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_what_column" />
-
-                    <TextView
-                        android:id="@+id/tv_description_two"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:paddingHorizontal="16dp"
-                        android:text="• ex. 2열 7번좌석"
-                        android:textAppearance="@style/TextAppearance.Spot.Caption03"
-                        android:textColor="@color/color_foreground_caption"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
-
-                    <ImageView
+                        android:id="@+id/tv_block_description"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="16dp"
-                        android:src="@drawable/ic_column_example"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginVertical="20dp"
+                        android:layout_marginStart="16dp"
+                        android:text="블록을 선택해주세요"
+                        android:textAppearance="@style/TextAppearance.Spot.Label04"
+                        android:textColor="@color/color_foreground_caption"
+                        app:layout_constraintBottom_toBottomOf="@+id/spinner_block"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_description_two" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintTop_toTopOf="@+id/spinner_block" />
+
+                    <ImageView
+                        android:id="@+id/iv_select_block_chevron"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="12dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:layout_constraintBottom_toBottomOf="@+id/spinner_block"
+                        app:layout_constraintEnd_toEndOf="@+id/spinner_block"
+                        app:layout_constraintTop_toTopOf="@+id/spinner_block" />
+
+                    <TextView
+                        android:id="@+id/tv_block"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingStart="4dp"
+                        android:text="블록"
+                        android:textAppearance="@style/TextAppearance.Spot.Label05"
+                        android:textColor="@color/color_foreground_heading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="30dp">
+
+                    <EditText
+                        android:id="@+id/et_column"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rect_background_secondary_fill_8"
+                        android:hint="ex) 12"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:paddingVertical="13dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="64dp"
+                        android:textColor="#121212"
+                        android:textColorHint="@color/color_foreground_disabled"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_delete_column"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="13dp"
+                        android:src="@drawable/ic_x_circle"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_column"
+                        app:layout_constraintEnd_toEndOf="@+id/et_column"
+                        app:layout_constraintTop_toTopOf="@+id/et_column" />
+
+                    <TextView
+                        android:id="@+id/tv_column"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:text="열"
+                        android:textAppearance="@style/TextAppearance.Spot.Label05"
+                        android:textColor="@color/color_foreground_heading"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_column"
+                        app:layout_constraintStart_toEndOf="@+id/et_column"
+                        app:layout_constraintTop_toTopOf="@+id/et_column" />
+
+                    <EditText
+                        android:id="@+id/et_number"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/rect_background_secondary_fill_8"
+                        android:hint="ex) 12"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:paddingVertical="13dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="64dp"
+                        android:textColor="#121212"
+                        android:textColorHint="@color/color_foreground_disabled"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_number"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_delete_number"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="13dp"
+                        android:src="@drawable/ic_x_circle"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_number"
+                        app:layout_constraintEnd_toEndOf="@+id/et_number"
+                        app:layout_constraintTop_toTopOf="@+id/et_number" />
+
+                    <EditText
+                        android:id="@+id/et_non_column_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="23dp"
+                        android:background="@drawable/rect_gray50_fill_gray200_line_12"
+                        android:hint="ex)12"
+                        android:inputType="number"
+                        android:paddingVertical="13dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="64dp"
+                        android:textColor="#121212"
+                        android:textColorHint="#C8C8C8"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@+id/et_number"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="번"
+                        android:textAppearance="@style/TextAppearance.Spot.Label05"
+                        android:textColor="@color/color_foreground_heading"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/et_number" />
+
+                    <TextView
+                        android:id="@+id/tv_none_column_warning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:drawableStart="@drawable/ic_select_seat_error"
+                        android:text="존재하지 않는 열이에요"
+                        android:textColor="#FF5C5C"
+                        android:visibility="invisible"
+                        app:layout_constraintStart_toStartOf="@+id/et_column"
+                        app:layout_constraintTop_toBottomOf="@+id/et_column" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_column_number_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="24dp">
+
+                    <ImageView
+                        android:id="@+id/iv_help_circle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="12dp"
+                        android:src="@drawable/ic_help_circle2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_what_column"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginBottom="208dp"
+                        android:layout_weight="1"
+                        android:paddingVertical="12dp"
+                        android:text="열과 번이 무엇인가요?"
+                        android:textAppearance="@style/TextAppearance.Spot.Label07"
+                        android:textColor="@color/color_foreground_caption"
+                        app:layout_constraintStart_toEndOf="@id/iv_help_circle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_what_column_chevron"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_what_column"
+                        app:layout_constraintStart_toEndOf="@+id/tv_what_column"
+                        app:layout_constraintTop_toTopOf="@+id/tv_what_column" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_column_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_what_column">
+
+                        <TextView
+                            android:id="@+id/tv_description_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="16dp"
+                            android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한\n  고유 번호를 뜻해요."
+                            android:textAppearance="@style/TextAppearance.Spot.Caption03"
+                            android:textColor="@color/color_foreground_caption"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_what_column" />
+
+                        <TextView
+                            android:id="@+id/tv_description_two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:paddingHorizontal="16dp"
+                            android:text="• ex. 2열 7번좌석"
+                            android:textAppearance="@style/TextAppearance.Spot.Caption03"
+                            android:textColor="@color/color_foreground_caption"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="16dp"
+                            android:src="@drawable/ic_column_example"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_description_two" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/tv_next_btn"

@@ -137,6 +137,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             tvNextBtn.setOnSingleClickListener {
                 svSelectSeat.visibility = INVISIBLE
                 layoutSeatNumber.visibility = VISIBLE
+                svSeatNumber.visibility = VISIBLE
                 tvSelectSeatLine.visibility = INVISIBLE
                 tvSelectNumberLine.visibility = VISIBLE
                 tvCompleteBtn.visibility = VISIBLE

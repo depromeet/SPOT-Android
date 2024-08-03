@@ -57,7 +57,6 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         dialog.setCanceledOnTouchOutside(false)
         return dialog
     }
-
     override fun onStart() {
         super.onStart()
         val bottomSheet =
