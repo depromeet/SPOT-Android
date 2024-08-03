@@ -31,22 +31,52 @@
     <string name="profile_edit_error_no">정상적으로 입력 완료!</string>
 
     <!-- upload_error -->
-    <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>
-    <string name="upload_error_capacity_5MB">5MB에 맞게 다시 선택해주세요</string>
-    <string name="upload_error_capacity_15MB">15MB에 맞게 다시 선택해주세요</string>
+    <string name="upload_error_capacity_description">선택한 사진의\n용량이 너무 커요</string>
+    <string name="upload_error_capacity_5MB">5MB</string>
+    <string name="upload_error_capacity_15MB">15MB</string>
+    <string name="upload_error_discipline">에 맞게 다시 선택해주세요</string>
     <string name="upload_error_extension_description">선택한 사진\n확장자가 맞지 않아요</string>
     <string name="upload_error_extension_photo">jpg, jpeg, png 사진을 선택해주세요</string>
     <string name="upload_error_check">확인</string>
 
     <!-- viewfinder -->
+    <string name="viewfinder_dot">•</string>
+    <string name="viewfinder_column">열</string>
+    <string name="viewfinder_number">번</string>
+    <string name="viewfinder_cancel">취소</string>
+    <string name="viewfinder_completed">완료</string>
+    <string name="viewfinder_more">더보기</string>
+    <string name="viewfinder_report">신고하기</string>
+    <string name="viewfinder_input_example">ex) 12</string>
+    <string name="viewfinder_latest">최신순</string>
+    <string name="viewfinder_go_back">돌아가기</string>
     <string name="viewfinder_find_view">시야찾기</string>
+    <string name="viewfinder_review_view">시야 후기</string>
+    <string name="viewfinder_monthly_view">월별 시야</string>
+    <string name="viewfinder_selection_seat">좌석선택</string>
+    <string name="viewfinder_selection_area">구역 선택</string>
+    <string name="viewfinder_question_title">열과 번이 무엇인가요?</string>
+    <string name="viewfinder_question_01">\‘열\’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요.</string>
+    <string name="viewfinder_question_02">ex. 2열 7번좌석</string>
+    <string name="viewfinder_select_only_column">\'열\'만 선택하기</string>
+    <string name="viewfinder_empty_review">등록된 시야 후기가 없습니다.</string>
+    <string name="viewfinder_empty_review_description">다른 좌석을 선택해 새로운 시야를 찾아보세요!</string>
     <string name="viewfinder_stadium_selection_description">어떤 야구장의\n시야가 궁금하신가요?</string>
     <string name="viewfinder_stadium_selection_sub_description">꾸준히 다른 구장에 대한 정보가 추가될 예정이에요</string>
-    <string name="viewfinder_selection_area">구역 선택</string>
-    <string name="viewfinder_zoom_description">"<b>"화면을 손가락으로 확대하여"</b>" 구역을 더 크게 볼 수 있어요</string>
-    <string name="viewfinder_zoom_description_statement">화면을 손가락으로 확대하여\n 구역을 더 크게 보세요!</string>
+    <string name="viewfinder_zoom_description">화면을 손가락으로 확대하여 구역을 더 크게 볼 수 있어요</string>
     <string name="viewfinder_lock_warning_description">아직 잠실야구장만 이용할 수 있어요!</string>
     <string name="viewfinder_lock_warning_trigger">"<u>"잠실야구장 시야보기"</u>"</string>
+    <string name="viewfinder_empty_block_description">다른 블록에서 새로운 시야를 찾아보세요!</string>
+    <string name="viewfinder_tooltip_description">열과 번을 선택해 빠르게 자리를 찾아보세요⚡</string>
+
+    <string name="viewfinder_date_dot">・%s</string>
+    <string name="viewfinder_plus_count">+%s</string>
+    <string name="viewfinder_level_format">Lv.%s</string>
+    <string name="viewfinder_month_format">%s월</string>
+    <string name="viewfinder_seat_format">%s열</string>
+    <string name="viewfinder_seat_number_format">%s열 %s번</string>
+    <string name="viewfinder_best_keyword_description_format">가장 많이 선정된 %s개의 키워드만 보여줘요</string>
+    <string name="viewfinder_empty_block_review_description">%s 블록에 등록된\n시야 후기가 없습니다.</string>
 
     <!-- viewRecord -->
     <string name="view_record_my">내 시야 기록</string>
@@ -67,6 +97,10 @@
     <string name="six_level_to_title">전설의 직관러</string>
     <string name="unknown_level_to_title">알 수 없음</string>
 
+    <!-- Error -->
+    <string name="error_reload">새로고침</string>
+    <string name="error_server_content_title">정보를 불러올 수 없습니다.</string>
+    <string name="error_server_content_description">새로고침하여 다시 시도해 주세요!</string>
 
     <!-- 셋팅 -->
     <string name="setting_title">설정 및 개인정보</string>

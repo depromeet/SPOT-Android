@@ -13,10 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
+import com.depromeet.presentation.R
 
 @Composable
 fun CustomTooltip(
@@ -38,20 +41,23 @@ fun CustomTooltip(
 
                     drawPath(
                         path = path,
-                        color = Color(0xCC000000)
+                        color = Color(0xE6000000)
                     )
                 }
             )
             Spacer(modifier = Modifier.height(5.dp))
             Box(
                 modifier = modifier
-                    .background(Color(0xCC000000), shape = RoundedCornerShape(6.dp))
-                    .padding(horizontal = 12.dp, vertical = 10.dp)
+                    .background(
+                        color = SpotTheme.colors.transferBlack03,
+                        shape = RoundedCornerShape(46.dp)
+                    )
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 Text(
-                    text = "열과 번을 선택해 빠르게 자리를 찾아보세요⚡",
-                    color = Color.White,
-                    fontSize = 11.sp
+                    text = stringResource(id = R.string.viewfinder_tooltip_description),
+                    style = SpotTheme.typography.label12,
+                    color = SpotTheme.colors.foregroundWhite,
                 )
             }
         }

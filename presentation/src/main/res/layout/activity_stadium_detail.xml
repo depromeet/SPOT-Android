@@ -13,10 +13,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menuIcon="@drawable/ic_close"
-        app:menuIconColor="@color/black"
-        app:navigationIcon="@drawable/ic_back"
-        app:navigationIconColor="@color/black" />
+        app:menuIcon="@drawable/ic_x_close_big"
+        app:menuIconColor="@color/color_foreground_body_sebtext"
+        app:menuIconSize="24"
+        app:navigationIcon="@drawable/ic_chevron_left_big"
+        app:navigationIconColor="@color/color_foreground_body_sebtext"
+        app:navigationIconSize="24"/>
 
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/compose_view"

@@ -8,12 +8,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
+import com.depromeet.presentation.R
 
 @Composable
 fun LevelCard(
@@ -22,15 +26,22 @@ fun LevelCard(
 ) {
     Box(
         modifier = modifier
-            .background(Color(0xFF0068FF), shape = RoundedCornerShape(2.dp))
-            .padding(horizontal = 2.dp),
+            .background(
+                brush = Brush.verticalGradient(
+                    listOf(
+                        SpotTheme.colors.spotGreen2CD7A6,
+                        SpotTheme.colors.spotGreen5DD281
+                    )
+                ),
+                shape = RoundedCornerShape(2.dp)
+            )
+            .padding(horizontal = 3.dp, vertical = 1.5.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Lv.$level",
-            fontSize = 10.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
+            text = stringResource(id = R.string.viewfinder_level_format, level),
+            style = SpotTheme.typography.label13,
+            color = SpotTheme.colors.backgroundWhite,
             textAlign = TextAlign.Center
         )
     }
