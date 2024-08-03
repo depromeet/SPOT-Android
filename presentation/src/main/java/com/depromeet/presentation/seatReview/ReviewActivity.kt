@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -56,6 +55,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         super.onCreate(savedInstanceState)
         Utils(this).apply {
             setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+            isStatusBarBlackIconColor(window, com.depromeet.designsystem.R.color.black)
         }
 
         viewModel.getStadiumName()
@@ -91,7 +91,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.selectedSeatZone.asLiveData().observe(this) { name ->
-            val formattedName = name.toString().replace("\n", "").replace("\r", "") // 개행 문자를 제거
+            val formattedName = name.toString().replace("\n", "").replace("\r", "")
             binding.tvSeatColor.text = formattedName
             updateLayoutSeatInfoVisibility()
             updateNextButtonState()
@@ -109,7 +109,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.selectedNumber.asLiveData().observe(this) { number ->
-            binding.tvSeatNumber.text = number.toString()
+            binding.tvSeatNumber.text = "${number}번"
             updateLayoutSeatInfoVisibility()
             updateNextButtonState()
         }

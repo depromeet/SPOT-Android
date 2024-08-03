@@ -68,11 +68,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.depromeet.presentation.seatReview.ReviewDoneActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
