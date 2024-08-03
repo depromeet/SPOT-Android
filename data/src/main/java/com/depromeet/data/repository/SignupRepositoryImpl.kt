@@ -22,4 +22,10 @@ class SignupRepositoryImpl @Inject constructor(
             signupRemoteDataSource.getSignup(accessToken).toSignupTokenModel()
         }
     }
+
+    override suspend fun deleteWithdraw(): Result<Unit> {
+        return runCatching {
+            signupRemoteDataSource.deleteWithdraw()
+        }
+    }
 }

@@ -11,4 +11,6 @@ interface SignupRepository {
     suspend fun getSignup(
         accessToken: String
     ): Result<SignupTokenModel>
+
+    suspend fun deleteWithdraw(): Result<Unit>
 }
