@@ -209,7 +209,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:src="@drawable/ic_chevron_down"
+                    android:src="@drawable/ic_chevron_down_soft"
                     android:textAppearance="@style/TextAppearance.Spot.Label07"
                     android:textColor="@color/color_foreground_caption"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_seat_again"

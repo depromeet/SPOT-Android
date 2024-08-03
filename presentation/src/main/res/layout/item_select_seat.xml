@@ -1,6 +1,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:layout_marginTop="2dp"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -19,23 +20,34 @@
             android:background="@drawable/rect_background_tertiary_fill_8"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_seat_color"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginVertical="22dp"
-                android:layout_marginStart="13dp" />
-
-            <TextView
-                android:id="@+id/tv_seat_name"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="21dp"
-                android:layout_marginStart="4dp"
-                android:gravity="center"
-                android:text="3루 테이블석"
-                android:textAppearance="@style/TextAppearance.Spot.Label08"
-                android:textColor="@color/color_foreground_heading" />
+                android:layout_height="match_parent"
+                android:layout_marginVertical="11dp"
+                android:layout_marginStart="13dp">
+
+                <TextView
+                    android:id="@+id/tv_seat_color"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginVertical="11dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_seat_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginStart="4dp"
+                    android:gravity="center"
+                    android:text="테이블석\n dsdf"
+                    android:textAppearance="@style/TextAppearance.Spot.Label08"
+                    android:textColor="@color/color_foreground_heading"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_seat_color" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </RelativeLayout>
 
