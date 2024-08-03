@@ -39,6 +39,27 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
                 startActivity(this)
             }
         }
+
+        viewModel.withdrawState.asLiveData().observe(this) {
+            when (it) {
+                is WithdrawState.Loading -> {
+
+                }
+                is WithdrawState.Success -> {
+                    toast("탈퇴 되었습니다.")
+                    Intent(this, SignUpActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(this)
+                    }
+                }
+                is WithdrawState.Error -> {
+
+                }
+                is WithdrawState.Init -> {
+
+                }
+            }
+        }
     }
 
     private fun initView() {
