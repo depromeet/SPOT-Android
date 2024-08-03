@@ -8,8 +8,8 @@
     <TextView
         android:id="@+id/tv_level"
         style="@style/TextAppearance.Spot.Label11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="21dp"
         android:layout_marginVertical="17dp"
         android:layout_marginStart="20dp"
         android:background="@drawable/rect_action_enabled_line_20"

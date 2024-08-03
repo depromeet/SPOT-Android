@@ -36,9 +36,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private val homeViewModel: HomeGuiViewModel by viewModels()
-
     private lateinit var stadiumAdapter: StadiumAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +54,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
     private fun initView() {
         homeViewModel.getStadiums()
-//        homeViewModel.getHomeFeed()
         setStadiumAdapter()
     }
 
     private fun initEvent() = with(binding) {
-        clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
         clHomeScrap.setOnClickListener {
