@@ -13,7 +13,7 @@ class AuthInterceptor @Inject constructor(
     private val sharedPreference: SharedPreference,
 ) : Interceptor {
     private val encodedToken: String
-        get() = "Bearer ${sharedPreference.token}"
+        get() = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjEsImlhdCI6MTc1MzI5MDA3NSwiZXhwIjoxNzUzMjkwMDc1fQ.EcX7rtsnp2L1H5AyNOBWPRnlubXhjEnstZ2g5leC-fM"
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         if (!shouldRequestAuthenticatedHeaders(originalRequest.url.encodedPath) || urlIsS3(
