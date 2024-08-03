@@ -6,6 +6,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebChromeClient
@@ -51,6 +52,13 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private fun initView() {
+        binding.root.isClickable = !binding.clZoomDescription.isVisible
+        this.window?.apply {
+            this.statusBarColor = getColor(R.color.transparent)
+            decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+        }
         setTextZoomDescriptionColor()
         getStadiumIdExtra()
         configureWebViewSetting()
@@ -60,6 +68,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         interactionWebView()
         onClickBack()
         onClickClose()
+        onClickZoomDescriptionDim()
     }
 
     private fun observeData() {
@@ -188,6 +197,12 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }
 
         binding.ivClose.setOnClickListener {
+            binding.clZoomDescription.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun onClickZoomDescriptionDim() {
+        binding.clZoomDescription.setOnClickListener {
             binding.clZoomDescription.visibility = View.INVISIBLE
         }
     }
