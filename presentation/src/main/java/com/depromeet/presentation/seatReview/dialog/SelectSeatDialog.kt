@@ -335,7 +335,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
-        val blockCodes = mutableListOf("")
+        val blockCodes = mutableListOf("블록을 선택해주세요")
         blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
         val adapter =
@@ -354,7 +354,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     id: Long,
                 ) {
                     if (position > 0) {
-                        binding.tvBlockDescription.visibility = INVISIBLE
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)
                         val selectedBlockId = blockCodeToIdMap[selectedBlock] ?: 0
@@ -363,26 +362,11 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             viewModel.selectedStadiumId.value,
                             viewModel.selectedSectionId.value,
                         )
-                    } else {
-                        binding.tvBlockDescription.visibility = VISIBLE
                     }
-                    updateChevronIcon(position)
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    binding.tvBlockDescription.visibility = VISIBLE
-                    updateChevronIcon(-1)
-                }
-
-                fun updateChevronIcon(position: Int) {
-                    if (position > 0) {
-                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
-                    } else {
-                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
-                    }
                 }
             }
-            binding.tvBlockDescription.visibility = VISIBLE
         }
     }
 }
