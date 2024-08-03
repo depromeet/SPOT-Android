@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
@@ -19,6 +22,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
@@ -95,14 +99,28 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
     }
 
     private fun initObservers() {
-        signUpViewModel.kakaoToken.asLiveData().observe(viewLifecycleOwner) { token ->
-            if (token.isNotEmpty()) {
-                parentFragmentManager.commit {
-                    addToBackStack(null)
-                    add(R.id.fl_signup_container, NicknameInputFragment())
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpViewModel.kakaoToken.collect { token ->
+                    if (token.isNotEmpty()) {
+                        parentFragmentManager.commit {
+                            replace(R.id.fl_signup_container, NicknameInputFragment())
+                            addToBackStack(null)
+                        }
+                    }
                 }
             }
         }
+
+//        signUpViewModel.kakaoToken.asLiveData().observe(viewLifecycleOwner) { token ->
+//            if (token.isNotEmpty() && signUpViewModel.initKakaoLoginFragment.value) {
+//                signUpViewModel.initKakaoLoginFragment(false)
+//                parentFragmentManager.commit {
+//                    replace(R.id.fl_signup_container, NicknameInputFragment())
+//                    addToBackStack(null)
+//                }
+//            }
+//        }
 
         signUpViewModel.loginUiState.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {

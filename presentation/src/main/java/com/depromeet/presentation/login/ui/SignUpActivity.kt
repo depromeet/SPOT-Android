@@ -32,7 +32,7 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>({
             }
         } else {
             supportFragmentManager.commit(false) {
-                add(binding.flSignupContainer.id, KakaoSignupFragment())
+                replace(binding.flSignupContainer.id, KakaoSignupFragment())
             }
         }
     }

@@ -1,8 +1,10 @@
 package com.depromeet.presentation.login.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -117,7 +119,7 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
         if (isEnabled) {
             tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
         } else {
-            tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+            tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
         }
     }
 }

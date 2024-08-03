@@ -46,6 +46,10 @@ class SignUpViewModel @Inject constructor(
     private val _teamSelectUiState = MutableStateFlow<SignupUiState>(SignupUiState.Initial)
     val teamSelectUiState: StateFlow<SignupUiState> = _teamSelectUiState.asStateFlow()
 
+    private val _initKakaoLoginFragment = MutableStateFlow<Boolean>(true)
+    val initKakaoLoginFragment: StateFlow<Boolean> = _initKakaoLoginFragment.asStateFlow()
+
+
     fun validateNickname(nickname: String) {
         when {
             nickname.isEmpty() -> _nicknameInputState.tryEmit(NicknameInputState.EMPTY)
@@ -95,6 +99,10 @@ class SignUpViewModel @Inject constructor(
                 _teamSelectUiState.emit(SignupUiState.Failure)
             }
         }
+    }
+
+    fun initKakaoLoginFragment(isInit : Boolean) {
+        _initKakaoLoginFragment.tryEmit(isInit)
     }
 }
 
