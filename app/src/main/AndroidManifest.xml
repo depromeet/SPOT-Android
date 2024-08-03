@@ -75,6 +75,10 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
 
+        <activity android:name="com.depromeet.presentation.setting.SettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
@@ -86,10 +90,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.depromeet.presentation.viewfinder.WebViewActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name="com.depromeet.presentation.setting.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
