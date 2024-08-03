@@ -67,7 +67,7 @@ class ReviewDetailViewHolder(
 
             ivDetailProfileImage.load(profile.profileImage) {
                 transformations(CircleCropTransformation())
-                error(R.drawable.ic_default_profile)
+                error(com.depromeet.designsystem.R.drawable.ic_default_profile)
             }
             tvDetailNickname.text = profile.nickname
             "Lv.${profile.level}".also { tvDetailLevel.text = it }
