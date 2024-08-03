@@ -1,12 +1,12 @@
 package com.depromeet.presentation.seatReview.dialog
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
@@ -26,6 +26,7 @@ import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatReview.ReviewViewModel
 import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,9 +42,24 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val bottomSheet =
+            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.let {
+            val behavior = BottomSheetBehavior.from(it)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBottomSheetHeight(view)
         observeStadiumSection()
         observeSeatBlock()
         observeSeatRange()
@@ -52,6 +68,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         setupEditTextListeners()
     }
 
+    // 구역 선택뷰
     private fun observeStadiumSection() {
         viewModel.stadiumSectionState.asLiveData().observe(this) { state ->
             when (state) {
@@ -74,6 +91,81 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
+    private fun setupSectionRecyclerView() {
+        adapter = SelectSeatAdapter { position, sectionId ->
+            val selectedSeatInfo = adapter.currentList[position]
+            adapter.setItemSelected(position)
+            viewModel.setSelectedSeatZone(selectedSeatInfo.name)
+            viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
+            viewModel.updateSelectedSectionId(sectionId)
+            updateNextBtnState()
+        }
+        binding.rvSelectSeatZone.adapter = adapter
+    }
+
+    private fun setupTransactionSelectSeat() {
+        with(binding) {
+            layoutSeatAgain.setOnSingleClickListener {
+                ivSeatAgain.isVisible = !ivSeatAgain.isVisible
+                if (ivSeatAgain.isVisible) {
+                    binding.ivChevronDown.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            binding.root.context,
+                            R.drawable.ic_chevron_up,
+                        ),
+                    )
+                } else {
+                    binding.ivChevronDown.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            binding.root.context,
+                            R.drawable.ic_chevron_down,
+                        ),
+                    )
+                }
+            }
+            layoutColumnNumberDescription.setOnSingleClickListener {
+                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
+                if (layoutColumnDescription.isGone) {
+                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
+                } else {
+                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
+                }
+            }
+            tvWhatColumn.setOnSingleClickListener {
+                layoutColumnDescription.visibility = VISIBLE
+            }
+            tvNextBtn.setOnSingleClickListener {
+                svSelectSeat.visibility = INVISIBLE
+                layoutSeatNumber.visibility = VISIBLE
+                tvSelectSeatLine.visibility = INVISIBLE
+                tvSelectNumberLine.visibility = VISIBLE
+                tvCompleteBtn.visibility = VISIBLE
+                tvNextBtn.visibility = GONE
+                tvSelectZone.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_caption,
+                    ),
+                )
+                tvSelectNumber.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_heading,
+                    ),
+                )
+            }
+            tvCompleteBtn.setOnSingleClickListener { dismiss() }
+        }
+    }
+
+    private fun updateNextBtnState() {
+        with(binding.tvNextBtn) {
+            setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
+            isEnabled = true
+        }
+    }
+
+    // 좌석 번호 뷰
     private fun observeSeatBlock() {
         viewModel.seatBlockState.asLiveData().observe(this) { state ->
             when (state) {
@@ -121,6 +213,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.etColumn.addTextChangedListener { text: Editable? ->
             val newColumn = text.toString()
             viewModel.setSelectedColumn(newColumn)
+            binding.ivDeleteColumn.visibility = if (newColumn.isNotEmpty()) View.VISIBLE else View.GONE
             viewModel.seatRangeState.value?.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
@@ -129,10 +222,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
         }
-
         binding.etNumber.addTextChangedListener { text: Editable? ->
             val newNumber = text.toString()
             viewModel.setSelectedNumber(newNumber)
+            binding.ivDeleteNumber.visibility = if (newNumber.isNotEmpty()) View.VISIBLE else View.GONE
             viewModel.seatRangeState.value?.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
@@ -140,6 +233,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     }
                 }
             }
+        }
+        binding.ivDeleteColumn.setOnSingleClickListener() {
+            binding.etColumn.text.clear()
+            binding.ivDeleteColumn.visibility = GONE
+        }
+
+        binding.ivDeleteNumber.setOnSingleClickListener {
+            binding.etNumber.text.clear()
+            binding.ivDeleteNumber.visibility = GONE
         }
     }
 
@@ -206,13 +308,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
                         tvNoneColumnWarning.visibility = GONE
                         binding.tvCompleteBtn.isEnabled = true
-                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray900_fill_6)
-                        binding.tvCompleteBtn.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                android.R.color.white,
-                            ),
-                        )
+                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
                     }
                 }
             }
@@ -238,20 +334,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
-        val blockCodes = mutableListOf<String>().apply {
-            add("")
-            addAll(blockItems.map { it.code })
-        }
-
+        val blockCodes = mutableListOf("")
+        blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
-
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
 
         with(binding.spinnerBlock) {
             this.adapter = adapter
-            this.setSelection(0, false)
+            this.setSelection(-1)
 
             this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -260,10 +352,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     position: Int,
                     id: Long,
                 ) {
-                    if (position == 0) {
-                        viewModel.setSelectedBlock("")
-                        viewModel.updateSelectedBlockId(0)
-                    } else {
+                    if (position > 0) {
+                        binding.tvBlockDescription.visibility = INVISIBLE
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)
                         val selectedBlockId = blockCodeToIdMap[selectedBlock] ?: 0
@@ -272,70 +362,26 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             viewModel.selectedStadiumId.value,
                             viewModel.selectedSectionId.value,
                         )
+                    } else {
+                        binding.tvBlockDescription.visibility = VISIBLE
                     }
+                    updateChevronIcon(position)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    viewModel.setSelectedBlock("")
-                    viewModel.updateSelectedBlockId(0)
+                    binding.tvBlockDescription.visibility = VISIBLE
+                    updateChevronIcon(-1)
+                }
+
+                fun updateChevronIcon(position: Int) {
+                    if (position > 0) {
+                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
+                    } else {
+                        binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
+                    }
                 }
             }
+            binding.tvBlockDescription.visibility = VISIBLE
         }
-    }
-
-    private fun setupSectionRecyclerView() {
-        adapter = SelectSeatAdapter { position, sectionId ->
-            val selectedSeatInfo = adapter.currentList[position]
-            adapter.setItemSelected(position)
-            viewModel.setSelectedSeatZone(selectedSeatInfo.name)
-            viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
-            viewModel.updateSelectedSectionId(sectionId)
-            updateNextBtnState()
-        }
-        binding.rvSelectSeatZone.adapter = adapter
-    }
-
-    private fun setupTransactionSelectSeat() {
-        with(binding) {
-            layoutSeatAgain.setOnSingleClickListener {
-                ivSeatAgain.isVisible = !ivSeatAgain.isVisible
-            }
-            layoutColumnNumberDescription.setOnSingleClickListener {
-                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
-            }
-            tvWhatColumn.setOnSingleClickListener {
-                layoutColumnDescription.visibility = VISIBLE
-            }
-            tvNextBtn.setOnSingleClickListener {
-                svSelectSeat.visibility = INVISIBLE
-                layoutSeatNumber.visibility = VISIBLE
-                tvSelectSeatLine.visibility = INVISIBLE
-                tvSelectNumberLine.visibility = VISIBLE
-                tvCompleteBtn.visibility = VISIBLE
-                tvNextBtn.visibility = GONE
-            }
-            tvCompleteBtn.setOnSingleClickListener { dismiss() }
-        }
-    }
-
-    private fun updateNextBtnState() {
-        with(binding.tvNextBtn) {
-            setBackgroundResource(R.drawable.rect_gray900_fill_6)
-            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
-            isEnabled = true
-        }
-    }
-
-    private fun setBottomSheetHeight(view: View) {
-        view.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                view.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                view.layoutParams = view.layoutParams.apply {
-                    height = (resources.displayMetrics.heightPixels * 0.8).toInt()
-                }
-                view.requestLayout()
-            }
-        })
     }
 }

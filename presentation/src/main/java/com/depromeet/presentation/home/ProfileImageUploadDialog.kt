@@ -28,7 +28,7 @@ import java.io.File
 @AndroidEntryPoint
 class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditBottomSheetBinding>(
     R.layout.fragment_profile_edit_bottom_sheet,
-    FragmentProfileEditBottomSheetBinding::inflate
+    FragmentProfileEditBottomSheetBinding::inflate,
 ) {
 
     private val viewModel: ProfileEditViewModel by activityViewModels()
@@ -144,7 +144,8 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
             if (sizeMB > 5) {
                 val fragment = UploadErrorDialog(
                     getString(R.string.upload_error_capacity_description),
-                    getString(R.string.upload_error_capacity_5MB)
+                    getString(R.string.upload_error_capacity_5MB),
+                    getString(R.string.upload_error_discipline),
                 )
                 fragment.show(parentFragmentManager, fragment.tag)
                 dismiss()
@@ -153,7 +154,8 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                 if (fileExtension != "png" && fileExtension != "jpeg" && fileExtension != "jpg") {
                     val fragment = UploadErrorDialog(
                         getString(R.string.upload_error_extension_description),
-                        getString(R.string.upload_error_extension_photo)
+                        null,
+                        getString(R.string.upload_error_extension_photo),
                     )
                     fragment.show(parentFragmentManager, fragment.tag)
                     dismiss()

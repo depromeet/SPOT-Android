@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_selected="true"
-        android:drawable="@drawable/ic_check" />
+        android:drawable="@drawable/ic_checkbox" />
     <item
-        android:drawable="@drawable/ic_uncheck" />
+        android:drawable="@drawable/ic_not_checkbox" />
 </selector>

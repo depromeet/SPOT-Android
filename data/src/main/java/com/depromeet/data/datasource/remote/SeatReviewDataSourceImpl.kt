@@ -1,8 +1,8 @@
 package com.depromeet.data.datasource.remote
 
 import com.depromeet.data.datasource.SeatReviewDataSource
-import com.depromeet.data.model.request.RequestPreSignedUrlDto
-import com.depromeet.data.model.request.RequestSeatReviewDto
+import com.depromeet.data.model.request.seatReview.RequestPreSignedUrlDto
+import com.depromeet.data.model.request.seatReview.RequestSeatReviewDto
 import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
 import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto

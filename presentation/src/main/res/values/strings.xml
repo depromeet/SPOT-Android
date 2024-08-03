@@ -45,9 +45,10 @@
     <string name="profile_edit_change_image">프로필 사진 변경</string>
 
     <!-- upload_error -->
-    <string name="upload_error_capacity_description">선택한 사진\n용량이 너무 커요</string>
-    <string name="upload_error_capacity_5MB">5MB에 맞게 다시 선택해주세요</string>
-    <string name="upload_error_capacity_15MB">15MB에 맞게 다시 선택해주세요</string>
+    <string name="upload_error_capacity_description">선택한 사진의\n용량이 너무 커요</string>
+    <string name="upload_error_capacity_5MB">5MB</string>
+    <string name="upload_error_capacity_15MB">15MB</string>
+    <string name="upload_error_discipline">에 맞게 다시 선택해주세요</string>
     <string name="upload_error_extension_description">선택한 사진\n확장자가 맞지 않아요</string>
     <string name="upload_error_extension_photo">jpg, jpeg, png 사진을 선택해주세요</string>
     <string name="upload_error_check">확인</string>

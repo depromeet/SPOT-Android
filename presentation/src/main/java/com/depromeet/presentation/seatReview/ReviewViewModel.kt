@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.request.SeatReviewModel
+import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
 import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
 import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
 import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
@@ -13,7 +13,6 @@ import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
 import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
 import com.depromeet.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -94,12 +93,14 @@ class ReviewViewModel @Inject constructor(
     private val _seatRangeState = MutableStateFlow<UiState<List<SeatRangeModel>>>(UiState.Empty)
     val seatRangeState: StateFlow<UiState<List<SeatRangeModel>>> = _seatRangeState
 
-    private val _getPreSignedUrl =
-        MutableStateFlow<UiState<ResponsePresignedUrlModel>>(UiState.Loading)
+    private val _getPreSignedUrl = MutableStateFlow<UiState<ResponsePresignedUrlModel>>(UiState.Loading)
     val getPreSignedUrl = _getPreSignedUrl.asStateFlow()
 
     private val _postReviewState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
     val postReviewState: StateFlow<UiState<Unit>> = _postReviewState.asStateFlow()
+
+    private val _uploadImageState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
+    val uploadImageState: StateFlow<UiState<Unit>> = _uploadImageState.asStateFlow()
 
     fun updateSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
@@ -121,12 +122,21 @@ class ReviewViewModel @Inject constructor(
         _selectedImages.value = image
     }
 
-    fun setPreSignedUrlImages(image: String) {
-        val newImage = removeQueryParameters(image)
-        val currentImages = _preSignedUrlImages.value.toMutableSet()
-        currentImages.add(newImage)
-        _preSignedUrlImages.value = currentImages.toList()
+    fun setPreSignedUrlImages(images: List<String>) {
+        val newImages = images.map { removeQueryParameters(it) }.toSet()
+        Log.d("minju6", newImages.toString())
+        val currentImages = _preSignedUrlImages.value.map { removeQueryParameters(it) }.toSet()
+
+        val updatedImages = (currentImages + newImages).toList()
+        _preSignedUrlImages.value = updatedImages
+        Log.d("minju7", _preSignedUrlImages.value.toString())
     }
+
+    private fun removeQueryParameters(url: String): String {
+        val uri = Uri.parse(url)
+        return uri.buildUpon().clearQuery().build().toString()
+    }
+
     fun setReviewCount(count: Int) {
         _reviewCount.value = count
     }
@@ -251,60 +261,42 @@ class ReviewViewModel @Inject constructor(
             }
         }
     }
-
-    // presigned URL 요청
     fun requestPreSignedUrl(fileExtension: String) {
         viewModelScope.launch {
             _getPreSignedUrl.value = UiState.Loading
             seatReviewRepository.postReviewImagePresigned(fileExtension)
                 .onSuccess { response ->
+                    Log.d("minju2", getPreSignedUrl.toString())
                     Timber.d("REQUEST PRESIGNED URL SUCCESS : $response")
                     _getPreSignedUrl.value = UiState.Success(response)
                 }
                 .onFailure { t ->
-                    Timber.e("REQUEST PRESIGNED URL FAILURE : $t")
-                    val errorMessage = if (t is HttpException) {
-                        val errorBody = t.response()?.errorBody()?.string()
-                        "HTTP Error ${t.code()}: ${errorBody ?: "Unknown error"}"
-                    } else {
-                        t.message ?: "Unknown error"
+                    if (t is HttpException) {
+                        Timber.e("REQUEST PRESIGNED URL FAILURE : $t")
+                        _getPreSignedUrl.value = UiState.Failure(t.code().toString())
                     }
-
-                    _getPreSignedUrl.value = UiState.Failure(errorMessage)
                 }
         }
     }
 
-    // 이미지 업로드
-    fun uploadImageToPreSignedUrl(
+    private fun uploadImageToPreSignedUrl(
         presignedUrl: String,
         image: ByteArray,
-    ): CompletableDeferred<Boolean> {
-        val deferred = CompletableDeferred<Boolean>()
+        onComplete: () -> Unit,
+    ) {
         viewModelScope.launch {
             val result = seatReviewRepository.putImagePreSignedUrl(presignedUrl, image)
             result.onSuccess {
-                Timber.d("UPLOAD IMAGE SUCCESS")
-                deferred.complete(true)
+                Timber.d("uploadImageToPreSignedUrl called with presignedUrl: $presignedUrl")
+                onComplete()
             }.onFailure { t ->
-                Timber.e("UPLOAD IMAGE FAILURE : $t")
                 if (t is HttpException) {
-                    Timber.e("HTTP error code: ${t.code()}")
-                    Timber.e("HTTP error response: ${t.response()?.errorBody()?.string()}")
-                } else {
-                    Timber.e("General error: ${t.message ?: "Unknown error"}")
+                    Timber.e("UPLOAD IMAGE FAILURE for presignedUrl: $presignedUrl with error: $t")
                 }
-                deferred.complete(false)
+                onComplete()
             }
         }
-        return deferred
     }
-
-    private fun removeQueryParameters(url: String): String {
-        val uri = Uri.parse(url)
-        return uri.buildUpon().clearQuery().build().toString()
-    }
-
     fun postSeatReview() {
         viewModelScope.launch {
             val seatReviewModel = SeatReviewModel(
@@ -314,8 +306,6 @@ class ReviewViewModel @Inject constructor(
                 bad = _selectedBadReview.value,
                 content = _detailReviewText.value,
             )
-
-            // 추후 Timber 삭제 예정
             Timber.d("Selected Images: ${_preSignedUrlImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
             Timber.d("Good Review: ${_selectedGoodReview.value}")
@@ -324,28 +314,11 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Selected Stadium ID: ${_selectedStadiumId.value}")
             Timber.d("Selected Block ID: ${_selectedBlockId.value}")
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
-
-            val selectedNumberValue = selectedNumber.value
-            if (selectedNumberValue.isNullOrEmpty()) {
-                Timber.e("Selected Number is null or empty")
-                _postReviewState.value = UiState.Failure("Selected Number is required")
-                return@launch
-            }
-
-            val selectedNumberInt = try {
-                selectedNumberValue.toInt()
-            } catch (e: NumberFormatException) {
-                Timber.e("Selected Number is not a valid integer: $selectedNumberValue")
-                _postReviewState.value = UiState.Failure("Selected Number is not a valid integer")
-                return@launch
-            }
-
-            Timber.d("Selected Number: $selectedNumberInt")
-
+            Timber.d("Selected Number: ${selectedNumber.value}")
             _postReviewState.value = UiState.Loading
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
-                selectedNumberInt,
+                selectedNumber.value.toInt(),
                 seatReviewModel,
             )
                 .onSuccess {
@@ -353,23 +326,35 @@ class ReviewViewModel @Inject constructor(
                     Timber.d("POST REVIEW SUCCESS")
                 }
                 .onFailure { t ->
-                    Timber.e("POST REVIEW FAILURE : $t")
-
                     if (t is HttpException) {
-                        val errorBody = t.response()?.errorBody()?.string()
-                        Timber.e("Error Body: $errorBody")
-
-                        val errorMessage = when {
-                            t.code() == 403 -> "권한이 없습니다. 요청을 확인하고 다시 시도해 주세요."
-                            errorBody.isNullOrEmpty() -> "HTTP ${t.code()} 에러 발생: ${t.message()}"
-                            else -> errorBody
-                        }
-
-                        _postReviewState.value = UiState.Failure(errorMessage)
-                    } else {
-                        _postReviewState.value = UiState.Failure(t.message ?: "알 수 없는 오류")
+                        Timber.e("POST REVIEW FAILURE : $t")
                     }
                 }
         }
+    }
+    fun uploadImagesSequentially(
+        presignedUrl: String,
+        imageDataList: List<ByteArray>,
+        onComplete: () -> Unit,
+    ) {
+        var currentIndex = 0
+        _uploadImageState.value = UiState.Loading
+        fun uploadNextImages() {
+            if (currentIndex < imageDataList.size) {
+                val imageData = imageDataList[currentIndex]
+                Log.d("minju8", "Uploading image $currentIndex: $imageData")
+                uploadImageToPreSignedUrl(presignedUrl, imageData) {
+                    currentIndex++
+                    if (currentIndex < imageDataList.size) {
+                        uploadNextImages()
+                    } else {
+                        _uploadImageState.value = UiState.Success(Unit)
+                        Log.d("minju9", "All images uploaded successfully")
+                        onComplete()
+                    }
+                }
+            }
+        }
+        uploadNextImages()
     }
 }

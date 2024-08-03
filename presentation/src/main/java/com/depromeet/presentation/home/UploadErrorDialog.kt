@@ -14,16 +14,16 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class UploadErrorDialog(
     private val description: String,
+    private val capacity: String? = null,
     private val discipline: String,
 ) : BindingDialogFragment<FragmentUploadErrorDialogBinding>(
     layoutResId = R.layout.fragment_upload_error_dialog,
-    bindingInflater = FragmentUploadErrorDialogBinding::inflate
+    bindingInflater = FragmentUploadErrorDialogBinding::inflate,
 ) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.TransparentDialogFragment)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,11 +38,11 @@ class UploadErrorDialog(
         }
         with(binding) {
             tvErrorDescription.text = description
+            tvErrorCapacity.text = capacity
             tvErrorDiscipline.text = discipline
             btErrorCheck.setOnClickListener {
                 dismiss()
             }
         }
-
     }
 }
