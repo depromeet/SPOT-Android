@@ -1,15 +1,12 @@
 package com.depromeet.presentation.util
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowInsetsController
-import android.view.WindowManager
 import androidx.annotation.ColorRes
-import androidx.core.view.WindowCompat
 
 class Utils(
     private val context: Context
@@ -33,7 +30,8 @@ class Utils(
     }
 
     fun isStatusBarBlackIconColor(
-        window: Window
+        window: Window,
+        @ColorRes color: Int
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.setSystemBarsAppearance(

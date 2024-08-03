@@ -90,7 +90,7 @@
     <ScrollView
         android:id="@+id/sv_select_seat"
         android:layout_width="0dp"
-        android:layout_height="458dp"
+        android:layout_height="530dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
@@ -546,8 +546,7 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sv_select_seat" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_complete_btn"
