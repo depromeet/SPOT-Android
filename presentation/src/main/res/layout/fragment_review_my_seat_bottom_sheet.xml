@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="💺️ 충분한 다리 공간"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -106,7 +106,7 @@
                     android:layout_marginStart="6dp"
                     android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🔥 생생한 응원 열기"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🏟️ 좋은 시야각"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -136,7 +136,7 @@
                     android:layout_marginStart="6dp"
                     android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🍃 선선한 그늘존"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -154,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sel_review_color_seat_good_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🚶 가까운 출입구"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -209,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🌞 온종일 햇빛존"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -221,7 +221,7 @@
                     android:layout_marginStart="6dp"
                     android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🤢 벌레가 많은 자리"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -239,7 +239,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🥅 신경쓰이는 그물망"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -251,7 +251,7 @@
                     android:layout_marginStart="6dp"
                     android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🥲 시야방해 기둥"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -269,7 +269,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="🥤 컵홀더가 없는 자리"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -281,7 +281,7 @@
                     android:layout_marginStart="6dp"
                     android:background="@drawable/sel_review_color_seat_bad_review"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="13dp"
                     android:text="📢시끄러운 스피커"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_body_subtitle" />
@@ -392,7 +392,7 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
         android:id="@+id/tv_complete_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
