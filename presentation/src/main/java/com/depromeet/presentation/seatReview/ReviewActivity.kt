@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -27,10 +28,6 @@ import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -58,8 +55,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         super.onCreate(savedInstanceState)
         viewModel.getStadiumName()
         observeStadiumName()
+        observePreSignedUrl()
+        observeUploadImageToS3()
         observeUploadReview()
-        uploadAllReviewDone()
+        navigateToUploadBtn()
         initDatePickerDialog()
         initUploadDialog()
         initSeatReviewDialog()
@@ -148,7 +147,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 }
                 is UiState.Failure -> { toast("오류가 발생했습니다") }
                 is UiState.Loading -> {}
-                is UiState.Empty -> { toast("오류가 발생했습니다") }
+                is UiState.Empty -> {}
                 else -> {}
             }
         }
@@ -272,28 +271,67 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         return inputStream?.use { it.readBytes() }
     }
 
-    private fun observePreSignedUrl(deferred: CompletableDeferred<Boolean>, imageData: ByteArray) {
+    private fun navigateToUploadBtn() {
+        binding.tvUploadBtn.setOnSingleClickListener {
+            val uniqueImageUris = selectedImageUris.distinct()
+            uniqueImageUris.forEach { imageUriString ->
+                val imageUri = Uri.parse(imageUriString)
+                val fileExtension = getFileExtension(this, imageUri)
+                val imageData = readImageData(this, imageUri)
+                if (imageData != null) {
+                    Log.d("minju1", fileExtension)
+                    viewModel.requestPreSignedUrl(fileExtension)
+                } else {
+                    toast("파일을 읽을 수 없습니다.")
+                }
+            }
+        }
+    }
+
+    private fun observePreSignedUrl() {
         viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    val preSignedUrl = state.data.presignedUrl
-                    if (viewModel.preSignedUrlImages.value.contains(preSignedUrl).not()) {
-                        viewModel.setPreSignedUrlImages(preSignedUrl)
-                        viewModel.uploadImageToPreSignedUrl(preSignedUrl, imageData).invokeOnCompletion {
-                            if (it == null) {
-                                deferred.complete(true)
-                            } else {
-                                deferred.complete(false)
-                            }
-                        }
-                    } else {
-                        deferred.complete(false)
+                    val presignedUrl = state.data.presignedUrl
+                    Log.d("minju3", "Presigned URL: $presignedUrl")
+                    val uniqueImageUris = selectedImageUris.distinct()
+                    Log.d("minju4", "Unique Image URIs: $uniqueImageUris")
+                    val imageDataList = uniqueImageUris.mapNotNull { imageUriString ->
+                        val imageUri = Uri.parse(imageUriString)
+                        val imageData = readImageData(this, imageUri)
+                        Log.d("minju5", "Image Data for $imageUriString: $imageData")
+                        imageData
+                    }
+
+                    if (viewModel.preSignedUrlImages.value.contains(presignedUrl).not()) {
+                        viewModel.setPreSignedUrlImages(listOf(presignedUrl))
+                    }
+                    viewModel.uploadImagesSequentially(presignedUrl, imageDataList) {
+                        Log.d("minju10", "Upload images complete")
                     }
                 }
+
                 is UiState.Failure -> {
                     toast("Presigned URL 요청 실패")
-                    deferred.complete(false)
                 }
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun observeUploadImageToS3() {
+        viewModel.uploadImageState.asLiveData().observe(this) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    viewModel.postSeatReview()
+                    Log.d("minju11", viewModel.preSignedUrlImages.value.toString())
+                }
+
+                is UiState.Failure -> {
+                    toast("이미지 업로드 실패")
+                }
+
                 else -> {}
             }
         }
@@ -311,38 +349,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     toast("리뷰 등록 실패: $state")
                 }
                 else -> {}
-            }
-        }
-    }
-
-    private fun uploadAllReviewDone() {
-        binding.tvUploadBtn.setOnSingleClickListener {
-            val uploadResults = mutableListOf<CompletableDeferred<Boolean>>()
-            val uniqueImageUris = selectedImageUris.distinct()
-            uniqueImageUris.forEach { imageUriString ->
-
-                val imageUri = Uri.parse(imageUriString)
-                val fileExtension = getFileExtension(this, imageUri)
-                val imageData = readImageData(this, imageUri)
-
-                if (imageData != null) {
-                    val deferred = CompletableDeferred<Boolean>()
-                    uploadResults.add(deferred)
-                    // presignedurl 호출
-                    viewModel.requestPreSignedUrl(fileExtension)
-                    observePreSignedUrl(deferred, imageData)
-                } else {
-                    toast("파일을 읽을 수 없습니다.")
-                }
-            }
-
-            CoroutineScope(Dispatchers.Main).launch {
-                val allUploadsCompleted = uploadResults.all { it.await() }
-                if (allUploadsCompleted) {
-                    viewModel.postSeatReview()
-                } else {
-                    toast("이미지 업로드에 실패했습니다.")
-                }
             }
         }
     }
