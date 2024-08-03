@@ -68,4 +68,11 @@
     <string name="unknown_level_to_title">알 수 없음</string>
 
 
+    <!-- 셋팅 -->
+    <string name="setting_title">설정 및 개인정보</string>
+    <string name="setting_feedback_title">SPOT은 여러분의 피드백으로 성장해요!</string>
+    <string name="setting_feedback_description">좋은 점, 개선할 점, 궁금한 점 모두 알려주세요</string>
+    <string name="setting_manage_account">계정 관리</string>
+
+
 </resources>
