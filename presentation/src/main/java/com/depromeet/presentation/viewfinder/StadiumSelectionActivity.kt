@@ -16,6 +16,7 @@ import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.util.SpannableStringUtils
+import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.viewfinder.adapter.StadiumSelectionAdapter
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumSelectionViewModel
@@ -28,7 +29,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     companion object {
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val STADIUM_GRID_SPAN_COUNT = 2
-        private const val STADIUM_GRID_SPACING = 8
+        private const val STADIUM_GRID_SPACING = 4
     }
 
     private val viewModel: StadiumSelectionViewModel by viewModels()
@@ -36,6 +37,10 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+        }
 
         initView()
         initEvent()

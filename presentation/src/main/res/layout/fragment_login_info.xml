@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
     <com.depromeet.designsystem.SpotAppbar
         android:id="@+id/appbar_login_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="로그인 정보"
+        android:textColor="@color/gray900"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_chevron_left"
         app:navigationIconColor="@color/color_foreground_body_sebtext"
-        app:text="로그인 정보" />
-
+        app:navigationIconSize="24" />
 
     <TextView
         android:id="@+id/tv_login_info_link_title"
         style="@style/TextAppearance.Spot.Label08"
         android:layout_width="0dp"
         android:layout_height="58dp"
-        android:paddingStart="16dp"
         android:gravity="center_vertical"
+        android:paddingStart="16dp"
         android:paddingTop="12dp"
         android:text="계정 관리"
         android:textColor="@color/color_foreground_caption"
@@ -36,13 +38,25 @@
         style="@style/TextAppearance.Spot.Body01"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:paddingStart="16dp"
         android:gravity="center_vertical"
+        android:paddingStart="16dp"
         android:text="카카오"
         android:textColor="@color/color_foreground_heading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_login_info_link_title" />
+
+    <TextView
+        android:id="@+id/tv_setting_nickname"
+        style="@style/TextAppearance.Spot.Body01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:textColor="@color/color_foreground_heading"
+        app:layout_constraintBottom_toBottomOf="@id/tv_setting_login_info"
+        app:layout_constraintEnd_toEndOf="@id/tv_setting_login_info"
+        app:layout_constraintTop_toTopOf="@id/tv_setting_login_info"
+        tools:text="ssong" />
 
     <View
         android:id="@+id/v_login_info_divider"
@@ -59,8 +73,8 @@
         style="@style/TextAppearance.Spot.Label08"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:paddingStart="16dp"
         android:gravity="center_vertical"
+        android:paddingStart="16dp"
         android:text="회원 탈퇴"
         android:textColor="@color/color_foreground_caption"
         app:layout_constraintEnd_toEndOf="parent"

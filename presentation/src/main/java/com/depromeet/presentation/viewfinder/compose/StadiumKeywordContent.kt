@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -47,13 +48,13 @@ fun StadiumKeywordContent(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(
                     id = R.string.viewfinder_best_keyword_description_format,
                     keywords.size
                 ),
-                style = SpotTheme.typography.label11,
+                style = SpotTheme.typography.caption02,
                 color = SpotTheme.colors.foregroundBodySebtext,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
@@ -63,9 +64,11 @@ fun StadiumKeywordContent(
                 contentDescription = null,
                 modifier = Modifier
                     .padding(12.dp)
+                    .size(28.dp)
                     .clickable { onChangeIsMore(false) },
                 tint = SpotTheme.colors.foregroundCaption
             )
+            Spacer(modifier = Modifier.height(4.dp))
         } else {
             when {
                 keywords.isEmpty() -> Unit
@@ -78,17 +81,18 @@ fun StadiumKeywordContent(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = stringResource(
                             id = R.string.viewfinder_best_keyword_description_format,
                             keywords.size
                         ),
-                        fontSize = 12.sp,
-                        color = Color(0xFF606060),
+                        style = SpotTheme.typography.caption02,
+                        color = SpotTheme.colors.foregroundBodySebtext,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
                 keywords.size > 3 -> {
@@ -142,10 +146,12 @@ private fun DownKeywordBlind(
         Icon(
             painter = painterResource(id = R.drawable.ic_chevron_down),
             contentDescription = null,
-            modifier = Modifier.padding(
-                top = 24.dp,
-                bottom = 16.dp,
-            ),
+            modifier = Modifier
+                .padding(
+                    top = 24.dp,
+                    bottom = 16.dp,
+                )
+                .size(28.dp),
             tint = SpotTheme.colors.foregroundCaption
         )
     }

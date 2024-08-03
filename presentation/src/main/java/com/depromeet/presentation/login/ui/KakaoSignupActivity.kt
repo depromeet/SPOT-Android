@@ -2,18 +2,16 @@ package com.depromeet.presentation.login.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
+import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.viewpager2.widget.ViewPager2
-import com.depromeet.core.base.BindingFragment
+import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentKakaoSignupBinding
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.HomeActivity
+import com.depromeet.presentation.login.viewmodel.KakaoSignupViewModel
 import com.depromeet.presentation.login.viewmodel.LoginUiState
-import com.depromeet.presentation.login.viewmodel.SignUpViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -21,15 +19,13 @@ import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
-    R.layout.fragment_kakao_signup, { inflater, container, attachToRoot ->
-        FragmentKakaoSignupBinding.inflate(inflater, container, attachToRoot)
-    }
-) {
-    private val signUpViewModel by activityViewModels<SignUpViewModel>()
+class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
+    FragmentKakaoSignupBinding.inflate(it)
+}) {
+    private val signUpViewModel by viewModels<KakaoSignupViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         initView()
         initClickListeners()
@@ -69,19 +65,19 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
 
     private fun initClickListeners() {
         binding.clKakaoSignupButton.setOnClickListener {
-            if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
-                UserApiClient.instance.loginWithKakaoTalk(requireContext()) { token, error ->
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
+                UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                     if (error != null) {
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled ) {
                             return@loginWithKakaoTalk
                         }
-                        UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
+                        UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                     } else if (token != null) {
                         signUpViewModel.updateKakaoToken(token.accessToken)
                     }
                 }
             } else {
-                UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
+                UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
         }
     }
@@ -95,21 +91,21 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
     }
 
     private fun initObservers() {
-        signUpViewModel.kakaoToken.asLiveData().observe(viewLifecycleOwner) { token ->
+        signUpViewModel.kakaoToken.asLiveData().observe(this) { token ->
             if (token.isNotEmpty()) {
-                parentFragmentManager.commit {
-                    addToBackStack(null)
-                    add(R.id.fl_signup_container, NicknameInputFragment())
+                Intent(this, NicknameInputActivity::class.java).apply {
+                    putExtra("kakaoToken", token)
+                    startActivity(this)
                 }
             }
         }
 
-        signUpViewModel.loginUiState.asLiveData().observe(viewLifecycleOwner) { state ->
+        signUpViewModel.loginUiState.asLiveData().observe(this) { state ->
             when (state) {
                 LoginUiState.LoginSuccess -> {
-                    Intent(requireContext(), HomeActivity::class.java).apply {
+                    Intent(this, HomeActivity::class.java).apply {
                         startActivity(this)
-                        requireActivity().finish()
+                        finish()
                     }
                 }
                 LoginUiState.Loading -> {

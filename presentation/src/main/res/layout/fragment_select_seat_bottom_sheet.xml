@@ -87,11 +87,10 @@
     </LinearLayout>
 
     <!-- 구역 선택 -->
-
     <ScrollView
         android:id="@+id/sv_select_seat"
         android:layout_width="0dp"
-        android:layout_height="458dp"
+        android:layout_height="530dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
@@ -209,7 +208,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:src="@drawable/ic_chevron_down"
+                    android:src="@drawable/ic_chevron_down_soft"
                     android:textAppearance="@style/TextAppearance.Spot.Label07"
                     android:textColor="@color/color_foreground_caption"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_seat_again"
@@ -277,19 +276,6 @@
                         app:layout_constraintEnd_toStartOf="@+id/tv_block"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_block_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="20dp"
-                        android:layout_marginStart="16dp"
-                        android:text="블록을 선택해주세요"
-                        android:textAppearance="@style/TextAppearance.Spot.Label04"
-                        android:textColor="@color/color_foreground_caption"
-                        app:layout_constraintBottom_toBottomOf="@+id/spinner_block"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/spinner_block" />
 
                     <ImageView
                         android:id="@+id/iv_select_block_chevron"
@@ -445,8 +431,9 @@
                         android:layout_height="wrap_content"
                         android:paddingVertical="12dp"
                         android:src="@drawable/ic_help_circle2"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_what_column"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/tv_what_column" />
 
                     <TextView
                         android:id="@+id/tv_what_column"
@@ -484,17 +471,34 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_what_column">
 
-                        <TextView
-                            android:id="@+id/tv_description_one"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingHorizontal="16dp"
-                            android:text="• ‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한\n  고유 번호를 뜻해요."
-                            android:textAppearance="@style/TextAppearance.Spot.Caption03"
-                            android:textColor="@color/color_foreground_caption"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_what_column" />
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_dot"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="•"
+                                android:textColor="@color/color_foreground_caption"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_description_one"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:paddingHorizontal="16dp"
+                                android:text="‘열’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요."
+                                android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                                android:textColor="@color/color_foreground_caption"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/tv_dot"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
                             android:id="@+id/tv_description_two"
@@ -503,7 +507,7 @@
                             android:layout_marginTop="6dp"
                             android:paddingHorizontal="16dp"
                             android:text="• ex. 2열 7번좌석"
-                            android:textAppearance="@style/TextAppearance.Spot.Caption03"
+                            android:textAppearance="@style/TextAppearance.Spot.Caption01"
                             android:textColor="@color/color_foreground_caption"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_description_one" />
@@ -542,8 +546,7 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sv_select_seat" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_complete_btn"

@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
@@ -28,14 +29,16 @@ class StadiumDetailViewModel @Inject constructor(
     private val _scrollState = MutableStateFlow(false)
     val scrollState = _scrollState.asStateFlow()
 
-    private val _reviewFilter = MutableStateFlow<BlockReviewRequestQuery>(BlockReviewRequestQuery(
-        rowNumber = null,
-        seatNumber = null,
-        year = null,
-        month = null,
-        page = 0,
-        size = 10
-    ))
+    private val _reviewFilter = MutableStateFlow<BlockReviewRequestQuery>(
+        BlockReviewRequestQuery(
+            rowNumber = null,
+            seatNumber = null,
+            year = null,
+            month = null,
+            page = 0,
+            size = 10
+        )
+    )
     val reviewFilter = _reviewFilter.asStateFlow()
 
 
@@ -127,17 +130,20 @@ class StadiumDetailViewModel @Inject constructor(
         number: Int,
         response: (isSuccess: Boolean, seat: Seat) -> Unit
     ) {
-        if (blockRow?.checkColumnRange(column) == true) {
-            if (blockRow?.checkNumberRange(column, number) == true) {
-                response(true, Seat.NUMBER)
-                return
-            } else {
-                response(false, Seat.NUMBER)
-                return
+        when (blockRow?.isCheck(column, number)) {
+            Seat.COLUMN -> response(false, Seat.COLUMN)
+            Seat.NUMBER -> response(false, Seat.NUMBER)
+            Seat.COLUMN_NUMBER -> response(false, Seat.COLUMN_NUMBER)
+            Seat.CHECK -> {
+                if (blockRow?.checkNumberRange(column, number) == false) {
+                    response(false, Seat.CHECK)
+                } else {
+                    response(true, Seat.CHECK)
+                }
             }
-        }
 
-        response(false, Seat.COLUMN)
+            else -> Unit
+        }
     }
 
     fun handleColumn(column: Int, response: (isSuccess: Boolean, seat: Seat) -> Unit) {

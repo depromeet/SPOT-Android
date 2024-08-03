@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:background="@color/white">
+    android:background="@color/color_background_tertiary">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_stadium"
@@ -13,6 +12,7 @@
         android:layout_height="160dp"
         android:elevation="1dp"
         app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,17 +35,19 @@
         android:visibility="invisible"
         app:cardBackgroundColor="@color/color_transfer_black_01"
         app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="@id/cv_stadium"
         app:layout_constraintEnd_toEndOf="@id/cv_stadium"
         app:layout_constraintStart_toStartOf="@id/cv_stadium"
         app:layout_constraintTop_toTopOf="@id/cv_stadium">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_stadium_lock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_lock" />
+            android:src="@drawable/ic_lock"
+            android:tint="@color/color_foreground_disabled" />
 
     </androidx.cardview.widget.CardView>
 

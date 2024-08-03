@@ -9,7 +9,10 @@ import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySettingBinding
+import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.login.ui.SignUpActivity
+import com.depromeet.presentation.seatrecord.ConfirmDeleteDialog
+import com.depromeet.presentation.seatrecord.SeatDetailRecordFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -30,9 +33,31 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
 
     private fun initObserver() {
         viewModel.logoutEvent.asLiveData().observe(this) {
+            toast("로그아웃 되었습니다.")
             Intent(this, SignUpActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(this)
+            }
+        }
+
+        viewModel.withdrawState.asLiveData().observe(this) {
+            when (it) {
+                is WithdrawState.Loading -> {
+
+                }
+                is WithdrawState.Success -> {
+                    toast("탈퇴 되었습니다.")
+                    Intent(this, SignUpActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(this)
+                    }
+                }
+                is WithdrawState.Error -> {
+
+                }
+                is WithdrawState.Init -> {
+
+                }
             }
         }
     }
@@ -90,7 +115,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
         }
 
         tvSettingLogout.setOnClickListener {
-            viewModel.logout()
+            LogoutDialog.newInstance("tag")
+                .show(supportFragmentManager, "tag")
         }
     }
 }

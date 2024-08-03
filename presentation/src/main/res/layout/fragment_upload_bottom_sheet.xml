@@ -8,8 +8,8 @@
 
     <View
         android:id="@+id/v_handler"
-        android:layout_width="36dp"
-        android:layout_height="5dp"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/rect_gray600_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,12 +22,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
+        android:paddingVertical="8dp"
         android:text="업로드"
-        android:textColor="#121212"
-        android:textFontWeight="700"
-        android:textStyle="normal"
-        android:textSize="16sp"
+        android:textAppearance="@style/TextAppearance.Spot.Subtitle03"
+        android:textColor="@color/color_foreground_heading"
+
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/v_handler" />
 
@@ -35,7 +36,7 @@
         android:id="@+id/layout_upload_method"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="40dp"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,6 +48,7 @@
             android:id="@+id/layout_take_photo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
             android:layout_marginTop="12dp"
             android:orientation="horizontal">
 
@@ -62,23 +64,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="사진 촬영"
-                android:textFontWeight="500"
-                android:textStyle="normal"
-                android:gravity="center"
-                android:textColor="#4A4A4A"
-                android:textSize="16sp" />
+                android:textColor="@color/color_foreground_body_subtitle"
+               android:textAppearance="@style/TextAppearance.Spot.Body02" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.8dp"
-            android:layout_marginVertical="12dp"
-            android:background="#F4F4F3" />
 
         <LinearLayout
             android:id="@+id/layout_gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -93,11 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="갤러리에서 선택"
-                android:textFontWeight="500"
-                android:textStyle="normal"
-                android:gravity="center"
-                android:textColor="#4A4A4A"
-                android:textSize="16sp" />
+                android:textColor="@color/color_foreground_body_subtitle"
+                android:textAppearance="@style/TextAppearance.Spot.Body02" /> />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
