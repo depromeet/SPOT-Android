@@ -107,13 +107,13 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun signUp(teamId: Int) {
+    fun signUp() {
         viewModelScope.launch {
             signupRepository.postSignup(
                 PostSignupModel(
                     idCode = kakaoToken.value,
                     nickname = currentNickName.value,
-                    teamId = teamId
+                    teamId = cheerTeam.value
                 )
             ).onSuccess {
                 sharedPreference.token = it.jwtToken
@@ -121,6 +121,17 @@ class SignUpViewModel @Inject constructor(
             }.onFailure {
                 _teamSelectUiState.emit(SignupUiState.Failure)
             }
+        }
+    }
+
+    fun setClickedBaseballTeam(id: Int) {
+        val currentState = team.value
+        if (currentState is UiState.Success) {
+            val updatedList = currentState.data.map { team ->
+                team.copy(isClicked = team.id == id)
+            }
+            _team.value = UiState.Success(updatedList)
+            _cheerTeam.value = id
         }
     }
 

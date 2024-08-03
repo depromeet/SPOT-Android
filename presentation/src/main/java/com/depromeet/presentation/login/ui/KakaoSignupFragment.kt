@@ -99,28 +99,15 @@ class KakaoSignupFragment : BindingFragment<FragmentKakaoSignupBinding>(
     }
 
     private fun initObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpViewModel.kakaoToken.collect { token ->
-                    if (token.isNotEmpty()) {
-                        parentFragmentManager.commit {
-                            replace(R.id.fl_signup_container, NicknameInputFragment())
-                            addToBackStack(null)
-                        }
-                    }
+        signUpViewModel.kakaoToken.asLiveData().observe(viewLifecycleOwner) { token ->
+            if (token.isNotEmpty() && signUpViewModel.initKakaoLoginFragment.value) {
+                signUpViewModel.initKakaoLoginFragment(false)
+                parentFragmentManager.commit {
+                    replace(R.id.fl_signup_container, NicknameInputFragment())
+                    addToBackStack(null)
                 }
             }
         }
-
-//        signUpViewModel.kakaoToken.asLiveData().observe(viewLifecycleOwner) { token ->
-//            if (token.isNotEmpty() && signUpViewModel.initKakaoLoginFragment.value) {
-//                signUpViewModel.initKakaoLoginFragment(false)
-//                parentFragmentManager.commit {
-//                    replace(R.id.fl_signup_container, NicknameInputFragment())
-//                    addToBackStack(null)
-//                }
-//            }
-//        }
 
         signUpViewModel.loginUiState.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {

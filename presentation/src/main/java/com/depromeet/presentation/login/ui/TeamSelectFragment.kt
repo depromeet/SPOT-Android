@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.core.state.UiState
+import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentTeamSelectBinding
 import com.depromeet.presentation.extension.toast
@@ -56,9 +57,9 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
         signupViewModel.team.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
-//                    if (!state.data.any { it.isClicked }) {
-//                        binding.tvTeamSelectTitle.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
-//                    }
+                    if (!state.data.any { it.isClicked }) {
+                        binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                    }
                     adapter.submitList(state.data)
                 }
 
@@ -81,28 +82,26 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
         binding.ivBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
+        binding.tvSelectedTeamNextBtn.setOnClickListener {
+            signupViewModel.signUp()
+        }
     }
 
     private fun initRecyclerView() {
         adapter = BaseballTeamAdapter()
         binding.rvTeamSelectStadium.adapter = adapter
-        val layoutManager = GridLayoutManager(requireContext(), 2)
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (adapter.getItemViewType(position) == TeamSelectViewType.BUTTON_ITEM.ordinal) {
-                    2
-                } else {
-                    1
-                }
-            }
-        }
-
-        binding.rvTeamSelectStadium.layoutManager = layoutManager
         binding.rvTeamSelectStadium.addItemDecoration(
             GridSpacingItemDecoration(
                 2,
                 40
             )
         )
+        adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
+            override fun onItemClubClick(item: BaseballTeamResponse) {
+                signupViewModel.setClickedBaseballTeam(item.id)
+                binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
+            }
+        }
     }
 }
