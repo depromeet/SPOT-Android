@@ -10,3 +10,11 @@ fun Int.dpToPx(context: Context): Int {
         context.resources.displayMetrics,
     ).toInt()
 }
+
+fun Float.dpToPx(context: Context): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        toFloat(),
+        context.resources.displayMetrics,
+    ).toInt()
+}

@@ -1,6 +1,8 @@
 package com.depromeet.presentation.viewfinder.viewholder
 
 import android.view.View
+import androidx.compose.ui.unit.dp
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.depromeet.designsystem.SpotTeamLabel
@@ -21,6 +23,7 @@ class StadiumSelectionViewHolder(
                 binding.llStadiumTeamLabel.addView(
                     SpotTeamLabel(binding.root.context).apply {
                         teamType = teamName.alias
+                        updatePadding(right = 2)
                     }
                 )
             }

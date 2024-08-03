@@ -40,8 +40,23 @@ class StadiumFilterMonthsDialog :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setLayoutSizeRatio(widthPercent = 1f, heightPercent = 0.44f)
+        setLayoutSizeRatio(widthPercent = 1f, heightPercent = 0.51f)
 
+        initView()
+        initEvent()
+    }
+
+    private fun initView() {
+        configureMonthPickerSetting()
+    }
+
+    private fun initEvent() {
+        setOnValueChangedMonthListener()
+        setOnClickCancel()
+        setOnClickCompleted()
+    }
+
+    private fun configureMonthPickerSetting() {
         with(binding.npMonths) {
             minValue = 0
             maxValue = months.size - 1
@@ -49,14 +64,24 @@ class StadiumFilterMonthsDialog :
             displayedValues = months
             wrapSelectorWheel = false
         }
+    }
 
+    private fun setOnValueChangedMonthListener() {
         binding.npMonths.setOnValueChangedListener { picker, oldVal, newVal ->
             month = newVal
         }
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        viewModel.updateMonth(month?.plus(1) ?: viewModel.reviewFilter.value.month ?: 1)
-        super.onDismiss(dialog)
+    private fun setOnClickCancel() {
+        binding.tvCancel.setOnClickListener {
+            dismiss()
+        }
+    }
+
+    private fun setOnClickCompleted() {
+        binding.tvCompleted.setOnClickListener {
+            viewModel.updateMonth(month?.plus(1) ?: viewModel.reviewFilter.value.month ?: 1)
+            dismiss()
+        }
     }
 }

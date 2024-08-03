@@ -34,11 +34,12 @@ fun StadiumDetailScreen(
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
-    onClickReviewPicture: (BlockReviewResponse.ReviewResponse) -> Unit,
+    onClickReviewPicture: (reviewContent: BlockReviewResponse.ReviewResponse, index: Int, title: String) -> Unit,
     onClickSelectSeat: () -> Unit,
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit,
-    onClickGoBack: () -> Unit
+    onClickGoBack: () -> Unit,
+    onRefresh: () -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
     val verticalScrollState = rememberLazyListState()
@@ -65,7 +66,11 @@ fun StadiumDetailScreen(
                 )
             }
 
-            is StadiumDetailUiState.Failed -> Unit
+            is StadiumDetailUiState.Failed -> {
+                ErrorScreen(
+                    onRefresh = onRefresh
+                )
+            }
             is StadiumDetailUiState.Loading -> Unit
             is StadiumDetailUiState.ReviewsData -> {
                 LazyColumn(
@@ -99,7 +104,7 @@ fun StadiumDetailScreen(
                     if (uiState.reviews.isEmpty()) {
                         item(StadiumDetailActivity.STADIUM_REVIEW_CONTENT) {
                             StadiumEmptyReviewContent()
-                            Spacer(modifier = Modifier.height(40.dp))
+                            Spacer(modifier = Modifier.height(60.dp))
                         }
                     } else {
                         if (verticalScrollState.firstVisibleItemIndex == uiState.reviews.size - 1 && !uiState.pageState) {
@@ -116,7 +121,13 @@ fun StadiumDetailScreen(
                             StadiumReviewContent(
                                 context = context,
                                 reviewContent = uiState.reviews[index],
-                                onClick = onClickReviewPicture,
+                                onClick = { reviewContent, index ->
+                                    onClickReviewPicture(
+                                        reviewContent,
+                                        index,
+                                        uiState.stadiumContent.toTitle()
+                                    )
+                                },
                                 onClickReport = onClickReport
                             )
                             Spacer(modifier = Modifier.height(40.dp))
@@ -134,11 +145,12 @@ private fun StadiumDetailScreenPreview() {
     Box(modifier = Modifier.background(Color.White)) {
         StadiumDetailScreen(
             blockNumber = "207",
-            onClickReviewPicture = {},
+            onClickReviewPicture = { _, _, _ -> },
             onClickSelectSeat = {},
             onClickFilterMonthly = {},
             onClickReport = {},
-            onClickGoBack = {}
+            onClickGoBack = {},
+            onRefresh = {}
         )
     }
 }

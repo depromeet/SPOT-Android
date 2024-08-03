@@ -14,41 +14,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
+import com.depromeet.presentation.R
 
 @Composable
 fun StadiumViewReviewHeader(
-    reviewQuery: BlockReviewRequestQuery,
     reviewCount: Long,
+    reviewQuery: BlockReviewRequestQuery,
     modifier: Modifier = Modifier,
+    onCancel: () -> Unit,
     onClickMonthly: () -> Unit,
-    onCancel: () -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(SpotTheme.colors.backgroundWhite)
             .padding(horizontal = 16.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "시야 후기",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
+                text = stringResource(id = R.string.viewfinder_review_view),
+                style = SpotTheme.typography.subtitle01,
+                color = SpotTheme.colors.foregroundHeading
             )
-            Spacer(modifier = Modifier.width(5.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = reviewCount.toString(),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFFAFAFAF)
+                style = SpotTheme.typography.subtitle03,
+                color = SpotTheme.colors.foregroundCaption
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -63,12 +62,12 @@ fun StadiumViewReviewHeader(
                 onCancel = onCancel
             )
             Text(
-                text = "최신순",
-                fontSize = 13.sp,
-                color = Color(0xFF7B7B7B)
+                text = stringResource(id = R.string.viewfinder_latest),
+                style = SpotTheme.typography.caption01,
+                color = SpotTheme.colors.foregroundCaption
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

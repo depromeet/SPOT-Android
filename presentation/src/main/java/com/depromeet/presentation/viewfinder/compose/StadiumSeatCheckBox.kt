@@ -15,13 +15,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
+import com.depromeet.presentation.viewfinder.sample.review
 
 @Composable
 fun StadiumSeatCheckBox(
@@ -30,65 +35,74 @@ fun StadiumSeatCheckBox(
     onClick: () -> Unit,
     onCancel: () -> Unit
 ) {
+    val backgroundModifier = if (
+        reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()
+    ) {
+        modifier.background(
+            color = SpotTheme.colors.backgroundSecondary,
+            shape = RoundedCornerShape(999.dp)
+        )
+    } else {
+        modifier.background(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    SpotTheme.colors.spotGreen2CD7A6,
+                    SpotTheme.colors.spotGreen5DD281
+                )
+            ),
+            shape = RoundedCornerShape(999.dp)
+        )
+    }
+
     Row(
-        modifier = modifier
-            .background(
-                color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
-                    Color(0xFFFFFFFF)
-                } else {
-                    Color(0xFF121212)
-                },
-                shape = RoundedCornerShape(100.dp)
-            )
-            .border(
-                1.dp,
-                color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
-                    Color(0xFFE5E5E5)
-                } else {
-                    Color(0xFF121212)
-                }, shape = RoundedCornerShape(100.dp)
-            )
-            .clickable(
-                enabled = true,
-                onClick = onClick
-            )
-            .padding(vertical = 10.dp, horizontal = 16.dp),
+        modifier = backgroundModifier
+            .noRippleClickable {
+                onClick()
+            }
+            .padding(vertical = 10.dp, horizontal = 12.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = if (reviewFilter.seatNumberIsEmpty()) {
                 if (reviewFilter.rowNumberIsEmpty()) {
-                    "좌석 선택"
+                    stringResource(id = R.string.viewfinder_selection_seat)
                 } else {
-                    "${reviewFilter.rowNumber}열"
+                    stringResource(
+                        id = R.string.viewfinder_seat_format,
+                        reviewFilter.rowNumber.toString()
+                    )
                 }
             } else {
-                "${reviewFilter.rowNumber}열 ${reviewFilter.seatNumber}번"
+                stringResource(
+                    id = R.string.viewfinder_seat_number_format,
+                    reviewFilter.rowNumber.toString(),
+                    reviewFilter.seatNumber.toString()
+                )
             },
-            fontSize = 13.sp,
+            style = SpotTheme.typography.label05,
             color = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
-                Color(0xFF121212)
+                SpotTheme.colors.foregroundBodySubtitle
             } else {
-                Color(0xFFFFFFFF)
+                SpotTheme.colors.backgroundWhite
             }
         )
-        Spacer(modifier = Modifier.width(6.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         Icon(
             painter = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
-                painterResource(id = R.drawable.ic_down)
+                painterResource(id = R.drawable.ic_chevron_right)
             } else {
-                painterResource(id = R.drawable.ic_close)
+                painterResource(id = R.drawable.ic_x_close)
             },
             contentDescription = null,
             tint = if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
-                Color(0xFF878787)
+                SpotTheme.colors.foregroundDisabled
             } else {
-                Color(0xFFFFFFFF)
+                SpotTheme.colors.foregroundWhite
             },
             modifier = Modifier
-                .size(12.dp)
-                .clickable {
+                .size(20.dp)
+                .noRippleClickable {
                     if (reviewFilter.seatNumberIsEmpty() && reviewFilter.rowNumberIsEmpty()) {
                         onClick()
                     } else {

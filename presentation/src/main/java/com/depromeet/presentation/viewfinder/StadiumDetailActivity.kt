@@ -1,8 +1,10 @@
 package com.depromeet.presentation.viewfinder
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.compose.material.MaterialTheme
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
@@ -11,6 +13,7 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
+import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
@@ -25,6 +28,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 }) {
     companion object {
         const val REVIEW_ID = "review_id"
+        const val REVIEW_INDEX = "review_index"
+        const val REVIEW_TITLE_WITH_STADIUM = "review_title_with_stadium"
         const val STADIUM_HEADER = "stadium_header"
         const val STADIUM_REVIEW_CONTENT = "stadium_review_content"
     }
@@ -38,31 +43,42 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         initObserver()
 
         binding.composeView.setContent {
-            StadiumDetailScreen(
-                blockNumber = viewModel.blockCode,
-                viewModel = viewModel,
-                onClickReviewPicture = { reviewContent ->
-                    startToStadiumDetailPictureFragment(reviewContent)
-                },
-                onClickSelectSeat = {
-                    startToBottomSheetDialog(
-                        StadiumSelectSeatDialog.newInstance(),
-                        StadiumSelectSeatDialog.TAG
-                    )
-                },
-                onClickFilterMonthly = {
-                    startToBottomSheetDialog(
-                        StadiumFilterMonthsDialog.newInstance(),
-                        StadiumFilterMonthsDialog.TAG
-                    )
-                },
-                onClickReport = {
-                    startToBottomSheetDialog(ReportDialog.newInstance(), ReportDialog.TAG)
-                },
-                onClickGoBack = {
-                    finish()
-                }
-            )
+            MaterialTheme {
+                StadiumDetailScreen(
+                    blockNumber = viewModel.blockCode,
+                    viewModel = viewModel,
+                    onClickReviewPicture = { reviewContent, index, title ->
+                        startToStadiumDetailPictureFragment(reviewContent, index, title)
+                    },
+                    onClickSelectSeat = {
+                        StadiumSelectSeatDialog.apply {
+                            newInstance().show(
+                                supportFragmentManager, TAG
+                            )
+                        }
+                    },
+                    onClickFilterMonthly = {
+                        StadiumFilterMonthsDialog.apply {
+                            newInstance().show(
+                                supportFragmentManager, TAG
+                            )
+                        }
+                    },
+                    onClickReport = {
+                        ReportDialog.apply {
+                            newInstance().show(
+                                supportFragmentManager, TAG
+                            )
+                        }
+                    },
+                    onClickGoBack = {
+                        finish()
+                    },
+                    onRefresh = {
+                        viewModel.getBlockReviews()
+                    }
+                )
+            }
         }
     }
 
@@ -80,7 +96,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
 
         binding.spotAppbar.setMenuOnClickListener {
-            // go to home
+            startToHomeActivity()
         }
 
         binding.btnUp.setOnClickListener {
@@ -92,6 +108,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         viewModel.detailUiState.asLiveData().observe(this) { uiState ->
             when (uiState) {
                 is StadiumDetailUiState.Empty -> binding.btnUp.visibility = View.GONE
+                is StadiumDetailUiState.Failed -> binding.btnUp.visibility = View.GONE
+                is StadiumDetailUiState.ReviewsData -> binding.btnUp.visibility = View.VISIBLE
                 else -> Unit
             }
         }
@@ -104,9 +122,17 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         )
     }
 
-    private fun startToStadiumDetailPictureFragment(reviewContent: BlockReviewResponse.ReviewResponse) {
+    private fun startToStadiumDetailPictureFragment(
+        reviewContent: BlockReviewResponse.ReviewResponse,
+        index: Int,
+        title: String
+    ) {
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
-            arguments = bundleOf(REVIEW_ID to reviewContent.id)
+            arguments = bundleOf(
+                REVIEW_ID to reviewContent.id,
+                REVIEW_INDEX to index,
+                REVIEW_TITLE_WITH_STADIUM to title
+            )
         }
 
         supportFragmentManager.commit {
@@ -114,7 +140,13 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
     }
 
-    private fun startToBottomSheetDialog(dialogInstance: DialogFragment, tag: String) {
-        dialogInstance.show(supportFragmentManager, tag)
+    private fun startToHomeActivity() {
+        Intent(
+            this,
+            HomeActivity::class.java
+        ).apply {
+            startActivity(this)
+            finishAffinity()
+        }
     }
 }
