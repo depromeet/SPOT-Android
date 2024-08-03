@@ -27,6 +27,7 @@ import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
 import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
 import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
 import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
+import com.depromeet.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -53,6 +54,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+        }
+
         viewModel.getStadiumName()
         observeStadiumName()
         observePreSignedUrl()
