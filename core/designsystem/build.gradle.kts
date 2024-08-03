@@ -17,6 +17,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
     }
     buildTypes {
         release {
@@ -34,6 +35,9 @@ android {
     kotlinOptions {
         jvmTarget = Versions.jvmVersion
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.6"
+    }
 }
 
 dependencies {
@@ -47,5 +51,10 @@ dependencies {
     TestDependencies.run {
         testImplementation(jUnit)
         androidTestImplementation(androidTest)
+    }
+
+    ComposeDependency.run {
+        implementation(material)
+        implementation(ui)
     }
 }

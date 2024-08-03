@@ -1,14 +1,11 @@
 package com.depromeet.presentation.viewfinder.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingBottomSheetDialog
-import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.domain.model.viewfinder.Seat
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumSelectSeatDialogBinding
@@ -52,31 +49,48 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
 
         binding.etOnlyColumn.addTextChangedListener { editText ->
             binding.tvWarning.visibility = View.INVISIBLE
-            binding.etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+            binding.etOnlyColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
             if (binding.clOnlyColumn.isVisible) {
                 binding.btnAdapt.isEnabled = editText?.isNotEmpty() == true
+            }
+            if (editText?.length == 0) {
+                binding.ivOnlyColumnCancel.visibility = View.INVISIBLE
+            } else {
+                binding.ivOnlyColumnCancel.visibility = View.VISIBLE
             }
         }
 
         binding.etColumn.addTextChangedListener { editText ->
             binding.tvWarning.visibility = View.INVISIBLE
-            binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-            binding.etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+            binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
+            binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
             if (binding.clColumnNumber.isVisible) {
                 if (binding.etNumber.text.isNotEmpty()) {
                     binding.btnAdapt.isEnabled = editText?.isNotEmpty() == true
                 }
             }
+
+            if (editText?.length == 0) {
+                binding.ivColumnCancel.visibility = View.INVISIBLE
+            } else {
+                binding.ivColumnCancel.visibility = View.VISIBLE
+            }
         }
 
         binding.etNumber.addTextChangedListener { editText ->
             binding.tvWarning.visibility = View.INVISIBLE
-            binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-            binding.etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+            binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
+            binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
             if (binding.clColumnNumber.isVisible) {
                 if (binding.etColumn.text.isNotEmpty()) {
                     binding.btnAdapt.isEnabled = editText?.isNotEmpty() == true
                 }
+            }
+
+            if (editText?.length == 0) {
+                binding.ivNumberCancel.visibility = View.INVISIBLE
+            } else {
+                binding.ivNumberCancel.visibility = View.VISIBLE
             }
         }
     }
@@ -85,6 +99,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
         readDescription()
         onClickCheckOnlyColumn()
         onClickSelectSeat()
+        onClickEditTextClear()
     }
 
     private fun initEditText() {
@@ -98,7 +113,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
 
         if (stadiumDetailViewModel.reviewFilter.value.rowNumber != null && stadiumDetailViewModel.reviewFilter.value.seatNumber == null) {
             binding.etOnlyColumn.setText(stadiumDetailViewModel.reviewFilter.value.rowNumber.toString())
-            binding.btnCheckColumn.setBackgroundResource(R.drawable.ic_check)
+            binding.btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_4)
             binding.clColumnNumber.visibility = View.INVISIBLE
             binding.clOnlyColumn.visibility = View.VISIBLE
             return
@@ -120,13 +135,13 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
     private fun onClickCheckOnlyColumn() {
         binding.btnCheckColumn.setOnClickListener {
             if (binding.clColumnNumber.isVisible) {
-                binding.btnCheckColumn.setBackgroundResource(R.drawable.ic_check)
+                binding.btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_4)
                 binding.clColumnNumber.visibility = View.INVISIBLE
                 binding.clOnlyColumn.visibility = View.VISIBLE
                 binding.etColumn.setText("")
                 binding.etNumber.setText("")
             } else {
-                binding.btnCheckColumn.setBackgroundResource(R.drawable.ic_uncheck)
+                binding.btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_primary_fill_4)
                 binding.clOnlyColumn.visibility = View.INVISIBLE
                 binding.clColumnNumber.visibility = View.VISIBLE
                 binding.etOnlyColumn.setText("")
@@ -148,7 +163,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                             if (!isSuccess) {
                                 binding.tvWarning.visibility = View.VISIBLE
                                 binding.tvWarning.text = "존재하지 않는 열이에요"
-                                binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_warning01red_line_12)
+                                binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
                             }
                         }
 
@@ -162,7 +177,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                             } else {
                                 binding.tvWarning.visibility = View.VISIBLE
                                 binding.tvWarning.text = "존재하지 않는 번이에요"
-                                binding.etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_warning01red_line_12)
+                                binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
                             }
                         }
                     }
@@ -181,10 +196,27 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                     } else {
                         binding.tvWarning.visibility = View.VISIBLE
                         binding.tvWarning.text = "존재하지 않는 열이에요"
-                        binding.etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_warning01red_line_12)
+                        binding.etOnlyColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
                     }
                 }
             }
+        }
+    }
+
+    private fun onClickEditTextClear() {
+        binding.ivOnlyColumnCancel.setOnClickListener {
+            binding.etOnlyColumn.setText("")
+            binding.ivOnlyColumnCancel.visibility = View.INVISIBLE
+        }
+
+        binding.ivColumnCancel.setOnClickListener {
+            binding.etColumn.setText("")
+            binding.ivColumnCancel.visibility = View.INVISIBLE
+        }
+
+        binding.ivNumberCancel.setOnClickListener {
+            binding.etNumber.setText("")
+            binding.ivNumberCancel.visibility = View.INVISIBLE
         }
     }
 }

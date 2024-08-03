@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
 import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
 import com.depromeet.presentation.viewfinder.sample.Keyword
@@ -23,19 +24,19 @@ import com.depromeet.presentation.viewfinder.sample.Keyword
 @Composable
 fun StadiumHeaderContent(
     context: Context,
-    topReviewImages: List<BlockReviewResponse.TopReviewImagesResponse>,
-    stadiumTitle: String,
-    seatContent: String,
     isMore: Boolean,
-    reviewFilter: BlockReviewRequestQuery,
+    seatContent: String,
+    stadiumTitle: String,
     keywords: List<Keyword>,
+    reviewFilter: BlockReviewRequestQuery,
+    topReviewImages: List<BlockReviewResponse.TopReviewImagesResponse>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
     onClickSelectSeat: () -> Unit,
     onCancelSeat: () -> Unit
 ) {
     Column(
-        modifier = modifier.background(Color.White),
+        modifier = modifier.background(SpotTheme.colors.backgroundWhite),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         StadiumPictureViewPager(
@@ -49,7 +50,6 @@ fun StadiumHeaderContent(
             seatContent = seatContent
         )
         Spacer(modifier = Modifier.height(10.dp))
-
         StadiumSeatCheckBox(
             reviewFilter = reviewFilter,
             onClick = onClickSelectSeat,
@@ -70,9 +70,9 @@ fun StadiumHeaderContent(
                 modifier = Modifier.zIndex(1f)
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Divider(
-            color = Color(0xFFF4F4F4),
+            color = SpotTheme.colors.backgroundTertiary,
             thickness = 10.dp,
             modifier = Modifier.fillMaxWidth()
         )

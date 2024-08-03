@@ -23,13 +23,10 @@ fun StadiumsResponseDto.HomeTeamsResponseDto.toHomeTeamsResponse() =
     StadiumsResponse.HomeTeamsResponse(
         id = id,
         alias = alias,
-        color = color.toColorResponse()
+        backgroundColor = backgroundColor,
+        fontColor = fontColor
     )
 
-fun StadiumsResponseDto.HomeTeamsResponseDto.ColorResponseDto.toColorResponse() =
-    StadiumsResponse.HomeTeamsResponse.ColorResponse(
-        red = red, green = green, blue = blue
-    )
 
 fun StadiumResponseDto.toStadiumResponse() = StadiumResponse(
     id = id,
@@ -72,7 +69,10 @@ fun BlockReviewResponseDto.TopReviewImagesResponseDto.toTopReviewImagesResponse(
 
 fun BlockReviewResponseDto.ReviewFilterResponseDto.toReviewFilterResponse() =
     BlockReviewResponse.ReviewFilterResponse(
-        rowNumber = rowNumber ?: 0, seatNumber = seatNumber ?: 0, year = year ?: 0, month = month ?: 0
+        rowNumber = rowNumber ?: 0,
+        seatNumber = seatNumber ?: 0,
+        year = year ?: 0,
+        month = month ?: 0
     )
 
 fun BlockReviewResponseDto.ReviewResponseDto.toReviewResponse() =

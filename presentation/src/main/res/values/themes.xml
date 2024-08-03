@@ -36,9 +36,10 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorBackground">@android:color/transparent</item>
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textSize">28sp</item>
-        <item name="colorControlNormal">#00BCD4</item>
+        <item name="android:textColorPrimary">@color/color_foreground_heading</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="colorControlNormal">@color/color_action_enabled</item>
     </style>
 
     <style name="TransparentDialogFragment" parent="Theme.Material3.Light.Dialog">

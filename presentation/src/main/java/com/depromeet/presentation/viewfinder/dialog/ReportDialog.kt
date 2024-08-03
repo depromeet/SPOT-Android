@@ -15,7 +15,8 @@ class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
 ) {
     companion object {
         const val TAG = "ReportDialog"
-        private const val GoogleReportFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeVCiFapLIvR3ZdbOE056CImlxohxryUUXISOlYoIodtOwZHQ/viewform"
+        private const val GoogleReportFormUrl =
+            "https://docs.google.com/forms/d/e/1FAIpQLSeVCiFapLIvR3ZdbOE056CImlxohxryUUXISOlYoIodtOwZHQ/viewform"
 
         fun newInstance(): ReportDialog {
             val args = Bundle()
@@ -33,11 +34,16 @@ class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setLayoutSizeRatio(widthPercent = 1f, heightPercent = 0.2f)
         initEvent()
     }
 
     private fun initEvent() {
-        binding.tvReport.setOnClickListener {
+        goToGoogleForm()
+    }
+
+    private fun goToGoogleForm() {
+        binding.layerReport.setOnClickListener {
             Intent(requireContext(), WebViewActivity::class.java).apply {
                 putExtra(WebViewActivity.WEB_VIEW_URL, GoogleReportFormUrl)
             }.let(::startActivity)

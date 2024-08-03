@@ -2,12 +2,17 @@ package com.depromeet.presentation.viewfinder
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import coil.load
@@ -15,8 +20,11 @@ import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotTeamLabel
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.HomeActivity
+import com.depromeet.presentation.util.SpannableStringUtils
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumViewModel
 import com.depromeet.presentation.viewfinder.web.AndroidBridge
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,9 +39,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         private const val BASE_URL = "file:///android_asset/web/"
         private const val ENCODING_UTF8 = "UTF-8"
         private const val MIME_TYPE_TEXT_HTML = "text/html"
-
-        /** @test */
-        private const val SVG_URL = "https://svgshare.com/i/18EQ.svg"
     }
 
     private val viewModel: StadiumViewModel by viewModels()
@@ -46,6 +51,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private fun initView() {
+        setTextZoomDescriptionColor()
         getStadiumIdExtra()
         configureWebViewSetting()
     }
@@ -61,7 +67,10 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             when (stadium) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> toast(stadium.msg)
-                is UiState.Loading -> toast("로딩 중")
+                is UiState.Loading -> {
+                    startShimmer()
+                }
+
                 is UiState.Success -> {
                     viewModel.stadiumId = stadium.data.id
                     with(binding) {
@@ -85,14 +94,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         viewModel.htmlBody.asLiveData().observe(this) { uiState ->
             when (uiState) {
                 is UiState.Empty -> Unit
-                is UiState.Failure -> {
-                    toast("실패")
-                }
-
-                is UiState.Loading -> {
-                    toast("로딩중")
-                }
-
+                is UiState.Failure -> toast(uiState.msg)
+                is UiState.Loading -> Unit
                 is UiState.Success -> {
                     binding.wvStadium.loadDataWithBaseURL(
                         BASE_URL, uiState.data, MIME_TYPE_TEXT_HTML,
@@ -128,7 +131,13 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             },
             AndroidBridge.JAVASCRIPT_OBJ
         )
+    }
 
+    private fun setTextZoomDescriptionColor() {
+        binding.tvZoomDescription.text = SpannableStringUtils(this).toColorSpan(
+            com.depromeet.designsystem.R.color.color_action_enabled,
+            binding.tvZoomDescription.text, 4, 12
+        )
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -150,8 +159,21 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.wvStadium.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 injectJavaScriptFunction()
+                stopShimmer()
             }
         }
+    }
+
+    private fun startShimmer() {
+        binding.shimmerFrameLayout.startShimmer()
+        binding.shimmerFrameLayout.visibility = View.VISIBLE
+        binding.clMainContainer.visibility = View.INVISIBLE
+    }
+
+    private fun stopShimmer() {
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.shimmerFrameLayout.visibility = View.INVISIBLE
+        binding.clMainContainer.visibility = View.VISIBLE
     }
 
     private fun onClickBack() {
@@ -162,7 +184,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun onClickClose() {
         binding.spotAppbar.setMenuOnClickListener {
-            // go to main activity
+            startToHomeActivity()
         }
 
         binding.ivClose.setOnClickListener {
@@ -194,6 +216,16 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             clearHistory()
             removeAllViews()
             destroy()
+        }
+    }
+
+    private fun startToHomeActivity() {
+        Intent(
+            this,
+            HomeActivity::class.java
+        ).apply {
+            startActivity(this)
+            finishAffinity()
         }
     }
 }

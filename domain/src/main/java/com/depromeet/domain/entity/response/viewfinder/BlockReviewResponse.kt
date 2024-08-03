@@ -27,6 +27,10 @@ data class BlockReviewResponse(
         fun formattedStadiumBlock(): String {
             return sectionName + "•" + blockCode + "블록"
         }
+
+        fun toTitle(): String {
+            return "$stadiumName $sectionName"
+        }
     }
 
     data class KeywordResponse(

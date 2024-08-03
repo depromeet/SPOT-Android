@@ -2,6 +2,7 @@ package com.depromeet.presentation.viewfinder
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +14,8 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumSelectionBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.home.HomeActivity
+import com.depromeet.presentation.util.SpannableStringUtils
 import com.depromeet.presentation.viewfinder.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.viewfinder.adapter.StadiumSelectionAdapter
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumSelectionViewModel
@@ -25,6 +28,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     companion object {
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val STADIUM_GRID_SPAN_COUNT = 2
+        private const val STADIUM_GRID_SPACING = 8
     }
 
     private val viewModel: StadiumSelectionViewModel by viewModels()
@@ -40,25 +44,45 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
 
     private fun initView() {
         viewModel.getStadiums()
+        setTextTitleColor()
         configureRecyclerViewAdapter()
     }
 
     private fun initEvent() {
         onClickStadium()
         onClickClose()
+        onClickReload()
     }
 
     private fun observeData() {
-        viewModel.stadiums.asLiveData().observe(this) { stadiums ->
-            when (stadiums) {
+        viewModel.stadiums.asLiveData().observe(this) { uiState ->
+            when (uiState) {
                 is UiState.Empty -> Unit
-                is UiState.Failure -> toast(stadiums.msg)
-                is UiState.Loading -> toast("로딩중")
+                is UiState.Failure -> {
+                    stopShimmer()
+                    binding.layoutErrorScreen.root.visibility = View.VISIBLE
+                }
+                is UiState.Loading -> {
+                    startShimmer()
+                    binding.rvStadium.visibility = View.INVISIBLE
+                }
                 is UiState.Success -> {
-                    stadiumSelectionAdapter.submitList(stadiums.data)
+                    stopShimmer()
+                    binding.rvStadium.visibility = View.VISIBLE
+                    binding.layoutErrorScreen.root.visibility = View.INVISIBLE
+                    stadiumSelectionAdapter.submitList(uiState.data)
                 }
             }
         }
+    }
+
+    private fun setTextTitleColor() {
+        binding.tvTitle.text = SpannableStringUtils(this).toColorSpan(
+            color = com.depromeet.designsystem.R.color.color_stroke_positive_primary,
+            text = binding.tvTitle.text,
+            start = 0,
+            end = 6
+        )
     }
 
     private fun configureRecyclerViewAdapter() {
@@ -69,10 +93,20 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             addItemDecoration(
                 GridSpacingItemDecoration(
                     spanCount = STADIUM_GRID_SPAN_COUNT,
-                    spacing = 16.dpToPx(context)
+                    spacing = STADIUM_GRID_SPACING.dpToPx(context)
                 )
             )
         }
+    }
+
+    private fun startShimmer() {
+        binding.shimmerFrameLayout.startShimmer()
+        binding.shimmerFrameLayout.visibility = View.VISIBLE
+    }
+
+    private fun stopShimmer() {
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.shimmerFrameLayout.visibility = View.INVISIBLE
     }
 
     private fun onClickStadium() {
@@ -96,7 +130,13 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
 
     private fun onClickClose() {
         binding.ivClose.setOnClickListener {
-            // go to main activity
+            startToHomeActivity()
+        }
+    }
+
+    private fun onClickReload() {
+        binding.layoutErrorScreen.btnReload.setOnClickListener {
+            viewModel.getStadiums()
         }
     }
 
@@ -112,5 +152,15 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
             }
         }
         startActivity(intent)
+    }
+
+    private fun startToHomeActivity() {
+        Intent(
+            this@StadiumSelectionActivity,
+            HomeActivity::class.java
+        ).apply {
+            startActivity(this)
+            finishAffinity()
+        }
     }
 }
