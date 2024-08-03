@@ -42,7 +42,7 @@ class LevelDescriptionViewHolder(
 
     private fun countToString(minimum: Int, maximum: Int?): String = when (maximum) {
         0 -> "0회"
-        null -> "${maximum}회 이상"
+        null -> "${minimum}회 이상"
         else -> "${minimum}~${maximum}회"
     }
 

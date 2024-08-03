@@ -17,6 +17,7 @@ import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.DeleteReviewResponse
 import com.depromeet.domain.entity.response.home.HomeFeedResponse
 import com.depromeet.domain.entity.response.home.LevelByPostResponse
+import com.depromeet.domain.entity.response.home.LevelUpInfoResponse
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
@@ -105,6 +106,12 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun getHomeFeed(): Result<HomeFeedResponse> {
         return runCatching {
             homeDataSource.getHomeFeed().toHomeFeedResponse()
+        }
+    }
+
+    override suspend fun getLevelUpInfo(nextLevel: Int): Result<LevelUpInfoResponse> {
+        return runCatching {
+            homeDataSource.getLevelUpInfo(nextLevel).toLevelUpInfoResponse()
         }
     }
 }

@@ -14,6 +14,7 @@ import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
 import com.depromeet.presentation.util.CalendarUtil
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
+import timber.log.Timber
 
 class RecentRecordAdapter(
 ) : ListAdapter<MySeatRecordResponse.ReviewResponse, RecentRecordViewHolder>(
@@ -70,7 +71,8 @@ class RecentRecordViewHolder(
             }
             tvRecentDateDay.text = CalendarUtil.getDayOfMonthFromDateFormat(item.date).toString()
             tvRecentDay.text = CalendarUtil.getDayOfWeekFromDateFormat(item.date)
-            "${item.sectionName} ${item.blockName}블록".also { tvRecentBlockName.text = it }
+            "${item.sectionName} ${item.blockName}블록".trimStart().also { tvRecentBlockName.text = it }
+            Timber.d("test ${item.sectionName} / ${item.blockName}")
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)

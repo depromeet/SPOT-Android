@@ -176,6 +176,13 @@
         <item name="android:textSize">11sp</item>
     </style>
 
+    <style name="TextAppearance.Spot.Label14" parent="TextAppearance.Spot">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+        <item name="android:lineSpacingExtra">0dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="TextAppearance.Spot.Caption01" parent="TextAppearance.Spot">
         <item name="android:fontFamily">@font/font_pretendard_medium</item>
         <item name="android:lineSpacingMultiplier">1.4</item>

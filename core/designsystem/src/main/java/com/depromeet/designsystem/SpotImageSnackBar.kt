@@ -24,7 +24,7 @@ class SpotImageSnackBar(
             icon: Int = R.drawable.ic_alert_circle,
             iconColor: Int = R.color.white,
             marginHorizontal: Int = 16,
-            marginBottom: Int = 96,
+            marginBottom: Int = 94,
         ) = SpotImageSnackBar(
             view,
             message,

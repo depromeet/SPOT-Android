@@ -8,7 +8,7 @@
                 </shape>
             </item>
             <item
-                android:drawable="@drawable/ic_down"
+                android:drawable="@drawable/ic_chevron_down"
                 android:gravity="center|end" />
         </layer-list>
     </item>

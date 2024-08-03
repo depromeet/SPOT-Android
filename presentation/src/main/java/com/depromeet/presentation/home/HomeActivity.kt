@@ -36,9 +36,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private val homeViewModel: HomeGuiViewModel by viewModels()
-
     private lateinit var stadiumAdapter: StadiumAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,31 +47,31 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         initObserver()
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.getHomeFeed()
+    }
+
     private fun initView() {
         homeViewModel.getStadiums()
-        homeViewModel.getHomeFeed()
         setStadiumAdapter()
     }
 
     private fun initEvent() = with(binding) {
-        clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
         clHomeScrap.setOnClickListener {
             SpotImageSnackBar.make(
                 view = binding.root,
                 message = "스크랩이 잠겨있어요\uD83E\uDEE2 곧 업데이트 예정이에요",
+                /** TODO : 스낵바 transparent label08로 텍스트 적용  */
                 messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
                 icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
                 iconColor = com.depromeet.designsystem.R.color.color_error_secondary
             ).show()
         }
         clHomeUpload.setOnClickListener { navigateToReviewActivity() }
-        ivHomeSetting.setOnClickListener {
-            Intent(this@HomeActivity, SettingActivity::class.java).apply {
-                startActivity(this)
-            }
-        }
+        ivHomeSetting.setOnClickListener { navigatToSettingActivity() }
     }
 
     private fun initObserver() {
@@ -114,6 +112,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 }
             }
 
+        }
+
+        homeViewModel.levelState.asLiveData().observe(this) {
+            val currentState = homeViewModel.homeFeed.value
+            if (it && currentState is UiState.Success) {
+                LevelupDialog(
+                    currentState.data.levelTitle,
+                    currentState.data.level,
+                    currentState.data.mascotImageUrl
+                ).show(supportFragmentManager, LevelupDialog.TAG )
+            }
         }
     }
 
@@ -208,5 +217,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             shimmerHomeProfile.stopShimmer()
             shimmerHomeProfile.visibility = View.GONE
         }
+    }
+
+    private fun navigatToSettingActivity() {
+        Intent(this, SettingActivity::class.java).apply { startActivity(this) }
     }
 }

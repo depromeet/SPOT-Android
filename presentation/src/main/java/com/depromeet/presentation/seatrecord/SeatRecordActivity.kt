@@ -87,6 +87,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun initEvent() {
         with(binding) {
             recordSpotAppbar.setNavigationOnClickListener {
+                Timber.d("test")
                 finish()
             }
             fabRecordUp.setOnClickListener {
@@ -104,6 +105,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             }
             ivRecordEdit.setOnClickListener {
                 navigateToProfileEditActivity()
+            }
+            btRecordWriteRecord.setOnClickListener {
+                Intent(this@SeatRecordActivity, ReviewActivity::class.java).apply {
+                    startActivity(this)
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ import com.depromeet.data.model.response.home.ResponseBaseballTeamDto
 import com.depromeet.data.model.response.home.ResponseDeleteReviewDto
 import com.depromeet.data.model.response.home.ResponseHomeFeedDto
 import com.depromeet.data.model.response.home.ResponseLevelByPostDto
+import com.depromeet.data.model.response.home.ResponseLevelUpInfoDto
 import com.depromeet.data.model.response.home.ResponseMySeatRecordDto
 import com.depromeet.data.model.response.home.ResponsePresignedUrlDto
 import com.depromeet.data.model.response.home.ResponseProfileDto
@@ -69,9 +70,15 @@ interface HomeApiService {
         @Path("reviewId") reviewId: Int,
     ): ResponseDeleteReviewDto
 
-    @GET("/api/v1/levelUpConditions")
-    suspend fun getLevelByPost() : List<ResponseLevelByPostDto>
+    @GET("/api/v1/levels/info")
+    suspend fun getLevelByPost(): List<ResponseLevelByPostDto>
 
     @GET("/api/v1/members/homeFeed")
-    suspend fun getHomeFeed() : ResponseHomeFeedDto
+    suspend fun getHomeFeed(): ResponseHomeFeedDto
+
+    @GET("/api/v1/levels/up/info")
+    suspend fun getLevelUpInfo(
+        @Query("nextLevel") nextLevel: Int,
+    ): ResponseLevelUpInfoDto
+
 }
