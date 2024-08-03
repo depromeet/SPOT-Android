@@ -242,6 +242,7 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
+        android:visibility="gone"
         android:text="오픈소스 라이센스"
         android:textColor="@color/color_foreground_heading"
         app:layout_constraintEnd_toEndOf="parent"

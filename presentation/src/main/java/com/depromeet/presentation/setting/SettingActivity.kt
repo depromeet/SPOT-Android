@@ -3,12 +3,13 @@ package com.depromeet.presentation.setting
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.TextUtils.replace
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
+import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySettingBinding
+import com.depromeet.presentation.login.ui.SignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -24,6 +25,16 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
 
         initView()
         initEvent()
+        initObserver()
+    }
+
+    private fun initObserver() {
+        viewModel.logoutEvent.asLiveData().observe(this) {
+            Intent(this, SignUpActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(this)
+            }
+        }
     }
 
     private fun initView() {
@@ -70,12 +81,16 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
 
         }
 
+        // 약관 정채 Fragment 화면으로
         tvSettingTerms.setOnClickListener {
-
+            supportFragmentManager.commit {
+                replace(R.id.fcv_setting, TermsFragment())
+                addToBackStack(null)
+            }
         }
 
         tvSettingLogout.setOnClickListener {
-
+            viewModel.logout()
         }
     }
 }

@@ -31,7 +31,7 @@
 
         </activity>
         <activity
-            android:name="com.depromeet.presentation.login.ui.SingUpActivity"
+            android:name="com.depromeet.presentation.login.ui.SignUpActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
