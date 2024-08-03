@@ -19,6 +19,7 @@ import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
 import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
+import com.depromeet.presentation.setting.SettingActivity
 import com.depromeet.presentation.viewfinder.StadiumActivity
 import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,6 +69,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             ).show()
         }
         clHomeUpload.setOnClickListener { navigateToReviewActivity() }
+        ivHomeSetting.setOnClickListener {
+            Intent(this@HomeActivity, SettingActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
     }
 
     private fun initObserver() {

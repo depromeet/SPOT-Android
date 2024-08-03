@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TransparentDialogFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="35dp"
+        android:background="@drawable/rect_background_white_fill_24"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/tv_confirm_description"
+            style="@style/TextAppearance.Spot.Title04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="로그아웃"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_confirm_discipline"
+            style="@style/TextAppearance.Spot.Body03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="정말 로그아웃 하시겠어요?"
+            android:textColor="@color/color_foreground_caption"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_confirm_description"
+            tools:text="게시물 삭제시 복구가 불가능합니다" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_confirm_check"
+            style="@style/TextAppearance.Spot.Label02"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rect_spot_green_fill_8"
+            android:gravity="center"
+            android:text="로그아웃"
+            android:textColor="@color/color_foreground_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bt_confirm_cancel"
+            app:layout_constraintTop_toBottomOf="@id/tv_confirm_discipline" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_confirm_cancel"
+            style="@style/TextAppearance.Spot.Label02"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/rect_background_secondary_fill_8"
+            android:gravity="center"
+            android:text="@string/confirm_delete_cancel"
+            android:textColor="@color/color_foreground_body_sebtext"
+            app:layout_constraintEnd_toStartOf="@id/bt_confirm_check"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bt_confirm_check" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
