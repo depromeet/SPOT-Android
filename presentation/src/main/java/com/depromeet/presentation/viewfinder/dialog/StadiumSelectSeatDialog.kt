@@ -159,15 +159,26 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                     binding.etNumber.text.toString().toInt()
                 ) { isSuccess, seat ->
                     when (seat) {
+                        Seat.COLUMN_NUMBER -> {
+                            binding.tvWarning.visibility = View.VISIBLE
+                            binding.tvWarning.text = "존재하지 않는 열과 번입니다."
+                            binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                            binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                        }
+
                         Seat.COLUMN -> {
-                            if (!isSuccess) {
-                                binding.tvWarning.visibility = View.VISIBLE
-                                binding.tvWarning.text = "존재하지 않는 열이에요"
-                                binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
-                            }
+                            binding.tvWarning.visibility = View.VISIBLE
+                            binding.tvWarning.text = "존재하지 않는 열이에요"
+                            binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
                         }
 
                         Seat.NUMBER -> {
+                            binding.tvWarning.visibility = View.VISIBLE
+                            binding.tvWarning.text = "존재하지 않는 번이에요"
+                            binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                        }
+
+                        Seat.CHECK -> {
                             if (isSuccess) {
                                 stadiumDetailViewModel.updateSeat(
                                     binding.etColumn.text.toString().toInt(),

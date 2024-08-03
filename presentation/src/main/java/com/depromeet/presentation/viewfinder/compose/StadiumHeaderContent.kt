@@ -70,7 +70,6 @@ fun StadiumHeaderContent(
                 modifier = Modifier.zIndex(1f)
             )
         }
-        Spacer(modifier = Modifier.height(6.dp))
         Divider(
             color = SpotTheme.colors.backgroundTertiary,
             thickness = 10.dp,

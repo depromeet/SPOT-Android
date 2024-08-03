@@ -1,6 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -53,6 +59,11 @@ fun StadiumReviewContent(
     onClick: (reviewContent: BlockReviewResponse.ReviewResponse, index: Int) -> Unit,
     onClickReport: () -> Unit
 ) {
+    val minimumLineLength = 3
+    var showMoreButtonState by remember {
+        mutableStateOf(-1)
+    }
+
     Column(
         modifier = modifier
     ) {
@@ -158,19 +169,57 @@ fun StadiumReviewContent(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = reviewContent.content,
-            style = SpotTheme.typography.body03,
-            color = SpotTheme.colors.foregroundHeading,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 3,
-            modifier = Modifier.padding(start = 32.dp, end = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(if (reviewContent.content.isEmpty()) 4.dp else 16.dp))
+        if (reviewContent.content.isNotEmpty()) {
+            Text(
+                text = reviewContent.content,
+                style = SpotTheme.typography.body03,
+                color = SpotTheme.colors.foregroundHeading,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = if (showMoreButtonState == 1) {
+                    Int.MAX_VALUE
+                } else {
+                    minimumLineLength
+                },
+                modifier = Modifier.padding(start = 32.dp, end = 16.dp),
+                onTextLayout = {
+                    if (it.lineCount > minimumLineLength - 1) {
+                        if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState = 0
+                    }
+                }
+            )
+        }
+        when (showMoreButtonState) {
+            0 -> {
+                Spacer(modifier = Modifier.height(height = 4.dp))
+                Text(
+                    text = "더보기",
+                    style = SpotTheme.typography.label10,
+                    color = SpotTheme.colors.foregroundCaption,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.noRippleClickable {
+                        showMoreButtonState = 1
+                    }.padding(start = 32.dp)
+                )
+            }
+
+            1 -> {
+                Spacer(modifier = Modifier.height(height = 4.dp))
+                Text(
+                    text = "접기",
+                    style = SpotTheme.typography.label10,
+                    color = SpotTheme.colors.foregroundCaption,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.noRippleClickable {
+                        showMoreButtonState = 0
+                    }.padding(start = 32.dp)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
         KeywordFlowRow(
             keywords = reviewContent.keywords.map { it.toKeyword() },
-            modifier = Modifier.padding(start = 36.dp, end = 16.dp),
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp),
         )
     }
 }
@@ -188,7 +237,7 @@ private fun StadiumReviewContentPreview() {
             reviewContent = BlockReviewResponse.ReviewResponse(
                 id = 1,
                 dateTime = "2023-03-01T19:00:00",
-                content = "전체적으로 좋은 경험이었습니다. 다음에 또 오고 싶어요! 요요요요요요요요요요요요요요요요요요",
+                content = "asdfsdfsafsfda",
                 images = listOf(
                     BlockReviewResponse.ReviewResponse.ReviewImageResponse(
                         id = 1,

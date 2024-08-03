@@ -1,18 +1,28 @@
 package com.depromeet.presentation.viewfinder.compose
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,10 +43,10 @@ fun CustomTooltip(
                 onDraw = {
                     // 삼각형을 그릴 Path 생성
                     val path = Path().apply {
-                        moveTo(104.dp.toPx(), 0.dp.toPx()) // 삼각형의 꼭짓점
-                        lineTo(110.dp.toPx(), 5.dp.toPx()) // 오른쪽 아래 점
-                        lineTo(98.dp.toPx(), 5.dp.toPx()) // 왼쪽 아래 점
-                        lineTo(104.dp.toPx(), 0.dp.toPx())
+                        moveTo(125.dp.toPx(), 0.dp.toPx()) // 삼각형의 꼭짓점
+                        lineTo(131.dp.toPx(), 5.dp.toPx()) // 오른쪽 아래 점
+                        lineTo(119.dp.toPx(), 5.dp.toPx()) // 왼쪽 아래 점
+                        lineTo(125.dp.toPx(), 0.dp.toPx())
                     }
 
                     drawPath(

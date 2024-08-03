@@ -197,28 +197,30 @@ fun StadiumDetailReviewViewPager(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = reviews[page].content,
-                        style = SpotTheme.typography.body03,
-                        maxLines = if (isMore) {
-                            Int.MAX_VALUE
-                        } else {
-                            minimumLineLength
-                        },
-                        overflow = TextOverflow.Ellipsis,
-                        color = SpotTheme.colors.foregroundWhite,
-                        onTextLayout = {
-                            if (it.lineCount > minimumLineLength - 1) {
-                                if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState =
-                                    true
+                    if (reviews[page].content.isNotEmpty()) {
+                        Text(
+                            text = reviews[page].content,
+                            style = SpotTheme.typography.body03,
+                            maxLines = if (isMore) {
+                                Int.MAX_VALUE
+                            } else {
+                                minimumLineLength
+                            },
+                            overflow = TextOverflow.Ellipsis,
+                            color = SpotTheme.colors.foregroundWhite,
+                            onTextLayout = {
+                                if (it.lineCount > minimumLineLength - 1) {
+                                    if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState =
+                                        true
+                                }
+                            },
+                            modifier = if (showMoreButtonState) {
+                                Modifier.fillMaxWidth(0.8f)
+                            } else {
+                                Modifier.wrapContentWidth()
                             }
-                        },
-                        modifier = if (showMoreButtonState) {
-                            Modifier.fillMaxWidth(0.8f)
-                        } else {
-                            Modifier.wrapContentWidth()
-                        }
-                    )
+                        )
+                    }
                     if (showMoreButtonState) {
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
@@ -234,7 +236,7 @@ fun StadiumDetailReviewViewPager(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(if (reviews[page].content.isEmpty()) 0.dp else 8.dp))
                 KeywordFlowRow(
                     keywords = reviews[page].keywords.map { it.toKeyword() },
                     overflowIndex = if (isDimmed) {
@@ -282,7 +284,7 @@ private fun StadiumDetailReviewViewPagerPreview() {
                 id = 1, seatNumber = 12
             ),
             dateTime = "2023-03-01T19:00:00",
-            content = "좋은 경기였습니다!",
+            content = "",
             images = listOf(
                 BlockReviewResponse.ReviewResponse.ReviewImageResponse(
                     id = 1, "https://picsum.photos/600/400"

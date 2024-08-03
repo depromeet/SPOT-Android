@@ -52,3 +52,13 @@ private fun StadiumAreaTextPreview() {
         modifier = Modifier.background(SpotTheme.colors.backgroundWhite)
     )
 }
+
+@Preview
+@Composable
+private fun StadiumAreaTextSplitPreview() {
+    StadiumAreaText(
+        stadium = "서울 잠실 야구장",
+        seatContent = "1루\n익사이팅석 207블럭",
+        modifier = Modifier.background(SpotTheme.colors.backgroundWhite)
+    )
+}

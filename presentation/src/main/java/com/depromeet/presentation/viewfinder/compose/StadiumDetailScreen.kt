@@ -83,7 +83,7 @@ fun StadiumDetailScreen(
                             isMore = isMore,
                             reviewFilter = reviewFilter,
                             topReviewImages = uiState.topReviewImages,
-                            stadiumTitle = uiState.stadiumContent.stadiumName,
+                            stadiumTitle = uiState.stadiumContent.stadiumName.trim(),
                             seatContent = uiState.stadiumContent.formattedStadiumBlock(),
                             keywords = uiState.keywords.map { it.toKeyword() },
                             onChangeIsMore = { isMore = it },
