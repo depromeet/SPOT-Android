@@ -23,29 +23,12 @@ sealed class SignupUiState {
     object Failure : SignupUiState()
 }
 
-sealed class LoginUiState {
-    object Initial : LoginUiState()
-    object Loading : LoginUiState()
-    object LoginSuccess : LoginUiState()
-}
-
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signupRepository: SignupRepository,
     private val homeRepository: HomeRepository,
     private val sharedPreference: SharedPreference
 ) : ViewModel() {
-    private val _nicknameInputState = MutableStateFlow<NicknameInputState>(NicknameInputState.EMPTY)
-    val nicknameInputState: StateFlow<NicknameInputState> = _nicknameInputState
-
-    private val _currentNickName = MutableStateFlow<String>("")
-    val currentNickName: StateFlow<String> = _currentNickName
-
-    private val _kakaoToken = MutableStateFlow<String>("")
-    val kakaoToken: StateFlow<String> = _kakaoToken
-
-    private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
-    val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
 
     private val _teamSelectUiState = MutableStateFlow<SignupUiState>(SignupUiState.Initial)
     val teamSelectUiState: StateFlow<SignupUiState> = _teamSelectUiState.asStateFlow()
@@ -58,40 +41,6 @@ class SignUpViewModel @Inject constructor(
 
     private val _cheerTeam = MutableStateFlow(0)
     val cheerTeam = _cheerTeam.asStateFlow()
-
-    fun validateNickname(nickname: String) {
-        when {
-            nickname.isEmpty() -> _nicknameInputState.tryEmit(NicknameInputState.EMPTY)
-            nickname.length < 2 || nickname.length > 10 -> _nicknameInputState.tryEmit(
-                NicknameInputState.INVALID_LENGTH
-            )
-            !nickname.matches(Regex(NICKNAME_PATTERN)) -> _nicknameInputState.tryEmit(
-                NicknameInputState.INVALID_CHARACTER
-            )
-            else -> _nicknameInputState.tryEmit(NicknameInputState.VALID)
-        }
-        _currentNickName.tryEmit(nickname)
-    }
-
-    fun updateKakaoToken(token: String) {
-        // 해당 토큰으로 로그인 시도
-        // JwtToken 이 정상적으로 발급되면 SharedPreference 에 저장하고 메인화면으로 이동
-        // 그게 아니고 신규 유저면 _kakaoToken 에 저장하고 닉네임 입력 화면으로 이동
-        viewModelScope.launch {
-            _loginUiState.emit(LoginUiState.Loading)
-            signupRepository.getSignup(token)
-                .onSuccess {
-                    if (it.jwtToken.isEmpty()) {
-                        _kakaoToken.tryEmit(token)
-                    } else {
-                        sharedPreference.token = it.jwtToken
-                        _loginUiState.emit(LoginUiState.LoginSuccess)
-                    }
-                }.onFailure {
-                    _kakaoToken.tryEmit(token)
-                }
-        }
-    }
 
     fun getBaseballTeam() {
         viewModelScope.launch {
@@ -107,12 +56,15 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun signUp() {
+    fun signUp(
+        kakaoToken: String,
+        currentNickName: String
+    ) {
         viewModelScope.launch {
             signupRepository.postSignup(
                 PostSignupModel(
-                    idCode = kakaoToken.value,
-                    nickname = currentNickName.value,
+                    idCode = kakaoToken,
+                    nickname = currentNickName,
                     teamId = cheerTeam.value
                 )
             ).onSuccess {

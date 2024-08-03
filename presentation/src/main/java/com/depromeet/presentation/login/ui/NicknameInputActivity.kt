@@ -1,30 +1,28 @@
 package com.depromeet.presentation.login.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
-import com.depromeet.core.base.BindingFragment
+import com.depromeet.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentNicknameInputBinding
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
-import com.depromeet.presentation.login.viewmodel.SignUpViewModel
+import com.depromeet.presentation.login.viewmodel.NicknameInputViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
-    R.layout.fragment_nickname_input, { inflater, container, attachToRoot ->
-        FragmentNicknameInputBinding.inflate(inflater, container, attachToRoot)
-    }
-) {
-    private val signUpViewModel: SignUpViewModel by activityViewModels()
+class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
+        FragmentNicknameInputBinding.inflate(it)
+}) {
+    private val signUpViewModel by viewModels<NicknameInputViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         initClickListener()
         initObserver()
@@ -32,20 +30,20 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
 
     private fun initClickListener() = with(binding) {
         ivBack.setOnClickListener {
-             parentFragmentManager.popBackStack()
+             finish()
         }
 
         etProfileEditNickname.addTextChangedListener { text ->
             if (text.isNullOrEmpty()) {
                 ivNicknameClear.visibility = View.GONE
                 etProfileEditNickname.backgroundTintList = getColorStateList(
-                    context ?: return@addTextChangedListener,
+                    this@NicknameInputActivity,
                     com.depromeet.designsystem.R.color.color_gray_200
                 )
             } else {
                 ivNicknameClear.visibility = View.VISIBLE
                 etProfileEditNickname.backgroundTintList = getColorStateList(
-                    context ?: return@addTextChangedListener,
+                    this@NicknameInputActivity,
                     com.depromeet.designsystem.R.color.color_green_600
                 )
             }
@@ -67,22 +65,19 @@ class NicknameInputFragment: BindingFragment<FragmentNicknameInputBinding>(
             etProfileEditNickname.text.clear()
         }
 
-        ivBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
-
         tvNicknameNextBtn.setOnClickListener {
             //Todo : 서버 API 연동 및 닉네임 중복 검사
             //임시로 응원하는 팀 선택 화면으로 이동
-            parentFragmentManager.commit {
-                replace(R.id.fl_signup_container, TeamSelectFragment())
-                addToBackStack(null)
+            Intent(this@NicknameInputActivity, TeamSelectActivity::class.java).apply {
+                putExtra("nickname", etProfileEditNickname.text.toString())
+                putExtra("kakaoToken", intent.getStringExtra("kakaoToken"))
+                startActivity(this)
             }
         }
     }
 
     private fun initObserver() = with(binding) {
-        signUpViewModel.nicknameInputState.asLiveData().observe(viewLifecycleOwner) { state ->
+        signUpViewModel.nicknameInputState.asLiveData().observe(this@NicknameInputActivity) { state ->
             when (state) {
                 NicknameInputState.EMPTY -> {
                     clNicknameInputWarning.visibility = View.GONE

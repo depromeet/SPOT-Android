@@ -2,42 +2,39 @@ package com.depromeet.presentation.login.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.activityViewModels
+import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
-import androidx.recyclerview.widget.GridLayoutManager
-import com.depromeet.core.base.BindingFragment
+import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentTeamSelectBinding
 import com.depromeet.presentation.extension.toast
-import com.depromeet.presentation.home.ProfileEditActivity
 import com.depromeet.presentation.home.adapter.BaseballTeamAdapter
 import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
-import com.depromeet.presentation.login.TeamSelectAdapter
-import com.depromeet.presentation.login.TeamSelectViewType
-import com.depromeet.presentation.login.selectStadiums
+import com.depromeet.presentation.login.viewmodel.NicknameInputViewModel
 import com.depromeet.presentation.login.viewmodel.SignUpViewModel
 import com.depromeet.presentation.login.viewmodel.SignupUiState
+import dagger.hilt.android.AndroidEntryPoint
 
-class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
-    R.layout.fragment_team_select, { inflater, container, attachToRoot ->
-        FragmentTeamSelectBinding.inflate(inflater, container, attachToRoot)
+@AndroidEntryPoint
+class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
+    {
+        FragmentTeamSelectBinding.inflate(it)
     }
 ) {
-    private val signupViewModel: SignUpViewModel by activityViewModels()
+    private val signupViewModel by viewModels<SignUpViewModel>()
     private lateinit var adapter: BaseballTeamAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        signupViewModel.getBaseballTeam()
         initObserver()
     }
 
     private fun initObserver() {
-        signupViewModel.teamSelectUiState.asLiveData().observe(viewLifecycleOwner) {
+        signupViewModel.getBaseballTeam()
+        signupViewModel.teamSelectUiState.asLiveData().observe(this) {
             when (it) {
                 SignupUiState.Failure -> { }
                 SignupUiState.Initial -> {
@@ -46,15 +43,15 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
                 }
                 SignupUiState.Loading -> { }
                 SignupUiState.SignUpSuccess -> {
-                    Intent(requireContext(), SignUpCompleteActivity::class.java).apply {
+                    Intent(this, SignUpCompleteActivity::class.java).apply {
                         startActivity(this)
-                        requireActivity().finish()
+                        finish()
                     }
                 }
             }
         }
 
-        signupViewModel.team.asLiveData().observe(viewLifecycleOwner) { state ->
+        signupViewModel.team.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     if (!state.data.any { it.isClicked }) {
@@ -80,11 +77,14 @@ class TeamSelectFragment: BindingFragment<FragmentTeamSelectBinding>(
 
     private fun initClickListener() {
         binding.ivBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            finish()
         }
 
         binding.tvSelectedTeamNextBtn.setOnClickListener {
-            signupViewModel.signUp()
+            signupViewModel.signUp(
+                intent.getStringExtra("kakaoToken") ?: "",
+                intent.getStringExtra("nickname") ?: ""
+            )
         }
     }
 

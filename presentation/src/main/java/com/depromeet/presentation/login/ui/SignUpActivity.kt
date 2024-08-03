@@ -2,7 +2,6 @@ package com.depromeet.presentation.login.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.commit
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.presentation.databinding.ActivitySignupBinding
@@ -31,8 +30,9 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>({
                 finish()
             }
         } else {
-            supportFragmentManager.commit(false) {
-                replace(binding.flSignupContainer.id, KakaoSignupFragment())
+            Intent(this@SignUpActivity, KakaoSignupActivity::class.java).apply {
+                startActivity(this)
+                finish()
             }
         }
     }
