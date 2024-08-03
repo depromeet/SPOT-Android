@@ -53,12 +53,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun initView() {
         binding.root.isClickable = !binding.clZoomDescription.isVisible
-        this.window?.apply {
-            this.statusBarColor = getColor(R.color.transparent)
-            decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-
-        }
         setTextZoomDescriptionColor()
         getStadiumIdExtra()
         configureWebViewSetting()
