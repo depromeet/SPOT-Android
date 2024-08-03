@@ -69,6 +69,7 @@ class SignUpViewModel @Inject constructor(
                 )
             ).onSuccess {
                 sharedPreference.token = it.jwtToken
+                sharedPreference.nickname = currentNickName
                 _teamSelectUiState.emit(SignupUiState.SignUpSuccess)
             }.onFailure {
                 _teamSelectUiState.emit(SignupUiState.Failure)
