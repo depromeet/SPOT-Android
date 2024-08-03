@@ -46,10 +46,10 @@ class SettingViewModel @Inject constructor(
     }
 
     fun withdraw() {
-        sharedPreference.clear()
         viewModelScope.launch {
             _withdrawState.emit(WithdrawState.Loading)
             signupRepository.deleteWithdraw().onSuccess {
+                sharedPreference.clear()
                 _withdrawState.emit(WithdrawState.Success(it))
             }.onFailure {
                 _withdrawState.emit(WithdrawState.Error(it.message ?: "알 수 없는 오류가 발생했습니다."))
