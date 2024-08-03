@@ -91,7 +91,8 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.selectedSeatZone.asLiveData().observe(this) { name ->
-            binding.tvSeatColor.text = name.toString()
+            val formattedName = name.toString().replace("\n", "").replace("\r", "") // 개행 문자를 제거
+            binding.tvSeatColor.text = formattedName
             updateLayoutSeatInfoVisibility()
             updateNextButtonState()
         }
