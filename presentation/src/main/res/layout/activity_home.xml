@@ -119,13 +119,14 @@
 
     <ImageView
         android:id="@+id/iv_home_info"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_marginStart="2dp"
         android:src="@drawable/ic_info_circle_line"
         app:layout_constraintBottom_toBottomOf="@id/tv_home_title"
         app:layout_constraintStart_toEndOf="@id/tv_home_title"
         app:layout_constraintTop_toTopOf="@id/tv_home_title"
+        app:tint="@color/transparent_black01"
         tools:ignore="contentDescription" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
@@ -287,12 +288,12 @@
         <ImageView
             android:layout_width="125dp"
             android:layout_height="100dp"
-            android:layout_marginEnd="34dp"
             android:layout_marginBottom="19dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_scrap_design"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="contentDescription" />
 
 

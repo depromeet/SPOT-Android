@@ -27,8 +27,11 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="30dp" />
 
+
+    <!-- TODO : semibold 적용 확인하기 -->
     <com.depromeet.designsystem.SpotAppbar
         android:id="@+id/record_spot_appbar"
+        style="@style/TextAppearance.Spot.Label03"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/color_background_tertiary"
@@ -39,7 +42,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menuIconColor="@color/gray900"
-        app:navigationIcon="@drawable/ic_chevron_left" />
+        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIconColor="@color/color_foreground_body_sebtext"
+        app:navigationIconSize="24" />
 
 
     <com.depromeet.designsystem.StickyNestedScrollView
@@ -84,6 +89,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="20dp"
+                android:elevation="1dp"
                 android:src="@drawable/ic_default_profile"
                 app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
                 app:layout_constraintStart_toStartOf="@id/csbv_record_title"
@@ -96,6 +102,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="47dp"
                 android:background="@drawable/circle_spot_green_fill"
+                android:elevation="2dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_pencil_line"
                 app:layout_constraintBottom_toBottomOf="@id/iv_record_profile"
@@ -121,7 +128,7 @@
                 style="@style/TextAppearance.Spot.Subtitle01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="@string/view_record_whole"
                 android:textColor="@color/color_foreground_body_subtitle"
                 app:layout_constraintEnd_toStartOf="@id/tv_record_count"
@@ -166,7 +173,7 @@
 
                 <Spinner
                     android:id="@+id/spinner_record_year"
-                    style="@style/TextAppearance.Spot.Title02"
+                    style="@style/TextAppearance.Spot.Subtitle01"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -408,7 +415,8 @@
         android:background="@drawable/circle_white_fill"
         android:padding="12dp"
         android:scaleType="center"
-        android:src="@drawable/ic_up"
+        android:elevation="2dp"
+        android:src="@drawable/ic_chevron_up"
         app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
         tools:ignore="contentDescription" />
@@ -421,7 +429,8 @@
         android:background="@drawable/circle_spot_green_fill"
         android:padding="12dp"
         android:scaleType="center"
-        android:src="@drawable/ic_plus_24"
+        android:src="@drawable/ic_plus"
+        android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
         tools:ignore="contentDescription" />
@@ -430,6 +439,7 @@
         android:id="@+id/fcv_record"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
