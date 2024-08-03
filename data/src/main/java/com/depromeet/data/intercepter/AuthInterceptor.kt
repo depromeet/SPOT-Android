@@ -44,6 +44,7 @@ class AuthInterceptor @Inject constructor(
 
 
     private fun shouldRequestAuthenticatedHeaders(encodedPath: String) = when (encodedPath) {
+        "/api/v1/baseball-teams" -> false
         "/api/v1/members" -> true // TODO : 프로필 수정과 URL이 겹쳐서 수정했습니다.
         "/api/v1/members/{accessToken}" -> false //TODO 추 후 변경 필요
         else -> true
