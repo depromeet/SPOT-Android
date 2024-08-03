@@ -217,7 +217,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             tvRecordCount.text = data.reviewCount.toString()
             ivRecordProfile.load(data.profileImage) {
                 transformations(CircleCropTransformation())
-                error(R.drawable.ic_default_profile)
+                error(com.depromeet.designsystem.R.drawable.ic_default_profile)
             }
         }
     }

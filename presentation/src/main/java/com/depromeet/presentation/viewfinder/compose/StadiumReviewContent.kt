@@ -79,7 +79,7 @@ fun StadiumReviewContent(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data(reviewContent.member.profileImage)
+                        .data(reviewContent.member.profileImage.ifEmpty { com.depromeet.designsystem.R.drawable.ic_default_profile })
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -197,9 +197,11 @@ fun StadiumReviewContent(
                     style = SpotTheme.typography.label10,
                     color = SpotTheme.colors.foregroundCaption,
                     textDecoration = TextDecoration.Underline,
-                    modifier = Modifier.noRippleClickable {
-                        showMoreButtonState = 1
-                    }.padding(start = 32.dp)
+                    modifier = Modifier
+                        .noRippleClickable {
+                            showMoreButtonState = 1
+                        }
+                        .padding(start = 32.dp)
                 )
             }
 
@@ -210,9 +212,11 @@ fun StadiumReviewContent(
                     style = SpotTheme.typography.label10,
                     color = SpotTheme.colors.foregroundCaption,
                     textDecoration = TextDecoration.Underline,
-                    modifier = Modifier.noRippleClickable {
-                        showMoreButtonState = 0
-                    }.padding(start = 32.dp)
+                    modifier = Modifier
+                        .noRippleClickable {
+                            showMoreButtonState = 0
+                        }
+                        .padding(start = 32.dp)
                 )
             }
         }

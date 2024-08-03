@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -159,7 +160,7 @@ fun StadiumDetailReviewViewPager(
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(context)
-                            .data(reviews[page].member.profileImage)
+                            .data(reviews[page].member.profileImage.ifEmpty { com.depromeet.designsystem.R.drawable.ic_default_profile })
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
