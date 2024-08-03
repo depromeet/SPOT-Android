@@ -11,7 +11,7 @@ data class ResponseProfileEditDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("teamId")
-    val teamId: Int,
+    val teamId: Int?,
 ) {
     companion object {
         fun ResponseProfileEditDto.toProfileEditResponse(): ProfileEditResponse {

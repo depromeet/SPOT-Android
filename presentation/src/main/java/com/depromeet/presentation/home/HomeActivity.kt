@@ -1,232 +1,206 @@
 package com.depromeet.presentation.home
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableStringBuilder
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.home.ProfileResponse
-import com.depromeet.domain.entity.response.home.RecentReviewResponse
+import com.depromeet.designsystem.SpotImageSnackBar
+import com.depromeet.domain.entity.response.home.HomeFeedResponse
+import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
 import com.depromeet.presentation.databinding.ActivityHomeBinding
-import com.depromeet.presentation.extension.loadAndClip
+import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
-import com.depromeet.presentation.home.viewmodel.HomeViewModel
+import com.depromeet.presentation.home.adapter.StadiumAdapter
+import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
 import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.SeatRecordActivity
-import com.depromeet.presentation.util.CalendarUtil
-import com.depromeet.presentation.util.applyBoldAndSizeSpan
+import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.viewfinder.StadiumActivity
+import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding>(
     ActivityHomeBinding::inflate
 ) {
     companion object {
-        const val PROFILE_NAME = "profile_name"
-        const val PROFILE_IMAGE = "profile_image"
-        const val PROFILE_CHEER_TEAM = "profile_cheer_team"
+        const val STADIUM_EXTRA_ID = "stadium_id"
+        private const val START_SPACING_DP = 16
+        private const val BETWEEN_SPADING_DP = 8
     }
 
-    private val viewModel: HomeViewModel by viewModels()
-    private val sightList: List<View> by lazy {
-        listOf(
-            binding.clHomeNoRecord,
-            binding.clHomeOneRecord,
-            binding.clHomeTwoRecord,
-            binding.clHomeThreeRecord
-        )
-    }
+    private val homeViewModel: HomeGuiViewModel by viewModels()
 
-    private val editProfileLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
-                val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
-                val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM, 0) ?: 0
-                val teamIdUrl =
-                    data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_URL) ?: ""
-
-                viewModel.updateTest(nickname, profileImage, teamId, teamIdUrl)
-            }
-        }
+    private lateinit var stadiumAdapter: StadiumAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getInformation()
+
+
         initView()
         initEvent()
         initObserver()
-
     }
 
     private fun initView() {
-        binding.clMainFindSight.clipToOutline = true
+        homeViewModel.getStadiums()
+        homeViewModel.getHomeFeed()
+        setStadiumAdapter()
     }
 
-
     private fun initEvent() = with(binding) {
-
-        /** 프로필 수정 */
-        ivHomeProfile.setOnClickListener { navigateToProfileEditActivity() }
-        ibHomeEdit.setOnClickListener { navigateToProfileEditActivity() }
-        /** 내 시야 기록 */
-        clHomeSightRecord.setOnClickListener { navigateToSeatRecordActivity() }
-        tvHomeMore.setOnClickListener { navigateToSeatRecordActivity() }
-        clHomeOneRecord.setOnClickListener { navigateToSeatRecordActivity() }
-        clHomeTwoRecord.setOnClickListener { navigateToSeatRecordActivity() }
-        clHomeThreeRecord.setOnClickListener { navigateToSeatRecordActivity() }
-        /** 시야후기 등록*/
-        clHomeRegisterSight.setOnClickListener { navigateToReviewActivity() }
-        clHomeNoRecord.setOnClickListener { navigateToReviewActivity() }
-        /** 시야 찾기 */
-        clMainFindSight.setOnClickListener { navigateToStadiumActivity() }
-
-        ibHomeSetting.setOnClickListener { /** 셋팅 이동 **/ }
-
+        clHomeScrap.setOnClickListener { toast("아직 열리지 않음") }
+        clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
+        ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
+        clHomeScrap.setOnClickListener {
+            SpotImageSnackBar.make(
+                view = binding.root,
+                message = "스크랩이 잠겨있어요\uD83E\uDEE2 곧 업데이트 예정이에요",
+                messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+                icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+                iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+            ).show()
+        }
+        clHomeUpload.setOnClickListener { navigateToReviewActivity() }
     }
 
     private fun initObserver() {
-        viewModel.profile.asLiveData().observe(this) { state ->
+        homeViewModel.stadiums.asLiveData().observe(this) { state ->
             when (state) {
-                is UiState.Success -> {
-                    updateProfile(state.data)
-                }
-
+                is UiState.Empty -> Unit
                 is UiState.Failure -> {
-                    toast("실패")
+                    toast(state.msg)
+                    setStadiumShimmer(true)
                 }
 
-                is UiState.Loading -> {}
-                is UiState.Empty -> {}
+                is UiState.Loading -> {
+                    setStadiumShimmer(true)
+                }
+
+                is UiState.Success -> {
+                    stadiumAdapter.submitList(state.data)
+                    binding.rvHomeStadium.scrollToPosition(0)
+                    setStadiumShimmer(false)
+                }
             }
         }
-        viewModel.recentReview.asLiveData().observe(this) { state ->
+
+        homeViewModel.homeFeed.asLiveData().observe(this) { state ->
             when (state) {
-                is UiState.Success -> {
-                    updateRecentReview(state.data)
-                }
-
+                is UiState.Empty -> Unit
                 is UiState.Failure -> {
-                    toast("실패")
+                    toast("내 정보 불러오기 실패")
                 }
 
-                is UiState.Loading -> {}
-                is UiState.Empty -> {}
-            }
-        }
-    }
+                is UiState.Loading -> {
+                    setHomeFeedShimmer(true)
+                }
 
-    private fun updateRecentReview(data: RecentReviewResponse) = with(binding) {
-        setSpannableString(viewModel.nickname.value, viewModel.reviewCount.value)
-        tvHomeRecentRecordName.text = data.review.stadiumName
-        tvHomeRecentRecordDate.text = CalendarUtil.getFormattedDate(data.review.baseReview.dateTime)
-
-        sightList.forEachIndexed { index, view ->
-            view.visibility =
-                if (index == data.review.baseReview.images.size) VISIBLE else GONE
-        }
-        when (data.review.baseReview.images.size) {
-            0 -> {
-                tvHomeRecentRecordDate.visibility = GONE
-                tvHomeRecentRecordName.visibility = GONE
-            }
-
-            1 -> {
-                ivHomeRecentOneRecord1.loadAndClip(data.review.baseReview.images[0])
-                "${data.review.sectionName} ${data.review.blockCode}블록".also {
-                    tvHomeRecentOneSection.text = it
+                is UiState.Success -> {
+                    setHomeFeed(state.data)
+                    setHomeFeedShimmer(false)
                 }
             }
 
-            2 -> {
-                ivHomeRecentTwoRecord1.loadAndClip(data.review.baseReview.images[0])
-                ivHomeRecentTwoRecord2.loadAndClip(data.review.baseReview.images[1])
-                "${data.review.sectionName} ${data.review.blockCode}블록".also {
-                    tvHomeRecentOneSection.text = it
-                }
-            }
-
-            3 -> {
-                ivHomeRecentThreeRecord1.loadAndClip(data.review.baseReview.images[0])
-                ivHomeRecentThreeRecord2.loadAndClip(data.review.baseReview.images[1])
-                ivHomeRecentThreeRecord3.loadAndClip(data.review.baseReview.images[2])
-                "${data.review.sectionName} ${data.review.blockCode}블록".also {
-                    tvHomeRecentOneSection.text = it
-                }
-            }
-
-            else -> {}
         }
     }
 
-    private fun updateProfile(profile: ProfileResponse) = with(binding) {
-        setSpannableString(viewModel.nickname.value, viewModel.reviewCount.value)
-        if (profile.profileImage.isEmpty()) {
-            ivHomeProfile.setImageResource(com.depromeet.presentation.R.drawable.ic_default_profile)
-        } else {
-            ivHomeProfile.load(profile.profileImage) {
-                transformations(CircleCropTransformation())
-            }
-        }
-        "Lv.${profile.level} ${profile.levelTitle}".also { tvHomeLevel.text = it }
-        ivHomeCheerTeam.load(profile.teamImage)
-
-    }
-
-    private fun setSpannableString(
-        nickName: String,
-        writeCount: Int,
-    ) {
-        val text = "${nickName}님, 지금까지\n시야후기를\n${writeCount}번 작성했어요!"
-        val spannableBuilder = SpannableStringBuilder(text)
-
-        val startIndexNickname = 0
-        val endIndexNickname = nickName.length
-        applyBoldAndSizeSpan(spannableBuilder, startIndexNickname, endIndexNickname)
-
-        val startIndexWriteCount = text.indexOf(writeCount.toString())
-        val endIndexWriteCount = startIndexWriteCount + writeCount.toString().length
-        applyBoldAndSizeSpan(spannableBuilder, startIndexWriteCount, endIndexWriteCount)
-
-        binding.tvHomeSightChance.text = spannableBuilder
-    }
-
-
-    private fun navigateToProfileEditActivity() {
-        val currentState = viewModel.profile.value
-        if (currentState is UiState.Success) {
-            editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
-                with(currentState.data) {
-                    putExtra(PROFILE_NAME, this.nickname)
-                    putExtra(PROFILE_IMAGE, this.profileImage)
-                    putExtra(PROFILE_CHEER_TEAM, this.teamId)
+    private fun setStadiumAdapter() {
+        stadiumAdapter = StadiumAdapter(
+            searchClick = {
+                startStadiumSelectionActivity()
+            },
+            stadiumClick = {
+                if (!it.isActive) {
+                    toast("현재 잠실야구장만 이용할 수 있어요!")
+                } else {
+                    startStadiumActivity(it)
                 }
-            })
-        }
+            }
+        )
+        binding.rvHomeStadium.adapter = stadiumAdapter
+        binding.rvHomeStadium.addItemDecoration(
+            LinearSpacingItemDecoration(
+                START_SPACING_DP.dpToPx(this),
+                BETWEEN_SPADING_DP.dpToPx(this)
+            )
+        )
 
     }
 
-    private fun navigateToSeatRecordActivity() {
+
+    private fun startStadiumSelectionActivity() {
+        Intent(this@HomeActivity, StadiumSelectionActivity::class.java).apply {
+            startActivity(
+                this
+            )
+        }
+    }
+
+    private fun startSeatRecordActivity() {
         Intent(this, SeatRecordActivity::class.java).apply { startActivity(this) }
+    }
+
+    private fun startStadiumActivity(stadium: StadiumsResponse) {
+        val intent = Intent(
+            this@HomeActivity,
+            StadiumActivity::class.java
+        ).apply {
+            if (stadium.id != 1) {
+                putExtra(STADIUM_EXTRA_ID, 1)
+            } else {
+                putExtra(STADIUM_EXTRA_ID, stadium.id)
+            }
+        }
+        startActivity(intent)
+    }
+
+    private fun showLevelDescriptionDialog() {
+        LevelDescriptionDialog().apply { show(supportFragmentManager, this.tag) }
+    }
+
+    private fun setStadiumShimmer(isLoading: Boolean) = with(binding) {
+        if (isLoading) {
+            shimmerHomeStadium.startShimmer()
+            shimmerHomeStadium.visibility = View.VISIBLE
+            rvHomeStadium.visibility = View.INVISIBLE
+        } else {
+            shimmerHomeStadium.stopShimmer()
+            shimmerHomeStadium.visibility = View.GONE
+            rvHomeStadium.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setHomeFeed(data: HomeFeedResponse) = with(binding) {
+        Timber.d("test ${data}")
+        "Lv.${data.level}".also { tvHomeLevel.text = it }
+        tvHomeTeam.text = if (data.teamId == null) {
+            "모두를 응원하는"
+        } else {
+            "${data.teamName}의"
+        }
+        tvHomeTitle.text = data.levelTitle
+        ivHomeCharacter.load(data.mascotImageUrl)
+        csbvHomeTitle.setText("시야 사진 ${data.reviewCntToLevelup}장 더 올리면 레벨업!")
     }
 
     private fun navigateToReviewActivity() {
         Intent(this, ReviewActivity::class.java).apply { startActivity(this) }
     }
 
-    private fun navigateToStadiumActivity() {
-        Intent(this, StadiumActivity::class.java).apply { startActivity(this) }
+    private fun setHomeFeedShimmer(isLoading: Boolean) = with(binding) {
+        if (isLoading) {
+            shimmerHomeProfile.startShimmer()
+            shimmerHomeProfile.visibility = View.VISIBLE
+        } else {
+            shimmerHomeProfile.stopShimmer()
+            shimmerHomeProfile.visibility = View.GONE
+        }
     }
 }

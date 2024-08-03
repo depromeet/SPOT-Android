@@ -2,16 +2,21 @@
 <resources>
 
     <declare-styleable name="CustomSpeechBubbleView">
-        <attr name="text" format="string"/>
-        <attr name="textSize" format="dimension"/>
+        <attr name="text" format="string" />
+        <attr name="textSize" format="dimension" />
         <attr name="textColor" format="color" />
-        <attr name="backgroundColor" format="color"/>
-        <attr name="paddingLeft" format="dimension"/>
-        <attr name="paddingRight" format="dimension"/>
-        <attr name="paddingTop" format="dimension"/>
-        <attr name="paddingBottom" format="dimension"/>
-        <attr name="triangleHeight" format="dimension"/>
-        <attr name="triangleWidth" format="dimension"/>
-        <attr name="cornerRadius"  format="dimension"/>
+        <attr name="backgroundColor" format="color" />
+        <attr name="textStyle" format="enum">
+            <enum name="medium" value="0" />
+            <enum name="semiBold" value="1" />
+            <enum name="regular" value="2" />
+        </attr>
+        <attr name="paddingLeft" format="dimension" />
+        <attr name="paddingRight" format="dimension" />
+        <attr name="paddingTop" format="dimension" />
+        <attr name="paddingBottom" format="dimension" />
+        <attr name="triangleHeight" format="dimension" />
+        <attr name="triangleWidth" format="dimension" />
+        <attr name="cornerRadius" format="dimension" />
     </declare-styleable>
 </resources>
