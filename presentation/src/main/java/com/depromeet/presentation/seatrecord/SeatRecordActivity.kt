@@ -1,5 +1,6 @@
 package com.depromeet.presentation.seatrecord
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -9,9 +10,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
@@ -33,6 +37,7 @@ import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -42,11 +47,28 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         const val SEAT_RECORD_TAG = "seatRecord"
         private const val START_SPACING_DP = 20
         private const val BETWEEN_SPACING_DP = 8
+        const val PROFILE_NAME = "profile_name"
+        const val PROFILE_IMAGE = "profile_image"
+        const val PROFILE_CHEER_TEAM = "profile_cheer_team"
     }
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
     private lateinit var monthRecordAdapter: MonthRecordAdapter
     private val viewModel: SeatRecordViewModel by viewModels()
+    private var isLoading: Boolean = false
+
+    private val editProfileLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
+                val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
+                val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_ID, 0) ?: 0
+                val teamName = data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_NAME)
+
+                viewModel.updateProfile(nickname, profileImage, teamId, teamName)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +80,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun initView() {
         initMonthAdapter()
+        setRefreshClicked()
         viewModel.getReviewDate()
     }
 
@@ -80,9 +103,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 viewModel.getSeatRecords()
             }
             ivRecordEdit.setOnClickListener {
-                Intent(this@SeatRecordActivity, ProfileEditActivity::class.java).apply {
-                    startActivity(this)
-                }
+                navigateToProfileEditActivity()
             }
         }
     }
@@ -91,6 +112,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         observeDates()
         observeReviews()
         observeEvents()
+    }
+
+    private fun setRefreshClicked() {
+        binding.btRecordFailResfresh.setOnClickListener {
+            if (viewModel.date.value is UiState.Success) {
+                viewModel.getReviewDate()
+            } else {
+                viewModel.getSeatRecords()
+            }
+        }
     }
 
     private fun observeDates() {
@@ -135,14 +166,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setReviewList(state.data.reviews)
                     binding.clHomeFail.visibility = GONE
                     binding.rvRecordMonthDetail.visibility = VISIBLE
+                    isLoading = false
                 }
 
                 is UiState.Loading -> {
-                    toast("로딩중")
+                    //TODO : 여기에 이제 skelton 보여주면 됨(shimmer)
                 }
 
                 is UiState.Empty -> {
-                    toast("오류 발생 빈값")
+                    monthRecordAdapter.submitList(emptyList())
+                    toast("해당 월에 작성한 글이 없습니다.")
                 }
 
                 is UiState.Failure -> {
@@ -169,9 +202,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
-            if(data.teamId != null){
-                "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
-            }else{
+            if (data.teamId != null) {
+                "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also {
+                    csbvRecordTitle.setText(
+                        it
+                    )
+                }
+            } else {
                 "모두를 응원하는 Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
             }
             tvRecordNickname.text = data.nickname
@@ -308,12 +345,48 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
             }
+
+
+        binding.rvRecordMonthDetail.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val scrollBottom = !binding.rvRecordMonthDetail.canScrollVertically(1)
+
+                val layoutManager = binding.rvRecordMonthDetail.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val itemCount = layoutManager.itemCount - 1
+
+                Timber.d("test 마지막 포지션 : $lastVisibleItemPosition 아이템 : $itemCount")
+
+//                val hasNextPage = (viewModel.reviews.value as? UiState.Success)?.data?.last == false
+//                if (lastVisibleItemPosition == itemCount && hasNextPage && !isLoading) {
+//                    isLoading = true
+//                    viewModel.loadNextSeatRecords()
+//                }
+            }
+        })
+
+    }
+
+    private fun navigateToProfileEditActivity() {
+        val currentState = viewModel.reviews.value
+        if (currentState is UiState.Success) {
+            editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
+                with(currentState.data) {
+                    putExtra(PROFILE_NAME, this.profile.nickname)
+                    putExtra(PROFILE_IMAGE, this.profile.profileImage)
+                    putExtra(PROFILE_CHEER_TEAM, this.profile.teamId)
+                }
+            })
+        }
     }
 
     private fun moveConfirmationDialog() {
         ConfirmDeleteDialog.newInstance(SEAT_RECORD_TAG)
             .apply { show(supportFragmentManager, this.tag) }
     }
+
 
     private fun moveEditReview() {
 

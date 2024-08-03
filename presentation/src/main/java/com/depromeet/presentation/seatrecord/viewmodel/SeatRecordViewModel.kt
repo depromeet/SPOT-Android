@@ -10,14 +10,12 @@ import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
@@ -77,6 +75,7 @@ class SeatRecordViewModel @Inject constructor(
     fun getSeatRecords() {
         val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
         if (selectedYear.value == 0) return
+        page.value = 0
 
         viewModelScope.launch {
             homeRepository.getMySeatRecord(
@@ -87,8 +86,13 @@ class SeatRecordViewModel @Inject constructor(
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
-                _reviews.value = UiState.Success(data)
-                page.value += 1
+                if (data.reviews.isEmpty()) {
+                    _reviews.value = UiState.Empty
+                } else {
+                    _reviews.value = UiState.Success(data)
+                    page.value += 1
+                }
+
             }.onFailure {
                 Timber.d("GET_SEAT_RECORDS_TEST FAIL : $it")
                 _reviews.value = UiState.Failure(it.message ?: "실패")
@@ -97,17 +101,18 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     fun loadNextSeatRecords() {
-        val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
         viewModelScope.launch {
+            val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
             homeRepository.getMySeatRecord(
                 MySeatRecordRequest(
                     year = selectedYear.value,
                     month = month,
                     page = page.value
                 )
-            ).onSuccess {data ->
+            ).onSuccess { data ->
                 Timber.d("NEXT_SEAT_RECORDS_SUCCESS : $data")
-                val updatedReviewList = (_reviews.value as UiState.Success).data.reviews + data.reviews
+                val updatedReviewList =
+                    (_reviews.value as UiState.Success).data.reviews + data.reviews
                 page.value += 1
                 _reviews.value = UiState.Success(data.copy(reviews = updatedReviewList))
             }.onFailure {
@@ -129,7 +134,6 @@ class SeatRecordViewModel @Inject constructor(
                 MonthUiData(month = month, isClicked = index == 0)
             }
             selectedMonth.value = 0
-            page.value = 0
         }
     }
 
@@ -138,7 +142,6 @@ class SeatRecordViewModel @Inject constructor(
             it.copy(isClicked = it.month == month)
         }
         selectedMonth.value = month
-        page.value = 0
     }
 
     fun setEditReviewId(id: Int) {
@@ -161,18 +164,34 @@ class SeatRecordViewModel @Inject constructor(
         _deleteClickedEvent.value = EditUi.NONE
     }
 
+    fun updateProfile(nickname: String, profileImage: String, teamId: Int, teamName: String?) {
+        val currentState = _reviews.value
+        if (currentState is UiState.Success) {
+            val updatedProfile = currentState.data.profile.copy(
+                nickname = nickname,
+                profileImage = profileImage,
+                teamId = teamId,
+                teamName = teamName
+            )
+
+            val updatedData = currentState.data.copy(
+                profile = updatedProfile
+            )
+
+            _reviews.value = UiState.Success(updatedData)
+        }
+    }
+
     fun removeReviewData() {
         val currentState = reviews.value
         if (currentState is UiState.Success) {
             viewModelScope.launch {
-                Timber.d("test -> 서버 통신 전  : ${editReviewId.value}")
                 homeRepository.deleteReview(editReviewId.value)
                     .onSuccess {
                         if (it.reviewId == editReviewId.value) {
                             val updatedList = currentState.data.reviews.filter { review ->
                                 review.id != editReviewId.value
                             }
-                            Timber.d("test -> 서버 통신 성공후 비교  : ${editReviewId.value}")
                             _reviews.value =
                                 UiState.Success(currentState.data.copy(reviews = updatedList))
                         }
