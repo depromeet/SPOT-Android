@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,33 +55,38 @@ fun KakaoSignupScreen(
         R.drawable.ic_signup_image_2,
     )
 
-    Column(
+    val pageCount = onBoardingList.size
+    val pagerState = rememberPagerState(
+        pageCount = { pageCount },
+    )
+
+    Box(
         modifier = Modifier.fillMaxSize(),
+        contentAlignment= Alignment.Center
     ) {
-        val pageCount = onBoardingList.size
-        val pagerState = rememberPagerState(
-            pageCount = { pageCount },
-        )
-        Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment= Alignment.Center
+        HorizontalPager(
+            state = pagerState,
         ) {
-            HorizontalPager(
-                state = pagerState,
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(
-                        painter = painterResource(id = onboardingImageList[pagerState.currentPage]),
-                        contentDescription = "onboarding",
-                        modifier = Modifier.size(120.dp)
-                    )
-                }
+                Image(
+                    painter = painterResource(id = onboardingImageList[pagerState.currentPage]),
+                    contentDescription = "onboarding",
+                    modifier = Modifier
+                        .padding(horizontal = 44.dp)
+                        .aspectRatio(1f / 2f)
+                        .weight(1f)
+                )
             }
         }
+    }
 
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,7 +149,7 @@ fun KakaoSignupScreen(
                     .padding(horizontal = 40.dp, vertical = 30.dp),
                 shape = RoundedCornerShape(40.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFFFEE500),
+                    backgroundColor = Color(0xFFFEE500)
                 ),
                 onClick = { /*TODO*/ },
             ) {
