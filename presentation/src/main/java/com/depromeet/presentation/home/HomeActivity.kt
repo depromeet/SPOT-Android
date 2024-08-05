@@ -88,9 +88,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 }
 
                 is UiState.Success -> {
+                    setStadiumShimmer(false)
                     stadiumAdapter.submitList(state.data)
                     binding.rvHomeStadium.scrollToPosition(0)
-                    setStadiumShimmer(false)
                 }
             }
         }
@@ -146,7 +146,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 BETWEEN_SPADING_DP.dpToPx(this)
             )
         )
-
+        binding.rvHomeStadium.itemAnimator = null
     }
 
 
@@ -183,12 +183,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun setStadiumShimmer(isLoading: Boolean) = with(binding) {
         if (isLoading) {
             shimmerHomeStadium.startShimmer()
-            shimmerHomeStadium.visibility = View.VISIBLE
             rvHomeStadium.visibility = View.INVISIBLE
+            shimmerHomeStadium.visibility = View.VISIBLE
+
         } else {
             shimmerHomeStadium.stopShimmer()
-            shimmerHomeStadium.visibility = View.GONE
             rvHomeStadium.visibility = View.VISIBLE
+            shimmerHomeStadium.visibility = View.GONE
+
         }
     }
 
