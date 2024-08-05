@@ -87,7 +87,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun initEvent() {
         with(binding) {
             recordSpotAppbar.setNavigationOnClickListener {
-                Timber.d("test")
+                Timber.d("testclicked")
                 finish()
             }
             fabRecordUp.setOnClickListener {
@@ -148,6 +148,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
                 is UiState.Empty -> {
                     setReviewsVisibility(isExist = false)
+                    binding.shimmerRecord.visibility = GONE
                 }
 
                 is UiState.Loading -> {
