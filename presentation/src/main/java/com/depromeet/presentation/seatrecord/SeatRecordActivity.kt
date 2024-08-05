@@ -81,6 +81,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun initView() {
         initMonthAdapter()
         setRefreshClicked()
+        initReviewList()
         viewModel.getReviewDate()
     }
 
@@ -122,9 +123,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun setRefreshClicked() {
         binding.btRecordFailResfresh.setOnClickListener {
             if (viewModel.date.value is UiState.Success) {
-                viewModel.getReviewDate()
-            } else {
                 viewModel.getSeatRecords()
+            } else {
+                viewModel.getReviewDate()
             }
         }
     }
@@ -169,7 +170,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             when (state) {
                 is UiState.Success -> {
                     setProfile(state.data.profile)
-                    setReviewList(state.data.reviews)
+                    updateReviewList(state.data.reviews)
                     binding.clHomeFail.visibility = GONE
                     binding.rvRecordMonthDetail.visibility = VISIBLE
                     isLoading = false
@@ -321,15 +322,10 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setReviewList(reviews: List<MySeatRecordResponse.ReviewResponse>) {
-        val groupList =
-            reviews.groupBy { CalendarUtil.getMonthFromDateFormat(it.date) }
-                .map { (month, reviews) ->
-                    MonthReviewData(month, reviews)
-                }
+    private fun initReviewList(){
         monthRecordAdapter = MonthRecordAdapter()
         binding.rvRecordMonthDetail.adapter = monthRecordAdapter
-        monthRecordAdapter.submitList(groupList)
+        binding.rvRecordMonthDetail.itemAnimator = null
 
         monthRecordAdapter.itemRecordClickListener =
             object : MonthRecordAdapter.OnItemRecordClickListener {
@@ -354,7 +350,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
             }
 
-
         binding.rvRecordMonthDetail.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -374,7 +369,15 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 //                }
             }
         })
+    }
 
+    private fun updateReviewList(reviews: List<MySeatRecordResponse.ReviewResponse>) {
+        val groupList =
+            reviews.groupBy { CalendarUtil.getMonthFromDateFormat(it.date) }
+                .map { (month, reviews) ->
+                    MonthReviewData(month, reviews)
+                }
+        monthRecordAdapter.submitList(groupList)
     }
 
     private fun navigateToProfileEditActivity() {

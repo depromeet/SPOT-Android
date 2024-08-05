@@ -77,6 +77,12 @@ class MonthRecordViewHolder(
                     Timber.d("test scroll $scrollBottom / $lastVisibleItemPosition / $itemCount")
                 }
             })
+
+            binding.root.alpha = 0f
+            binding.root.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .start()
         }
     }
 }
