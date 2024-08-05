@@ -87,7 +87,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun initEvent() {
         with(binding) {
             recordSpotAppbar.setNavigationOnClickListener {
-                Timber.d("testclicked")
                 finish()
             }
             fabRecordUp.setOnClickListener {

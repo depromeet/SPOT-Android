@@ -28,23 +28,21 @@
         app:layout_constraintGuide_end="30dp" />
 
 
-    <!-- TODO : semibold 적용 확인하기 -->
     <com.depromeet.designsystem.SpotAppbar
         android:id="@+id/record_spot_appbar"
-        style="@style/TextAppearance.Spot.Label03"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/color_background_tertiary"
         android:text="@string/view_record_my"
-        android:textColor="@color/gray900"
+        android:textColor="@color/color_foreground_heading"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menuIconColor="@color/gray900"
-        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIcon="@drawable/ic_chevron_left_big"
         app:navigationIconColor="@color/color_foreground_body_sebtext"
-        app:navigationIconSize="24" />
+        app:navigationIconSize="24"
+        app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />
 
 
     <com.depromeet.designsystem.StickyNestedScrollView
@@ -152,9 +150,9 @@
                 android:id="@+id/shimmer_record_profile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:elevation="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:elevation="3dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <include layout="@layout/item_shimmer_record_profile" />
@@ -413,9 +411,9 @@
         android:layout_height="48dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/circle_white_fill"
+        android:elevation="2dp"
         android:padding="12dp"
         android:scaleType="center"
-        android:elevation="2dp"
         android:src="@drawable/ic_up"
         app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
@@ -427,10 +425,10 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/circle_spot_green_fill"
+        android:elevation="2dp"
         android:padding="12dp"
         android:scaleType="center"
         android:src="@drawable/ic_plus_24"
-        android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
         tools:ignore="contentDescription" />
