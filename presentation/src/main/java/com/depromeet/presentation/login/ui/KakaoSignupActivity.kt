@@ -17,6 +17,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
@@ -73,6 +74,7 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
                         }
                         UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                     } else if (token != null) {
+                        Timber.d("KakaoToken: $token")
                         signUpViewModel.updateKakaoToken(token.accessToken)
                     }
                 }
