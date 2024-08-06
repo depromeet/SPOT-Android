@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TextAppearance.Spot.Body01"
+    android:id="@+id/spot_spinner_dropdown"
+    android:layout_width="103dp"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="12dp"
+    android:textColor="@color/color_foreground_body_sebtext"
+    android:textStyle="bold"
+    tools:text="2024년" />
