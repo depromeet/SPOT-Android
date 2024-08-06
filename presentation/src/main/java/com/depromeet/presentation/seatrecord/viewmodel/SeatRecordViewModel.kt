@@ -8,7 +8,6 @@ import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.domain.repository.HomeRepository
-import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,15 +25,6 @@ class SeatRecordViewModel @Inject constructor(
 
     private val _date = MutableStateFlow<UiState<ReviewDateResponse>>(UiState.Loading)
     val date = _date.asStateFlow()
-
-    private val _months =
-        MutableStateFlow<List<MonthUiData>>(emptyList())
-    val months = _months.asStateFlow()
-
-    private val selectedMonth = MutableStateFlow(0)
-
-    private val _selectedYear = MutableStateFlow(0)
-    val selectedYear = _selectedYear.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(EditUi.NONE)
     val deleteClickedEvent = _deleteClickedEvent.asStateFlow()
@@ -60,7 +50,6 @@ class SeatRecordViewModel @Inject constructor(
                 .onSuccess { data ->
                     if (data.yearMonths.isNotEmpty()) {
                         _date.value = UiState.Success(data)
-                        _selectedYear.value = data.yearMonths[0].year
                     } else {
                         _date.value = UiState.Empty
                     }
@@ -73,15 +62,16 @@ class SeatRecordViewModel @Inject constructor(
 
 
     fun getSeatRecords() {
-        val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
-        if (selectedYear.value == 0) return
+        val year = (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
+        val month =
+            (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
         page.value = 0
 
         viewModelScope.launch {
             homeRepository.getMySeatRecord(
                 MySeatRecordRequest(
-                    year = selectedYear.value,
-                    month = month,
+                    year = year,
+                    month = month.takeIf { it != 0 },
                     page = page.value
                 )
             ).onSuccess { data ->
@@ -102,10 +92,12 @@ class SeatRecordViewModel @Inject constructor(
 
     fun loadNextSeatRecords() {
         viewModelScope.launch {
-            val month = months.value.find { it.isClicked }?.takeIf { it.month != 0 }?.month
+            val year = (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
+            val month =
+                (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
             homeRepository.getMySeatRecord(
                 MySeatRecordRequest(
-                    year = selectedYear.value,
+                    year = year,
                     month = month,
                     page = page.value
                 )
@@ -122,26 +114,36 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     fun setSelectedYear(year: Int) {
-        _selectedYear.value = year
-    }
-
-    fun initMonths() {
         val currentState = date.value
         if (currentState is UiState.Success) {
-            val selectedYearMonths =
-                currentState.data.yearMonths.first { it.year == selectedYear.value }.months
-            _months.value = selectedYearMonths.mapIndexed { index, month ->
-                MonthUiData(month = month, isClicked = index == 0)
+
+            val updatedYearMonths = currentState.data.yearMonths.map { yearMonth ->
+                yearMonth.copy(
+                    isClicked = yearMonth.year == year
+                )
             }
-            selectedMonth.value = 0
+            _date.value = UiState.Success(currentState.data.copy(yearMonths = updatedYearMonths))
         }
     }
 
     fun setSelectedMonth(month: Int) {
-        _months.value = months.value.map {
-            it.copy(isClicked = it.month == month)
+        val currentState = _date.value
+        if (currentState is UiState.Success) {
+            val selectedYear = currentState.data.yearMonths.find { it.isClicked }?.year
+
+            val updatedYearMonths = currentState.data.yearMonths.map { yearMonth ->
+                if (yearMonth.year == selectedYear) {
+                    yearMonth.copy(
+                        months = yearMonth.months.map { monthData ->
+                            monthData.copy(isClicked = monthData.month == month)
+                        }
+                    )
+                } else {
+                    yearMonth.copy()
+                }
+            }
+            _date.value = UiState.Success(currentState.data.copy(yearMonths = updatedYearMonths))
         }
-        selectedMonth.value = month
     }
 
     fun setEditReviewId(id: Int) {

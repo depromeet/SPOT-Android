@@ -23,6 +23,7 @@ import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotSpinner
 import com.depromeet.designsystem.extension.dpToPx
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.toast
@@ -32,7 +33,6 @@ import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
-import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.util.CalendarUtil
@@ -56,6 +56,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private lateinit var monthRecordAdapter: MonthRecordAdapter
     private val viewModel: SeatRecordViewModel by viewModels()
     private var isLoading: Boolean = false
+    private var isSpinnerInitialized = false
 
     private val editProfileLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -131,19 +132,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun observeDates() {
-        viewModel.selectedYear.asLiveData().observe(this) {
-            viewModel.initMonths()
-        }
-        viewModel.months.asLiveData().observe(this) {
-            dateMonthAdapter.submitList(it)
-            viewModel.getSeatRecords()
-        }
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     setReviewsVisibility(isExist = true)
-                    val year = state.data.yearMonths.map { it.year }
-                    initYearSpinner(year)
+                    setYearSpinner(state.data)
+                    dateMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
+                    viewModel.getSeatRecords()
                 }
 
                 is UiState.Empty -> {
@@ -251,17 +246,18 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         return spannableString
     }
 
-    private fun initYearSpinner(years: List<Int>) {
-        viewModel.setSelectedYear(years[0])
+    private fun setYearSpinner(data: ReviewDateResponse) {
+        if (isSpinnerInitialized) return
+        val years = data.yearMonths.map { it.year }
         val yearList = years.map { "${it}년" }
 
         val adapter = SpotSpinner(
             this,
-            R.layout.item_custom_month_spinner_view,
-            R.layout.item_custom_month_spinner_dropdown,
+            com.depromeet.designsystem.R.layout.item_spot_spinner_view,
+            com.depromeet.designsystem.R.layout.item_spot_spinner_dropdown,
             yearList,
             true,
-            R.color.gray900
+            com.depromeet.designsystem.R.color.color_foreground_heading,
         )
         with(binding.spinnerRecordYear) {
             this.adapter = adapter
@@ -282,10 +278,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
                 }
         }
+        isSpinnerInitialized = true
     }
 
     private fun initMonthAdapter() {
-        dateMonthAdapter = DateMonthAdapter()
+        dateMonthAdapter = DateMonthAdapter(
+            monthClick = { month ->
+                viewModel.setSelectedMonth(month)
+                binding.ssvRecord.smoothScrollTo(0, 0)
+            }
+        )
         binding.rvRecordMonth.adapter = dateMonthAdapter
         binding.rvRecordMonth.addItemDecoration(
             LinearSpacingItemDecoration(
@@ -293,14 +295,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 BETWEEN_SPACING_DP.dpToPx(this)
             )
         )
-        dateMonthAdapter.itemMonthClickListener =
-            object : DateMonthAdapter.OnItemMonthClickListener {
-                override fun onItemMonthClick(item: MonthUiData) {
-                    val selectedMonth = item.month
-                    viewModel.setSelectedMonth(selectedMonth)
-                    binding.ssvRecord.smoothScrollTo(0, 0)
-                }
-            }
     }
 
     private fun setReviewsVisibility(isExist: Boolean) {
@@ -322,7 +316,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun initReviewList(){
+    private fun initReviewList() {
         monthRecordAdapter = MonthRecordAdapter()
         binding.rvRecordMonthDetail.adapter = monthRecordAdapter
         binding.rvRecordMonthDetail.itemAnimator = null
