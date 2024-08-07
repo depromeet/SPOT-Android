@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotSnackBar
-import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumSelectionBinding
 import com.depromeet.presentation.extension.dpToPx
-import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.util.SpannableStringUtils
 import com.depromeet.presentation.util.Utils
@@ -117,7 +116,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     private fun onClickStadium() {
         stadiumSelectionAdapter.itemStadiumClickListener =
             object : StadiumSelectionAdapter.OnItemStadiumClickListener {
-                override fun onItemStadiumClick(stadium: StadiumsResponse) {
+                override fun onItemStadiumClick(stadium: ResponseStadiums) {
                     if (!stadium.isActive) {
                         SpotSnackBar.make(
                             view = binding.root,
@@ -145,7 +144,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
         }
     }
 
-    private fun startStadiumActivity(stadium: StadiumsResponse) {
+    private fun startStadiumActivity(stadium: ResponseStadiums) {
         val intent = Intent(
             this@StadiumSelectionActivity,
             StadiumActivity::class.java

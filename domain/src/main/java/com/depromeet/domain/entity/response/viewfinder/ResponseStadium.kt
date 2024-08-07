@@ -1,9 +1,9 @@
 package com.depromeet.domain.entity.response.viewfinder
 
-data class StadiumResponse(
+data class ResponseStadium(
     val id: Int,
     val name: String = "",
-    val homeTeams: List<StadiumsResponse.HomeTeamsResponse> = emptyList(),
+    val homeTeams: List<ResponseStadiums.ResponseHomeTeams> = emptyList(),
     val thumbnail: String = "",
     val stadiumUrl: String = ""
 )

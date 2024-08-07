@@ -11,14 +11,13 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.depromeet.designsystem.compose.ui.SpotTheme
-import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.request.viewfinder.RequestBlockReviewQuery
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
 @Composable
@@ -28,8 +27,8 @@ fun StadiumHeaderContent(
     seatContent: String,
     stadiumTitle: String,
     keywords: List<Keyword>,
-    reviewFilter: BlockReviewRequestQuery,
-    topReviewImages: List<BlockReviewResponse.TopReviewImagesResponse>,
+    reviewFilter: RequestBlockReviewQuery,
+    topReviewImages: List<ResponseBlockReview.ResponseTopReviewImages>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
     onClickSelectSeat: () -> Unit,
@@ -86,14 +85,14 @@ private fun StadiumHeaderContentPreview() {
         context = LocalContext.current,
         isMore = false,
         topReviewImages = listOf(
-            BlockReviewResponse.TopReviewImagesResponse(
+            ResponseBlockReview.ResponseTopReviewImages(
                 url = "",
                 reviewId = 1,
                 blockCode = "207",
                 rowNumber = 1,
                 seatNumber = 12
             ),
-            BlockReviewResponse.TopReviewImagesResponse(
+            ResponseBlockReview.ResponseTopReviewImages(
                 url = "",
                 reviewId = 1,
                 blockCode = "207",
@@ -101,7 +100,7 @@ private fun StadiumHeaderContentPreview() {
                 seatNumber = 12
             ),
         ),
-        reviewFilter = BlockReviewRequestQuery(
+        reviewFilter = RequestBlockReviewQuery(
             rowNumber = null,
             seatNumber = null,
             year = null,
@@ -129,7 +128,7 @@ private fun StadiumHeaderContentIsMorePreview() {
         context = LocalContext.current,
         isMore = true,
         topReviewImages = listOf(
-            BlockReviewResponse.TopReviewImagesResponse(
+            ResponseBlockReview.ResponseTopReviewImages(
                 url = "",
                 reviewId = 1,
                 blockCode = "207",
@@ -137,7 +136,7 @@ private fun StadiumHeaderContentIsMorePreview() {
                 seatNumber = 12
 
             ),
-            BlockReviewResponse.TopReviewImagesResponse(
+            ResponseBlockReview.ResponseTopReviewImages(
                 url = "",
                 reviewId = 1,
                 blockCode = "207",
@@ -145,7 +144,7 @@ private fun StadiumHeaderContentIsMorePreview() {
                 seatNumber = 12
             ),
         ),
-        reviewFilter = BlockReviewRequestQuery(
+        reviewFilter = RequestBlockReviewQuery(
             rowNumber = 1,
             seatNumber = 12,
             year = null,

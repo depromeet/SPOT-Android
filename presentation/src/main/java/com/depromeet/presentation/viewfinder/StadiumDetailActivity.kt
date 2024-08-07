@@ -6,11 +6,10 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.depromeet.presentation.home.HomeActivity
@@ -123,7 +122,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun startToStadiumDetailPictureFragment(
-        reviewContent: BlockReviewResponse.ReviewResponse,
+        reviewContent: ResponseBlockReview.ResponseReview,
         index: Int,
         title: String
     ) {

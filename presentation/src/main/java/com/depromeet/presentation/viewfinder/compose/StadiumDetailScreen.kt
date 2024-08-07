@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.StadiumDetailActivity
 import com.depromeet.presentation.viewfinder.uistate.StadiumDetailUiState
@@ -34,7 +34,7 @@ fun StadiumDetailScreen(
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
-    onClickReviewPicture: (reviewContent: BlockReviewResponse.ReviewResponse, index: Int, title: String) -> Unit,
+    onClickReviewPicture: (reviewContent: ResponseBlockReview.ResponseReview, index: Int, title: String) -> Unit,
     onClickSelectSeat: () -> Unit,
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit,

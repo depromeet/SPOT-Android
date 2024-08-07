@@ -1,13 +1,11 @@
 package com.depromeet.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,13 +20,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.FabPosition
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,18 +33,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.airbnb.lottie.model.content.CircleShape
 import com.depromeet.designsystem.compose.ui.SpotTheme
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
-import com.depromeet.presentation.viewfinder.sample.pictures
-import kotlinx.coroutines.flow.collect
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumDetailPictureViewPager(
     context: Context,
     verticalPagerState: PagerState,
-    pictures: List<BlockReviewResponse.ReviewResponse.ReviewImageResponse>,
+    pictures: List<ResponseBlockReview.ResponseReview.ResponseReviewImage>,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -129,13 +118,13 @@ private fun StadiumDetailPictureViewPagerPreview() {
         context = LocalContext.current,
         verticalPagerState = pagerState,
         pictures = listOf(
-            BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
                 id = 1, url = ""
             ),
-            BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
                 id = 1, url = ""
             ),
-            BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
                 id = 1, url = ""
             )
         ),
