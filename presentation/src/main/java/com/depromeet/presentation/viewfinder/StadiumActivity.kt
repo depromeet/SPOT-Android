@@ -2,18 +2,12 @@ package com.depromeet.presentation.viewfinder
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import coil.load
@@ -21,7 +15,6 @@ import coil.transform.RoundedCornersTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotTeamLabel
-import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.HomeActivity
@@ -48,7 +41,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         super.onCreate(savedInstanceState)
         initView()
         initEvent()
-        observeData()
+        initObserve()
     }
 
     private fun initView() {
@@ -65,7 +58,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         onClickZoomDescriptionDim()
     }
 
-    private fun observeData() {
+    private fun initObserve() {
         viewModel.stadium.asLiveData().observe(this) { stadium ->
             when (stadium) {
                 is UiState.Empty -> Unit

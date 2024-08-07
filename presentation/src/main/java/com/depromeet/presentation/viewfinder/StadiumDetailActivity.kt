@@ -40,7 +40,18 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         initView()
         initEvent()
         initObserver()
+    }
 
+    private fun initView() {
+        getIdExtra { stadiumId, blockCode ->
+            viewModel.updateRequestPathVariable(stadiumId, blockCode)
+            viewModel.getBlockReviews(stadiumId, blockCode)
+            viewModel.getBlockRow(stadiumId, blockCode)
+        }
+        initComposeView()
+    }
+
+    private fun initComposeView() {
         binding.composeView.setContent {
             MaterialTheme {
                 StadiumDetailScreen(
@@ -78,14 +89,6 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     }
                 )
             }
-        }
-    }
-
-    private fun initView() {
-        getIdExtra { stadiumId, blockCode ->
-            viewModel.updateRequestPathVariable(stadiumId, blockCode)
-            viewModel.getBlockReviews(stadiumId, blockCode)
-            viewModel.getBlockRow(stadiumId, blockCode)
         }
     }
 
