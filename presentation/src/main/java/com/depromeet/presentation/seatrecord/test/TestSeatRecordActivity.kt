@@ -7,6 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
@@ -16,6 +18,7 @@ import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.ProfileEditActivity
 import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.ConfirmDeleteDialog
+import com.depromeet.presentation.seatrecord.RecordEditDialog
 import com.depromeet.presentation.seatrecord.SeatDetailRecordFragment
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
@@ -36,6 +39,7 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
     private lateinit var adapter: SeatRecordAdapter
     private val viewModel: SeatRecordViewModel by viewModels()
     private var isLoading: Boolean = false
+
 
     private val editProfileLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -90,6 +94,7 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
     private fun initRecordAdapter() {
         adapter = SeatRecordAdapter(
             reviewClick = {
+                viewModel.setClickedReviewId(it.id)
                 supportFragmentManager.commit {
                     replace(
                         R.id.fcv_record,
@@ -109,10 +114,29 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
             },
             profileEditClick = {
                 navigateToProfileEditActivity()
+            },
+            reviewEditClick = { reviewId ->
+                viewModel.setEditReviewId(reviewId)
+                RecordEditDialog.newInstance(SEAT_RECORD_TAG)
+                    .apply { show(supportFragmentManager, this.tag) }
             }
         )
 
-        binding.rvSeatRecord.adapter = adapter
+        with(binding) {
+            rvSeatRecord.adapter = adapter
+
+            rvSeatRecord.addOnScrollListener(object : OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    val scrollBottom = !binding.rvSeatRecord.canScrollVertically(1)
+                    if (scrollBottom && !isLoading && viewModel.reviews.value is UiState.Success) {
+                        if (!(viewModel.reviews.value as UiState.Success).data.last) {
+                            isLoading = true
+                            viewModel.loadNextSeatRecords()
+                        }
+                    }
+                }
+            })
+        }
     }
 
     private fun observeDates() {
@@ -138,7 +162,6 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
                         )
                     }
                     viewModel.getSeatRecords()
-                    Timber.d("test success")
                 }
 
                 is UiState.Empty -> {
@@ -170,7 +193,6 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
                             RecordListItem.Record(state.data.reviews)
                         )
                     )
-
 
                     //TODO : 실패 VISIBILITY GONE + 리사이클러뷰 보여줘야함
                     isLoading = false
@@ -225,6 +247,7 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
 
 
     private fun moveEditReview() {
-
+        //TODO : 나중에 삭제해야함
+        viewModel.test()
     }
 }

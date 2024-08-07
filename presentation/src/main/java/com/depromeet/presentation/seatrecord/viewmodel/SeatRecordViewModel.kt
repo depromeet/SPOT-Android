@@ -2,7 +2,6 @@ package com.depromeet.presentation.seatrecord.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
@@ -37,10 +36,6 @@ class SeatRecordViewModel @Inject constructor(
 
     private val _clickedReviewId = MutableStateFlow(0)
     val clickedReviewId = _clickedReviewId.asStateFlow()
-
-    private val _pagingData =
-        MutableStateFlow<PagingData<MySeatRecordResponse.ReviewResponse>>(PagingData.empty())
-    val pagingData = _pagingData.asStateFlow()
 
     private val page = MutableStateFlow(0)
 
@@ -98,7 +93,7 @@ class SeatRecordViewModel @Inject constructor(
             homeRepository.getMySeatRecord(
                 MySeatRecordRequest(
                     year = year,
-                    month = month,
+                    month = month.takeIf { it != 0 },
                     page = page.value
                 )
             ).onSuccess { data ->
@@ -207,6 +202,21 @@ class SeatRecordViewModel @Inject constructor(
 
     }
 
+
+    fun test() {
+        val reviewState = _reviews.value
+
+        if (reviewState is UiState.Success) {
+
+            val updatedReviews = reviewState.data.reviews.map {
+                it.copy(
+                    stadiumName = "노균욱",
+                    sectionName = "테스트"
+                )
+            }
+            _reviews.value = UiState.Success(reviewState.data.copy(reviews = updatedReviews))
+        }
+    }
 }
 
 enum class EditUi {

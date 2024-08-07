@@ -51,10 +51,22 @@ class MonthRecordViewHolder(
 
     fun bind(item: MonthReviewData) {
         with(binding) {
-            adapter = RecentRecordAdapter()
+            initReviewAdapter()
             "${item.month}월".also { tvRecentMonth.text = it }
-            rvRecentPost.adapter = adapter
             adapter.submitList(item.reviews)
+            binding.root.alpha = 0f
+            binding.root.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .start()
+        }
+    }
+
+
+    private fun initReviewAdapter(){
+        if(!::adapter.isInitialized){
+            adapter = RecentRecordAdapter()
+            binding.rvRecentPost.adapter = adapter
             adapter.itemRecordClickListener =
                 object : RecentRecordAdapter.OnItemRecordClickListener {
                     override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
@@ -77,12 +89,7 @@ class MonthRecordViewHolder(
                     Timber.d("test scroll $scrollBottom / $lastVisibleItemPosition / $itemCount")
                 }
             })
-
-            binding.root.alpha = 0f
-            binding.root.animate()
-                .alpha(1f)
-                .setDuration(300)
-                .start()
         }
     }
+
 }
