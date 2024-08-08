@@ -8,7 +8,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version Versions.kotlinVersion
     id("com.google.gms.google-services")
-    id ("com.google.firebase.crashlytics")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -21,13 +21,9 @@ android {
         targetSdk = Constants.targetSdk
         versionCode = Constants.versionCode
         versionName = Constants.versionName
-
-        buildConfigField("String", "BASE_URL", getApiKey("base.url"))
-        buildConfigField("String", "SVG_BASE_URL", getApiKey("svg.base.url"))
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${getApiKey("kakaoApiKey")}\"")
-
+        buildConfigField("String", "SVG_BASE_URL", getApiKey("svg.base.url"))
         manifestPlaceholders["kakaoApiKey"] = getApiKey("kakaoApiKey")
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -48,6 +44,22 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+        }
+    }
+
+    flavorDimensions += "version"
+    productFlavors {
+
+        create("dev") {
+
+            buildConfigField("String", "BASE_URL", getApiKey("dev.base.url"))
+            buildConfigField("String", "S3_URL", getApiKey("dev.s3.base.url"))
+            dimension = "version"
+        }
+        create("prod") {
+            buildConfigField("String", "BASE_URL", getApiKey("prod.base.url"))
+            buildConfigField("String", "S3_URL", getApiKey("prod.s3.base.url"))
+            dimension = "version"
         }
     }
 
