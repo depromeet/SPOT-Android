@@ -242,7 +242,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
 
     private fun moveEditReview() {
-        //TODO : 나중에 삭제해야함
-        viewModel.test()
+        viewModel.setEditReview(viewModel.editReviewId.value)
+        supportFragmentManager.commit {
+            replace(
+                R.id.fcv_record,
+                EditReviewFragment(),
+                EditReviewFragment.EDIT_REIVIEW_TAG
+            )
+            addToBackStack(null)
+        }
     }
 }

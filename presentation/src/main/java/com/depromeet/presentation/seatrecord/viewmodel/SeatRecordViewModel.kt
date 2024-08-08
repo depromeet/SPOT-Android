@@ -39,6 +39,10 @@ class SeatRecordViewModel @Inject constructor(
 
     private val page = MutableStateFlow(0)
 
+    private val _editReview =
+        MutableStateFlow(MySeatRecordResponse.ReviewResponse(id = 0, stadiumId = 0))
+    val editReview = _editReview.asStateFlow()
+
     fun getReviewDate() {
         viewModelScope.launch {
             homeRepository.getReviewDate()
@@ -220,6 +224,12 @@ class SeatRecordViewModel @Inject constructor(
             }
             _reviews.value = UiState.Success(reviewState.data.copy(reviews = updatedReviews))
             _editClickedEvent.value = EditUi.NONE
+        }
+    }
+
+    fun setEditReview(reviewId: Int) {
+        _editReview.value = (_reviews.value as UiState.Success).data.reviews.first {
+            it.id == reviewId
         }
     }
 
