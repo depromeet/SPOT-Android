@@ -1,6 +1,6 @@
-package com.depromeet.domain.entity.request.seatReview
+package com.depromeet.domain.entity.request.seatreview
 
-data class SeatReviewModel(
+data class RequestSeatReview(
     val images: List<String>,
     val dateTime: String,
     val good: List<String>,

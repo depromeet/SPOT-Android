@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview.adapter
+package com.depromeet.presentation.seatreview.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
@@ -9,14 +9,14 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSelectSeatBinding
 import com.depromeet.presentation.util.ItemDiffCallback
 
 class SelectSeatAdapter(
     private val onItemClick: (Int, Int) -> Unit,
-) : ListAdapter<StadiumSectionModel.SectionListDto, SelectSeatAdapter.SectionViewHolder>(diffUtil) {
+) : ListAdapter<ResponseStadiumSection.SectionListDto, SelectSeatAdapter.SectionViewHolder>(diffUtil) {
 
     private var selectedPosition = RecyclerView.NO_POSITION
 
@@ -38,7 +38,7 @@ class SelectSeatAdapter(
 
     class SectionViewHolder(private val binding: ItemSelectSeatBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(section: StadiumSectionModel.SectionListDto, isSelected: Boolean) {
+        fun bind(section: ResponseStadiumSection.SectionListDto, isSelected: Boolean) {
             binding.tvSeatName.text = section.name
             binding.tvSubName.text = section.alias
 
@@ -65,7 +65,7 @@ class SelectSeatAdapter(
     }
 
     companion object {
-        private val diffUtil = ItemDiffCallback<StadiumSectionModel.SectionListDto>(
+        private val diffUtil = ItemDiffCallback<ResponseStadiumSection.SectionListDto>(
             onItemsTheSame = { old, new -> old == new },
             onContentsTheSame = { old, new -> old == new },
         )

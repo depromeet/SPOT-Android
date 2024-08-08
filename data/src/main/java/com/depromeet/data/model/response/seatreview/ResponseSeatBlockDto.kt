@@ -1,6 +1,6 @@
-package com.depromeet.data.model.response.seatReview
+package com.depromeet.data.model.response.seatreview
 
-import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,8 +12,8 @@ data class ResponseSeatBlockDto(
     val code: String,
 
 ) {
-    fun toSeatBlock(): SeatBlockModel {
-        return SeatBlockModel(
+    fun toSeatBlock(): ResponseSeatBlock {
+        return ResponseSeatBlock(
             id = id,
             code = code,
         )

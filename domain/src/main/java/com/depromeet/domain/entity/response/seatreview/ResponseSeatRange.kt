@@ -1,6 +1,6 @@
-package com.depromeet.domain.entity.response.seatReview
+package com.depromeet.domain.entity.response.seatreview
 
-data class SeatRangeModel(
+data class ResponseSeatRange(
     val id: Int,
     val code: String,
     val rowInfo: List<RowInfo>,

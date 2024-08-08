@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview.dialog
+package com.depromeet.presentation.seatreview.dialog
 
 import android.app.Dialog
 import android.os.Bundle
@@ -19,14 +19,14 @@ import androidx.lifecycle.asLiveData
 import coil.load
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
-import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
-import com.depromeet.presentation.seatReview.ReviewViewModel
-import com.depromeet.presentation.seatReview.adapter.SelectSeatAdapter
+import com.depromeet.presentation.seatreview.ReviewViewModel
+import com.depromeet.presentation.seatreview.adapter.SelectSeatAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -259,7 +259,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     // TODO : 추후 코드 개선 예정 (if else 이슈 ㅠㅠ)
-    private fun updateColumnNumberUI(range: SeatRangeModel) {
+    private fun updateColumnNumberUI(range: ResponseSeatRange) {
         if (viewModel.selectedColumn.value.isEmpty() && viewModel.selectedNumber.value.isEmpty()) {
             binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
             binding.etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
@@ -328,7 +328,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun updateIsExistedColumnUI(rowInfoList: List<SeatRangeModel.RowInfo>) {
+    private fun updateIsExistedColumnUI(rowInfoList: List<ResponseSeatRange.RowInfo>) {
         if (rowInfoList.size == 1) {
             with(binding) {
                 etColumn.visibility = INVISIBLE
@@ -346,7 +346,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun observeSuccessSeatBlock(blockItems: List<SeatBlockModel>) {
+    private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
         val blockCodes = mutableListOf("블록을 선택해주세요")
         blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }

@@ -1,16 +1,15 @@
-package com.depromeet.presentation.seatReview
+package com.depromeet.presentation.seatreview
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
-import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
-import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
-import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
-import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
-import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
+import com.depromeet.domain.entity.request.seatreview.RequestSeatReview
+import com.depromeet.domain.entity.response.seatreview.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumName
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 import com.depromeet.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,8 +71,8 @@ class ReviewViewModel @Inject constructor(
 
     // 서버 통신
 
-    private val _stadiumNameState = MutableStateFlow<UiState<List<StadiumNameModel>>>(UiState.Empty)
-    val stadiumNameState: StateFlow<UiState<List<StadiumNameModel>>> = _stadiumNameState
+    private val _stadiumNameState = MutableStateFlow<UiState<List<ResponseStadiumName>>>(UiState.Empty)
+    val stadiumNameState: StateFlow<UiState<List<ResponseStadiumName>>> = _stadiumNameState
 
     private val _selectedStadiumId = MutableStateFlow(0)
     val selectedStadiumId: StateFlow<Int> = _selectedStadiumId.asStateFlow()
@@ -84,17 +83,17 @@ class ReviewViewModel @Inject constructor(
     private val _selectedBlockId = MutableStateFlow(0)
     val selectedBlockId: StateFlow<Int> = _selectedBlockId.asStateFlow()
 
-    private val _stadiumSectionState = MutableStateFlow<UiState<StadiumSectionModel>>(UiState.Empty)
-    val stadiumSectionState: StateFlow<UiState<StadiumSectionModel>> = _stadiumSectionState
+    private val _stadiumSectionState = MutableStateFlow<UiState<ResponseStadiumSection>>(UiState.Empty)
+    val stadiumSectionState: StateFlow<UiState<ResponseStadiumSection>> = _stadiumSectionState
 
-    private val _seatBlockState = MutableStateFlow<UiState<List<SeatBlockModel>>>(UiState.Empty)
-    val seatBlockState: StateFlow<UiState<List<SeatBlockModel>>> = _seatBlockState
+    private val _seatBlockState = MutableStateFlow<UiState<List<ResponseSeatBlock>>>(UiState.Empty)
+    val seatBlockState: StateFlow<UiState<List<ResponseSeatBlock>>> = _seatBlockState
 
-    private val _seatRangeState = MutableStateFlow<UiState<List<SeatRangeModel>>>(UiState.Empty)
-    val seatRangeState: StateFlow<UiState<List<SeatRangeModel>>> = _seatRangeState
+    private val _seatRangeState = MutableStateFlow<UiState<List<ResponseSeatRange>>>(UiState.Empty)
+    val seatRangeState: StateFlow<UiState<List<ResponseSeatRange>>> = _seatRangeState
 
     private val _getPreSignedUrl =
-        MutableStateFlow<UiState<ResponsePresignedUrlModel>>(UiState.Loading)
+        MutableStateFlow<UiState<ResponsePresignedUrl>>(UiState.Loading)
     val getPreSignedUrl = _getPreSignedUrl.asStateFlow()
 
     private val _postReviewState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
@@ -301,7 +300,7 @@ class ReviewViewModel @Inject constructor(
 
     fun postSeatReview() {
         viewModelScope.launch {
-            val seatReviewModel = SeatReviewModel(
+            val requestSeatReview = RequestSeatReview(
                 images = _preSignedUrlImages.value,
                 dateTime = _selectedDate.value,
                 good = _selectedGoodReview.value,
@@ -321,7 +320,7 @@ class ReviewViewModel @Inject constructor(
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
                 selectedNumber.value.toInt(),
-                seatReviewModel,
+                requestSeatReview,
             )
                 .onSuccess {
                     _postReviewState.value = UiState.Success(Unit)

@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview
+package com.depromeet.presentation.seatreview
 
 import android.content.Context
 import android.content.Intent
@@ -22,10 +22,10 @@ import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.HomeActivity
-import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
-import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
-import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
-import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
+import com.depromeet.presentation.seatreview.dialog.DatePickerDialog
+import com.depromeet.presentation.seatreview.dialog.ImageUploadDialog
+import com.depromeet.presentation.seatreview.dialog.ReviewMySeatDialog
+import com.depromeet.presentation.seatreview.dialog.SelectSeatDialog
 import com.depromeet.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
