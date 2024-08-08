@@ -3,7 +3,7 @@ package com.depromeet.presentation.seatrecord.test
 import android.view.View
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.designsystem.SpotTestSpinner
+import com.depromeet.designsystem.SpotDropDownSpinner
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
@@ -32,14 +32,8 @@ class RecordDateViewHolder(
         val years = data.map { it.year }
         val yearList = years.map { "${it}년" }
 
-        val adapter = SpotTestSpinner(
-            yearList,
-            selectedTextView = { item ->
-                //TODO : 선택되었을 때
-            },
-            dropDownTextView = { item ->
-                //TODO : 드롭다운 메뉴들 로그 확인해보기
-            }
+        val adapter = SpotDropDownSpinner(
+            yearList
         )
         with(binding.spinnerRecordYear) {
             this.adapter = adapter

@@ -33,6 +33,7 @@
         android:layout_marginTop="20dp"
         android:elevation="1dp"
         android:src="@drawable/ic_default_profile"
+        android:background="@drawable/circle_white_fill"
         app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
         app:layout_constraintStart_toStartOf="@id/csbv_record_title"
         app:layout_constraintTop_toTopOf="@id/csbv_record_title"

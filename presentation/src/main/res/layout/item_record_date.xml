@@ -8,7 +8,7 @@
 
     <Spinner
         android:id="@+id/spinner_record_year"
-        style="@style/TextAppearance.Spot.Subtitle01"
+        style="@style/YearSpinner"
         android:layout_width="93dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

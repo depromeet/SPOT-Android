@@ -10,7 +10,7 @@ import com.depromeet.presentation.util.CalendarUtil
 class RecordReviewViewHolder(
     internal val binding: ItemRecordReviewBinding,
     private val reviewClick: (MySeatRecordResponse.ReviewResponse) -> Unit,
-    private val editClick : (Int) -> Unit,
+    private val editClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var adapter: MonthRecordAdapter
@@ -24,23 +24,24 @@ class RecordReviewViewHolder(
                 .map { (month, reviews) ->
                     MonthReviewData(month, reviews)
                 }
+                .sortedByDescending { it.month }
         adapter.submitList(groupList)
     }
 
-    private fun initMonthAdapter(){
-        if(!::adapter.isInitialized){
+    private fun initMonthAdapter() {
+        if (!::adapter.isInitialized) {
             adapter = MonthRecordAdapter()
             binding.rvRecordReview.adapter = adapter
-            adapter.itemRecordClickListener = object : MonthRecordAdapter.OnItemRecordClickListener {
-                override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
-                    reviewClick(item)
-                }
+            adapter.itemRecordClickListener =
+                object : MonthRecordAdapter.OnItemRecordClickListener {
+                    override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
+                        reviewClick(item)
+                    }
 
-                override fun onMoreRecordClick(reviewId: Int) {
-                    editClick(reviewId)
+                    override fun onMoreRecordClick(reviewId: Int) {
+                        editClick(reviewId)
+                    }
                 }
-            }
         }
     }
-
 }

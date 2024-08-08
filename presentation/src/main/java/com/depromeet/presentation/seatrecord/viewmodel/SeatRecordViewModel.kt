@@ -205,18 +205,24 @@ class SeatRecordViewModel @Inject constructor(
 
     fun test() {
         val reviewState = _reviews.value
+        val editId = _editReviewId.value
 
         if (reviewState is UiState.Success) {
-
-            val updatedReviews = reviewState.data.reviews.map {
-                it.copy(
-                    stadiumName = "노균욱",
-                    sectionName = "테스트"
-                )
+            val updatedReviews = reviewState.data.reviews.map { review ->
+                if (review.id == editId) {
+                    review.copy(
+                        stadiumName = "테스트테스트테스트",
+                        sectionName = "테스트테스트테스트"
+                    )
+                } else {
+                    review
+                }
             }
             _reviews.value = UiState.Success(reviewState.data.copy(reviews = updatedReviews))
+            _editClickedEvent.value = EditUi.NONE
         }
     }
+
 }
 
 enum class EditUi {

@@ -10,6 +10,7 @@ import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.databinding.ItemRecordProfileBinding
 import com.depromeet.presentation.databinding.ItemRecordReviewBinding
+import timber.log.Timber
 
 enum class RecordViewType {
     PROFILE_ITEM,
@@ -107,22 +108,27 @@ class SeatRecordAdapter(
             }
         }
     }
+
+    fun updateItemAt(index: Int, newItem: RecordListItem) {
+        val newList = currentList.toMutableList()
+        if (index >= 0 && index < newList.size) {
+            Timber.d("test -> 인덱스 :  $index 새로운 아이템 :  $newItem")
+            newList[index] = newItem
+
+            testDiffUtil(currentList, newList)
+
+            submitList(newList) {
+                Timber.d("test -> submitlist 완료")
+            }
+        } else {
+            Timber.d("test -> 인덱스 초과: $index")
+        }
+    }
 }
 
 class RecordItemDiffCallback : DiffUtil.ItemCallback<RecordListItem>() {
     override fun areItemsTheSame(oldItem: RecordListItem, newItem: RecordListItem): Boolean {
-        return when {
-            oldItem is RecordListItem.Profile && newItem is RecordListItem.Profile ->
-                oldItem.profile.userId == newItem.profile.userId
-
-            oldItem is RecordListItem.Date && newItem is RecordListItem.Date ->
-                oldItem.reviewDates == newItem.reviewDates
-
-            oldItem is RecordListItem.Record && newItem is RecordListItem.Record ->
-                oldItem.reviews.map { it.id } == newItem.reviews.map { it.id }
-
-            else -> false
-        }
+        return oldItem::class == newItem::class
     }
 
     override fun areContentsTheSame(oldItem: RecordListItem, newItem: RecordListItem): Boolean {
@@ -130,7 +136,30 @@ class RecordItemDiffCallback : DiffUtil.ItemCallback<RecordListItem>() {
     }
 }
 
+fun testDiffUtil(oldList: List<RecordListItem>, newList: List<RecordListItem>) {
+    val diffResult = DiffUtil.calculateDiff(
+        object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = oldList.size
 
+            override fun getNewListSize(): Int = newList.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return RecordItemDiffCallback().areItemsTheSame(
+                    oldList[oldItemPosition],
+                    newList[newItemPosition]
+                )
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return RecordItemDiffCallback().areContentsTheSame(
+                    oldList[oldItemPosition],
+                    newList[newItemPosition]
+                )
+            }
+        }
+    )
+    Timber.d("test 결과 차이는? : $diffResult")
+}
 
 
 

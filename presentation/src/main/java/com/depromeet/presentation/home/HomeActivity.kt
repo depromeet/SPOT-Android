@@ -113,7 +113,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                     currentState.data.levelTitle,
                     currentState.data.level,
                     currentState.data.mascotImageUrl
-                ).show(supportFragmentManager, LevelupDialog.TAG )
+                ).show(supportFragmentManager, LevelupDialog.TAG)
             }
         }
     }
@@ -217,7 +217,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         Intent(this, SettingActivity::class.java).apply { startActivity(this) }
     }
 
-    private fun makeSpotImageAppbar(message : String){
+    private fun makeSpotImageAppbar(message: String) {
         SpotImageSnackBar.make(
             view = binding.root,
             message = message,

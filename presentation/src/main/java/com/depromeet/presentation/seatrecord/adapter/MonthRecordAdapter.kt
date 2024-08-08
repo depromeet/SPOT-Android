@@ -16,7 +16,7 @@ class MonthRecordAdapter() :
     ListAdapter<MonthReviewData, MonthRecordViewHolder>(
         ItemDiffCallback(
             onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
-            onContentsTheSame = { oldItem, newItem -> oldItem.reviews == newItem.reviews }
+            onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
         )
     ) {
     interface OnItemRecordClickListener {
@@ -63,8 +63,8 @@ class MonthRecordViewHolder(
     }
 
 
-    private fun initReviewAdapter(){
-        if(!::adapter.isInitialized){
+    private fun initReviewAdapter() {
+        if (!::adapter.isInitialized) {
             adapter = RecentRecordAdapter()
             binding.rvRecentPost.adapter = adapter
             adapter.itemRecordClickListener =
@@ -77,7 +77,7 @@ class MonthRecordViewHolder(
                         itemRecordClickListener?.onMoreRecordClick(item.id)
                     }
                 }
-            binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
@@ -91,5 +91,4 @@ class MonthRecordViewHolder(
             })
         }
     }
-
 }
