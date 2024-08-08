@@ -53,23 +53,29 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initViewStatusBar()
+        setupFragmentResultListener()
+
+        viewModel.getStadiumName()
+        initObserveStadiumName()
+        initObservePreSignedUrl()
+        initObserveUploadImageToS3()
+        initObserveUploadReview()
+
+        initDatePickerDialog()
+        initUploadDialog()
+        initSeatReviewDialog()
+
+        initEventUploadBtn()
+        initEventRemoveBtn()
+        initEventToHome()
+    }
+
+    private fun initViewStatusBar() {
         Utils(this).apply {
             setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
             setBlackSystemBarIconColor(window)
         }
-
-        viewModel.getStadiumName()
-        observeStadiumName()
-        observePreSignedUrl()
-        observeUploadImageToS3()
-        observeUploadReview()
-        navigateToUploadBtn()
-        initDatePickerDialog()
-        initUploadDialog()
-        initSeatReviewDialog()
-        setupFragmentResultListener()
-        setupRemoveButtons()
-        navigateToHomeActivity()
     }
 
     private fun observeReviewViewModel() {
@@ -134,13 +140,13 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun navigateToHomeActivity() {
+    private fun initEventToHome() {
         binding.btnBack.setOnSingleClickListener {
             Intent(this, HomeActivity::class.java).apply { startActivity(this) }
         }
     }
 
-    private fun observeStadiumName() {
+    private fun initObserveStadiumName() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -183,7 +189,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         updateSelectedImages()
     }
 
-    private fun setupRemoveButtons() {
+    private fun initEventRemoveBtn() {
         removeButtons.forEachIndexed { index, button ->
             button.setOnSingleClickListener {
                 removeImageAt(index)
@@ -277,7 +283,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         return inputStream?.use { it.readBytes() }
     }
 
-    private fun navigateToUploadBtn() {
+    private fun initEventUploadBtn() {
         binding.tvUploadBtn.setOnSingleClickListener {
             val uniqueImageUris = selectedImageUris.distinct()
             uniqueImageUris.forEach { imageUriString ->
@@ -293,7 +299,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun observePreSignedUrl() {
+    private fun initObservePreSignedUrl() {
         viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -318,7 +324,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun observeUploadImageToS3() {
+    private fun initObserveUploadImageToS3() {
         viewModel.count.asLiveData().observe(this) {
             if (it == selectedImageUris.size && it != 0) {
                 viewModel.postSeatReview()
@@ -326,7 +332,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun observeUploadReview() {
+    private fun initObserveUploadReview() {
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -334,6 +340,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                         startActivity(this)
                     }
                 }
+
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
                 }

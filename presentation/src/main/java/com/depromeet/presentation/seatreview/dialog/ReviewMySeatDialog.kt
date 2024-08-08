@@ -72,8 +72,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     }
     override fun onStart() {
         super.onStart()
-        val bottomSheet =
-            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         bottomSheet?.let {
             val behavior = BottomSheetBehavior.from(it)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -82,13 +81,13 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeReviewViewModel()
-        setupReviewBtnClickListeners()
+        initObserve()
+        initEvent()
+        initCompleteEvent()
         setupDetailReviewEditText()
-        setupCompleteButton()
     }
 
-    private fun observeReviewViewModel() {
+    private fun initObserve() {
         viewModel.selectedGoodReview.asLiveData().observe(viewLifecycleOwner) { goodReviews ->
             viewModel.selectedBadReview.asLiveData().observe(viewLifecycleOwner) { badReviews ->
                 updateGoodReviewBtnState(goodReviews)
@@ -98,7 +97,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         }
     }
 
-    private fun setupReviewBtnClickListeners() {
+    private fun initEvent() {
         selectedGoodBtn.forEach { button ->
             button.setOnSingleClickListener {
                 if (selectedGoodBtn.filter { it.isSelected }.size < 3 || button.isSelected) {
@@ -108,8 +107,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                     val selectedBadButtonText =
                         selectedBadBtn.filter { it.isSelected }.map { it.text.toString() }
 
-                    val totalSelectedCount =
-                        selectedGoodButtonText.size + selectedBadButtonText.size
+                    val totalSelectedCount = selectedGoodButtonText.size + selectedBadButtonText.size
                     viewModel.setReviewCount(totalSelectedCount)
                     viewModel.setSelectedGoodReview(selectedGoodButtonText)
                 }
@@ -125,8 +123,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                     val selectedGoodButtonText =
                         selectedGoodBtn.filter { it.isSelected }.map { it.text.toString() }
 
-                    val totalSelectedCount =
-                        selectedGoodButtonText.size + selectedBadButtonText.size
+                    val totalSelectedCount = selectedGoodButtonText.size + selectedBadButtonText.size
                     viewModel.setReviewCount(totalSelectedCount)
                     viewModel.setSelectedBadReview(selectedBadButtonText)
                 }
@@ -164,7 +161,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         }
     }
 
-    private fun setupCompleteButton() {
+    private fun initCompleteEvent() {
         binding.tvCompleteBtn.setOnSingleClickListener {
             if (binding.tvCompleteBtn.isEnabled) {
                 dismiss()

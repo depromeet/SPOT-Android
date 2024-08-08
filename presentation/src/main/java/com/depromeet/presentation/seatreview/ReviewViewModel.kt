@@ -274,9 +274,7 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-
     private var index = -1
-
     private var _count = MutableStateFlow(0)
     val count = _count.asStateFlow()
 

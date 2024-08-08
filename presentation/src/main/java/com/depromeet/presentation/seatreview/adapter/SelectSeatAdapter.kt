@@ -21,8 +21,7 @@ class SelectSeatAdapter(
     private var selectedPosition = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
-        val binding =
-            ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SectionViewHolder(binding)
     }
 
