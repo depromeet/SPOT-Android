@@ -24,6 +24,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -61,6 +66,13 @@ fun KakaoSignupScreen(
     val pagerState = rememberPagerState(
         pageCount = { pageCount },
     )
+
+    LaunchedEffect(pagerState) {
+        while (true) {
+            delay(3000)
+            pagerState.animateScrollToPage((pagerState.currentPage + 1) % pageCount)
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
