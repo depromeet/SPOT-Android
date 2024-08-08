@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.request.viewfinder
 
-data class BlockReviewRequestQuery(
+data class RequestBlockReviewQuery(
     val rowNumber: Int?,
     val seatNumber: Int?,
     val year: Int?,

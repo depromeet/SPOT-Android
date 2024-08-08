@@ -1,10 +1,8 @@
 package com.depromeet.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -36,28 +33,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BrushPainter
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.depromeet.designsystem.compose.ui.SpotTheme
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.mapper.toKeyword
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 import com.depromeet.presentation.viewfinder.compose.LevelCard
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -66,7 +58,7 @@ fun StadiumDetailReviewViewPager(
     position: Int,
     pageState: Boolean,
     pagerState: PagerState,
-    reviews: List<BlockReviewResponse.ReviewResponse>,
+    reviews: List<ResponseBlockReview.ResponseReview>,
     visited: List<Boolean>,
     modifier: Modifier = Modifier,
     onLoadPaging: () -> Unit,
@@ -262,46 +254,46 @@ fun StadiumDetailReviewViewPager(
 @Composable
 private fun StadiumDetailReviewViewPagerPreview() {
     val reviews = listOf(
-        BlockReviewResponse.ReviewResponse(
+        ResponseBlockReview.ResponseReview(
             id = 1,
-            member = BlockReviewResponse.ReviewResponse.ReviewMemberResponse(
+            member = ResponseBlockReview.ResponseReview.ResponseReviewMember(
                 "https://picsum.photos/600/400",
                 "조관희",
                 1
             ),
-            stadium = BlockReviewResponse.ReviewResponse.ReviewStadiumResponse(
+            stadium = ResponseBlockReview.ResponseReview.ResponseReviewStadium(
                 1, "서울 잠실 야구장"
             ),
-            section = BlockReviewResponse.ReviewResponse.ReviewSectionResponse(
+            section = ResponseBlockReview.ResponseReview.ResponseReviewSection(
                 1, "오렌지석", "응원석"
             ),
-            block = BlockReviewResponse.ReviewResponse.ReviewBlockResponse(
+            block = ResponseBlockReview.ResponseReview.ResponseReviewBlock(
                 id = 1, code = "207"
             ),
-            row = BlockReviewResponse.ReviewResponse.ReviewRowResponse(
+            row = ResponseBlockReview.ResponseReview.ResponseReviewRow(
                 id = 1, number = 1
             ),
-            seat = BlockReviewResponse.ReviewResponse.ReviewSeatResponse(
+            seat = ResponseBlockReview.ResponseReview.ResponseReviewSeat(
                 id = 1, seatNumber = 12
             ),
             dateTime = "2023-03-01T19:00:00",
             content = "",
             images = listOf(
-                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewImage(
                     id = 1, "https://picsum.photos/600/400"
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewImage(
                     id = 2, "https://picsum.photos/600/400"
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewImage(
                     id = 3, "https://picsum.photos/600/400"
                 )
             ),
             keywords = listOf(
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 1, content = "좋아요", isPositive = true
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 2, content = "싫어요", isPositive = false
                 )
             )
@@ -326,58 +318,58 @@ private fun StadiumDetailReviewViewPagerPreview() {
 @Composable
 private fun StadiumDetailReviewViewPagerMorePreview() {
     val reviews = listOf(
-        BlockReviewResponse.ReviewResponse(
+        ResponseBlockReview.ResponseReview(
             id = 1,
-            member = BlockReviewResponse.ReviewResponse.ReviewMemberResponse(
+            member = ResponseBlockReview.ResponseReview.ResponseReviewMember(
                 "https://picsum.photos/600/400",
                 "조관희",
                 1
             ),
-            stadium = BlockReviewResponse.ReviewResponse.ReviewStadiumResponse(
+            stadium = ResponseBlockReview.ResponseReview.ResponseReviewStadium(
                 1, "서울 잠실 야구장"
             ),
-            section = BlockReviewResponse.ReviewResponse.ReviewSectionResponse(
+            section = ResponseBlockReview.ResponseReview.ResponseReviewSection(
                 1, "오렌지석", "응원석"
             ),
-            block = BlockReviewResponse.ReviewResponse.ReviewBlockResponse(
+            block = ResponseBlockReview.ResponseReview.ResponseReviewBlock(
                 id = 1, code = "207"
             ),
-            row = BlockReviewResponse.ReviewResponse.ReviewRowResponse(
+            row = ResponseBlockReview.ResponseReview.ResponseReviewRow(
                 id = 1, number = 1
             ),
-            seat = BlockReviewResponse.ReviewResponse.ReviewSeatResponse(
+            seat = ResponseBlockReview.ResponseReview.ResponseReviewSeat(
                 id = 1, seatNumber = 12
             ),
             dateTime = "2023-03-01T19:00:00",
             content = "좋은 경기였습니다! 경기였습니다!경기였습니다!경기였습니다!경기였습니다!경기였습니다!",
             images = listOf(
-                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewImage(
                     id = 1, "https://picsum.photos/600/400"
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewImage(
                     id = 2, "https://picsum.photos/600/400"
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewImage(
                     id = 3, "https://picsum.photos/600/400"
                 )
             ),
             keywords = listOf(
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 1, content = "좋아요", isPositive = true
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 2, content = "싫어요", isPositive = false
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 1, content = "좋아요", isPositive = true
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 2, content = "싫어요", isPositive = false
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 1, content = "좋아요", isPositive = true
                 ),
-                BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 2, content = "싫어요", isPositive = false
                 )
             )

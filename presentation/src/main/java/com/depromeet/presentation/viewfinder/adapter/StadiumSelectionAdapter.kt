@@ -1,26 +1,25 @@
 package com.depromeet.presentation.viewfinder.adapter
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.databinding.ItemStadiumSelectionBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.viewfinder.viewholder.StadiumSelectionViewHolder
 
-class StadiumSelectionAdapter : ListAdapter<StadiumsResponse, StadiumSelectionViewHolder>(
-    ItemDiffCallback<StadiumsResponse>(
+class StadiumSelectionAdapter : ListAdapter<ResponseStadiums, StadiumSelectionViewHolder>(
+    ItemDiffCallback<ResponseStadiums>(
         onItemsTheSame = { old, new -> old.id == new.id },
         onContentsTheSame = { old, new -> old == new }
     )
 ) {
     interface OnItemStadiumClickListener {
-        fun onItemStadiumClick(stadiums: StadiumsResponse)
+        fun onItemStadiumClick(stadiums: ResponseStadiums)
     }
 
     var itemStadiumClickListener: OnItemStadiumClickListener? = null

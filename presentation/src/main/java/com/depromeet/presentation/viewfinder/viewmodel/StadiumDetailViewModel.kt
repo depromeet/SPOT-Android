@@ -1,10 +1,9 @@
 package com.depromeet.presentation.viewfinder.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
-import com.depromeet.domain.entity.response.viewfinder.BlockRowResponse
+import com.depromeet.domain.entity.request.viewfinder.RequestBlockReviewQuery
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockRow
 import com.depromeet.domain.model.viewfinder.Seat
 import com.depromeet.domain.repository.ViewfinderRepository
 import com.depromeet.presentation.viewfinder.uistate.StadiumDetailUiState
@@ -20,7 +19,7 @@ class StadiumDetailViewModel @Inject constructor(
 ) : ViewModel() {
     var stadiumId: Int = 0
     var blockCode: String = ""
-    private var blockRow: BlockRowResponse? = null
+    private var blockRow: ResponseBlockRow? = null
 
     private val _detailUiState =
         MutableStateFlow<StadiumDetailUiState>(StadiumDetailUiState.Loading)
@@ -29,8 +28,8 @@ class StadiumDetailViewModel @Inject constructor(
     private val _scrollState = MutableStateFlow(false)
     val scrollState = _scrollState.asStateFlow()
 
-    private val _reviewFilter = MutableStateFlow<BlockReviewRequestQuery>(
-        BlockReviewRequestQuery(
+    private val _reviewFilter = MutableStateFlow<RequestBlockReviewQuery>(
+        RequestBlockReviewQuery(
             rowNumber = null,
             seatNumber = null,
             year = null,
@@ -64,7 +63,7 @@ class StadiumDetailViewModel @Inject constructor(
         this.blockCode = blockCode
     }
 
-    fun updateQueryPage(callback: (query: BlockReviewRequestQuery) -> Unit) {
+    fun updateQueryPage(callback: (query: RequestBlockReviewQuery) -> Unit) {
         _reviewFilter.value = _reviewFilter.value.copy(page = _reviewFilter.value.page + 1)
         callback(_reviewFilter.value)
     }
@@ -72,7 +71,7 @@ class StadiumDetailViewModel @Inject constructor(
     fun getBlockReviews(
         stadiumId: Int = this.stadiumId,
         blockCode: String = this.blockCode,
-        query: BlockReviewRequestQuery = this._reviewFilter.value,
+        query: RequestBlockReviewQuery = this._reviewFilter.value,
     ) {
         viewModelScope.launch {
             viewfinderRepository.getBlockReviews(stadiumId, blockCode, query)

@@ -6,7 +6,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemStadiumSearchBinding
 import com.depromeet.presentation.databinding.ItemStadiumSmallSelectionBinding
@@ -20,8 +20,8 @@ enum class StadiumSelectViewType {
 
 class StadiumAdapter(
     private val searchClick: () -> Unit,
-    private val stadiumClick: (StadiumsResponse) -> Unit,
-) : ListAdapter<StadiumsResponse, RecyclerView.ViewHolder>(
+    private val stadiumClick: (ResponseStadiums) -> Unit,
+) : ListAdapter<ResponseStadiums, RecyclerView.ViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -88,9 +88,9 @@ class StadiumSearchViewHolder(
 
 class StadiumSmallSelectionViewHolder(
     private val binding: ItemStadiumSmallSelectionBinding,
-    private val teamClick: (StadiumsResponse) -> Unit,
+    private val teamClick: (ResponseStadiums) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: StadiumsResponse) {
+    fun bind(item: ResponseStadiums) {
         binding.root.setOnClickListener {
             teamClick(item)
         }
