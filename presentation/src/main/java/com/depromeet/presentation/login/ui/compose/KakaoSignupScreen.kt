@@ -143,32 +143,26 @@ fun KakaoSignupScreen(
                 }
             }
 
-            Button(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp, vertical = 30.dp),
-                shape = RoundedCornerShape(40.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFFFEE500)
-                ),
-                onClick = { /*TODO*/ },
+                    .padding(vertical = 30.dp, horizontal = 40.dp)
+                    .background(Color(0xFFFEE500), RoundedCornerShape(40.dp))
+                    .padding(horizontal = 40.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_kakao_logo),
-                        contentDescription = "kakao logo",
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(
-                        text = "카카오 로그인",
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(vertical = 10.dp),
-                        fontWeight = FontWeight(600),
-                    )
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.ic_kakao_logo),
+                    contentDescription = "kakao logo",
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = "카카오 로그인",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight(600),
+                )
             }
         }
     }
