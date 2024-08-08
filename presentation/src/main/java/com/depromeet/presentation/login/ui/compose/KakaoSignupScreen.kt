@@ -3,6 +3,7 @@ package com.depromeet.presentation.login.ui.compose
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -38,7 +40,7 @@ import com.depromeet.presentation.R
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun KakaoSignupScreen(
-
+    onKakaoLoginClick: () -> Unit = {}
 ) {
     val onBoardingList = listOf(
         Triple("시야찾기로 원하는 야구장\n" +
@@ -147,6 +149,9 @@ fun KakaoSignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 30.dp, horizontal = 40.dp)
+                    .clickable {
+                        onKakaoLoginClick()
+                    }
                     .background(Color(0xFFFEE500), RoundedCornerShape(40.dp))
                     .padding(horizontal = 40.dp, vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
