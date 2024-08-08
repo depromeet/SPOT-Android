@@ -1,13 +1,13 @@
 package com.depromeet.data.repository
 
 import com.depromeet.data.datasource.SeatReviewDataSource
-import com.depromeet.data.model.request.seatReview.toSeatReview
-import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
-import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
-import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
-import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
-import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
-import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
+import com.depromeet.data.model.request.seatreview.toSeatReview
+import com.depromeet.domain.entity.request.seatreview.RequestSeatReview
+import com.depromeet.domain.entity.response.seatreview.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumName
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 import com.depromeet.domain.repository.SeatReviewRepository
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ class SeatReviewRepositoryImpl @Inject constructor(
     private val seatReviewDataSource: SeatReviewDataSource,
 ) : SeatReviewRepository {
 
-    override suspend fun getStadiumName(): Result<List<StadiumNameModel>> {
+    override suspend fun getStadiumName(): Result<List<ResponseStadiumName>> {
         return runCatching {
             val response = seatReviewDataSource.getStadiumNameData()
             response.map { it.toStadiumName() }
@@ -24,7 +24,7 @@ class SeatReviewRepositoryImpl @Inject constructor(
 
     override suspend fun getStadiumSection(
         stadiumId: Int,
-    ): Result<StadiumSectionModel?> {
+    ): Result<ResponseStadiumSection?> {
         return runCatching {
             seatReviewDataSource.getStadiumSectionData(
                 stadiumId,
@@ -35,7 +35,7 @@ class SeatReviewRepositoryImpl @Inject constructor(
     override suspend fun getSeatBlock(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<List<SeatBlockModel>> {
+    ): Result<List<ResponseSeatBlock>> {
         return runCatching {
             val response = seatReviewDataSource.getSeatBlockData(stadiumId, sectionId)
             response.map { it.toSeatBlock() }
@@ -45,7 +45,7 @@ class SeatReviewRepositoryImpl @Inject constructor(
     override suspend fun getSeatRange(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<List<SeatRangeModel>> {
+    ): Result<List<ResponseSeatRange>> {
         return runCatching {
             val response = seatReviewDataSource.getSeatRangeData(stadiumId, sectionId)
             response.map { it.toSeatRange() }
@@ -54,7 +54,7 @@ class SeatReviewRepositoryImpl @Inject constructor(
 
     override suspend fun postReviewImagePresigned(
         fileExtension: String,
-    ): Result<ResponsePresignedUrlModel> {
+    ): Result<ResponsePresignedUrl> {
         return runCatching {
             seatReviewDataSource.postImagePreSignedData(
                 fileExtension,
@@ -77,7 +77,7 @@ class SeatReviewRepositoryImpl @Inject constructor(
     override suspend fun postSeatReview(
         blockId: Int,
         seatNumber: Int,
-        seatReviewInfo: SeatReviewModel,
+        seatReviewInfo: RequestSeatReview,
     ): Result<Unit> {
         return runCatching {
             seatReviewDataSource.postSeatReviewData(

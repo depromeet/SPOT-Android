@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview
+package com.depromeet.presentation.seatreview
 
 import android.content.Intent
 import android.os.Bundle

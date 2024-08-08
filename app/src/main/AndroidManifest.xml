@@ -67,12 +67,12 @@
             android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
-            android:exported="false"
+        <activity android:name="com.depromeet.presentation.seatreview.ReviewActivity"
+            android:exported="true"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.seatReview.ReviewDoneActivity"
-            android:exported="false"
+        <activity android:name="com.depromeet.presentation.seatreview.ReviewDoneActivity"
+            android:exported="true"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.depromeet.presentation.setting.SettingActivity"

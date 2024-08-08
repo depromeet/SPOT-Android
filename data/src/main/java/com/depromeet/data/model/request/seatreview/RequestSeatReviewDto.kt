@@ -1,6 +1,6 @@
-package com.depromeet.data.model.request.seatReview
+package com.depromeet.data.model.request.seatreview
 
-import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
+import com.depromeet.domain.entity.request.seatreview.RequestSeatReview
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,7 +18,7 @@ data class RequestSeatReviewDto(
     val content: String?,
 )
 
-fun SeatReviewModel.toSeatReview() = RequestSeatReviewDto(
+fun RequestSeatReview.toSeatReview() = RequestSeatReviewDto(
     images = images,
     dateTime = dateTime,
     good = good,

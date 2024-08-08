@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview.dialog
+package com.depromeet.presentation.seatreview.dialog
 
 import android.app.Dialog
 import android.os.Bundle
@@ -17,7 +17,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReviewMySeatBottomSheetBinding
 import com.depromeet.presentation.extension.colorOf
 import com.depromeet.presentation.extension.setOnSingleClickListener
-import com.depromeet.presentation.seatReview.ReviewViewModel
+import com.depromeet.presentation.seatreview.ReviewViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint

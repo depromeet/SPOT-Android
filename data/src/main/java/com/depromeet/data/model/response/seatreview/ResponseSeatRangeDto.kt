@@ -1,6 +1,6 @@
-package com.depromeet.data.model.response.seatReview
+package com.depromeet.data.model.response.seatreview
 
-import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -22,8 +22,8 @@ data class ResponseSeatRangeDto(
         @SerialName("seatNumList")
         val seatNumList: List<Int>,
     ) {
-        fun toRowInfo(): SeatRangeModel.RowInfo {
-            return SeatRangeModel.RowInfo(
+        fun toRowInfo(): ResponseSeatRange.RowInfo {
+            return ResponseSeatRange.RowInfo(
                 id = id,
                 number = number,
                 seatNumList = seatNumList,
@@ -31,8 +31,8 @@ data class ResponseSeatRangeDto(
         }
     }
 
-    fun toSeatRange(): SeatRangeModel {
-        return SeatRangeModel(
+    fun toSeatRange(): ResponseSeatRange {
+        return ResponseSeatRange(
             id = id,
             code = code,
             rowInfo = rowInfo.map { it.toRowInfo() },

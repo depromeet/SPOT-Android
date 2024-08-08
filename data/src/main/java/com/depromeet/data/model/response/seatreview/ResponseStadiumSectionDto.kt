@@ -1,6 +1,6 @@
-package com.depromeet.data.model.response.seatReview
+package com.depromeet.data.model.response.seatreview
 
-import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,8 +18,8 @@ data class ResponseStadiumSectionDto(
         @SerialName("alias") val alias: String?,
         @SerialName("color") val color: String,
     ) {
-        fun toSelectionList(): StadiumSectionModel.SectionListDto {
-            return StadiumSectionModel.SectionListDto(
+        fun toSelectionList(): ResponseStadiumSection.SectionListDto {
+            return ResponseStadiumSection.SectionListDto(
                 id = id,
                 name = name,
                 alias = alias,
@@ -28,7 +28,7 @@ data class ResponseStadiumSectionDto(
         }
     }
 
-    fun toStadiumSection(): StadiumSectionModel {
-        return StadiumSectionModel(seatChart, sectionList.map { it.toSelectionList() })
+    fun toStadiumSection(): ResponseStadiumSection {
+        return ResponseStadiumSection(seatChart, sectionList.map { it.toSelectionList() })
     }
 }

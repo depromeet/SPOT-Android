@@ -1,6 +1,6 @@
-package com.depromeet.data.model.response.seatReview
+package com.depromeet.data.model.response.seatreview
 
-import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,8 +13,8 @@ data class ResponseStadiumNameDto(
     @SerialName("isActive")
     val isActive: Boolean,
 ) {
-    fun toStadiumName(): StadiumNameModel {
-        return StadiumNameModel(
+    fun toStadiumName(): ResponseStadiumName {
+        return ResponseStadiumName(
             id = id,
             name = name,
             isActive = isActive,

@@ -1,6 +1,6 @@
-package com.depromeet.domain.entity.response.seatReview
+package com.depromeet.domain.entity.response.seatreview
 
-data class StadiumSectionModel(
+data class ResponseStadiumSection(
     val seatChart: String,
     val sectionList: List<SectionListDto>,
 ) {
