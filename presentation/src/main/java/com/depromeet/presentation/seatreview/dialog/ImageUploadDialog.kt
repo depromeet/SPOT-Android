@@ -52,10 +52,10 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initUploadImageMethod()
+        initEvent()
     }
 
-    private fun initUploadImageMethod() {
+    private fun initEvent() {
         binding.layoutGallery.setOnSingleClickListener {
             selectMultipleMediaLauncher.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),

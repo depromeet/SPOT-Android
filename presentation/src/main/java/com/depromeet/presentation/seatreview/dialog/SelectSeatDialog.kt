@@ -72,16 +72,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeStadiumSection()
-        observeSeatBlock()
-        observeSeatRange()
-        setupSectionRecyclerView()
+        initObserveSection()
+        initObserveSeatBlock()
+        initObserveSeatRange()
+        initView()
         setupTransactionSelectSeat()
         setupEditTextListeners()
     }
 
     // 구역 선택뷰
-    private fun observeStadiumSection() {
+    private fun initObserveSection() {
         viewModel.stadiumSectionState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -103,7 +103,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun setupSectionRecyclerView() {
+    private fun initView() {
         adapter = SelectSeatAdapter { position, sectionId ->
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
@@ -179,7 +179,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     // 좌석 번호 뷰
-    private fun observeSeatBlock() {
+    private fun initObserveSeatBlock() {
         viewModel.seatBlockState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -197,7 +197,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun observeSeatRange() {
+    private fun initObserveSeatRange() {
         viewModel.seatRangeState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
