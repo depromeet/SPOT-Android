@@ -72,7 +72,7 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
     }
 
     private fun initObservers() {
-        signUpViewModel.kakaoToken.asLiveData().observe(this) { token ->
+        signUpViewModel.kakaoToken.observe(this) { token ->
             if (token.isNotEmpty()) {
                 Intent(this, NicknameInputActivity::class.java).apply {
                     putExtra("kakaoToken", token)

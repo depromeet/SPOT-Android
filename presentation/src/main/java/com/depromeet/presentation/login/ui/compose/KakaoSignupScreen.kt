@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.presentation.R
+import com.depromeet.presentation.extension.noRippleClickable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -161,7 +162,7 @@ fun KakaoSignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 30.dp, horizontal = 40.dp)
-                    .clickable {
+                    .noRippleClickable {
                         onKakaoLoginClick()
                     }
                     .background(Color(0xFFFEE500), RoundedCornerShape(40.dp))
