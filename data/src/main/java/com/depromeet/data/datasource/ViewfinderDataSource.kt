@@ -1,18 +1,18 @@
 package com.depromeet.data.datasource
 
-import com.depromeet.data.model.request.viewfinder.BlockReviewRequestQueryDto
-import com.depromeet.data.model.response.viewfinder.BlockReviewResponseDto
-import com.depromeet.data.model.response.viewfinder.BlockRowResponseDto
-import com.depromeet.data.model.response.viewfinder.StadiumResponseDto
-import com.depromeet.data.model.response.viewfinder.StadiumsResponseDto
+import com.depromeet.data.model.request.viewfinder.RequestBlockReviewQueryDto
+import com.depromeet.data.model.response.viewfinder.ResponseBlockReviewDto
+import com.depromeet.data.model.response.viewfinder.ResponseBlockRowDto
+import com.depromeet.data.model.response.viewfinder.ResponseStadiumDto
+import com.depromeet.data.model.response.viewfinder.ResponseStadiumsDto
 
 interface ViewfinderDataSource {
-    suspend fun getStadiums(): List<StadiumsResponseDto>
-    suspend fun getStadium(id: Int): StadiumResponseDto
+    suspend fun getStadiums(): List<ResponseStadiumsDto>
+    suspend fun getStadium(id: Int): ResponseStadiumDto
     suspend fun getBlockReviews(
         stadiumId: Int,
         blockCode: String,
-        queryParam: BlockReviewRequestQueryDto
-    ): BlockReviewResponseDto
-    suspend fun getBlockRow(stadiumId: Int, blockCode: String): BlockRowResponseDto
+        queryParam: RequestBlockReviewQueryDto
+    ): ResponseBlockReviewDto
+    suspend fun getBlockRow(stadiumId: Int, blockCode: String): ResponseBlockRowDto
 }

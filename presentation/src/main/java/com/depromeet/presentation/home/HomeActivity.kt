@@ -10,7 +10,7 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotImageSnackBar
 import com.depromeet.domain.entity.response.home.HomeFeedResponse
-import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.toast
@@ -162,7 +162,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         Intent(this, SeatRecordActivity::class.java).apply { startActivity(this) }
     }
 
-    private fun startStadiumActivity(stadium: StadiumsResponse) {
+    private fun startStadiumActivity(stadium: ResponseStadiums) {
         val intent = Intent(
             this@HomeActivity,
             StadiumActivity::class.java

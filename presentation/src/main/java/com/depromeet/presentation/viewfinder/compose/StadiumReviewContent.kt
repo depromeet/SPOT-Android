@@ -1,9 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,22 +29,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BrushPainter
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.depromeet.designsystem.compose.ui.SpotTheme
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.mapper.toKeyword
@@ -54,9 +48,9 @@ import com.depromeet.presentation.mapper.toKeyword
 @Composable
 fun StadiumReviewContent(
     context: Context,
-    reviewContent: BlockReviewResponse.ReviewResponse,
+    reviewContent: ResponseBlockReview.ResponseReview,
     modifier: Modifier = Modifier,
-    onClick: (reviewContent: BlockReviewResponse.ReviewResponse, index: Int) -> Unit,
+    onClick: (reviewContent: ResponseBlockReview.ResponseReview, index: Int) -> Unit,
     onClickReport: () -> Unit
 ) {
     val minimumLineLength = 3
@@ -238,58 +232,58 @@ private fun StadiumReviewContentPreview() {
     ) {
         StadiumReviewContent(
             context = LocalContext.current,
-            reviewContent = BlockReviewResponse.ReviewResponse(
+            reviewContent = ResponseBlockReview.ResponseReview(
                 id = 1,
                 dateTime = "2023-03-01T19:00:00",
                 content = "asdfsdfsafsfda",
                 images = listOf(
-                    BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                    ResponseBlockReview.ResponseReview.ResponseReviewImage(
                         id = 1,
                         url = "https://picsum.photos/200/300"
                     ),
-                    BlockReviewResponse.ReviewResponse.ReviewImageResponse(
+                    ResponseBlockReview.ResponseReview.ResponseReviewImage(
                         id = 1,
                         url = "https://picsum.photos/200/300"
                     ),
                 ),
-                member = BlockReviewResponse.ReviewResponse.ReviewMemberResponse(
+                member = ResponseBlockReview.ResponseReview.ResponseReviewMember(
                     "https://picsum.photos/200/300",
                     nickname = "엘지의 왕자",
                     level = 0
                 ),
-                stadium = BlockReviewResponse.ReviewResponse.ReviewStadiumResponse(
+                stadium = ResponseBlockReview.ResponseReview.ResponseReviewStadium(
                     id = 1,
                     name = "서울 잠실 야구장"
                 ),
-                section = BlockReviewResponse.ReviewResponse.ReviewSectionResponse(
+                section = ResponseBlockReview.ResponseReview.ResponseReviewSection(
                     id = 1,
                     name = "오렌지석",
                     alias = "응원석"
                 ),
-                block = BlockReviewResponse.ReviewResponse.ReviewBlockResponse(
+                block = ResponseBlockReview.ResponseReview.ResponseReviewBlock(
                     id = 1,
                     code = "207"
                 ),
-                row = BlockReviewResponse.ReviewResponse.ReviewRowResponse(
+                row = ResponseBlockReview.ResponseReview.ResponseReviewRow(
                     id = 1,
                     number = 1
                 ),
-                seat = BlockReviewResponse.ReviewResponse.ReviewSeatResponse(
+                seat = ResponseBlockReview.ResponseReview.ResponseReviewSeat(
                     id = 1,
                     seatNumber = 12
                 ),
                 keywords = listOf(
-                    BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                         id = 1,
                         content = "",
                         isPositive = false
                     ),
-                    BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                         id = 1,
                         content = "",
                         isPositive = false
                     ),
-                    BlockReviewResponse.ReviewResponse.ReviewKeywordResponse(
+                    ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                         id = 1,
                         content = "",
                         isPositive = false

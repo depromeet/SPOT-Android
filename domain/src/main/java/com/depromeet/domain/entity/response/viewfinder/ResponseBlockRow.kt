@@ -2,12 +2,12 @@ package com.depromeet.domain.entity.response.viewfinder
 
 import com.depromeet.domain.model.viewfinder.Seat
 
-data class BlockRowResponse(
+data class ResponseBlockRow(
     val id: Int,
     val code: String = "",
-    val rowInfo: List<RowInfoResponse> = emptyList()
+    val rowInfo: List<ResponseRowInfo> = emptyList()
 ) {
-    data class RowInfoResponse(
+    data class ResponseRowInfo(
         val id: Int,
         val number: Int = 0,
         val seatNumList: List<Int> = emptyList()

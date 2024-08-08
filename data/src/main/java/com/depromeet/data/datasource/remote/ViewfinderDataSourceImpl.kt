@@ -1,30 +1,30 @@
 package com.depromeet.data.datasource.remote
 
 import com.depromeet.data.datasource.ViewfinderDataSource
-import com.depromeet.data.model.request.viewfinder.BlockReviewRequestQueryDto
-import com.depromeet.data.model.response.viewfinder.BlockReviewResponseDto
-import com.depromeet.data.model.response.viewfinder.BlockRowResponseDto
-import com.depromeet.data.model.response.viewfinder.StadiumResponseDto
-import com.depromeet.data.model.response.viewfinder.StadiumsResponseDto
+import com.depromeet.data.model.request.viewfinder.RequestBlockReviewQueryDto
+import com.depromeet.data.model.response.viewfinder.ResponseBlockReviewDto
+import com.depromeet.data.model.response.viewfinder.ResponseBlockRowDto
+import com.depromeet.data.model.response.viewfinder.ResponseStadiumDto
+import com.depromeet.data.model.response.viewfinder.ResponseStadiumsDto
 import com.depromeet.data.remote.ViewfinderService
 import javax.inject.Inject
 
 class ViewfinderDataSourceImpl @Inject constructor(
     private val viewfinderService: ViewfinderService
 ) : ViewfinderDataSource {
-    override suspend fun getStadiums(): List<StadiumsResponseDto> {
+    override suspend fun getStadiums(): List<ResponseStadiumsDto> {
         return viewfinderService.getStadiums()
     }
 
-    override suspend fun getStadium(id: Int): StadiumResponseDto {
+    override suspend fun getStadium(id: Int): ResponseStadiumDto {
         return viewfinderService.getStadium(id)
     }
 
     override suspend fun getBlockReviews(
         stadiumId: Int,
         blockCode: String,
-        queryParam: BlockReviewRequestQueryDto
-    ): BlockReviewResponseDto {
+        queryParam: RequestBlockReviewQueryDto
+    ): ResponseBlockReviewDto {
         return viewfinderService.getBlockReviews(
             stadiumId,
             blockCode,
@@ -37,7 +37,7 @@ class ViewfinderDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun getBlockRow(stadiumId: Int, blockCode: String): BlockRowResponseDto {
+    override suspend fun getBlockRow(stadiumId: Int, blockCode: String): ResponseBlockRowDto {
         return viewfinderService.getBlockRow(stadiumId, blockCode)
     }
 }

@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotSnackBar
-import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumSelectionBinding
 import com.depromeet.presentation.extension.dpToPx
-import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.util.SpannableStringUtils
 import com.depromeet.presentation.util.Utils
@@ -38,16 +37,13 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Utils(this).apply {
-            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
-        }
-
         initView()
         initEvent()
-        observeData()
+        initObserve()
     }
 
     private fun initView() {
+        setStatusBar()
         viewModel.getStadiums()
         setTextTitleColor()
         configureRecyclerViewAdapter()
@@ -59,7 +55,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
         onClickReload()
     }
 
-    private fun observeData() {
+    private fun initObserve() {
         viewModel.stadiums.asLiveData().observe(this) { uiState ->
             when (uiState) {
                 is UiState.Empty -> Unit
@@ -67,10 +63,12 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
                     stopShimmer()
                     binding.layoutErrorScreen.root.visibility = View.VISIBLE
                 }
+
                 is UiState.Loading -> {
                     startShimmer()
                     binding.rvStadium.visibility = View.INVISIBLE
                 }
+
                 is UiState.Success -> {
                     stopShimmer()
                     binding.rvStadium.visibility = View.VISIBLE
@@ -78,6 +76,12 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
                     stadiumSelectionAdapter.submitList(uiState.data)
                 }
             }
+        }
+    }
+
+    private fun setStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
         }
     }
 
@@ -117,7 +121,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     private fun onClickStadium() {
         stadiumSelectionAdapter.itemStadiumClickListener =
             object : StadiumSelectionAdapter.OnItemStadiumClickListener {
-                override fun onItemStadiumClick(stadium: StadiumsResponse) {
+                override fun onItemStadiumClick(stadium: ResponseStadiums) {
                     if (!stadium.isActive) {
                         SpotSnackBar.make(
                             view = binding.root,
@@ -145,7 +149,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
         }
     }
 
-    private fun startStadiumActivity(stadium: StadiumsResponse) {
+    private fun startStadiumActivity(stadium: ResponseStadiums) {
         val intent = Intent(
             this@StadiumSelectionActivity,
             StadiumActivity::class.java

@@ -1,9 +1,6 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,13 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,18 +25,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.depromeet.designsystem.compose.ui.SpotTheme
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumPictureViewPager(
     context: Context,
-    topReviewImages: List<BlockReviewResponse.TopReviewImagesResponse>,
+    topReviewImages: List<ResponseBlockReview.ResponseTopReviewImages>,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { topReviewImages.size })
@@ -133,14 +123,14 @@ private fun StadiumPictureViewPagerPreview() {
     StadiumPictureViewPager(
         context = LocalContext.current,
         topReviewImages = listOf(
-            BlockReviewResponse.TopReviewImagesResponse(
+            ResponseBlockReview.ResponseTopReviewImages(
                 url = "",
                 reviewId = 1,
                 blockCode = "207",
                 rowNumber = 1,
                 seatNumber = 12
             ),
-            BlockReviewResponse.TopReviewImagesResponse(
+            ResponseBlockReview.ResponseTopReviewImages(
                 url = "",
                 reviewId = 1,
                 blockCode = "207",
