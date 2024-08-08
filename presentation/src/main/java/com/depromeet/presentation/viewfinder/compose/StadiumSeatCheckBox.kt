@@ -1,8 +1,6 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,21 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.depromeet.designsystem.compose.ui.SpotTheme
-import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
+import com.depromeet.domain.entity.request.viewfinder.RequestBlockReviewQuery
 import com.depromeet.presentation.R
 import com.depromeet.presentation.extension.noRippleClickable
-import com.depromeet.presentation.viewfinder.sample.review
 
 @Composable
 fun StadiumSeatCheckBox(
-    reviewFilter: BlockReviewRequestQuery,
+    reviewFilter: RequestBlockReviewQuery,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onCancel: () -> Unit
@@ -117,7 +112,7 @@ fun StadiumSeatCheckBox(
 @Composable
 private fun StadiumSeatCheckBoxPreview() {
     StadiumSeatCheckBox(
-        reviewFilter = BlockReviewRequestQuery(
+        reviewFilter = RequestBlockReviewQuery(
             rowNumber = null,
             seatNumber = null,
             year = null,
@@ -136,7 +131,7 @@ private fun StadiumSeatCheckBoxPreview() {
 @Composable
 private fun StadiumSeatCheckBoxPreviewRowNumber() {
     StadiumSeatCheckBox(
-        reviewFilter = BlockReviewRequestQuery(
+        reviewFilter = RequestBlockReviewQuery(
             rowNumber = 1,
             seatNumber = null,
             year = null,
@@ -154,7 +149,7 @@ private fun StadiumSeatCheckBoxPreviewRowNumber() {
 @Composable
 private fun StadiumSeatCheckBoxPreviewSeatNumber() {
     StadiumSeatCheckBox(
-        reviewFilter = BlockReviewRequestQuery(
+        reviewFilter = RequestBlockReviewQuery(
             rowNumber = 1,
             seatNumber = 12,
             year = null,

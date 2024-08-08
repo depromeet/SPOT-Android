@@ -6,7 +6,7 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.HomeFeedResponse
 import com.depromeet.domain.entity.response.home.LevelByPostResponse
 import com.depromeet.domain.entity.response.home.LevelUpInfoResponse
-import com.depromeet.domain.entity.response.viewfinder.StadiumsResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.domain.repository.ViewfinderRepository
@@ -22,7 +22,7 @@ class HomeGuiViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val sharedPreference: SharedPreference,
 ) : ViewModel() {
-    private val _stadiums = MutableStateFlow<UiState<List<StadiumsResponse>>>(UiState.Loading)
+    private val _stadiums = MutableStateFlow<UiState<List<ResponseStadiums>>>(UiState.Loading)
     val stadiums = _stadiums.asStateFlow()
 
     private val _levelDescriptions =

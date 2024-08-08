@@ -1,21 +1,21 @@
 package com.depromeet.data.remote
 
-import com.depromeet.data.model.response.viewfinder.BlockReviewResponseDto
-import com.depromeet.data.model.response.viewfinder.BlockRowResponseDto
-import com.depromeet.data.model.response.viewfinder.StadiumResponseDto
-import com.depromeet.data.model.response.viewfinder.StadiumsResponseDto
+import com.depromeet.data.model.response.viewfinder.ResponseBlockReviewDto
+import com.depromeet.data.model.response.viewfinder.ResponseBlockRowDto
+import com.depromeet.data.model.response.viewfinder.ResponseStadiumDto
+import com.depromeet.data.model.response.viewfinder.ResponseStadiumsDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ViewfinderService {
     @GET("/api/v1/stadiums")
-    suspend fun getStadiums(): List<StadiumsResponseDto>
+    suspend fun getStadiums(): List<ResponseStadiumsDto>
 
     @GET("/api/v1/stadiums/{stadiumId}")
     suspend fun getStadium(
         @Path("stadiumId") stadiumId: Int
-    ): StadiumResponseDto
+    ): ResponseStadiumDto
 
     @GET("/api/v1/stadiums/{stadiumId}/blocks/{blockCode}/reviews")
     suspend fun getBlockReviews(
@@ -27,11 +27,11 @@ interface ViewfinderService {
         @Query("month") month: Int?,
         @Query("page") page: Int?,
         @Query("size") size: Int?,
-    ): BlockReviewResponseDto
+    ): ResponseBlockReviewDto
 
     @GET("/api/v1/stadiums/{stadiumId}/blocks/{blockCode}/rows")
     suspend fun getBlockRow(
         @Path("stadiumId") stadiumId: Int,
         @Path("blockCode") blockCode: String
-    ): BlockRowResponseDto
+    ): ResponseBlockRowDto
 }

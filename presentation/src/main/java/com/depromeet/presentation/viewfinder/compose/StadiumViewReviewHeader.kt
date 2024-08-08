@@ -18,13 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.depromeet.designsystem.compose.ui.SpotTheme
-import com.depromeet.domain.entity.request.viewfinder.BlockReviewRequestQuery
+import com.depromeet.domain.entity.request.viewfinder.RequestBlockReviewQuery
 import com.depromeet.presentation.R
 
 @Composable
 fun StadiumViewReviewHeader(
     reviewCount: Long,
-    reviewQuery: BlockReviewRequestQuery,
+    reviewQuery: RequestBlockReviewQuery,
     modifier: Modifier = Modifier,
     onCancel: () -> Unit,
     onClickMonthly: () -> Unit,
@@ -78,7 +78,7 @@ private fun StadiumViewReviewHeaderPreview() {
         modifier = Modifier.background(Color.White)
     ) {
         StadiumViewReviewHeader(
-            reviewQuery = BlockReviewRequestQuery(
+            reviewQuery = RequestBlockReviewQuery(
                 rowNumber = null,
                 seatNumber = null,
                 year = null,

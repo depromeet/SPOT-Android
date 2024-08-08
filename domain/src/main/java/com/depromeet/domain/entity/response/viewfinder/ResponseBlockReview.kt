@@ -3,20 +3,20 @@ package com.depromeet.domain.entity.response.viewfinder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class BlockReviewResponse(
-    val location: LocationResponse = LocationResponse(),
-    val keywords: List<KeywordResponse> = emptyList(),
-    val reviews: List<ReviewResponse> = emptyList(),
-    val topReviewImages: List<TopReviewImagesResponse> = emptyList(),
+data class ResponseBlockReview(
+    val location: ResponseLocation = ResponseLocation(),
+    val keywords: List<ResponseKeyword> = emptyList(),
+    val reviews: List<ResponseReview> = emptyList(),
+    val topReviewImages: List<ResponseTopReviewImages> = emptyList(),
     val totalElements: Long = 0,
     val totalPages: Int = 0,
     val number: Int = 0,
     val size: Int = 0,
     val first: Boolean = false,
     val last: Boolean = false,
-    val filter: ReviewFilterResponse = ReviewFilterResponse()
+    val filter: ResponseReviewFilter = ResponseReviewFilter()
 ) {
-    data class LocationResponse(
+    data class ResponseLocation(
         val stadiumName: String = "",
         val sectionName: String = "",
         val blockCode: String = ""
@@ -45,65 +45,65 @@ data class BlockReviewResponse(
         }
     }
 
-    data class KeywordResponse(
+    data class ResponseKeyword(
         val content: String = "",
         val count: Int = 0,
         val isPositive: Boolean = false
     )
 
-    data class ReviewResponse(
+    data class ResponseReview(
         val id: Long,
-        val member: ReviewMemberResponse = ReviewMemberResponse(),
-        val stadium: ReviewStadiumResponse,
-        val section: ReviewSectionResponse,
-        val block: ReviewBlockResponse,
-        val row: ReviewRowResponse,
-        val seat: ReviewSeatResponse,
+        val member: ResponseReviewMember = ResponseReviewMember(),
+        val stadium: ResponseReviewStadium,
+        val section: ResponseReviewSection,
+        val block: ResponseReviewBlock,
+        val row: ResponseReviewRow,
+        val seat: ResponseReviewSeat,
         val dateTime: String = "",
         val content: String = "",
-        val images: List<ReviewImageResponse> = emptyList(),
-        val keywords: List<ReviewKeywordResponse> = emptyList(),
+        val images: List<ResponseReviewImage> = emptyList(),
+        val keywords: List<ResponseReviewKeyword> = emptyList(),
 
         ) {
-        data class ReviewImageResponse(
+        data class ResponseReviewImage(
             val id: Int,
             val url: String = "",
         )
 
-        data class ReviewKeywordResponse(
+        data class ResponseReviewKeyword(
             val id: Int,
             val content: String = "",
             val isPositive: Boolean = false,
         )
 
-        data class ReviewMemberResponse(
+        data class ResponseReviewMember(
             val profileImage: String = "",
             val nickname: String = "",
             val level: Int = 0,
         )
 
-        data class ReviewStadiumResponse(
+        data class ResponseReviewStadium(
             val id: Int,
             val name: String = ""
         )
 
-        data class ReviewSectionResponse(
+        data class ResponseReviewSection(
             val id: Int,
             val name: String = "",
             val alias: String = "",
         )
 
-        data class ReviewBlockResponse(
+        data class ResponseReviewBlock(
             val id: Int,
             val code: String = "",
         )
 
-        data class ReviewRowResponse(
+        data class ResponseReviewRow(
             val id: Int,
             val number: Int = 0,
         )
 
-        data class ReviewSeatResponse(
+        data class ResponseReviewSeat(
             val id: Int,
             val seatNumber: Int = 0,
         )
@@ -129,7 +129,7 @@ data class BlockReviewResponse(
         }
     }
 
-    data class TopReviewImagesResponse(
+    data class ResponseTopReviewImages(
         val url: String = "",
         val reviewId: Int,
         val blockCode: String = "",
@@ -148,7 +148,7 @@ data class BlockReviewResponse(
         }
     }
 
-    data class ReviewFilterResponse(
+    data class ResponseReviewFilter(
         val rowNumber: Int = 0,
         val seatNumber: Int = 0,
         val year: Int = 0,

@@ -6,11 +6,10 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
-import com.depromeet.domain.entity.response.viewfinder.BlockReviewResponse
+import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.depromeet.presentation.home.HomeActivity
@@ -41,7 +40,18 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         initView()
         initEvent()
         initObserver()
+    }
 
+    private fun initView() {
+        getIdExtra { stadiumId, blockCode ->
+            viewModel.updateRequestPathVariable(stadiumId, blockCode)
+            viewModel.getBlockReviews(stadiumId, blockCode)
+            viewModel.getBlockRow(stadiumId, blockCode)
+        }
+        initComposeView()
+    }
+
+    private fun initComposeView() {
         binding.composeView.setContent {
             MaterialTheme {
                 StadiumDetailScreen(
@@ -82,14 +92,6 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
     }
 
-    private fun initView() {
-        getIdExtra { stadiumId, blockCode ->
-            viewModel.updateRequestPathVariable(stadiumId, blockCode)
-            viewModel.getBlockReviews(stadiumId, blockCode)
-            viewModel.getBlockRow(stadiumId, blockCode)
-        }
-    }
-
     private fun initEvent() {
         binding.spotAppbar.setNavigationOnClickListener {
             finish()
@@ -123,7 +125,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun startToStadiumDetailPictureFragment(
-        reviewContent: BlockReviewResponse.ReviewResponse,
+        reviewContent: ResponseBlockReview.ResponseReview,
         index: Int,
         title: String
     ) {

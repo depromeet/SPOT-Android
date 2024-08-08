@@ -1,6 +1,7 @@
 package com.depromeet.spot.di
 
 import com.depromeet.data.intercepter.AuthInterceptor
+import com.depromeet.spot.BuildConfig
 import com.depromeet.spot.BuildConfig.BASE_URL
 import com.depromeet.spot.BuildConfig.SVG_BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -69,7 +70,7 @@ object RetrofitModule {
     @Provides
     @Singleton
     fun provideWebSvgOkHttpClient(
-        loggingInterceptor: Interceptor
+        loggingInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor).build()
 
@@ -86,7 +87,11 @@ object RetrofitModule {
     @Singleton
     fun provideWebSvgRetrofit(
         @WebSvg client: OkHttpClient,
-        factory: Factory
+        factory: Factory,
     ): Retrofit =
         Retrofit.Builder().baseUrl(SVG_BASE_URL).client(client).addConverterFactory(factory).build()
+
+    @Provides
+    @Singleton
+    fun provideS3Url(): String = BuildConfig.S3_URL
 }
