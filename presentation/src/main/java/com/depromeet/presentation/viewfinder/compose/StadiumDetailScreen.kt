@@ -52,6 +52,12 @@ fun StadiumDetailScreen(
         viewModel.updateScrollState(false)
     }
 
+    LaunchedEffect(key1 = verticalScrollState.firstVisibleItemScrollOffset) {
+        if (verticalScrollState.firstVisibleItemScrollOffset != 0) {
+            viewModel.updateScrollState(true)
+        }
+    }
+
     detailUiState.let { uiState ->
         when (uiState) {
             is StadiumDetailUiState.Empty -> {

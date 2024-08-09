@@ -17,7 +17,6 @@ import com.depromeet.presentation.viewfinder.compose.StadiumDetailScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
 import com.depromeet.presentation.viewfinder.dialog.StadiumSelectSeatDialog
-import com.depromeet.presentation.viewfinder.uistate.StadiumDetailUiState
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -102,18 +101,14 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
 
         binding.btnUp.setOnClickListener {
-            viewModel.updateScrollState(true)
+            viewModel.updateScrollState(false)
         }
     }
 
     private fun initObserver() {
-        viewModel.detailUiState.asLiveData().observe(this) { uiState ->
-            when (uiState) {
-                is StadiumDetailUiState.Empty -> binding.btnUp.visibility = View.GONE
-                is StadiumDetailUiState.Failed -> binding.btnUp.visibility = View.GONE
-                is StadiumDetailUiState.ReviewsData -> binding.btnUp.visibility = View.VISIBLE
-                else -> Unit
-            }
+        viewModel.scrollState.asLiveData().observe(this) {
+            if (it) binding.btnUp.visibility = View.VISIBLE
+            else binding.btnUp.visibility = View.INVISIBLE
         }
     }
 
