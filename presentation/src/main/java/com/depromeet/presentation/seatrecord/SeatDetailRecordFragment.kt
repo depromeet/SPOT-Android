@@ -53,10 +53,22 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     private fun initObserver() {
         viewModel.reviews.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state is UiState.Success) {
-                detailRecordAdapter.submitList(state.data.reviews)
-                isLoading = false
+            when (state) {
+                is UiState.Success -> {
+                    detailRecordAdapter.submitList(state.data.reviews)
+                    isLoading = false
+                }
+
+                is UiState.Failure -> {}
+                is UiState.Loading -> {}
+                is UiState.Empty -> {}
             }
+
+        }
+
+        viewModel.date.asLiveData().observe(viewLifecycleOwner){state ->
+            if (state is UiState.Empty)
+                detailRecordAdapter.submitList(emptyList())
         }
 
 

@@ -24,7 +24,13 @@ class RecordDateViewHolder(
     fun bind(data: List<ReviewDateResponse.YearMonths>) {
         initMonthAdapter()
         initYearSpinner(data)
-        dateMonthAdapter.submitList(data.first { it.isClicked }.months)
+        val clickedYearMonths = data.firstOrNull { it.isClicked }?.months
+
+        if (clickedYearMonths != null) {
+            dateMonthAdapter.submitList(clickedYearMonths)
+        } else {
+            dateMonthAdapter.submitList(emptyList())
+        }
     }
 
 

@@ -44,6 +44,7 @@
         app:navigationIconSize="24"
         app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_record_none"
         android:layout_width="0dp"
@@ -147,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            style="@style/TextAppearance.Spot.Title02"
+            style="@style/TextAppearance.Spot.Subtitle01"
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_record_count"
@@ -159,8 +160,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:background="@drawable/rect_spot_green_fill_999"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="6dp"
+            android:paddingHorizontal="19dp"
+            android:paddingVertical="9dp"
             android:text="@string/view_record_all"
             android:textColor="@color/color_foreground_white"
             style="@style/TextAppearance.Spot.Subtitle03"
@@ -252,6 +253,52 @@
         android:textColor="@color/color_foreground_heading"
         android:visibility="gone"
         />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_profile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
+
+        <include layout="@layout/item_shimmer_record_profile" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shimmer_profile">
+
+        <include layout="@layout/item_shimmer_record_date" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_review"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shimmer_date">
+
+        <include layout="@layout/item_shimmer_review_record" />
+        <include layout="@layout/item_shimmer_review_record" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <ImageButton
         android:id="@+id/fab_record_up"

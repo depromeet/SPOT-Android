@@ -67,10 +67,15 @@ class SeatRecordViewModel @Inject constructor(
 
 
     fun getSeatRecords() {
-        val year = (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
-        val month =
-            (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
+        val dateState = date.value as? UiState.Success<ReviewDateResponse>
+
+        val year = dateState?.data?.yearMonths?.firstOrNull { it.isClicked }?.year
+        val month = dateState?.data?.yearMonths?.firstOrNull { it.isClicked }?.months?.firstOrNull { it.isClicked }?.month
         page.value = 0
+        if(year == null || month == null){
+            _reviews.value = UiState.Failure("유효하지 않은 날짜입니다.")
+        }
+
 
         viewModelScope.launch {
             homeRepository.getMySeatRecord(
@@ -81,11 +86,13 @@ class SeatRecordViewModel @Inject constructor(
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
+                _profile.value = data.profile
                 if (data.reviews.isNotEmpty()) {
                     page.value += 1
+                    _reviews.value = UiState.Success(data)
+                }else{
+                    _reviews.value = UiState.Empty
                 }
-                _reviews.value = UiState.Success(data)
-
             }.onFailure {
                 Timber.d("GET_SEAT_RECORDS_TEST FAIL : $it")
                 _reviews.value = UiState.Failure(it.message ?: "실패")
@@ -211,8 +218,26 @@ class SeatRecordViewModel @Inject constructor(
                             val updatedList = currentState.data.reviews.filter { review ->
                                 review.id != editReviewId.value
                             }
-                            _reviews.value =
-                                UiState.Success(currentState.data.copy(reviews = updatedList))
+                            if (updatedList.isEmpty()) {
+                                val dateState = date.value as UiState.Success
+                                val clickedYear = dateState.data.yearMonths
+                                    .find { year -> year.isClicked }?.year
+
+                                val clickedMonth = dateState.data.yearMonths
+                                    .find { year -> year.isClicked }
+                                    ?.months
+                                    ?.find { month -> month.isClicked }
+                                    ?.month
+
+                                Timber.d("test 년/월 : $clickedYear / $clickedMonth")
+
+                                if (clickedYear != null && clickedMonth != null)
+                                    removeEmptyDate(clickedYear, clickedMonth)
+                            } else {
+                                _reviews.value =
+                                    UiState.Success(currentState.data.copy(reviews = updatedList))
+                            }
+
                         }
                     }
                     .onFailure {
@@ -221,27 +246,55 @@ class SeatRecordViewModel @Inject constructor(
             }
             _deleteClickedEvent.value = EditUi.NONE
         }
-
     }
 
-
-    fun test() {
-        val reviewState = _reviews.value
-        val editId = _editReviewId.value
-
-        if (reviewState is UiState.Success) {
-            val updatedReviews = reviewState.data.reviews.map { review ->
-                if (review.id == editId) {
-                    review.copy(
-                        stadiumName = "테스트테스트테스트",
-                        sectionName = "테스트테스트테스트"
-                    )
+    private fun removeEmptyDate(year: Int, month: Int) {
+        val dateState = _date.value as? UiState.Success<ReviewDateResponse>
+        if (dateState != null) {
+            val updatedYearMonths = dateState.data.yearMonths.mapNotNull { yearMonth ->
+                if (yearMonth.year == year) {
+                    if (month == 0 || yearMonth.months.size <= 2) {
+                        null
+                    } else {
+                        val updatedMonths: List<ReviewDateResponse.MonthData> =
+                            yearMonth.months.filter { it.month != month }.map { monthData ->
+                                if (monthData.month == 0) {
+                                    monthData.copy(isClicked = true)
+                                } else {
+                                    monthData
+                                }
+                            }
+                        yearMonth.copy(months = updatedMonths)
+                    }
                 } else {
-                    review
+                    yearMonth
                 }
             }
-            _reviews.value = UiState.Success(reviewState.data.copy(reviews = updatedReviews))
-            _editClickedEvent.value = EditUi.NONE
+            val existingClickedYear = dateState.data.yearMonths.find { it.isClicked }?.year
+            if (existingClickedYear != null) {
+                _date.value = if (updatedYearMonths.isEmpty()) {
+                    UiState.Empty
+                } else {
+                    Timber.d("test updatedYearMonths -> $updatedYearMonths")
+                    UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
+                }
+            } else {
+                val highestYear = updatedYearMonths.maxOfOrNull { it.year }
+
+                val updatedYearMonthsWithClicked = updatedYearMonths.map { yearMonth ->
+                    if (yearMonth.year == highestYear) {
+                        yearMonth.copy(isClicked = true)
+                    } else {
+                        yearMonth
+                    }
+                }
+                _date.value = if (updatedYearMonths.isEmpty()) {
+                    UiState.Empty
+                } else {
+                    Timber.d("test updatedYearMonthsWithClicked -> $updatedYearMonthsWithClicked")
+                    UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
+                }
+            }
         }
     }
 
