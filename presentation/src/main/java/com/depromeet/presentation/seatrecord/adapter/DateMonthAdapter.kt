@@ -82,7 +82,7 @@ class DateMonthViewHolder(
 }
 
 internal class LinearSpacingItemDecoration(
-    private val startSpacing: Int,
+    private val startSpacing: Int= 0,
     private val betweenSpacing: Int,
 ) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(

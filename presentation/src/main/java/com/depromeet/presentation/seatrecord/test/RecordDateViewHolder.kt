@@ -14,10 +14,6 @@ class RecordDateViewHolder(
     private val yearClick: (Int) -> Unit,
     private val monthClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    companion object {
-        private const val START_SPACING_DP = 20
-        private const val BETWEEN_SPACING_DP = 8
-    }
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
 
@@ -69,12 +65,6 @@ class RecordDateViewHolder(
                 }
             )
             binding.rvRecordMonth.adapter = dateMonthAdapter
-            binding.rvRecordMonth.addItemDecoration(
-                LinearSpacingItemDecoration(
-                    START_SPACING_DP, //.dpToPx(this),
-                    BETWEEN_SPACING_DP, //.dpToPx(this)
-                )
-            )
         }
     }
 }

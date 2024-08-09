@@ -16,5 +16,7 @@
         style="@style/TextAppearance.Spot.Label06"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="6dp"
         tools:text="3월" />
 </androidx.constraintlayout.widget.ConstraintLayout>
