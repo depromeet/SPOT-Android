@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatReview.dialog
+package com.depromeet.presentation.seatreview.dialog
 
 import android.os.Bundle
 import android.view.View
