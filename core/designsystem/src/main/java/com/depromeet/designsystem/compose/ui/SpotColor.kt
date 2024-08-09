@@ -8,7 +8,7 @@ import com.depromeet.designsystem.R
 data class SpotColor internal constructor(
     val transferBlack01: Color = Color(0x4D000000),
     val transferBlack02: Color = Color(0x99000000),
-    val transferBlack03: Color = Color(0xE6000000),
+    val transferBlack03: Color = Color(0xE6212124),
 
     val gray00: Color = Color(0xFFFFFFFF),
     val gray50: Color = Color(0xFFF7F8FA),
