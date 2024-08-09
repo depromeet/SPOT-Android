@@ -59,7 +59,7 @@ fun CustomTooltip(
 
                 drawPath(
                     path = trianglePath,
-                    color = Color(0xE6000000)
+                    color = Color(0xE6212124)
                 )
             }
             Box(modifier = Modifier
