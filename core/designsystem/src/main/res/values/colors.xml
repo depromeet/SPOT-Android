@@ -127,4 +127,7 @@
     <color name="color_seat_premium">#FFB3B248</color>
     <color name="color_seat_orange">#FFFF8519</color>
 
+
+    <!-- Etc -->
+    <color name="color_80000000">#80000000</color>
 </resources>

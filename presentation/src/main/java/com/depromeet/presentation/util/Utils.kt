@@ -4,9 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowInsetsController
 import androidx.annotation.ColorRes
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 
 class Utils(
     private val context: Context
@@ -55,6 +60,23 @@ class Utils(
         } else {
 
             window.decorView.systemUiVisibility = 0
+        }
+    }
+
+    fun setOnApplyWindowInsetsTopMarginListener(
+        window: Window,
+        view: View
+    ) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        ViewCompat.setOnApplyWindowInsetsListener(view) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
+
+            WindowInsetsCompat.CONSUMED
         }
     }
 }

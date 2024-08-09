@@ -154,7 +154,7 @@
         android:id="@+id/cl_zoom_description"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80000000"
+        android:background="@color/color_80000000"
         android:visibility="visible">
 
         <androidx.appcompat.widget.AppCompatImageView
