@@ -5,7 +5,11 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,6 +21,7 @@ import androidx.fragment.app.commit
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBinding
+import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.compose.detailpicture.StadiumDetailPictureScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
@@ -64,8 +69,6 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                 }
             }
         }
-
-
     }
 
     private fun initEvent() {
@@ -74,21 +77,24 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initWindowInsets() {
+
         utils.apply {
             requireActivity().apply {
                 setStatusBarColor(window, R.color.transparent)
-                isStatusBarWhiteIconColor(window)
+                setNavigationBarColor(window, R.color.transparent)
+                setWhiteSystemBarIconColor(window)
                 WindowCompat.setDecorFitsSystemWindows(window, false)
+            }
 
-                ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
-                    val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-                    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                        bottomMargin = insets.bottom
-                        binding.spotAppbar.updatePadding(top = insets.top)
-                    }
-                    WindowInsetsCompat.CONSUMED
+                stadiumDetailViewModel.updateBottomPadding(insets.bottom / (resources.displayMetrics.density))
+
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    binding.spotAppbar.updatePadding(top = insets.top)
                 }
+                WindowInsetsCompat.CONSUMED
             }
         }
     }
@@ -145,7 +151,8 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         utils.apply {
             requireActivity().apply {
                 setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
-                isStatusBarBlackIconColor(window)
+                setNavigationBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+                setBlackSystemBarIconColor(window)
                 WindowCompat.setDecorFitsSystemWindows(window, true)
             }
         }

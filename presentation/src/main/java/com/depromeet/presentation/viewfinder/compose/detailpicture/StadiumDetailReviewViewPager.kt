@@ -3,53 +3,22 @@ package com.depromeet.presentation.viewfinder.compose.detailpicture
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BrushPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.depromeet.designsystem.compose.ui.SpotTheme
 import com.depromeet.domain.entity.response.viewfinder.ResponseBlockReview
-import com.depromeet.presentation.R
-import com.depromeet.presentation.extension.noRippleClickable
-import com.depromeet.presentation.mapper.toKeyword
-import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
-import com.depromeet.presentation.viewfinder.compose.LevelCard
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -58,13 +27,12 @@ fun StadiumDetailReviewViewPager(
     position: Int,
     pageState: Boolean,
     pagerState: PagerState,
+    bottomPadding: Float,
     reviews: List<ResponseBlockReview.ResponseReview>,
     visited: List<Boolean>,
     modifier: Modifier = Modifier,
     onLoadPaging: () -> Unit,
 ) {
-    val minimumLineLength = 1
-
     if (pagerState.currentPage == reviews.size - 1 && !pageState) {
         onLoadPaging()
     }
@@ -98,153 +66,38 @@ fun StadiumDetailReviewViewPager(
             }
         }
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            AsyncImage(
-                model = ImageRequest.Builder(context)
-                    .data(reviews[page].images.getOrNull(verticalPagerState.currentPage)?.url)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .zIndex(1f)
-                    .blur(5.dp),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            DetailBackgroundLayer(
+                context = context,
+                image = reviews[page].images.getOrNull(verticalPagerState.currentPage)?.url,
             )
-
-            Column(
-                modifier = Modifier
-                    .zIndex(if (isDimmed) 2f else 3f)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                StadiumDetailPictureViewPager(
-                    context = context,
-                    pictures = reviews[page].images,
-                    verticalPagerState = verticalPagerState,
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .zIndex(if (isDimmed) 3f else 2f)
-                    .fillMaxSize()
-                    .noRippleClickable(enabled = isDimmed) {
-                        if (isDimmed) {
-                            isDimmed = false
-                            isMore = false
-                            showMoreButtonState = false
-                        }
-                    }
-                    .background(
-                        color = if (isDimmed) {
-                            SpotTheme.colors.transferBlack01.copy(alpha = 0.6f)
-                        } else {
-                            SpotTheme.colors.transferBlack01.copy(alpha = 0.5f)
-                        }
-                    )
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 24.dp),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(context)
-                            .data(reviews[page].member.profileImage.ifEmpty { com.depromeet.designsystem.R.drawable.ic_default_profile })
-                            .build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        placeholder = BrushPainter(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFFE1E1E1),
-                                    Color(0x00E1E1E1),
-                                )
-                            )
-                        ),
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clip(CircleShape)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = reviews[page].member.nickname,
-                        style = SpotTheme.typography.caption02,
-                        color = SpotTheme.colors.foregroundDisabled
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    LevelCard(
-                        level = reviews[page].member.level,
-                    )
+            DetailGradientLayer()
+            DetailViewPagerLayer(
+                context = context,
+                isDimmed = isDimmed,
+                pictures = reviews[page].images,
+                verticalPagerState = verticalPagerState,
+            )
+            DetailContentLayer(
+                context = context,
+                isMore = isMore,
+                isDimmed = isDimmed,
+                showMoreButtonState = showMoreButtonState,
+                bottomPadding = bottomPadding,
+                review = reviews[page],
+                onChangeIsMore = {
+                    isMore = it
+                },
+                onChangeIsDimmed = {
+                    isDimmed = it
+                },
+                onChangeShowMoreButtonState = {
+                    showMoreButtonState = it
                 }
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = reviews[page].formattedNumber(),
-                    style = SpotTheme.typography.subtitle02,
-                    color = SpotTheme.colors.foregroundWhite,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (reviews[page].content.isNotEmpty()) {
-                        Text(
-                            text = reviews[page].content,
-                            style = SpotTheme.typography.body03,
-                            maxLines = if (isMore) {
-                                Int.MAX_VALUE
-                            } else {
-                                minimumLineLength
-                            },
-                            overflow = TextOverflow.Ellipsis,
-                            color = SpotTheme.colors.foregroundWhite,
-                            onTextLayout = {
-                                if (it.lineCount > minimumLineLength - 1) {
-                                    if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState =
-                                        true
-                                }
-                            },
-                            modifier = if (showMoreButtonState) {
-                                Modifier.fillMaxWidth(0.8f)
-                            } else {
-                                Modifier.wrapContentWidth()
-                            }
-                        )
-                    }
-                    if (showMoreButtonState) {
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = stringResource(id = R.string.viewfinder_more),
-                            style = SpotTheme.typography.label10,
-                            color = SpotTheme.colors.foregroundDisabled,
-                            textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.noRippleClickable {
-                                showMoreButtonState = false
-                                isDimmed = true
-                                isMore = true
-                            }
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(if (reviews[page].content.isEmpty()) 0.dp else 8.dp))
-                KeywordFlowRow(
-                    keywords = reviews[page].keywords.map { it.toKeyword() },
-                    overflowIndex = if (isDimmed) {
-                        -1
-                    } else {
-                        2
-                    },
-                    isSelfExpanded = false,
-                    onActionCallback = {
-                        showMoreButtonState = false
-                        isDimmed = true
-                        isMore = true
-                    }
-                )
-            }
+            )
         }
     }
 }
@@ -309,6 +162,7 @@ private fun StadiumDetailReviewViewPagerPreview() {
         position = 1,
         pageState = false,
         pagerState = pagerState,
+        bottomPadding = 0f,
         onLoadPaging = {},
     )
 }
@@ -385,6 +239,7 @@ private fun StadiumDetailReviewViewPagerMorePreview() {
         position = 1,
         pageState = false,
         pagerState = pagerState,
+        bottomPadding = 0f,
         onLoadPaging = {},
     )
 }

@@ -28,6 +28,9 @@ class StadiumDetailViewModel @Inject constructor(
     private val _scrollState = MutableStateFlow(false)
     val scrollState = _scrollState.asStateFlow()
 
+    private val _bottomPadding = MutableStateFlow(0f)
+    val bottomPadding = _bottomPadding.asStateFlow()
+
     private val _reviewFilter = MutableStateFlow<RequestBlockReviewQuery>(
         RequestBlockReviewQuery(
             rowNumber = null,
@@ -41,6 +44,9 @@ class StadiumDetailViewModel @Inject constructor(
     val reviewFilter = _reviewFilter.asStateFlow()
 
 
+    fun updateBottomPadding(padding: Float) {
+        _bottomPadding.value = padding
+    }
     fun updateScrollState(state: Boolean) {
         _scrollState.value = state
     }
