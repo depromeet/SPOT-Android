@@ -7,22 +7,18 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.presentation.databinding.ItemDateMonthBinding
-import com.depromeet.presentation.seatrecord.uiMapper.MonthUiData
 import com.depromeet.presentation.util.ItemDiffCallback
 
-class DateMonthAdapter : ListAdapter<MonthUiData, DateMonthViewHolder>(
+class DateMonthAdapter(
+    private val monthClick: (Int) -> Unit,
+) : ListAdapter<ReviewDateResponse.MonthData, DateMonthViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
-    interface OnItemMonthClickListener {
-        fun onItemMonthClick(item: MonthUiData)
-    }
-
-    var itemMonthClickListener: OnItemMonthClickListener? = null
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DateMonthViewHolder {
         return DateMonthViewHolder(
@@ -30,22 +26,23 @@ class DateMonthAdapter : ListAdapter<MonthUiData, DateMonthViewHolder>(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
-            )
+            ), monthClick
         )
     }
 
     override fun onBindViewHolder(holder: DateMonthViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-            itemMonthClickListener?.onItemMonthClick(currentList[position])
-        }
     }
 }
 
 class DateMonthViewHolder(
     private val binding: ItemDateMonthBinding,
+    private val monthClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: MonthUiData) {
+    fun bind(item: ReviewDateResponse.MonthData) {
+        binding.root.setOnClickListener {
+            monthClick(item.month)
+        }
         binding.tvMonth.text = when (item.month) {
             0 -> "전체"
             else -> "${item.month}월"

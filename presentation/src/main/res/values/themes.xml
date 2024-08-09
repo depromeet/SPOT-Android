@@ -57,4 +57,10 @@
         <item name="fontFamily">@font/font_pretendard_semibold</item>
         <item name="android:lineHeight">130sp</item>
     </style>
+
+    <style name="YearSpinner" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+    </style>
 </resources>

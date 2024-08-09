@@ -13,7 +13,6 @@ import com.depromeet.domain.entity.response.home.HomeFeedResponse
 import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.dpToPx
-import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.adapter.StadiumAdapter
 import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
 import com.depromeet.presentation.seatReview.ReviewActivity
@@ -61,17 +60,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
         clHomeScrap.setOnClickListener {
-            SpotImageSnackBar.make(
-                view = binding.root,
-                message = "스크랩이 잠겨있어요\uD83E\uDEE2 곧 업데이트 예정이에요",
-                /** TODO : 스낵바 transparent label08로 텍스트 적용  */
-                messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
-                icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
-                iconColor = com.depromeet.designsystem.R.color.color_error_secondary
-            ).show()
+            makeSpotImageAppbar("스크랩이 잠겨있어요\uD83E\uDEE2 곧 업데이트 예정이에요")
         }
         clHomeUpload.setOnClickListener { navigateToReviewActivity() }
-        ivHomeSetting.setOnClickListener { navigatToSettingActivity() }
+        ivHomeSetting.setOnClickListener { navigateToSettingActivity() }
     }
 
     private fun initObserver() {
@@ -79,7 +71,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             when (state) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> {
-                    toast(state.msg)
+                    makeSpotImageAppbar("경기장 정보를 불러오는데 실패하였습니다.")
                     setStadiumShimmer(true)
                 }
 
@@ -88,9 +80,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 }
 
                 is UiState.Success -> {
+                    setStadiumShimmer(false)
                     stadiumAdapter.submitList(state.data)
                     binding.rvHomeStadium.scrollToPosition(0)
-                    setStadiumShimmer(false)
                 }
             }
         }
@@ -99,7 +91,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             when (state) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> {
-                    toast("내 정보 불러오기 실패")
+                    makeSpotImageAppbar("내 정보 불러오기를 실패하였습니다.\uD83E\uDEE2")
                 }
 
                 is UiState.Loading -> {
@@ -121,7 +113,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                     currentState.data.levelTitle,
                     currentState.data.level,
                     currentState.data.mascotImageUrl
-                ).show(supportFragmentManager, LevelupDialog.TAG )
+                ).show(supportFragmentManager, LevelupDialog.TAG)
             }
         }
     }
@@ -133,7 +125,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             },
             stadiumClick = {
                 if (!it.isActive) {
-                    toast("현재 잠실야구장만 이용할 수 있어요!")
+                    makeSpotImageAppbar("${it.name} 야구장은 곧 업데이트 예정이에요")
                 } else {
                     startStadiumActivity(it)
                 }
@@ -146,7 +138,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 BETWEEN_SPADING_DP.dpToPx(this)
             )
         )
-
+        binding.rvHomeStadium.itemAnimator = null
     }
 
 
@@ -183,12 +175,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun setStadiumShimmer(isLoading: Boolean) = with(binding) {
         if (isLoading) {
             shimmerHomeStadium.startShimmer()
-            shimmerHomeStadium.visibility = View.VISIBLE
             rvHomeStadium.visibility = View.INVISIBLE
+            shimmerHomeStadium.visibility = View.VISIBLE
+
         } else {
             shimmerHomeStadium.stopShimmer()
-            shimmerHomeStadium.visibility = View.GONE
             rvHomeStadium.visibility = View.VISIBLE
+            shimmerHomeStadium.visibility = View.GONE
+
         }
     }
 
@@ -219,7 +213,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
     }
 
-    private fun navigatToSettingActivity() {
+    private fun navigateToSettingActivity() {
         Intent(this, SettingActivity::class.java).apply { startActivity(this) }
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+        ).show()
     }
 }

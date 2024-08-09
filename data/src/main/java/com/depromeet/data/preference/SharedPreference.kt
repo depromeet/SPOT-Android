@@ -45,4 +45,34 @@ class DefaultSharedPreference @Inject constructor(
                 putInt("level", value)
             }
         }
+
+    override var teamName: String
+        get() = preferences.getString("teamName","").orEmpty()
+        set(value) {
+            preferences.edit(commit = true) {
+                putString("teamName", value)
+            }
+        }
+    override var teamId: Int
+        get() = preferences.getInt("teamId", 0)
+        set(value) {
+            preferences.edit(commit = true) {
+                putInt("teamId", value)
+            }
+        }
+    override var levelTitle: String
+        get() = preferences.getString("levelTitle", "").orEmpty()
+        set(value) {
+            preferences.edit(commit = true) {
+                putString("levelTitle",value)
+            }
+        }
+
+    override var profileImage: String
+        get() = preferences.getString("profileImage","").orEmpty()
+        set(value) {
+            preferences.edit(commit = true) {
+                putString("profileImage", value)
+            }
+        }
 }

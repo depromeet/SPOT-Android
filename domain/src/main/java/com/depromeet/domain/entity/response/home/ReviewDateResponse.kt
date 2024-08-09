@@ -5,6 +5,12 @@ data class ReviewDateResponse(
 ) {
     data class YearMonths(
         val year: Int = 2024,
-        val months: List<Int> = emptyList(),
+        val months: List<MonthData> = emptyList(),
+        val isClicked: Boolean = false,
+    )
+
+    data class MonthData(
+        val month: Int = 0,
+        val isClicked: Boolean = false,
     )
 }

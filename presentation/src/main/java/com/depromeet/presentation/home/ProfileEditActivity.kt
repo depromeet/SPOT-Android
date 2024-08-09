@@ -25,7 +25,7 @@ import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import com.depromeet.presentation.home.viewmodel.ProfileEvents
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
-import com.depromeet.presentation.seatrecord.SeatRecordActivity
+import com.depromeet.presentation.seatrecord.TempSeatRecordActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -275,9 +275,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun getDataExtra(callback: (name: String, profileImage: String, cheerTeam: Int) -> Unit) {
         callback(
-            intent?.getStringExtra(SeatRecordActivity.PROFILE_NAME) ?: "",
-            intent?.getStringExtra(SeatRecordActivity.PROFILE_IMAGE) ?: "",
-            intent?.getIntExtra(SeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
+            intent?.getStringExtra(TempSeatRecordActivity.PROFILE_NAME) ?: "",
+            intent?.getStringExtra(TempSeatRecordActivity.PROFILE_IMAGE) ?: "",
+            intent?.getIntExtra(TempSeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
         )
     }
 

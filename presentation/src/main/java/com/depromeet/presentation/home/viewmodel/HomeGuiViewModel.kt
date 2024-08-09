@@ -65,7 +65,7 @@ class HomeGuiViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getHomeFeed().onSuccess {
                 _homeFeed.value = UiState.Success(it)
-                checkLevelUp(it.level)
+                putProfileInfo(it)
 
             }.onFailure {
                 _homeFeed.value = UiState.Failure(it.message.toString())
@@ -88,5 +88,13 @@ class HomeGuiViewModel @Inject constructor(
             levelState.value = true
         }
         sharedPreference.level = level
+    }
+
+    private fun putProfileInfo(data : HomeFeedResponse){
+        checkLevelUp(data.level)
+        sharedPreference.teamId = data.teamId ?: 0
+        sharedPreference.levelTitle = data.levelTitle
+        sharedPreference.teamName = data.teamName ?: ""
+        sharedPreference.level = data.level
     }
 }

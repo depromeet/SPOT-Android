@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import coil.load
-import com.depromeet.presentation.R
+import coil.transform.CircleCropTransformation
 
 inline fun View.setOnSingleClickListener(
     delay: Long = 1000L,
@@ -29,9 +29,18 @@ fun View.setMargins(left: Int, top: Int, right: Int, bottom: Int) {
 }
 
 fun ImageView.loadAndClip(imageUrl: Any) {
-    this.load(imageUrl){
-        placeholder(R.drawable.ic_image_placeholder)
-        error(R.drawable.ic_image_error)
+    this.load(imageUrl) {
+        placeholder(com.depromeet.designsystem.R.drawable.skeleton_gradient)
+        error(com.depromeet.designsystem.R.drawable.skeleton_gradient)
+    }
+    this.clipToOutline = true
+}
+
+fun ImageView.loadAndCircle(image: Any) {
+    this.load(image) {
+        placeholder(com.depromeet.designsystem.R.drawable.skeleton_gradient)
+        error(com.depromeet.designsystem.R.drawable.skeleton_gradient)
+        transformations(CircleCropTransformation())
     }
     this.clipToOutline = true
 }

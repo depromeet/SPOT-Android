@@ -22,27 +22,55 @@
 
         <TextView
             android:id="@+id/tv_levelup_title"
+            style="@style/TextAppearance.Spot.Title04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/home_level_up"
-            android:textAppearance="@style/TextAppearance.Spot.Title04"
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_levelup_description_prefix"
+            style="@style/TextAppearance.Spot.Body03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/color_foreground_caption"
+            app:layout_constraintEnd_toStartOf="@+id/tv_levelup_description"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_levelup_title"
+            tools:text="두근두근" />
+
+        <TextView
             android:id="@+id/tv_levelup_description"
+            style="@style/TextAppearance.Spot.Subtitle04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/color_action_enabled"
+            app:layout_constraintEnd_toStartOf="@+id/tv_levelup_description_suffix"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_levelup_description_prefix"
+            app:layout_constraintTop_toBottomOf="@id/tv_levelup_title"
+            tools:text="직관 첫걸음" />
+
+        <TextView
+            android:id="@+id/tv_levelup_description_suffix"
             style="@style/TextAppearance.Spot.Body03"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@color/color_foreground_caption"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_levelup_description"
             app:layout_constraintTop_toBottomOf="@id/tv_levelup_title"
-            tools:text="두근두근 직관 첫 걸음으로 레벨업했어요!" />
+            tools:text="두근두근" />
 
         <ImageView
             android:id="@+id/iv_levelup_mascot_image"
@@ -53,8 +81,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_levelup_description"
-            tools:src="@drawable/ic_image"
-            tools:ignore="contentDescription"/>
+            tools:ignore="contentDescription"
+            tools:src="@drawable/ic_image" />
 
 
         <androidx.appcompat.widget.AppCompatButton

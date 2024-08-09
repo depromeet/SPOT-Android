@@ -39,6 +39,12 @@ object CalendarUtil {
         return calendar.get(Calendar.DAY_OF_MONTH)
     }
 
+    fun getYearFromDateFormat(date : String) : Int {
+        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
+        val parsedDate = LocalDateTime.parse(date, formatter)
+        return parsedDate.year
+    }
+
     fun getMonthFromDateFormat(date: String): Int {
         val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
         val parsedDate = LocalDateTime.parse(date, formatter)

@@ -8,6 +8,7 @@ import com.depromeet.domain.entity.request.home.ProfileEditRequest
 import com.depromeet.domain.entity.response.home.BaseballTeamResponse
 import com.depromeet.domain.entity.response.home.PresignedUrlResponse
 import com.depromeet.domain.entity.response.home.ProfileEditResponse
+import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.extension.validateNickName
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
@@ -32,6 +33,7 @@ sealed class ProfileEvents {
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val sharedPreference: SharedPreference,
 ) : ViewModel() {
 
     private val _events = MutableSharedFlow<ProfileEvents>(
@@ -156,6 +158,10 @@ class ProfileEditViewModel @Inject constructor(
                 )
             )
                 .onSuccess {
+                    sharedPreference.nickname = nickname.value
+                    sharedPreference.teamId = cheerTeam.value
+                    sharedPreference.profileImage = getPresignedUrlOrProfileImage()
+                    sharedPreference.teamName = getTeamName() ?: ""
                     _profileEdit.value = UiState.Success(it)
                 }
                 .onFailure {
@@ -173,7 +179,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun getTeamName() : String? {
+    fun getTeamName(): String? {
         if (cheerTeam.value == 0) return null
         return (team.value as UiState.Success).data.first { it.isClicked }.name
     }
