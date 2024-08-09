@@ -1,6 +1,7 @@
 package com.depromeet.presentation.viewfinder.compose
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,10 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.extension.noRippleClickable
 import com.depromeet.presentation.mapper.toKeyword
 
+private enum class ReviewContentShowMoreState {
+    SHOW, HIDE, NOTHING
+}
+
 @Composable
 fun StadiumReviewContent(
     context: Context,
@@ -55,7 +60,7 @@ fun StadiumReviewContent(
 ) {
     val minimumLineLength = 3
     var showMoreButtonState by remember {
-        mutableStateOf(-1)
+        mutableStateOf(ReviewContentShowMoreState.NOTHING)
     }
 
     Column(
@@ -170,7 +175,7 @@ fun StadiumReviewContent(
                 style = SpotTheme.typography.body03,
                 color = SpotTheme.colors.foregroundHeading,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = if (showMoreButtonState == 1) {
+                maxLines = if (showMoreButtonState == ReviewContentShowMoreState.SHOW) {
                     Int.MAX_VALUE
                 } else {
                     minimumLineLength
@@ -178,46 +183,60 @@ fun StadiumReviewContent(
                 modifier = Modifier.padding(start = 32.dp, end = 16.dp),
                 onTextLayout = {
                     if (it.lineCount > minimumLineLength - 1) {
-                        if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState = 0
+                        if (it.isLineEllipsized(minimumLineLength - 1)) showMoreButtonState =
+                            ReviewContentShowMoreState.HIDE
                     }
                 }
             )
         }
         when (showMoreButtonState) {
-            0 -> {
+            ReviewContentShowMoreState.HIDE -> {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 Text(
-                    text = "더보기",
+                    text = stringResource(id = R.string.viewfinder_more),
                     style = SpotTheme.typography.label10,
                     color = SpotTheme.colors.foregroundCaption,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
                         .noRippleClickable {
-                            showMoreButtonState = 1
+                            showMoreButtonState = ReviewContentShowMoreState.SHOW
                         }
                         .padding(start = 32.dp)
                 )
             }
 
-            1 -> {
+            ReviewContentShowMoreState.SHOW -> {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 Text(
-                    text = "접기",
+                    text = stringResource(id = R.string.viewfinder_fold),
                     style = SpotTheme.typography.label10,
                     color = SpotTheme.colors.foregroundCaption,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
                         .noRippleClickable {
-                            showMoreButtonState = 0
+                            showMoreButtonState = ReviewContentShowMoreState.HIDE
                         }
                         .padding(start = 32.dp)
                 )
             }
+
+            ReviewContentShowMoreState.NOTHING -> Unit
         }
         Spacer(modifier = Modifier.height(12.dp))
         KeywordFlowRow(
             keywords = reviewContent.keywords.map { it.toKeyword() },
+            overflowIndex = if (showMoreButtonState == ReviewContentShowMoreState.SHOW) {
+                -1
+            } else {
+                2
+            },
+            isSelfExpanded = showMoreButtonState == ReviewContentShowMoreState.NOTHING,
             modifier = Modifier.padding(start = 32.dp, end = 16.dp),
+            onActionCallback = {
+                if (showMoreButtonState != ReviewContentShowMoreState.NOTHING) {
+                    showMoreButtonState = ReviewContentShowMoreState.SHOW
+                }
+            }
         )
     }
 }

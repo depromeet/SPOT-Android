@@ -60,6 +60,7 @@
     <string name="viewfinder_number">번</string>
     <string name="viewfinder_cancel">취소</string>
     <string name="viewfinder_completed">완료</string>
+    <string name="viewfinder_fold">접기</string>
     <string name="viewfinder_more">더보기</string>
     <string name="viewfinder_report">신고하기</string>
     <string name="viewfinder_input_example">ex) 12</string>
