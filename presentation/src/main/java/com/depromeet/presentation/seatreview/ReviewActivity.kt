@@ -167,12 +167,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initSeatReviewDialog() {
         binding.layoutReviewMySeat.setOnSingleClickListener {
-            ReviewMySeatDialog().show(supportFragmentManager, "ReviewMySeatDialog")
+            if (supportFragmentManager.findFragmentByTag("ReviewMySeatDialog") == null &&
+                supportFragmentManager.findFragmentByTag("SelectSeatDialog") == null
+            ) {
+                ReviewMySeatDialog().show(supportFragmentManager, "ReviewMySeatDialog")
+            }
         }
+
         binding.layoutSeatInfoNext.setOnSingleClickListener {
-            SelectSeatDialog().show(supportFragmentManager, "SelectSeatDialog")
+            if (supportFragmentManager.findFragmentByTag("SelectSeatDialog") == null &&
+                supportFragmentManager.findFragmentByTag("ReviewMySeatDialog") == null
+            ) {
+                SelectSeatDialog().show(supportFragmentManager, "SelectSeatDialog")
+            }
         }
     }
+
     private fun setupFragmentResultListener() {
         supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
             val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
