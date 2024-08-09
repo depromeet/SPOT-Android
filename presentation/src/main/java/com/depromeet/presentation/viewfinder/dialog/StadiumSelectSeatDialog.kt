@@ -1,7 +1,13 @@
 package com.depromeet.presentation.viewfinder.dialog
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
+import android.view.Window
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -9,6 +15,7 @@ import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.domain.model.viewfinder.Seat
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumSelectSeatDialogBinding
+import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,12 +43,21 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+
+        Utils(requireContext()).apply {
+            setWhiteNavigationBar(dialog)
+        }
+
+        return dialog
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setLayoutSizeRatio(heightPercent = 0.7f, widthPercent = 1f)
         initView()
         initEvent()
-
     }
 
     private fun initView() {

@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.dialog
 
+import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumFilterMonthsDialogBinding
+import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 
 class StadiumFilterMonthsDialog :
@@ -36,6 +38,16 @@ class StadiumFilterMonthsDialog :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetNumberPickerDialogFragment)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+
+        Utils(requireContext()).apply {
+            setWhiteNavigationBar(dialog)
+        }
+
+        return dialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
