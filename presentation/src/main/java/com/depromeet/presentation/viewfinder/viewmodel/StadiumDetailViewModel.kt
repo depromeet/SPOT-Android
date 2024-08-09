@@ -134,7 +134,7 @@ class StadiumDetailViewModel @Inject constructor(
             Seat.NUMBER -> response(false, Seat.NUMBER)
             Seat.COLUMN_NUMBER -> response(false, Seat.COLUMN_NUMBER)
             Seat.CHECK -> {
-                if (blockRow?.checkNumberRange(column, number) == false) {
+                if (blockRow?.checkNumberRangeByColumn(column, number) == false) {
                     response(false, Seat.CHECK)
                 } else {
                     response(true, Seat.CHECK)
@@ -152,6 +152,15 @@ class StadiumDetailViewModel @Inject constructor(
         }
 
         response(false, Seat.COLUMN)
+    }
+
+    fun handleNumber(number: Int, response: (isSuccess: Boolean, seat: Seat) -> Unit) {
+        if (blockRow?.checkNumberRange(number) == true) {
+            response(true, Seat.NUMBER)
+            return
+        }
+
+        response(false, Seat.NUMBER)
     }
 
     fun clearSeat() {
