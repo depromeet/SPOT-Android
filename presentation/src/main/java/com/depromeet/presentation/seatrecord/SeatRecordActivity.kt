@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -13,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
+import com.depromeet.designsystem.SpotImageSnackBar
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.loadAndCircle
 import com.depromeet.presentation.extension.setOnSingleClickListener
-import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.ProfileEditActivity
 import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.test.RecordListItem
@@ -26,8 +27,8 @@ import com.depromeet.presentation.seatrecord.test.SeatRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.util.CalendarUtil
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -52,7 +53,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
                 val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
                 val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_ID, 0) ?: 0
-                val teamName = data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_NAME) ?: ""
+                val teamName =
+                    data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_NAME) ?: ""
 
                 viewModel.updateProfile(nickname, profileImage, teamId, teamName)
             }
@@ -145,8 +147,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setNoneVisibility(isEmpty: Boolean){
-        with(binding){
+    private fun setNoneVisibility(isEmpty: Boolean) {
+        with(binding) {
             if (isEmpty) {
                 rvSeatRecord.visibility = GONE
                 clRecordNone.visibility = VISIBLE
@@ -161,7 +163,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    setNoneVisibility(false)
+                    setNoneVisibility(isEmpty = false)
+                    stopDateShimmer()
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
                         adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
@@ -179,17 +182,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
                 is UiState.Empty -> {
                     setNoneVisibility(isEmpty = true)
+                    stopAllShimmer()
                 }
 
                 is UiState.Loading -> {
-                    //TODO : 여기서 SHIMMER 보여주기
-                    Timber.d("test loading")
+                    startAllShimmer()
                 }
 
                 is UiState.Failure -> {
-                    setNoneVisibility(true)
-                    //TODO : 기록 SHIMMER 처리 GONE + 실패 LAYOUT 보여줘야함
-                    Timber.d("test fail")
+                    setNoneVisibility(isEmpty = true)
+                    /*** 리뷰 에러 관련 뷰 헨들링 하기 ***/
+                    stopAllShimmer()
                 }
 
             }
@@ -200,6 +203,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.reviews.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
+                    stopReviewShimmer()
                     val newProfileItem = RecordListItem.Profile(state.data.profile)
                     val newRecordItem = RecordListItem.Record(state.data.reviews)
                     val newList = adapter.currentList.toMutableList()
@@ -209,18 +213,19 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     adapter.submitList(newList)
 
                     isLoading = false
-                    //TODO : 실패 VISIBILITY GONE + 리사이클러뷰 보여줘야함
+
+                    //TODO : 실패 VISIBILITY GONE
                 }
 
                 is UiState.Loading -> {
                 }
 
                 is UiState.Empty -> {
-                    //TODO monthadapter에 비어있는 리스트 보내줘야함
-                    toast("해당 월에 작성한 글이 없습니다.")
+                    makeSpotImageAppbar("해당 날짜에 작성한 글이 없습니다.")
                 }
 
                 is UiState.Failure -> {
+                    stopReviewShimmer()
                     //TODO 실패 보여줘야하고 리사이클러뷰 사라지게?
                 }
             }
@@ -229,20 +234,26 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeNoneProfile() {
         viewModel.profile.asLiveData().observe(this) {
-            with(binding) {
-                val bubbleText = if (it.teamId == null || it.teamId == 0) {
-                    "모두를 응원하는 Lv.${it.level} ${it.levelTitle}"
-                } else {
-                    "${it.teamName}의 Lv.${it.level} ${it.levelTitle}"
-                }
-                csbvRecordTitle.setText(bubbleText)
-                ivRecordProfile.loadAndCircle(it.profileImage)
-                tvRecordNickname.text = it.nickname
-                tvRecordCount.text = "0"
-                "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
-            }
+            profileNone(it)
+            //TODO : 리사이클러뷰 프로필
         }
     }
+
+    private fun profileNone(profile : MySeatRecordResponse.MyProfileResponse) {
+        with(binding) {
+            val bubbleText = if (profile.teamId == null || profile.teamId == 0) {
+                "모두를 응원하는 Lv.${profile.level} ${profile.levelTitle}"
+            } else {
+                "${profile.teamName}의 Lv.${profile.level} ${profile.levelTitle}"
+            }
+            csbvRecordTitle.setText(bubbleText)
+            ivRecordProfile.loadAndCircle(profile.profileImage)
+            tvRecordNickname.text = profile.nickname
+            tvRecordCount.text = "0"
+            "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
+        }
+    }
+
 
     private fun observeEvents() {
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
@@ -292,4 +303,52 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+        ).show()
+    }
+
+    private fun startShimmerWithVisibility(shimmerView: ShimmerFrameLayout) {
+        shimmerView.apply {
+            visibility = VISIBLE
+            startShimmer()
+        }
+    }
+
+    private fun stopShimmerWithVisibility(shimmerView: ShimmerFrameLayout) {
+        shimmerView.apply {
+            stopShimmer()
+            visibility = INVISIBLE
+        }
+    }
+
+    private fun startAllShimmer() {
+        with(binding) {
+            startShimmerWithVisibility(shimmerProfile)
+            startShimmerWithVisibility(shimmerDate)
+            startShimmerWithVisibility(shimmerReview)
+        }
+    }
+
+    private fun stopAllShimmer() {
+        with(binding) {
+            stopShimmerWithVisibility(shimmerProfile)
+            stopShimmerWithVisibility(shimmerDate)
+            stopShimmerWithVisibility(shimmerReview)
+        }
+    }
+
+    private fun stopDateShimmer() {
+        stopShimmerWithVisibility(binding.shimmerDate)
+    }
+
+    private fun stopReviewShimmer() {
+        stopShimmerWithVisibility(binding.shimmerProfile)
+        stopShimmerWithVisibility(binding.shimmerReview)
+    }
 }
