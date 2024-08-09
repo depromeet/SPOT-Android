@@ -16,7 +16,7 @@ class RecordProfileViewHolder(
     }
 
     private fun initView(data: MySeatRecordResponse.MyProfileResponse) = with(binding) {
-        if (data.teamId != null) {
+        if (data.teamId != null && data.teamId != 0) {
             "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also {
                 csbvRecordTitle.setText(
                     it

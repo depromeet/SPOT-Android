@@ -3,6 +3,8 @@ package com.depromeet.presentation.seatrecord
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
@@ -14,6 +16,8 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
+import com.depromeet.presentation.extension.loadAndCircle
+import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.ProfileEditActivity
 import com.depromeet.presentation.seatReview.ReviewActivity
@@ -21,6 +25,7 @@ import com.depromeet.presentation.seatrecord.test.RecordListItem
 import com.depromeet.presentation.seatrecord.test.SeatRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -47,7 +52,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
                 val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
                 val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_ID, 0) ?: 0
-                val teamName = data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_NAME)
+                val teamName = data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_NAME) ?: ""
 
                 viewModel.updateProfile(nickname, profileImage, teamId, teamName)
             }
@@ -63,6 +68,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun initView() {
         viewModel.getReviewDate()
+        viewModel.getLocalProfile()
         initRecordAdapter()
     }
 
@@ -75,12 +81,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 rvSeatRecord.smoothScrollToPosition(0)
             }
             fabRecordPlus.setOnClickListener {
-                Intent(this@SeatRecordActivity, ReviewActivity::class.java).apply {
-                    startActivity(
-                        this
-                    )
-                }
+                navigateToReviewActivity()
             }
+
+            /** 게시물 없을 때 **/
+            ivRecordProfile.setOnSingleClickListener { navigateToProfileEditActivity() }
+            ivRecordEdit.setOnSingleClickListener { navigateToProfileEditActivity() }
+            btRecordWriteRecord.setOnSingleClickListener { navigateToReviewActivity() }
         }
     }
 
@@ -88,6 +95,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         observeDates()
         observeReviews()
         observeEvents()
+        observeNoneProfile()
     }
 
     private fun initRecordAdapter() {
@@ -137,10 +145,23 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
+    private fun setNoneVisibility(isEmpty: Boolean){
+        with(binding){
+            if (isEmpty) {
+                rvSeatRecord.visibility = GONE
+                clRecordNone.visibility = VISIBLE
+            } else {
+                rvSeatRecord.visibility = VISIBLE
+                clRecordNone.visibility = GONE
+            }
+        }
+    }
+
     private fun observeDates() {
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
+                    setNoneVisibility(false)
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
                         adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
@@ -157,15 +178,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Empty -> {
-                    //TODO : 기록 SHIMMER 처리 GONE
-                    Timber.d("test empty")
+                    setNoneVisibility(isEmpty = true)
                 }
 
                 is UiState.Loading -> {
+                    //TODO : 여기서 SHIMMER 보여주기
                     Timber.d("test loading")
                 }
 
                 is UiState.Failure -> {
+                    setNoneVisibility(true)
                     //TODO : 기록 SHIMMER 처리 GONE + 실패 LAYOUT 보여줘야함
                     Timber.d("test fail")
                 }
@@ -178,14 +200,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.reviews.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-
-                    Timber.d("test왜 다른거지? \n ${state.data.reviews}\n ${state.data.profile}")
                     val newProfileItem = RecordListItem.Profile(state.data.profile)
                     val newRecordItem = RecordListItem.Record(state.data.reviews)
                     val newList = adapter.currentList.toMutableList()
                     newList[0] = newProfileItem
                     newList[2] = newRecordItem
-
 
                     adapter.submitList(newList)
 
@@ -208,6 +227,23 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
+    private fun observeNoneProfile() {
+        viewModel.profile.asLiveData().observe(this) {
+            with(binding) {
+                val bubbleText = if (it.teamId == null || it.teamId == 0) {
+                    "모두를 응원하는 Lv.${it.level} ${it.levelTitle}"
+                } else {
+                    "${it.teamName}의 Lv.${it.level} ${it.levelTitle}"
+                }
+                csbvRecordTitle.setText(bubbleText)
+                ivRecordProfile.loadAndCircle(it.profileImage)
+                tvRecordNickname.text = it.nickname
+                tvRecordCount.text = "0"
+                "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
+            }
+        }
+    }
+
     private fun observeEvents() {
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
@@ -223,16 +259,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun navigateToProfileEditActivity() {
-        val currentState = viewModel.reviews.value
-        if (currentState is UiState.Success) {
-            editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
-                with(currentState.data) {
-                    putExtra(PROFILE_NAME, this.profile.nickname)
-                    putExtra(PROFILE_IMAGE, this.profile.profileImage)
-                    putExtra(PROFILE_CHEER_TEAM, this.profile.teamId)
-                }
-            })
-        }
+        editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
+            putExtra(PROFILE_NAME, viewModel.profile.value.nickname)
+            putExtra(PROFILE_IMAGE, viewModel.profile.value.profileImage)
+            putExtra(PROFILE_CHEER_TEAM, viewModel.profile.value.teamId)
+        })
     }
 
     private fun moveConfirmationDialog() {
@@ -252,4 +283,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             addToBackStack(null)
         }
     }
+
+    private fun navigateToReviewActivity() {
+        Intent(this@SeatRecordActivity, ReviewActivity::class.java).apply {
+            startActivity(
+                this
+            )
+        }
+    }
+
 }

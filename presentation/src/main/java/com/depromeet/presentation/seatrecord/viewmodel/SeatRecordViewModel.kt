@@ -6,6 +6,7 @@ import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.request.home.MySeatRecordRequest
 import com.depromeet.domain.entity.response.home.MySeatRecordResponse
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val sharedPreference: SharedPreference,
 ) : ViewModel() {
 
     private val _reviews = MutableStateFlow<UiState<MySeatRecordResponse>>(UiState.Loading)
@@ -24,6 +26,10 @@ class SeatRecordViewModel @Inject constructor(
 
     private val _date = MutableStateFlow<UiState<ReviewDateResponse>>(UiState.Loading)
     val date = _date.asStateFlow()
+
+    private val _profile =
+        MutableStateFlow<MySeatRecordResponse.MyProfileResponse>(MySeatRecordResponse.MyProfileResponse())
+    val profile = _profile.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(EditUi.NONE)
     val deleteClickedEvent = _deleteClickedEvent.asStateFlow()
@@ -75,18 +81,27 @@ class SeatRecordViewModel @Inject constructor(
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
-                if (data.reviews.isEmpty()) {
-                    _reviews.value = UiState.Empty
-                } else {
-                    _reviews.value = UiState.Success(data)
+                if (data.reviews.isNotEmpty()) {
                     page.value += 1
                 }
+                _reviews.value = UiState.Success(data)
 
             }.onFailure {
                 Timber.d("GET_SEAT_RECORDS_TEST FAIL : $it")
                 _reviews.value = UiState.Failure(it.message ?: "실패")
             }
         }
+    }
+
+    fun getLocalProfile() {
+        _profile.value = profile.value.copy(
+            level = sharedPreference.level,
+            levelTitle = sharedPreference.levelTitle,
+            nickname = sharedPreference.nickname,
+            teamId = sharedPreference.teamId,
+            teamName = sharedPreference.teamName,
+            profileImage = sharedPreference.profileImage
+        )
     }
 
     fun loadNextSeatRecords() {
@@ -181,6 +196,9 @@ class SeatRecordViewModel @Inject constructor(
 
             _reviews.value = UiState.Success(updatedData)
         }
+        _profile.value = profile.value.copy(
+            nickname = nickname, profileImage = profileImage, teamId = teamId, teamName = teamName
+        )
     }
 
     fun removeReviewData() {
@@ -232,6 +250,7 @@ class SeatRecordViewModel @Inject constructor(
             it.id == reviewId
         }
     }
+
 
 }
 
