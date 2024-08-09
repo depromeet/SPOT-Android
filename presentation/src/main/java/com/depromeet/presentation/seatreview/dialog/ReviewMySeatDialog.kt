@@ -93,10 +93,10 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         binding.etDetailReview.setText(savedText)
         if (savedText.isNotEmpty()) {
             with(binding) {
-                btnDetailCheck.isSelected
-                etDetailReview.isVisible
-                tvTextCount.isVisible
-                tvTextTotal.isVisible
+                btnDetailCheck.isSelected = true
+                etDetailReview.isVisible = true
+                tvTextCount.isVisible = true
+                tvTextTotal.isVisible = true
                 tvTextCount.text = savedText.length.toString()
             }
         }
