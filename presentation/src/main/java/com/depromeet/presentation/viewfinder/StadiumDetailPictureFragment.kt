@@ -1,15 +1,23 @@
 package com.depromeet.presentation.viewfinder
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.material.MaterialTheme
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBinding
+import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.compose.detailpicture.StadiumDetailPictureScreen
 import com.depromeet.presentation.viewfinder.dialog.ReportDialog
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
@@ -32,6 +40,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private val stadiumDetailViewModel: StadiumDetailViewModel by activityViewModels()
+    private val utils by lazy {
+        Utils(requireActivity())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +51,7 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initView() {
+        initWindowInsets()
         getReviewExtra { reviewId, reviewIndex, title ->
             binding.spotAppbar.setText(title)
             binding.cvReviewContent.setContent {
@@ -52,11 +64,33 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                 }
             }
         }
+
+
     }
 
     private fun initEvent() {
         onBackPressed()
         setOnClickSpotAppbar()
+    }
+
+    private fun initWindowInsets() {
+        utils.apply {
+            requireActivity().apply {
+                setStatusBarColor(window, R.color.transparent)
+                isStatusBarWhiteIconColor(window)
+                WindowCompat.setDecorFitsSystemWindows(window, false)
+
+                ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+                    val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+                    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        bottomMargin = insets.bottom
+                        binding.spotAppbar.updatePadding(top = insets.top)
+                    }
+                    WindowInsetsCompat.CONSUMED
+                }
+            }
+        }
     }
 
     private fun getReviewExtra(callback: (id: Long, index: Int, title: String) -> Unit) {
@@ -100,5 +134,20 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                     }
                 }
             })
+    }
+
+    override fun onDestroy() {
+        resetWindowInsets()
+        super.onDestroy()
+    }
+
+    private fun resetWindowInsets() {
+        utils.apply {
+            requireActivity().apply {
+                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+                isStatusBarBlackIconColor(window)
+                WindowCompat.setDecorFitsSystemWindows(window, true)
+            }
+        }
     }
 }

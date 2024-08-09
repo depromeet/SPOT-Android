@@ -36,7 +36,6 @@ class Utils(
 
     fun isStatusBarBlackIconColor(
         window: Window,
-        @ColorRes color: Int
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.setSystemBarsAppearance(

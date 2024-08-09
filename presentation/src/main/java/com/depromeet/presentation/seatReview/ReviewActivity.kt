@@ -55,7 +55,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         super.onCreate(savedInstanceState)
         Utils(this).apply {
             setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
-            isStatusBarBlackIconColor(window, com.depromeet.designsystem.R.color.black)
+            isStatusBarBlackIconColor(window)
         }
 
         viewModel.getStadiumName()
