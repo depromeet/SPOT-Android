@@ -46,11 +46,11 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_record_none"
+        android:id="@+id/cl_record_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/color_background_tertiary"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
@@ -168,63 +168,145 @@
             app:layout_constraintStart_toStartOf="@id/tv_record_year"
             app:layout_constraintTop_toBottomOf="@id/tv_record_year" />
 
-        <ImageView
-            android:id="@+id/iv_record_no_record"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="50dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_communication_empty"
-            app:layout_constraintEnd_toEndOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_record_empty"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            tools:ignore="contentDescription" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="300dp">
 
-        <TextView
-            android:id="@+id/tv_record_no_record_description"
-            style="@style/TextAppearance.Spot.Title04"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/home_no_record_description"
-            android:textColor="@color/color_foreground_heading"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_record_no_record" />
+            <ImageView
+                android:id="@+id/iv_record_no_record"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="50dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_communication_empty"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="contentDescription" />
 
-        <TextView
-            android:id="@+id/tv_record_no_record_advice"
-            style="@style/TextAppearance.Spot.Body02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/home_no_record_advice"
-            android:textColor="@color/color_foreground_caption"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_description" />
+            <TextView
+                android:id="@+id/tv_record_no_record_description"
+                style="@style/TextAppearance.Spot.Title04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/home_no_record_description"
+                android:textColor="@color/color_foreground_heading"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_record_no_record" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_record_write_record"
-            style="@style/TextAppearance.Spot.Label05"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_record_no_record_advice"
+                style="@style/TextAppearance.Spot.Body02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/home_no_record_advice"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_description" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_record_write_record"
+                style="@style/TextAppearance.Spot.Label05"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rect_background_white_fill_999"
+                android:drawableEnd="@drawable/layer_list_plus_20"
+                android:drawablePadding="4dp"
+                android:drawableTint="@color/color_foreground_disabled"
+                android:paddingHorizontal="11dp"
+                android:paddingVertical="11dp"
+                android:text="@string/home_write_record"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_advice" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_record_fail"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/rect_background_white_fill_999"
-            android:drawableEnd="@drawable/layer_list_plus_20"
-            android:drawablePadding="4dp"
-            android:drawableTint="@color/color_foreground_disabled"
-            android:paddingHorizontal="11dp"
-            android:paddingVertical="11dp"
-            android:text="@string/home_write_record"
-            android:textColor="@color/color_foreground_body_subtitle"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_advice" />
+            app:layout_constraintTop_toBottomOf="@id/textView">
+
+            <ImageView
+                android:id="@+id/iv_record_fail"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="50dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_communication_error"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="contentDescription" />
+
+            <TextView
+                android:id="@+id/tv_record_fail_description"
+                style="@style/TextAppearance.Spot.Title04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/home_fail_description"
+                android:textColor="@color/color_foreground_heading"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_record_fail" />
+
+            <TextView
+                android:id="@+id/tv_record_fail_advice"
+                style="@style/TextAppearance.Spot.Body02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/home_fail_advice"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_fail_description" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_record_fail_refresh"
+                style="@style/TextAppearance.Spot.Label05"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rect_background_white_fill_999"
+                android:drawableEnd="@drawable/layer_list_refresh_20"
+                android:drawablePadding="4dp"
+                android:drawableTint="@color/color_foreground_disabled"
+                android:paddingHorizontal="11dp"
+                android:paddingVertical="11dp"
+                android:text="@string/refresh"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_record_fail_advice" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -300,30 +382,31 @@
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/fab_record_up"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/circle_white_fill"
         android:elevation="2dp"
-        android:padding="12dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_up"
+        android:padding="14dp"
+        android:src="@drawable/ic_chevron_up"
+        app:tint="@color/color_foreground_body_sebtext"
         app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
         tools:ignore="contentDescription" />
 
 
-    <ImageButton
+    <ImageView
         android:id="@+id/fab_record_plus"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:background="@drawable/circle_spot_green_fill"
         android:elevation="2dp"
-        android:padding="12dp"
+        android:padding="14dp"
         android:scaleType="center"
-        android:src="@drawable/ic_plus_24"
+        android:src="@drawable/ic_plus"
+        app:tint="@color/color_foreground_white"
         app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
         tools:ignore="contentDescription" />

@@ -90,6 +90,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             ivRecordProfile.setOnSingleClickListener { navigateToProfileEditActivity() }
             ivRecordEdit.setOnSingleClickListener { navigateToProfileEditActivity() }
             btRecordWriteRecord.setOnSingleClickListener { navigateToReviewActivity() }
+
+            /** 로딩 실패 **/
+            btRecordFailRefresh.setOnSingleClickListener { viewModel.getReviewDate() }
         }
     }
 
@@ -97,7 +100,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         observeDates()
         observeReviews()
         observeEvents()
-        observeNoneProfile()
+        observeProfile()
     }
 
     private fun initRecordAdapter() {
@@ -147,14 +150,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setNoneVisibility(isEmpty: Boolean) {
+    private fun setErrorVisibility(isEmpty: Boolean) {
         with(binding) {
             if (isEmpty) {
                 rvSeatRecord.visibility = GONE
-                clRecordNone.visibility = VISIBLE
+                clRecordError.visibility = VISIBLE
+                fabRecordUp.visibility = GONE
             } else {
                 rvSeatRecord.visibility = VISIBLE
-                clRecordNone.visibility = GONE
+                clRecordError.visibility = GONE
+                fabRecordUp.visibility = VISIBLE
             }
         }
     }
@@ -163,7 +168,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    setNoneVisibility(isEmpty = false)
+                    setErrorVisibility(isEmpty = false)
                     stopDateShimmer()
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
@@ -181,7 +186,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Empty -> {
-                    setNoneVisibility(isEmpty = true)
+                    setErrorVisibility(isEmpty = true)
                     stopAllShimmer()
                 }
 
@@ -190,7 +195,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
-                    setNoneVisibility(isEmpty = true)
+                    setErrorVisibility(isEmpty = true)
                     /*** 리뷰 에러 관련 뷰 헨들링 하기 ***/
                     stopAllShimmer()
                 }
@@ -232,14 +237,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun observeNoneProfile() {
+    private fun observeProfile() {
         viewModel.profile.asLiveData().observe(this) {
             profileNone(it)
             //TODO : 리사이클러뷰 프로필
         }
     }
 
-    private fun profileNone(profile : MySeatRecordResponse.MyProfileResponse) {
+    private fun profileNone(profile: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
             val bubbleText = if (profile.teamId == null || profile.teamId == 0) {
                 "모두를 응원하는 Lv.${profile.level} ${profile.levelTitle}"
@@ -284,15 +289,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
 
     private fun moveEditReview() {
-        viewModel.setEditReview(viewModel.editReviewId.value)
-        supportFragmentManager.commit {
-            replace(
-                R.id.fcv_record,
-                EditReviewFragment(),
-                EditReviewFragment.EDIT_REIVIEW_TAG
-            )
-            addToBackStack(null)
-        }
+        makeSpotImageAppbar("수정은 추후에 열릴 예정입니다!")
+//        viewModel.setEditReview(viewModel.editReviewId.value)
+//        supportFragmentManager.commit {
+//            replace(
+//                R.id.fcv_record,
+//                EditReviewFragment(),
+//                EditReviewFragment.EDIT_REIVIEW_TAG
+//            )
+//            addToBackStack(null)
+//        }
     }
 
     private fun navigateToReviewActivity() {

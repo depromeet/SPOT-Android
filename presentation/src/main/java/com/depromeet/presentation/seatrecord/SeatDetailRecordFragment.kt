@@ -7,6 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.core.state.UiState
+import com.depromeet.designsystem.SpotImageSnackBar
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.depromeet.presentation.seatrecord.adapter.DetailRecordAdapter
@@ -123,6 +124,17 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private fun moveEditReview() {
-
+        makeSpotImageAppbar("수정은 추후에 열릴 예정입니다!")
     }
+
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+        ).show()
+    }
+
 }
