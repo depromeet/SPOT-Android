@@ -81,10 +81,25 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        restoreDetailReviewText()
         initObserve()
         initEvent()
         initCompleteEvent()
         setupDetailReviewEditText()
+    }
+
+    private fun restoreDetailReviewText() {
+        val savedText = viewModel.detailReviewText.value
+        binding.etDetailReview.setText(savedText)
+        if (savedText.isNotEmpty()) {
+            with(binding) {
+                btnDetailCheck.isSelected
+                etDetailReview.isVisible
+                tvTextCount.isVisible
+                tvTextTotal.isVisible
+                tvTextCount.text = savedText.length.toString()
+            }
+        }
     }
 
     private fun initObserve() {

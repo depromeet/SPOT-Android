@@ -53,7 +53,7 @@ class ReviewViewModel @Inject constructor(
     private val _selectedBadReview = MutableStateFlow<List<String>>(emptyList())
     val selectedBadReview: StateFlow<List<String>> = _selectedBadReview.asStateFlow()
 
-    private val _detailReviewText = MutableStateFlow("")
+    val detailReviewText = MutableStateFlow("")
 
     // 좌석 선택
 
@@ -145,7 +145,7 @@ class ReviewViewModel @Inject constructor(
     }
 
     fun setDetailReviewText(text: String) {
-        _detailReviewText.value = text
+        detailReviewText.value = text
     }
 
     fun setSelectedSeatZone(name: String) {
@@ -303,13 +303,13 @@ class ReviewViewModel @Inject constructor(
                 dateTime = _selectedDate.value,
                 good = _selectedGoodReview.value,
                 bad = _selectedBadReview.value,
-                content = _detailReviewText.value,
+                content = detailReviewText.value,
             )
             Timber.d("Selected Images: ${_preSignedUrlImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
             Timber.d("Good Review: ${_selectedGoodReview.value}")
             Timber.d("Bad Review: ${_selectedBadReview.value}")
-            Timber.d("Detail Review Text: ${_detailReviewText.value}")
+            Timber.d("Detail Review Text: ${detailReviewText.value}")
             Timber.d("Selected Stadium ID: ${_selectedStadiumId.value}")
             Timber.d("Selected Block ID: ${_selectedBlockId.value}")
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
