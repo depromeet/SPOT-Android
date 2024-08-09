@@ -105,10 +105,6 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.editReview.EditReviewActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
