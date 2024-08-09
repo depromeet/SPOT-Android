@@ -60,7 +60,7 @@ fun StadiumDetailScreen(
                         "exciting1" -> "1루 익사이팅석 "
                         "exciting3" -> "3루 익사이팅석 "
                         "premium" -> "프리미엄석 "
-                        else -> "$blockNumber 블럭"
+                        else -> "$blockNumber 블록"
                     },
                     onGoBack = onClickGoBack
                 )
