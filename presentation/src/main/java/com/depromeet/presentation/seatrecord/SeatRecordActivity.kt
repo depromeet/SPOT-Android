@@ -3,6 +3,7 @@ package com.depromeet.presentation.seatrecord
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -150,25 +151,26 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setErrorVisibility(isEmpty: Boolean) {
+    private fun View.setVisible(visible: Boolean) {
+        visibility = if (visible) VISIBLE else GONE
+    }
+
+    private fun setErrorVisibility(recordErrorType: RecordErrorType) {
         with(binding) {
-            if (isEmpty) {
-                rvSeatRecord.visibility = GONE
-                clRecordError.visibility = VISIBLE
-                fabRecordUp.visibility = GONE
-            } else {
-                rvSeatRecord.visibility = VISIBLE
-                clRecordError.visibility = GONE
-                fabRecordUp.visibility = VISIBLE
-            }
+            rvSeatRecord.setVisible(recordErrorType == RecordErrorType.NONE)
+            clRecordError.setVisible(recordErrorType != RecordErrorType.NONE)
+            fabRecordUp.setVisible(recordErrorType == RecordErrorType.NONE)
+            clRecordEmpty.setVisible(recordErrorType == RecordErrorType.EMPTY)
+            clRecordFail.setVisible(recordErrorType == RecordErrorType.FAIL)
         }
     }
+
 
     private fun observeDates() {
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    setErrorVisibility(isEmpty = false)
+                    setErrorVisibility(RecordErrorType.NONE)
                     stopDateShimmer()
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
@@ -186,7 +188,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Empty -> {
-                    setErrorVisibility(isEmpty = true)
+                    setErrorVisibility(RecordErrorType.EMPTY)
                     stopAllShimmer()
                 }
 
@@ -195,8 +197,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
-                    setErrorVisibility(isEmpty = true)
-                    /*** 리뷰 에러 관련 뷰 헨들링 하기 ***/
+                    setErrorVisibility(RecordErrorType.FAIL)
                     stopAllShimmer()
                 }
 
@@ -230,8 +231,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
+                    setErrorVisibility(RecordErrorType.FAIL)
                     stopReviewShimmer()
-                    //TODO 실패 보여줘야하고 리사이클러뷰 사라지게?
                 }
             }
         }
@@ -356,5 +357,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun stopReviewShimmer() {
         stopShimmerWithVisibility(binding.shimmerProfile)
         stopShimmerWithVisibility(binding.shimmerReview)
+    }
+
+    enum class RecordErrorType{
+        EMPTY,
+        FAIL,
+        NONE
     }
 }
