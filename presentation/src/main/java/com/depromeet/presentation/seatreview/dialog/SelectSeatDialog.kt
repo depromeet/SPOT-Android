@@ -9,7 +9,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -45,29 +45,31 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), theme).apply {
-            setOnShowListener {
-                val bottomSheet = (it as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as? View
-                bottomSheet?.let { sheet ->
-                    BottomSheetBehavior.from(sheet).apply {
-                        state = BottomSheetBehavior.STATE_EXPANDED
-                        skipCollapsed = true
-                        peekHeight = 0
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            val bottomSheet =
+                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            val behavior = BottomSheetBehavior.from(bottomSheet!!)
+
+            behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                        behavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
-                window?.findViewById<View>(com.google.android.material.R.id.touch_outside)?.setOnClickListener(null)
-                window?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.layoutParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT)
-            }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                }
+            })
         }
+        return dialog
     }
     override fun onStart() {
         super.onStart()
         val bottomSheet =
-            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        bottomSheet?.let {
-            val behavior = BottomSheetBehavior.from(it)
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }
+            dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+        behavior.peekHeight = (resources.displayMetrics.heightPixels * 0.85).toInt()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

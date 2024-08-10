@@ -56,7 +56,6 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-
         dialog.setOnShowListener {
             val bottomSheet =
                 dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
@@ -77,8 +76,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     }
     override fun onStart() {
         super.onStart()
-        val bottomSheet =
-            dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet = dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
         val behavior = BottomSheetBehavior.from(bottomSheet!!)
         behavior.peekHeight = (resources.displayMetrics.heightPixels * 0.85).toInt()
     }
