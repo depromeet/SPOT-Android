@@ -42,6 +42,28 @@
         <item name="colorControlNormal">@color/color_action_enabled</item>
     </style>
 
+    <style name="Widget.AppTheme.BottomSheet" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item> <!-- This is important -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="bottomSheetStyle">@style/CustomRoundedBackgroundBottomSheet</item>
+        <item name="android:navigationBarColor">@color/color_background_white</item>
+    </style>
+
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomRoundedBackgroundBottomSheet</item>
+    </style>
+    <style name="CustomRoundedBackgroundBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rect_white_fill_top_24</item>
+    </style>
+
+    <style name="Month.NumberPicker" parent="Widget.AppTheme.BottomSheet">
+        <item name="android:textColorPrimary">@color/color_foreground_heading</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="colorControlNormal">@color/color_action_enabled</item>
+    </style>
+
     <style name="TransparentDialogFragment" parent="Theme.Material3.Light.Dialog">
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>

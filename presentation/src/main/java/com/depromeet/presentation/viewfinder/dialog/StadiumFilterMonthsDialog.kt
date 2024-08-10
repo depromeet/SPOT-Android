@@ -37,17 +37,7 @@ class StadiumFilterMonthsDialog :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetNumberPickerDialogFragment)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-
-        Utils(requireContext()).apply {
-            setWhiteNavigationBar(dialog)
-        }
-
-        return dialog
+        setStyle(STYLE_NORMAL, R.style.Month_NumberPicker)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

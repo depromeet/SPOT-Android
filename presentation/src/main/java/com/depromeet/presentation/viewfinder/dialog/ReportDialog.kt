@@ -31,17 +31,7 @@ class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-
-        Utils(requireContext()).apply {
-            setWhiteNavigationBar(dialog)
-        }
-
-        return dialog
+        setStyle(STYLE_NORMAL, R.style.Widget_AppTheme_BottomSheet)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

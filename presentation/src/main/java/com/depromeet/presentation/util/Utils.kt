@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowInsetsController
 import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -135,6 +136,8 @@ class Utils(
     /**
      * 바텀시트 다이어로그 호출 시,
      * 네비게이션 바(navigation bar) 딤 처리 되는 것을 흰색으로 색상변경할 수 있는 함수
+     *
+     * @RequireAPI : API 29 이하
      */
     fun setWhiteNavigationBar(dialog: Dialog) {
         val window: Window? = dialog.window
