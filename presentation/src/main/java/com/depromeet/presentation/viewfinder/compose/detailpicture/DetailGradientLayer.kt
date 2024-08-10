@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.compose.detailpicture
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,9 @@ fun DetailGradientLayer(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(SpotTheme.colors.transferBlack01),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         GradientBox(
