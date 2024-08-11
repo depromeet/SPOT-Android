@@ -16,7 +16,7 @@ fun DetailGradientLayer(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SpotTheme.colors.transferBlack01),
+            .background(SpotTheme.colors.colorB3000000),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         GradientBox(
