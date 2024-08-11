@@ -1,6 +1,5 @@
 package com.depromeet.data.intercepter
 
-import com.depromeet.data.BuildConfig.S3_URL
 import com.depromeet.domain.preference.SharedPreference
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -11,6 +10,7 @@ import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
     private val sharedPreference: SharedPreference,
+    private val s3Url: String,
 ) : Interceptor {
     private val encodedToken: String
         get() = "Bearer ${sharedPreference.token}"
@@ -18,7 +18,7 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         if (!shouldRequestAuthenticatedHeaders(originalRequest.url.encodedPath) || urlIsS3(
-                originalRequest.url.toString()
+                originalRequest.url.toString(),
             )
         ) {
             return chain.proceed(originalRequest)
@@ -40,14 +40,13 @@ class AuthInterceptor @Inject constructor(
     }
 
     private fun urlIsS3(url: String): Boolean {
-        return url.contains(S3_URL)
+        return url.contains(s3Url)
     }
-
 
     private fun shouldRequestAuthenticatedHeaders(encodedPath: String) = when (encodedPath) {
         "/api/v1/baseball-teams" -> false
         "/api/v1/members" -> true // TODO : 프로필 수정과 URL이 겹쳐서 수정했습니다.
-        "/api/v1/members/{accessToken}" -> false //TODO 추 후 변경 필요
+        "/api/v1/members/{accessToken}" -> false // TODO 추 후 변경 필요
         else -> true
     }
 
@@ -67,4 +66,3 @@ class AuthInterceptor @Inject constructor(
         return true
     }
 }
-
