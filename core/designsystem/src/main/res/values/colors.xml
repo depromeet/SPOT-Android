@@ -36,7 +36,7 @@
     <color name="black_alpha60">#99000000</color>
     <color name="color_transfer_black_01">#4D000000</color>
     <color name="color_transfer_black_02">#99000000</color>
-    <color name="color_transfer_black_03">#E6000000</color>
+    <color name="color_transfer_black_03">#E6212124</color>
 
 
     <!-- Color Token -->
@@ -127,4 +127,7 @@
     <color name="color_seat_premium">#FFB3B248</color>
     <color name="color_seat_orange">#FFFF8519</color>
 
+
+    <!-- Etc -->
+    <color name="color_80000000">#80000000</color>
 </resources>

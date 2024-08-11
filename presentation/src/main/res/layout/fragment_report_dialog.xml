@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rect_background_white_fill_24">
+    android:background="@drawable/rect_background_white_top_24">
 
     <View
         android:id="@+id/view_handler"

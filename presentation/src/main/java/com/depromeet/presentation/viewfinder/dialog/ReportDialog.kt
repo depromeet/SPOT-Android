@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.dialog
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,7 @@ import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReportDialogBinding
 import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.WebViewActivity
 
 class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
@@ -29,7 +31,7 @@ class ReportDialog : BindingBottomSheetDialog<FragmentReportDialogBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
+        setStyle(STYLE_NORMAL, R.style.Widget_AppTheme_BottomSheet)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

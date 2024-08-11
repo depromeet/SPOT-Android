@@ -1,5 +1,6 @@
 package com.depromeet.presentation.viewfinder.dialog
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -9,6 +10,7 @@ import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.domain.model.viewfinder.Seat
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumSelectSeatDialogBinding
+import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +35,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
+        setStyle(STYLE_NORMAL, R.style.Widget_AppTheme_BottomSheet)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +43,6 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
         setLayoutSizeRatio(heightPercent = 0.7f, widthPercent = 1f)
         initView()
         initEvent()
-
     }
 
     private fun initView() {
@@ -50,13 +51,22 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
         binding.etOnlyColumn.addTextChangedListener { editText ->
             binding.tvWarning.visibility = View.INVISIBLE
             binding.etOnlyColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
-            if (binding.clOnlyColumn.isVisible) {
-                binding.btnAdapt.isEnabled = editText?.isNotEmpty() == true
-            }
+
             if (editText?.length == 0) {
                 binding.ivOnlyColumnCancel.visibility = View.INVISIBLE
+                binding.btnAdapt.isEnabled = false
             } else {
                 binding.ivOnlyColumnCancel.visibility = View.VISIBLE
+
+                stadiumDetailViewModel.handleColumn(
+                    editText?.toString()?.toInt() ?: 0
+                ) { isSuccess, _ ->
+                    if (isSuccess) {
+                        binding.btnAdapt.isEnabled = true
+                    } else {
+                        checkColumn(true)
+                    }
+                }
             }
         }
 
@@ -64,16 +74,30 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
             binding.tvWarning.visibility = View.INVISIBLE
             binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
             binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
-            if (binding.clColumnNumber.isVisible) {
-                if (binding.etNumber.text.isNotEmpty()) {
-                    binding.btnAdapt.isEnabled = editText?.isNotEmpty() == true
-                }
-            }
 
             if (editText?.length == 0) {
                 binding.ivColumnCancel.visibility = View.INVISIBLE
+                binding.btnAdapt.isEnabled = false
             } else {
                 binding.ivColumnCancel.visibility = View.VISIBLE
+
+                if (binding.etNumber.text.isEmpty()) {
+                    stadiumDetailViewModel.handleColumn(
+                        editText?.toString()?.toInt() ?: 0
+                    ) { isSuccess, _ ->
+                        if (!isSuccess) {
+                            checkColumn(false)
+                        }
+                    }
+                } else {
+                    stadiumDetailViewModel.handleColumNumber(
+                        editText?.toString()?.toInt() ?: 0,
+                        binding.etNumber.text.toString().toInt()
+                    ) { isSuccess, seat ->
+                        checkColumnAndNumber(isSuccess, seat)
+                    }
+                }
+
             }
         }
 
@@ -81,16 +105,85 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
             binding.tvWarning.visibility = View.INVISIBLE
             binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
             binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_8)
-            if (binding.clColumnNumber.isVisible) {
-                if (binding.etColumn.text.isNotEmpty()) {
-                    binding.btnAdapt.isEnabled = editText?.isNotEmpty() == true
-                }
-            }
+
 
             if (editText?.length == 0) {
                 binding.ivNumberCancel.visibility = View.INVISIBLE
+                binding.btnAdapt.isEnabled = false
             } else {
                 binding.ivNumberCancel.visibility = View.VISIBLE
+
+                if (binding.etColumn.text.isEmpty()) {
+                    stadiumDetailViewModel.handleNumber(
+                        editText?.toString()?.toInt() ?: 0
+                    ) { isSuccess, _ ->
+                        if (!isSuccess) {
+                            checkNumber()
+                        }
+                    }
+                } else {
+                    stadiumDetailViewModel.handleColumNumber(
+                        binding.etColumn.text.toString().toInt(),
+                        editText?.toString()?.toInt() ?: 0
+                    ) { isSuccess, seat ->
+                        checkColumnAndNumber(isSuccess, seat)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkColumn(isOnly: Boolean) {
+        binding.tvWarning.visibility = View.VISIBLE
+        binding.tvWarning.text = "존재하지 않는 열이에요"
+        binding.btnAdapt.isEnabled = false
+        if (isOnly) {
+            binding.etOnlyColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+        } else {
+            binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+        }
+    }
+
+    private fun checkNumber() {
+        binding.tvWarning.visibility = View.VISIBLE
+        binding.tvWarning.text = "존재하지 않는 번이에요"
+        binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+        binding.btnAdapt.isEnabled = false
+    }
+
+    private fun checkColumnAndNumber(isSuccess: Boolean, seat: Seat) {
+        when (seat) {
+            Seat.COLUMN_NUMBER -> {
+                binding.tvWarning.visibility = View.VISIBLE
+                binding.tvWarning.text = getString(R.string.viewfinder_error_column_and_number)
+                binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                binding.btnAdapt.isEnabled = false
+            }
+
+            Seat.COLUMN -> {
+                binding.tvWarning.visibility = View.VISIBLE
+                binding.tvWarning.text = getString(R.string.viewfinder_error_column)
+                binding.etColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                binding.btnAdapt.isEnabled = false
+            }
+
+            Seat.NUMBER -> {
+                binding.tvWarning.visibility = View.VISIBLE
+                binding.tvWarning.text = getString(R.string.viewfinder_error_number)
+                binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                binding.btnAdapt.isEnabled = false
+            }
+
+            Seat.CHECK -> {
+                if (isSuccess) {
+                    binding.btnAdapt.isEnabled = true
+                } else {
+                    binding.tvWarning.visibility = View.VISIBLE
+                    binding.tvWarning.text = getString(R.string.viewfinder_error_number)
+                    binding.etNumber.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                    binding.btnAdapt.isEnabled = false
+                }
             }
         }
     }

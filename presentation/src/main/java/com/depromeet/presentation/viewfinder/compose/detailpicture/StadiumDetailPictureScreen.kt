@@ -30,6 +30,7 @@ fun StadiumDetailPictureScreen(
     modifier: Modifier = Modifier
 ) {
     val reviews = stadiumDetailViewModel.detailUiState.collectAsStateWithLifecycle()
+    val bottomPadding by stadiumDetailViewModel.bottomPadding.collectAsStateWithLifecycle()
 
     reviews.value.let { uiState ->
         when (uiState) {
@@ -74,6 +75,7 @@ fun StadiumDetailPictureScreen(
                     position = reviewIndex,
                     pageState = uiState.pageState,
                     pagerState = pagerState,
+                    bottomPadding = bottomPadding,
                     modifier = modifier,
                     onLoadPaging = {
                         stadiumDetailViewModel.updateQueryPage { query ->
