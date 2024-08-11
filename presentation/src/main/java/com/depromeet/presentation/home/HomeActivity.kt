@@ -187,7 +187,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun setHomeFeed(data: HomeFeedResponse) = with(binding) {
-        Timber.d("test ${data}")
         "Lv.${data.level}".also { tvHomeLevel.text = it }
         tvHomeTeam.text = if (data.teamId == null) {
             "모두를 응원하는"
@@ -196,7 +195,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
         tvHomeTitle.text = data.levelTitle
         ivHomeCharacter.load(data.mascotImageUrl)
-        csbvHomeTitle.setText("시야 사진 ${data.reviewCntToLevelup}장 더 올리면 레벨업!")
+        csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup,"장 더 올리면 레벨업!")
     }
 
     private fun navigateToReviewActivity() {

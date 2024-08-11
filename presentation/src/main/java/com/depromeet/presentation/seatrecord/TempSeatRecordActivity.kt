@@ -206,15 +206,15 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
 
     private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
-            if (data.teamId != null) {
-                "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also {
-                    csbvRecordTitle.setText(
-                        it
-                    )
-                }
-            } else {
-                "모두를 응원하는 Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
-            }
+//            if (data.teamId != null) {
+//                "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also {
+//                    csbvRecordTitle.setText(
+//                        it
+//                    )
+//                }
+//            } else {
+//                "모두를 응원하는 Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
+//            }
             tvRecordNickname.text = data.nickname
             tvRecordCount.text = data.reviewCount.toString()
             ivRecordProfile.load(data.profileImage) {

@@ -219,8 +219,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     adapter.submitList(newList)
 
                     isLoading = false
-
-                    //TODO : 실패 VISIBILITY GONE
+                    setErrorVisibility(RecordErrorType.NONE)
                 }
 
                 is UiState.Loading -> {
@@ -252,7 +251,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             } else {
                 "${profile.teamName}의 Lv.${profile.level} ${profile.levelTitle}"
             }
-            csbvRecordTitle.setText(bubbleText)
             ivRecordProfile.loadAndCircle(profile.profileImage)
             tvRecordNickname.text = profile.nickname
             tvRecordCount.text = "0"
@@ -359,7 +357,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         stopShimmerWithVisibility(binding.shimmerReview)
     }
 
-    enum class RecordErrorType{
+    enum class RecordErrorType {
         EMPTY,
         FAIL,
         NONE
