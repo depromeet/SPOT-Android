@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/spot_spinner_dropdown"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:paddingVertical="10dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
     android:paddingStart="16dp"
     android:paddingHorizontal="24dp"
+    android:background="@drawable/spinner_block_item_background"
     android:textAppearance="@style/TextAppearance.Spot.Label04"
     tools:text="1루 익사이팅석" />
