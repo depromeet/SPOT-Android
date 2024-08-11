@@ -171,6 +171,28 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     ),
                 )
             }
+
+            layoutTabSelectSection.setOnSingleClickListener {
+                svSelectSeat.visibility = VISIBLE
+                layoutSeatNumber.visibility = INVISIBLE
+                svSeatNumber.visibility = INVISIBLE
+                tvSelectSeatLine.visibility = VISIBLE
+                tvSelectNumberLine.visibility = INVISIBLE
+                tvCompleteBtn.visibility = INVISIBLE
+                tvNextBtn.visibility = VISIBLE
+                tvSelectZone.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_heading,
+                    ),
+                )
+                tvSelectNumber.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_caption,
+                    ),
+                )
+            }
             tvCompleteBtn.setOnSingleClickListener { dismiss() }
         }
     }
@@ -182,7 +204,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    // 좌석 번호 뷰
+    // 좌석 번호
     private fun initObserveSeatBlock() {
         viewModel.seatBlockState.asLiveData().observe(this) { state ->
             when (state) {
@@ -361,14 +383,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         with(binding.spinnerBlock) {
             this.adapter = adapter
             this.setSelection(-1)
-            try {
-                val popup = Spinner::class.java.getDeclaredField("mPopup")
-                popup.isAccessible = true
-                val popupWindow = popup.get(this) as ListPopupWindow
-                popupWindow.height = 224
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
             this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
