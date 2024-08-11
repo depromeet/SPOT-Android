@@ -43,6 +43,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
     }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.setOnShowListener {
@@ -371,6 +372,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
         }
     }
+
     private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
         val blockCodes = mutableListOf("블록을 선택해주세요")
         blockCodes.addAll(blockItems.map { it.code })
@@ -380,7 +382,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         adapter.setDropDownViewResource(R.layout.custom_spinner_block_dropdown_item)
         with(binding.spinnerBlock) {
             this.adapter = adapter
-            this.setSelection(-1)
+            this.setSelection(0)
             this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -399,6 +401,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         )
                     }
                 }
+
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
