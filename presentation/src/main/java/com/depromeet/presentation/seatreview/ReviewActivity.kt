@@ -43,6 +43,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         private const val FRAGMENT_RESULT_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val MAX_SELECTED_IMAGES = 3
+        private const val REVIEW_MY_SEAT_DIALOG = "ReviewMySeatDialog"
+        private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
+        private const val DATE_PICKER_DIALOG_TAG = "DatePickerDialogTag"
+        private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
@@ -129,10 +133,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             updateNextButtonState()
         }
     }
-
     private fun initDatePickerDialog() {
         binding.layoutDatePicker.setOnSingleClickListener {
-            DatePickerDialog().show(supportFragmentManager, "DatePickerDialogTag")
+            DatePickerDialog().show(supportFragmentManager, DATE_PICKER_DIALOG_TAG)
         }
         viewModel.selectedDate.asLiveData().observe(this) { date ->
             val originalFormat = SimpleDateFormat(ISO_DATE_FORMAT, Locale.getDefault())
@@ -145,7 +148,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initUploadDialog() {
         binding.btnAddImage.setOnClickListener {
-            ImageUploadDialog().show(supportFragmentManager, "ImageUploadDialog")
+            ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
     }
 
@@ -176,18 +179,18 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initSeatReviewDialog() {
         binding.layoutReviewMySeat.setOnSingleClickListener {
-            if (supportFragmentManager.findFragmentByTag("ReviewMySeatDialog") == null &&
-                supportFragmentManager.findFragmentByTag("SelectSeatDialog") == null
+            if (supportFragmentManager.findFragmentByTag(REVIEW_MY_SEAT_DIALOG) == null &&
+                supportFragmentManager.findFragmentByTag(SELECT_SEAT_DIALOG) == null
             ) {
-                ReviewMySeatDialog().show(supportFragmentManager, "ReviewMySeatDialog")
+                ReviewMySeatDialog().show(supportFragmentManager, REVIEW_MY_SEAT_DIALOG)
             }
         }
 
         binding.layoutSeatInfoNext.setOnSingleClickListener {
-            if (supportFragmentManager.findFragmentByTag("SelectSeatDialog") == null &&
-                supportFragmentManager.findFragmentByTag("ReviewMySeatDialog") == null
+            if (supportFragmentManager.findFragmentByTag(SELECT_SEAT_DIALOG) == null &&
+                supportFragmentManager.findFragmentByTag(REVIEW_MY_SEAT_DIALOG) == null
             ) {
-                SelectSeatDialog().show(supportFragmentManager, "SelectSeatDialog")
+                SelectSeatDialog().show(supportFragmentManager, SELECT_SEAT_DIALOG)
             }
         }
     }
