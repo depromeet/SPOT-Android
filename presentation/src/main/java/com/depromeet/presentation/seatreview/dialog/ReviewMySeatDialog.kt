@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
 import android.view.View
+import android.view.View.FOCUS_DOWN
+import android.view.View.FOCUS_UP
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.FrameLayout
@@ -159,12 +161,12 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                 if (btnDetailCheck.isSelected) {
                     tvBlank.visibility = VISIBLE
                     svSeatReview.post {
-                        svSeatReview.fullScroll(View.FOCUS_DOWN)
+                        svSeatReview.fullScroll(FOCUS_DOWN)
                     }
                 } else {
                     tvBlank.visibility = GONE
                     svSeatReview.post {
-                        svSeatReview.fullScroll(View.FOCUS_UP)
+                        svSeatReview.fullScroll(FOCUS_UP)
                     }
                 }
             }
