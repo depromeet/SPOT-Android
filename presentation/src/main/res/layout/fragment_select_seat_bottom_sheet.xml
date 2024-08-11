@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="645dp"
+    android:layout_height="match_parent"
     android:background="@drawable/rect_white_fill_32">
 
     <View
@@ -35,6 +35,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/layout_tab_select_section"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -90,7 +91,7 @@
     <ScrollView
         android:id="@+id/sv_select_seat"
         android:layout_width="0dp"
-        android:layout_height="530dp"
+        android:layout_height="510dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
@@ -167,6 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="13dp"
+                android:nestedScrollingEnabled="false"
                 android:layout_marginTop="32dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="3"
@@ -223,6 +225,7 @@
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginBottom="80dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_seat_again" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -234,7 +237,7 @@
     <ScrollView
         android:id="@+id/sv_seat_number"
         android:layout_width="0dp"
-        android:layout_height="556dp"
+        android:layout_height="510dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -244,7 +247,7 @@
             android:id="@+id/layout_seat_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
             <LinearLayout
@@ -268,10 +271,8 @@
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:background="@drawable/rect_white_fill_stroke_tertiary_line_8"
-                        android:dropDownWidth="240dp"
-                        android:dropDownVerticalOffset="45dp"
-                        android:paddingVertical="13dp"
-                        android:paddingStart="16dp"
+                        android:dropDownWidth="match_parent"
+                        android:dropDownVerticalOffset="60dp"
                         android:popupBackground="@drawable/rect_white_fill_gray100_line_12"
                         app:layout_constraintEnd_toStartOf="@+id/tv_block"
                         app:layout_constraintStart_toStartOf="parent"
@@ -316,7 +317,7 @@
                         android:hint="ex) 12"
                         android:inputType="number"
                         android:maxLength="4"
-                        android:paddingVertical="13dp"
+                        android:paddingVertical="16dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="64dp"
                         android:textColor="#121212"
@@ -357,7 +358,7 @@
                         android:hint="ex) 12"
                         android:inputType="number"
                         android:maxLength="4"
-                        android:paddingVertical="13dp"
+                        android:paddingVertical="16dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="64dp"
                         android:textColor="#121212"

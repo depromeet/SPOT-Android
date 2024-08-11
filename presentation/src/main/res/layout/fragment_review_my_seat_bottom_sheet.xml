@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="645dp"
-    app:layout_constraintBottom_toBottomOf="parent"
+    android:layout_height="match_parent"
     android:background="@drawable/rect_white_fill_32">
 
     <View
@@ -32,9 +31,8 @@
     <ScrollView
         android:id="@+id/sv_seat_review"
         android:layout_width="0dp"
-        android:layout_height="495dp"
+        android:layout_height="510dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_complete_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_review_my_seat">
@@ -327,7 +325,7 @@
                     android:maxLines="5"
                     android:paddingHorizontal="16dp"
                     android:paddingTop="16dp"
-                    android:paddingBottom="32dp"
+                    android:paddingBottom="40dp"
                     android:textAppearance="@style/TextAppearance.Spot.Body02"
                     android:textColor="@color/color_foreground_body_subtitle"
                     android:textColorHint="@color/color_foreground_disabled"
@@ -340,34 +338,34 @@
                     android:id="@+id/tv_text_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
                     android:text="0"
+                    android:paddingBottom="10dp"
                     android:textAppearance="@style/TextAppearance.Spot.Label12"
                     android:textColor="@color/color_foreground_disabled"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/et_detail_review"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_text_total"
                     app:layout_constraintEnd_toStartOf="@id/tv_text_total"
-                    app:layout_constraintTop_toTopOf="@id/tv_text_total" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_text_total" />
 
                 <TextView
                     android:id="@+id/tv_text_total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="16dp"
                     android:text="/200"
+                    android:paddingBottom="10dp"
                     android:textAppearance="@style/TextAppearance.Spot.Label12"
                     android:textColor="@color/color_foreground_disabled"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/et_detail_review"
                     app:layout_constraintEnd_toEndOf="@id/et_detail_review" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="25dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -390,24 +388,32 @@
                     android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@+id/iv_text_warning"
                     app:layout_constraintTop_toBottomOf="@id/et_detail_review" />
+
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvBlank"
+                android:layout_width="300dp"
+                android:layout_height="250dp"
+                android:visibility="visible" />
         </LinearLayout>
     </ScrollView>
+
     <TextView
         android:id="@+id/tv_complete_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="20dp"
+        android:background="@drawable/rect_action_disabled_fill_8"
         android:clickable="false"
         android:enabled="false"
         android:gravity="center"
         android:paddingVertical="19dp"
         android:text="완료"
-        android:background="@drawable/rect_action_disabled_fill_8"
         android:textAppearance="@style/TextAppearance.Spot.Label02"
         android:textColor="@color/color_foreground_white"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/sv_seat_review" />
 </androidx.constraintlayout.widget.ConstraintLayout>
