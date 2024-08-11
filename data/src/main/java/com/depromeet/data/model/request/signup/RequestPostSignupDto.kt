@@ -7,13 +7,13 @@ import kotlinx.serialization.Serializable
 data class RequestPostSignupDto(
     val accessToken: String,
     val nickname: String,
-    val teamId: Int
+    val teamId: Int?
 )
 
 fun PostSignupModel.toRequestPostSignupDto(): RequestPostSignupDto {
     return RequestPostSignupDto(
         accessToken = idCode,
         nickname = nickname,
-        teamId = teamId
+        teamId = teamId.takeIf { it !=0 }
     )
 }
