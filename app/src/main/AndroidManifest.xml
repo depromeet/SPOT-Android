@@ -68,11 +68,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name="com.depromeet.presentation.seatreview.ReviewActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.depromeet.presentation.seatreview.ReviewDoneActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.depromeet.presentation.setting.SettingActivity"
