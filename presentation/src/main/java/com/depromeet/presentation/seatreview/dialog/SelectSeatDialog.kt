@@ -374,8 +374,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
-        val blockCodes = mutableListOf("블록을 선택해주세요")
-        blockCodes.addAll(blockItems.map { it.code })
+        val blockCodes = blockItems.map { it.code }
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_block_item, blockCodes)
