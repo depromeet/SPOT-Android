@@ -380,9 +380,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_block_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_block_dropdown_item)
+
         with(binding.spinnerBlock) {
             this.adapter = adapter
             this.setSelection(0)
+            binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_down)
+            this.setOnTouchListener { _, _ ->
+                binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_up)
+                false
+            }
             this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -400,11 +406,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             viewModel.selectedSectionId.value,
                         )
                     }
+                    binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_down)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
+                    binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_down)
                 }
             }
         }
     }
+
 }
