@@ -142,9 +142,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
             })
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         resetWindowInsets()
-        super.onDestroy()
+        super.onDestroyView()
     }
 
     private fun resetWindowInsets() {
