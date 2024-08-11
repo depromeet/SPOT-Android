@@ -10,6 +10,8 @@ import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.ListPopupWindow
+import android.widget.Spinner
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -43,7 +45,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
     }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.setOnShowListener {
@@ -64,6 +65,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
         return dialog
     }
+
     override fun onStart() {
         super.onStart()
         val bottomSheet =
@@ -228,7 +230,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.etColumn.addTextChangedListener { text: Editable? ->
             val newColumn = text.toString()
             viewModel.setSelectedColumn(newColumn)
-            binding.ivDeleteColumn.visibility = if (newColumn.isNotEmpty()) View.VISIBLE else View.GONE
+            binding.ivDeleteColumn.visibility =
+                if (newColumn.isNotEmpty()) View.VISIBLE else View.GONE
             viewModel.seatRangeState.value?.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
@@ -240,7 +243,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.etNumber.addTextChangedListener { text: Editable? ->
             val newNumber = text.toString()
             viewModel.setSelectedNumber(newNumber)
-            binding.ivDeleteNumber.visibility = if (newNumber.isNotEmpty()) View.VISIBLE else View.GONE
+            binding.ivDeleteNumber.visibility =
+                if (newNumber.isNotEmpty()) View.VISIBLE else View.GONE
             viewModel.seatRangeState.value?.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
@@ -347,19 +351,24 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
         }
     }
-
     private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
         val blockCodes = mutableListOf("블록을 선택해주세요")
         blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, blockCodes)
-        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
 
+        val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_block_item, blockCodes)
+        adapter.setDropDownViewResource(R.layout.custom_spinner_block_dropdown_item)
         with(binding.spinnerBlock) {
             this.adapter = adapter
             this.setSelection(-1)
-
+            try {
+                val popup = Spinner::class.java.getDeclaredField("mPopup")
+                popup.isAccessible = true
+                val popupWindow = popup.get(this) as ListPopupWindow
+                popupWindow.height = 224
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,

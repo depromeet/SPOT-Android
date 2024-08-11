@@ -246,7 +246,7 @@
             android:id="@+id/layout_seat_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/layout_combined_top">
 
             <LinearLayout
@@ -270,10 +270,8 @@
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:background="@drawable/rect_white_fill_stroke_tertiary_line_8"
-                        android:dropDownWidth="240dp"
-                        android:dropDownVerticalOffset="45dp"
-                        android:paddingVertical="13dp"
-                        android:paddingStart="16dp"
+                        android:dropDownWidth="match_parent"
+                        android:dropDownVerticalOffset="60dp"
                         android:popupBackground="@drawable/rect_white_fill_gray100_line_12"
                         app:layout_constraintEnd_toStartOf="@+id/tv_block"
                         app:layout_constraintStart_toStartOf="parent"
