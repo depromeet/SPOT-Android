@@ -392,7 +392,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_blank"
+                android:id="@+id/tvBlank"
                 android:layout_width="300dp"
                 android:layout_height="250dp"
                 android:visibility="visible" />
