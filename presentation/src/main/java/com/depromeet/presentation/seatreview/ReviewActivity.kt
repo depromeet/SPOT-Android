@@ -53,22 +53,31 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
+        initObserve()
+        initEvent()
+    }
+
+    private fun initView() {
+        viewModel.getStadiumName()
+        initDatePickerDialog()
+        initUploadDialog()
+        initSeatReviewDialog()
         initViewStatusBar()
         setupFragmentResultListener()
+    }
 
-        viewModel.getStadiumName()
+    private fun initEvent() {
+        initEventUploadBtn()
+        initEventRemoveBtn()
+        initEventToHome()
+    }
+
+    private fun initObserve() {
         initObserveStadiumName()
         initObservePreSignedUrl()
         initObserveUploadImageToS3()
         initObserveUploadReview()
-
-        initDatePickerDialog()
-        initUploadDialog()
-        initSeatReviewDialog()
-
-        initEventUploadBtn()
-        initEventRemoveBtn()
-        initEventToHome()
     }
 
     private fun initViewStatusBar() {

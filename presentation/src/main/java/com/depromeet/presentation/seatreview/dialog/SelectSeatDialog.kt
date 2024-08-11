@@ -75,12 +75,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        initObserve()
+    }
+
+    private fun initObserve() {
         initObserveSection()
         initObserveSeatBlock()
         initObserveSeatRange()
-        initView()
-        setupTransactionSelectSeat()
-        setupEditTextListeners()
     }
 
     // 구역 선택뷰
@@ -116,6 +118,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             updateNextBtnState()
         }
         binding.rvSelectSeatZone.adapter = adapter
+
+        setupTransactionSelectSeat()
+        setupEditTextListeners()
     }
 
     private fun setupTransactionSelectSeat() {
@@ -414,5 +419,4 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
         }
     }
-
 }
