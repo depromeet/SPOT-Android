@@ -18,19 +18,19 @@
 
     <TextView
         android:id="@+id/tv_nickname_input_title"
+        style="@style/TextAppearance.Spot.Title03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:layout_marginTop="48dp"
         android:text="닉네임을 입력해주세요."
         android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textFontWeight="600"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_back" />
 
     <EditText
         android:id="@+id/et_profile_edit_nickname"
+        style="@style/TextAppearance.Spot.Title04"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -43,8 +43,6 @@
         android:singleLine="true"
         android:textColor="@color/black"
         android:textColorHint="#C8C8C8"
-        android:textSize="20sp"
-        android:textFontWeight="600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_nickname_input_title" />
