@@ -1,32 +1,32 @@
 package com.depromeet.domain.repository
 
-import com.depromeet.domain.entity.request.seatReview.SeatReviewModel
-import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrlModel
-import com.depromeet.domain.entity.response.seatReview.SeatBlockModel
-import com.depromeet.domain.entity.response.seatReview.SeatRangeModel
-import com.depromeet.domain.entity.response.seatReview.StadiumNameModel
-import com.depromeet.domain.entity.response.seatReview.StadiumSectionModel
+import com.depromeet.domain.entity.request.seatreview.RequestSeatReview
+import com.depromeet.domain.entity.response.seatreview.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumName
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 
 interface SeatReviewRepository {
-    suspend fun getStadiumName(): Result<List<StadiumNameModel>>
+    suspend fun getStadiumName(): Result<List<ResponseStadiumName>>
 
     suspend fun getStadiumSection(
         stadiumId: Int,
-    ): Result<StadiumSectionModel?>
+    ): Result<ResponseStadiumSection?>
 
     suspend fun getSeatBlock(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<List<SeatBlockModel>>
+    ): Result<List<ResponseSeatBlock>>
 
     suspend fun getSeatRange(
         stadiumId: Int,
         sectionId: Int,
-    ): Result<List<SeatRangeModel>>
+    ): Result<List<ResponseSeatRange>>
 
     suspend fun postReviewImagePresigned(
         fileExtension: String,
-    ): Result<ResponsePresignedUrlModel>
+    ): Result<ResponsePresignedUrl>
 
     suspend fun putImagePreSignedUrl(
         presignedUrl: String,
@@ -36,6 +36,6 @@ interface SeatReviewRepository {
     suspend fun postSeatReview(
         seatId: Int,
         seatNumber: Int,
-        seatReviewInfo: SeatReviewModel,
+        seatReviewInfo: RequestSeatReview,
     ): Result<Unit>
 }

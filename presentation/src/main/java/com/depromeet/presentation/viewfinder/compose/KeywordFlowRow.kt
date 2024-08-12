@@ -88,7 +88,7 @@ private fun KeywordFlowOneLinePreview() {
         keywords = listOf(
             Keyword("🙍‍서서 응원하는 존", 44, 0),
             Keyword("🙍‍서서 응원하는 존", 44, 0)
-        )
+        ),
     )
 }
 
@@ -102,7 +102,7 @@ private fun KeywordFlowRowTwoLinePreview() {
             Keyword("🙍‍서서 응원하는 존", 44, 1),
             Keyword("🙍‍서서 응원하는 존", 44, 0),
             Keyword("🙍‍서서 응원하는 존", 44, 0)
-        )
+        ),
     )
 }
 
@@ -118,6 +118,6 @@ private fun KeywordFlowRowTwoLineOverflowPreview() {
             Keyword("🙍‍서서 응원하는 존", 44, 0),
             Keyword("🙍‍서서 응원하는 존", 44, 0),
             Keyword("🙍‍서서 응원하는 존", 44, 0)
-        )
+        ),
     )
 }

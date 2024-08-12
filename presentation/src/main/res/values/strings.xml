@@ -60,6 +60,7 @@
     <string name="viewfinder_number">번</string>
     <string name="viewfinder_cancel">취소</string>
     <string name="viewfinder_completed">완료</string>
+    <string name="viewfinder_fold">접기</string>
     <string name="viewfinder_more">더보기</string>
     <string name="viewfinder_report">신고하기</string>
     <string name="viewfinder_input_example">ex) 12</string>
@@ -71,6 +72,9 @@
     <string name="viewfinder_selection_seat">좌석선택</string>
     <string name="viewfinder_selection_area">구역 선택</string>
     <string name="viewfinder_question_title">열과 번이 무엇인가요?</string>
+    <string name="viewfinder_error_column">존재하지 않는 열입니다.</string>
+    <string name="viewfinder_error_number">존재하지 않는 번입니다.</string>
+    <string name="viewfinder_error_column_and_number">존재하지 않는 열과 번입니다.</string>
     <string name="viewfinder_question_01">\‘열\’은 같은 가로 줄에 있는 좌석이고, 번호는 좌석에 대한 고유 번호를 뜻해요.</string>
     <string name="viewfinder_question_02">ex. 2열 7번좌석</string>
     <string name="viewfinder_select_only_column">\'열\'만 선택하기</string>

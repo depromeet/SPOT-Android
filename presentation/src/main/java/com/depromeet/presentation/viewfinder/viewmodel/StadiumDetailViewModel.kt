@@ -28,6 +28,9 @@ class StadiumDetailViewModel @Inject constructor(
     private val _scrollState = MutableStateFlow(false)
     val scrollState = _scrollState.asStateFlow()
 
+    private val _bottomPadding = MutableStateFlow(0f)
+    val bottomPadding = _bottomPadding.asStateFlow()
+
     private val _reviewFilter = MutableStateFlow<RequestBlockReviewQuery>(
         RequestBlockReviewQuery(
             rowNumber = null,
@@ -41,6 +44,9 @@ class StadiumDetailViewModel @Inject constructor(
     val reviewFilter = _reviewFilter.asStateFlow()
 
 
+    fun updateBottomPadding(padding: Float) {
+        _bottomPadding.value = padding
+    }
     fun updateScrollState(state: Boolean) {
         _scrollState.value = state
     }
@@ -134,7 +140,7 @@ class StadiumDetailViewModel @Inject constructor(
             Seat.NUMBER -> response(false, Seat.NUMBER)
             Seat.COLUMN_NUMBER -> response(false, Seat.COLUMN_NUMBER)
             Seat.CHECK -> {
-                if (blockRow?.checkNumberRange(column, number) == false) {
+                if (blockRow?.checkNumberRangeByColumn(column, number) == false) {
                     response(false, Seat.CHECK)
                 } else {
                     response(true, Seat.CHECK)
@@ -152,6 +158,15 @@ class StadiumDetailViewModel @Inject constructor(
         }
 
         response(false, Seat.COLUMN)
+    }
+
+    fun handleNumber(number: Int, response: (isSuccess: Boolean, seat: Seat) -> Unit) {
+        if (blockRow?.checkNumberRange(number) == true) {
+            response(true, Seat.NUMBER)
+            return
+        }
+
+        response(false, Seat.NUMBER)
     }
 
     fun clearSeat() {

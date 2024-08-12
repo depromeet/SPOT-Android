@@ -42,7 +42,17 @@ data class ResponseBlockRow(
         return false
     }
 
-    fun checkNumberRange(column: Int, number: Int): Boolean {
+    fun checkNumberRange(number: Int): Boolean {
+        val isSeatNumExistsInAll = rowInfo.any { it.seatNumList.contains(number) }
+
+        if (!isSeatNumExistsInAll) {
+            return false
+        }
+
+        return true
+    }
+
+    fun checkNumberRangeByColumn(column: Int, number: Int): Boolean {
         rowInfo.filter { it.number == column }.getOrNull(0)?.let {
             if (number in it.seatNumList) {
                 return true

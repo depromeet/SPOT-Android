@@ -7,6 +7,8 @@
         <item name="android:includeFontPadding">false</item>
         <item name="android:statusBarColor">@color/color_background_white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/color_background_white</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="Theme.DepromeetAndroid" parent="Base.Theme.DepromeetAndroid" />

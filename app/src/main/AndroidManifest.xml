@@ -67,11 +67,11 @@
             android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name="com.depromeet.presentation.seatReview.ReviewActivity"
+        <activity android:name="com.depromeet.presentation.seatreview.ReviewActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.seatReview.ReviewDoneActivity"
+        <activity android:name="com.depromeet.presentation.seatreview.ReviewDoneActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 

@@ -15,7 +15,7 @@ import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.home.adapter.StadiumAdapter
 import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
-import com.depromeet.presentation.seatReview.ReviewActivity
+import com.depromeet.presentation.seatreview.ReviewActivity
 import com.depromeet.presentation.seatrecord.SeatRecordActivity
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.setting.SettingActivity

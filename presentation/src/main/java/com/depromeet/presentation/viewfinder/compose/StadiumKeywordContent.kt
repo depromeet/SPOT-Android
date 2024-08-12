@@ -94,8 +94,8 @@ fun StadiumKeywordContent(
                 }
 
                 keywords.size > 3 -> {
-                    repeat(3) {
-                        if (it == 2) {
+                    repeat(2) {
+                        if (it == 1) {
                             Box(
                                 modifier = Modifier.fillMaxWidth()
                             ) {

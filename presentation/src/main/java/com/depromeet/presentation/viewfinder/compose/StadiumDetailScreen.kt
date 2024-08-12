@@ -52,6 +52,12 @@ fun StadiumDetailScreen(
         viewModel.updateScrollState(false)
     }
 
+    LaunchedEffect(key1 = verticalScrollState.firstVisibleItemScrollOffset) {
+        if (verticalScrollState.firstVisibleItemScrollOffset != 0) {
+            viewModel.updateScrollState(true)
+        }
+    }
+
     detailUiState.let { uiState ->
         when (uiState) {
             is StadiumDetailUiState.Empty -> {
@@ -60,7 +66,7 @@ fun StadiumDetailScreen(
                         "exciting1" -> "1루 익사이팅석 "
                         "exciting3" -> "3루 익사이팅석 "
                         "premium" -> "프리미엄석 "
-                        else -> "$blockNumber 블럭"
+                        else -> "$blockNumber 블록"
                     },
                     onGoBack = onClickGoBack
                 )

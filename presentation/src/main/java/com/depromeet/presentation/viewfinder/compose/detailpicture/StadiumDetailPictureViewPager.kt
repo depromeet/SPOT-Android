@@ -52,23 +52,20 @@ fun StadiumDetailPictureViewPager(
             modifier = Modifier,
             state = verticalPagerState,
         ) { page ->
-            Card(
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(pictures.getOrNull(page)?.url)
+                    .crossfade(true)
+                    .build(),
+                contentScale = ContentScale.FillWidth,
+                contentDescription = null,
+                placeholder = ColorPainter(Color.LightGray),
                 modifier = Modifier
-                    .heightIn(max = 420.dp)
-                    .fillMaxWidth(),
-                shape = RectangleShape
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(pictures.getOrNull(page)?.url)
-                        .crossfade(true)
-                        .build(),
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = null,
-                    placeholder = ColorPainter(Color.LightGray),
-                    modifier = Modifier.fillMaxWidth()
+                    .fillMaxWidth()
+                    .heightIn(max = ((context.resources.displayMetrics.heightPixels / context.resources.displayMetrics.density) * 0.5).dp)
+                    .clip(RectangleShape),
+
                 )
-            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(

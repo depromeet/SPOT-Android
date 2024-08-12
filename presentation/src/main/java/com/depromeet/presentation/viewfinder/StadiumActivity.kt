@@ -19,6 +19,7 @@ import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.HomeActivity
 import com.depromeet.presentation.util.SpannableStringUtils
+import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumViewModel
 import com.depromeet.presentation.viewfinder.web.AndroidBridge
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,9 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private val viewModel: StadiumViewModel by viewModels()
+    private val utils: Utils by lazy {
+        Utils(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun initView() {
         binding.root.isClickable = !binding.clZoomDescription.isVisible
+        initStatusBar()
         setTextZoomDescriptionColor()
         getStadiumIdExtra()
         configureWebViewSetting()
@@ -129,6 +134,13 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         )
     }
 
+    private fun initStatusBar() {
+        utils.apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_80000000)
+            setOnApplyWindowInsetsTopMarginListener(window, binding.root)
+        }
+    }
+
     private fun setTextZoomDescriptionColor() {
         binding.tvZoomDescription.text = SpannableStringUtils(this).toColorSpan(
             com.depromeet.designsystem.R.color.color_action_enabled,
@@ -185,12 +197,20 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
         binding.ivClose.setOnClickListener {
             binding.clZoomDescription.visibility = View.INVISIBLE
+            setStatusBarColorWhite()
         }
     }
 
     private fun onClickZoomDescriptionDim() {
         binding.clZoomDescription.setOnClickListener {
             binding.clZoomDescription.visibility = View.INVISIBLE
+            setStatusBarColorWhite()
+        }
+    }
+
+    private fun setStatusBarColorWhite() {
+        utils.apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
         }
     }
 
