@@ -12,12 +12,13 @@ class SignUpCompleteActivity : BaseActivity<ActivitySignupCompleteBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initClickListener()
+        initEvent()
     }
 
-    private fun initClickListener() {
+    private fun initEvent() {
         binding.tvSignupCompleteBtn.setOnClickListener {
             Intent(this, HomeActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(this)
                 finish()
             }

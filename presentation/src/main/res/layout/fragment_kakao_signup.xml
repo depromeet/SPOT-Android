@@ -3,8 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/spot_green">
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/kakao_sign_compose_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_spot_logo"
@@ -15,91 +23,5 @@
         android:src="@drawable/ic_spot_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_spot_signup_image"
-        android:layout_width="wrap_content"
-        android:layout_height="550dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:src="@drawable/ic_signup_image_1" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_viewpager_kakao_signup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_signup_introduce"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/ci_signup_introduce_indicator" />
-
-        <me.relex.circleindicator.CircleIndicator3
-            android:id="@+id/ci_signup_introduce_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="16dp"
-            app:ci_drawable="@drawable/indicator"
-            app:ci_drawable_unselected="@drawable/indicator_un"
-            app:ci_height="7dp"
-            app:ci_margin="8dp"
-            app:ci_width="7dp"
-            app:layout_constraintBottom_toTopOf="@+id/cl_kakao_signup_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vp_signup_introduce" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_kakao_signup_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="28dp"
-            android:background="@drawable/rect_kakao_login_40"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <ImageView
-                android:id="@+id/iv_kakao_signup_icon"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@drawable/ic_kakao_logo"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_kakao_signup_message"
-                app:layout_constraintEnd_toStartOf="@+id/tv_kakao_signup_message"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_kakao_signup_message" />
-
-            <TextView
-                android:id="@+id/tv_kakao_signup_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="18dp"
-                android:layout_marginStart="8dp"
-                android:text="카카오 로그인"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_kakao_signup_icon"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,17 +28,17 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initObserver()
+        initObserve()
     }
 
-    private fun initObserver() {
+    private fun initObserve() {
         signupViewModel.getBaseballTeam()
         signupViewModel.teamSelectUiState.asLiveData().observe(this) {
             when (it) {
                 SignupUiState.Failure -> { }
                 SignupUiState.Initial -> {
-                    initRecyclerView()
-                    initClickListener()
+                    initView()
+                    initEvent()
                 }
                 SignupUiState.Loading -> { }
                 SignupUiState.SignUpSuccess -> {
@@ -60,7 +60,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
                 }
 
                 is UiState.Loading -> {
-                    toast("로딩 중")
+
                 }
 
                 is UiState.Empty -> {
@@ -74,7 +74,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
         }
     }
 
-    private fun initClickListener() {
+    private fun initEvent() {
         binding.ivBack.setOnClickListener {
             finish()
         }
@@ -85,9 +85,15 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
                 intent.getStringExtra("nickname") ?: ""
             )
         }
+
+        binding.tvProfileEditNoTeam.setOnClickListener {
+            signupViewModel.setClickedBaseballTeam(0)
+            binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
+            binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
+        }
     }
 
-    private fun initRecyclerView() {
+    private fun initView() {
         adapter = BaseballTeamAdapter()
         binding.rvTeamSelectStadium.adapter = adapter
         binding.rvTeamSelectStadium.addItemDecoration(
@@ -99,6 +105,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
             override fun onItemClubClick(item: ResponseBaseballTeam) {
                 signupViewModel.setClickedBaseballTeam(item.id)
+                binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
                 binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
             }
         }
