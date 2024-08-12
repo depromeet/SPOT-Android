@@ -1,5 +1,7 @@
 package com.depromeet.presentation.login.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.domain.preference.SharedPreference
@@ -23,8 +25,8 @@ class KakaoSignupViewModel @Inject constructor(
     private val sharedPreference: SharedPreference
 ) : ViewModel() {
 
-    private val _kakaoToken = MutableStateFlow<String>("")
-    val kakaoToken: StateFlow<String> = _kakaoToken
+    private val _kakaoToken = MutableLiveData<String>()
+    val kakaoToken: LiveData<String> = _kakaoToken
 
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
     val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
@@ -38,13 +40,13 @@ class KakaoSignupViewModel @Inject constructor(
             signupRepository.getSignup(token)
                 .onSuccess {
                     if (it.jwtToken.isEmpty()) {
-                        _kakaoToken.tryEmit(token)
+                        _kakaoToken.value = token
                     } else {
                         sharedPreference.token = it.jwtToken
                         _loginUiState.emit(LoginUiState.LoginSuccess)
                     }
                 }.onFailure {
-                    _kakaoToken.tryEmit(token)
+                    _kakaoToken.value = token
                 }
         }
     }
