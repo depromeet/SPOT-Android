@@ -7,7 +7,7 @@ import com.depromeet.designsystem.SpotDropDownSpinner
 import com.depromeet.domain.entity.response.home.ReviewDateResponse
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
-import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
+import timber.log.Timber
 
 class RecordDateViewHolder(
     internal val binding: ItemRecordDateBinding,
@@ -16,10 +16,14 @@ class RecordDateViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
+    private lateinit var yearAdapter: SpotDropDownSpinner<String>
+    private var isYearInitialized : Boolean = false
+    private var isSettingSelectedItem = false
+
 
     fun bind(data: List<ReviewDateResponse.YearMonths>) {
         initMonthAdapter()
-        initYearSpinner(data)
+        setYearSpinner(data)
         val clickedYearMonths = data.firstOrNull { it.isClicked }?.months
 
         if (clickedYearMonths != null) {
@@ -29,17 +33,18 @@ class RecordDateViewHolder(
         }
     }
 
-
-    private fun initYearSpinner(data: List<ReviewDateResponse.YearMonths>) {
+    private fun setYearSpinner(data: List<ReviewDateResponse.YearMonths>) {
         val years = data.map { it.year }
         val yearList = years.map { "${it}년" }
+        val selectedYear = data.firstOrNull { it.isClicked }?.year
+        val selectedPosition = years.indexOf(selectedYear).takeIf { it >= 0 } ?: 0
 
-        val adapter = SpotDropDownSpinner(
-            yearList
-        )
-        with(binding.spinnerRecordYear) {
-            this.adapter = adapter
-            onItemSelectedListener =
+        if (!isYearInitialized) {
+            Timber.d("------------\ntest -> 초기화 안됨!!!")
+            yearAdapter = SpotDropDownSpinner(yearList, selectedPosition)
+            binding.spinnerRecordYear.adapter = yearAdapter
+
+            binding.spinnerRecordYear.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
                         parent: AdapterView<*>?,
@@ -47,15 +52,26 @@ class RecordDateViewHolder(
                         position: Int,
                         id: Long,
                     ) {
-                        adapter.setSelectedItemPosition(position)
-                        val selectedYear = yearList[position].filter { it.isDigit() }.toInt()
+                        if (isSettingSelectedItem) {
+                            isSettingSelectedItem = false
+                            return
+                        }
+                        yearAdapter.setSelectedItemPosition(position)
+                        val selectedYear = years[position]
                         yearClick(selectedYear)
+
+                        Timber.d("test 테스트 포지션 : $position  //// $selectedYear")
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
                 }
+
+            isSettingSelectedItem = true
+            binding.spinnerRecordYear.setSelection(selectedPosition)
         }
+        isYearInitialized = true
     }
+
 
     private fun initMonthAdapter() {
         if (!::dateMonthAdapter.isInitialized) {

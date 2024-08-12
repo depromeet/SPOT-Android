@@ -115,8 +115,6 @@ class SeatRecordAdapter(
             Timber.d("test -> 인덱스 :  $index 새로운 아이템 :  $newItem")
             newList[index] = newItem
 
-            testDiffUtil(currentList, newList)
-
             submitList(newList) {
                 Timber.d("test -> submitlist 완료")
             }
@@ -127,40 +125,24 @@ class SeatRecordAdapter(
 }
 
 class RecordItemDiffCallback : DiffUtil.ItemCallback<RecordListItem>() {
+
     override fun areItemsTheSame(oldItem: RecordListItem, newItem: RecordListItem): Boolean {
         return oldItem::class == newItem::class
     }
 
     override fun areContentsTheSame(oldItem: RecordListItem, newItem: RecordListItem): Boolean {
-        return oldItem == newItem
+
+        return when{
+            oldItem is RecordListItem.Record && newItem is RecordListItem.Record ->
+                oldItem.reviews == newItem.reviews
+            oldItem is RecordListItem.Profile && newItem is RecordListItem.Profile ->
+                oldItem.profile == newItem.profile
+            oldItem is RecordListItem.Date && newItem is RecordListItem.Date ->
+                oldItem.reviewDates == newItem.reviewDates
+            else -> false
+        }
     }
 }
-
-fun testDiffUtil(oldList: List<RecordListItem>, newList: List<RecordListItem>) {
-    val diffResult = DiffUtil.calculateDiff(
-        object : DiffUtil.Callback() {
-            override fun getOldListSize(): Int = oldList.size
-
-            override fun getNewListSize(): Int = newList.size
-
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return RecordItemDiffCallback().areItemsTheSame(
-                    oldList[oldItemPosition],
-                    newList[newItemPosition]
-                )
-            }
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return RecordItemDiffCallback().areContentsTheSame(
-                    oldList[oldItemPosition],
-                    newList[newItemPosition]
-                )
-            }
-        }
-    )
-    Timber.d("test 결과 차이는? : $diffResult")
-}
-
 
 
 

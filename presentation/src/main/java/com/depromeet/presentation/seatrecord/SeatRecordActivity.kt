@@ -30,6 +30,7 @@ import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.util.CalendarUtil
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -122,6 +123,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 binding.rvSeatRecord.smoothScrollToPosition(0)
             },
             yearClick = { year ->
+                Timber.d("test -> yearclick ${year}")
                 viewModel.setSelectedYear(year)
                 binding.rvSeatRecord.smoothScrollToPosition(0)
             },
@@ -174,7 +176,10 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     stopDateShimmer()
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
-                        adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
+                        Timber.d("test uistate success : ${reviewState.data.reviews}")
+                        if(!viewModel.yearClickedEvent.value){
+                            adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
+                        }
                     } else {
                         adapter.submitList(
                             listOf(
@@ -197,6 +202,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
+                    makeSpotImageAppbar("리뷰를 불러오는데 실패하였습니다.")
                     setErrorVisibility(RecordErrorType.FAIL)
                     stopAllShimmer()
                 }
@@ -211,9 +217,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Success -> {
                     stopReviewShimmer()
                     val newProfileItem = RecordListItem.Profile(state.data.profile)
+                    //val newDateItem =
+                     //   RecordListItem.Date((viewModel.date.value as UiState.Success).data.yearMonths)
                     val newRecordItem = RecordListItem.Record(state.data.reviews)
                     val newList = adapter.currentList.toMutableList()
                     newList[0] = newProfileItem
+                    //newList[1] = newDateItem
                     newList[2] = newRecordItem
 
                     adapter.submitList(newList)
@@ -230,6 +239,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 is UiState.Failure -> {
+                    makeSpotImageAppbar("리뷰를 불러오는데 실패하였습니다.")
                     setErrorVisibility(RecordErrorType.FAIL)
                     stopReviewShimmer()
                 }
@@ -246,10 +256,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun profileNone(profile: MySeatRecordResponse.MyProfileResponse) {
         with(binding) {
-            val bubbleText = if (profile.teamId == null || profile.teamId == 0) {
-                "모두를 응원하는 Lv.${profile.level} ${profile.levelTitle}"
+            if (profile.teamId != null && profile.teamId != 0) {
+                csbvRecordTitle.setTextPart(
+                    "${profile.teamName}의 Lv.", profile.level,
+                    " ${profile.levelTitle}"
+                )
+
             } else {
-                "${profile.teamName}의 Lv.${profile.level} ${profile.levelTitle}"
+                csbvRecordTitle.setTextPart(
+                    "모두를 응원하는 Lv.", profile.level, " ${profile.levelTitle}"
+                )
             }
             ivRecordProfile.loadAndCircle(profile.profileImage)
             tvRecordNickname.text = profile.nickname

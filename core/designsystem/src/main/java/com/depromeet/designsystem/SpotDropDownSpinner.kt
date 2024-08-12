@@ -8,10 +8,11 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 
 class SpotDropDownSpinner<T>(
-    private val data: List<T>,
+    private var data: List<T>,
+    initialSelectedPosition: Int = 0,
 ) : BaseAdapter() {
 
-    private var selectedItemPosition = 0
+    private var selectedItemPosition = initialSelectedPosition
 
     override fun getCount(): Int = data.size
 
@@ -26,13 +27,8 @@ class SpotDropDownSpinner<T>(
         val item = getItem(position)
 
         textView.text = item.toString()
-        if (position == selectedItemPosition) {
-            textView.setTextColor(parent.context.getColor(R.color.color_foreground_heading))
-            textView.setTypeface(null, Typeface.BOLD)
-        } else {
-            textView.setTextColor(parent.context.getColor(R.color.color_foreground_body_sebtext))
-            textView.setTypeface(null, Typeface.NORMAL)
-        }
+        textView.setTextColor(parent.context.getColor(R.color.color_foreground_heading))
+        textView.setTypeface(null, Typeface.BOLD)
 
         textView.text = item.toString()
 
@@ -59,11 +55,20 @@ class SpotDropDownSpinner<T>(
         return view
     }
 
-    fun setSelectedItemPosition(position: Int) {
-        selectedItemPosition = position
+    fun updateData(newData: List<T>, selectedPosition: Int) {
+        data = newData
+        selectedItemPosition = selectedPosition
         notifyDataSetChanged()
     }
+
+    fun setSelectedItemPosition(position: Int) {
+        if (position != selectedItemPosition) {
+            selectedItemPosition = position
+            notifyDataSetChanged()
+        }
+    }
 }
+
 
 
 
