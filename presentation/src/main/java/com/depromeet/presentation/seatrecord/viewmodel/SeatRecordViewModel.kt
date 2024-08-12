@@ -270,12 +270,11 @@ class SeatRecordViewModel @Inject constructor(
                     yearMonth
                 }
             }
-            val existingClickedYear = dateState.data.yearMonths.find { it.isClicked }?.year
+            val existingClickedYear = updatedYearMonths.find { it.isClicked }?.year
             if (existingClickedYear != null) {
                 _date.value = if (updatedYearMonths.isEmpty()) {
                     UiState.Empty
                 } else {
-                    Timber.d("test updatedYearMonths -> $updatedYearMonths")
                     UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
                 }
             } else {
