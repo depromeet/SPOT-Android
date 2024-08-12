@@ -43,6 +43,14 @@ class DetailRecordAdapter(
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         holder.bind(getItem(position), myProfile)
+
+        val params = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams
+
+        if (position == itemCount - 1) {
+            params.setMargins(0, 0, 0, 115)
+        }
+
+        holder.itemView.layoutParams = params
     }
 }
 
