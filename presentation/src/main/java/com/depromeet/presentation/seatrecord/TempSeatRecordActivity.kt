@@ -28,13 +28,13 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityTempSeatRecordBinding
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.ProfileEditActivity
-import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.depromeet.presentation.seatreview.ReviewActivity
 import com.depromeet.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

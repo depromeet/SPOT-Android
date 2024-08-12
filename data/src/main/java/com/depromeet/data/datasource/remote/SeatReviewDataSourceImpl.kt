@@ -1,13 +1,13 @@
 package com.depromeet.data.datasource.remote
 
 import com.depromeet.data.datasource.SeatReviewDataSource
-import com.depromeet.data.model.request.seatreview.RequestPreSignedUrlDto
-import com.depromeet.data.model.request.seatreview.RequestSeatReviewDto
-import com.depromeet.data.model.response.seatreview.ResponsePreSignedUrlDto
-import com.depromeet.data.model.response.seatreview.ResponseSeatBlockDto
-import com.depromeet.data.model.response.seatreview.ResponseSeatRangeDto
-import com.depromeet.data.model.response.seatreview.ResponseStadiumNameDto
-import com.depromeet.data.model.response.seatreview.ResponseStadiumSectionDto
+import com.depromeet.data.model.request.seatReview.RequestPreSignedUrlDto
+import com.depromeet.data.model.request.seatReview.RequestSeatReviewDto
+import com.depromeet.data.model.response.seatReview.ResponsePreSignedUrlDto
+import com.depromeet.data.model.response.seatReview.ResponseSeatBlockDto
+import com.depromeet.data.model.response.seatReview.ResponseSeatRangeDto
+import com.depromeet.data.model.response.seatReview.ResponseStadiumNameDto
+import com.depromeet.data.model.response.seatReview.ResponseStadiumSectionDto
 import com.depromeet.data.remote.SeatReviewService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody

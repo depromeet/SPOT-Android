@@ -1,13 +1,13 @@
 package com.depromeet.data.repository
 
 import com.depromeet.data.datasource.SeatReviewDataSource
-import com.depromeet.data.model.request.seatreview.toSeatReview
-import com.depromeet.domain.entity.request.seatreview.RequestSeatReview
-import com.depromeet.domain.entity.response.seatreview.ResponsePresignedUrl
-import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
-import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
-import com.depromeet.domain.entity.response.seatreview.ResponseStadiumName
-import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
+import com.depromeet.data.model.request.seatReview.toSeatReview
+import com.depromeet.domain.entity.request.seatReview.RequestSeatReview
+import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.seatReview.ResponseSeatBlock
+import com.depromeet.domain.entity.response.seatReview.ResponseSeatRange
+import com.depromeet.domain.entity.response.seatReview.ResponseStadiumName
+import com.depromeet.domain.entity.response.seatReview.ResponseStadiumSection
 import com.depromeet.domain.repository.SeatReviewRepository
 import javax.inject.Inject
 

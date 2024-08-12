@@ -9,16 +9,9 @@ import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentEditReviewBinding
-import com.depromeet.presentation.extension.setOnSingleClickListener
-import com.depromeet.presentation.seatReview.ReviewActivity
-import com.depromeet.presentation.seatReview.dialog.DatePickerDialog
-import com.depromeet.presentation.seatReview.dialog.ImageUploadDialog
-import com.depromeet.presentation.seatReview.dialog.ReviewMySeatDialog
-import com.depromeet.presentation.seatReview.dialog.SelectSeatDialog
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.depromeet.presentation.seatreview.dialog.DatePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @AndroidEntryPoint
 class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
@@ -35,10 +28,28 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     }
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
-    private val selectedImage: List<ImageView> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
-    private val selectedImageLayout: List<FrameLayout> by lazy { listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage) }
-    private val removeButtons: List<ImageView> by lazy { listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage) }
-    private val selectedImageUris : MutableList<String> = mutableListOf()
+    private val selectedImage: List<ImageView> by lazy {
+        listOf(
+            binding.ivFirstImage,
+            binding.ivSecondImage,
+            binding.ivThirdImage
+        )
+    }
+    private val selectedImageLayout: List<FrameLayout> by lazy {
+        listOf(
+            binding.layoutFirstImage,
+            binding.layoutSecondImage,
+            binding.layoutThirdImage
+        )
+    }
+    private val removeButtons: List<ImageView> by lazy {
+        listOf(
+            binding.ivRemoveFirstImage,
+            binding.ivRemoveSecondImage,
+            binding.ivRemoveThirdImage
+        )
+    }
+    private val selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,7 +59,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         initObserver()
     }
 
-    private fun initView(){
+    private fun initView() {
 
     }
 
@@ -57,12 +68,12 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     }
 
     private fun initObserver() {
-        viewModel.editReview.asLiveData().observe(viewLifecycleOwner){
-             initDatePickerDialog()
+        viewModel.editReview.asLiveData().observe(viewLifecycleOwner) {
+            initDatePickerDialog()
         }
     }
 
-    private fun initDatePickerDialog(){
+    private fun initDatePickerDialog() {
         binding.layoutDatePicker.setOnClickListener {
             DatePickerDialog().show(parentFragmentManager, "DatePickerDialogTag")
         }

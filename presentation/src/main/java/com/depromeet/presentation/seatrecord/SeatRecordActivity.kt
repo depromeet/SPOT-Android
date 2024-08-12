@@ -22,11 +22,11 @@ import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.loadAndCircle
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.home.ProfileEditActivity
-import com.depromeet.presentation.seatReview.ReviewActivity
 import com.depromeet.presentation.seatrecord.test.RecordListItem
 import com.depromeet.presentation.seatrecord.test.SeatRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.depromeet.presentation.seatreview.ReviewActivity
 import com.depromeet.presentation.util.CalendarUtil
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -177,7 +177,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
                         Timber.d("test uistate success : ${reviewState.data.reviews}")
-                        if(!viewModel.yearClickedEvent.value){
+                        if (!viewModel.yearClickedEvent.value) {
                             adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
                         }
                     } else {
@@ -218,7 +218,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     stopReviewShimmer()
                     val newProfileItem = RecordListItem.Profile(state.data.profile)
                     //val newDateItem =
-                     //   RecordListItem.Date((viewModel.date.value as UiState.Success).data.yearMonths)
+                    //   RecordListItem.Date((viewModel.date.value as UiState.Success).data.yearMonths)
                     val newRecordItem = RecordListItem.Record(state.data.reviews)
                     val newList = adapter.currentList.toMutableList()
                     newList[0] = newProfileItem
