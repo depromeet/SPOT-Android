@@ -94,7 +94,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             btRecordWriteRecord.setOnSingleClickListener { navigateToReviewActivity() }
 
             /** 로딩 실패 **/
-            btRecordFailRefresh.setOnSingleClickListener { viewModel.getReviewDate() }
+            btRecordFailRefresh.setOnSingleClickListener {
+                if (viewModel.reviews.value is UiState.Failure || viewModel.date.value is UiState.Failure) {
+                    makeSpotImageAppbar("리뷰를 불러오는데 실패하였습니다.")
+                }
+                viewModel.getReviewDate()
+            }
         }
     }
 
@@ -141,6 +146,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             rvSeatRecord.adapter = adapter
             rvSeatRecord.addOnScrollListener(object : OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    val scrollTop = !binding.rvSeatRecord.canScrollVertically(-1)
                     val scrollBottom = !binding.rvSeatRecord.canScrollVertically(1)
                     if (scrollBottom && !isLoading && viewModel.reviews.value is UiState.Success) {
                         if (!(viewModel.reviews.value as UiState.Success).data.last) {
@@ -148,6 +154,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                             viewModel.loadNextSeatRecords()
                         }
                     }
+                    binding.fabRecordUp.visibility = if (scrollTop) GONE else VISIBLE
                 }
             })
         }
@@ -217,12 +224,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Success -> {
                     stopReviewShimmer()
                     val newProfileItem = RecordListItem.Profile(state.data.profile)
-                    //val newDateItem =
-                    //   RecordListItem.Date((viewModel.date.value as UiState.Success).data.yearMonths)
+                    val newDateItem =
+                        RecordListItem.Date((viewModel.date.value as UiState.Success).data.yearMonths)
                     val newRecordItem = RecordListItem.Record(state.data.reviews)
                     val newList = adapter.currentList.toMutableList()
                     newList[0] = newProfileItem
-                    //newList[1] = newDateItem
+                    newList[1] = newDateItem
                     newList[2] = newRecordItem
 
                     adapter.submitList(newList)
