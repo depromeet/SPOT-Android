@@ -1,4 +1,4 @@
-package com.depromeet.data.model.request.seatreview
+package com.depromeet.data.model.request.seatReview
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

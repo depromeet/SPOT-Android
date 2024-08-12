@@ -1,6 +1,6 @@
-package com.depromeet.data.model.response.seatreview
+package com.depromeet.data.model.response.seatReview
 
-import com.depromeet.domain.entity.response.seatreview.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrl
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

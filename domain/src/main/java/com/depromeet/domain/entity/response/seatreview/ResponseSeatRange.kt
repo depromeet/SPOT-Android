@@ -1,4 +1,4 @@
-package com.depromeet.domain.entity.response.seatreview
+package com.depromeet.domain.entity.response.seatReview
 
 data class ResponseSeatRange(
     val id: Int,
