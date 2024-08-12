@@ -1,21 +1,21 @@
 package com.depromeet.presentation.seatrecord.test
 
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.databinding.ItemRecordProfileBinding
 import com.depromeet.presentation.extension.loadAndCircle
 
 class RecordProfileViewHolder(
     internal val binding: ItemRecordProfileBinding,
-    private val editClick: (MySeatRecordResponse.MyProfileResponse) -> Unit,
+    private val editClick: (ResponseMySeatRecord.MyProfileResponse) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(data: MySeatRecordResponse.MyProfileResponse) = with(binding) {
+    fun bind(data: ResponseMySeatRecord.MyProfileResponse) = with(binding) {
         initEvent(data)
         initView(data)
     }
 
-    private fun initView(data: MySeatRecordResponse.MyProfileResponse) = with(binding) {
+    private fun initView(data: ResponseMySeatRecord.MyProfileResponse) = with(binding) {
         if (data.teamId != null && data.teamId != 0) {
             csbvRecordTitle.setTextPart("${data.teamName}의 Lv.", data.level, " ${data.levelTitle}")
         } else {
@@ -26,7 +26,7 @@ class RecordProfileViewHolder(
         ivRecordProfile.loadAndCircle(data.profileImage)
     }
 
-    private fun initEvent(data: MySeatRecordResponse.MyProfileResponse) = with(binding) {
+    private fun initEvent(data: ResponseMySeatRecord.MyProfileResponse) = with(binding) {
         ivRecordProfile.setOnClickListener { editClick(data) }
         ivRecordEdit.setOnClickListener { editClick(data) }
     }

@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.response.home
 
-data class RecentReviewResponse(
+data class ResponseRecentReview(
     val review: ReviewWrapperResponse,
     val reviewCount: Int = 0,
 ) {

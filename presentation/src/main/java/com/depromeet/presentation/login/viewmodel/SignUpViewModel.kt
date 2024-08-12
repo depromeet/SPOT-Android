@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
 import com.depromeet.domain.entity.request.signup.PostSignupModel
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
 import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.domain.repository.SignupRepository
-import com.depromeet.presentation.extension.NICKNAME_PATTERN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +35,7 @@ class SignUpViewModel @Inject constructor(
     private val _initKakaoLoginFragment = MutableStateFlow<Boolean>(true)
     val initKakaoLoginFragment: StateFlow<Boolean> = _initKakaoLoginFragment.asStateFlow()
 
-    private val _team = MutableStateFlow<UiState<List<BaseballTeamResponse>>>(UiState.Loading)
+    private val _team = MutableStateFlow<UiState<List<ResponseBaseballTeam>>>(UiState.Loading)
     val team = _team.asStateFlow()
 
     private val _cheerTeam = MutableStateFlow(0)

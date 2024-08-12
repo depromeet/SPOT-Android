@@ -1,6 +1,6 @@
 package com.depromeet.presentation.seatrecord.uiMapper
 
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.viewfinder.sample.Keyword
 
 /**
@@ -8,7 +8,7 @@ import com.depromeet.presentation.viewfinder.sample.Keyword
  */
 data class MonthReviewData(
     val month: Int,
-    val reviews: List<MySeatRecordResponse.ReviewResponse>,
+    val reviews: List<ResponseMySeatRecord.ReviewResponse>,
 )
 
 data class MonthUiData(
@@ -19,7 +19,7 @@ data class MonthUiData(
 /**
  * 우선 Ui Mapper로 임시 처리 추후 관희 flowRow 변경 사항에 따라 수정 예정
  */
-fun MySeatRecordResponse.ReviewResponse.ReviewKeywordResponse.toUiKeyword() =
+fun ResponseMySeatRecord.ReviewResponse.ReviewKeywordResponse.toUiKeyword() =
     Keyword(
         message = content,
         type = if (isPositive) 1 else 0,

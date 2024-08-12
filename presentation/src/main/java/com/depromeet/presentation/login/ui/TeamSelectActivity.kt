@@ -6,13 +6,12 @@ import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentTeamSelectBinding
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.home.adapter.BaseballTeamAdapter
 import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
-import com.depromeet.presentation.login.viewmodel.NicknameInputViewModel
 import com.depromeet.presentation.login.viewmodel.SignUpViewModel
 import com.depromeet.presentation.login.viewmodel.SignupUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -98,7 +97,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
             )
         )
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
-            override fun onItemClubClick(item: BaseballTeamResponse) {
+            override fun onItemClubClick(item: ResponseBaseballTeam) {
                 signupViewModel.setClickedBaseballTeam(item.id)
                 binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
             }

@@ -1,6 +1,6 @@
 package com.depromeet.data.model.request.home
 
-import com.depromeet.domain.entity.request.home.ProfileEditRequest
+import com.depromeet.domain.entity.request.home.RequestProfileEdit
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,7 +14,7 @@ data class RequestProfileEditDto(
     val teamId: Int? = null,
 ) {
     companion object {
-        fun ProfileEditRequest.toProfileEditRequestDto() = RequestProfileEditDto(
+        fun RequestProfileEdit.toProfileEditRequestDto() = RequestProfileEditDto(
             profileImage = url.ifEmpty { null },
             nickname = nickname.ifEmpty { null },
             teamId = teamId.takeIf { it !=0 }

@@ -1,6 +1,6 @@
 package com.depromeet.data.model.response.home
 
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -169,7 +169,7 @@ data class ResponseMySeatRecordDto(
     )
 
     companion object {
-        fun ResponseMySeatRecordDto.toMySeatRecordResponse() = MySeatRecordResponse(
+        fun ResponseMySeatRecordDto.toMySeatRecordResponse() = ResponseMySeatRecord(
             profile = memberInfoOnMyReview.toMyProfileResponse(),
             reviews = reviews.map { it.baseReview.toReviewResponse() },
             totalElements = totalElements,
@@ -182,7 +182,7 @@ data class ResponseMySeatRecordDto(
         )
 
         private fun ResponseMemberDto.toMyProfileResponse() =
-            MySeatRecordResponse.MyProfileResponse(
+            ResponseMySeatRecord.MyProfileResponse(
                 userId = userId,
                 profileImage = profileImageUrl ?: "",
                 level = level,
@@ -193,7 +193,7 @@ data class ResponseMySeatRecordDto(
                 teamName = teamName
             )
 
-        private fun ResponseReviewDto.toReviewResponse() = MySeatRecordResponse.ReviewResponse(
+        private fun ResponseReviewDto.toReviewResponse() = ResponseMySeatRecord.ReviewResponse(
             id = id,
             stadiumId = stadium.id,
             stadiumName = stadium.name,
@@ -212,21 +212,21 @@ data class ResponseMySeatRecordDto(
         )
 
         private fun ResponseReviewDto.ResponseMemberDto.toMemberResponse() =
-            MySeatRecordResponse.ReviewResponse.MemberResponse(
+            ResponseMySeatRecord.ReviewResponse.MemberResponse(
                 profileImage = profileImage ?: "",
                 nickname = nickname,
                 level = level
             )
 
         private fun ResponseReviewDto.ResponseReviewKeywordDto.toReviewKeywordResponse() =
-            MySeatRecordResponse.ReviewResponse.ReviewKeywordResponse(
+            ResponseMySeatRecord.ReviewResponse.ReviewKeywordResponse(
                 id = id,
                 content = content,
                 isPositive = isPositive
             )
 
         private fun ResponseReviewDto.ResponseReviewImageDto.toReviewImageResponse() =
-            MySeatRecordResponse.ReviewResponse.ReviewImageResponse(
+            ResponseMySeatRecord.ReviewResponse.ReviewImageResponse(
                 id = id,
                 url = url
             )

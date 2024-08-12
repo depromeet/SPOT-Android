@@ -1,6 +1,6 @@
 package com.depromeet.data.model.response.home
 
-import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,7 +18,7 @@ data class ResponseReviewDateDto(
     )
 
     companion object {
-        fun ResponseReviewDateDto.toReviewDateResponse(): ReviewDateResponse {
+        fun ResponseReviewDateDto.toReviewDateResponse(): ResponseReviewDate {
             val groupedByYear = this.yearMonths
                 .groupBy { it.year }
                 .toSortedMap(reverseOrder())
@@ -26,13 +26,13 @@ data class ResponseReviewDateDto(
             val firstYear = groupedByYear.keys.firstOrNull()
 
             val yearMonths = groupedByYear.map { (year, dates) ->
-                ReviewDateResponse.YearMonths(
+                ResponseReviewDate.YearMonths(
                     year = year,
                     months = buildList {
-                        add(ReviewDateResponse.MonthData(month = 0, isClicked = true))
+                        add(ResponseReviewDate.MonthData(month = 0, isClicked = true))
                         addAll(
                             dates.map { date ->
-                                ReviewDateResponse.MonthData(
+                                ResponseReviewDate.MonthData(
                                     month = date.month,
                                     isClicked = false
                                 )
@@ -43,7 +43,7 @@ data class ResponseReviewDateDto(
                 )
             }
 
-            return ReviewDateResponse(yearMonths = yearMonths)
+            return ResponseReviewDate(yearMonths = yearMonths)
         }
     }
 }

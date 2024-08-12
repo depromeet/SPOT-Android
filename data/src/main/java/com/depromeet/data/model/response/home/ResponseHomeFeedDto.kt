@@ -1,6 +1,6 @@
 package com.depromeet.data.model.response.home
 
-import com.depromeet.domain.entity.response.home.HomeFeedResponse
+import com.depromeet.domain.entity.response.home.ResponseHomeFeed
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,7 +19,7 @@ data class ResponseHomeFeedDto(
     @SerialName("mascotImageUrl")
     val mascotImageUrl : String
 ) {
-    fun toHomeFeedResponse() = HomeFeedResponse(
+    fun toHomeFeedResponse() = ResponseHomeFeed(
         level = level,
         teamName = teamName,
         teamId = teamId,

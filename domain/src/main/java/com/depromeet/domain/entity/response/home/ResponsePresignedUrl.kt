@@ -1,5 +1,5 @@
 package com.depromeet.domain.entity.response.home
 
-data class PresignedUrlResponse(
+data class ResponsePresignedUrl(
     val presignedUrl: String = ""
 )

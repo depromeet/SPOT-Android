@@ -1,6 +1,6 @@
 package com.depromeet.data.model.request.home
 
-import com.depromeet.domain.entity.request.home.MySeatRecordRequest
+import com.depromeet.domain.entity.request.home.RequestMySeatRecord
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +16,7 @@ data class RequestMySeatRecordDto(
     val month: Int? = null,
 ) {
     companion object {
-        fun MySeatRecordRequest.toMySeatRecordRequestDto() = RequestMySeatRecordDto(
+        fun RequestMySeatRecord.toMySeatRecordRequestDto() = RequestMySeatRecordDto(
             page = page,
             size = size,
             year = year,

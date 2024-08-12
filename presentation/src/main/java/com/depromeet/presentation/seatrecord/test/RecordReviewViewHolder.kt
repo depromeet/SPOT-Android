@@ -1,7 +1,7 @@
 package com.depromeet.presentation.seatrecord.test
 
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.databinding.ItemRecordReviewBinding
 import com.depromeet.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
@@ -9,14 +9,14 @@ import com.depromeet.presentation.util.CalendarUtil
 
 class RecordReviewViewHolder(
     internal val binding: ItemRecordReviewBinding,
-    private val reviewClick: (MySeatRecordResponse.ReviewResponse) -> Unit,
+    private val reviewClick: (ResponseMySeatRecord.ReviewResponse) -> Unit,
     private val editClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var adapter: MonthRecordAdapter
 
 
-    fun bind(data: List<MySeatRecordResponse.ReviewResponse>) {
+    fun bind(data: List<ResponseMySeatRecord.ReviewResponse>) {
         initMonthAdapter()
 
         val groupList =
@@ -34,7 +34,7 @@ class RecordReviewViewHolder(
             binding.rvRecordReview.adapter = adapter
             adapter.itemRecordClickListener =
                 object : MonthRecordAdapter.OnItemRecordClickListener {
-                    override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
+                    override fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse) {
                         reviewClick(item)
                     }
 

@@ -16,7 +16,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
 import com.depromeet.presentation.extension.toast
@@ -252,7 +252,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun onClickTeam() {
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
-            override fun onItemClubClick(item: BaseballTeamResponse) {
+            override fun onItemClubClick(item: ResponseBaseballTeam) {
                 viewModel.setClickedBaseballTeam(item.id)
                 binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
             }

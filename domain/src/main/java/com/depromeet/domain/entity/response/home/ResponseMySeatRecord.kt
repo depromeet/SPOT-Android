@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.response.home
 
-data class MySeatRecordResponse(
+data class ResponseMySeatRecord(
     val profile: MyProfileResponse = MyProfileResponse(),
     val reviews: List<ReviewResponse> = emptyList(),
     val totalElements: Int = 0,

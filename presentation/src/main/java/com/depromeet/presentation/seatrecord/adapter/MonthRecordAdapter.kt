@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.databinding.ItemRecentMonthBinding
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.util.ItemDiffCallback
@@ -20,7 +20,7 @@ class MonthRecordAdapter() :
         )
     ) {
     interface OnItemRecordClickListener {
-        fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse)
+        fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
         fun onMoreRecordClick(reviewId: Int)
     }
 
@@ -69,11 +69,11 @@ class MonthRecordViewHolder(
             binding.rvRecentPost.adapter = adapter
             adapter.itemRecordClickListener =
                 object : RecentRecordAdapter.OnItemRecordClickListener {
-                    override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
+                    override fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse) {
                         itemRecordClickListener?.onItemRecordClick(item)
                     }
 
-                    override fun onItemMoreClick(item: MySeatRecordResponse.ReviewResponse) {
+                    override fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse) {
                         itemRecordClickListener?.onMoreRecordClick(item.id)
                     }
                 }

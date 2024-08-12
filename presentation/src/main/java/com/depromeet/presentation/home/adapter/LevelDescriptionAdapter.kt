@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.LevelByPostResponse
+import com.depromeet.domain.entity.response.home.ResponseLevelByPost
 import com.depromeet.presentation.databinding.ItemLevelDescriptionBinding
 import com.depromeet.presentation.util.ItemDiffCallback
 
-class LevelDescriptionAdapter : ListAdapter<LevelByPostResponse, LevelDescriptionViewHolder>(
+class LevelDescriptionAdapter : ListAdapter<ResponseLevelByPost, LevelDescriptionViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.level == newItem.level },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -32,7 +32,7 @@ class LevelDescriptionAdapter : ListAdapter<LevelByPostResponse, LevelDescriptio
 class LevelDescriptionViewHolder(
     private val binding: ItemLevelDescriptionBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: LevelByPostResponse) {
+    fun bind(item: ResponseLevelByPost) {
         with(binding) {
             "Lv.${item.level}".also { tvLevel.text = it }
             tvTitle.text = item.title

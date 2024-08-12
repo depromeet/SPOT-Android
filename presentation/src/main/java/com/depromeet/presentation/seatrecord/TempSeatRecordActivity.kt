@@ -22,8 +22,8 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotSpinner
 import com.depromeet.designsystem.extension.dpToPx
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
-import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
+import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityTempSeatRecordBinding
 import com.depromeet.presentation.extension.toast
@@ -204,7 +204,7 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         }
     }
 
-    private fun setProfile(data: MySeatRecordResponse.MyProfileResponse) {
+    private fun setProfile(data: ResponseMySeatRecord.MyProfileResponse) {
         with(binding) {
 //            if (data.teamId != null) {
 //                "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also {
@@ -224,7 +224,7 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         }
     }
 
-    private fun createColoredLevelString(data: MySeatRecordResponse.MyProfileResponse): SpannableString {
+    private fun createColoredLevelString(data: ResponseMySeatRecord.MyProfileResponse): SpannableString {
         /** 커스텀뷰에 또 spannable을 적용해야한다니... */
         val fullText = if (data.teamId != null) {
             "${data.teamName}의 Lv.${data.level} ${data.levelTitle}"
@@ -246,7 +246,7 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         return spannableString
     }
 
-    private fun setYearSpinner(data: ReviewDateResponse) {
+    private fun setYearSpinner(data: ResponseReviewDate) {
         if (isSpinnerInitialized) return
         val years = data.yearMonths.map { it.year }
         val yearList = years.map { "${it}년" }
@@ -324,7 +324,7 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         monthRecordAdapter.itemRecordClickListener =
             object : MonthRecordAdapter.OnItemRecordClickListener {
 
-                override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
+                override fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse) {
                     viewModel.setClickedReviewId(item.id)
                     supportFragmentManager.commit {
                         replace(
@@ -365,7 +365,7 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         })
     }
 
-    private fun updateReviewList(reviews: List<MySeatRecordResponse.ReviewResponse>) {
+    private fun updateReviewList(reviews: List<ResponseMySeatRecord.ReviewResponse>) {
         val groupList =
             reviews.groupBy { CalendarUtil.getMonthFromDateFormat(it.date) }
                 .map { (month, reviews) ->

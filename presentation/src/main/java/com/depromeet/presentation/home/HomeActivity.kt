@@ -9,7 +9,7 @@ import coil.load
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotImageSnackBar
-import com.depromeet.domain.entity.response.home.HomeFeedResponse
+import com.depromeet.domain.entity.response.home.ResponseHomeFeed
 import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.dpToPx
@@ -22,7 +22,6 @@ import com.depromeet.presentation.setting.SettingActivity
 import com.depromeet.presentation.viewfinder.StadiumActivity
 import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding>(
@@ -186,7 +185,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
     }
 
-    private fun setHomeFeed(data: HomeFeedResponse) = with(binding) {
+    private fun setHomeFeed(data: ResponseHomeFeed) = with(binding) {
         "Lv.${data.level}".also { tvHomeLevel.text = it }
         tvHomeTeam.text = if (data.teamId == null) {
             "모두를 응원하는"

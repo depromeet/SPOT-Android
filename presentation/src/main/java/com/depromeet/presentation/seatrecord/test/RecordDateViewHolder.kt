@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.designsystem.SpotDropDownSpinner
-import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
 import timber.log.Timber
@@ -21,7 +21,7 @@ class RecordDateViewHolder(
     private var isSettingSelectedItem = false
 
 
-    fun bind(data: List<ReviewDateResponse.YearMonths>) {
+    fun bind(data: List<ResponseReviewDate.YearMonths>) {
         initMonthAdapter()
         setYearSpinner(data)
         val clickedYearMonths = data.firstOrNull { it.isClicked }?.months
@@ -33,7 +33,7 @@ class RecordDateViewHolder(
         }
     }
 
-    private fun setYearSpinner(data: List<ReviewDateResponse.YearMonths>) {
+    private fun setYearSpinner(data: List<ResponseReviewDate.YearMonths>) {
         val years = data.map { it.year }
         val yearList = years.map { "${it}년" }
         val selectedYear = data.firstOrNull { it.isClicked }?.year
@@ -44,6 +44,8 @@ class RecordDateViewHolder(
             yearAdapter = SpotDropDownSpinner(yearList, selectedPosition)
             binding.spinnerRecordYear.adapter = yearAdapter
 
+
+            binding.spinnerRecordYear.setSelection(selectedPosition)
             binding.spinnerRecordYear.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
@@ -67,7 +69,6 @@ class RecordDateViewHolder(
                 }
 
             isSettingSelectedItem = true
-            binding.spinnerRecordYear.setSelection(selectedPosition)
         }
         isYearInitialized = true
     }

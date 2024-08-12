@@ -1,6 +1,6 @@
 package com.depromeet.data.model.response.home
 
-import com.depromeet.domain.entity.response.home.RecentReviewResponse
+import com.depromeet.domain.entity.response.home.ResponseRecentReview
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -120,20 +120,20 @@ data class ResponseRecentReviewDto(
     )
 
     companion object {
-        fun ResponseRecentReviewDto.toRecentReviewResponse() = RecentReviewResponse(
+        fun ResponseRecentReviewDto.toRecentReviewResponse() = ResponseRecentReview(
             review = review.toReviewWrapperResponse(),
             reviewCount = reviewCount
         )
 
         fun ResponseReviewWrapperDto.toReviewWrapperResponse() =
-            RecentReviewResponse.ReviewWrapperResponse(
+            ResponseRecentReview.ReviewWrapperResponse(
                 baseReview = baseReview.toReviewResponse(),
                 stadiumName = stadiumName,
                 sectionName = sectionName,
                 blockCode = blockCode
             )
 
-        fun ResponseReviewDto.toReviewResponse() = RecentReviewResponse.ReviewResponse(
+        fun ResponseReviewDto.toReviewResponse() = ResponseRecentReview.ReviewResponse(
             id = id,
             member = member.toMemberResponse(),
             stadium = stadium.toStadiumResponse(),
@@ -147,44 +147,44 @@ data class ResponseRecentReviewDto(
             keywords = keywords.map { it.toKeywordResponse() }
         )
 
-        fun ResponseMemberDto.toMemberResponse() = RecentReviewResponse.MemberResponse(
+        fun ResponseMemberDto.toMemberResponse() = ResponseRecentReview.MemberResponse(
             profileImage = profileImage,
             nickname = nickname,
             level = level
         )
 
-        fun ResponseStadiumDto.toStadiumResponse() = RecentReviewResponse.StadiumResponse(
+        fun ResponseStadiumDto.toStadiumResponse() = ResponseRecentReview.StadiumResponse(
             id = id,
             name = name
         )
 
-        fun ResponseSectionDto.toSectionResponse() = RecentReviewResponse.SectionResponse(
+        fun ResponseSectionDto.toSectionResponse() = ResponseRecentReview.SectionResponse(
             id = id,
             name = name,
             alias = alias
         )
 
-        fun ResponseBlockDto.toBlockResponse() = RecentReviewResponse.BlockResponse(
+        fun ResponseBlockDto.toBlockResponse() = ResponseRecentReview.BlockResponse(
             id = id,
             code = code
         )
 
-        fun ResponseRowDto.toRowResponse() = RecentReviewResponse.RowResponse(
+        fun ResponseRowDto.toRowResponse() = ResponseRecentReview.RowResponse(
             id = id,
             number = number
         )
 
-        fun ResponseSeatDto.toSeatResponse() = RecentReviewResponse.SeatResponse(
+        fun ResponseSeatDto.toSeatResponse() = ResponseRecentReview.SeatResponse(
             id = id,
             seatNumber = seatNumber
         )
 
-        fun ResponseImageDto.toImageResponse() = RecentReviewResponse.ImageResponse(
+        fun ResponseImageDto.toImageResponse() = ResponseRecentReview.ImageResponse(
             id = id,
             url = url
         )
 
-        fun ResponseKeywordDto.toKeywordResponse() = RecentReviewResponse.KeywordResponse(
+        fun ResponseKeywordDto.toKeywordResponse() = ResponseRecentReview.KeywordResponse(
             id = id,
             content = content,
             isPositive = isPositive

@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.designsystem.SpotImageSnackBar
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.loadAndCircle
@@ -190,7 +190,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     } else {
                         adapter.submitList(
                             listOf(
-                                RecordListItem.Profile(MySeatRecordResponse.MyProfileResponse()),
+                                RecordListItem.Profile(ResponseMySeatRecord.MyProfileResponse()),
                                 RecordListItem.Date(state.data.yearMonths),
                                 RecordListItem.Record(emptyList())
                             )
@@ -261,7 +261,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun profileNone(profile: MySeatRecordResponse.MyProfileResponse) {
+    private fun profileNone(profile: ResponseMySeatRecord.MyProfileResponse) {
         with(binding) {
             if (profile.teamId != null && profile.teamId != 0) {
                 csbvRecordTitle.setTextPart(

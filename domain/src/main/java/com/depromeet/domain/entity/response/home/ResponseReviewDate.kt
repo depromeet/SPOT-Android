@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.response.home
 
-data class ReviewDateResponse(
+data class ResponseReviewDate(
     val yearMonths: List<YearMonths> = emptyList(),
 ) {
     data class YearMonths(

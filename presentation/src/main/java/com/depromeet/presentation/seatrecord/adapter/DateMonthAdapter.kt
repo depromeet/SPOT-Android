@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.databinding.ItemDateMonthBinding
 import com.depromeet.presentation.util.ItemDiffCallback
 
 class DateMonthAdapter(
     private val monthClick: (Int) -> Unit,
-) : ListAdapter<ReviewDateResponse.MonthData, DateMonthViewHolder>(
+) : ListAdapter<ResponseReviewDate.MonthData, DateMonthViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -39,7 +39,7 @@ class DateMonthViewHolder(
     private val binding: ItemDateMonthBinding,
     private val monthClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ReviewDateResponse.MonthData) {
+    fun bind(item: ResponseReviewDate.MonthData) {
         binding.root.setOnClickListener {
             monthClick(item.month)
         }

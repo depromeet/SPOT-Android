@@ -4,10 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.request.home.ProfileEditRequest
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
-import com.depromeet.domain.entity.response.home.PresignedUrlResponse
-import com.depromeet.domain.entity.response.home.ProfileEditResponse
+import com.depromeet.domain.entity.request.home.RequestProfileEdit
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
+import com.depromeet.domain.entity.response.home.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.home.ResponseProfileEdit
 import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.extension.validateNickName
@@ -43,13 +43,13 @@ class ProfileEditViewModel @Inject constructor(
     )
     val events: SharedFlow<ProfileEvents> = _events.asSharedFlow()
 
-    private val _team = MutableStateFlow<UiState<List<BaseballTeamResponse>>>(UiState.Loading)
+    private val _team = MutableStateFlow<UiState<List<ResponseBaseballTeam>>>(UiState.Loading)
     val team = _team.asStateFlow()
 
-    private val _presignedUrl = MutableStateFlow<UiState<PresignedUrlResponse>>(UiState.Loading)
+    private val _presignedUrl = MutableStateFlow<UiState<ResponsePresignedUrl>>(UiState.Loading)
     val presignedUrl = _presignedUrl.asStateFlow()
 
-    private val _profileEdit = MutableStateFlow<UiState<ProfileEditResponse>>(UiState.Loading)
+    private val _profileEdit = MutableStateFlow<UiState<ResponseProfileEdit>>(UiState.Loading)
     val profileEdit = _profileEdit.asStateFlow()
 
     private val _nickname = MutableStateFlow("")
@@ -151,7 +151,7 @@ class ProfileEditViewModel @Inject constructor(
             }
 
             homeRepository.putProfileEdit(
-                ProfileEditRequest(
+                RequestProfileEdit(
                     url = getPresignedUrlOrProfileImage(),
                     nickname = nickname.value,
                     teamId = cheerTeam.value

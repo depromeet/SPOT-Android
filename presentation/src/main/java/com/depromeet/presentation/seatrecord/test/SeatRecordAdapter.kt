@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
-import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
+import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.databinding.ItemRecordProfileBinding
 import com.depromeet.presentation.databinding.ItemRecordReviewBinding
@@ -19,17 +19,17 @@ enum class RecordViewType {
 }
 
 sealed class RecordListItem {
-    data class Profile(val profile: MySeatRecordResponse.MyProfileResponse) : RecordListItem()
-    data class Date(val reviewDates: List<ReviewDateResponse.YearMonths>) : RecordListItem()
-    data class Record(val reviews: List<MySeatRecordResponse.ReviewResponse>) : RecordListItem()
+    data class Profile(val profile: ResponseMySeatRecord.MyProfileResponse) : RecordListItem()
+    data class Date(val reviewDates: List<ResponseReviewDate.YearMonths>) : RecordListItem()
+    data class Record(val reviews: List<ResponseMySeatRecord.ReviewResponse>) : RecordListItem()
 }
 
 class SeatRecordAdapter(
-    private val reviewClick: (MySeatRecordResponse.ReviewResponse) -> Unit,
+    private val reviewClick: (ResponseMySeatRecord.ReviewResponse) -> Unit,
     private val reviewEditClick: (Int) -> Unit,
     private val monthClick: (Int) -> Unit,
     private val yearClick: (Int) -> Unit,
-    private val profileEditClick: (MySeatRecordResponse.MyProfileResponse) -> Unit,
+    private val profileEditClick: (ResponseMySeatRecord.MyProfileResponse) -> Unit,
 ) : ListAdapter<RecordListItem, RecyclerView.ViewHolder>(
     RecordItemDiffCallback()
 ) {
@@ -112,12 +112,8 @@ class SeatRecordAdapter(
     fun updateItemAt(index: Int, newItem: RecordListItem) {
         val newList = currentList.toMutableList()
         if (index >= 0 && index < newList.size) {
-            Timber.d("test -> 인덱스 :  $index 새로운 아이템 :  $newItem")
             newList[index] = newItem
-
-            submitList(newList) {
-                Timber.d("test -> submitlist 완료")
-            }
+            submitList(newList)
         } else {
             Timber.d("test -> 인덱스 초과: $index")
         }

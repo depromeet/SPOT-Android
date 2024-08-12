@@ -7,20 +7,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemBaseballTeamBinding
 import com.depromeet.presentation.util.ItemDiffCallback
 
 
-class BaseballTeamAdapter : ListAdapter<BaseballTeamResponse, ProfileEditTeamViewHolder>(
+class BaseballTeamAdapter : ListAdapter<ResponseBaseballTeam, ProfileEditTeamViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.name == newItem.name },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
     interface OnItemClubClickListener {
-        fun onItemClubClick(item: BaseballTeamResponse)
+        fun onItemClubClick(item: ResponseBaseballTeam)
     }
 
     var itemClubClickListener: OnItemClubClickListener? = null
@@ -46,7 +46,7 @@ class BaseballTeamAdapter : ListAdapter<BaseballTeamResponse, ProfileEditTeamVie
 class ProfileEditTeamViewHolder(
     private val binding: ItemBaseballTeamBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: BaseballTeamResponse) {
+    fun bind(item: ResponseBaseballTeam) {
         with(binding) {
             ivTeamImage.load(item.logo) {
                 placeholder(R.drawable.ic_lg_team)

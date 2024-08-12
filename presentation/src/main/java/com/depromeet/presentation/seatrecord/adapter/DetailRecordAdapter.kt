@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
-import com.depromeet.presentation.R
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.databinding.ItemSeatReviewDetailBinding
 import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
 import com.depromeet.presentation.util.CalendarUtil
@@ -21,9 +20,9 @@ import com.depromeet.presentation.util.applyBoldSpan
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
 
 class DetailRecordAdapter(
-    private val myProfile: MySeatRecordResponse.MyProfileResponse,
+    private val myProfile: ResponseMySeatRecord.MyProfileResponse,
     private val moreClick: (Int) -> Unit,
-) : ListAdapter<MySeatRecordResponse.ReviewResponse, ReviewDetailViewHolder>(
+) : ListAdapter<ResponseMySeatRecord.ReviewResponse, ReviewDetailViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -57,8 +56,8 @@ class ReviewDetailViewHolder(
     }
 
     fun bind(
-        item: MySeatRecordResponse.ReviewResponse,
-        profile: MySeatRecordResponse.MyProfileResponse,
+        item: ResponseMySeatRecord.ReviewResponse,
+        profile: ResponseMySeatRecord.MyProfileResponse,
     ) {
         with(binding) {
             binding.ivDetailMore.setOnClickListener {
