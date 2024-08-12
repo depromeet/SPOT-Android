@@ -113,6 +113,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                     currentState.data.level,
                     currentState.data.mascotImageUrl
                 ).show(supportFragmentManager, LevelupDialog.TAG)
+                homeViewModel.levelState.value = false
             }
         }
     }
