@@ -39,7 +39,6 @@ class RecordDateViewHolder(
         val selectedPosition = years.indexOf(selectedYear).takeIf { it >= 0 } ?: 0
 
         if(!::yearAdapter.isInitialized){
-            Timber.d("------------\ntest -> 초기화 안됨!!!")
             yearAdapter = SpotDropDownSpinner(yearList, selectedPosition)
             binding.spinnerRecordYear.adapter = yearAdapter
 
@@ -56,8 +55,6 @@ class RecordDateViewHolder(
                         yearAdapter.setSelectedItemPosition(position)
                         val selectedYear = years[position]
                         yearClick(selectedYear)
-
-                        Timber.d("test 테스트 포지션 : $position  //// $selectedYear")
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -65,6 +62,7 @@ class RecordDateViewHolder(
 
         }else {
             yearAdapter.updateData(yearList, selectedPosition)
+            binding.spinnerRecordYear.setSelection(selectedPosition)
         }
     }
 

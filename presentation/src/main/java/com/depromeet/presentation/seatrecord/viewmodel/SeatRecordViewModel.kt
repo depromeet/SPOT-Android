@@ -31,9 +31,6 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow<ResponseMySeatRecord.MyProfileResponse>(ResponseMySeatRecord.MyProfileResponse())
     val profile = _profile.asStateFlow()
 
-    private val _yearClickedEvent = MutableStateFlow(false)
-    val yearClickedEvent = _yearClickedEvent.asStateFlow()
-
     private val _deleteClickedEvent = MutableStateFlow(EditUi.NONE)
     val deleteClickedEvent = _deleteClickedEvent.asStateFlow()
 
@@ -140,14 +137,12 @@ class SeatRecordViewModel @Inject constructor(
     fun setSelectedYear(year: Int) {
         val currentState = date.value
         if (currentState is UiState.Success) {
-            _yearClickedEvent.value = true
             val updatedYearMonths = currentState.data.yearMonths.map { yearMonth ->
                 yearMonth.copy(
                     isClicked = yearMonth.year == year
                 )
             }
             _date.value = UiState.Success(currentState.data.copy(yearMonths = updatedYearMonths))
-            _yearClickedEvent.value = false
         }
     }
 
@@ -288,7 +283,14 @@ class SeatRecordViewModel @Inject constructor(
 
                 val updatedYearMonthsWithClicked = updatedYearMonths.map { yearMonth ->
                     if (yearMonth.year == highestYear) {
-                        yearMonth.copy(isClicked = true)
+                        val updatedMonths = yearMonth.months.map { monthData ->
+                            if (monthData.month == 0) {
+                                monthData.copy(isClicked = true)
+                            } else {
+                                monthData.copy(isClicked = false)
+                            }
+                        }
+                        yearMonth.copy(months = updatedMonths, isClicked = true)
                     } else {
                         yearMonth
                     }

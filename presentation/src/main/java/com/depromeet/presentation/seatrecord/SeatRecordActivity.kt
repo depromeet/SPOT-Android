@@ -128,7 +128,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 binding.rvSeatRecord.smoothScrollToPosition(0)
             },
             yearClick = { year ->
-                Timber.d("test -> yearclick ${year}")
                 viewModel.setSelectedYear(year)
                 binding.rvSeatRecord.smoothScrollToPosition(0)
             },
@@ -183,10 +182,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     stopDateShimmer()
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
-                        Timber.d("test uistate success : ${reviewState.data.reviews}")
-                        if (!viewModel.yearClickedEvent.value) {
-                            adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
-                        }
+                        adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
                     } else {
                         adapter.submitList(
                             listOf(
