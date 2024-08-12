@@ -1,6 +1,6 @@
-package com.depromeet.data.model.request.seatReview
+package com.depromeet.data.model.request.seatreview
 
-import com.depromeet.domain.entity.request.seatReview.RequestSeatReview
+import com.depromeet.domain.entity.request.seatreview.RequestSeatReview
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

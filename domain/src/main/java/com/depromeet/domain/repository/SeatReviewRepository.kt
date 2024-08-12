@@ -1,11 +1,11 @@
 package com.depromeet.domain.repository
 
-import com.depromeet.domain.entity.request.seatReview.RequestSeatReview
-import com.depromeet.domain.entity.response.seatReview.ResponsePresignedUrl
-import com.depromeet.domain.entity.response.seatReview.ResponseSeatBlock
-import com.depromeet.domain.entity.response.seatReview.ResponseSeatRange
-import com.depromeet.domain.entity.response.seatReview.ResponseStadiumName
-import com.depromeet.domain.entity.response.seatReview.ResponseStadiumSection
+import com.depromeet.domain.entity.request.seatreview.RequestSeatReview
+import com.depromeet.domain.entity.response.seatreview.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumName
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 
 interface SeatReviewRepository {
     suspend fun getStadiumName(): Result<List<ResponseStadiumName>>

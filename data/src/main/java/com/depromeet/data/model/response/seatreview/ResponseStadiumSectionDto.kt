@@ -1,6 +1,6 @@
-package com.depromeet.data.model.response.seatReview
+package com.depromeet.data.model.response.seatreview
 
-import com.depromeet.domain.entity.response.seatReview.ResponseStadiumSection
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

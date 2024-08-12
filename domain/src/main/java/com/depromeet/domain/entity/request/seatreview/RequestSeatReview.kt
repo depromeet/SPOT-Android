@@ -1,4 +1,4 @@
-package com.depromeet.domain.entity.request.seatReview
+package com.depromeet.domain.entity.request.seatreview
 
 data class RequestSeatReview(
     val images: List<String>,

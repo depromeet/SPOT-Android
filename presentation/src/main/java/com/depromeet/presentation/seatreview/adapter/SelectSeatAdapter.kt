@@ -9,7 +9,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.seatReview.ResponseStadiumSection
+import com.depromeet.domain.entity.response.seatreview.ResponseStadiumSection
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSelectSeatBinding
 import com.depromeet.presentation.util.ItemDiffCallback

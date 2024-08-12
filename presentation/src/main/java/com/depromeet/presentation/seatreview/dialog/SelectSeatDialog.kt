@@ -19,8 +19,8 @@ import androidx.lifecycle.asLiveData
 import coil.load
 import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.seatReview.ResponseSeatBlock
-import com.depromeet.domain.entity.response.seatReview.ResponseSeatRange
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatBlock
+import com.depromeet.domain.entity.response.seatreview.ResponseSeatRange
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.depromeet.presentation.extension.setOnSingleClickListener
