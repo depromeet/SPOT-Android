@@ -1,6 +1,6 @@
 package com.depromeet.data.model.response.home
 
-import com.depromeet.domain.entity.response.home.DeleteReviewResponse
+import com.depromeet.domain.entity.response.home.ResponseDeleteReview
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,7 +10,7 @@ data class ResponseDeleteReviewDto(
     val deleteReviewId: Int,
 ) {
     companion object {
-        fun ResponseDeleteReviewDto.toDeleteReviewResponse() = DeleteReviewResponse(
+        fun ResponseDeleteReviewDto.toDeleteReviewResponse() = ResponseDeleteReview(
             reviewId = deleteReviewId
         )
     }

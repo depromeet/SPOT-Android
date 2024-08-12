@@ -22,9 +22,8 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private val bubblePath: Path = Path()
     private val bubbleRect: RectF = RectF()
 
-    private var text: String = ""
+    private var textParts: List<String> = listOf()
     private var textSize: Float = 0f
-    private var textColor: Int = 0
     private var backgroundColor: Int = 0
     private var paddingLeftValue: Float = 0f
     private var paddingRightValue: Float = 0f
@@ -43,15 +42,10 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                         R.styleable.CustomSpeechBubbleView_backgroundColor,
                         context.getColor(R.color.black)
                     )
-                    textColor = getColor(
-                        R.styleable.CustomSpeechBubbleView_textColor,
-                        context.getColor(R.color.white)
-                    )
                     textSize = getDimension(
                         R.styleable.CustomSpeechBubbleView_textSize,
                         resources.getDimension(R.dimen.speech_bubble_text_size)
                     )
-                    text = getString(R.styleable.CustomSpeechBubbleView_text) ?: ""
                     paddingLeftValue = getDimension(
                         R.styleable.CustomSpeechBubbleView_paddingLeft,
                         resources.getDimension(R.dimen.speech_bubble_padding_left)
@@ -80,8 +74,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                         R.styleable.CustomSpeechBubbleView_cornerRadius,
                         resources.getDimension(R.dimen.speech_bubble_corner_radius)
                     )
-                    textStyle =
-                        getInt(R.styleable.CustomSpeechBubbleView_textStyle, Typeface.NORMAL)
+                    textStyle = getInt(R.styleable.CustomSpeechBubbleView_textStyle, Typeface.NORMAL)
                 } finally {
                     recycle()
                 }
@@ -89,21 +82,13 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
 
         bubblePaint.color = backgroundColor
         bubblePaint.style = Paint.Style.FILL
-        textPaint.color = textColor
+        textPaint.color = context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
         textPaint.textSize = textSize
-        textPaint.textAlign = Paint.Align.CENTER
-
-        textPaint.typeface = when (textStyle) {
-            1 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_medium)
-            2 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_semibold)
-            3 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
-            else -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
-        }
+        textPaint.textAlign = Paint.Align.LEFT
     }
 
-
-    fun setText(text: String) {
-        this.text = text
+    fun setTextPart(prefix: String, number: Int, suffix: String){
+        textParts = listOf(prefix, number.toString(), suffix)
         requestLayout()
         invalidate()
     }
@@ -111,10 +96,11 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        val textWidth = textPaint.measureText(text)
-        val desiredWidth = (textWidth + paddingBottomValue + paddingRightValue).toInt()
-        val desiredHeight =
-            (paddingTopValue + textSize + paddingBottomValue + triangleHeight).toInt()
+        val totalTextWidth = textParts.fold(0f) { acc, textPart ->
+            acc + textPaint.measureText(textPart)
+        }
+        val desiredWidth = (totalTextWidth + paddingLeftValue + paddingRightValue).toInt()
+        val desiredHeight = (paddingTopValue + textSize + paddingBottomValue + triangleHeight).toInt()
 
         val width = resolveSize(desiredWidth, widthMeasureSpec)
         val height = resolveSize(desiredHeight, heightMeasureSpec)
@@ -125,17 +111,13 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // 둥근 사각형
         val width = width.toFloat()
         val height = height.toFloat()
 
         val bubbleHeight = height - triangleHeight
-        bubbleRect.set(
-            0f, 0f, width, bubbleHeight
-        )
+        bubbleRect.set(0f, 0f, width, bubbleHeight)
         canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
 
-        // 삼각형
         bubblePath.reset()
         val triangleX = width / 2 - triangleWidth
         val triangleY = height - triangleHeight
@@ -147,9 +129,27 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
 
         canvas.drawPath(bubblePath, bubblePaint)
 
-        // 텍스트
-        val textX = width / 2
-        val textY = bubbleHeight / 2 - (textPaint.descent() + textPaint.ascent()) / 2
-        canvas.drawText(text, textX, textY, textPaint)
+        // 텍스트 그리기
+        var xOffset = paddingLeftValue
+        textParts.forEachIndexed { index, textPart ->
+            textPaint.color = when(index) {
+                1 -> context.getColor(com.depromeet.designsystem.R.color.color_action_enabled)
+                else -> context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
+            }
+            textPaint.typeface = when (textStyle) {
+                1 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_medium)
+                2 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_semibold)
+                3 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
+                else -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
+            }
+
+            val textWidth = textPaint.measureText(textPart)
+            val textX = xOffset
+            val textY = bubbleHeight / 2 - (textPaint.descent() + textPaint.ascent()) / 2
+
+            canvas.drawText(textPart, textX, textY, textPaint)
+            xOffset += textWidth
+        }
     }
 }
+

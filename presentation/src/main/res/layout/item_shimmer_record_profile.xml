@@ -13,21 +13,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="28dp"/>
+        android:layout_marginTop="26dp"/>
     <View
         android:id="@+id/v_seat_shimmer_profile_name"
         android:layout_width="150dp"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:background="@color/color_foreground_disabled"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="28dp"/>
+        android:layout_marginTop="16dp"/>
 
     <View
         android:id="@+id/v_seat_shimmer_name"
         android:layout_width="80dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:background="@color/color_foreground_disabled"
         app:layout_constraintStart_toStartOf="@id/v_seat_shimmer_profile_image"
         app:layout_constraintTop_toBottomOf="@id/v_seat_shimmer_profile_image"
@@ -36,12 +36,13 @@
 
     <View
         android:layout_width="120dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="4dp"
         android:background="@color/color_foreground_disabled"
         app:layout_constraintTop_toBottomOf="@id/v_seat_shimmer_name"
         app:layout_constraintStart_toStartOf="@id/v_seat_shimmer_name"
-        app:layout_constraintEnd_toEndOf="@id/v_seat_shimmer_name"/>
+        app:layout_constraintEnd_toEndOf="@id/v_seat_shimmer_name"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 

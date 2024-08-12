@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.response.home
 
-data class HomeFeedResponse(
+data class ResponseHomeFeed(
     val level: Int = 0,
     val teamName: String?,
     val teamId: Int?,

@@ -16,7 +16,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
 import com.depromeet.presentation.extension.toast
@@ -25,7 +25,7 @@ import com.depromeet.presentation.home.adapter.GridSpacingItemDecoration
 import com.depromeet.presentation.home.viewmodel.ProfileEditViewModel
 import com.depromeet.presentation.home.viewmodel.ProfileEvents
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
-import com.depromeet.presentation.seatrecord.SeatRecordActivity
+import com.depromeet.presentation.seatrecord.TempSeatRecordActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -252,7 +252,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun onClickTeam() {
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
-            override fun onItemClubClick(item: BaseballTeamResponse) {
+            override fun onItemClubClick(item: ResponseBaseballTeam) {
                 viewModel.setClickedBaseballTeam(item.id)
                 binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
             }
@@ -275,9 +275,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun getDataExtra(callback: (name: String, profileImage: String, cheerTeam: Int) -> Unit) {
         callback(
-            intent?.getStringExtra(SeatRecordActivity.PROFILE_NAME) ?: "",
-            intent?.getStringExtra(SeatRecordActivity.PROFILE_IMAGE) ?: "",
-            intent?.getIntExtra(SeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
+            intent?.getStringExtra(TempSeatRecordActivity.PROFILE_NAME) ?: "",
+            intent?.getStringExtra(TempSeatRecordActivity.PROFILE_IMAGE) ?: "",
+            intent?.getIntExtra(TempSeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
         )
     }
 

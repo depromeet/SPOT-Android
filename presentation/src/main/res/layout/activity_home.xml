@@ -77,9 +77,9 @@
         app:paddingRight="10dp"
         app:paddingTop="8dp"
         app:textColor="@color/color_foreground_body_subtitle"
-        app:textSize="11sp"
+        app:textSize="10sp"
         app:textStyle="semiBold"
-        app:triangleHeight="5dp"
+        app:triangleHeight="4dp"
         app:triangleWidth="7dp" />
 
 

@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.response.home
 
-data class BaseballTeamResponse(
+data class ResponseBaseballTeam(
     val id : Int,
     val name : String = "",
     val logo : String = "",

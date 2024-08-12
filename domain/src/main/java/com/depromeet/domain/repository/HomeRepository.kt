@@ -1,29 +1,29 @@
 package com.depromeet.domain.repository
 
-import com.depromeet.domain.entity.request.home.MySeatRecordRequest
-import com.depromeet.domain.entity.request.home.ProfileEditRequest
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
-import com.depromeet.domain.entity.response.home.DeleteReviewResponse
-import com.depromeet.domain.entity.response.home.HomeFeedResponse
-import com.depromeet.domain.entity.response.home.LevelByPostResponse
-import com.depromeet.domain.entity.response.home.LevelUpInfoResponse
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
-import com.depromeet.domain.entity.response.home.PresignedUrlResponse
-import com.depromeet.domain.entity.response.home.ProfileEditResponse
-import com.depromeet.domain.entity.response.home.ProfileResponse
-import com.depromeet.domain.entity.response.home.RecentReviewResponse
-import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.entity.request.home.RequestMySeatRecord
+import com.depromeet.domain.entity.request.home.RequestProfileEdit
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
+import com.depromeet.domain.entity.response.home.ResponseDeleteReview
+import com.depromeet.domain.entity.response.home.ResponseHomeFeed
+import com.depromeet.domain.entity.response.home.ResponseLevelByPost
+import com.depromeet.domain.entity.response.home.ResponseLevelUpInfo
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
+import com.depromeet.domain.entity.response.home.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.home.ResponseProfileEdit
+import com.depromeet.domain.entity.response.home.ResponseProfile
+import com.depromeet.domain.entity.response.home.ResponseRecentReview
+import com.depromeet.domain.entity.response.home.ResponseReviewDate
 
 interface HomeRepository {
     suspend fun getMySeatRecord(
-        mySeatRecordRequest: MySeatRecordRequest,
-    ): Result<MySeatRecordResponse>
+        requestMySeatRecord: RequestMySeatRecord,
+    ): Result<ResponseMySeatRecord>
 
-    suspend fun getBaseballTeam(): Result<List<BaseballTeamResponse>>
+    suspend fun getBaseballTeam(): Result<List<ResponseBaseballTeam>>
 
     suspend fun postProfileImagePresigned(
         fileExtension: String,
-    ): Result<PresignedUrlResponse>
+    ): Result<ResponsePresignedUrl>
 
     suspend fun putProfileImage(
         presignedUrl: String,
@@ -31,26 +31,26 @@ interface HomeRepository {
     ): Result<Unit>
 
     suspend fun putProfileEdit(
-        profileEditRequest: ProfileEditRequest,
-    ): Result<ProfileEditResponse>
+        requestProfileEdit: RequestProfileEdit,
+    ): Result<ResponseProfileEdit>
 
     suspend fun getDuplicateNickname(
         nickname: String,
     ): Result<Unit>
 
-    suspend fun getReviewDate(): Result<ReviewDateResponse>
+    suspend fun getReviewDate(): Result<ResponseReviewDate>
 
-    suspend fun getProfile(): Result<ProfileResponse>
+    suspend fun getProfile(): Result<ResponseProfile>
 
-    suspend fun getRecentReview(): Result<RecentReviewResponse>
+    suspend fun getRecentReview(): Result<ResponseRecentReview>
 
     suspend fun deleteReview(
         reviewId: Int,
-    ): Result<DeleteReviewResponse>
+    ): Result<ResponseDeleteReview>
 
-    suspend fun getLevelByPost() : Result<List<LevelByPostResponse>>
+    suspend fun getLevelByPost() : Result<List<ResponseLevelByPost>>
 
-    suspend fun getHomeFeed() : Result<HomeFeedResponse>
+    suspend fun getHomeFeed() : Result<ResponseHomeFeed>
 
-    suspend fun getLevelUpInfo(nextLevel : Int) : Result<LevelUpInfoResponse>
+    suspend fun getLevelUpInfo(nextLevel : Int) : Result<ResponseLevelUpInfo>
 }

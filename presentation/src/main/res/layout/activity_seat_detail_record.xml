@@ -14,9 +14,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menuIcon="@drawable/ic_close"
+        app:menuIcon="@drawable/ic_x_close_big"
         app:menuIconColor="@color/color_foreground_body_sebtext"
-        app:navigationIcon="@drawable/ic_back" />
+        app:menuIconSize="24"
+        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIconColor="@color/color_foreground_body_sebtext"
+        app:navigationIconSize="24" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_detail_record"

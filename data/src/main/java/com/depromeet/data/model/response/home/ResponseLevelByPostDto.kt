@@ -1,6 +1,6 @@
 package com.depromeet.data.model.response.home
 
-import com.depromeet.domain.entity.response.home.LevelByPostResponse
+import com.depromeet.domain.entity.response.home.ResponseLevelByPost
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +16,7 @@ data class ResponseLevelByPostDto(
     @SerialName("maximum")
     val maximum : Int?
 ) {
-    fun toLevelByPostResponse() = LevelByPostResponse(
+    fun toLevelByPostResponse() = ResponseLevelByPost(
         level = level,
         title = title,
         minimum = minimum,

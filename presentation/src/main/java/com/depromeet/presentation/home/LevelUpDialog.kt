@@ -50,17 +50,19 @@ class LevelupDialog(
             attributes = params
         }
         with(binding) {
+            tvLevelupDescriptionPrefix.text = "두근두근 "
+            tvLevelupDescription.text = title
             when (level) {
                 1, 4 -> {
-                    tvLevelupDescription.text = "두근두근 ${title}로 레벨업했어요!"
+                    tvLevelupDescriptionSuffix.text = " 으로 레벨업했어요!"
                 }
 
                 2, 5, 6 -> {
-                    tvLevelupDescription.text = "두근두근 ${title}로 레벨업했어요!"
+                    tvLevelupDescriptionSuffix.text = " 로 레벨업했어요!"
                 }
 
                 3 -> {
-                    tvLevelupDescription.text = "두근두근 ${title}를 갖게 되었어요!"
+                    tvLevelupDescriptionSuffix.text = " 를 갖게 되었어요!"
                 }
             }
             btErrorCheck.setOnClickListener {

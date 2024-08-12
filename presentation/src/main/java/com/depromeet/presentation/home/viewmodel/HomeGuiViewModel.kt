@@ -3,9 +3,9 @@ package com.depromeet.presentation.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.response.home.HomeFeedResponse
-import com.depromeet.domain.entity.response.home.LevelByPostResponse
-import com.depromeet.domain.entity.response.home.LevelUpInfoResponse
+import com.depromeet.domain.entity.response.home.ResponseHomeFeed
+import com.depromeet.domain.entity.response.home.ResponseLevelByPost
+import com.depromeet.domain.entity.response.home.ResponseLevelUpInfo
 import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
@@ -26,16 +26,16 @@ class HomeGuiViewModel @Inject constructor(
     val stadiums = _stadiums.asStateFlow()
 
     private val _levelDescriptions =
-        MutableStateFlow<UiState<List<LevelByPostResponse>>>(UiState.Loading)
+        MutableStateFlow<UiState<List<ResponseLevelByPost>>>(UiState.Loading)
     val levelDescriptions = _levelDescriptions.asStateFlow()
 
-    private val _homeFeed = MutableStateFlow<UiState<HomeFeedResponse>>(UiState.Loading)
+    private val _homeFeed = MutableStateFlow<UiState<ResponseHomeFeed>>(UiState.Loading)
     val homeFeed = _homeFeed.asStateFlow()
 
     private val _level = MutableStateFlow(0)
     val level = _level.asStateFlow()
 
-    private val _levelUpInfo = MutableStateFlow<UiState<LevelUpInfoResponse>>(UiState.Loading)
+    private val _levelUpInfo = MutableStateFlow<UiState<ResponseLevelUpInfo>>(UiState.Loading)
     val levelUpInfo = _levelUpInfo.asStateFlow()
 
     val levelState = MutableStateFlow(false)
@@ -65,7 +65,7 @@ class HomeGuiViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getHomeFeed().onSuccess {
                 _homeFeed.value = UiState.Success(it)
-                checkLevelUp(it.level)
+                putProfileInfo(it)
 
             }.onFailure {
                 _homeFeed.value = UiState.Failure(it.message.toString())
@@ -88,5 +88,13 @@ class HomeGuiViewModel @Inject constructor(
             levelState.value = true
         }
         sharedPreference.level = level
+    }
+
+    private fun putProfileInfo(data : ResponseHomeFeed){
+        checkLevelUp(data.level)
+        sharedPreference.teamId = data.teamId ?: 0
+        sharedPreference.levelTitle = data.levelTitle
+        sharedPreference.teamName = data.teamName ?: ""
+        sharedPreference.level = data.level
     }
 }

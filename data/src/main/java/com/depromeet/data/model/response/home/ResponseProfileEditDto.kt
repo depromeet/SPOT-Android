@@ -1,6 +1,6 @@
 package com.depromeet.data.model.response.home
 
-import com.depromeet.domain.entity.response.home.ProfileEditResponse
+import com.depromeet.domain.entity.response.home.ResponseProfileEdit
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,8 +14,8 @@ data class ResponseProfileEditDto(
     val teamId: Int?,
 ) {
     companion object {
-        fun ResponseProfileEditDto.toProfileEditResponse(): ProfileEditResponse {
-            return ProfileEditResponse(
+        fun ResponseProfileEditDto.toProfileEditResponse(): ResponseProfileEdit {
+            return ResponseProfileEdit(
                 id = id,
                 nickname = nickname,
                 teamId = teamId

@@ -1,6 +1,6 @@
 package com.depromeet.domain.entity.response.home
 
-data class ProfileResponse(
+data class ResponseProfile(
     val teamId : Int = 0,
     val profileImage : String = "",
     val nickname :String = "",

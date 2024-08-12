@@ -6,7 +6,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
 import com.depromeet.presentation.extension.loadAndClip
@@ -14,18 +14,17 @@ import com.depromeet.presentation.seatrecord.uiMapper.toUiKeyword
 import com.depromeet.presentation.util.CalendarUtil
 import com.depromeet.presentation.util.ItemDiffCallback
 import com.depromeet.presentation.viewfinder.compose.KeywordFlowRow
-import timber.log.Timber
 
 class RecentRecordAdapter(
-) : ListAdapter<MySeatRecordResponse.ReviewResponse, RecentRecordViewHolder>(
+) : ListAdapter<ResponseMySeatRecord.ReviewResponse, RecentRecordViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
     interface OnItemRecordClickListener {
-        fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse)
-        fun onItemMoreClick(item: MySeatRecordResponse.ReviewResponse)
+        fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
+        fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -52,6 +51,7 @@ class RecentRecordAdapter(
 
         }
     }
+
 }
 
 class RecentRecordViewHolder(
@@ -62,7 +62,7 @@ class RecentRecordViewHolder(
     }
 
 
-    fun bind(item: MySeatRecordResponse.ReviewResponse) {
+    fun bind(item: ResponseMySeatRecord.ReviewResponse) {
         with(binding) {
             if (item.images.isNotEmpty()) {
                 ivRecentImage.loadAndClip(item.images[0].url)
@@ -71,8 +71,8 @@ class RecentRecordViewHolder(
             }
             tvRecentDateDay.text = CalendarUtil.getDayOfMonthFromDateFormat(item.date).toString()
             tvRecentDay.text = CalendarUtil.getDayOfWeekFromDateFormat(item.date)
-            "${item.sectionName} ${item.blockName}블록".trimStart().also { tvRecentBlockName.text = it }
-            Timber.d("test ${item.sectionName} / ${item.blockName}")
+            "${item.sectionName} ${item.blockName}블록 ${item.rowNumber}열 ${item.seatNumber}번".trimStart()
+                .also { tvRecentBlockName.text = it }
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)

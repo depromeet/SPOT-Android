@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.databinding.ItemRecentMonthBinding
 import com.depromeet.presentation.seatrecord.uiMapper.MonthReviewData
 import com.depromeet.presentation.util.ItemDiffCallback
@@ -16,11 +16,11 @@ class MonthRecordAdapter() :
     ListAdapter<MonthReviewData, MonthRecordViewHolder>(
         ItemDiffCallback(
             onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
-            onContentsTheSame = { oldItem, newItem -> oldItem.reviews == newItem.reviews }
+            onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
         )
     ) {
     interface OnItemRecordClickListener {
-        fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse)
+        fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
         fun onMoreRecordClick(reviewId: Int)
     }
 
@@ -51,21 +51,33 @@ class MonthRecordViewHolder(
 
     fun bind(item: MonthReviewData) {
         with(binding) {
-            adapter = RecentRecordAdapter()
+            initReviewAdapter()
             "${item.month}월".also { tvRecentMonth.text = it }
-            rvRecentPost.adapter = adapter
             adapter.submitList(item.reviews)
+            binding.root.alpha = 0f
+            binding.root.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .start()
+        }
+    }
+
+
+    private fun initReviewAdapter() {
+        if (!::adapter.isInitialized) {
+            adapter = RecentRecordAdapter()
+            binding.rvRecentPost.adapter = adapter
             adapter.itemRecordClickListener =
                 object : RecentRecordAdapter.OnItemRecordClickListener {
-                    override fun onItemRecordClick(item: MySeatRecordResponse.ReviewResponse) {
+                    override fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse) {
                         itemRecordClickListener?.onItemRecordClick(item)
                     }
 
-                    override fun onItemMoreClick(item: MySeatRecordResponse.ReviewResponse) {
+                    override fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse) {
                         itemRecordClickListener?.onMoreRecordClick(item.id)
                     }
                 }
-            binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 

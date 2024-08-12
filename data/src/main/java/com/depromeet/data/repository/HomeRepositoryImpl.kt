@@ -11,33 +11,33 @@ import com.depromeet.data.model.response.home.ResponseProfileDto.Companion.toPro
 import com.depromeet.data.model.response.home.ResponseProfileEditDto.Companion.toProfileEditResponse
 import com.depromeet.data.model.response.home.ResponseRecentReviewDto.Companion.toRecentReviewResponse
 import com.depromeet.data.model.response.home.ResponseReviewDateDto.Companion.toReviewDateResponse
-import com.depromeet.domain.entity.request.home.MySeatRecordRequest
-import com.depromeet.domain.entity.request.home.ProfileEditRequest
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
-import com.depromeet.domain.entity.response.home.DeleteReviewResponse
-import com.depromeet.domain.entity.response.home.HomeFeedResponse
-import com.depromeet.domain.entity.response.home.LevelByPostResponse
-import com.depromeet.domain.entity.response.home.LevelUpInfoResponse
-import com.depromeet.domain.entity.response.home.MySeatRecordResponse
-import com.depromeet.domain.entity.response.home.PresignedUrlResponse
-import com.depromeet.domain.entity.response.home.ProfileEditResponse
-import com.depromeet.domain.entity.response.home.ProfileResponse
-import com.depromeet.domain.entity.response.home.RecentReviewResponse
-import com.depromeet.domain.entity.response.home.ReviewDateResponse
+import com.depromeet.domain.entity.request.home.RequestMySeatRecord
+import com.depromeet.domain.entity.request.home.RequestProfileEdit
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
+import com.depromeet.domain.entity.response.home.ResponseDeleteReview
+import com.depromeet.domain.entity.response.home.ResponseHomeFeed
+import com.depromeet.domain.entity.response.home.ResponseLevelByPost
+import com.depromeet.domain.entity.response.home.ResponseLevelUpInfo
+import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
+import com.depromeet.domain.entity.response.home.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.home.ResponseProfileEdit
+import com.depromeet.domain.entity.response.home.ResponseProfile
+import com.depromeet.domain.entity.response.home.ResponseRecentReview
+import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.domain.repository.HomeRepository
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
     private val homeDataSource: HomeDataSource,
 ) : HomeRepository {
-    override suspend fun getMySeatRecord(mySeatRecordRequest: MySeatRecordRequest): Result<MySeatRecordResponse> {
+    override suspend fun getMySeatRecord(requestMySeatRecord: RequestMySeatRecord): Result<ResponseMySeatRecord> {
         return runCatching {
-            homeDataSource.getMySeatRecordData(mySeatRecordRequest.toMySeatRecordRequestDto())
+            homeDataSource.getMySeatRecordData(requestMySeatRecord.toMySeatRecordRequestDto())
                 .toMySeatRecordResponse()
         }
     }
 
-    override suspend fun getBaseballTeam(): Result<List<BaseballTeamResponse>> {
+    override suspend fun getBaseballTeam(): Result<List<ResponseBaseballTeam>> {
         return runCatching {
             homeDataSource.getBaseballTeamData().map { it.toBaseballTeamResponse() }
         }
@@ -45,7 +45,7 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun postProfileImagePresigned(
         fileExtension: String,
-    ): Result<PresignedUrlResponse> {
+    ): Result<ResponsePresignedUrl> {
         return runCatching {
             homeDataSource.postProfileImagePresigned(fileExtension)
                 .toPresignedUrlResponse()
@@ -59,10 +59,10 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun putProfileEdit(
-        profileEditRequest: ProfileEditRequest,
-    ): Result<ProfileEditResponse> {
+        requestProfileEdit: RequestProfileEdit,
+    ): Result<ResponseProfileEdit> {
         return runCatching {
-            homeDataSource.putProfileEdit(profileEditRequest.toProfileEditRequestDto())
+            homeDataSource.putProfileEdit(requestProfileEdit.toProfileEditRequestDto())
                 .toProfileEditResponse()
         }
     }
@@ -73,43 +73,43 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getReviewDate(): Result<ReviewDateResponse> {
+    override suspend fun getReviewDate(): Result<ResponseReviewDate> {
         return runCatching {
             homeDataSource.getReviewDate().toReviewDateResponse()
         }
     }
 
-    override suspend fun getProfile(): Result<ProfileResponse> {
+    override suspend fun getProfile(): Result<ResponseProfile> {
         return runCatching {
             homeDataSource.getProfile().toProfileResponse()
         }
     }
 
-    override suspend fun getRecentReview(): Result<RecentReviewResponse> {
+    override suspend fun getRecentReview(): Result<ResponseRecentReview> {
         return runCatching {
             homeDataSource.getRecentReview().toRecentReviewResponse()
         }
     }
 
-    override suspend fun deleteReview(reviewId: Int): Result<DeleteReviewResponse> {
+    override suspend fun deleteReview(reviewId: Int): Result<ResponseDeleteReview> {
         return runCatching {
             homeDataSource.deleteReview(reviewId).toDeleteReviewResponse()
         }
     }
 
-    override suspend fun getLevelByPost(): Result<List<LevelByPostResponse>> {
+    override suspend fun getLevelByPost(): Result<List<ResponseLevelByPost>> {
         return runCatching {
             homeDataSource.getLevelByPost().map { it.toLevelByPostResponse() }
         }
     }
 
-    override suspend fun getHomeFeed(): Result<HomeFeedResponse> {
+    override suspend fun getHomeFeed(): Result<ResponseHomeFeed> {
         return runCatching {
             homeDataSource.getHomeFeed().toHomeFeedResponse()
         }
     }
 
-    override suspend fun getLevelUpInfo(nextLevel: Int): Result<LevelUpInfoResponse> {
+    override suspend fun getLevelUpInfo(nextLevel: Int): Result<ResponseLevelUpInfo> {
         return runCatching {
             homeDataSource.getLevelUpInfo(nextLevel).toLevelUpInfoResponse()
         }

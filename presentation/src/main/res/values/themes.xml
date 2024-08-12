@@ -83,4 +83,10 @@
         <item name="android:textSize">24sp</item>
 
     </style>
+
+    <style name="YearSpinner" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+    </style>
 </resources>

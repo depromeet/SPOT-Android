@@ -4,10 +4,11 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.depromeet.core.state.UiState
-import com.depromeet.domain.entity.request.home.ProfileEditRequest
-import com.depromeet.domain.entity.response.home.BaseballTeamResponse
-import com.depromeet.domain.entity.response.home.PresignedUrlResponse
-import com.depromeet.domain.entity.response.home.ProfileEditResponse
+import com.depromeet.domain.entity.request.home.RequestProfileEdit
+import com.depromeet.domain.entity.response.home.ResponseBaseballTeam
+import com.depromeet.domain.entity.response.home.ResponsePresignedUrl
+import com.depromeet.domain.entity.response.home.ResponseProfileEdit
+import com.depromeet.domain.preference.SharedPreference
 import com.depromeet.domain.repository.HomeRepository
 import com.depromeet.presentation.extension.validateNickName
 import com.depromeet.presentation.login.viewmodel.NicknameInputState
@@ -32,6 +33,7 @@ sealed class ProfileEvents {
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val sharedPreference: SharedPreference,
 ) : ViewModel() {
 
     private val _events = MutableSharedFlow<ProfileEvents>(
@@ -41,13 +43,13 @@ class ProfileEditViewModel @Inject constructor(
     )
     val events: SharedFlow<ProfileEvents> = _events.asSharedFlow()
 
-    private val _team = MutableStateFlow<UiState<List<BaseballTeamResponse>>>(UiState.Loading)
+    private val _team = MutableStateFlow<UiState<List<ResponseBaseballTeam>>>(UiState.Loading)
     val team = _team.asStateFlow()
 
-    private val _presignedUrl = MutableStateFlow<UiState<PresignedUrlResponse>>(UiState.Loading)
+    private val _presignedUrl = MutableStateFlow<UiState<ResponsePresignedUrl>>(UiState.Loading)
     val presignedUrl = _presignedUrl.asStateFlow()
 
-    private val _profileEdit = MutableStateFlow<UiState<ProfileEditResponse>>(UiState.Loading)
+    private val _profileEdit = MutableStateFlow<UiState<ResponseProfileEdit>>(UiState.Loading)
     val profileEdit = _profileEdit.asStateFlow()
 
     private val _nickname = MutableStateFlow("")
@@ -149,13 +151,17 @@ class ProfileEditViewModel @Inject constructor(
             }
 
             homeRepository.putProfileEdit(
-                ProfileEditRequest(
+                RequestProfileEdit(
                     url = getPresignedUrlOrProfileImage(),
                     nickname = nickname.value,
                     teamId = cheerTeam.value
                 )
             )
                 .onSuccess {
+                    sharedPreference.nickname = nickname.value
+                    sharedPreference.teamId = cheerTeam.value
+                    sharedPreference.profileImage = getPresignedUrlOrProfileImage()
+                    sharedPreference.teamName = getTeamName() ?: ""
                     _profileEdit.value = UiState.Success(it)
                 }
                 .onFailure {
@@ -173,7 +179,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun getTeamName() : String? {
+    fun getTeamName(): String? {
         if (cheerTeam.value == 0) return null
         return (team.value as UiState.Success).data.first { it.isClicked }.name
     }
