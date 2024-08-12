@@ -72,7 +72,7 @@ class ReviewDetailViewHolder(
             tvDetailNickname.text = profile.nickname
             "Lv.${profile.level}".also { tvDetailLevel.text = it }
             tvDetailStadium.text = item.stadiumName
-            "${item.sectionName} ${item.blockName}블록".trimStart().also { tvDetailBlock.text = it }
+            "${item.sectionName} ${item.blockName}블록 ${item.rowNumber}열 ${item.seatNumber}번".trimStart().also { tvDetailBlock.text = it }
             tvDetailDate.text = CalendarUtil.getFormattedDate(item.date)
             if (item.content.isBlank()) {
                 tvDetailContent.visibility = GONE
