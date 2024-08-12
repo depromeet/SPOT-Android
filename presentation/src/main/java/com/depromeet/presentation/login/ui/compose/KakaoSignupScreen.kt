@@ -120,7 +120,7 @@ fun KakaoSignupScreen(
                         text = onBoardingList[page].first,
                         fontSize = 22.sp,
                         textAlign = TextAlign.Center,
-                        color = Color.Black,
+                        color = SpotTheme.colors.transferBlack03,
                         fontWeight = FontWeight(600),
                     )
                 }
@@ -178,8 +178,7 @@ fun KakaoSignupScreen(
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     text = "카카오 로그인",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(600),
+                    style = SpotTheme.typography.subtitle02
                 )
             }
         }
