@@ -18,7 +18,6 @@ class RecordDateViewHolder(
     private lateinit var dateMonthAdapter: DateMonthAdapter
     private lateinit var yearAdapter: SpotDropDownSpinner<String>
     private var isYearInitialized : Boolean = false
-    private var isSettingSelectedItem = false
 
 
     fun bind(data: List<ResponseReviewDate.YearMonths>) {
@@ -39,7 +38,7 @@ class RecordDateViewHolder(
         val selectedYear = data.firstOrNull { it.isClicked }?.year
         val selectedPosition = years.indexOf(selectedYear).takeIf { it >= 0 } ?: 0
 
-        if (!isYearInitialized) {
+        if(!::yearAdapter.isInitialized){
             Timber.d("------------\ntest -> 초기화 안됨!!!")
             yearAdapter = SpotDropDownSpinner(yearList, selectedPosition)
             binding.spinnerRecordYear.adapter = yearAdapter
@@ -54,10 +53,6 @@ class RecordDateViewHolder(
                         position: Int,
                         id: Long,
                     ) {
-                        if (isSettingSelectedItem) {
-                            isSettingSelectedItem = false
-                            return
-                        }
                         yearAdapter.setSelectedItemPosition(position)
                         val selectedYear = years[position]
                         yearClick(selectedYear)
@@ -68,9 +63,9 @@ class RecordDateViewHolder(
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
                 }
 
-            isSettingSelectedItem = true
+        }else {
+            yearAdapter.updateData(yearList, selectedPosition)
         }
-        isYearInitialized = true
     }
 
 

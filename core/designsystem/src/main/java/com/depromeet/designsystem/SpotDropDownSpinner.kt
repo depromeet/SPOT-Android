@@ -26,11 +26,10 @@ class SpotDropDownSpinner<T>(
         val textView = view.findViewById<TextView>(R.id.spot_spinner_view)
         val item = getItem(position)
 
-        textView.text = item.toString()
         textView.setTextColor(parent.context.getColor(R.color.color_foreground_heading))
         textView.setTypeface(null, Typeface.BOLD)
 
-        textView.text = item.toString()
+        textView.text = data[selectedItemPosition].toString()
 
         return view
     }
@@ -42,17 +41,19 @@ class SpotDropDownSpinner<T>(
         val item = getItem(position)
 
         textView.text = item.toString()
-        if (position == selectedItemPosition) {
-            textView.setTextColor(parent.context.getColor(R.color.color_foreground_heading))
-            textView.setTypeface(null, Typeface.BOLD)
-        } else {
-            textView.setTextColor(parent.context.getColor(R.color.color_foreground_body_sebtext))
-            textView.setTypeface(null, Typeface.NORMAL)
-        }
-
-        textView.text = item.toString()
+        updateTextAppearance(textView, position == selectedItemPosition)
 
         return view
+    }
+
+    private fun updateTextAppearance(textView: TextView, isSelected: Boolean) {
+        if (isSelected) {
+            textView.setTextColor(textView.context.getColor(R.color.color_foreground_heading))
+            textView.setTypeface(null, Typeface.BOLD)
+        } else {
+            textView.setTextColor(textView.context.getColor(R.color.color_foreground_body_sebtext))
+            textView.setTypeface(null, Typeface.NORMAL)
+        }
     }
 
     fun updateData(newData: List<T>, selectedPosition: Int) {
