@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatrecord.test
+package com.depromeet.presentation.seatrecord.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +10,9 @@ import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.databinding.ItemRecordProfileBinding
 import com.depromeet.presentation.databinding.ItemRecordReviewBinding
+import com.depromeet.presentation.seatrecord.viewholder.RecordDateViewHolder
+import com.depromeet.presentation.seatrecord.viewholder.RecordProfileViewHolder
+import com.depromeet.presentation.seatrecord.viewholder.RecordReviewViewHolder
 import timber.log.Timber
 
 enum class RecordViewType {

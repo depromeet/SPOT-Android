@@ -22,8 +22,8 @@ import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.loadAndCircle
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.home.ProfileEditActivity
-import com.depromeet.presentation.seatrecord.test.RecordListItem
-import com.depromeet.presentation.seatrecord.test.SeatRecordAdapter
+import com.depromeet.presentation.seatrecord.adapter.RecordListItem
+import com.depromeet.presentation.seatrecord.adapter.SeatRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.seatreview.ReviewActivity
