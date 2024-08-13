@@ -10,8 +10,8 @@
     <View
         android:id="@+id/view_handler"
         android:layout_width="40dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="4dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rect_gray600_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
