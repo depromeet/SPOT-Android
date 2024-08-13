@@ -22,7 +22,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private val bubblePath: Path = Path()
     private val bubbleRect: RectF = RectF()
 
-    private var textParts: MutableList<String> = mutableListOf("","","")
+    private var textParts: MutableList<String> = mutableListOf("", "", "")
     private var textSize: Float = 0f
     private var backgroundColor: Int = 0
     private var paddingLeftValue: Float = 0f
@@ -33,6 +33,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private var triangleWidth = 0f
     private var cornerRadius = 0f
     private var textStyle: Int = 0
+    private var triangleDirection: Int = 0
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView, defStyleAttr, 0)
@@ -75,6 +76,8 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                         resources.getDimension(R.dimen.speech_bubble_corner_radius)
                     )
                     textStyle = getInt(R.styleable.CustomSpeechBubbleView_textStyle, Typeface.BOLD)
+                    triangleDirection =
+                        getInt(R.styleable.CustomSpeechBubbleView_triangleDirection, 0)
                 } finally {
                     recycle()
                 }
@@ -88,7 +91,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         textPaint.textAlign = Paint.Align.LEFT
     }
 
-    fun setText(text : String){
+    fun setText(text: String) {
         textParts[0] = text
         textParts[1] = ""
         textParts[2] = ""
@@ -125,20 +128,37 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
 
         val width = width.toFloat()
         val height = height.toFloat()
+        var bubbleHeight = height - triangleHeight
 
-        val bubbleHeight = height - triangleHeight
-        bubbleRect.set(0f, 0f, width, bubbleHeight)
-        canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
+        when (triangleDirection) {
+            0 -> {
+                bubbleHeight = height - triangleHeight
+                bubbleRect.set(0f, 0f, width, bubbleHeight)
+                canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
 
-        bubblePath.reset()
-        val triangleX = width / 2 - triangleWidth / 2
-        val triangleY = height - triangleHeight
+                val triangleX = width / 2 - triangleWidth / 2
+                val triangleY = height - triangleHeight
 
+                bubblePath.moveTo(triangleX, triangleY)
+                bubblePath.lineTo(triangleX + triangleWidth, triangleY)
+                bubblePath.lineTo(width / 2, height)
+                bubblePath.close()
+            }
 
-        bubblePath.moveTo(triangleX, triangleY)
-        bubblePath.lineTo(triangleX + triangleWidth, triangleY)
-        bubblePath.lineTo(width / 2, height)
-        bubblePath.close()
+            1 -> {
+                bubbleHeight = height - triangleHeight
+                bubbleRect.set(0f, triangleHeight, width, bubbleHeight)
+                canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
+
+                val triangleX = width / 2 - triangleWidth / 2
+                val triangleY = 0f
+
+                bubblePath.moveTo(triangleX, triangleY + triangleHeight)
+                bubblePath.lineTo(triangleX + triangleWidth, triangleY + triangleHeight)
+                bubblePath.lineTo(width / 2, triangleY)
+                bubblePath.close()
+            }
+        }
 
         canvas.drawPath(bubblePath, bubblePaint)
 
