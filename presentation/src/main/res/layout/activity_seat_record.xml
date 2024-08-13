@@ -58,9 +58,8 @@
         <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
             android:id="@+id/csbv_record_title"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="55dp"
             android:elevation="4dp"
             android:paddingRight="10dp"
             app:backgroundColor="@color/color_background_white"
@@ -69,6 +68,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:paddingBottom="8dp"
             app:paddingLeft="10dp"
+            app:paddingRight="10dp"
             app:paddingTop="8dp"
             app:textColor="@color/color_foreground_body_sebtext"
             app:textSize="11sp"

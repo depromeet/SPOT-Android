@@ -22,7 +22,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private val bubblePath: Path = Path()
     private val bubbleRect: RectF = RectF()
 
-    private var textParts: List<String> = listOf()
+    private var textParts: MutableList<String> = mutableListOf("","","")
     private var textSize: Float = 0f
     private var backgroundColor: Int = 0
     private var paddingLeftValue: Float = 0f
@@ -74,7 +74,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                         R.styleable.CustomSpeechBubbleView_cornerRadius,
                         resources.getDimension(R.dimen.speech_bubble_corner_radius)
                     )
-                    textStyle = getInt(R.styleable.CustomSpeechBubbleView_textStyle, Typeface.NORMAL)
+                    textStyle = getInt(R.styleable.CustomSpeechBubbleView_textStyle, Typeface.BOLD)
                 } finally {
                     recycle()
                 }
@@ -82,13 +82,24 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
 
         bubblePaint.color = backgroundColor
         bubblePaint.style = Paint.Style.FILL
-        textPaint.color = context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
+        textPaint.color =
+            context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
         textPaint.textSize = textSize
         textPaint.textAlign = Paint.Align.LEFT
     }
 
-    fun setTextPart(prefix: String, number: Int, suffix: String){
-        textParts = listOf(prefix, number.toString(), suffix)
+    fun setText(text : String){
+        textParts[0] = text
+        textParts[1] = ""
+        textParts[2] = ""
+        requestLayout()
+        invalidate()
+    }
+
+    fun setTextPart(prefix: String?, number: Int?, suffix: String?) {
+        textParts[0] = prefix ?: ""
+        textParts[1] = number?.toString() ?: ""
+        textParts[2] = suffix ?: ""
         requestLayout()
         invalidate()
     }
@@ -100,7 +111,8 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
             acc + textPaint.measureText(textPart)
         }
         val desiredWidth = (totalTextWidth + paddingLeftValue + paddingRightValue).toInt()
-        val desiredHeight = (paddingTopValue + textSize + paddingBottomValue + triangleHeight).toInt()
+        val desiredHeight =
+            (paddingTopValue + textSize + paddingBottomValue + triangleHeight).toInt()
 
         val width = resolveSize(desiredWidth, widthMeasureSpec)
         val height = resolveSize(desiredHeight, heightMeasureSpec)
@@ -119,12 +131,13 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
 
         bubblePath.reset()
-        val triangleX = width / 2 - triangleWidth
+        val triangleX = width / 2 - triangleWidth / 2
         val triangleY = height - triangleHeight
 
+
         bubblePath.moveTo(triangleX, triangleY)
-        bubblePath.lineTo(triangleX + triangleWidth, triangleY + triangleHeight)
-        bubblePath.lineTo(triangleX + triangleWidth * 2, triangleY)
+        bubblePath.lineTo(triangleX + triangleWidth, triangleY)
+        bubblePath.lineTo(width / 2, height)
         bubblePath.close()
 
         canvas.drawPath(bubblePath, bubblePaint)
@@ -132,15 +145,30 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         // 텍스트 그리기
         var xOffset = paddingLeftValue
         textParts.forEachIndexed { index, textPart ->
-            textPaint.color = when(index) {
+            textPaint.color = when (index) {
                 1 -> context.getColor(com.depromeet.designsystem.R.color.color_action_enabled)
                 else -> context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
             }
             textPaint.typeface = when (textStyle) {
-                1 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_medium)
-                2 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_semibold)
-                3 -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
-                else -> ResourcesCompat.getFont(context, com.depromeet.designsystem.R.font.font_pretendard_regular)
+                1 -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_medium
+                )
+
+                2 -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_semibold
+                )
+
+                3 -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_regular
+                )
+
+                else -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_regular
+                )
             }
 
             val textWidth = textPaint.measureText(textPart)
