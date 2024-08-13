@@ -30,7 +30,6 @@ import com.depromeet.presentation.seatreview.ReviewActivity
 import com.depromeet.presentation.util.CalendarUtil
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -167,9 +166,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         with(binding) {
             rvSeatRecord.setVisible(recordErrorType == RecordErrorType.NONE)
             clRecordError.setVisible(recordErrorType != RecordErrorType.NONE)
-            fabRecordUp.setVisible(recordErrorType == RecordErrorType.NONE)
             clRecordEmpty.setVisible(recordErrorType == RecordErrorType.EMPTY)
             clRecordFail.setVisible(recordErrorType == RecordErrorType.FAIL)
+            fabRecordUp.visibility = GONE
         }
     }
 
