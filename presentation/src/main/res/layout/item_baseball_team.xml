@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="78dp"
+    android:layout_height="64dp"
     android:background="@drawable/rect_background_tertiary_fill_8">
 
     <ImageView
@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         style="@style/TextAppearance.Spot.Label06"
+        android:textColor="@color/color_foreground_heading"
         app:layout_constraintStart_toEndOf="@id/iv_team_image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

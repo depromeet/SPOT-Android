@@ -152,6 +152,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                         getString(R.string.profile_edit_error_duplicate)
                     )
                 }
+
+                else -> {}
             }
         }
     }
@@ -215,7 +217,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
             when (state) {
                 is UiState.Success -> {
                     if (!state.data.any { it.isClicked }) {
-                        binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
+                        binding.clProfileEditAllTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
                     }
                     adapter.submitList(state.data)
                 }
@@ -254,12 +256,12 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
             override fun onItemClubClick(item: ResponseBaseballTeam) {
                 viewModel.setClickedBaseballTeam(item.id)
-                binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
+                binding.clProfileEditAllTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
             }
         }
-        binding.tvProfileEditNoTeam.setOnClickListener {
+        binding.clProfileEditAllTeam.setOnClickListener {
             viewModel.deleteCheerTeam()
-            binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
+            binding.clProfileEditAllTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
         }
     }
 
