@@ -187,6 +187,10 @@ class SeatRecordViewModel @Inject constructor(
         _deleteClickedEvent.value = EditUi.NONE
     }
 
+    fun cancelEditEvent() {
+        _editClickedEvent.value = EditUi.NONE
+    }
+
     fun updateProfile(nickname: String, profileImage: String, teamId: Int, teamName: String?) {
         val currentState = _reviews.value
         if (currentState is UiState.Success) {

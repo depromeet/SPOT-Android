@@ -281,12 +281,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
                 moveConfirmationDialog()
+                viewModel.cancelDeleteEvent()
             }
         }
 
         viewModel.editClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
                 moveEditReview()
+                viewModel.cancelEditEvent()
             }
         }
     }
