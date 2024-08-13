@@ -130,6 +130,8 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         val height = height.toFloat()
         var bubbleHeight = height - triangleHeight
 
+        bubblePath.reset()
+
         when (triangleDirection) {
             0 -> {
                 bubbleHeight = height - triangleHeight
