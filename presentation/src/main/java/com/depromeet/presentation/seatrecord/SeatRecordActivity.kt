@@ -142,6 +142,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
         with(binding) {
             rvSeatRecord.adapter = adapter
+            rvSeatRecord.addItemDecoration(
+                HeaderItemDecoration(
+                    binding.rvSeatRecord,
+                    shouldFadeOutHeader = true,
+                    isHeader = { position -> (rvSeatRecord.adapter as SeatRecordAdapter).isHeader(position) }
+                )
+            )
+
             rvSeatRecord.addOnScrollListener(object : OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     val scrollTop = !binding.rvSeatRecord.canScrollVertically(-1)

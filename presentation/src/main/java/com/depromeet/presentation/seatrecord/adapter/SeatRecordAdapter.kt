@@ -112,6 +112,9 @@ class SeatRecordAdapter(
         }
     }
 
+    fun isHeader(position: Int): Boolean =
+        getItemViewType(position) == RecordViewType.DATE_ITEM.ordinal
+
     fun updateItemAt(index: Int, newItem: RecordListItem) {
         val newList = currentList.toMutableList()
         if (index >= 0 && index < newList.size) {
@@ -131,13 +134,16 @@ class RecordItemDiffCallback : DiffUtil.ItemCallback<RecordListItem>() {
 
     override fun areContentsTheSame(oldItem: RecordListItem, newItem: RecordListItem): Boolean {
 
-        return when{
+        return when {
             oldItem is RecordListItem.Record && newItem is RecordListItem.Record ->
                 oldItem.reviews == newItem.reviews
+
             oldItem is RecordListItem.Profile && newItem is RecordListItem.Profile ->
                 oldItem.profile == newItem.profile
+
             oldItem is RecordListItem.Date && newItem is RecordListItem.Date ->
                 oldItem.reviewDates == newItem.reviewDates
+
             else -> false
         }
     }
