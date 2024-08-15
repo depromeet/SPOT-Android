@@ -1,6 +1,5 @@
 package com.depromeet.presentation.viewfinder.dialog
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -10,7 +9,6 @@ import com.depromeet.core.base.BindingBottomSheetDialog
 import com.depromeet.domain.model.viewfinder.Seat
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumSelectSeatDialogBinding
-import com.depromeet.presentation.util.Utils
 import com.depromeet.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +45,7 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
 
     private fun initView() {
         initEditText()
+        handleEditTextFocus()
 
         binding.etOnlyColumn.addTextChangedListener { editText ->
             binding.tvWarning.visibility = View.INVISIBLE
@@ -129,6 +128,19 @@ class StadiumSelectSeatDialog : BindingBottomSheetDialog<FragmentStadiumSelectSe
                         checkColumnAndNumber(isSuccess, seat)
                     }
                 }
+            }
+        }
+    }
+
+    private fun handleEditTextFocus() {
+        binding.etNumber.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                binding.ivNumberCancel.visibility = View.INVISIBLE
+            }
+        }
+        binding.etColumn.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                binding.ivColumnCancel.visibility = View.INVISIBLE
             }
         }
     }

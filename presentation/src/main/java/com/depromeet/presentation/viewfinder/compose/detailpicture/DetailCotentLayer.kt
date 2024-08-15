@@ -72,7 +72,7 @@ fun DetailContentLayer(
                 }
             )
             .padding(horizontal = 16.dp)
-            .padding(bottom = (24 + bottomPadding).dp),
+            .padding(bottom = (20 + bottomPadding).dp),
         verticalArrangement = Arrangement.Bottom) {
         DetailContentHeader(
             context = context,
