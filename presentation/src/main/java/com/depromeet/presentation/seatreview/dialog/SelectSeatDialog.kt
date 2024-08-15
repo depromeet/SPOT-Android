@@ -232,7 +232,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             when (state) {
                 is UiState.Success -> {
                     state.data.forEach { range ->
-                        updateIsExistedColumnUI(range.rowInfo)
                         updateColumnNumberUI(range)
                     }
                 }
@@ -356,24 +355,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
                     }
                 }
-            }
-        }
-    }
-
-    private fun updateIsExistedColumnUI(rowInfoList: List<ResponseSeatRange.RowInfo>) {
-        if (rowInfoList.size == 1) {
-            with(binding) {
-                etColumn.visibility = INVISIBLE
-                tvColumn.visibility = INVISIBLE
-                etNumber.visibility = INVISIBLE
-                etNonColumnNumber.visibility = VISIBLE
-            }
-        } else {
-            with(binding) {
-                etColumn.visibility = VISIBLE
-                tvColumn.visibility = VISIBLE
-                etNumber.visibility = VISIBLE
-                etNonColumnNumber.visibility = INVISIBLE
             }
         }
     }
