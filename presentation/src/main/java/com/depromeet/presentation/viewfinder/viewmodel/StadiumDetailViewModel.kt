@@ -53,7 +53,7 @@ class StadiumDetailViewModel @Inject constructor(
 
     fun updateMonth(month: Int?) {
         if (month != _reviewFilter.value.month) {
-            _reviewFilter.value = _reviewFilter.value.copy(year = 2024, month = month, page = 0)
+            _reviewFilter.value = _reviewFilter.value.copy(month = month, page = 0)
             getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
         }
     }
