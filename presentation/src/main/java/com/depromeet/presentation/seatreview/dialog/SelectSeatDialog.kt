@@ -360,6 +360,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             view.setTextColor(ContextCompat.getColor(requireContext(), com.depromeet.designsystem.R.color.color_foreground_caption))
                             binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
                             binding.tvCompleteBtn.isEnabled = false
+                        } else {
                         }
                     }
 
