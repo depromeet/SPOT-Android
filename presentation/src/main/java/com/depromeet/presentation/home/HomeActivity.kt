@@ -13,6 +13,7 @@ import com.depromeet.domain.entity.response.home.ResponseHomeFeed
 import com.depromeet.domain.entity.response.viewfinder.ResponseStadiums
 import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.depromeet.presentation.extension.dpToPx
+import com.depromeet.presentation.gallery.GalleryActivity
 import com.depromeet.presentation.home.adapter.StadiumAdapter
 import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
 import com.depromeet.presentation.seatreview.ReviewActivity
@@ -56,6 +57,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initEvent() = with(binding) {
+        ivHomeAppBar.setOnClickListener {
+            Intent(this@HomeActivity, GalleryActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
         clHomeScrap.setOnClickListener {
