@@ -6,25 +6,18 @@ import java.time.format.DateTimeFormatter
 enum class BASE {
     Base1, Base3, Nothing
 }
-fun compareBase1AndBase3(
-    stadiumName: String,
-    blockCode: String
-): BASE {
-    when (stadiumName) {
+
+fun String.base(blockCode: String): BASE {
+    when (this) {
         "서울 잠실 야구장" -> {
             return when {
-                blockCode in listOf("301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317") -> { // 1루 네이비석
-                     BASE.Base1
-                }
-                blockCode in listOf("401","402","403","404","405","406","407","408","409","410","411") -> { // 1루 외야그린석
-                     BASE.Base1
-                }
-                blockCode in listOf("101","102","103","104","105","106","201","202","203","204") -> { // 1루 레드석
-                     BASE.Base1
-                }
-                blockCode in listOf("205","206","207","208") -> BASE.Base1 // 1루 오렌지석
-                blockCode in listOf("107","108","109","209","210","211") -> BASE.Base1 // 1루 블루석
-                blockCode in listOf("110","111","212","213") -> BASE.Base1 // 1루 테이블석
+                blockCode in listOf("301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317") // 1루 네이비석
+                        + listOf("401","402","403","404","405","406","407","408","409","410","411") // 1루 외야그린석
+                        + listOf("101","102","103","104","105","106","201","202","203","204") // 1루 레드석
+                        + listOf("205","206","207","208") // 1루 오렌지석
+                        + listOf("107","108","109","209","210","211") // 1루 블루석
+                        + listOf("110","111","212","213") // 1루 테이블석
+                -> BASE.Base1
                 blockCode in listOf("exciting1", "exciting3", "premium") -> BASE.Nothing
                 else -> BASE.Base3
             }
@@ -61,7 +54,7 @@ data class ResponseBlockReview(
             } else {
                 sectionName.trim()
             }
-            var base = when (compareBase1AndBase3(stadiumName, blockCode)) {
+            var base = when (stadiumName.base(blockCode)) {
                 BASE.Base1 -> "1루•"
                 BASE.Base3 -> "3루•"
                 else -> ""
@@ -77,7 +70,7 @@ data class ResponseBlockReview(
             } else {
                 sectionName.trim()
             }
-            var base = when (compareBase1AndBase3(stadiumName, blockCode)) {
+            var base = when (stadiumName.base(blockCode)) {
                 BASE.Base1 -> " 1루"
                 BASE.Base3 -> " 3루"
                 else -> ""
