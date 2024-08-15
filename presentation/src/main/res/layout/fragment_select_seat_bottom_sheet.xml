@@ -88,7 +88,7 @@
     </LinearLayout>
 
     <!-- 구역 선택 -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_select_seat"
         android:layout_width="0dp"
         android:layout_height="510dp"
@@ -230,11 +230,11 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_seat_again" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <!--좌석 번호 -->
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_seat_number"
         android:layout_width="0dp"
         android:layout_height="510dp"
@@ -527,7 +527,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <TextView
         android:id="@+id/tv_next_btn"
