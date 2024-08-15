@@ -33,7 +33,7 @@ class DatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
+
         initView()
         initEvent()
     }
