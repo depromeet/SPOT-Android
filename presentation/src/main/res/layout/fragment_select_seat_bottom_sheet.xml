@@ -93,6 +93,7 @@
         android:layout_width="0dp"
         android:layout_height="510dp"
         android:visibility="visible"
+        android:layout_marginBottom=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
         app:layout_constraintStart_toStartOf="parent">
@@ -534,37 +535,37 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/rect_action_disabled_fill_8"
         android:clickable="false"
+        android:enabled="false"
         android:gravity="center"
         android:text="저장 후 이동"
         android:textAppearance="@style/TextAppearance.Spot.Label02"
-        android:enabled="false"
         android:textColor="@color/color_foreground_white"
-        android:layout_marginBottom="20dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sv_select_seat" />
 
     <TextView
         android:id="@+id/tv_complete_btn"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/rect_action_disabled_fill_8"
         android:clickable="false"
+        android:enabled="false"
         android:gravity="center"
         android:text="완료"
-        android:layout_marginBottom="20dp"
         android:textAppearance="@style/TextAppearance.Spot.Label02"
         android:textColor="@color/color_foreground_white"
-        android:enabled="false"
         android:textStyle="normal"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sv_select_seat" />
 </androidx.constraintlayout.widget.ConstraintLayout>
