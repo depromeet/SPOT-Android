@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view_handler" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_seat_review"
         android:layout_width="0dp"
         android:layout_height="510dp"
@@ -397,7 +397,7 @@
                 android:layout_height="250dp"
                 android:visibility="visible" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <TextView
         android:id="@+id/tv_complete_btn"
