@@ -253,25 +253,27 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun setupEditTextListeners() {
+        binding.etColumn.setOnFocusChangeListener { _, hasFocus ->
+            binding.ivDeleteColumn.visibility = if (binding.etColumn.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
+        }
         binding.etColumn.addTextChangedListener { text: Editable? ->
-            val newColumn = text.toString()
-            viewModel.setSelectedColumn(newColumn)
-            binding.ivDeleteColumn.visibility =
-                if (newColumn.isNotEmpty()) View.VISIBLE else View.GONE
-            viewModel.seatRangeState.value?.let { state ->
+            viewModel.setSelectedColumn(text.toString())
+            binding.ivDeleteColumn.visibility = if (text.toString().isNotEmpty() && binding.etColumn.hasFocus()) VISIBLE else GONE
+            viewModel.seatRangeState.value.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
                         updateColumnNumberUI(range)
                     }
                 }
             }
+        }
+        binding.etNumber.setOnFocusChangeListener { _, hasFocus ->
+            binding.ivDeleteNumber.visibility = if (binding.etNumber.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
         }
         binding.etNumber.addTextChangedListener { text: Editable? ->
-            val newNumber = text.toString()
-            viewModel.setSelectedNumber(newNumber)
-            binding.ivDeleteNumber.visibility =
-                if (newNumber.isNotEmpty()) View.VISIBLE else View.GONE
-            viewModel.seatRangeState.value?.let { state ->
+            viewModel.setSelectedNumber(text.toString())
+            binding.ivDeleteNumber.visibility = if (text.toString().isNotEmpty()) VISIBLE else GONE
+            viewModel.seatRangeState.value.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
                         updateColumnNumberUI(range)
@@ -279,16 +281,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
         }
-        binding.ivDeleteColumn.setOnSingleClickListener() {
+        binding.ivDeleteColumn.setOnSingleClickListener {
             binding.etColumn.text.clear()
             binding.ivDeleteColumn.visibility = GONE
         }
-
         binding.ivDeleteNumber.setOnSingleClickListener {
             binding.etNumber.text.clear()
             binding.ivDeleteNumber.visibility = GONE
         }
     }
+
 
     // TODO : 추후 코드 개선 예정 (if else 이슈 ㅠㅠ)
     private fun updateColumnNumberUI(range: ResponseSeatRange) {
