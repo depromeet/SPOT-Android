@@ -10,6 +10,7 @@ import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -338,12 +339,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         tvNoneColumnWarning.text = "존재하지 않는 번이에요"
                         tvNoneColumnWarning.visibility = VISIBLE
                         binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                        binding.tvCompleteBtn.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                android.R.color.white,
-                            ),
-                        )
                         binding.tvCompleteBtn.isEnabled = false
                     }
                 } else {
@@ -360,7 +355,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
-        val blockCodes = blockItems.map { it.code }
+        val blockCodes = mutableListOf("블록을 선택해주세요")
+        blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_block_item, blockCodes)
@@ -381,6 +377,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     position: Int,
                     id: Long,
                 ) {
+                    if (view is TextView) {
+                        if (position == 0) {
+                            view.setTextColor(ContextCompat.getColor(requireContext(), com.depromeet.designsystem.R.color.color_foreground_caption))
+                            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                            binding.tvCompleteBtn.isEnabled = false
+                        }
+                    }
+
                     if (position > 0) {
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)
