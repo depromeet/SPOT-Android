@@ -93,7 +93,6 @@
         android:layout_width="0dp"
         android:layout_height="510dp"
         android:visibility="visible"
-        android:layout_marginBottom=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_combined_top"
         app:layout_constraintStart_toStartOf="parent">
