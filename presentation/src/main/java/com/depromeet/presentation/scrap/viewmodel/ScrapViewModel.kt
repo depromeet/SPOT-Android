@@ -41,6 +41,8 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
 
     fun getScrapRecord(){
         viewModelScope.launch {
+//            _scrap.value = UiState.Failure("실패")
+//            _scrap.value = UiState.Empty
             _scrap.value = UiState.Success(getScrapData())
         }
     }

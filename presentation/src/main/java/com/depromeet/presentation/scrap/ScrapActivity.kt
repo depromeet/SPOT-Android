@@ -1,5 +1,6 @@
 package com.depromeet.presentation.scrap
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -9,10 +10,12 @@ import com.depromeet.core.base.BaseActivity
 import com.depromeet.core.state.UiState
 import com.depromeet.presentation.databinding.ActivityScrapBinding
 import com.depromeet.presentation.extension.dpToPx
+import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.depromeet.presentation.scrap.adapter.ScrapRecordAdapter
 import com.depromeet.presentation.scrap.viewmodel.ScrapViewModel
+import com.depromeet.presentation.viewfinder.StadiumActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,10 +37,21 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private fun initView() {
         viewModel.getScrapRecord()
         initScrapAdapter()
+
     }
 
-    private fun initEvent() {
-
+    private fun initEvent() = with(binding) {
+        btScrapEmptyView.setOnClickListener {
+            Intent(this@ScrapActivity, StadiumActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+        btScrapFailRefresh.setOnSingleClickListener {
+            viewModel.getScrapRecord()
+        }
+        AppbarScrap.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     private fun initObserver() {
