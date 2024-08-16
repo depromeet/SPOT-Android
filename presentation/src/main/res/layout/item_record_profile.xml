@@ -7,7 +7,6 @@
 
     <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
         android:id="@+id/csbv_record_title"
-        style="@style/TextAppearance.Spot.Caption04"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
@@ -21,9 +20,8 @@
         app:paddingBottom="8dp"
         app:paddingLeft="10dp"
         app:paddingTop="8dp"
+        app:textAppearance="@style/TextAppearance.Spot.Caption04"
         app:textColor="@color/color_foreground_body_sebtext"
-        app:textSize="11sp"
-        app:textStyle="medium"
         tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
     <ImageView

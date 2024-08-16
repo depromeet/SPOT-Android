@@ -6,6 +6,7 @@
         <attr name="textSize" format="dimension" />
         <attr name="textColor" format="color" />
         <attr name="backgroundColor" format="color" />
+        <attr name="textAppearance" format="reference"/>
         <attr name="textStyle" format="enum">
             <enum name="medium" value="0" />
             <enum name="semiBold" value="1" />
@@ -22,5 +23,10 @@
             <enum name="bottom" value="0" />
             <enum name="top" value="1" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CustomTextAppearance">
+        <attr name="android:fontFamily" format="reference"/>
+        <attr name="android:textSize" format="dimension"/>
     </declare-styleable>
 </resources>

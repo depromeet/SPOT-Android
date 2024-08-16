@@ -77,8 +77,7 @@
         app:paddingRight="10dp"
         app:paddingTop="8dp"
         app:textColor="@color/color_foreground_body_subtitle"
-        app:textSize="11sp"
-        app:textStyle="medium" />
+        app:textAppearance="@style/TextAppearance.Spot.Caption04" />
 
 
     <TextView

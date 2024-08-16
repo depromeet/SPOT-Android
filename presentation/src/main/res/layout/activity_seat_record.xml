@@ -71,8 +71,7 @@
             app:paddingRight="10dp"
             app:paddingTop="8dp"
             app:textColor="@color/color_foreground_body_sebtext"
-            app:textSize="11sp"
-            app:textStyle="medium"
+            app:textAppearance="@style/TextAppearance.Spot.Caption04"
             tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
         <ImageView

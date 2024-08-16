@@ -1,5 +1,6 @@
 package com.depromeet.presentation.home.customview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -34,6 +35,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private var cornerRadius = 0f
     private var textStyle: Int = 0
     private var triangleDirection: Int = 0
+    private var textAppearance: Int = 0
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView, defStyleAttr, 0)
@@ -78,6 +80,10 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                     textStyle = getInt(R.styleable.CustomSpeechBubbleView_textStyle, Typeface.BOLD)
                     triangleDirection =
                         getInt(R.styleable.CustomSpeechBubbleView_triangleDirection, 0)
+                    textAppearance =
+                        getResourceId(R.styleable.CustomSpeechBubbleView_textAppearance, 0)
+
+
                 } finally {
                     recycle()
                 }
@@ -87,8 +93,54 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         bubblePaint.style = Paint.Style.FILL
         textPaint.color =
             context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
-        textPaint.textSize = textSize
         textPaint.textAlign = Paint.Align.LEFT
+
+        if (textAppearance != 0) {
+            applyTextAppearance(textAppearance)
+        } else {
+            textPaint.textSize = textSize
+            textPaint.typeface = when (textStyle) {
+                1 -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_medium
+                )
+
+                2 -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_semibold
+                )
+
+                3 -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_regular
+                )
+
+                else -> ResourcesCompat.getFont(
+                    context,
+                    com.depromeet.designsystem.R.font.font_pretendard_regular
+                )
+            }
+
+        }
+    }
+
+    @SuppressLint("CustomViewStyleable")
+    private fun applyTextAppearance(styleResId: Int) {
+        val typedArray =
+            context.obtainStyledAttributes(styleResId, R.styleable.CustomTextAppearance)
+        try {
+            val fontResId =
+                typedArray.getResourceId(R.styleable.CustomTextAppearance_android_fontFamily, 0)
+            val textSizeFromAppearance =
+                typedArray.getDimension(R.styleable.CustomTextAppearance_android_textSize, textSize)
+
+            if (fontResId != 0) {
+                textPaint.typeface = ResourcesCompat.getFont(context, fontResId)
+            }
+            textPaint.textSize = textSizeFromAppearance
+        } finally {
+            typedArray.recycle()
+        }
     }
 
     fun setText(text: String) {
@@ -170,27 +222,6 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
             textPaint.color = when (index) {
                 1 -> context.getColor(com.depromeet.designsystem.R.color.color_action_enabled)
                 else -> context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
-            }
-            textPaint.typeface = when (textStyle) {
-                1 -> ResourcesCompat.getFont(
-                    context,
-                    com.depromeet.designsystem.R.font.font_pretendard_medium
-                )
-
-                2 -> ResourcesCompat.getFont(
-                    context,
-                    com.depromeet.designsystem.R.font.font_pretendard_semibold
-                )
-
-                3 -> ResourcesCompat.getFont(
-                    context,
-                    com.depromeet.designsystem.R.font.font_pretendard_regular
-                )
-
-                else -> ResourcesCompat.getFont(
-                    context,
-                    com.depromeet.designsystem.R.font.font_pretendard_regular
-                )
             }
 
             val textWidth = textPaint.measureText(textPart)
