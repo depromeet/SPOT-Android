@@ -1,15 +1,16 @@
 package com.depromeet.presentation.seatreview.dialog
 
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.view.View.FOCUS_DOWN
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -28,7 +29,6 @@ import com.depromeet.presentation.extension.toast
 import com.depromeet.presentation.seatreview.ReviewViewModel
 import com.depromeet.presentation.seatreview.adapter.SelectSeatAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,27 +42,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentBottomSheetDialogFragment)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener {
-            val bottomSheet =
-                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            val behavior = BottomSheetBehavior.from(bottomSheet!!)
-
-            behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    }
-                }
-
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                }
-            })
-        }
-        return dialog
     }
 
     override fun onStart() {
@@ -123,11 +102,33 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         setupEditTextListeners()
     }
 
+    private fun toggleDescriptionVisibility() {
+        binding.layoutColumnDescription.isGone = !binding.layoutColumnDescription.isGone
+        if (binding.layoutColumnDescription.isVisible) {
+            binding.ivWhatColumnChevron.setImageDrawable(
+                ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.ic_chevron_up,
+                ),
+            )
+        } else {
+            binding.ivWhatColumnChevron.setImageDrawable(
+                ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.ic_chevron_down,
+                ),
+            )
+        }
+    }
+
     private fun setupTransactionSelectSeat() {
         with(binding) {
             layoutSeatAgain.setOnSingleClickListener {
                 ivSeatAgain.isVisible = !ivSeatAgain.isVisible
                 if (ivSeatAgain.isVisible) {
+                    svSelectSeat.post {
+                        svSelectSeat.fullScroll(FOCUS_DOWN)
+                    }
                     binding.ivChevronDown.setImageDrawable(
                         ContextCompat.getDrawable(
                             binding.root.context,
@@ -144,15 +145,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
             layoutColumnNumberDescription.setOnSingleClickListener {
-                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
-                if (layoutColumnDescription.isGone) {
-                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
-                } else {
-                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
-                }
+                toggleDescriptionVisibility()
+            }
+            ivHelpCircle.setOnSingleClickListener {
+                toggleDescriptionVisibility()
+            }
+            ivWhatColumnChevron.setOnSingleClickListener {
+                toggleDescriptionVisibility()
             }
             tvWhatColumn.setOnSingleClickListener {
-                layoutColumnDescription.visibility = VISIBLE
+                toggleDescriptionVisibility()
             }
             tvNextBtn.setOnSingleClickListener {
                 svSelectSeat.visibility = INVISIBLE
@@ -232,7 +234,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             when (state) {
                 is UiState.Success -> {
                     state.data.forEach { range ->
-                        updateIsExistedColumnUI(range.rowInfo)
                         updateColumnNumberUI(range)
                     }
                 }
@@ -253,25 +254,27 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun setupEditTextListeners() {
+        binding.etColumn.setOnFocusChangeListener { _, hasFocus ->
+            binding.ivDeleteColumn.visibility = if (binding.etColumn.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
+        }
         binding.etColumn.addTextChangedListener { text: Editable? ->
-            val newColumn = text.toString()
-            viewModel.setSelectedColumn(newColumn)
-            binding.ivDeleteColumn.visibility =
-                if (newColumn.isNotEmpty()) View.VISIBLE else View.GONE
-            viewModel.seatRangeState.value?.let { state ->
+            viewModel.setSelectedColumn(text.toString())
+            binding.ivDeleteColumn.visibility = if (text.toString().isNotEmpty() && binding.etColumn.hasFocus()) VISIBLE else GONE
+            viewModel.seatRangeState.value.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
                         updateColumnNumberUI(range)
                     }
                 }
             }
+        }
+        binding.etNumber.setOnFocusChangeListener { _, hasFocus ->
+            binding.ivDeleteNumber.visibility = if (binding.etNumber.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
         }
         binding.etNumber.addTextChangedListener { text: Editable? ->
-            val newNumber = text.toString()
-            viewModel.setSelectedNumber(newNumber)
-            binding.ivDeleteNumber.visibility =
-                if (newNumber.isNotEmpty()) View.VISIBLE else View.GONE
-            viewModel.seatRangeState.value?.let { state ->
+            viewModel.setSelectedNumber(text.toString())
+            binding.ivDeleteNumber.visibility = if (text.toString().isNotEmpty()) VISIBLE else GONE
+            viewModel.seatRangeState.value.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
                         updateColumnNumberUI(range)
@@ -279,11 +282,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
         }
-        binding.ivDeleteColumn.setOnSingleClickListener() {
+        binding.ivDeleteColumn.setOnSingleClickListener {
             binding.etColumn.text.clear()
             binding.ivDeleteColumn.visibility = GONE
         }
-
         binding.ivDeleteNumber.setOnSingleClickListener {
             binding.etNumber.text.clear()
             binding.ivDeleteNumber.visibility = GONE
@@ -339,12 +341,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         tvNoneColumnWarning.text = "존재하지 않는 번이에요"
                         tvNoneColumnWarning.visibility = VISIBLE
                         binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                        binding.tvCompleteBtn.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                android.R.color.white,
-                            ),
-                        )
                         binding.tvCompleteBtn.isEnabled = false
                     }
                 } else {
@@ -360,26 +356,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun updateIsExistedColumnUI(rowInfoList: List<ResponseSeatRange.RowInfo>) {
-        if (rowInfoList.size == 1) {
-            with(binding) {
-                etColumn.visibility = INVISIBLE
-                tvColumn.visibility = INVISIBLE
-                etNumber.visibility = INVISIBLE
-                etNonColumnNumber.visibility = VISIBLE
-            }
-        } else {
-            with(binding) {
-                etColumn.visibility = VISIBLE
-                tvColumn.visibility = VISIBLE
-                etNumber.visibility = VISIBLE
-                etNonColumnNumber.visibility = INVISIBLE
-            }
-        }
-    }
-
     private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
-        val blockCodes = blockItems.map { it.code }
+        val blockCodes = mutableListOf("블록을 선택해주세요")
+        blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_block_item, blockCodes)
@@ -400,6 +379,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     position: Int,
                     id: Long,
                 ) {
+                    if (view is TextView) {
+                        if (position == 0) {
+                            view.setTextColor(ContextCompat.getColor(requireContext(), com.depromeet.designsystem.R.color.color_foreground_caption))
+                            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                            binding.tvCompleteBtn.isEnabled = false
+                        } else {
+                        }
+                    }
+
                     if (position > 0) {
                         val selectedBlock = blockCodes[position]
                         viewModel.setSelectedBlock(selectedBlock)

@@ -10,8 +10,8 @@
     <View
         android:id="@+id/view_handler"
         android:layout_width="40dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="4dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rect_gray600_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
     </LinearLayout>
 
     <!-- 구역 선택 -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_select_seat"
         android:layout_width="0dp"
         android:layout_height="510dp"
@@ -230,11 +230,11 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_seat_again" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <!--좌석 번호 -->
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_seat_number"
         android:layout_width="0dp"
         android:layout_height="510dp"
@@ -527,43 +527,48 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/tv_next_btn"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rect_action_disabled_fill_8"
-        android:clickable="false"
-        android:gravity="center"
-        android:paddingVertical="19dp"
-        android:text="저장 후 이동"
-        android:textAppearance="@style/TextAppearance.Spot.Label02"
-        android:enabled="false"
-        android:textColor="@color/color_foreground_white"
-        android:layout_marginBottom="20dp"
-        android:visibility="visible"
+        android:layout_height="76dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_next_btn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rect_action_disabled_fill_8"
+            android:clickable="false"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="저장 후 이동"
+            android:textAppearance="@style/TextAppearance.Spot.Label02"
+            android:textColor="@color/color_foreground_white"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tv_complete_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/rect_action_disabled_fill_8"
         android:clickable="false"
+        android:enabled="false"
         android:gravity="center"
-        android:paddingVertical="19dp"
         android:text="완료"
-        android:layout_marginBottom="20dp"
         android:textAppearance="@style/TextAppearance.Spot.Label02"
         android:textColor="@color/color_foreground_white"
-        android:enabled="false"
         android:textStyle="normal"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

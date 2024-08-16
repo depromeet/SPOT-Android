@@ -75,7 +75,6 @@
     <style name="AppTheme.NumberPicker" parent="android:Widget.Material.NumberPicker">
         <item name="colorControlNormal">@color/color_action_enabled</item>
         <item name="android:fontWeight">600</item>
-        <item name="android:paddingVertical">16dp</item>
         <item name="android:textColor">@color/color_foreground_heading</item>
         <item name="android:fontFamily">@font/font_pretendard_semibold</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
