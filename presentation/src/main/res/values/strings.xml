@@ -138,6 +138,7 @@
     <string name="scrap_find_view">시야 찾으러 가기</string>
     <string name="scrap_fail_advice">새로고침하여 다시 시도해주세요!</string>
     <string name="scrap_fail_description">정보를 불러올 수 없습니다.</string>
+    <string name="scrap_filter">필터</string>
 
 
 </resources>

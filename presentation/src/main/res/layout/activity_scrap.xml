@@ -66,14 +66,17 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvScrapFilter"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:orientation="horizontal"
+            android:paddingBottom="12dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScrapNoneCount" />
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoneCount"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_scrap_filter_selected"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

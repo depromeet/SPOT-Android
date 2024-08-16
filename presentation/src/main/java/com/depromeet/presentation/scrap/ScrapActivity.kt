@@ -11,12 +11,13 @@ import com.depromeet.core.state.UiState
 import com.depromeet.presentation.databinding.ActivityScrapBinding
 import com.depromeet.presentation.extension.dpToPx
 import com.depromeet.presentation.extension.setOnSingleClickListener
-import com.depromeet.presentation.extension.toast
+import com.depromeet.presentation.scrap.adapter.ScrapFilterAdapter
 import com.depromeet.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.depromeet.presentation.scrap.adapter.ScrapRecordAdapter
 import com.depromeet.presentation.scrap.viewmodel.ScrapViewModel
 import com.depromeet.presentation.viewfinder.StadiumActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ScrapActivity : BaseActivity<ActivityScrapBinding>(
@@ -24,6 +25,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
 ) {
     private val viewModel: ScrapViewModel by viewModels()
     private lateinit var scrapAdapter: ScrapRecordAdapter
+    private lateinit var scrapFilterAdapter: ScrapFilterAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private fun initView() {
         viewModel.getScrapRecord()
         initScrapAdapter()
+        initScrapFilterAdapter()
 
     }
 
@@ -74,17 +77,22 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 }
             }
         }
+
+        viewModel.filter.asLiveData().observe(this) {
+            Timber.d("testtest -> $it")
+            scrapFilterAdapter.submitList(it) {
+                binding.rvScrapFilter.scrollToPosition(0)
+            }
+        }
     }
 
     private fun initScrapAdapter() {
         scrapAdapter = ScrapRecordAdapter(
             scrapClick = {
-                toast("스크랩 클릭 ${it.id}")
-                //TODO : 스크랩 삭제
+                viewModel.deleteScrapRecord(it.id)
             },
             recordClick = {
-                toast("게시물 클릭 ${it.id}")
-                //TODO : 게시물 상세화면 이동
+                //TODO : 상세화면 이동
             }
         )
         binding.rvScrapRecord.adapter = scrapAdapter
@@ -94,6 +102,19 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
             )
         )
 
+    }
+
+    private fun initScrapFilterAdapter() {
+        scrapFilterAdapter = ScrapFilterAdapter(
+            filterClick = {
+                viewModel.setFilter()
+            },
+            selectedClick = {
+                //TODO : 삭제
+            }
+        )
+        binding.rvScrapFilter.adapter = scrapFilterAdapter
+        binding.rvScrapFilter.itemAnimator = null
     }
 
     private fun setScrapScreenVisibility(scrapState: ScrapScreenState) = with(binding) {
