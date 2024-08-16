@@ -323,16 +323,19 @@
                     android:hint="시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요"
                     android:inputType="textMultiLine"
                     android:maxLines="5"
-                    android:paddingHorizontal="16dp"
+                    android:paddingStart="16dp"
                     android:paddingTop="16dp"
                     android:paddingBottom="40dp"
+                    android:gravity="start|top"
+                    android:paddingEnd="12dp"
                     android:textAppearance="@style/TextAppearance.Spot.Body02"
                     android:textColor="@color/color_foreground_body_subtitle"
                     android:textColorHint="@color/color_foreground_disabled"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
 
                 <TextView
                     android:id="@+id/tv_text_count"
