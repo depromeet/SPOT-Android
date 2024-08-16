@@ -288,21 +288,22 @@
 
             <LinearLayout
                 android:id="@+id/layout_detail_review"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/btn_detail_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
                     android:background="@drawable/sel_review_check_write" />
 
                 <TextView
                     android:id="@+id/tv_write_detail_review"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:text="더 자세한 후기를 남길래요!"
                     android:textAppearance="@style/TextAppearance.Spot.Subtitle04"
