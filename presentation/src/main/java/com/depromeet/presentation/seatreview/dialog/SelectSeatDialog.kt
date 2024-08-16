@@ -3,6 +3,8 @@ package com.depromeet.presentation.seatreview.dialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.view.View.FOCUS_DOWN
+import android.view.View.FOCUS_UP
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -106,6 +108,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             layoutSeatAgain.setOnSingleClickListener {
                 ivSeatAgain.isVisible = !ivSeatAgain.isVisible
                 if (ivSeatAgain.isVisible) {
+                    svSelectSeat.post {
+                        svSelectSeat.fullScroll(FOCUS_DOWN)
+                    }
                     binding.ivChevronDown.setImageDrawable(
                         ContextCompat.getDrawable(
                             binding.root.context,

@@ -10,7 +10,7 @@
         android:id="@+id/v_handler"
         android:layout_width="40dp"
         android:layout_height="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rect_gray600_fill_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,18 +60,18 @@
 
             <TextView
                 android:id="@+id/tv_take_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:text="사진 촬영"
                 android:textColor="@color/color_foreground_body_subtitle"
-               android:textAppearance="@style/TextAppearance.Spot.Body02" />
+                android:textAppearance="@style/TextAppearance.Spot.Body02" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_gallery"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginVertical="16dp"
             android:orientation="horizontal">
 
@@ -83,8 +83,8 @@
 
             <TextView
                 android:id="@+id/tv_select_gallery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:text="갤러리에서 선택"
                 android:textColor="@color/color_foreground_body_subtitle"

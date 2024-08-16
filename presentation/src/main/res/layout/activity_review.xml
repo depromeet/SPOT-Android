@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/rect_white_fill_stroke_tertiary_line_999"
                 android:orientation="horizontal">
 
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:text="경기의 순간을 기록해보세요"
                 android:textAppearance="@style/TextAppearance.Spot.Title02" />
 
@@ -268,7 +268,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="13dp"
                             android:background="@drawable/rect_white_fill_16"
-                            android:elevation="1dp"
+                            android:elevation="4dp"
                             android:orientation="horizontal"
                             android:rotation="-3"
                             android:visibility="gone">
@@ -301,7 +301,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="13dp"
                             android:background="@drawable/rect_white_fill_16"
-                            android:elevation="1dp"
+                            android:elevation="4dp"
                             android:orientation="horizontal"
                             android:rotation="+3"
                             android:visibility="gone">
@@ -334,7 +334,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="13dp"
                             android:background="@drawable/rect_white_fill_16"
-                            android:elevation="1dp"
+                            android:elevation="4dp"
                             android:orientation="horizontal"
                             android:rotation="-3"
                             android:visibility="gone">
