@@ -77,6 +77,7 @@ object ThirdPartyDependencies {
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
     const val lottieCompose = "com.airbnb.android:lottie-compose:${Versions.lottieVersion}"
     const val kakaoLogin = "com.kakao.sdk:v2-user:${Versions.kakaoVersion}"
+    const val kakaoShare = "com.kakao.sdk:v2-share:${Versions.kakaoVersion}"
     const val indicator = "me.relex:circleindicator:${Versions.circleIndicator}"
     const val shimmer = "com.facebook.shimmer:shimmer:${Versions.shimmerVersion}"
 }
