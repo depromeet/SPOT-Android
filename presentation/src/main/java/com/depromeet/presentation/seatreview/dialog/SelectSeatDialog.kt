@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import android.view.View.FOCUS_DOWN
-import android.view.View.FOCUS_UP
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -103,6 +102,25 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         setupEditTextListeners()
     }
 
+    private fun toggleDescriptionVisibility() {
+        binding.layoutColumnDescription.isGone = !binding.layoutColumnDescription.isGone
+        if (binding.layoutColumnDescription.isVisible) {
+            binding.ivWhatColumnChevron.setImageDrawable(
+                ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.ic_chevron_up,
+                ),
+            )
+        } else {
+            binding.ivWhatColumnChevron.setImageDrawable(
+                ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.ic_chevron_down,
+                ),
+            )
+        }
+    }
+
     private fun setupTransactionSelectSeat() {
         with(binding) {
             layoutSeatAgain.setOnSingleClickListener {
@@ -127,15 +145,16 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
             layoutColumnNumberDescription.setOnSingleClickListener {
-                layoutColumnDescription.isGone = !layoutColumnDescription.isGone
-                if (layoutColumnDescription.isGone) {
-                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_down)
-                } else {
-                    binding.ivWhatColumnChevron.setImageResource(R.drawable.ic_chevron_up)
-                }
+                toggleDescriptionVisibility()
+            }
+            ivHelpCircle.setOnSingleClickListener {
+                toggleDescriptionVisibility()
+            }
+            ivWhatColumnChevron.setOnSingleClickListener {
+                toggleDescriptionVisibility()
             }
             tvWhatColumn.setOnSingleClickListener {
-                layoutColumnDescription.visibility = VISIBLE
+                toggleDescriptionVisibility()
             }
             tvNextBtn.setOnSingleClickListener {
                 svSelectSeat.visibility = INVISIBLE
