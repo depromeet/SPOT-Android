@@ -195,7 +195,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
         tvHomeTitle.text = data.levelTitle
         ivHomeCharacter.load(data.mascotImageUrl)
-        csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup,"장 더 올리면 레벨업!")
+        if(data.reviewCntToLevelup == 0){
+            csbvHomeTitle.setTextPart("내가 바로 이 구역 직관왕!",number = null, suffix = null)
+        }else{
+            csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup,"장 더 올리면 레벨업!")
+        }
+
     }
 
     private fun navigateToReviewActivity() {

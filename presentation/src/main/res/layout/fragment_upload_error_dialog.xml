@@ -70,6 +70,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/rect_action_enabled_fill_8"
+            android:stateListAnimator="@null"
             android:gravity="center"
             android:text="@string/upload_error_check"
             android:textColor="@color/white"

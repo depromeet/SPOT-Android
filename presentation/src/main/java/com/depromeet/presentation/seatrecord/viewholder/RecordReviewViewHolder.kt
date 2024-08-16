@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatrecord.test
+package com.depromeet.presentation.seatrecord.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.domain.entity.response.home.ResponseMySeatRecord

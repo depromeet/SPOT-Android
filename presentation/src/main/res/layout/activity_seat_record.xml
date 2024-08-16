@@ -58,9 +58,8 @@
         <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
             android:id="@+id/csbv_record_title"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="55dp"
             android:elevation="4dp"
             android:paddingRight="10dp"
             app:backgroundColor="@color/color_background_white"
@@ -69,10 +68,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:paddingBottom="8dp"
             app:paddingLeft="10dp"
+            app:paddingRight="10dp"
             app:paddingTop="8dp"
             app:textColor="@color/color_foreground_body_sebtext"
-            app:textSize="11sp"
-            app:textStyle="medium"
+            app:textAppearance="@style/TextAppearance.Spot.Caption04"
             tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
         <ImageView
@@ -80,12 +79,12 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="20dp"
+            android:background="@drawable/circle_white_fill"
             android:elevation="1dp"
             android:src="@drawable/ic_default_profile"
             app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
             app:layout_constraintStart_toStartOf="@id/csbv_record_title"
             app:layout_constraintTop_toTopOf="@id/csbv_record_title"
-            android:background="@drawable/circle_white_fill"
             tools:ignore="contentDescription" />
 
         <ImageView
@@ -143,11 +142,11 @@
 
         <TextView
             android:id="@+id/tv_record_year"
+            style="@style/TextAppearance.Spot.Subtitle01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            style="@style/TextAppearance.Spot.Subtitle01"
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_record_count"
@@ -155,6 +154,7 @@
 
         <TextView
             android:id="@+id/textView"
+            style="@style/TextAppearance.Spot.Subtitle03"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -163,18 +163,17 @@
             android:paddingVertical="9dp"
             android:text="@string/view_record_all"
             android:textColor="@color/color_foreground_white"
-            style="@style/TextAppearance.Spot.Subtitle03"
             app:layout_constraintStart_toStartOf="@id/tv_record_year"
             app:layout_constraintTop_toBottomOf="@id/tv_record_year" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_record_empty"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView"
-            android:visibility="visible"
             android:layout_width="0dp"
-            android:layout_height="300dp">
+            android:layout_height="300dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView">
 
             <ImageView
                 android:id="@+id/iv_record_no_record"
@@ -311,29 +310,27 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_seat_record"
-        android:visibility="visible"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/record_spot_appbar"
-        />
+        app:layout_constraintTop_toBottomOf="@id/record_spot_appbar" />
 
     <TextView
         android:id="@+id/tv_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="끝에 도달 테스트"
-        app:layout_constraintBottom_toBottomOf="@id/rv_seat_record"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="40sp"
         android:textColor="@color/color_foreground_heading"
+        android:textSize="40sp"
         android:visibility="gone"
-        />
+        app:layout_constraintBottom_toBottomOf="@id/rv_seat_record"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_profile"
@@ -377,6 +374,7 @@
         app:layout_constraintTop_toBottomOf="@id/shimmer_date">
 
         <include layout="@layout/item_shimmer_review_record" />
+
         <include layout="@layout/item_shimmer_review_record" />
 
     </com.facebook.shimmer.ShimmerFrameLayout>
@@ -390,9 +388,10 @@
         android:elevation="2dp"
         android:padding="14dp"
         android:src="@drawable/ic_chevron_up"
-        app:tint="@color/color_foreground_body_sebtext"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:tint="@color/color_foreground_body_sebtext"
         tools:ignore="contentDescription" />
 
 
@@ -405,9 +404,9 @@
         android:padding="14dp"
         android:scaleType="center"
         android:src="@drawable/ic_plus"
-        app:tint="@color/color_foreground_white"
         app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
         app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:tint="@color/color_foreground_white"
         tools:ignore="contentDescription" />
 
     <FrameLayout

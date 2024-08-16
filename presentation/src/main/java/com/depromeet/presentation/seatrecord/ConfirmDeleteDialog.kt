@@ -56,7 +56,6 @@ class ConfirmDeleteDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBin
             dismiss()
         }
         binding.btConfirmCancel.setOnClickListener {
-            viewModel.cancelDeleteEvent()
             dismiss()
         }
 
@@ -64,7 +63,6 @@ class ConfirmDeleteDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBin
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        viewModel.cancelDeleteEvent()
     }
 
 

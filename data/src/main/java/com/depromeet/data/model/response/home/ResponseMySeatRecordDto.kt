@@ -74,7 +74,7 @@ data class ResponseMySeatRecordDto(
         @SerialName("row")
         val row: ResponseRowDto,
         @SerialName("seat")
-        val seat: ResponseSeatDto,
+        val seat: ResponseSeatDto?,
         @SerialName("dateTime")
         val dateTime: String,
         @SerialName("content")
@@ -199,10 +199,11 @@ data class ResponseMySeatRecordDto(
             stadiumName = stadium.name,
             blockId = block.id,
             blockName = block.code,
-            seatId = seat.id,
+            blockCode = block.code,
             rowId = row.id,
             rowNumber = row.number,
-            seatNumber = seat.seatNumber,
+            seatId = seat?.id,
+            seatNumber = seat?.seatNumber,
             date = dateTime,
             content = content,
             sectionName = section.name,

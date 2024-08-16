@@ -62,7 +62,7 @@ fun StadiumDetailPictureViewPager(
                 placeholder = ColorPainter(Color.LightGray),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = ((context.resources.displayMetrics.heightPixels / context.resources.displayMetrics.density) * 0.5).dp)
+                    .heightIn(max = ((context.resources.displayMetrics.heightPixels / context.resources.displayMetrics.density) * 0.58).dp)
                     .clip(RectangleShape),
 
                 )

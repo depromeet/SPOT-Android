@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatrecord.test
+package com.depromeet.presentation.seatrecord.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +10,9 @@ import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.databinding.ItemRecordProfileBinding
 import com.depromeet.presentation.databinding.ItemRecordReviewBinding
+import com.depromeet.presentation.seatrecord.viewholder.RecordDateViewHolder
+import com.depromeet.presentation.seatrecord.viewholder.RecordProfileViewHolder
+import com.depromeet.presentation.seatrecord.viewholder.RecordReviewViewHolder
 import timber.log.Timber
 
 enum class RecordViewType {
@@ -109,6 +112,9 @@ class SeatRecordAdapter(
         }
     }
 
+    fun isHeader(position: Int): Boolean =
+        getItemViewType(position) == RecordViewType.DATE_ITEM.ordinal
+
     fun updateItemAt(index: Int, newItem: RecordListItem) {
         val newList = currentList.toMutableList()
         if (index >= 0 && index < newList.size) {
@@ -128,13 +134,16 @@ class RecordItemDiffCallback : DiffUtil.ItemCallback<RecordListItem>() {
 
     override fun areContentsTheSame(oldItem: RecordListItem, newItem: RecordListItem): Boolean {
 
-        return when{
+        return when {
             oldItem is RecordListItem.Record && newItem is RecordListItem.Record ->
                 oldItem.reviews == newItem.reviews
+
             oldItem is RecordListItem.Profile && newItem is RecordListItem.Profile ->
                 oldItem.profile == newItem.profile
+
             oldItem is RecordListItem.Date && newItem is RecordListItem.Date ->
                 oldItem.reviewDates == newItem.reviewDates
+
             else -> false
         }
     }
