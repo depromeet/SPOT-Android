@@ -130,5 +130,13 @@
     <string name="setting_manage_account">계정 관리</string>
 
 
+    <!-- 스크랩 -->
+    <string name="scrap_title">스크랩</string>
+    <string name="scrap_save_record">저장된 게시물</string>
+    <string name="scrap_empty_description">아직 스크랩한\n게시물이 없습니다.</string>
+    <string name="scrap_empty_advice">궁금한 야구장 시야를 찾아보세요!</string>
+    <string name="scrap_find_view">시야 찾으러 가기</string>
+
+
 
 </resources>

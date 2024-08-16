@@ -1,6 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_background_tertiary">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <com.depromeet.designsystem.SpotAppbar
+        android:id="@+id/AppbarScrap"
+        style="@style/TextAppearance.Spot.Label03"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:text="@string/scrap_title"
+        android:textColor="@color/color_foreground_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_chevron_left_big"
+        app:navigationIconSize="24" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clScrapTop"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/gl_end"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/AppbarScrap">
+
+        <TextView
+            android:id="@+id/tvScrapNoneTitle"
+            style="@style/TextAppearance.Spot.Subtitle01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/scrap_save_record"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvScrapNoneCount"
+            style="@style/TextAppearance.Spot.Subtitle03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:textColor="@color/color_foreground_caption"
+            app:layout_constraintBottom_toBottomOf="@id/tvScrapNoneTitle"
+            app:layout_constraintStart_toEndOf="@id/tvScrapNoneTitle"
+            app:layout_constraintTop_toTopOf="@id/tvScrapNoneTitle"
+            tools:text="0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvScrapFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoneCount"
+            android:layout_marginTop="12dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clScrapEmpty"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="92dp"
+        app:layout_constraintTop_toBottomOf="@id/clScrapTop">
+
+        <ImageView
+            android:id="@+id/ivNoScrap"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_communication_empty"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            android:id="@+id/tvScrapNoDescription"
+            style="@style/TextAppearance.Spot.Title04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/scrap_empty_description"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivNoScrap" />
+
+        <TextView
+            android:id="@+id/tvScrapNoAdvice"
+            style="@style/TextAppearance.Spot.Body02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/scrap_empty_advice"
+            android:textColor="@color/color_foreground_caption"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoDescription" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_record_write_record"
+            style="@style/TextAppearance.Spot.Label05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rect_background_white_fill_999"
+            android:paddingHorizontal="11dp"
+            android:paddingVertical="13.5dp"
+            android:text="@string/scrap_find_view"
+            android:textColor="@color/color_foreground_body_subtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoAdvice" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
