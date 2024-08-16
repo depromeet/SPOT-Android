@@ -77,6 +77,24 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- 자연스러운 dropshadow를 위해 전체 마진 dp -3했음 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvScrapRecord"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="13dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clScrapTop"
+        app:spanCount="2"
+        tools:itemCount="6"
+        tools:listitem="@layout/item_scrap_record" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clScrapEmpty"
@@ -135,8 +153,8 @@
             android:background="@drawable/rect_background_white_fill_999"
             android:paddingHorizontal="11dp"
             android:paddingVertical="13.5dp"
-            android:text="@string/scrap_find_view"
             android:stateListAnimator="@null"
+            android:text="@string/scrap_find_view"
             android:textColor="@color/color_foreground_body_subtitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -149,8 +167,8 @@
         android:id="@+id/clScrapFail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:layout_marginTop="92dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clScrapTop">
@@ -194,7 +212,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvScrapFailDescription" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_record_fail_refresh"
+            android:id="@+id/btScrapFailRefresh"
             style="@style/TextAppearance.Spot.Label05"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -206,8 +224,8 @@
             android:drawableTint="@color/color_foreground_disabled"
             android:paddingHorizontal="11dp"
             android:paddingVertical="11dp"
-            android:text="@string/refresh"
             android:stateListAnimator="@null"
+            android:text="@string/refresh"
             android:textColor="@color/color_foreground_body_subtitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
