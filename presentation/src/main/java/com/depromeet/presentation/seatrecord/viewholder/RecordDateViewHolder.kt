@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatrecord.test
+package com.depromeet.presentation.seatrecord.viewholder
 
 import android.view.View
 import android.widget.AdapterView
@@ -7,7 +7,6 @@ import com.depromeet.designsystem.SpotDropDownSpinner
 import com.depromeet.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.seatrecord.adapter.DateMonthAdapter
-import timber.log.Timber
 
 class RecordDateViewHolder(
     internal val binding: ItemRecordDateBinding,
@@ -17,7 +16,6 @@ class RecordDateViewHolder(
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
     private lateinit var yearAdapter: SpotDropDownSpinner<String>
-    private var isYearInitialized : Boolean = false
 
 
     fun bind(data: List<ResponseReviewDate.YearMonths>) {
@@ -53,8 +51,7 @@ class RecordDateViewHolder(
                         id: Long,
                     ) {
                         yearAdapter.setSelectedItemPosition(position)
-                        val selectedYear = years[position]
-                        yearClick(selectedYear)
+                        yearClick(years[position])
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {}

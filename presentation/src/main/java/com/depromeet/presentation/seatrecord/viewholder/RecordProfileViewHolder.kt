@@ -1,4 +1,4 @@
-package com.depromeet.presentation.seatrecord.test
+package com.depromeet.presentation.seatrecord.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.domain.entity.response.home.ResponseMySeatRecord
@@ -23,7 +23,12 @@ class RecordProfileViewHolder(
         }
         tvRecordNickname.text = data.nickname
         tvRecordCount.text = data.reviewCount.toString()
-        ivRecordProfile.loadAndCircle(data.profileImage)
+        if (data.profileImage.isEmpty()) {
+            ivRecordProfile.loadAndCircle(com.depromeet.designsystem.R.drawable.ic_default_profile)
+        } else {
+            ivRecordProfile.loadAndCircle(data.profileImage)
+        }
+
     }
 
     private fun initEvent(data: ResponseMySeatRecord.MyProfileResponse) = with(binding) {

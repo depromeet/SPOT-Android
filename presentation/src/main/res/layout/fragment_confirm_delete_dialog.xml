@@ -56,6 +56,7 @@
             android:gravity="center"
             android:text="@string/confirm_delete_do"
             android:textColor="@color/color_foreground_white"
+            android:stateListAnimator="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/bt_confirm_cancel"
             app:layout_constraintTop_toBottomOf="@id/tv_confirm_discipline" />
@@ -70,6 +71,7 @@
             android:gravity="center"
             android:text="@string/confirm_delete_cancel"
             android:textColor="@color/color_foreground_body_sebtext"
+            android:stateListAnimator="@null"
             app:layout_constraintEnd_toStartOf="@id/bt_confirm_check"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/bt_confirm_check" />

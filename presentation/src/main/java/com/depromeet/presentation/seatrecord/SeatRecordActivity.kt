@@ -22,15 +22,14 @@ import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.depromeet.presentation.extension.loadAndCircle
 import com.depromeet.presentation.extension.setOnSingleClickListener
 import com.depromeet.presentation.home.ProfileEditActivity
-import com.depromeet.presentation.seatrecord.test.RecordListItem
-import com.depromeet.presentation.seatrecord.test.SeatRecordAdapter
+import com.depromeet.presentation.seatrecord.adapter.RecordListItem
+import com.depromeet.presentation.seatrecord.adapter.SeatRecordAdapter
 import com.depromeet.presentation.seatrecord.viewmodel.EditUi
 import com.depromeet.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.depromeet.presentation.seatreview.ReviewActivity
 import com.depromeet.presentation.util.CalendarUtil
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -143,6 +142,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
         with(binding) {
             rvSeatRecord.adapter = adapter
+            /*
+            rvSeatRecord.addItemDecoration(
+                HeaderItemDecoration(
+                    binding.rvSeatRecord,
+                    shouldFadeOutHeader = true,
+                    isHeader = { position -> (rvSeatRecord.adapter as SeatRecordAdapter).isHeader(position) }
+                )
+            )
+             */
+
             rvSeatRecord.addOnScrollListener(object : OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     val scrollTop = !binding.rvSeatRecord.canScrollVertically(-1)
@@ -167,9 +176,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         with(binding) {
             rvSeatRecord.setVisible(recordErrorType == RecordErrorType.NONE)
             clRecordError.setVisible(recordErrorType != RecordErrorType.NONE)
-            fabRecordUp.setVisible(recordErrorType == RecordErrorType.NONE)
             clRecordEmpty.setVisible(recordErrorType == RecordErrorType.EMPTY)
             clRecordFail.setVisible(recordErrorType == RecordErrorType.FAIL)
+            fabRecordUp.visibility = GONE
         }
     }
 
@@ -282,12 +291,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
                 moveConfirmationDialog()
+                viewModel.cancelDeleteEvent()
             }
         }
 
         viewModel.editClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
                 moveEditReview()
+                viewModel.cancelEditEvent()
             }
         }
     }
