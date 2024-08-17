@@ -1,4 +1,4 @@
-package com.depromeet.presentation.scrap.adapter
+package com.dpm.presentation.scrap.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.databinding.ItemScrapFilterBinding
 import com.depromeet.presentation.databinding.ItemScrapFilterSelectedBinding
-import com.depromeet.presentation.scrap.viewmodel.FilterTestData
-import com.depromeet.presentation.util.ItemDiffCallback
+import com.dpm.presentation.scrap.viewmodel.FilterTestData
+import com.dpm.presentation.util.ItemDiffCallback
 import timber.log.Timber
 
 enum class ScrapFilterViewType {

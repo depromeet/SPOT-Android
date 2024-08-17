@@ -1,4 +1,4 @@
-package com.depromeet.presentation.scrap
+package com.dpm.presentation.scrap
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,16 +6,16 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
-import com.depromeet.core.base.BaseActivity
-import com.depromeet.core.state.UiState
 import com.depromeet.presentation.databinding.ActivityScrapBinding
-import com.depromeet.presentation.extension.dpToPx
-import com.depromeet.presentation.extension.setOnSingleClickListener
-import com.depromeet.presentation.scrap.adapter.ScrapFilterAdapter
-import com.depromeet.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
-import com.depromeet.presentation.scrap.adapter.ScrapRecordAdapter
-import com.depromeet.presentation.scrap.viewmodel.ScrapViewModel
-import com.depromeet.presentation.viewfinder.StadiumActivity
+import com.dpm.core.base.BaseActivity
+import com.dpm.core.state.UiState
+import com.dpm.designsystem.extension.dpToPx
+import com.dpm.presentation.extension.setOnSingleClickListener
+import com.dpm.presentation.scrap.adapter.ScrapFilterAdapter
+import com.dpm.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
+import com.dpm.presentation.scrap.adapter.ScrapRecordAdapter
+import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
+import com.dpm.presentation.viewfinder.StadiumActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

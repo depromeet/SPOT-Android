@@ -1,4 +1,4 @@
-package com.depromeet.presentation.scrap.adapter
+package com.dpm.presentation.scrap.adapter
 
 import android.graphics.Rect
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.databinding.ItemScrapRecordBinding
-import com.depromeet.presentation.extension.loadAndClip
-import com.depromeet.presentation.extension.setOnSingleClickListener
-import com.depromeet.presentation.scrap.viewmodel.ScrapTestData
-import com.depromeet.presentation.util.ItemDiffCallback
+import com.dpm.presentation.extension.loadAndClip
+import com.dpm.presentation.extension.setOnSingleClickListener
+import com.dpm.presentation.scrap.viewmodel.ScrapTestData
+import com.dpm.presentation.util.ItemDiffCallback
 
 
 class ScrapRecordAdapter(

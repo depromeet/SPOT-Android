@@ -1,8 +1,8 @@
-package com.depromeet.presentation.scrap.viewmodel
+package com.dpm.presentation.scrap.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.depromeet.core.state.UiState
+import com.dpm.core.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
