@@ -64,7 +64,7 @@ data class ResponseBlockReviewDto(
         @SerialName("row")
         val row: ResponseReviewRowDto,
         @SerialName("seat")
-        val seat: ResponseReviewSeatDto,
+        val seat: ResponseReviewSeatDto?,
         @SerialName("dateTime")
         val dateTime: String,
         @SerialName("content")
@@ -140,9 +140,9 @@ data class ResponseBlockReviewDto(
         @Serializable
         data class ResponseReviewSeatDto(
             @SerialName("id")
-            val id: Int,
+            val id: Int?,
             @SerialName("seatNumber")
-            val seatNumber: Int,
+            val seatNumber: Int?,
         )
     }
 
@@ -157,7 +157,7 @@ data class ResponseBlockReviewDto(
         @SerialName("rowNumber")
         val rowNumber: Int,
         @SerialName("seatNumber")
-        val seatNumber: Int,
+        val seatNumber: Int?,
     )
 
     @Serializable
@@ -200,7 +200,7 @@ fun ResponseBlockReviewDto.ResponseTopReviewImagesDto.toTopReviewImagesResponse(
         reviewId = reviewId,
         blockCode = blockCode,
         rowNumber = rowNumber,
-        seatNumber = seatNumber
+        seatNumber = seatNumber ?: 0
     )
 
 fun ResponseBlockReviewDto.ResponseReviewFilterDto.toReviewFilterResponse() =
@@ -219,7 +219,7 @@ fun ResponseBlockReviewDto.ResponseReviewDto.toReviewResponse() =
         section = section.toReviewSectionResponse(),
         block = block.toReviewBlockResponse(),
         row = row.toReviewRowResponse(),
-        seat = seat.toReviewSeatResponse(),
+        seat = seat?.toReviewSeatResponse() ?: ResponseBlockReview.ResponseReview.ResponseReviewSeat(),
         dateTime = dateTime,
         content = content ?: "",
         images = images.map { it.toReviewImageResponse() },
@@ -278,7 +278,7 @@ fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewRowDto.toReviewRowRes
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewSeatDto.toReviewSeatResponse() =
     ResponseBlockReview.ResponseReview.ResponseReviewSeat(
-        id = id,
-        seatNumber = seatNumber
+        id = id ?: 0,
+        seatNumber = seatNumber ?: 0
     )
 
