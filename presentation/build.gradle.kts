@@ -92,6 +92,7 @@ dependencies {
         implementation(balloon)
         implementation(lottie)
         implementation(kakaoLogin)
+        implementation(kakaoShare)
         implementation(indicator)
         implementation(shimmer)
         debugImplementation(flipperLeakCanary)

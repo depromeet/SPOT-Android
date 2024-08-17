@@ -126,7 +126,7 @@
                 style="@style/TextAppearance.Spot.Label12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/warning_red01"
                 android:textColor="@color/color_error_primary"
@@ -143,7 +143,7 @@
                 style="@style/TextAppearance.Spot.Subtitle04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="34dp"
+                android:layout_marginTop="54dp"
                 android:text="@string/profile_edit_cheer_team"
                 android:textColor="@color/color_foreground_body_sebtext"
                 app:layout_constraintStart_toStartOf="parent"
@@ -161,22 +161,47 @@
                 app:spanCount="2"
                 tools:listitem="@layout/item_baseball_team" />
 
-            <TextView
-                android:id="@+id/tv_profile_edit_no_team"
-                style="@style/TextAppearance.Spot.Label06"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clProfileEditAllTeam"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="64dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="60dp"
                 android:background="@drawable/rect_background_tertiary_fill_8"
-                android:gravity="center"
-                android:paddingVertical="24dp"
-                android:text="@string/profile_edit_cheer_all"
-                android:textColor="@color/color_foreground_heading"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_team" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_team">
+
+                <ImageView
+                    android:id="@+id/iv_team_image"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_cheer_all_teams"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tv_team_name"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="contentDescription"
+                    tools:src="@drawable/ic_cheer_all_teams" />
+
+                <TextView
+                    android:id="@+id/tv_team_name"
+                    style="@style/TextAppearance.Spot.Label06"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6.5dp"
+                    android:text="@string/profile_edit_cheer_all"
+                    android:textColor="@color/color_foreground_heading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_team_image"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/profile_edit_cheer_all" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
