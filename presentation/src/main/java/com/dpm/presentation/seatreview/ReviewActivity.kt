@@ -231,8 +231,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         val seatName = viewModel.selectedSeatZone.value
         val block = viewModel.selectedBlock.value
         val column = viewModel.selectedColumn.value
-        val number = viewModel.selectedNumber.value
-        if (listOf(seatName, block, column, number).any { it.isNullOrEmpty() }) {
+        if (listOf(seatName, block, column).any { it.isEmpty() }) {
             binding.layoutSeatInfo.visibility = INVISIBLE
         } else {
             binding.layoutSeatInfo.visibility = VISIBLE
@@ -272,12 +271,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         val isSelectedGoodBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
         val isSelectedBadBtnFilled = viewModel.selectedBadReview.value.isNotEmpty()
         val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
-        val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvUploadBtn) {
             isEnabled =
                 isSelectedDateFilled && isSelectedImageFilled && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
-                isSelectedBlockFilled && isSelectedNumberFilled
+                isSelectedBlockFilled
             if (isEnabled) {
                 setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             } else {

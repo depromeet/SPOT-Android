@@ -18,12 +18,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import coil.load
+import com.depromeet.presentation.R
+import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.core.state.UiState
 import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
-import com.depromeet.presentation.R
-import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.seatreview.ReviewViewModel
@@ -100,6 +100,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
         setupTransactionSelectSeat()
         setupEditTextListeners()
+        onClickCheckOnlyColumn()
     }
 
     private fun toggleDescriptionVisibility() {
@@ -253,13 +254,53 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
+    private var isColumnCheckEnabled = false
+    private fun onClickCheckOnlyColumn() {
+        binding.btnCheckColumn.setOnClickListener {
+            if (isColumnCheckEnabled) {
+                binding.btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_primary_fill_4)
+                binding.clOnlyColumn.visibility = INVISIBLE
+                binding.clColumnNumber.visibility = VISIBLE
+                binding.tvCompleteBtn.isEnabled = false
+                binding.etColumn.setText("")
+                binding.etNumber.setText("")
+            } else {
+                binding.btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_4)
+                binding.clColumnNumber.visibility = INVISIBLE
+                binding.clOnlyColumn.visibility = VISIBLE
+                binding.tvCompleteBtn.isEnabled = false
+                binding.etOnlyColumn.setText("")
+            }
+            isColumnCheckEnabled = !isColumnCheckEnabled
+        }
+    }
+
     private fun setupEditTextListeners() {
         binding.etColumn.setOnFocusChangeListener { _, hasFocus ->
-            binding.ivDeleteColumn.visibility = if (binding.etColumn.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
+            binding.ivDeleteColumn.visibility =
+                if (binding.etColumn.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
         }
         binding.etColumn.addTextChangedListener { text: Editable? ->
             viewModel.setSelectedColumn(text.toString())
-            binding.ivDeleteColumn.visibility = if (text.toString().isNotEmpty() && binding.etColumn.hasFocus()) VISIBLE else GONE
+            binding.ivDeleteColumn.visibility =
+                if (text.toString().isNotEmpty() && binding.etColumn.hasFocus()) VISIBLE else GONE
+            viewModel.seatRangeState.value.let { state ->
+                if (state is UiState.Success) {
+                    state.data.forEach { range ->
+                        updateColumnNumberUI(range)
+                    }
+                }
+            }
+        }
+        binding.etOnlyColumn.addTextChangedListener { text: Editable? ->
+            viewModel.setSelectedColumn(text.toString())
+            binding.ivOnlyColumnCancel.visibility = if (text.toString()
+                    .isNotEmpty() && binding.etOnlyColumn.hasFocus()
+            ) {
+                VISIBLE
+            } else {
+                GONE
+            }
             viewModel.seatRangeState.value.let { state ->
                 if (state is UiState.Success) {
                     state.data.forEach { range ->
@@ -269,7 +310,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
         }
         binding.etNumber.setOnFocusChangeListener { _, hasFocus ->
-            binding.ivDeleteNumber.visibility = if (binding.etNumber.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
+            binding.ivDeleteNumber.visibility =
+                if (binding.etNumber.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
         }
         binding.etNumber.addTextChangedListener { text: Editable? ->
             viewModel.setSelectedNumber(text.toString())
@@ -290,6 +332,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             binding.etNumber.text.clear()
             binding.ivDeleteNumber.visibility = GONE
         }
+        binding.ivOnlyColumnCancel.setOnSingleClickListener {
+            binding.etOnlyColumn.text.clear()
+            binding.ivOnlyColumnCancel.visibility = GONE
+        }
     }
 
     // TODO : 추후 코드 개선 예정 (if else 이슈 ㅠㅠ)
@@ -297,12 +343,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         if (viewModel.selectedColumn.value.isEmpty() && viewModel.selectedNumber.value.isEmpty()) {
             binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
             binding.etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-            binding.tvNoneColumnWarning.visibility = GONE
+            binding.tvNoneColumnWarning.visibility = INVISIBLE
         }
         if (range.code == viewModel.selectedBlock.value) {
             val matchingRowInfo =
                 range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
-            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty() && viewModel.selectedColumn.value.isNotEmpty()) {
+            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
                 with(binding) {
                     etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
                     etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
@@ -347,10 +393,44 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     with(binding) {
                         etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
                         etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
-                        tvNoneColumnWarning.visibility = GONE
+                        tvNoneColumnWarning.visibility = INVISIBLE
                         binding.tvCompleteBtn.isEnabled = true
                         binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
                     }
+                }
+            } else {
+                binding.etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                binding.etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                binding.etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                binding.tvCompleteBtn.isEnabled = false
+            }
+        }
+        if (binding.clOnlyColumn.isVisible) {
+            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+            binding.tvCompleteBtn.isEnabled = false
+            val matchingRowInfo =
+                range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
+            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
+                with(binding) {
+                    etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    tvNoneColumnWarning.text = "존재하지 않는 열이에요"
+                    tvNoneColumnWarning.visibility = VISIBLE
+                    binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    binding.tvCompleteBtn.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            android.R.color.white,
+                        ),
+                    )
+                    binding.tvCompleteBtn.isEnabled = false
+                }
+            } else if (matchingRowInfo != null && viewModel.selectedColumn.value.isNotEmpty()) {
+                with(binding) {
+                    etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_gray200_line_12)
+                    tvNoneColumnWarning.visibility = INVISIBLE
+                    binding.tvCompleteBtn.isEnabled = true
+                    binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
                 }
             }
         }
@@ -384,8 +464,12 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             view.setTextColor(ContextCompat.getColor(requireContext(), com.depromeet.designsystem.R.color.color_foreground_caption))
                             binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
                             binding.tvCompleteBtn.isEnabled = false
-                        } else {
                         }
+                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                        binding.tvCompleteBtn.isEnabled = false
+                        binding.etColumn.setText("")
+                        binding.etNumber.setText("")
+                        binding.etOnlyColumn.setText("")
                     }
 
                     if (position > 0) {
