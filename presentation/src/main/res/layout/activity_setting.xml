@@ -21,7 +21,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <com.depromeet.designsystem.SpotAppbar
+    <com.dpm.designsystem.SpotAppbar
         android:id="@+id/appbar_setting"
         style="@style/TextAppearance.Spot.Label03"
         android:layout_width="0dp"

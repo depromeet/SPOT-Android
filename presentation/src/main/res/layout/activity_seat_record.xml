@@ -28,7 +28,7 @@
         app:layout_constraintGuide_end="30dp" />
 
 
-    <com.depromeet.designsystem.SpotAppbar
+    <com.dpm.designsystem.SpotAppbar
         android:id="@+id/record_spot_appbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
 
-        <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
+        <com.dpm.presentation.home.customview.CustomSpeechBubbleView
             android:id="@+id/csbv_record_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
