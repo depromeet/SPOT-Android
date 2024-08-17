@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="160dp">
 
-    <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
+    <com.dpm.presentation.home.customview.CustomSpeechBubbleView
         android:id="@+id/csbv_record_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
