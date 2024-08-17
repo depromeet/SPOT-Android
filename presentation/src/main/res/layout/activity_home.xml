@@ -61,7 +61,7 @@
         tools:src="@drawable/ic_default_profile" />
 
 
-    <com.depromeet.presentation.home.customview.CustomSpeechBubbleView
+    <com.dpm.presentation.home.customview.CustomSpeechBubbleView
         android:id="@+id/csbv_home_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

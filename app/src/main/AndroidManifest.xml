@@ -12,8 +12,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
+    <queries>
+        <package android:name="com.kakao.talk" />
+    </queries>
+
     <application
-        android:name="com.depromeet.spot.MyApp"
+        android:name="com.dpm.spot.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -25,13 +29,30 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="com.depromeet.presentation.MainActivity"
+            android:name="com.dpm.presentation.scheme.SchemeActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="kakaolink"
+                    android:scheme="kakao${kakaoApiKey}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.dpm.presentation.ExampleActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name="com.dpm.presentation.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name="com.depromeet.presentation.login.ui.SignUpActivity"
+            android:name="com.dpm.presentation.login.ui.SignUpActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -40,42 +61,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.depromeet.presentation.login.ui.SignUpCompleteActivity"
+            android:name="com.dpm.presentation.login.ui.SignUpCompleteActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.depromeet.presentation.viewfinder.StadiumDetailActivity"
+            android:name="com.dpm.presentation.viewfinder.StadiumDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.depromeet.presentation.viewfinder.StadiumActivity"
+            android:name="com.dpm.presentation.viewfinder.StadiumActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.depromeet.presentation.viewfinder.StadiumSelectionActivity"
+            android:name="com.dpm.presentation.viewfinder.StadiumSelectionActivity"
             android:exported="false"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.depromeet.presentation.home.HomeActivity"
+            android:name="com.dpm.presentation.home.HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.depromeet.presentation.home.ProfileEditActivity"
+            android:name="com.dpm.presentation.home.ProfileEditActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.depromeet.presentation.seatrecord.SeatRecordActivity"
+            android:name="com.dpm.presentation.seatrecord.SeatRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name="com.depromeet.presentation.seatreview.ReviewActivity"
+        <activity android:name="com.dpm.presentation.seatreview.ReviewActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.seatreview.ReviewDoneActivity"
+        <activity android:name="com.dpm.presentation.seatreview.ReviewDoneActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.setting.SettingActivity"
+        <activity android:name="com.dpm.presentation.setting.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
@@ -89,19 +110,19 @@
                     android:scheme="kakao${kakaoApiKey}" />
             </intent-filter>
         </activity>
-        <activity android:name="com.depromeet.presentation.viewfinder.WebViewActivity"
+        <activity android:name="com.dpm.presentation.viewfinder.WebViewActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.login.ui.KakaoSignupActivity"
+        <activity android:name="com.dpm.presentation.login.ui.KakaoSignupActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.login.ui.NicknameInputActivity"
+        <activity android:name="com.dpm.presentation.login.ui.NicknameInputActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.login.ui.TeamSelectActivity"
+        <activity android:name="com.dpm.presentation.login.ui.TeamSelectActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
