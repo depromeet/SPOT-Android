@@ -1,20 +1,31 @@
 package com.depromeet.presentation.gallery
 
 import android.Manifest
+import android.app.Activity
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -23,11 +34,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,11 +49,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import coil.compose.rememberImagePainter
-
-data class GalleryImage(val id: Long, val uri: Uri)
+import com.depromeet.presentation.R
+import com.depromeet.presentation.seatreview.dialog.ImageUploadDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun GalleryScreen(
@@ -52,159 +73,150 @@ fun GalleryScreen(
 
 @Composable
 fun CustomGallery() {
+    var galleryItems by remember { mutableStateOf<List<GalleryItem>>(emptyList()) }
+    val selectedItems = remember { mutableStateListOf<GalleryItem>() }
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    var showGallery by remember { mutableStateOf(false) }
-    var selectedImages by remember { mutableStateOf(listOf<GalleryImage>()) }
-    var galleryImages by remember { mutableStateOf(listOf<GalleryImage>()) }
 
-    val permissions = remember {
-        listOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-    }
-
-    var permissionsGranted by remember {
-        mutableStateOf(
-            permissions.all {
-                ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            isLoading = true
+            loadImages(context) { items ->
+                galleryItems = items
+                isLoading = false
             }
-        )
-    }
-
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissionsMap ->
-        permissionsGranted = permissionsMap.values.all { it }
-        if (permissionsGranted) {
-            showGallery = true
-            galleryImages = loadGalleryImages(context)
+        } else {
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
         }
     }
 
-    LaunchedEffect(permissionsGranted) {
-        if (permissionsGranted) {
-            showGallery = true
-            galleryImages = loadGalleryImages(context)
-        }
+    LaunchedEffect(Unit) {
+        checkAndRequestPermission(context, permissionLauncher)
     }
 
-    Column {
-        Button(onClick = {
-            if (!permissionsGranted) {
-                launcher.launch(permissions.toTypedArray())
-            } else {
-                showGallery = true
-                galleryImages = loadGalleryImages(context)
-            }
-        }) {
-            Text("Open Gallery")
-        }
-
-        if (permissionsGranted && showGallery) {
-            GalleryGrid(
-                images = galleryImages,
-                selectedImages = selectedImages,
-                onImageSelected = { image ->
-                    selectedImages = when {
-                        selectedImages.contains(image) -> selectedImages - image
-                        selectedImages.size < 3 -> selectedImages + image
-                        else -> selectedImages
-                    }
+    Column(modifier = Modifier.fillMaxSize()) {
+        if (isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+        } else if (galleryItems.isNotEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                contentPadding = PaddingValues(4.dp),
+            ) {
+                items(galleryItems) { item ->
+                    GalleryItemView(
+                        item = item,
+                        isSelected = selectedItems.contains(item),
+                        selectedIndex = selectedItems.indexOf(item) + 1,
+                        onClick = {
+                            if (selectedItems.contains(item)) {
+                                selectedItems.remove(item)
+                            } else if (selectedItems.size < 3) {
+                                selectedItems.add(item)
+                            }
+                        }
+                    )
                 }
-            )
-        } else if (!permissionsGranted) {
-            // 권한 없음
+            }
+        } else {
+            Text("No images found", modifier = Modifier.align(Alignment.CenterHorizontally))
+        }
+    }
+}
+
+fun checkAndRequestPermission(context: Context, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>) {
+    when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+            when (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES)) {
+                PackageManager.PERMISSION_GRANTED -> loadImages(context) {}
+                else -> permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
+            loadImages(context) {}
+        }
+        else -> {
+            when (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                PackageManager.PERMISSION_GRANTED -> loadImages(context) {}
+                else -> permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+    }
+}
+
+fun loadImages(context: Context, onComplete: (List<GalleryItem>) -> Unit) {
+    CoroutineScope(Dispatchers.IO).launch {
+        val contentResolver = context.contentResolver
+        val galleryItems = mutableListOf<GalleryItem>()
+        val projection = arrayOf(
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.DATE_ADDED
+        )
+        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
+
+        contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            null,
+            null,
+            sortOrder
+        )?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+            var count = 0
+            while (cursor.moveToNext() && count < 10) {
+                val id = cursor.getLong(idColumn)
+                val contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                galleryItems.add(GalleryItem(galleryItems.size, contentUri))
+                count++
+            }
+        }
+        withContext(Dispatchers.Main) {
+            onComplete(galleryItems)
         }
     }
 }
 
 @Composable
-fun GalleryGrid(
-    images: List<GalleryImage>,
-    selectedImages: List<GalleryImage>,
-    onImageSelected: (GalleryImage) -> Unit
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(4.dp)
-    ) {
-        items(images) { image ->
-            GalleryItem(
-                image = image,
-                isSelected = selectedImages.contains(image),
-                selectionOrder = selectedImages.indexOf(image) + 1,
-                onImageSelected = onImageSelected
-            )
-        }
-    }
-}
-
-@Composable
-fun GalleryItem(
-    image: GalleryImage,
+fun GalleryItemView(
+    item: GalleryItem,
     isSelected: Boolean,
-    selectionOrder: Int,
-    onImageSelected: (GalleryImage) -> Unit
+    selectedIndex: Int,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .padding(4.dp)
             .aspectRatio(1f)
-            .clickable { onImageSelected(image) }
+            .clickable { onClick() }
     ) {
         Image(
-            painter = rememberImagePainter(data = image.uri),
+            painter = rememberImagePainter(data = item.imageResource),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
 
-        Surface(
-            color = if (isSelected) Color.Blue else Color.White,
-            shape = CircleShape,
-            modifier = Modifier
-                .size(24.dp)
-                .align(Alignment.TopEnd)
-                .padding(4.dp)
-        ) {
-            if (isSelected) {
+        if (isSelected) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.TopEnd)
+                    .background(Color.Red, shape = CircleShape)
+            ) {
                 Text(
-                    text = selectionOrder.toString(),
+                    text = selectedIndex.toString(),
                     color = Color.White,
-                    modifier = Modifier.wrapContentSize(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
-        }
-    }
-}
-
-fun loadGalleryImages(context: Context): List<GalleryImage> {
-    val images = mutableListOf<GalleryImage>()
-    val projection = arrayOf(
-        MediaStore.Images.Media._ID,
-        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-        MediaStore.Images.Media.DATE_TAKEN
-    )
-    val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} 내림차순"
-
-    context.contentResolver.query(
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-        projection,
-        null,
-        null,
-        sortOrder
-    )?.use { cursor ->
-        val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(idColumn)
-            val contentUri = ContentUris.withAppendedId(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                id
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.TopEnd)
+                    .border(2.dp, Color.Gray, CircleShape)
             )
-            images.add(GalleryImage(id, contentUri))
         }
     }
-    return images
 }
+
+data class GalleryItem(val id: Int, val imageResource: Uri)
