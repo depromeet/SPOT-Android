@@ -34,7 +34,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
 ) {
 
     companion object {
-        private const val REQUEST_KEY = "requestKey"
+        const val REQUEST_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val IMAGE_TITLE = "image"
     }

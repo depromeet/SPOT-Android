@@ -1,4 +1,4 @@
-package com.depromeet.presentation.gallery
+package com.dpm.presentation.gallery
 
 import android.Manifest
 import android.app.Activity
@@ -55,9 +55,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.depromeet.presentation.R
-import com.depromeet.presentation.seatreview.dialog.ImageUploadDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,17 +65,18 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun GalleryScreen(
-
+    onImagesSelected: (List<Uri>) -> Unit
 ) {
-    CustomGallery()
+    CustomGallery(onImagesSelected)
 }
 
-
 @Composable
-fun CustomGallery() {
+fun CustomGallery(
+    onImagesSelected : (List<Uri>) -> Unit
+) {
     var galleryItems by remember { mutableStateOf<List<GalleryItem>>(emptyList()) }
     val selectedItems = remember { mutableStateListOf<GalleryItem>() }
-    var isLoading by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
     val context = LocalContext.current
 
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -86,12 +87,18 @@ fun CustomGallery() {
                 isLoading = false
             }
         } else {
-            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "권한이 거절되어있어용~", Toast.LENGTH_SHORT).show()
+            isLoading = false
         }
     }
 
     LaunchedEffect(Unit) {
-        checkAndRequestPermission(context, permissionLauncher)
+        checkAndRequestPermission(context, permissionLauncher) {
+            loadImages(context) { items ->
+                galleryItems = items
+                isLoading = false
+            }
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -102,6 +109,25 @@ fun CustomGallery() {
                 columns = GridCells.Fixed(3),
                 contentPadding = PaddingValues(4.dp),
             ) {
+                item(
+                    key = "gallery_top_bar",
+                ) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            onImagesSelected(selectedItems.map { it.imageResource })
+                        },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text("${selectedItems.size} 선택")
+                    }
+                }
+
+                item(key = "gallery_top_title") {
+                    Text("갤러리 제목입니당~~", modifier = Modifier.align(Alignment.CenterHorizontally))
+                    Spacer(modifier = Modifier.height(30.dp))
+                }
+
                 items(galleryItems) { item ->
                     GalleryItemView(
                         item = item,
@@ -123,20 +149,24 @@ fun CustomGallery() {
     }
 }
 
-fun checkAndRequestPermission(context: Context, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>) {
+private fun checkAndRequestPermission(
+    context: Context,
+    permissionLauncher: ManagedActivityResultLauncher<String, Boolean>,
+    onPermissionGranted: () -> Unit
+) {
     when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
             when (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES)) {
-                PackageManager.PERMISSION_GRANTED -> loadImages(context) {}
+                PackageManager.PERMISSION_GRANTED -> onPermissionGranted()
                 else -> permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
             }
         }
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
-            loadImages(context) {}
+            onPermissionGranted()
         }
         else -> {
             when (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                PackageManager.PERMISSION_GRANTED -> loadImages(context) {}
+                PackageManager.PERMISSION_GRANTED -> onPermissionGranted()
                 else -> permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
@@ -162,7 +192,7 @@ fun loadImages(context: Context, onComplete: (List<GalleryItem>) -> Unit) {
         )?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             var count = 0
-            while (cursor.moveToNext() && count < 10) {
+            while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                 galleryItems.add(GalleryItem(galleryItems.size, contentUri))
@@ -188,10 +218,9 @@ fun GalleryItemView(
             .aspectRatio(1f)
             .clickable { onClick() }
     ) {
-        Image(
-            painter = rememberImagePainter(data = item.imageResource),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
+        AsyncImage(
+            model = item.imageResource,
+            contentDescription = "",
             contentScale = ContentScale.Crop
         )
 

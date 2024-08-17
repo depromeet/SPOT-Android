@@ -126,7 +126,7 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.depromeet.presentation.gallery.GalleryActivity"
+        <activity android:name="com.dpm.presentation.gallery.GalleryActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 

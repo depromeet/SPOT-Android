@@ -1,4 +1,4 @@
-package com.depromeet.presentation.home
+package com.dpm.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +13,7 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.presentation.extension.dpToPx
+import com.dpm.presentation.gallery.GalleryActivity
 import com.dpm.presentation.home.adapter.StadiumAdapter
 import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
 import com.dpm.presentation.seatrecord.SeatRecordActivity
@@ -21,16 +22,6 @@ import com.dpm.presentation.seatreview.ReviewActivity
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.viewfinder.StadiumActivity
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
-import com.depromeet.presentation.extension.dpToPx
-import com.depromeet.presentation.gallery.GalleryActivity
-import com.depromeet.presentation.home.adapter.StadiumAdapter
-import com.depromeet.presentation.home.viewmodel.HomeGuiViewModel
-import com.depromeet.presentation.seatreview.ReviewActivity
-import com.depromeet.presentation.seatrecord.SeatRecordActivity
-import com.depromeet.presentation.seatrecord.adapter.LinearSpacingItemDecoration
-import com.depromeet.presentation.setting.SettingActivity
-import com.depromeet.presentation.viewfinder.StadiumActivity
-import com.depromeet.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,6 +57,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initEvent() = with(binding) {
+        ivHomeAppBar.setOnClickListener {
+            Intent(this@HomeActivity, GalleryActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
         clHomeScrap.setOnClickListener {
