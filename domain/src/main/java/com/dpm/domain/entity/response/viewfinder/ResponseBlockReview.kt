@@ -139,7 +139,7 @@ data class ResponseBlockReview(
         )
 
         data class ResponseReviewSeat(
-            val id: Int,
+            val id: Int = 0,
             val seatNumber: Int = 0,
         )
 
