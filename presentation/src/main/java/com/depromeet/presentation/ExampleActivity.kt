@@ -15,7 +15,7 @@ class ExampleActivity : BaseActivity<ActivityExampleBinding>(ActivityExampleBind
          * @sample : 카카오 공유하기
          * @author : 조관희
          */
-        binding.btnKakaShare.setOnClickListener {
+        binding.btnKakaoShare.setOnClickListener {
             KakaoUtils().share(
                 this,
                 template = mockDefaultFeed,
