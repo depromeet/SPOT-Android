@@ -9,9 +9,9 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSelectSeatBinding
+import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 import com.dpm.presentation.util.ItemDiffCallback
 
 class SelectSeatAdapter(
