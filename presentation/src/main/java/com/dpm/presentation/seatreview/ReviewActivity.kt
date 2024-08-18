@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
@@ -15,10 +16,10 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.dpm.core.base.BaseActivity
-import com.dpm.core.state.UiState
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityReviewBinding
+import com.dpm.core.base.BaseActivity
+import com.dpm.core.state.UiState
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
@@ -117,7 +118,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.selectedBlock.asLiveData().observe(this) { block ->
-            binding.tvSeatBlock.text = block.toString()
+            binding.tvSeatBlock.text = viewModel.getBlockListName(block)
             updateLayoutSeatInfoVisibility()
             updateNextButtonState()
         }
@@ -128,7 +129,12 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.selectedNumber.asLiveData().observe(this) { number ->
-            binding.tvSeatNumber.text = "${number}번"
+            if (viewModel.selectedSectionId.value == 10) {
+                binding.tvSeatNumber.text = "w$number"
+                binding.tvColumn.visibility = GONE
+            } else {
+                binding.tvSeatNumber.text = number
+            }
             updateLayoutSeatInfoVisibility()
             updateNextButtonState()
         }
