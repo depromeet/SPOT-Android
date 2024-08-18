@@ -1,6 +1,7 @@
 package com.dpm.presentation.seatreview
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
@@ -10,6 +11,7 @@ import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumName
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
+import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,6 +71,8 @@ class ReviewViewModel @Inject constructor(
     private val _selectedNumber = MutableStateFlow("")
     val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
 
+    val columnState = MutableLiveData<ValidSeat>()
+
     // 서버 통신
 
     private val _stadiumNameState = MutableStateFlow<UiState<List<ResponseStadiumName>>>(UiState.Empty)
@@ -81,7 +85,6 @@ class ReviewViewModel @Inject constructor(
     val selectedSectionId: StateFlow<Int> = _selectedSectionId.asStateFlow()
 
     private val _selectedBlockId = MutableStateFlow(0)
-    val selectedBlockId: StateFlow<Int> = _selectedBlockId.asStateFlow()
 
     private val _stadiumSectionState = MutableStateFlow<UiState<ResponseStadiumSection>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<ResponseStadiumSection>> = _stadiumSectionState

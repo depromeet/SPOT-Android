@@ -23,6 +23,7 @@ import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.core.state.UiState
 import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
+import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
@@ -78,11 +79,11 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.ivHelpCircle.setOnSingleClickListener { onClickToggleSeatVisibility() }
         binding.ivWhatColumnChevron.setOnSingleClickListener { onClickToggleSeatVisibility() }
         binding.tvWhatColumn.setOnSingleClickListener { onClickToggleSeatVisibility() }
-        onClickToggleSectionVisibility()
-        onClickNextBtnVisibility()
         onClickTabVisibility()
-        onClickDeleteEditText()
+        onClickToggleSectionVisibility()
         onClickCheckOnlyColumn()
+        onClickDeleteEditText()
+        onClickNextBtnVisibility()
     }
 
     private fun initObserve() {
@@ -108,19 +109,23 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
     private fun onClickCheckOnlyColumn() {
         binding.btnCheckColumn.setOnSingleClickListener {
-            if (isColumnCheckEnabled) {
-                binding.btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_primary_fill_4)
-                binding.clOnlyColumn.visibility = INVISIBLE
-                binding.clColumnNumber.visibility = VISIBLE
-                binding.tvCompleteBtn.isEnabled = false
-                binding.etColumn.setText("")
-                binding.etNumber.setText("")
-            } else {
-                binding.btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_4)
-                binding.clColumnNumber.visibility = INVISIBLE
-                binding.clOnlyColumn.visibility = VISIBLE
-                binding.tvCompleteBtn.isEnabled = false
-                binding.etOnlyColumn.setText("")
+            with(binding) {
+                if (isColumnCheckEnabled) {
+                    btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_primary_fill_4)
+                    clOnlyColumn.visibility = INVISIBLE
+                    clColumnNumber.visibility = VISIBLE
+                    tvCompleteBtn.isEnabled = false
+                    tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    etColumn.setText("")
+                    etNumber.setText("")
+                } else {
+                    btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_4)
+                    clColumnNumber.visibility = INVISIBLE
+                    clOnlyColumn.visibility = VISIBLE
+                    tvCompleteBtn.isEnabled = false
+                    tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    etOnlyColumn.setText("")
+                }
             }
             isColumnCheckEnabled = !isColumnCheckEnabled
         }
@@ -224,87 +229,88 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
     private fun updateColumnNumberUI(range: ResponseSeatRange) {
+        val matchingRowInfo = range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
+        if (viewModel.selectedColumn.value.isEmpty() && viewModel.selectedNumber.value.isEmpty()) {
+            viewModel.columnState.value = ValidSeat.NONE
+            updateSeatEditTextUI()
+            return
+        }
         if (range.code == viewModel.selectedBlock.value) {
-            val matchingRowInfo =
-                range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
-            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
-                with(binding) {
-                    etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                    etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                    tvNoneColumnWarning.text = "존재하지 않는 열이에요"
-                    tvNoneColumnWarning.visibility = VISIBLE
-                    binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                    binding.tvCompleteBtn.setTextColor(binding.root.context.colorOf(android.R.color.white))
-                    binding.tvCompleteBtn.isEnabled = false
+            when {
+                matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty() -> {
+                    viewModel.columnState.value = if (viewModel.selectedNumber.value.isNotEmpty()) { ValidSeat.INVALID_COLUMN_NUMBER } else { ValidSeat.INVALID_COLUMN }
                 }
-                if (viewModel.selectedNumber.value.isNotEmpty()) {
-                    // 열과 번호 모두 오류인 경우
-                    with(binding) {
-                        etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                        etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                        tvNoneColumnWarning.text = "존재하지 않는 열과 번이에요"
-                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                        binding.tvCompleteBtn.setTextColor(binding.root.context.colorOf(android.R.color.white))
-                        binding.tvCompleteBtn.isEnabled = false
-                    }
+                matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty() -> {
+                    if (!matchingRowInfo.seatNumList.contains(viewModel.selectedNumber.value.toInt())) { viewModel.columnState.value = ValidSeat.INVALID_NUMBER } else { viewModel.columnState.value = ValidSeat.VALID }
                 }
-            } else if (matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty() && viewModel.selectedNumber.value.isNotBlank()) {
-                if (!matchingRowInfo.seatNumList.contains(viewModel.selectedNumber.value.toInt())) {
-                    with(binding) {
-                        etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                        etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                        tvNoneColumnWarning.text = "존재하지 않는 번이에요"
-                        tvNoneColumnWarning.visibility = VISIBLE
-                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                        binding.tvCompleteBtn.isEnabled = false
-                    }
-                } else {
-                    with(binding) {
-                        etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                        etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                        tvNoneColumnWarning.visibility = INVISIBLE
-                        binding.tvCompleteBtn.isEnabled = true
-                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
-                    }
-                }
-            } else {
-                binding.etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                binding.etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                binding.etOnlyColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                binding.tvCompleteBtn.isEnabled = false
             }
         }
         if (binding.clOnlyColumn.isVisible) {
-            binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-            binding.tvCompleteBtn.isEnabled = false
-            val matchingRowInfo =
-                range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
+            viewModel.columnState.value = ValidSeat.NONE
             if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
-                with(binding) {
-                    etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-                    tvNoneColumnWarning.text = "존재하지 않는 열이에요"
-                    tvNoneColumnWarning.visibility = VISIBLE
-                    binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                    binding.tvCompleteBtn.setTextColor(binding.root.context.colorOf(android.R.color.white))
-                    binding.tvCompleteBtn.isEnabled = false
-                }
-            } else if (matchingRowInfo != null && viewModel.selectedColumn.value.isNotEmpty()) {
-                with(binding) {
-                    etOnlyColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                    tvNoneColumnWarning.visibility = INVISIBLE
-                    binding.tvCompleteBtn.isEnabled = true
-                    binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
-                }
-            }
+                viewModel.columnState.value = ValidSeat.INVALID_COLUMN
+            } else if (matchingRowInfo != null) { viewModel.columnState.value = ValidSeat.VALID }
         }
+        updateSeatEditTextUI()
     }
 
+    private fun updateSeatEditTextUI() {
+        when (viewModel.columnState.value) {
+            ValidSeat.INVALID_COLUMN -> {
+                with(binding) {
+                    etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    tvNoneColumnWarning.text = "존재하지 않는 열이에요"
+                    tvNoneColumnWarning.visibility = VISIBLE
+                    tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    tvCompleteBtn.isEnabled = false
+                }
+            }
+            ValidSeat.INVALID_NUMBER -> {
+                with(binding) {
+                    etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    tvNoneColumnWarning.text = "존재하지 않는 번이에요"
+                    tvNoneColumnWarning.visibility = VISIBLE
+                    tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    tvCompleteBtn.isEnabled = false
+                }
+            }
+            ValidSeat.INVALID_COLUMN_NUMBER -> {
+                with(binding) {
+                    etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    tvNoneColumnWarning.text = "존재하지 않는 열과 번이에요"
+                    tvNoneColumnWarning.visibility = VISIBLE
+                    tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    tvCompleteBtn.isEnabled = false
+                }
+            }
+            ValidSeat.VALID -> {
+                with(binding) {
+                    etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    tvNoneColumnWarning.visibility = INVISIBLE
+                    tvCompleteBtn.isEnabled = true
+                    tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
+                }
+            }
+            ValidSeat.NONE -> {
+                with(binding) {
+                    etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    tvNoneColumnWarning.visibility = INVISIBLE
+                    tvCompleteBtn.isEnabled = false
+                    tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                }
+            }
+
+            else -> {}
+        }
+    }
     private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
         val blockCodes = mutableListOf("블록을 선택해주세요")
         blockCodes.addAll(blockItems.map { it.code })
         val blockCodeToIdMap = blockItems.associate { it.code to it.id }
-
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_block_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_block_dropdown_item)
 
@@ -329,11 +335,11 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                             binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
                             binding.tvCompleteBtn.isEnabled = false
                         }
-                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
-                        binding.tvCompleteBtn.isEnabled = false
                         binding.etColumn.setText("")
                         binding.etNumber.setText("")
                         binding.etOnlyColumn.setText("")
+                        binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                        binding.tvCompleteBtn.isEnabled = false
                     }
 
                     if (position > 0) {
@@ -348,9 +354,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     }
                     binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_down)
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_down)
+                    binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
+                    binding.tvCompleteBtn.isEnabled = false
                 }
             }
         }
