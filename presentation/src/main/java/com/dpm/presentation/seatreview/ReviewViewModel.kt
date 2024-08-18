@@ -125,7 +125,6 @@ class ReviewViewModel @Inject constructor(
     fun setPreSignedUrlImages(images: List<String>) {
         val newImages = images.map { removeQueryParameters(it) }.toSet()
         val currentImages = _preSignedUrlImages.value.map { removeQueryParameters(it) }.toSet()
-
         val updatedImages = (currentImages + newImages).toList()
         _preSignedUrlImages.value = updatedImages
     }
@@ -167,6 +166,18 @@ class ReviewViewModel @Inject constructor(
         _selectedNumber.value = number
     }
 
+    fun getBlockListName(blockCode: String): String {
+        return when {
+            selectedSectionId.value == 10 && blockCode.endsWith("w") -> {
+                when (val codeWithoutW = blockCode.removeSuffix("w")) {
+                    "101", "102", "121", "122" -> "레드-$codeWithoutW"
+                    "109", "114" -> "블루-$codeWithoutW"
+                    else -> codeWithoutW
+                }
+            }
+            else -> blockCode
+        }
+    }
     fun getStadiumName() {
         viewModelScope.launch {
             _stadiumNameState.value = UiState.Loading

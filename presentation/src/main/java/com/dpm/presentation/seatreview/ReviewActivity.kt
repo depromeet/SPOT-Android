@@ -230,8 +230,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun updateLayoutSeatInfoVisibility() {
         val seatName = viewModel.selectedSeatZone.value
         val block = viewModel.selectedBlock.value
-        val column = viewModel.selectedColumn.value
-        if (listOf(seatName, block, column).any { it.isEmpty() }) {
+        if (listOf(seatName, block).any { it.isEmpty() }) {
             binding.layoutSeatInfo.visibility = INVISIBLE
         } else {
             binding.layoutSeatInfo.visibility = VISIBLE

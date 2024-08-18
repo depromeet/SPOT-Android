@@ -2,6 +2,7 @@ package com.dpm.presentation.seatreview.dialog
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.view.View.FOCUS_DOWN
 import android.view.View.GONE
@@ -375,8 +376,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
     private fun observeSuccessSeatBlock(blockItems: List<ResponseSeatBlock>) {
         val blockCodes = mutableListOf("블록을 선택해주세요")
-        blockCodes.addAll(blockItems.map { it.code })
-        val blockCodeToIdMap = blockItems.associate { it.code to it.id }
+        val blockDisplayNameToCodeMap = mutableMapOf<String, String>()
+
+        blockItems.forEach { block ->
+            val displayName = viewModel.getBlockListName(block.code)
+            blockCodes.add(displayName)
+            blockDisplayNameToCodeMap[displayName] = block.code
+        }
+
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_block_item, blockCodes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_block_dropdown_item)
 
@@ -409,9 +416,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     }
 
                     if (position > 0) {
-                        val selectedBlock = blockCodes[position]
-                        viewModel.setSelectedBlock(selectedBlock)
-                        val selectedBlockId = blockCodeToIdMap[selectedBlock] ?: 0
+                        val selectedDisplayName = blockCodes[position]
+                        val selectedBlockCode = blockDisplayNameToCodeMap[selectedDisplayName] ?: ""
+                        viewModel.setSelectedBlock(selectedBlockCode)
+                        val selectedBlockId = blockItems.find { it.code == selectedBlockCode }?.id ?: 0
                         viewModel.updateSelectedBlockId(selectedBlockId)
                         viewModel.getSeatRange(
                             viewModel.selectedStadiumId.value,
@@ -420,6 +428,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     }
                     binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_down)
                 }
+
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     binding.ivSelectBlockChevron.setImageResource(R.drawable.ic_chevron_down)
                     binding.tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
