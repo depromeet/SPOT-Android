@@ -104,8 +104,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun toggleDescriptionVisibility() {
-        binding.layoutColumnDescription.isGone = !binding.layoutColumnDescription.isGone
-        if (binding.layoutColumnDescription.isVisible) {
+        binding.llColumnDescription.isGone = !binding.llColumnDescription.isGone
+        if (binding.llColumnDescription.isVisible) {
             binding.ivWhatColumnChevron.setImageDrawable(
                 ContextCompat.getDrawable(
                     binding.root.context,
@@ -124,7 +124,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     private fun setupTransactionSelectSeat() {
         with(binding) {
-            layoutSeatAgain.setOnSingleClickListener {
+            clSeatAgain.setOnSingleClickListener {
                 ivSeatAgain.isVisible = !ivSeatAgain.isVisible
                 if (ivSeatAgain.isVisible) {
                     svSelectSeat.post {
@@ -145,7 +145,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     )
                 }
             }
-            layoutColumnNumberDescription.setOnSingleClickListener {
+            clColumnNumberDescription.setOnSingleClickListener {
                 toggleDescriptionVisibility()
             }
             ivHelpCircle.setOnSingleClickListener {
@@ -159,7 +159,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
             tvNextBtn.setOnSingleClickListener {
                 svSelectSeat.visibility = INVISIBLE
-                layoutSeatNumber.visibility = VISIBLE
+                clSeatNumber.visibility = VISIBLE
                 svSeatNumber.visibility = VISIBLE
                 tvSelectSeatLine.visibility = INVISIBLE
                 tvSelectNumberLine.visibility = VISIBLE
@@ -179,9 +179,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 )
             }
 
-            layoutTabSelectSection.setOnSingleClickListener {
+            llTabSelectSection.setOnSingleClickListener {
                 svSelectSeat.visibility = VISIBLE
-                layoutSeatNumber.visibility = INVISIBLE
+                clSeatNumber.visibility = INVISIBLE
                 svSeatNumber.visibility = INVISIBLE
                 tvSelectSeatLine.visibility = VISIBLE
                 tvSelectNumberLine.visibility = INVISIBLE
