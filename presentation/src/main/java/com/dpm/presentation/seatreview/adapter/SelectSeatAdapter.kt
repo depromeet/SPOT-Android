@@ -1,8 +1,5 @@
 package com.dpm.presentation.seatreview.adapter
 
-import android.graphics.Color
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -20,24 +17,41 @@ class SelectSeatAdapter(
 
     private var selectedPosition = RecyclerView.NO_POSITION
 
+    private val sectionColorList = listOf(
+        com.depromeet.designsystem.R.drawable.oval_section_premium,
+        com.depromeet.designsystem.R.drawable.oval_section_table,
+        com.depromeet.designsystem.R.drawable.oval_section_orange,
+        com.depromeet.designsystem.R.drawable.oval_section_blue,
+        com.depromeet.designsystem.R.drawable.oval_section_red,
+        com.depromeet.designsystem.R.drawable.oval_section_navy,
+        com.depromeet.designsystem.R.drawable.oval_section_green,
+        com.depromeet.designsystem.R.drawable.oval_exciting_blue,
+        com.depromeet.designsystem.R.drawable.ic_wheelchair,
+    )
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
-        val binding = ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SectionViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
         val section = getItem(position)
         val isSelected = position == selectedPosition
-        holder.bind(section, isSelected)
+        holder.bind(section, isSelected, position)
         holder.itemView.setOnClickListener {
             onItemClick(position, section.id)
             setItemSelected(position)
         }
     }
 
-    class SectionViewHolder(private val binding: ItemSelectSeatBinding) :
+    inner class SectionViewHolder(private val binding: ItemSelectSeatBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(section: ResponseStadiumSection.SectionListDto, isSelected: Boolean) {
+        fun bind(
+            section: ResponseStadiumSection.SectionListDto,
+            isSelected: Boolean,
+            position: Int,
+        ) {
             binding.tvSeatName.text = section.name
             binding.tvSubName.text = section.alias
 
@@ -46,17 +60,32 @@ class SelectSeatAdapter(
             } else {
                 binding.tvSubName.visibility = VISIBLE
                 binding.tvSubName.text = section.alias
-                binding.tvSubName.setBackgroundResource(if (isSelected) { R.drawable.rect_green_fill_40 } else { R.drawable.rect_foreground_caption_fill_40 })
+                binding.tvSubName.setBackgroundResource(
+                    if (isSelected) {
+                        R.drawable.rect_green_fill_40
+                    } else {
+                        R.drawable.rect_foreground_caption_fill_40
+                    },
+                )
             }
-            /**
-             * @example
-             * bidning.ivSeatColor.setImageResource(R.drawable.oval_section_[구역명])
-             * bidning.ivSeatColor.setImageResource(R.drawable.ic_wheelchair]) [예외_휠체어석]
-             */
-            val shapeDrawable = ShapeDrawable(OvalShape())
-            binding.ivSeatColor.background = shapeDrawable
-            shapeDrawable.paint.color = Color.parseColor(section.color)
-            binding.layoutSelectSeat.setBackgroundResource(if (isSelected) R.drawable.rect_background_positive_fill_secondary_line_8 else R.drawable.rect_background_tertiary_fill_8)
+            val iconResource = getIconResourceForPosition(position)
+            binding.ivSeatColor.setImageResource(iconResource)
+
+            binding.layoutSelectSeat.setBackgroundResource(
+                if (isSelected) {
+                    R.drawable.rect_background_positive_fill_secondary_line_8
+                } else {
+                    R.drawable.rect_background_tertiary_fill_8
+                },
+            )
+        }
+
+        private fun getIconResourceForPosition(position: Int): Int {
+            return if (position in sectionColorList.indices) {
+                sectionColorList[position]
+            } else {
+                R.drawable.rect_green_fill_40
+            }
         }
     }
 
