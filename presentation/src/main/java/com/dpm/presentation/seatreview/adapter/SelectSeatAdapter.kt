@@ -48,8 +48,13 @@ class SelectSeatAdapter(
                 binding.tvSubName.text = section.alias
                 binding.tvSubName.setBackgroundResource(if (isSelected) { R.drawable.rect_green_fill_40 } else { R.drawable.rect_foreground_caption_fill_40 })
             }
+            /**
+             * @example
+             * bidning.ivSeatColor.setImageResource(R.drawable.oval_section_[구역명])
+             * bidning.ivSeatColor.setImageResource(R.drawable.ic_wheelchair]) [예외_휠체어석]
+             */
             val shapeDrawable = ShapeDrawable(OvalShape())
-            binding.tvSeatColor.background = shapeDrawable
+            binding.ivSeatColor.background = shapeDrawable
             shapeDrawable.paint.color = Color.parseColor(section.color)
             binding.layoutSelectSeat.setBackgroundResource(if (isSelected) R.drawable.rect_background_positive_fill_secondary_line_8 else R.drawable.rect_background_tertiary_fill_8)
         }
