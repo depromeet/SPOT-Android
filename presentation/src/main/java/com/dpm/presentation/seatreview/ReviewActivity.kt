@@ -129,12 +129,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
 
         viewModel.selectedNumber.asLiveData().observe(this) { number ->
-            if (viewModel.selectedSectionId.value == 10) {
-                binding.tvSeatNumber.text = "w$number"
-                binding.tvColumn.visibility = GONE
-            } else {
-                binding.tvSeatNumber.text = number
-            }
+            binding.tvSeatNumber.text = number
             updateLayoutSeatInfoVisibility()
             updateNextButtonState()
         }

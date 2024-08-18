@@ -183,11 +183,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     clOnlyNumber.visibility = VISIBLE
                     clOnlyColumnBtn.visibility = GONE
                     clOnlyColumn.visibility = GONE
+                    val scale = context?.resources?.displayMetrics?.density
+                    val paddingInPx = (31 * scale!! + 0.5f).toInt()
+                    tvNoneColumnWarning.setPaddingRelative(paddingInPx, tvNoneColumnWarning.paddingTop, tvNoneColumnWarning.paddingEnd, tvNoneColumnWarning.paddingBottom)
                 } else {
                     clColumnNumber.visibility = VISIBLE
                     clOnlyNumber.visibility = INVISIBLE
                     clOnlyColumn.visibility = INVISIBLE
                     clOnlyColumnBtn.visibility = VISIBLE
+                    tvNoneColumnWarning.setPaddingRelative(tvNoneColumnWarning.paddingStart, tvNoneColumnWarning.paddingTop, tvNoneColumnWarning.paddingEnd, tvNoneColumnWarning.paddingBottom)
                 }
                 svSelectSeat.visibility = INVISIBLE
                 svSeatNumber.visibility = VISIBLE
@@ -275,6 +279,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             return
         }
         if (range.code == viewModel.selectedBlock.value) {
+            if (viewModel.selectedColumn.value.isEmpty() || viewModel.selectedNumber.value.isEmpty()) {
+                viewModel.uesrSeatState.value = ValidSeat.NONE
+            }
             when {
                 matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty() -> {
                     viewModel.uesrSeatState.value = if (viewModel.selectedNumber.value.isNotEmpty()) {
@@ -283,7 +290,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         ValidSeat.INVALID_COLUMN
                     }
                 }
-
                 matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty() -> {
                     if (!matchingRowInfo.seatNumList.contains(viewModel.selectedNumber.value.toInt())) {
                         viewModel.uesrSeatState.value = ValidSeat.INVALID_NUMBER
@@ -299,6 +305,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 viewModel.uesrSeatState.value = ValidSeat.INVALID_COLUMN
             } else if (matchingRowInfo != null) {
                 viewModel.uesrSeatState.value = ValidSeat.VALID
+            } else{
+                viewModel.uesrSeatState.value = ValidSeat.NONE
             }
         }
         if (binding.clOnlyNumber.isVisible) {
