@@ -250,7 +250,7 @@
             app:layout_constraintTop_toBottomOf="@id/layoutCombinedTop">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSeatNumber"
+                android:id="@+id/clSeatBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -307,7 +307,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clSeatNumber">
+                app:layout_constraintTop_toBottomOf="@+id/clSeatBlock">
 
                 <EditText
                     android:id="@+id/etOnlyColumn"
@@ -353,6 +353,73 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clOnlyNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clSeatBlock">
+
+                <TextView
+                    android:id="@+id/tvOnlyNumberW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="w"
+                    android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                    android:textColor="@color/color_foreground_heading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/etOnlyNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/rect_background_secondary_fill_8"
+                    android:hint="@string/viewfinder_input_example"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:padding="16dp"
+                    android:textAppearance="@style/TextAppearance.Spot.Label03"
+                    android:textColor="@color/color_foreground_heading"
+                    android:textColorHint="@color/color_foreground_disabled"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tvOnlyNumber"
+                    app:layout_constraintStart_toEndOf="@id/tvOnlyNumberW"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivDeleteOnlyNumber"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_x_circle"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/etOnlyNumber"
+                    app:layout_constraintEnd_toEndOf="@id/etOnlyNumber"
+                    app:layout_constraintTop_toTopOf="@id/etOnlyNumber" />
+
+                <TextView
+                    android:id="@+id/tvOnlyNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="번"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                    android:textColor="@color/color_foreground_heading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clColumnNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -361,7 +428,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clSeatNumber">
+                app:layout_constraintTop_toBottomOf="@+id/clSeatBlock">
 
                 <EditText
                     android:id="@+id/etColumn"

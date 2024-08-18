@@ -71,7 +71,7 @@ class ReviewViewModel @Inject constructor(
     private val _selectedNumber = MutableStateFlow("")
     val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
 
-    val columnState = MutableLiveData<ValidSeat>()
+    val uesrSeatState = MutableLiveData<ValidSeat>()
 
     // 서버 통신
 
@@ -340,7 +340,8 @@ class ReviewViewModel @Inject constructor(
         imageDataList: List<ByteArray>,
     ) {
         uploadImageToPreSignedUrl(
-            presignedUrl, imageDataList
+            presignedUrl,
+            imageDataList,
         )
     }
 }

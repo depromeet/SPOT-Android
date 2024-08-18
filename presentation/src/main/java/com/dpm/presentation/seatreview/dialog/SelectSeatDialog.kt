@@ -48,7 +48,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     override fun onStart() {
         super.onStart()
-        val bottomSheet = dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet =
+            dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
         val behavior = BottomSheetBehavior.from(bottomSheet!!)
         behavior.peekHeight = (resources.displayMetrics.heightPixels * 0.85).toInt()
     }
@@ -96,7 +97,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         with(binding) {
             llTabSelectSection.setOnSingleClickListener {
                 svSelectSeat.visibility = VISIBLE
-                clSeatNumber.visibility = INVISIBLE
+                clSeatBlock.visibility = INVISIBLE
                 svSeatNumber.visibility = INVISIBLE
                 tvSelectSeatLine.visibility = VISIBLE
                 tvSelectNumberLine.visibility = INVISIBLE
@@ -107,6 +108,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
         }
     }
+
     private fun onClickCheckOnlyColumn() {
         binding.btnCheckColumn.setOnSingleClickListener {
             with(binding) {
@@ -144,6 +146,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             binding.etOnlyColumn.text.clear()
             binding.ivDeleteOnlyColumn.visibility = GONE
         }
+        binding.ivDeleteOnlyNumber.setOnSingleClickListener {
+            binding.etOnlyNumber.text.clear()
+            binding.ivDeleteOnlyNumber.visibility = GONE
+        }
     }
 
     private fun onClickToggleSeatVisibility() {
@@ -170,13 +176,25 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private fun onClickNextBtnVisibility() {
         with(binding) {
             tvNextBtn.setOnSingleClickListener {
+                viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
+                if (viewModel.selectedSectionId.value == 10) {
+                    clColumnNumber.visibility = INVISIBLE
+                    clOnlyNumber.visibility = VISIBLE
+                    clOnlyColumnBtn.visibility = GONE
+                    clOnlyColumn.visibility = GONE
+                } else {
+                    clColumnNumber.visibility = VISIBLE
+                    clOnlyNumber.visibility = INVISIBLE
+                    clOnlyColumn.visibility = INVISIBLE
+                    clOnlyColumnBtn.visibility = VISIBLE
+                }
                 svSelectSeat.visibility = INVISIBLE
-                clSeatNumber.visibility = VISIBLE
                 svSeatNumber.visibility = VISIBLE
                 tvSelectSeatLine.visibility = INVISIBLE
                 tvSelectNumberLine.visibility = VISIBLE
                 tvCompleteBtn.visibility = VISIBLE
                 tvNextBtn.visibility = GONE
+                clSeatBlock.visibility = VISIBLE
                 tvSelectZone.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_caption))
                 tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
             }
@@ -192,6 +210,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.etNumber.setOnFocusChangeListener { _, hasFocus ->
             binding.ivDeleteNumber.visibility =
                 if (binding.etNumber.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
+        }
+        binding.etOnlyColumn.setOnFocusChangeListener { _, hasFocus ->
+            binding.ivDeleteOnlyColumn.visibility =
+                if (binding.etOnlyColumn.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
+        }
+        binding.etOnlyNumber.setOnFocusChangeListener { _, hasFocus ->
+            binding.ivDeleteOnlyNumber.visibility =
+                if (binding.etOnlyNumber.text.toString().isNotEmpty() && hasFocus) VISIBLE else GONE
         }
         binding.etColumn.addTextChangedListener { text: Editable? ->
             viewModel.setSelectedColumn(text.toString())
@@ -227,39 +253,74 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
             }
         }
+        binding.etOnlyNumber.addTextChangedListener { text: Editable? ->
+            viewModel.setSelectedNumber(text.toString())
+            binding.ivDeleteOnlyNumber.visibility = if (text.toString().isNotEmpty() && binding.etOnlyNumber.hasFocus())VISIBLE else GONE
+            viewModel.seatRangeState.value.let { state ->
+                if (state is UiState.Success) {
+                    state.data.forEach { range ->
+                        updateColumnNumberUI(range)
+                    }
+                }
+            }
+        }
     }
+
     private fun updateColumnNumberUI(range: ResponseSeatRange) {
         val matchingRowInfo = range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
         if (viewModel.selectedColumn.value.isEmpty() && viewModel.selectedNumber.value.isEmpty()) {
-            viewModel.columnState.value = ValidSeat.NONE
+            viewModel.uesrSeatState.value = ValidSeat.NONE
             updateSeatEditTextUI()
             return
         }
         if (range.code == viewModel.selectedBlock.value) {
             when {
                 matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty() -> {
-                    viewModel.columnState.value = if (viewModel.selectedNumber.value.isNotEmpty()) { ValidSeat.INVALID_COLUMN_NUMBER } else { ValidSeat.INVALID_COLUMN }
+                    viewModel.uesrSeatState.value = if (viewModel.selectedNumber.value.isNotEmpty()) {
+                        ValidSeat.INVALID_COLUMN_NUMBER
+                    } else {
+                        ValidSeat.INVALID_COLUMN
+                    }
                 }
+
                 matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty() -> {
-                    if (!matchingRowInfo.seatNumList.contains(viewModel.selectedNumber.value.toInt())) { viewModel.columnState.value = ValidSeat.INVALID_NUMBER } else { viewModel.columnState.value = ValidSeat.VALID }
+                    if (!matchingRowInfo.seatNumList.contains(viewModel.selectedNumber.value.toInt())) {
+                        viewModel.uesrSeatState.value = ValidSeat.INVALID_NUMBER
+                    } else {
+                        viewModel.uesrSeatState.value = ValidSeat.VALID
+                    }
                 }
             }
         }
         if (binding.clOnlyColumn.isVisible) {
-            viewModel.columnState.value = ValidSeat.NONE
+            viewModel.uesrSeatState.value = ValidSeat.NONE
             if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
-                viewModel.columnState.value = ValidSeat.INVALID_COLUMN
-            } else if (matchingRowInfo != null) { viewModel.columnState.value = ValidSeat.VALID }
+                viewModel.uesrSeatState.value = ValidSeat.INVALID_COLUMN
+            } else if (matchingRowInfo != null) {
+                viewModel.uesrSeatState.value = ValidSeat.VALID
+            }
+        }
+        if (binding.clOnlyNumber.isVisible) {
+            val matchingCode = range.rowInfo.find { range.code == viewModel.selectedBlock.value }
+            val selectedSeatNumber = viewModel.selectedNumber.value.toInt()
+            if (matchingCode != null && viewModel.selectedNumber.value.isNotEmpty()) {
+                if (matchingCode.seatNumList.contains(selectedSeatNumber)) {
+                    viewModel.uesrSeatState.value = ValidSeat.VALID
+                } else {
+                    viewModel.uesrSeatState.value = ValidSeat.INVALID_NUMBER
+                }
+            }
         }
         updateSeatEditTextUI()
     }
 
     private fun updateSeatEditTextUI() {
-        when (viewModel.columnState.value) {
+        when (viewModel.uesrSeatState.value) {
             ValidSeat.INVALID_COLUMN -> {
                 with(binding) {
                     etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
                     etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
                     tvNoneColumnWarning.text = "존재하지 않는 열이에요"
                     tvNoneColumnWarning.visibility = VISIBLE
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
@@ -269,6 +330,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             ValidSeat.INVALID_NUMBER -> {
                 with(binding) {
                     etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etOnlyNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
                     tvNoneColumnWarning.text = "존재하지 않는 번이에요"
                     tvNoneColumnWarning.visibility = VISIBLE
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
@@ -289,6 +351,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 with(binding) {
                     etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    etOnlyColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    etOnlyNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     tvNoneColumnWarning.visibility = INVISIBLE
                     tvCompleteBtn.isEnabled = true
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
@@ -298,6 +362,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 with(binding) {
                     etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    etOnlyColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
+                    etOnlyNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     tvNoneColumnWarning.visibility = INVISIBLE
                     tvCompleteBtn.isEnabled = false
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
