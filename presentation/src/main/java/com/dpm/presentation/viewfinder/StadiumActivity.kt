@@ -2,27 +2,80 @@ package com.dpm.presentation.viewfinder
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
+import androidx.annotation.ColorRes
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.depromeet.designsystem.R
+import com.depromeet.presentation.databinding.ActivityStadiumBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotTeamLabel
-import com.depromeet.presentation.databinding.ActivityStadiumBinding
+import com.dpm.designsystem.extension.dpToPx
+import com.dpm.domain.preference.SharedPreference
+import com.dpm.presentation.extension.setMargins
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.util.SpannableStringUtils
 import com.dpm.presentation.util.Utils
+import com.dpm.presentation.viewfinder.adapter.MockSection
+import com.dpm.presentation.viewfinder.adapter.Recommend
+import com.dpm.presentation.viewfinder.adapter.StadiumSectionAdapter
+import com.dpm.presentation.viewfinder.adapter.StadiumSectionRecommendAdapter
 import com.dpm.presentation.viewfinder.viewmodel.StadiumViewModel
 import com.dpm.presentation.viewfinder.web.AndroidBridge
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+enum class FilterType(
+    val description: String,
+    val ranges: List<Pair<Int, Int>>
+) {
+    Type1(
+        "응원하는 팀이 다른 경우!\n중앙네이비석에 앉아 두 팀의 응원 분위기를 모두 느낄 수 있어요",
+        listOf(Pair(15, 21), Pair(26, 37))
+    ),
+    Type2(
+        "익사이팅석에서는 선수들의 싸인을 받을 수 있고 블루석에서는 선수들이 몸푸는것을 가까이 볼 수 있어요",
+        listOf(Pair(0, 5), Pair(9, 16), Pair(26, 29), Pair(33, 42))
+    ),
+    Type3("잠실야구장은 오직 테이블석과 프리미엄석에만 테이블이 있어요. 음식을 편하게 즐기려면 두개의 구역을 추천해요", listOf(Pair(10, 27))),
+    Type4(
+        "야구장의 뜨거운 열기를 느끼고 싶으신가요?\n모두가 서서 열띤 응원을 하는 오렌지석과 네이비석을 추천해요!",
+        listOf(Pair(24, 36), Pair(40, 45), Pair(46, 51))
+    ),
+    Type5(
+        "야구 직관 초보자이신가요?\n응원석인 오렌지석과, 응원단상이 잘 보이는 블루석, 레드석, 네이비석도 추천해",
+        listOf(Pair(20, 24), Pair(27, 53))
+    ),
+    Type6(
+        "낮 2시 기준,\n1루 네이비석의 경우 3열 이후부터,\n3루 네이비석의 경우 8열 이후부터 그늘져요",
+        listOf(Pair(9, 16), Pair(21, 26), Pair(30, 37), Pair(42, 47))
+    ),
+    Type7(
+        "외야그린석은 가장 저렴하지만, 경기의 모습이 조금 멀리 보여요. 그러나, 홈런볼을 잡을 수 있고,외야수를 잘 볼 수 있는 자리에요!",
+        listOf(Pair(41, 70))
+    );
+}
 
 @AndroidEntryPoint
 class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
@@ -34,12 +87,23 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         private const val BASE_URL = "file:///android_asset/web/"
         private const val ENCODING_UTF8 = "UTF-8"
         private const val MIME_TYPE_TEXT_HTML = "text/html"
+
+        private const val BOTTOM_SHEET_PEEK_HEIGHT = 76 // 바텀 시트 peek 높이
+        private const val BUTTON_BOTTOM_MARGIN = 24 // 버튼과 바텀 시트 사이 간격
+
+        private const val TIP_CONTAINER_HORIZONTAL_MARGIN = 16
     }
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
 
     private val viewModel: StadiumViewModel by viewModels()
     private val utils: Utils by lazy {
         Utils(this)
     }
+    private lateinit var stadiumSectionRecommendAdapter: StadiumSectionRecommendAdapter
+    private lateinit var stadiumSectionAdapter: StadiumSectionAdapter
+    private lateinit var behavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,18 +113,20 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private fun initView() {
-        binding.root.isClickable = !binding.clZoomDescription.isVisible
         initStatusBar()
-        setTextZoomDescriptionColor()
         getStadiumIdExtra()
         configureWebViewSetting()
+        initRecyclerViewAdapter()
+        initBottomSheetBehavior()
     }
 
     private fun initEvent() {
         interactionWebView()
         onClickBack()
         onClickClose()
-        onClickZoomDescriptionDim()
+        onClickRefresh()
+        onClickBottomSheet()
+        onClickTipContainer()
     }
 
     private fun initObserve() {
@@ -98,13 +164,15 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
                 is UiState.Failure -> toast(uiState.msg)
                 is UiState.Loading -> Unit
                 is UiState.Success -> {
-                    binding.wvStadium.loadDataWithBaseURL(
-                        BASE_URL, uiState.data, MIME_TYPE_TEXT_HTML,
-                        ENCODING_UTF8, null
-                    )
-                    binding.wvStadium.webChromeClient = WebChromeClient()
+                    loadWebView(uiState.data)
                 }
             }
+        }
+        viewModel.blockFilters.asLiveData().observe(this) {
+            stadiumSectionRecommendAdapter.submitList(it)
+        }
+        viewModel.sections.asLiveData().observe(this) {
+            stadiumSectionAdapter.submitList(it)
         }
     }
 
@@ -134,33 +202,187 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         )
     }
 
-    private fun initStatusBar() {
-        utils.apply {
-            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_80000000)
-            setOnApplyWindowInsetsTopMarginListener(window, binding.root)
-        }
+    private fun initRecyclerViewAdapter() {
+        adaptRecommendFilter()
+        adaptSection()
     }
 
-    private fun setTextZoomDescriptionColor() {
-        binding.tvZoomDescription.text = SpannableStringUtils(this).toColorSpan(
-            com.depromeet.designsystem.R.color.color_action_enabled,
-            binding.tvZoomDescription.text, 4, 12
+    private fun adaptRecommendFilter() {
+        stadiumSectionRecommendAdapter = StadiumSectionRecommendAdapter()
+        binding.rcvRecommend.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = stadiumSectionRecommendAdapter
+        }
+        viewModel.getBlockFilters()
+
+        stadiumSectionRecommendAdapter.itemFilterClickListener =
+            object : StadiumSectionRecommendAdapter.OnItemFilterClickListener {
+                override fun onItemFilterClick(recommend: Recommend) {
+                    viewModel.updateBlockFilter(recommend)
+                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    setSectionText(
+                        getString(com.depromeet.presentation.R.string.viewfinder_find_section_description),
+                        R.color.color_foreground_caption
+                    )
+                    viewModel.refreshSections()
+                    if (recommend.isActive) {
+                        binding.clTipContainer.visibility = GONE
+                        binding.btnRefresh.visibility = GONE
+                        refresh()
+                    } else {
+                        binding.clTipContainer.visibility = VISIBLE
+                        binding.btnRefresh.visibility = VISIBLE
+                        filterByBlocks(recommend.blocks)
+                        when (recommend.id) {
+                            1 -> setTipContainerByFilter(FilterType.Type1)
+                            2 -> setTipContainerByFilter(FilterType.Type2)
+                            3 -> setTipContainerByFilter(FilterType.Type3)
+                            4 -> setTipContainerByFilter(FilterType.Type4)
+                            5 -> setTipContainerByFilter(FilterType.Type5)
+                            6 -> setTipContainerByFilter(FilterType.Type6)
+                            7 -> setTipContainerByFilter(FilterType.Type7)
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun adaptSection() {
+        stadiumSectionAdapter = StadiumSectionAdapter()
+
+        binding.rcvSection.apply {
+            layoutManager = GridLayoutManager(context, 3)
+            adapter = stadiumSectionAdapter
+            itemAnimator = null
+        }
+
+        viewModel.getSection()
+
+        stadiumSectionAdapter.itemSectionClickListener =
+            object : StadiumSectionAdapter.OnItemSectionClickListener {
+                override fun onItemSectionClick(mockSection: MockSection) {
+                    viewModel.updateSections(mockSection)
+                    viewModel.refreshFilter()
+                    if (mockSection.isActive) {
+                        binding.btnRefresh.visibility = GONE
+                        setSectionText(
+                            getString(com.depromeet.presentation.R.string.viewfinder_find_section_description),
+                            R.color.color_foreground_caption
+                        )
+                        refresh()
+                    } else {
+                        binding.btnRefresh.visibility = VISIBLE
+                        setSectionText(mockSection.title, R.color.color_action_enabled)
+                        when (mockSection.id) {
+                            1 -> filterBySection("premium")
+                            2 -> filterBySection("table")
+                            3 -> filterBySection("orange")
+                            4 -> filterBySection("blue")
+                            5 -> filterBySection("red")
+                            6 -> filterBySection("navy")
+                            7 -> filterBySection("green")
+                            8 -> filterBySection("exciting")
+                            9 -> filterBySection("wheelchair")
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun setSectionText(text: String, @ColorRes color: Int) {
+        binding.tvFindSectionDescription.text = text
+        binding.tvFindSectionDescription.setTextColor(
+            ContextCompat.getColor(
+                this@StadiumActivity,
+                color
+            )
         )
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        return if (binding.clZoomDescription.isVisible) {
-            super.dispatchTouchEvent(ev)
-        } else {
-            if (ev?.action == MotionEvent.ACTION_UP) {
-                binding.tvZoomDescription.visibility = View.VISIBLE
-            } else {
-                if ((ev?.y ?: 0f) >= resources.displayMetrics.heightPixels * (1 / 6.0)) {
-                    binding.tvZoomDescription.visibility = View.INVISIBLE
-                }
+    private fun initBottomSheetBehavior() {
+        behavior = BottomSheetBehavior.from(binding.clBottomSheet)
+        behavior.addBottomSheetCallback(object : BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
             }
-            super.dispatchTouchEvent(ev)
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.btnRefresh.setMargins(
+                    0, 0, 0,
+                    (((binding.clBottomSheet.height / resources.displayMetrics.density) - BOTTOM_SHEET_PEEK_HEIGHT) * slideOffset).dpToPx(
+                        this@StadiumActivity
+                    )
+                            + BOTTOM_SHEET_PEEK_HEIGHT.dpToPx(this@StadiumActivity)
+                            + BUTTON_BOTTOM_MARGIN.dpToPx(this@StadiumActivity)
+                )
+                binding.clTipContainer.setMargins(
+                    TIP_CONTAINER_HORIZONTAL_MARGIN.dpToPx(this@StadiumActivity),
+                    0,
+                    TIP_CONTAINER_HORIZONTAL_MARGIN.dpToPx(this@StadiumActivity),
+                    (((binding.clBottomSheet.height / resources.displayMetrics.density) - BOTTOM_SHEET_PEEK_HEIGHT) * slideOffset).dpToPx(
+                        this@StadiumActivity
+                    )
+                            + BOTTOM_SHEET_PEEK_HEIGHT.dpToPx(this@StadiumActivity)
+                            + BUTTON_BOTTOM_MARGIN.dpToPx(this@StadiumActivity)
+                )
+            }
+        })
+    }
+
+    private fun initTipContainer() {
+        initTipContainerSpanColor(binding.tvZoomDescription.text.toString(), 4, 12)
+        if (sharedPreference.isFirstTime) {
+            binding.clTipContainer.visibility = VISIBLE
+            sharedPreference.isFirstTime = false
+        } else {
+            binding.clTipContainer.visibility = GONE
         }
+    }
+
+    private fun initStatusBar() {
+        utils.apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_secondary)
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+
+            ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin = insets.top
+                    bottomMargin = insets.bottom
+                }
+
+                WindowInsetsCompat.CONSUMED
+            }
+        }
+    }
+
+    private fun setTipContainerByFilter(filterType: FilterType) {
+        setTextZoomDescriptionColorMulti(filterType.description, filterType.ranges)
+        binding.ivPinchZoom.setImageResource(R.drawable.ic_tip)
+        binding.ivPinchZoom.layoutParams.height = 52.dpToPx(this)
+        binding.ivPinchZoom.layoutParams.width = 52.dpToPx(this)
+        binding.ivPinchZoom.requestLayout()
+    }
+
+    private fun initTipContainerSpanColor(
+        text: String,
+        start: Int,
+        end: Int
+    ) {
+        binding.tvZoomDescription.text = SpannableStringUtils(this).toColorSpan(
+            R.color.color_action_enabled,
+            text, start, end
+        )
+    }
+
+    private fun setTextZoomDescriptionColorMulti(
+        text: String,
+        ranges: List<Pair<Int, Int>>
+    ) {
+        binding.tvZoomDescription.text = SpannableStringUtils(this).toColorSpanMulti(
+            R.color.color_action_enabled,
+            text, ranges
+        )
     }
 
     private fun interactionWebView() {
@@ -174,44 +396,78 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun startShimmer() {
         binding.shimmerFrameLayout.startShimmer()
-        binding.shimmerFrameLayout.visibility = View.VISIBLE
-        binding.clMainContainer.visibility = View.INVISIBLE
+        binding.shimmerFrameLayout.visibility = VISIBLE
+        binding.clContainer.visibility = INVISIBLE
+        binding.clTipContainer.visibility = INVISIBLE
     }
 
     private fun stopShimmer() {
         binding.shimmerFrameLayout.stopShimmer()
-        binding.shimmerFrameLayout.visibility = View.INVISIBLE
-        binding.clMainContainer.visibility = View.VISIBLE
+        binding.shimmerFrameLayout.visibility = INVISIBLE
+        binding.clContainer.visibility = VISIBLE
+        initTipContainer()
     }
 
     private fun onClickBack() {
-        binding.spotAppbar.setNavigationOnClickListener {
+        binding.ivBack.setOnClickListener {
             finish()
         }
     }
 
     private fun onClickClose() {
-        binding.spotAppbar.setMenuOnClickListener {
+        binding.ivHome.setOnClickListener {
             startToHomeActivity()
         }
+    }
 
-        binding.ivClose.setOnClickListener {
-            binding.clZoomDescription.visibility = View.INVISIBLE
-            setStatusBarColorWhite()
+    private fun onClickRefresh() {
+        binding.btnRefresh.setOnClickListener {
+            binding.clTipContainer.visibility = GONE
+            refresh()
+            setSectionText(
+                getString(com.depromeet.presentation.R.string.viewfinder_find_section_description),
+                R.color.color_foreground_caption
+            )
+            viewModel.refreshFilter()
+            viewModel.refreshSections()
         }
     }
 
-    private fun onClickZoomDescriptionDim() {
-        binding.clZoomDescription.setOnClickListener {
-            binding.clZoomDescription.visibility = View.INVISIBLE
-            setStatusBarColorWhite()
+    private fun onClickBottomSheet() {
+        binding.clBottomSheet.setOnClickListener {
+            if (behavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
         }
     }
 
-    private fun setStatusBarColorWhite() {
-        utils.apply {
-            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+    private fun onClickTipContainer() {
+        binding.ivZoomDescriptionClose.setOnClickListener {
+            binding.clTipContainer.visibility = GONE
         }
+    }
+
+    private fun filterBySection(sectionColor: String) {
+        binding.wvStadium.evaluateJavascript("javascript: onActiveBlock('${sectionColor}')", null)
+    }
+
+    private fun filterByBlocks(filters: List<String>) {
+        val formattedList =
+            filters.joinToString(prefix = "[", postfix = "]", transform = { "'$it'" })
+        binding.wvStadium.evaluateJavascript("javascript: onActiveBlock($formattedList)", null)
+    }
+
+    private fun loadWebView(data: String) {
+        binding.wvStadium.loadDataWithBaseURL(
+            BASE_URL, data, MIME_TYPE_TEXT_HTML,
+            ENCODING_UTF8, null
+        )
+        binding.wvStadium.webChromeClient = WebChromeClient()
+    }
+
+    private fun refresh() {
+        binding.btnRefresh.visibility = GONE
+        binding.wvStadium.evaluateJavascript("javascript: removeStyle()", null)
     }
 
     private fun startToStadiumDetailActivity(id: String) {
