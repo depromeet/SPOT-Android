@@ -30,9 +30,8 @@ class SelectSeatAdapter(
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
-        val binding =
-            ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SectionViewHolder(binding)
+        val binding = ItemSelectSeatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SectionViewHolder(binding, sectionColorList)
     }
 
     override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
@@ -45,8 +44,11 @@ class SelectSeatAdapter(
         }
     }
 
-    inner class SectionViewHolder(private val binding: ItemSelectSeatBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class SectionViewHolder(
+        private val binding: ItemSelectSeatBinding,
+        private val sectionColorList: List<Int>,
+    ) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(
             section: ResponseStadiumSection.SectionListDto,
             isSelected: Boolean,
