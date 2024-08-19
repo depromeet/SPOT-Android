@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="좌석번호"
+                    android:text="좌석선택"
                     android:textAppearance="@style/TextAppearance.Spot.Label05"
                     android:textColor="@color/color_foreground_caption"
                     app:layout_constraintStart_toEndOf="@id/tvSelectZone" />
