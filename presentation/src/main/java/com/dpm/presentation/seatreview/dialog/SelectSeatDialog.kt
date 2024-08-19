@@ -21,6 +21,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.core.state.UiState
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
 import com.dpm.domain.model.seatreview.ValidSeat
@@ -40,6 +41,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private val viewModel: ReviewViewModel by activityViewModels()
     private lateinit var adapter: SelectSeatAdapter
     private var isColumnCheckEnabled = false
+    private val parentView = requireDialog().window?.decorView?.findViewById<View>(android.R.id.content)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         initEvent()
         initObserve()
     }
-
     private fun initView() {
         adapter = SelectSeatAdapter { position, sectionId ->
             val selectedSeatInfo = adapter.currentList[position]
@@ -81,6 +82,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.ivHelpCircle.setOnSingleClickListener { onClickToggleSeatVisibility() }
         binding.ivWhatColumnChevron.setOnSingleClickListener { onClickToggleSeatVisibility() }
         binding.tvWhatColumn.setOnSingleClickListener { onClickToggleSeatVisibility() }
+        onClickStadiumName()
         onClickTabVisibility()
         onClickToggleSectionVisibility()
         onClickCheckOnlyColumn()
@@ -94,11 +96,37 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         initObserveSeatRange()
     }
 
+    private fun onClickStadiumName() {
+        binding.clSelectStadium.setOnSingleClickListener {
+            parentView?.let {
+                SpotImageSnackBar.make(
+                    it,
+                    message = "나중에 다른 구장도 추가될 예정이에요!",
+                    messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+                    icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+                    iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+                    marginBottom = 96,
+                    marginHorizontal = 39,
+
+                ).show()
+            }
+        }
+    }
     private fun onClickTabVisibility() {
         with(binding) {
             binding.llTabSelectSeat.setOnSingleClickListener {
                 if (!viewModel.sectionItemSelected.value) {
-                    // TODO : 스낵바 교체
+                    parentView?.let {
+                        SpotImageSnackBar.make(
+                            it,
+                            message = "나중에 다른 구장도 추가될 예정이에요!",
+                            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+                            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+                            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+                            marginBottom = 96,
+                            marginHorizontal = 71,
+                        ).show()
+                    }
                     toast("'구역'을 먼저 선택해주세요")
                 }
                 viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
@@ -581,5 +609,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 else -> {}
             }
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
