@@ -22,7 +22,7 @@
             android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="11dp"
                 android:layout_marginStart="13dp">
@@ -39,16 +39,14 @@
 
                 <TextView
                     android:id="@+id/tv_seat_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginVertical="10dp"
-                    android:layout_marginStart="4dp"
                     android:gravity="center"
-                    android:text="테이블석\n dsdf"
+                    android:text="프리미엄석"
                     android:textAppearance="@style/TextAppearance.Spot.Label08"
                     android:textColor="@color/color_foreground_heading"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivSeatColor" />
+                 app:layout_constraintStart_toEndOf="@id/ivSeatColor"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </RelativeLayout>

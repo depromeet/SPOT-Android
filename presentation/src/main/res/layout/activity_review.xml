@@ -424,7 +424,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="16dp"
-                        android:text="블럭"
+                        android:text="블록"
                         android:textAppearance="@style/TextAppearance.Spot.Caption01"
                         android:textColor="@color/color_action_enabled" />
 
@@ -456,6 +456,15 @@
                         android:textAppearance="@style/TextAppearance.Spot.Caption01"
                         android:textColor="@color/color_action_enabled"
                         tools:text="19" />
+
+                    <TextView
+                        android:id="@+id/tvNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:text="번"
+                        android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                        android:textColor="@color/color_action_enabled" />
                 </LinearLayout>
 
                 <ImageView
