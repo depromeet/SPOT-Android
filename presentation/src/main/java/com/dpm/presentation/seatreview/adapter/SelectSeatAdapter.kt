@@ -24,7 +24,7 @@ class SelectSeatAdapter(
         com.depromeet.designsystem.R.drawable.oval_section_orange,
         com.depromeet.designsystem.R.drawable.oval_section_red,
         com.depromeet.designsystem.R.drawable.oval_section_navy,
-        com.depromeet.designsystem.R.drawable.oval_exciting_blue,
+        com.depromeet.designsystem.R.drawable.oval_section_exciting,
         com.depromeet.designsystem.R.drawable.oval_section_green,
         com.depromeet.designsystem.R.drawable.ic_wheelchair,
     )
