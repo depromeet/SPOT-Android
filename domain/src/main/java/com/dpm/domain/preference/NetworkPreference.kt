@@ -9,5 +9,6 @@ interface SharedPreference {
     var levelTitle : String
     var nickname: String
     var profileImage : String
+    var isFirstTime: Boolean
     fun clear()
 }
