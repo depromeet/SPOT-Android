@@ -2,7 +2,6 @@ package com.dpm.presentation.seatreview.dialog
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.view.View.FOCUS_DOWN
 import android.view.View.GONE
@@ -203,7 +202,23 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 tvSelectZone.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_caption))
                 tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
             }
-            tvCompleteBtn.setOnSingleClickListener { dismiss() }
+            tvCompleteBtn.setOnSingleClickListener {
+                val selectedSeatZone = viewModel.selectedSeatZone.value
+                val selectedBlock = viewModel.selectedBlock.value
+                val selectedColumn = viewModel.selectedColumn.value
+                val selectedNumber = viewModel.selectedNumber.value
+                val sectionId = viewModel.selectedSectionId.value
+                val result = Bundle().apply {
+                    putString("seatZone", selectedSeatZone)
+                    putString("block", selectedBlock)
+                    putString("column", selectedColumn)
+                    putString("number", selectedNumber)
+                    putInt("sectionId", sectionId)
+                    putBoolean("isColumnCheckEnabled", isColumnCheckEnabled)
+                }
+                parentFragmentManager.setFragmentResult("selectSeatResult", result)
+                dismiss()
+            }
         }
     }
 
@@ -274,17 +289,17 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private fun updateColumnNumberUI(range: ResponseSeatRange) {
         val matchingRowInfo = range.rowInfo.find { it.number.toString() == viewModel.selectedColumn.value }
         if (viewModel.selectedColumn.value.isEmpty() && viewModel.selectedNumber.value.isEmpty()) {
-            viewModel.uesrSeatState.value = ValidSeat.NONE
+            viewModel.userSeatState.value = ValidSeat.NONE
             updateSeatEditTextUI()
             return
         }
         if (range.code == viewModel.selectedBlock.value) {
             if (viewModel.selectedColumn.value.isEmpty() || viewModel.selectedNumber.value.isEmpty()) {
-                viewModel.uesrSeatState.value = ValidSeat.NONE
+                viewModel.userSeatState.value = ValidSeat.NONE
             }
             when {
                 matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty() -> {
-                    viewModel.uesrSeatState.value = if (viewModel.selectedNumber.value.isNotEmpty()) {
+                    viewModel.userSeatState.value = if (viewModel.selectedNumber.value.isNotEmpty()) {
                         ValidSeat.INVALID_COLUMN_NUMBER
                     } else {
                         ValidSeat.INVALID_COLUMN
@@ -292,21 +307,21 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
                 matchingRowInfo != null && viewModel.selectedNumber.value.isNotEmpty() -> {
                     if (!matchingRowInfo.seatNumList.contains(viewModel.selectedNumber.value.toInt())) {
-                        viewModel.uesrSeatState.value = ValidSeat.INVALID_NUMBER
+                        viewModel.userSeatState.value = ValidSeat.INVALID_NUMBER
                     } else {
-                        viewModel.uesrSeatState.value = ValidSeat.VALID
+                        viewModel.userSeatState.value = ValidSeat.VALID
                     }
                 }
             }
         }
         if (binding.clOnlyColumn.isVisible) {
-            viewModel.uesrSeatState.value = ValidSeat.NONE
+            viewModel.userSeatState.value = ValidSeat.NONE
             if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
-                viewModel.uesrSeatState.value = ValidSeat.INVALID_COLUMN
+                viewModel.userSeatState.value = ValidSeat.INVALID_COLUMN
             } else if (matchingRowInfo != null) {
-                viewModel.uesrSeatState.value = ValidSeat.VALID
+                viewModel.userSeatState.value = ValidSeat.VALID
             } else{
-                viewModel.uesrSeatState.value = ValidSeat.NONE
+                viewModel.userSeatState.value = ValidSeat.NONE
             }
         }
         if (binding.clOnlyNumber.isVisible) {
@@ -314,9 +329,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             val selectedSeatNumber = viewModel.selectedNumber.value.toInt()
             if (matchingCode != null && viewModel.selectedNumber.value.isNotEmpty()) {
                 if (matchingCode.seatNumList.contains(selectedSeatNumber)) {
-                    viewModel.uesrSeatState.value = ValidSeat.VALID
+                    viewModel.userSeatState.value = ValidSeat.VALID
                 } else {
-                    viewModel.uesrSeatState.value = ValidSeat.INVALID_NUMBER
+                    viewModel.userSeatState.value = ValidSeat.INVALID_NUMBER
                 }
             }
         }
@@ -324,7 +339,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     }
 
     private fun updateSeatEditTextUI() {
-        when (viewModel.uesrSeatState.value) {
+        when (viewModel.userSeatState.value) {
             ValidSeat.INVALID_COLUMN -> {
                 with(binding) {
                     etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)

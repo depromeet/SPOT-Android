@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
@@ -51,9 +50,27 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-    private val selectedImage: List<ImageView> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
-    private val selectedImageLayout: List<FrameLayout> by lazy { listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage) }
-    private val removeButtons: List<ImageView> by lazy { listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage) }
+    private val selectedImage: List<ImageView> by lazy {
+        listOf(
+            binding.ivFirstImage,
+            binding.ivSecondImage,
+            binding.ivThirdImage,
+        )
+    }
+    private val selectedImageLayout: List<FrameLayout> by lazy {
+        listOf(
+            binding.layoutFirstImage,
+            binding.layoutSecondImage,
+            binding.layoutThirdImage,
+        )
+    }
+    private val removeButtons: List<ImageView> by lazy {
+        listOf(
+            binding.ivRemoveFirstImage,
+            binding.ivRemoveSecondImage,
+            binding.ivRemoveThirdImage,
+        )
+    }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +86,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         initUploadDialog()
         initSeatReviewDialog()
         initViewStatusBar()
-        setupFragmentResultListener()
+        initSeatInfoView()
     }
 
     private fun initEvent() {
@@ -79,10 +96,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun initObserve() {
-        initObserveStadiumName()
-        initObservePreSignedUrl()
-        initObserveUploadImageToS3()
-        initObserveUploadReview()
+        observeStadiumName()
+        observePreSignedUrl()
+        observeUploadImageToS3()
+        observeUploadReview()
     }
 
     private fun initViewStatusBar() {
@@ -99,7 +116,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
         viewModel.reviewCount.asLiveData().observe(this) { count ->
             binding.tvMySeatReviewCount.text = "${count}개"
-            binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
+            binding.layoutReviewNumber.visibility = if (count > 0) VISIBLE else GONE
         }
 
         viewModel.selectedGoodReview.asLiveData().observe(this) { count ->
@@ -109,31 +126,70 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.selectedBadReview.asLiveData().observe(this) { count ->
             updateNextButtonState()
         }
-
-        viewModel.selectedSeatZone.asLiveData().observe(this) { name ->
-            val formattedName = name.toString().replace("\n", "").replace("\r", "")
-            binding.tvSeatColor.text = formattedName
-            updateLayoutSeatInfoVisibility()
-            updateNextButtonState()
-        }
-
-        viewModel.selectedBlock.asLiveData().observe(this) { block ->
-            binding.tvSeatBlock.text = viewModel.getBlockListName(block)
-            updateLayoutSeatInfoVisibility()
-            updateNextButtonState()
-        }
-
-        viewModel.selectedColumn.asLiveData().observe(this) { column ->
-            binding.tvColumnNumber.text = column.toString()
-            updateLayoutSeatInfoVisibility()
-        }
-
-        viewModel.selectedNumber.asLiveData().observe(this) { number ->
-            binding.tvSeatNumber.text = number
-            updateLayoutSeatInfoVisibility()
-            updateNextButtonState()
-        }
     }
+
+    private fun initSeatInfoView() {
+        supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
+            val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
+            newSelectedImages?.let { addSelectedImages(it) }
+        }
+        supportFragmentManager.setFragmentResultListener("selectSeatResult", this) { _, bundle ->
+            binding.layoutSeatInfo.visibility = VISIBLE
+            val seatZone = bundle.getString("seatZone", "")
+            val block = bundle.getString("block", "")
+            val column = bundle.getString("column", "")
+            val number = bundle.getString("number", "")
+            val sectionId = bundle.getInt("sectionId", 0)
+            val isColumnCheckEnabled = bundle.getBoolean("isColumnCheckEnabled", false)
+            with(binding) {
+                when (sectionId) {
+                    10 -> {
+                        tvSeatColor.visibility = VISIBLE
+                        tvSeatColor.text = seatZone
+                        tvSeatBlock.text = viewModel.getBlockListName(block)
+                        tvBlock.visibility = VISIBLE
+                        tvColumnNumber.visibility = GONE
+                        tvColumn.visibility = GONE
+                        tvSeatNumber.visibility = VISIBLE
+                        tvSeatNumber.text = "W$number"
+                        tvNumber.visibility = VISIBLE
+                    }
+
+                    8 -> {
+                        tvSeatColor.visibility = GONE
+                        tvSeatBlock.text = block
+                        tvBlock.visibility = GONE
+                        tvColumnNumber.visibility = VISIBLE
+                        tvColumnNumber.text = column
+                        tvColumn.visibility = VISIBLE
+                        tvSeatNumber.text = number
+                        tvSeatNumber.visibility = VISIBLE
+                        tvNumber.visibility = VISIBLE
+                    }
+
+                    else -> {
+                        tvSeatColor.visibility = VISIBLE
+                        tvSeatColor.text = seatZone
+                        tvSeatBlock.text = block
+                        tvBlock.visibility = VISIBLE
+                        tvColumnNumber.visibility = VISIBLE
+                        tvColumnNumber.text = column
+                        tvColumn.visibility = VISIBLE
+                        if (isColumnCheckEnabled) {
+                            tvSeatNumber.visibility = GONE
+                            tvNumber.visibility = GONE
+                        } else {
+                            tvSeatNumber.text = number
+                            tvSeatNumber.visibility = VISIBLE
+                            tvNumber.visibility = VISIBLE
+                        }
+                    }
+                }
+            }
+        }
+        updateNextButtonState()
+    }
+
     private fun initDatePickerDialog() {
         binding.layoutDatePicker.setOnSingleClickListener {
             DatePickerDialog().show(supportFragmentManager, DATE_PICKER_DIALOG_TAG)
@@ -159,7 +215,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initObserveStadiumName() {
+    private fun observeStadiumName() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -196,13 +252,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun setupFragmentResultListener() {
-        supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
-            val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
-            newSelectedImages?.let { addSelectedImages(it) }
-        }
-    }
-
     private fun addSelectedImages(newImageUris: List<String>) {
         selectedImageUris.addAll(newImageUris.filterNot { selectedImageUris.contains(it) })
         if (selectedImageUris.size > MAX_SELECTED_IMAGES) {
@@ -227,17 +276,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             viewModel.setSelectedImages(selectedImageUris)
         }
     }
-
-    private fun updateLayoutSeatInfoVisibility() {
-        val seatName = viewModel.selectedSeatZone.value
-        val block = viewModel.selectedBlock.value
-        if (listOf(seatName, block).any { it.isEmpty() }) {
-            binding.layoutSeatInfo.visibility = INVISIBLE
-        } else {
-            binding.layoutSeatInfo.visibility = VISIBLE
-        }
-    }
-
     private fun updateSelectedImages() {
         with(binding) {
             layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
@@ -271,11 +309,14 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         val isSelectedGoodBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
         val isSelectedBadBtnFilled = viewModel.selectedBadReview.value.isNotEmpty()
         val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
+        val isSelectedColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
+        val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvUploadBtn) {
-            isEnabled =
-                isSelectedDateFilled && isSelectedImageFilled && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
-                isSelectedBlockFilled
+            isEnabled = isSelectedDateFilled && isSelectedImageFilled &&
+                (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
+                isSelectedBlockFilled &&
+                (isSelectedColumnFilled || isSelectedNumberFilled)
             if (isEnabled) {
                 setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             } else {
@@ -319,7 +360,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initObservePreSignedUrl() {
+    private fun observePreSignedUrl() {
         viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -344,7 +385,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initObserveUploadImageToS3() {
+    private fun observeUploadImageToS3() {
         viewModel.count.asLiveData().observe(this) {
             if (it == selectedImageUris.size && it != 0) {
                 viewModel.postSeatReview()
@@ -352,7 +393,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initObserveUploadReview() {
+    private fun observeUploadReview() {
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {

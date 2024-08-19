@@ -68,8 +68,8 @@ class SelectSeatAdapter(
                     },
                 )
             }
-            val iconResource = getIconResourceForPosition(position)
-            binding.ivSeatColor.setImageResource(iconResource)
+            val colorResource = getColorResourceForPosition(position)
+            binding.ivSeatColor.setImageResource(colorResource)
 
             binding.layoutSelectSeat.setBackgroundResource(
                 if (isSelected) {
@@ -80,7 +80,7 @@ class SelectSeatAdapter(
             )
         }
 
-        private fun getIconResourceForPosition(position: Int): Int {
+        private fun getColorResourceForPosition(position: Int): Int {
             return if (position in sectionColorList.indices) {
                 sectionColorList[position]
             } else {
