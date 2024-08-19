@@ -1,7 +1,6 @@
 package com.dpm.presentation.seatreview
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -73,6 +72,13 @@ class ReviewViewModel @Inject constructor(
     val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
 
     val userSeatState = MutableLiveData<ValidSeat>()
+
+    private val _sectionItemSelected = MutableStateFlow(false)
+    val sectionItemSelected: StateFlow<Boolean> = _sectionItemSelected
+
+    fun updateItemSelected(isSelected: Boolean) {
+        _sectionItemSelected.value = isSelected
+    }
 
     // 서버 통신
 
