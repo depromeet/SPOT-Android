@@ -41,7 +41,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private val viewModel: ReviewViewModel by activityViewModels()
     private lateinit var adapter: SelectSeatAdapter
     private var isColumnCheckEnabled = false
-    private val parentView = requireDialog().window?.decorView?.findViewById<View>(android.R.id.content)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,39 +97,18 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     private fun onClickStadiumName() {
         binding.clSelectStadium.setOnSingleClickListener {
-            parentView?.let {
-                SpotImageSnackBar.make(
-                    it,
-                    message = "나중에 다른 구장도 추가될 예정이에요!",
-                    messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
-                    icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
-                    iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
-                    marginBottom = 96,
-                    marginHorizontal = 39,
-
-                ).show()
-            }
+            makeSpotImageAppbar("나중에 다른 구장도 추가될 예정이에요!")
         }
     }
     private fun onClickTabVisibility() {
         with(binding) {
             binding.llTabSelectSeat.setOnSingleClickListener {
                 if (!viewModel.sectionItemSelected.value) {
-                    parentView?.let {
-                        SpotImageSnackBar.make(
-                            it,
-                            message = "나중에 다른 구장도 추가될 예정이에요!",
-                            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
-                            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
-                            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
-                            marginBottom = 96,
-                            marginHorizontal = 71,
-                        ).show()
-                    }
-                    toast("'구역'을 먼저 선택해주세요")
+                    makeSpotImageAppbar("‘구역'을 먼저 선택해주세요")
                 }
                 viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
                 if (viewModel.selectedSectionId.value == 10) {
+                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
                     clColumnNumber.visibility = INVISIBLE
                     clOnlyNumber.visibility = VISIBLE
                     clOnlyColumnBtn.visibility = GONE
@@ -270,6 +248,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     val scale = context?.resources?.displayMetrics?.density
                     val paddingInPx = (31 * scale!! + 0.5f).toInt()
                     tvNoneColumnWarning.setPaddingRelative(paddingInPx, tvNoneColumnWarning.paddingTop, tvNoneColumnWarning.paddingEnd, tvNoneColumnWarning.paddingBottom)
+                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
                 } else {
                     clColumnNumber.visibility = VISIBLE
                     clOnlyNumber.visibility = INVISIBLE
@@ -608,6 +587,21 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
                 else -> {}
             }
+        }
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        val parentView = requireDialog().window?.decorView?.findViewById<View>(android.R.id.content)
+        parentView?.let {
+            SpotImageSnackBar.make(
+                it,
+                message = message,
+                messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+                icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+                iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+                marginBottom = 96,
+                marginHorizontal = 71,
+            ).show()
         }
     }
     override fun onDestroyView() {
