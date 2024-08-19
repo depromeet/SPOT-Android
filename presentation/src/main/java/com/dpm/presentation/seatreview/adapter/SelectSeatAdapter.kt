@@ -20,12 +20,12 @@ class SelectSeatAdapter(
     private val sectionColorList = listOf(
         com.depromeet.designsystem.R.drawable.oval_section_premium,
         com.depromeet.designsystem.R.drawable.oval_section_table,
-        com.depromeet.designsystem.R.drawable.oval_section_orange,
         com.depromeet.designsystem.R.drawable.oval_section_blue,
+        com.depromeet.designsystem.R.drawable.oval_section_orange,
         com.depromeet.designsystem.R.drawable.oval_section_red,
         com.depromeet.designsystem.R.drawable.oval_section_navy,
-        com.depromeet.designsystem.R.drawable.oval_section_green,
         com.depromeet.designsystem.R.drawable.oval_exciting_blue,
+        com.depromeet.designsystem.R.drawable.oval_section_green,
         com.depromeet.designsystem.R.drawable.ic_wheelchair,
     )
 
