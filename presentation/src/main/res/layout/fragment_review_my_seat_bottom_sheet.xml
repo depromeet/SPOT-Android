@@ -350,7 +350,7 @@
                     android:textAppearance="@style/TextAppearance.Spot.Body02"
                     android:textColor="@color/color_foreground_body_subtitle"
                     android:textColorHint="@color/color_foreground_disabled"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

@@ -3,6 +3,7 @@ package com.dpm.presentation.seatreview.dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
+import android.util.Log
 import android.view.View
 import android.view.View.FOCUS_DOWN
 import android.view.View.FOCUS_UP
@@ -16,6 +17,7 @@ import androidx.lifecycle.asLiveData
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReviewMySeatBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.ReviewViewModel
@@ -106,6 +108,8 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                     val totalSelectedCount = selectedGoodButtonText.size + selectedBadButtonText.size
                     viewModel.setReviewCount(totalSelectedCount)
                     viewModel.setSelectedGoodReview(selectedGoodButtonText)
+                } else {
+                    makeSpotImageAppbar("후기 키워드는 각각 3개까지 선택할 수 있어요")
                 }
             }
         }
@@ -122,6 +126,8 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                     val totalSelectedCount = selectedGoodButtonText.size + selectedBadButtonText.size
                     viewModel.setReviewCount(totalSelectedCount)
                     viewModel.setSelectedBadReview(selectedBadButtonText)
+                } else {
+                    makeSpotImageAppbar("후기 키워드는 각각 3개까지 선택할 수 있어요")
                 }
             }
         }
@@ -193,6 +199,21 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         with(binding.tvCompleteBtn) {
             isEnabled = enable
             setBackgroundResource(if (isEnabled) R.drawable.rect_action_enabled_fill_8 else R.drawable.rect_action_disabled_fill_8)
+        }
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        val parentView = requireDialog().window?.decorView?.findViewById<View>(android.R.id.content)
+        parentView?.let {
+            SpotImageSnackBar.make(
+                it,
+                message = message,
+                messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+                icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+                iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+                marginBottom = 96,
+                marginHorizontal = 26,
+            ).show()
         }
     }
 }

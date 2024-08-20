@@ -98,14 +98,14 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
     private fun onClickStadiumName() {
         binding.clSelectStadium.setOnSingleClickListener {
-            makeSpotImageAppbar("나중에 다른 구장도 추가될 예정이에요!")
+            makeSpotImageAppbar("나중에 다른 구장도 추가될 예정이에요!",39)
         }
     }
 
     private fun createPreventTouchListener(message: String): View.OnTouchListener {
         return View.OnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
-                makeSpotImageAppbar(message)
+                makeSpotImageAppbar(message,71)
                 v.performClick()
                 true
             } else {
@@ -117,7 +117,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         with(binding) {
             llTabSelectSeat.setOnSingleClickListener {
                 if (!viewModel.sectionItemSelected.value) {
-                    makeSpotImageAppbar("‘구역'을 먼저 선택해주세요")
+                    makeSpotImageAppbar("‘구역'을 먼저 선택해주세요",71)
                     val preventTouchListener = createPreventTouchListener("‘구역'을 먼저 선택해주세요")
                     spinnerBlock.setOnTouchListener(preventTouchListener)
                     etColumn.setOnTouchListener(preventTouchListener)
@@ -131,7 +131,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
                 viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
                 if (viewModel.selectedSectionId.value == 10) {
-                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
+                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요",50)
                     clColumnNumber.visibility = INVISIBLE
                     clOnlyNumber.visibility = VISIBLE
                     clOnlyColumnBtn.visibility = GONE
@@ -281,7 +281,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     val scale = context?.resources?.displayMetrics?.density
                     val paddingInPx = (31 * scale!! + 0.5f).toInt()
                     tvNoneColumnWarning.setPaddingRelative(paddingInPx, tvNoneColumnWarning.paddingTop, tvNoneColumnWarning.paddingEnd, tvNoneColumnWarning.paddingBottom)
-                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
+                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요",50)
                 } else {
                     clColumnNumber.visibility = VISIBLE
                     clOnlyNumber.visibility = INVISIBLE
@@ -623,7 +623,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         }
     }
 
-    private fun makeSpotImageAppbar(message: String) {
+    private fun makeSpotImageAppbar(message: String, marginHorizontal: Int) {
         val parentView = requireDialog().window?.decorView?.findViewById<View>(android.R.id.content)
         parentView?.let {
             SpotImageSnackBar.make(
@@ -633,7 +633,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
                 iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
                 marginBottom = 96,
-                marginHorizontal = 71,
+                marginHorizontal = marginHorizontal,
             ).show()
         }
     }
