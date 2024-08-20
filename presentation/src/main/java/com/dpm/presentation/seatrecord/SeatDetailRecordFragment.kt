@@ -107,7 +107,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
                     super.onScrolled(recyclerView, dx, dy)
 
                     val scrollBottom = !rvDetailRecord.canScrollVertically(1)
-                    val hasNextPage = !(viewModel.reviews.value as UiState.Success).data.last
+                    val hasNextPage = (viewModel.reviews.value as UiState.Success).data.hasNext
                     if (scrollBottom && hasNextPage && !isLoading) {
                         isLoading = true
                         viewModel.loadNextSeatRecords()

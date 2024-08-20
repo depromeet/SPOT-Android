@@ -157,7 +157,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     val scrollTop = !binding.rvSeatRecord.canScrollVertically(-1)
                     val scrollBottom = !binding.rvSeatRecord.canScrollVertically(1)
                     if (scrollBottom && !isLoading && viewModel.reviews.value is UiState.Success) {
-                        if (!(viewModel.reviews.value as UiState.Success).data.last) {
+                        if ((viewModel.reviews.value as UiState.Success).data.hasNext) {
                             isLoading = true
                             viewModel.loadNextSeatRecords()
                         }

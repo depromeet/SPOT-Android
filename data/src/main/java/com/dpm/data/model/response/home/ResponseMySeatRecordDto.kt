@@ -11,18 +11,10 @@ data class ResponseMySeatRecordDto(
     val memberInfoOnMyReview: ResponseMemberDto,
     @SerialName("reviews")
     val reviews: List<ResponseReviewWrapperDto>,
-    @SerialName("totalElements")
-    val totalElements: Int,
-    @SerialName("totalPages")
-    val totalPages: Int,
-    @SerialName("number")
-    val number: Int,
-    @SerialName("size")
-    val size: Int,
-    @SerialName("first")
-    val first: Boolean,
-    @SerialName("last")
-    val last: Boolean,
+    @SerialName("nextCursor")
+    val NextCursor : String?,
+    @SerialName("hasNext")
+    val hasNext : Boolean,
     @SerialName("filter")
     val filter: ResponseFilterDto,
 ) {
@@ -78,7 +70,7 @@ data class ResponseMySeatRecordDto(
         @SerialName("dateTime")
         val dateTime: String,
         @SerialName("content")
-        val content: String,
+        val content: String?,
         @SerialName("images")
         val images: List<ResponseReviewImageDto>,
         @SerialName("keywords")
@@ -172,12 +164,8 @@ data class ResponseMySeatRecordDto(
         fun ResponseMySeatRecordDto.toMySeatRecordResponse() = ResponseMySeatRecord(
             profile = memberInfoOnMyReview.toMyProfileResponse(),
             reviews = reviews.map { it.baseReview.toReviewResponse() },
-            totalElements = totalElements,
-            totalPages = totalPages,
-            number = number,
-            size = size,
-            first = first,
-            last = last,
+            nextCursor = NextCursor,
+            hasNext = hasNext,
             isLoading = false
         )
 
@@ -205,7 +193,7 @@ data class ResponseMySeatRecordDto(
             seatId = seat?.id,
             seatNumber = seat?.seatNumber,
             date = dateTime,
-            content = content,
+            content = content ?: "",
             sectionName = section.name,
             member = member.toMemberResponse(),
             images = images.map { it.toReviewImageResponse() },
