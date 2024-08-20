@@ -18,7 +18,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
-import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -29,14 +28,14 @@ import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotTeamLabel
 import com.dpm.designsystem.extension.dpToPx
+import com.dpm.domain.entity.response.viewfinder.ResponseStadium
+import com.dpm.domain.entity.response.viewfinder.Section
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.extension.setMargins
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.util.SpannableStringUtils
 import com.dpm.presentation.util.Utils
-import com.dpm.presentation.viewfinder.adapter.MockSection
-import com.dpm.presentation.viewfinder.adapter.Recommend
 import com.dpm.presentation.viewfinder.adapter.StadiumSectionAdapter
 import com.dpm.presentation.viewfinder.adapter.StadiumSectionRecommendAdapter
 import com.dpm.presentation.viewfinder.viewmodel.StadiumViewModel
@@ -47,34 +46,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 enum class FilterType(
-    val description: String,
     val ranges: List<Pair<Int, Int>>
 ) {
-    Type1(
-        "응원하는 팀이 다른 경우!\n중앙네이비석에 앉아 두 팀의 응원 분위기를 모두 느낄 수 있어요",
-        listOf(Pair(15, 21), Pair(26, 37))
-    ),
-    Type2(
-        "익사이팅석에서는 선수들의 싸인을 받을 수 있고 블루석에서는 선수들이 몸푸는것을 가까이 볼 수 있어요",
-        listOf(Pair(0, 5), Pair(9, 16), Pair(26, 29), Pair(33, 42))
-    ),
-    Type3("잠실야구장은 오직 테이블석과 프리미엄석에만 테이블이 있어요. 음식을 편하게 즐기려면 두개의 구역을 추천해요", listOf(Pair(10, 27))),
-    Type4(
-        "야구장의 뜨거운 열기를 느끼고 싶으신가요?\n모두가 서서 열띤 응원을 하는 오렌지석과 네이비석을 추천해요!",
-        listOf(Pair(24, 36), Pair(40, 45), Pair(46, 51))
-    ),
-    Type5(
-        "야구 직관 초보자이신가요?\n응원석인 오렌지석과, 응원단상이 잘 보이는 블루석, 레드석, 네이비석도 추천해",
-        listOf(Pair(20, 24), Pair(27, 53))
-    ),
-    Type6(
-        "낮 2시 기준,\n1루 네이비석의 경우 3열 이후부터,\n3루 네이비석의 경우 8열 이후부터 그늘져요",
-        listOf(Pair(9, 16), Pair(21, 26), Pair(30, 37), Pair(42, 47))
-    ),
-    Type7(
-        "외야그린석은 가장 저렴하지만, 경기의 모습이 조금 멀리 보여요. 그러나, 홈런볼을 잡을 수 있고,외야수를 잘 볼 수 있는 자리에요!",
-        listOf(Pair(41, 70))
-    );
+    Type1(listOf(Pair(15, 21), Pair(26, 37))), // 1
+    Type2(listOf(Pair(0, 5), Pair(9, 16), Pair(26, 29), Pair(33, 42))), // 2
+    Type3(listOf(Pair(10, 27))), // 3
+    Type4(listOf(Pair(24, 36), Pair(40, 45), Pair(46, 51))), // 4
+    Type5(listOf(Pair(20, 24), Pair(27, 53))), // 5
+    Type6(listOf(Pair(9, 16), Pair(21, 26), Pair(30, 37), Pair(42, 47))), // 6
+    Type7(listOf(Pair(41, 70))); // 7
 }
 
 @AndroidEntryPoint
@@ -112,6 +92,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         initObserve()
     }
 
+
     private fun initView() {
         initStatusBar()
         getStadiumIdExtra()
@@ -125,12 +106,11 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         onClickBack()
         onClickClose()
         onClickRefresh()
-        onClickBottomSheet()
         onClickTipContainer()
     }
 
     private fun initObserve() {
-        viewModel.stadium.asLiveData().observe(this) { stadium ->
+        viewModel.stadium.observe(this) { stadium ->
             when (stadium) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> toast(stadium.msg)
@@ -155,10 +135,16 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
                         }
                     }
                     viewModel.downloadFileFromServer(stadium.data.stadiumUrl)
+                    stadiumSectionRecommendAdapter.submitList(stadium.data.blockTags)
+                    stadiumSectionAdapter.submitList(stadium.data.sections)
+                    viewModel.setBlockFilters(stadium.data.blockTags)
+                    viewModel.setSections(stadium.data.sections)
                 }
+
+                else -> Unit
             }
         }
-        viewModel.htmlBody.asLiveData().observe(this) { uiState ->
+        viewModel.htmlBody.observe(this) { uiState ->
             when (uiState) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> toast(uiState.msg)
@@ -166,12 +152,14 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
                 is UiState.Success -> {
                     loadWebView(uiState.data)
                 }
+
+                else -> Unit
             }
         }
-        viewModel.blockFilters.asLiveData().observe(this) {
+        viewModel.blockFilters.observe(this) {
             stadiumSectionRecommendAdapter.submitList(it)
         }
-        viewModel.sections.asLiveData().observe(this) {
+        viewModel.sections.observe(this) {
             stadiumSectionAdapter.submitList(it)
         }
     }
@@ -183,9 +171,9 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private fun configureWebViewSetting() {
-        binding.wvStadium.setInitialScale(0)
         binding.wvStadium.settings.apply {
             builtInZoomControls = true
+            loadWithOverviewMode = true
             displayZoomControls = false
             javaScriptEnabled = true
             domStorageEnabled = true
@@ -213,11 +201,10 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = stadiumSectionRecommendAdapter
         }
-        viewModel.getBlockFilters()
 
         stadiumSectionRecommendAdapter.itemFilterClickListener =
             object : StadiumSectionRecommendAdapter.OnItemFilterClickListener {
-                override fun onItemFilterClick(recommend: Recommend) {
+                override fun onItemFilterClick(recommend: ResponseStadium.ResponseBlockTags) {
                     viewModel.updateBlockFilter(recommend)
                     behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     setSectionText(
@@ -232,15 +219,42 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
                     } else {
                         binding.clTipContainer.visibility = VISIBLE
                         binding.btnRefresh.visibility = VISIBLE
-                        filterByBlocks(recommend.blocks)
+                        filterByBlocks(recommend.blockCodes)
                         when (recommend.id) {
-                            1 -> setTipContainerByFilter(FilterType.Type1)
-                            2 -> setTipContainerByFilter(FilterType.Type2)
-                            3 -> setTipContainerByFilter(FilterType.Type3)
-                            4 -> setTipContainerByFilter(FilterType.Type4)
-                            5 -> setTipContainerByFilter(FilterType.Type5)
-                            6 -> setTipContainerByFilter(FilterType.Type6)
-                            7 -> setTipContainerByFilter(FilterType.Type7)
+                            1 -> setTipContainerByFilter(
+                                recommend.description,
+                                FilterType.Type1.ranges
+                            )
+
+                            2 -> setTipContainerByFilter(
+                                recommend.description,
+                                FilterType.Type2.ranges
+                            )
+
+                            3 -> setTipContainerByFilter(
+                                recommend.description,
+                                FilterType.Type3.ranges
+                            )
+
+                            4 -> setTipContainerByFilter(
+                                recommend.description,
+                                FilterType.Type4.ranges
+                            )
+
+                            5 -> setTipContainerByFilter(
+                                recommend.description,
+                                FilterType.Type5.ranges
+                            )
+
+                            6 -> setTipContainerByFilter(
+                                recommend.description,
+                                FilterType.Type6.ranges
+                            )
+
+                            7 -> setTipContainerByFilter(
+                                recommend.description,
+                                FilterType.Type7.ranges
+                            )
                         }
                     }
                 }
@@ -256,14 +270,13 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             itemAnimator = null
         }
 
-        viewModel.getSection()
-
         stadiumSectionAdapter.itemSectionClickListener =
             object : StadiumSectionAdapter.OnItemSectionClickListener {
-                override fun onItemSectionClick(mockSection: MockSection) {
-                    viewModel.updateSections(mockSection)
+                override fun onItemSectionClick(section: Section) {
+                    binding.clTipContainer.visibility = GONE
+                    viewModel.updateSections(section)
                     viewModel.refreshFilter()
-                    if (mockSection.isActive) {
+                    if (section.isActive) {
                         binding.btnRefresh.visibility = GONE
                         setSectionText(
                             getString(com.depromeet.presentation.R.string.viewfinder_find_section_description),
@@ -272,17 +285,17 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
                         refresh()
                     } else {
                         binding.btnRefresh.visibility = VISIBLE
-                        setSectionText(mockSection.title, R.color.color_action_enabled)
-                        when (mockSection.id) {
+                        setSectionText(section.name, R.color.color_action_enabled)
+                        when (section.id) {
                             1 -> filterBySection("premium")
                             2 -> filterBySection("table")
-                            3 -> filterBySection("orange")
                             4 -> filterBySection("blue")
-                            5 -> filterBySection("red")
-                            6 -> filterBySection("navy")
-                            7 -> filterBySection("green")
+                            5 -> filterBySection("orange")
+                            6 -> filterBySection("red")
+                            7 -> filterBySection("navy")
                             8 -> filterBySection("exciting")
-                            9 -> filterBySection("wheelchair")
+                            9 -> filterBySection("green")
+                            10 -> filterBySection("wheelchair")
                         }
                     }
                 }
@@ -301,6 +314,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun initBottomSheetBehavior() {
         behavior = BottomSheetBehavior.from(binding.clBottomSheet)
+        behavior.isDraggable = false
         behavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
             }
@@ -356,8 +370,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         }
     }
 
-    private fun setTipContainerByFilter(filterType: FilterType) {
-        setTextZoomDescriptionColorMulti(filterType.description, filterType.ranges)
+    private fun setTipContainerByFilter(description: String, ranges: List<Pair<Int, Int>>) {
+        setTextZoomDescriptionColorMulti(description, ranges)
         binding.ivPinchZoom.setImageResource(R.drawable.ic_tip)
         binding.ivPinchZoom.layoutParams.height = 52.dpToPx(this)
         binding.ivPinchZoom.layoutParams.width = 52.dpToPx(this)
@@ -390,6 +404,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             override fun onPageFinished(view: WebView, url: String) {
                 injectJavaScriptFunction()
                 stopShimmer()
+                onClickBottomSheet()
+                behavior.isDraggable = true
             }
         }
     }
@@ -490,9 +506,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         binding.wvStadium.apply {
             removeJavascriptInterface(AndroidBridge.JAVASCRIPT_OBJ)
             webChromeClient = null
-            clearCache(true)
-            clearHistory()
-            removeAllViews()
             destroy()
         }
     }
