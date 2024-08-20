@@ -48,12 +48,15 @@ fun KakaoSignupScreen(
                 "캐릭터를 성장시켜요!", 0, 6),
         Triple("내 소중한 시야 기록을\n" +
                 "한 자리에서 봐요!", 6, 10),
+        Triple("내 직관 후기를 기록하면서\n" +
+                "좌석 시야도 공유할 수 있어요", 0, 3)
     )
 
     val onboardingImageList = listOf(
         R.drawable.ic_signup_image_1,
-        R.drawable.ic_signup_image_3,
         R.drawable.ic_signup_image_2,
+        R.drawable.ic_signup_image_3,
+        R.drawable.ic_signup_image_4
     )
 
     val pageCount = onBoardingList.size
