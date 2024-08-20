@@ -4,13 +4,13 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSelectSeatBinding
-import com.dpm.presentation.viewfinder.adapter.MockSection
+import com.dpm.domain.entity.response.viewfinder.Section
 
 class StadiumSectionViewHolder(
     private val binding: ItemSelectSeatBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: MockSection) {
-        binding.tvSeatName.text = item.title
+    fun bind(item: Section) {
+        binding.tvSeatName.text = item.name
         binding.tvSubName.text = item.alias
 
         if (item.alias.isNullOrEmpty()) {
@@ -28,13 +28,13 @@ class StadiumSectionViewHolder(
         when (item.id) {
             1 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_premium)
             2 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_table)
-            3 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_orange)
             4 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_blue)
-            5 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_red)
-            6 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_navy)
-            7 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_green)
-            8 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_exciting_blue)
-            9 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.ic_wheelchair)
+            5 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_orange)
+            6 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_red)
+            7 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_navy)
+            8 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_exciting)
+            9 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_green)
+            10 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.ic_wheelchair)
         }
     }
 }
