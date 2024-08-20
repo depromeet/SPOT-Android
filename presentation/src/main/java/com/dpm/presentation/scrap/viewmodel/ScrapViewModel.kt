@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -118,8 +119,11 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
     private val _months = MutableStateFlow<List<ScrapMonth>>(emptyList())
     val months = _months.asStateFlow()
 
-//    val goods = MutableStateFlow<List<Int>>(emptyList())
-//    val bads = MutableStateFlow<List<Int>>(emptyList())
+    private val _selectedGoodReview = MutableStateFlow<List<String>>(emptyList())
+    val selectedGoodReview: StateFlow<List<String>> = _selectedGoodReview.asStateFlow()
+
+    private val _selectedBadReview = MutableStateFlow<List<String>>(emptyList())
+    val selectedBadReview: StateFlow<List<String>> = _selectedBadReview.asStateFlow()
 
 
     fun getScrapRecord() {
@@ -137,6 +141,14 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
             val updatedList = scrapList.filter { it.id != id }
             _scrap.value = UiState.Success(updatedList)
         }
+    }
+
+    fun setSelectedGoodReview(buttonTexts: List<String>) {
+        _selectedGoodReview.value = buttonTexts
+    }
+
+    fun setSelectedBadReview(buttonTexts: List<String>) {
+        _selectedBadReview.value = buttonTexts
     }
 
     fun getMonths() {
