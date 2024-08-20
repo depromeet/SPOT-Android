@@ -117,7 +117,8 @@ private fun StadiumSeatCheckBoxPreview() {
             seatNumber = null,
             year = null,
             month = null,
-            page = 0,
+            cursor = null,
+            sortBy = "DATE_TIME",
             size = 10
         ),
         modifier = Modifier,
@@ -136,7 +137,8 @@ private fun StadiumSeatCheckBoxPreviewRowNumber() {
             seatNumber = null,
             year = null,
             month = null,
-            page = 0,
+            cursor = null,
+            sortBy = "DATE_TIME",
             size = 10
         ),
         modifier = Modifier,
@@ -154,7 +156,8 @@ private fun StadiumSeatCheckBoxPreviewSeatNumber() {
             seatNumber = 12,
             year = null,
             month = null,
-            page = 0,
+            cursor = null,
+            sortBy = "DATE_TIME",
             size = 10
         ),
         modifier = Modifier,

@@ -29,6 +29,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
+import com.dpm.presentation.util.toBlockContent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -75,7 +76,7 @@ fun StadiumPictureViewPager(
             contentAlignment = Alignment.TopEnd
         ) {
             Text(
-                text = "${topReviewImages.getOrNull(pagerState.currentPage)?.formattedNumber()}",
+                text = "${topReviewImages.getOrNull(pagerState.currentPage)?.toBlockContent()}",
                 style = SpotTheme.typography.label11,
                 color = SpotTheme.colors.foregroundWhite,
                 modifier = Modifier
