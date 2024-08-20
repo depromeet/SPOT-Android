@@ -182,6 +182,20 @@ class ReviewViewModel @Inject constructor(
                     else -> codeWithoutW
                 }
             }
+            selectedSectionId.value == 8 && blockCode.startsWith("exciting") -> {
+                when (blockCode) {
+                    "exciting1" -> "1루 익사이팅석"
+                    "exciting3" -> "3루 익사이팅석"
+                    else -> blockCode
+                }
+            }
+
+            selectedSectionId.value == 1 && blockCode.startsWith("premium") -> {
+                when (blockCode) {
+                    "premium" -> "프리미엄석"
+                    else -> blockCode
+                }
+            }
             else -> blockCode
         }
     }
