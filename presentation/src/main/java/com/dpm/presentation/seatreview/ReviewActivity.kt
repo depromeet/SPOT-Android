@@ -19,6 +19,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
@@ -326,11 +327,12 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvUploadBtn) {
-            isEnabled = isSelectedDateFilled && isSelectedImageFilled &&
+            val isReadyToUpload = isSelectedDateFilled && isSelectedImageFilled &&
                 (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
                 isSelectedBlockFilled &&
                 (isSelectedColumnFilled || isSelectedNumberFilled)
-            if (isEnabled) {
+
+            if (isReadyToUpload) {
                 setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             } else {
                 setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
@@ -359,15 +361,35 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initEventUploadBtn() {
         binding.tvUploadBtn.setOnSingleClickListener {
-            val uniqueImageUris = selectedImageUris.distinct()
-            uniqueImageUris.forEach { imageUriString ->
-                val imageUri = Uri.parse(imageUriString)
-                val fileExtension = getFileExtension(this, imageUri)
-                val imageData = readImageData(this, imageUri)
-                if (imageData != null) {
-                    viewModel.requestPreSignedUrl(fileExtension)
-                } else {
-                    toast("파일을 읽을 수 없습니다.")
+            val isSelectedGoodBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
+            val isSelectedBadBtnFilled = viewModel.selectedBadReview.value.isNotEmpty()
+            val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
+            val isSelectedColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
+            val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
+            when {
+                !(isSelectedGoodBtnFilled || isSelectedBadBtnFilled) && (isSelectedBlockFilled || (isSelectedColumnFilled || isSelectedNumberFilled)) -> {
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                    makeSpotImageAppbar("내 시야 후기를 등록해주세요", 67)
+                }
+                !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) -> {
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                    makeSpotImageAppbar("좌석을 선택해주세요", 88)
+                }
+                ((!isSelectedGoodBtnFilled && !isSelectedBadBtnFilled) || !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled))) -> {
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                }
+                else -> {
+                    val uniqueImageUris = selectedImageUris.distinct()
+                    uniqueImageUris.forEach { imageUriString ->
+                        val imageUri = Uri.parse(imageUriString)
+                        val fileExtension = getFileExtension(this, imageUri)
+                        val imageData = readImageData(this, imageUri)
+                        if (imageData != null) {
+                            viewModel.requestPreSignedUrl(fileExtension)
+                        } else {
+                            toast("파일을 읽을 수 없습니다.")
+                        }
+                    }
                 }
             }
         }
@@ -418,8 +440,20 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
                 }
+
                 else -> {}
             }
         }
+    }
+
+    private fun makeSpotImageAppbar(message: String, marginHorizontal: Int) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginHorizontal = marginHorizontal,
+        ).show()
     }
 }
