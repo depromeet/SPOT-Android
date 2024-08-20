@@ -23,6 +23,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.dpm.presentation.mapper.toKeyword
+import com.dpm.presentation.util.stadiumBlock
+import com.dpm.presentation.util.toTitle
 import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.uistate.StadiumDetailUiState
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
@@ -30,7 +32,7 @@ import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumDetailScreen(
-    blockNumber: String,
+    emptyBlockName: String,
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
@@ -46,6 +48,7 @@ fun StadiumDetailScreen(
     val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
     val reviewFilter by viewModel.reviewFilter.collectAsStateWithLifecycle()
     val detailUiState by viewModel.detailUiState.collectAsStateWithLifecycle()
+    val currentIndex by viewModel.currentIndex.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = scrollState) {
         verticalScrollState.scrollToItem(0)
@@ -58,16 +61,26 @@ fun StadiumDetailScreen(
         }
     }
 
+    LaunchedEffect(key1 = verticalScrollState.firstVisibleItemIndex) {
+        if (detailUiState is StadiumDetailUiState.ReviewsData) {
+            val reviewsData = (detailUiState as StadiumDetailUiState.ReviewsData)
+            if (verticalScrollState.firstVisibleItemIndex == reviewsData.reviews.size - 1 && reviewsData.hasNext) {
+                viewModel.getBlockReviews()
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = currentIndex) {
+        if (currentIndex > 0) {
+            verticalScrollState.scrollToItem(currentIndex + 1)
+        }
+    }
+
     detailUiState.let { uiState ->
         when (uiState) {
             is StadiumDetailUiState.Empty -> {
                 StadiumEmptyContent(
-                    blockNumber = when (blockNumber) {
-                        "exciting1" -> "1루 익사이팅석 "
-                        "exciting3" -> "3루 익사이팅석 "
-                        "premium" -> "프리미엄석 "
-                        else -> "$blockNumber 블록"
-                    },
+                    blockNumber = emptyBlockName,
                     onGoBack = onClickGoBack
                 )
             }
@@ -77,6 +90,7 @@ fun StadiumDetailScreen(
                     onRefresh = onRefresh
                 )
             }
+
             is StadiumDetailUiState.Loading -> Unit
             is StadiumDetailUiState.ReviewsData -> {
                 LazyColumn(
@@ -90,7 +104,7 @@ fun StadiumDetailScreen(
                             reviewFilter = reviewFilter,
                             topReviewImages = uiState.topReviewImages,
                             stadiumTitle = uiState.stadiumContent.stadiumName.trim(),
-                            seatContent = uiState.stadiumContent.formattedStadiumBlock(),
+                            seatContent = uiState.stadiumContent.stadiumBlock(),
                             keywords = uiState.keywords.map { it.toKeyword() },
                             onChangeIsMore = { isMore = it },
                             onClickSelectSeat = onClickSelectSeat,
@@ -104,20 +118,18 @@ fun StadiumDetailScreen(
                             reviewQuery = reviewFilter,
                             reviewCount = uiState.total,
                             onClickMonthly = onClickFilterMonthly,
-                            onCancel = viewModel::clearMonth
+                            onCancel = viewModel::clearMonth,
+                            onClickDateTime = viewModel::updateSort,
+                            onClickLikeCount = viewModel::updateSort
                         )
                     }
+
                     if (uiState.reviews.isEmpty()) {
                         item(StadiumDetailActivity.STADIUM_REVIEW_CONTENT) {
                             StadiumEmptyReviewContent()
                             Spacer(modifier = Modifier.height(60.dp))
                         }
                     } else {
-                        if (verticalScrollState.firstVisibleItemIndex == uiState.reviews.size - 1 && !uiState.pageState) {
-                            viewModel.updateQueryPage { query ->
-                                viewModel.getBlockReviews(query = query)
-                            }
-                        }
                         items(
                             key = { index ->
                                 uiState.reviews[index].id
@@ -150,7 +162,7 @@ fun StadiumDetailScreen(
 private fun StadiumDetailScreenPreview() {
     Box(modifier = Modifier.background(Color.White)) {
         StadiumDetailScreen(
-            blockNumber = "207",
+            emptyBlockName = "207",
             onClickReviewPicture = { _, _, _ -> },
             onClickSelectSeat = {},
             onClickFilterMonthly = {},
