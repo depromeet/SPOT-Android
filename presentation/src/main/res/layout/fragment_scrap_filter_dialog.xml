@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rect_white_fill_32">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <View
+        android:id="@+id/vScrapFilter"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rect_background_primary_fill_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvScrapFilterTitle"
+        style="@style/TextAppearance.Spot.Subtitle04"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16.5dp"
+        android:text="@string/scrap_filter_title"
+        android:textColor="@color/color_foreground_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vScrapFilter"
+        tools:text="필터" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8.5dp"
+        app:layout_constraintEnd_toStartOf="@id/gl_end"
+        app:layout_constraintStart_toEndOf="@id/gl_start"
+        app:layout_constraintTop_toBottomOf="@id/tvScrapFilterTitle"
+
+        android:layout_marginBottom="14dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvScrapFilterStadium"
+                style="@style/TextAppearance.Spot.Subtitle02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/scrap_filter_selection"
+                android:textColor="@color/color_foreground_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSelectStadium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rect_background_tertiary_fill_stroke_tertiary_8"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvScrapFilterStadium">
+
+                <TextView
+                    android:id="@+id/tvStadiumName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingVertical="16dp"
+                    android:paddingStart="16dp"
+                    android:text="@string/stadium_jamsil"
+                    android:textAppearance="@style/TextAppearance.Spot.Label04"
+                    android:textColor="@color/color_foreground_caption"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clStadiumWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clSelectStadium">
+
+                <ImageView
+                    android:id="@+id/ivStadiumWarning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_warning"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="아직 잠실 야구장만 오픈되었어요!"
+                    android:textAppearance="@style/TextAppearance.Spot.Label12"
+                    android:textColor="@color/color_error_primary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivStadiumWarning" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvScrapFilterMonth"
+                style="@style/TextAppearance.Spot.Subtitle02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:text="@string/scrap_filter_month"
+                android:textColor="@color/color_foreground_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clStadiumWarning" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvScrapMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvScrapFilterMonth"
+                app:spanCount="5"
+                tools:listitem="@layout/item_scrap_month"
+                tools:itemCount="12"/>
+
+            <TextView
+                android:id="@+id/tvScrapGood"
+                style="@style/TextAppearance.Spot.Subtitle02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:text="이런 점이 좋아요"
+                android:textColor="@color/color_foreground_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvScrapMonth" />
+
+
+            <TextView
+                android:id="@+id/tvGoodOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/sel_review_color_seat_good_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="💺️ 충분한 다리 공간"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvScrapGood" />
+
+            <TextView
+                android:id="@+id/tvGoodTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/sel_review_color_seat_good_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🔥 생생한 응원 열기"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintBottom_toBottomOf="@id/tvGoodOne"
+                app:layout_constraintStart_toEndOf="@id/tvGoodOne"
+                app:layout_constraintTop_toTopOf="@id/tvGoodOne" />
+
+            <TextView
+                android:id="@+id/tvGoodThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/sel_review_color_seat_good_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🏟️ 좋은 시야각"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvGoodOne" />
+
+            <TextView
+                android:id="@+id/tvGoodFour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/sel_review_color_seat_good_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🍃 선선한 그늘존"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintBottom_toBottomOf="@id/tvGoodThree"
+                app:layout_constraintStart_toEndOf="@id/tvGoodThree"
+                app:layout_constraintTop_toTopOf="@id/tvGoodThree" />
+
+            <TextView
+                android:id="@+id/tvGoodFive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/sel_review_color_seat_good_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🚶 가까운 출입구"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvGoodThree" />
+
+
+            <TextView
+                android:id="@+id/tvScrapBad"
+                style="@style/TextAppearance.Spot.Subtitle02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:text="이런 점이 아쉬워요"
+                android:textColor="@color/color_foreground_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvGoodFive" />
+
+            <TextView
+                android:id="@+id/tvBadOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/sel_review_color_seat_bad_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🌞 온종일 햇빛존"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvScrapBad" />
+
+            <TextView
+                android:id="@+id/tvBadTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/sel_review_color_seat_bad_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🤢 벌레가 많은 자리"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toEndOf="@id/tvBadOne"
+                app:layout_constraintTop_toTopOf="@id/tvBadOne" />
+
+            <TextView
+                android:id="@+id/tvBadThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/sel_review_color_seat_bad_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🥅 신경쓰이는 그물망"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBadOne" />
+
+            <TextView
+                android:id="@+id/tvBadFour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/sel_review_color_seat_bad_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🥲 시야방해 기둥"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toEndOf="@id/tvBadThree"
+                app:layout_constraintTop_toTopOf="@id/tvBadThree" />
+
+            <TextView
+                android:id="@+id/tvBadFive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/sel_review_color_seat_bad_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🥤 컵홀더가 없는 자리"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBadThree" />
+
+            <TextView
+                android:id="@+id/tvBadSix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/sel_review_color_seat_bad_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="📢 시끄러운 스피커"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toEndOf="@id/tvBadFive"
+                app:layout_constraintTop_toTopOf="@id/tvBadFive" />
+
+            <TextView
+                android:id="@+id/tvBadSeven"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/sel_review_color_seat_bad_review"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="13dp"
+                android:text="🪟 시끄러운 스피커"
+                android:textAppearance="@style/TextAppearance.Spot.Label08"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBadFive" />
+
+            <View
+                android:id="@+id/vBlank"
+                android:layout_width="0dp"
+                android:layout_height="188dp"
+                android:visibility="visible"
+                android:background="@android:color/transparent"
+                app:layout_constraintTop_toBottomOf="@id/tvBadSeven"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clScrapSearchDone"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/color_background_white">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btScrapSearch"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rect_spot_green_fill_8"
+            android:stateListAnimator="@null"
+            android:text="@string/scrap_search"
+            android:textColor="@color/color_foreground_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

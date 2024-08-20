@@ -107,7 +107,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private fun initScrapFilterAdapter() {
         scrapFilterAdapter = ScrapFilterAdapter(
             filterClick = {
-                viewModel.setFilter()
+                ScrapFilterDialog().show(supportFragmentManager, ScrapFilterDialog.TAG)
             },
             selectedClick = {
                 //TODO : 삭제

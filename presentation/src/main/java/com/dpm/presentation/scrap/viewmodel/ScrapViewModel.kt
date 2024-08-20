@@ -92,18 +92,19 @@ fun getScrapData(): List<ScrapTestData> {
     )
 }
 
-fun getFilter(): List<FilterTestData> {
-    return listOf(
-        FilterTestData("잠실야구장"),
-        FilterTestData("5월 외 2개"),
-        FilterTestData("키워드 3개"),
-    )
-}
-
 data class FilterTestData(
     val name: String,
 )
 
+
+data class ScrapMonth(
+    val month: Int,
+    val isSelected: Boolean,
+) {
+    fun formattedMonth(): String {
+        return "${month}월"
+    }
+}
 
 
 @HiltViewModel
@@ -113,6 +114,12 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
     val scrap = _scrap.asStateFlow()
 
     val filter = MutableStateFlow<List<FilterTestData>>(emptyList())
+
+    private val _months = MutableStateFlow<List<ScrapMonth>>(emptyList())
+    val months = _months.asStateFlow()
+
+//    val goods = MutableStateFlow<List<Int>>(emptyList())
+//    val bads = MutableStateFlow<List<Int>>(emptyList())
 
 
     fun getScrapRecord() {
@@ -132,8 +139,19 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun setFilter() {
-        filter.value = getFilter()
+    fun getMonths() {
+        val monthList = (1..12).map { ScrapMonth(it, false) }.toMutableList()
+        _months.value = monthList
+    }
+
+    fun updateMonth(month: Int) {
+        _months.value = months.value.map {
+            if (it.month == month) {
+                it.copy(isSelected = !it.isSelected)
+            } else {
+                it
+            }
+        }
     }
 
 

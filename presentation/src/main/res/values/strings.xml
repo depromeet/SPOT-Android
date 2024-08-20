@@ -139,6 +139,11 @@
     <string name="scrap_fail_advice">새로고침하여 다시 시도해주세요!</string>
     <string name="scrap_fail_description">정보를 불러올 수 없습니다.</string>
     <string name="scrap_filter">필터</string>
+    <string name="scrap_filter_title">필터</string>
+    <string name="scrap_filter_selection">야구장 선택</string>
+    <string name="scrap_filter_month">월별 시야</string>
+    <string name="scrap_search">검색하기</string>
+    <string name="stadium_jamsil">잠실야구장</string>
 
 
 </resources>
