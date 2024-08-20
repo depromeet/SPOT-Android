@@ -13,9 +13,9 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
-import com.dpm.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReviewMySeatBottomSheetBinding
+import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.ReviewViewModel
@@ -46,6 +46,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
             binding.tvBadFour,
             binding.tvBadFive,
             binding.tvBadSix,
+            binding.tvBadSeven,
         )
     }
     override fun onCreate(savedInstanceState: Bundle?) {
