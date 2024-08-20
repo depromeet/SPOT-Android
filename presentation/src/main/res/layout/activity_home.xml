@@ -79,6 +79,17 @@
         app:textColor="@color/color_foreground_body_subtitle"
         app:textAppearance="@style/TextAppearance.Spot.Caption04" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/rect_background_white_fill_20"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/csbv_home_title"
+        app:layout_constraintEnd_toEndOf="@id/csbv_home_title"
+        app:layout_constraintStart_toStartOf="@id/csbv_home_title"
+        app:layout_constraintTop_toTopOf="@id/csbv_home_title" />
+
 
     <TextView
         android:id="@+id/tv_home_level"

@@ -70,9 +70,20 @@
             app:paddingLeft="10dp"
             app:paddingRight="10dp"
             app:paddingTop="8dp"
-            app:textColor="@color/color_foreground_body_sebtext"
             app:textAppearance="@style/TextAppearance.Spot.Caption04"
+            app:textColor="@color/color_foreground_body_sebtext"
             tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/rect_background_white_fill_20"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/csbv_record_title"
+            app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
+            app:layout_constraintStart_toStartOf="@id/csbv_record_title"
+            app:layout_constraintTop_toTopOf="@id/csbv_record_title" />
 
         <ImageView
             android:id="@+id/iv_record_profile"
@@ -226,9 +237,9 @@
                 android:drawableTint="@color/color_foreground_disabled"
                 android:paddingHorizontal="11dp"
                 android:paddingVertical="11dp"
+                android:stateListAnimator="@null"
                 android:text="@string/home_write_record"
                 android:textColor="@color/color_foreground_body_subtitle"
-                android:stateListAnimator="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -297,8 +308,8 @@
                 android:drawableTint="@color/color_foreground_disabled"
                 android:paddingHorizontal="11dp"
                 android:paddingVertical="11dp"
-                android:text="@string/refresh"
                 android:stateListAnimator="@null"
+                android:text="@string/refresh"
                 android:textColor="@color/color_foreground_body_subtitle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
