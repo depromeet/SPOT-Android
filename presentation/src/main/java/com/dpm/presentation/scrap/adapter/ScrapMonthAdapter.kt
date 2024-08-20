@@ -50,22 +50,22 @@ class ScrapMonthViewHolder(
         with(binding.tvScrapMonth) {
             if (isSelected) {
                 setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_999)
+                setTextAppearance(com.depromeet.designsystem.R.style.TextAppearance_Spot_Label07)
                 setTextColor(
                     ContextCompat.getColor(
                         itemView.context,
                         com.depromeet.designsystem.R.color.color_foreground_white
                     )
                 )
-                setTextAppearance(com.depromeet.designsystem.R.style.TextAppearance_Spot_Label07)
             } else {
                 setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_999)
+                setTextAppearance(com.depromeet.designsystem.R.style.TextAppearance_Spot_Label08)
                 setTextColor(
                     ContextCompat.getColor(
                         itemView.context,
                         com.depromeet.designsystem.R.color.color_foreground_body_subtitle
                     )
                 )
-                setTextAppearance(com.depromeet.designsystem.R.style.TextAppearance_Spot_Label08)
             }
         }
     }
