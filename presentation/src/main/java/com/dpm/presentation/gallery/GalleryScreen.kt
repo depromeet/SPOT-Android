@@ -19,22 +19,27 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -102,6 +107,21 @@ fun CustomGallery(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("갤러리", style = MaterialTheme.typography.h6)
+            Button(
+                onClick = {
+                    onImagesSelected(selectedItems.map { it.imageResource })
+                }
+            ) {
+                Text("${selectedItems.size} 선택")
+            }
+        }
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else if (galleryItems.isNotEmpty()) {
@@ -110,20 +130,9 @@ fun CustomGallery(
                 contentPadding = PaddingValues(4.dp),
             ) {
                 item(
-                    key = "gallery_top_bar",
+                    span = { GridItemSpan(3) },
+                    key = "gallery_top_title"
                 ) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                            onImagesSelected(selectedItems.map { it.imageResource })
-                        },
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    ) {
-                        Text("${selectedItems.size} 선택")
-                    }
-                }
-
-                item(key = "gallery_top_title") {
                     Text("갤러리 제목입니당~~", modifier = Modifier.align(Alignment.CenterHorizontally))
                     Spacer(modifier = Modifier.height(30.dp))
                 }
