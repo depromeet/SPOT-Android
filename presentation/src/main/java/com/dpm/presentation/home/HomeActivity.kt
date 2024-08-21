@@ -21,6 +21,7 @@ import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatreview.ReviewActivity
 import com.dpm.presentation.setting.SettingActivity
+import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +54,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initView() {
+        initViewStatusBar()
         homeViewModel.getStadiums()
         setStadiumAdapter()
     }
@@ -119,6 +121,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 ).show(supportFragmentManager, LevelupDialog.TAG)
                 homeViewModel.levelState.value = false
             }
+        }
+    }
+
+    private fun initViewStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_secondary)
+            setBlackSystemBarIconColor(window)
         }
     }
 

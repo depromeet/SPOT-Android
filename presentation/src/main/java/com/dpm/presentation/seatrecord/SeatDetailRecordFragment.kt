@@ -15,6 +15,7 @@ import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,7 +40,18 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+                setBlackSystemBarIconColor(window)
+            }
+        }
+    }
+
     private fun initView() {
+        initViewStatusBar()
         setDetailRecordAdapter()
     }
 
@@ -84,6 +96,15 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         viewModel.editClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {
                 moveEditReview()
+            }
+        }
+    }
+
+    private fun initViewStatusBar() {
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+                setBlackSystemBarIconColor(window)
             }
         }
     }

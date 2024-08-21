@@ -30,6 +30,7 @@ import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.ReviewActivity
 import com.dpm.presentation.util.CalendarUtil
+import com.dpm.presentation.util.Utils
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,6 +73,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun initView() {
+        initViewStatusBar()
         viewModel.getReviewDate()
         viewModel.getLocalProfile()
         initRecordAdapter()
@@ -109,6 +111,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         observeReviews()
         observeEvents()
         observeProfile()
+    }
+
+    private fun initViewStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+            setBlackSystemBarIconColor(window)
+        }
     }
 
     private fun initRecordAdapter() {
@@ -183,6 +192,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             fabRecordUp.visibility = GONE
         }
     }
+
 
 
     private fun observeDates() {

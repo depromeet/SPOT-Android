@@ -27,6 +27,7 @@ import com.dpm.presentation.home.viewmodel.ProfileEditViewModel
 import com.dpm.presentation.home.viewmodel.ProfileEvents
 import com.dpm.presentation.login.viewmodel.NicknameInputState
 import com.dpm.presentation.seatrecord.TempSeatRecordActivity
+import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -55,6 +56,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
     }
 
     private fun initView() {
+        initViewStatusBar()
         getDataExtra { name, image, cheerTeam ->
             viewModel.initProfile(name, image, cheerTeam)
             binding.etProfileEditNickname.setText(name)
@@ -114,6 +116,13 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 }
             }
 
+        }
+    }
+
+    private fun initViewStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+            setBlackSystemBarIconColor(window)
         }
     }
 
