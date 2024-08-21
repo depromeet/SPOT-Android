@@ -13,15 +13,13 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
-import coil.load
-import coil.transform.CircleCropTransformation
+import com.depromeet.presentation.R
+import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
-import com.depromeet.presentation.R
-import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
-import com.dpm.presentation.extension.loadAndCircle
+import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.seatrecord.adapter.RecordListItem
@@ -196,7 +194,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
 
-
     private fun observeDates() {
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
@@ -293,12 +290,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     "모두를 응원하는 Lv.", profile.level, " ${profile.levelTitle}"
                 )
             }
-            ivRecordProfile.clipToOutline = true
-            ivRecordProfile.load(profile.profileImage) {
-                placeholder(com.depromeet.designsystem.R.drawable.skeleton_gradient)
-                error(com.depromeet.designsystem.R.drawable.ic_default_profile)
-                transformations(CircleCropTransformation())
-            }
+            ivRecordProfile.loadAndCircleProfile(profile.profileImage)
             tvRecordNickname.text = profile.nickname
             tvRecordCount.text = "0"
             "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }

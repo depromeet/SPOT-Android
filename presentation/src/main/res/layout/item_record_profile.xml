@@ -42,7 +42,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/circle_white_fill"
+        android:background="@drawable/circle_gray50_fill_gray200_stroke"
         android:elevation="1dp"
         android:src="@drawable/ic_default_profile"
         app:layout_constraintEnd_toEndOf="@id/csbv_record_title"

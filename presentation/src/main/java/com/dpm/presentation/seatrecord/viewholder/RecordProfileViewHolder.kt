@@ -1,9 +1,9 @@
 package com.dpm.presentation.seatrecord.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
-import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.databinding.ItemRecordProfileBinding
-import com.dpm.presentation.extension.loadAndCircle
+import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.presentation.extension.loadAndCircleProfile
 
 class RecordProfileViewHolder(
     internal val binding: ItemRecordProfileBinding,
@@ -23,11 +23,7 @@ class RecordProfileViewHolder(
         }
         tvRecordNickname.text = data.nickname
         tvRecordCount.text = data.reviewCount.toString()
-        if (data.profileImage.isEmpty()) {
-            ivRecordProfile.loadAndCircle(com.depromeet.designsystem.R.drawable.ic_default_profile)
-        } else {
-            ivRecordProfile.loadAndCircle(data.profileImage)
-        }
+        ivRecordProfile.loadAndCircleProfile(data.profileImage)
 
     }
 

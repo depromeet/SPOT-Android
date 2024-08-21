@@ -12,13 +12,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import coil.load
-import coil.transform.CircleCropTransformation
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
+import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.adapter.BaseballTeamAdapter
 import com.dpm.presentation.home.adapter.GridSpacingItemDecoration
@@ -170,15 +169,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun observeProfileImage() {
         viewModel.profileImage.asLiveData().observe(this) { state ->
-            with(binding.ivProfileEditImage) {
-                if (state.isEmpty()) {
-                    setImageResource(com.depromeet.designsystem.R.drawable.ic_default_profile)
-                } else {
-                    load(state) {
-                        transformations(CircleCropTransformation())
-                    }
-                }
-            }
+            binding.ivProfileEditImage.loadAndCircleProfile(state)
         }
 
         viewModel.presignedUrl.asLiveData().observe(this) { state ->
