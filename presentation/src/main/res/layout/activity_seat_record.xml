@@ -55,35 +55,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/rect_59ffffff_fill_20"
+            android:elevation="8dp"
+            android:translationZ="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/csbv_record_title"
+            app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
+            app:layout_constraintStart_toStartOf="@id/csbv_record_title"
+            app:layout_constraintTop_toTopOf="@id/csbv_record_title" />
+
         <com.dpm.presentation.home.customview.CustomSpeechBubbleView
             android:id="@+id/csbv_record_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:elevation="4dp"
+            android:elevation="12dp"
             android:paddingRight="10dp"
             app:backgroundColor="@color/color_background_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:paddingBottom="8dp"
+            app:paddingBottom="12dp"
             app:paddingLeft="10dp"
             app:paddingRight="10dp"
             app:paddingTop="8dp"
             app:textAppearance="@style/TextAppearance.Spot.Caption04"
             app:textColor="@color/color_foreground_body_sebtext"
             tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/rect_background_white_fill_20"
-            android:elevation="2dp"
-            app:layout_constraintBottom_toBottomOf="@id/csbv_record_title"
-            app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
-            app:layout_constraintStart_toStartOf="@id/csbv_record_title"
-            app:layout_constraintTop_toTopOf="@id/csbv_record_title" />
 
         <ImageView
             android:id="@+id/iv_record_profile"
@@ -127,10 +128,10 @@
 
         <TextView
             android:id="@+id/tv_record_whole"
-            style="@style/TextAppearance.Spot.Subtitle01"
+            style="@style/TextAppearance.Spot.Subtitle02"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:text="@string/view_record_whole"
             android:textColor="@color/color_foreground_body_subtitle"
             app:layout_constraintEnd_toStartOf="@id/tv_record_count"
@@ -230,8 +231,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/rect_background_white_fill_999"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rect_background_white_fill_gray200_stroke_999"
                 android:drawableEnd="@drawable/layer_list_plus_20"
                 android:drawablePadding="4dp"
                 android:drawableTint="@color/color_foreground_disabled"
@@ -302,7 +303,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/rect_background_white_fill_999"
+                android:background="@drawable/rect_background_white_fill_gray200_stroke_999"
                 android:drawableEnd="@drawable/layer_list_refresh_20"
                 android:drawablePadding="4dp"
                 android:drawableTint="@color/color_foreground_disabled"

@@ -60,6 +60,18 @@
         tools:ignore="ContentDescription"
         tools:src="@drawable/ic_default_profile" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/rect_59ffffff_fill_20"
+        android:elevation="8dp"
+        android:translationZ="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/csbv_home_title"
+        app:layout_constraintEnd_toEndOf="@id/csbv_home_title"
+        app:layout_constraintStart_toStartOf="@id/csbv_home_title"
+        app:layout_constraintTop_toTopOf="@id/csbv_home_title" />
+
 
     <com.dpm.presentation.home.customview.CustomSpeechBubbleView
         android:id="@+id/csbv_home_title"
@@ -67,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="5dp"
-        android:elevation="3dp"
+        android:elevation="12dp"
         app:backgroundColor="@color/color_background_white"
         app:layout_constraintEnd_toEndOf="@id/iv_home_character"
         app:layout_constraintStart_toStartOf="@id/iv_home_character"
@@ -79,16 +91,7 @@
         app:textColor="@color/color_foreground_body_subtitle"
         app:textAppearance="@style/TextAppearance.Spot.Caption04" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/rect_background_white_fill_20"
-        android:elevation="2dp"
-        app:layout_constraintBottom_toBottomOf="@id/csbv_home_title"
-        app:layout_constraintEnd_toEndOf="@id/csbv_home_title"
-        app:layout_constraintStart_toStartOf="@id/csbv_home_title"
-        app:layout_constraintTop_toTopOf="@id/csbv_home_title" />
+
 
 
     <TextView
