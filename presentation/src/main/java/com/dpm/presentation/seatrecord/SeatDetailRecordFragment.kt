@@ -11,6 +11,8 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.dpm.presentation.seatrecord.adapter.DetailRecordAdapter
+import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
+import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint

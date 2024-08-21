@@ -24,6 +24,8 @@ import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.seatrecord.adapter.RecordListItem
 import com.dpm.presentation.seatrecord.adapter.SeatRecordAdapter
+import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
+import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.ReviewActivity

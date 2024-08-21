@@ -1,4 +1,4 @@
-package com.dpm.presentation.seatrecord
+package com.dpm.presentation.seatrecord.dialog
 
 import android.os.Bundle
 import android.view.View

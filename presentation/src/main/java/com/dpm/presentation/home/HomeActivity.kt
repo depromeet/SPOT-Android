@@ -14,6 +14,8 @@ import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.home.adapter.StadiumAdapter
+import com.dpm.presentation.home.dialog.LevelDescriptionDialog
+import com.dpm.presentation.home.dialog.LevelupDialog
 import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
 import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration

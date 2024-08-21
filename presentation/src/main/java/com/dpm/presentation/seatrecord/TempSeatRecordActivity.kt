@@ -31,6 +31,8 @@ import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.seatrecord.adapter.DateMonthAdapter
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatrecord.adapter.MonthRecordAdapter
+import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
+import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.uiMapper.MonthReviewData
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
