@@ -80,8 +80,11 @@ class StadiumDetailViewModel @Inject constructor(
     }
 
     fun updateSort(sortBy: String) {
-        _reviewFilter.value = _reviewFilter.value.copy(sortBy = sortBy)
-        getBlockReviews(query = _reviewFilter.value)
+        if (_reviewFilter.value.sortBy != sortBy) {
+            reset = true
+            _reviewFilter.value = _reviewFilter.value.copy(sortBy = sortBy)
+            getBlockReviews(query = _reviewFilter.value)
+        }
     }
 
     fun updateRequestPathVariable(stadiumId: Int, blockCode: String) {
