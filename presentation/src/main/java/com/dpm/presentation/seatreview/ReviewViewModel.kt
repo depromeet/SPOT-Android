@@ -334,11 +334,13 @@ class ReviewViewModel @Inject constructor(
     fun postSeatReview() {
         viewModelScope.launch {
             val requestSeatReview = RequestSeatReview(
+                rowNumber = _selectedColumn.value.toIntOrNull(),
+                seatNumber = _selectedNumber.value.toIntOrNull(),
                 images = _preSignedUrlImages.value,
-                dateTime = _selectedDate.value,
                 good = _selectedGoodReview.value,
                 bad = _selectedBadReview.value,
                 content = detailReviewText.value,
+                dateTime = _selectedDate.value,
             )
             Timber.d("Selected Images: ${_preSignedUrlImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
@@ -347,12 +349,11 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Detail Review Text: ${detailReviewText.value}")
             Timber.d("Selected Stadium ID: ${_selectedStadiumId.value}")
             Timber.d("Selected Block ID: ${_selectedBlockId.value}")
+            Timber.d("Selected seatColumn: ${selectedColumn.value}")
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
-            Timber.d("Selected Number: ${selectedNumber.value}")
             _postReviewState.value = UiState.Loading
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
-                selectedNumber.value.toInt(),
                 requestSeatReview,
             )
                 .onSuccess {
@@ -361,7 +362,15 @@ class ReviewViewModel @Inject constructor(
                 }
                 .onFailure { t ->
                     if (t is HttpException) {
-                        Timber.e("POST REVIEW FAILURE : $t")
+                        val errorCode = t.code() // HTTP 상태 코드 (403)
+                        val errorBody = t.response()?.errorBody()?.string() // 응답 본문
+                        val errorHeaders = t.response()?.headers()?.toString() // 응답 헤더
+
+                        Timber.e("POST REVIEW FAILURE: HTTP $errorCode")
+                        Timber.e("Error Body: $errorBody")
+                        Timber.e("Error Headers: $errorHeaders")
+                    } else {
+                        Timber.e("POST REVIEW FAILURE: $t")
                     }
                 }
         }

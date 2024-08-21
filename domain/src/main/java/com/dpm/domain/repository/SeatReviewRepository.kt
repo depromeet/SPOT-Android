@@ -34,8 +34,7 @@ interface SeatReviewRepository {
     ): Result<Unit>
 
     suspend fun postSeatReview(
-        seatId: Int,
-        seatNumber: Int,
+        blockId: Int,
         seatReviewInfo: RequestSeatReview,
     ): Result<Unit>
 }
