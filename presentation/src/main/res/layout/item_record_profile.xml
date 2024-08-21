@@ -77,10 +77,10 @@
 
     <TextView
         android:id="@+id/tv_record_whole"
-        style="@style/TextAppearance.Spot.Subtitle01"
+        android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:text="@string/view_record_whole"
         android:textColor="@color/color_foreground_body_subtitle"
         app:layout_constraintEnd_toStartOf="@id/tv_record_count"
