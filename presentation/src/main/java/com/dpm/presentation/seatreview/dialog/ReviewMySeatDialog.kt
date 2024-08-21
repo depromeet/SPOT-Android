@@ -203,7 +203,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     }
 
     private fun makeSpotImageAppbar(message: String) {
-        val parentView = requireDialog().window?.decorView?.findViewById<View>(android.R.id.content)
+        val parentView = binding.root.rootView
         parentView?.let {
             SpotImageSnackBar.make(
                 it,
