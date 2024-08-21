@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+enum class Sort {
+    DATE_TIME, LIKES_COUNT;
+}
+
 @HiltViewModel
 class StadiumDetailViewModel @Inject constructor(
     private val viewfinderRepository: ViewfinderRepository
@@ -42,7 +46,7 @@ class StadiumDetailViewModel @Inject constructor(
             year = null,
             month = null,
             cursor = null,
-            sortBy = "DATE_TIME",
+            sortBy = Sort.DATE_TIME.name,
             size = 20
         )
     )

@@ -21,6 +21,7 @@ import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.request.viewfinder.RequestBlockReviewQuery
 import com.depromeet.presentation.R
 import com.dpm.presentation.extension.noRippleClickable
+import com.dpm.presentation.viewfinder.viewmodel.Sort
 
 @Composable
 fun StadiumViewReviewHeader(
@@ -68,29 +69,26 @@ fun StadiumViewReviewHeader(
                 Text(
                     text = stringResource(id = R.string.viewfinder_latest),
                     style = SpotTheme.typography.caption01,
-                    color = when(reviewQuery.sortBy) {
-                        "DATE_TIME" -> SpotTheme.colors.foregroundHeading
-                        "LIKE_COUNT" -> SpotTheme.colors.foregroundCaption
+                    color = when (reviewQuery.sortBy) {
+                        Sort.DATE_TIME.name -> SpotTheme.colors.foregroundHeading
+                        Sort.LIKES_COUNT.name -> SpotTheme.colors.foregroundCaption
                         else -> SpotTheme.colors.foregroundCaption
                     },
                     modifier = Modifier.noRippleClickable {
-//                        if (reviewQuery.sortBy != "DATE_TIME") onClickDateTime("DATE_TIME")
-                        onClickDateTime("DATE_TIME")
+                        if (reviewQuery.sortBy != Sort.DATE_TIME.name) onClickDateTime(Sort.DATE_TIME.name)
                     }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = stringResource(id = R.string.viewfinder_agree),
                     style = SpotTheme.typography.caption01,
-                    color = when(reviewQuery.sortBy) {
-                        "DATE_TIME" -> SpotTheme.colors.foregroundCaption
-                        "LIKE_COUNT" -> SpotTheme.colors.foregroundHeading
+                    color = when (reviewQuery.sortBy) {
+                        Sort.DATE_TIME.name -> SpotTheme.colors.foregroundCaption
+                        Sort.LIKES_COUNT.name -> SpotTheme.colors.foregroundHeading
                         else -> SpotTheme.colors.foregroundCaption
                     },
                     modifier = Modifier.noRippleClickable {
-                        // 서버 공감순 추가 시 진행
-                        // if (reviewQuery.sortBy != "LIKE_COUNT") onClickDateTime("LIKE_COUNT")
-                        onClickLikeCount("DATE_TIME")
+                        if (reviewQuery.sortBy != Sort.LIKES_COUNT.name) onClickLikeCount(Sort.LIKES_COUNT.name)
                     }
                 )
             }
