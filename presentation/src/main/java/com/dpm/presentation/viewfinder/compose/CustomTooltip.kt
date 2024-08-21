@@ -29,6 +29,7 @@ import com.depromeet.presentation.R
 fun CustomTooltip(
     triangleWidth: Dp = 12.dp,
     triangleHeight: Dp = 5.dp,
+    content: String,
     reviewFilter: RequestBlockReviewQuery,
     modifier: Modifier = Modifier
 ) {
@@ -72,7 +73,7 @@ fun CustomTooltip(
                 .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.viewfinder_tooltip_description),
+                    text = content,
                     style = SpotTheme.typography.label12,
                     color = SpotTheme.colors.foregroundWhite,
                 )
@@ -85,28 +86,14 @@ fun CustomTooltip(
 @Composable
 private fun CustomTooltipPreview() {
     CustomTooltip(
+        content = stringResource(id = R.string.viewfinder_tooltip_description),
         reviewFilter = RequestBlockReviewQuery(
             rowNumber = null,
             seatNumber = null,
             year = null,
             month = null,
-            page = 0,
-            size = 10
-        ),
-
-        )
-}
-
-@Preview
-@Composable
-private fun CustomTooltipSeatPreview() {
-    CustomTooltip(
-        reviewFilter = RequestBlockReviewQuery(
-            rowNumber = 1,
-            seatNumber = 12,
-            year = null,
-            month = null,
-            page = 0,
+            cursor = null,
+            sortBy = "DATE_TIME",
             size = 10
         ),
     )

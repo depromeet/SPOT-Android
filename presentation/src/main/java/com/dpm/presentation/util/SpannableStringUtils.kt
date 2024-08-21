@@ -32,4 +32,22 @@ class SpannableStringUtils(
         )
         return span
     }
+
+    fun toColorSpanMulti(
+        @ColorRes color: Int,
+        text: CharSequence,
+        ranges: List<Pair<Int, Int>>
+    ): SpannableStringBuilder {
+        val span = SpannableStringBuilder(text)
+        ranges.forEach { range ->
+            span.setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(context, color)),
+                range.first,
+                range.second,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        return span
+    }
 }

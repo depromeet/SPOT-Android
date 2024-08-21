@@ -7,7 +7,8 @@ data class RequestBlockReviewQueryDto(
     val seatNumber: Int? = null,
     val year: Int? = null,
     val month: Int? = null,
-    val page: Int = 0,
+    val cursor: String? = null,
+    val sortBy: String = "DATE_TIME",
     val size: Int = 20
 )
 
@@ -16,6 +17,7 @@ fun RequestBlockReviewQuery.toBlockReviewRequestQueryDto() = RequestBlockReviewQ
     seatNumber = seatNumber,
     year = year,
     month = month,
-    page = page,
+    cursor = cursor,
+    sortBy = sortBy,
     size = size
 )

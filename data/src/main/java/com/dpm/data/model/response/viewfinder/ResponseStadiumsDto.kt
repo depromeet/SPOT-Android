@@ -23,8 +23,6 @@ data class ResponseStadiumsDto(
         val id: Int,
         @SerialName("alias")
         val alias: String,
-        @SerialName("backgroundColor")
-        val backgroundColor: String,
         @SerialName("fontColor")
         val fontColor: String,
     )
@@ -42,7 +40,6 @@ fun ResponseStadiumsDto.ResponseHomeTeamsDto.toHomeTeamsResponse() =
     ResponseStadiums.ResponseHomeTeams(
         id = id,
         alias = alias,
-        backgroundColor = backgroundColor,
         fontColor = fontColor
     )
 

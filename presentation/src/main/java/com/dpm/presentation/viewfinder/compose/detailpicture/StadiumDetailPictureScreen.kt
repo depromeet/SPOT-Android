@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -52,8 +53,14 @@ fun StadiumDetailPictureScreen(
                     initialPage = initPage
                 )
 
+                var pageIndex by remember {
+                    mutableStateOf(0)
+                }
+
                 LaunchedEffect(key1 = pagerState) {
                     snapshotFlow { pagerState.currentPage }.collect {
+                        pageIndex = it
+                        stadiumDetailViewModel.updateCurrentIndex(it)
                         if (visited[it]) return@collect
 
                         if (it == initPage) {
@@ -71,15 +78,12 @@ fun StadiumDetailPictureScreen(
                     reviews = uiState.reviews,
                     visited = visited,
                     position = reviewIndex,
-                    pageState = uiState.pageState,
+                    pageState = uiState.hasNext,
                     pagerState = pagerState,
+                    pageIndex = pageIndex,
                     bottomPadding = bottomPadding,
                     modifier = modifier,
-                    onLoadPaging = {
-                        stadiumDetailViewModel.updateQueryPage { query ->
-                            stadiumDetailViewModel.getBlockReviews(query = query)
-                        }
-                    },
+                    onLoadPaging = stadiumDetailViewModel::getBlockReviews,
                 )
             }
 

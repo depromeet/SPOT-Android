@@ -16,16 +16,10 @@ data class ResponseBlockReviewDto(
     val topReviewImages: List<ResponseTopReviewImagesDto>,
     @SerialName("totalElements")
     val totalElements: Long,
-    @SerialName("totalPages")
-    val totalPages: Int,
-    @SerialName("number")
-    val number: Int,
-    @SerialName("size")
-    val size: Int,
-    @SerialName("first")
-    val first: Boolean,
-    @SerialName("last")
-    val last: Boolean,
+    @SerialName("nextCursor")
+    val nextCursor: String?,
+    @SerialName("hasNext")
+    val hasNext: Boolean,
     @SerialName("filter")
     val filter: ResponseReviewFilterDto
 ) {
@@ -179,11 +173,8 @@ fun ResponseBlockReviewDto.toBlockReviewResponse() = ResponseBlockReview(
     reviews = reviews.map { it.toReviewResponse() },
     topReviewImages = topReviewImages.map { it.toTopReviewImagesResponse() },
     totalElements = totalElements,
-    totalPages = totalPages,
-    number = number,
-    size = size,
-    first = first,
-    last = last,
+    nextCursor = nextCursor ?: "",
+    hasNext = hasNext,
     filter = filter.toReviewFilterResponse()
 )
 
@@ -267,7 +258,7 @@ fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewSectionDto.toReviewSe
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewBlockDto.toReviewBlockResponse() =
     ResponseBlockReview.ResponseReview.ResponseReviewBlock(
         id = id,
-        code = code
+        code = code.replace("w", "")
     )
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewRowDto.toReviewRowResponse() =

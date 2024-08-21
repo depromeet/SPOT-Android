@@ -25,7 +25,8 @@ interface ViewfinderService {
         @Query("seatNumber") seatNumber: Int?,
         @Query("year") year: Int?,
         @Query("month") month: Int?,
-        @Query("page") page: Int?,
+        @Query("cursor") cursor: String?,
+        @Query("sortBy") sortBy: String?,
         @Query("size") size: Int?,
     ): ResponseBlockReviewDto
 

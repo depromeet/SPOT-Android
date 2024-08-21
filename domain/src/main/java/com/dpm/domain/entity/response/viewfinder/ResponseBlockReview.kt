@@ -17,6 +17,7 @@ fun String.base(blockCode: String): BASE {
                         + listOf("205","206","207","208") // 1루 오렌지석
                         + listOf("107","108","109","209","210","211") // 1루 블루석
                         + listOf("110","111","212","213") // 1루 테이블석
+                        + listOf("101w", "102w", "109w") // 1루 휠체어석
                 -> BASE.Base1
                 blockCode in listOf("exciting1", "exciting3", "premium") -> BASE.Nothing
                 else -> BASE.Base3
@@ -32,53 +33,15 @@ data class ResponseBlockReview(
     val reviews: List<ResponseReview> = emptyList(),
     val topReviewImages: List<ResponseTopReviewImages> = emptyList(),
     val totalElements: Long = 0,
-    val totalPages: Int = 0,
-    val number: Int = 0,
-    val size: Int = 0,
-    val first: Boolean = false,
-    val last: Boolean = false,
+    val nextCursor: String = "",
+    val hasNext: Boolean = false,
     val filter: ResponseReviewFilter = ResponseReviewFilter()
 ) {
     data class ResponseLocation(
         val stadiumName: String = "",
         val sectionName: String = "",
         val blockCode: String = ""
-    ) {
-        /**
-         * @example : 오렌지석•207블록
-         */
-        fun formattedStadiumBlock(): String {
-            val sectionNameSplits = sectionName.split("\n")
-            var section = if (sectionNameSplits.size >= 2) {
-                sectionNameSplits[0] + " " + sectionNameSplits[1]
-            } else {
-                sectionName.trim()
-            }
-            var base = when (stadiumName.base(blockCode)) {
-                BASE.Base1 -> "1루•"
-                BASE.Base3 -> "3루•"
-                else -> ""
-            }
-
-            return base + section + "•" + blockCode + "블록"
-        }
-
-        fun toTitle(): String {
-            val sectionNameSplits = sectionName.split("\n")
-            var section = if (sectionNameSplits.size >= 2) {
-                sectionNameSplits[0] + " " + sectionNameSplits[1]
-            } else {
-                sectionName.trim()
-            }
-            var base = when (stadiumName.base(blockCode)) {
-                BASE.Base1 -> " 1루"
-                BASE.Base3 -> " 3루"
-                else -> ""
-            }
-
-            return "$stadiumName$base $section"
-        }
-    }
+    )
 
     data class ResponseKeyword(
         val content: String = "",
@@ -151,17 +114,6 @@ data class ResponseBlockReview(
             val dateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME)
             return dateTime.format(formatter)
         }
-
-        /**
-         * @example : 207블록 1열 12번
-         */
-        fun formattedNumber(): String {
-            var numberString = ""
-            if (block.code.isNotEmpty()) numberString += "${block.code}블록 "
-            if (row.number > 0) numberString += "${row.number}열 "
-            if (seat.seatNumber > 0) numberString += "${seat.seatNumber}번"
-            return numberString
-        }
     }
 
     data class ResponseTopReviewImages(
@@ -170,18 +122,7 @@ data class ResponseBlockReview(
         val blockCode: String = "",
         val rowNumber: Int = 0,
         val seatNumber: Int = 0,
-    ) {
-        /**
-         * @example : 207블록 1열 12번
-         */
-        fun formattedNumber(): String {
-            var numberString = ""
-            if (blockCode.isNotEmpty()) numberString += "${blockCode}블록 "
-            if (rowNumber > 0) numberString += "${rowNumber}열 "
-            if (seatNumber > 0) numberString += "${seatNumber}번"
-            return numberString
-        }
-    }
+    )
 
     data class ResponseReviewFilter(
         val rowNumber: Int = 0,
