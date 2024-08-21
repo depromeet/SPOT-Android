@@ -6,12 +6,8 @@ import com.dpm.domain.entity.response.viewfinder.base
 data class ResponseMySeatRecord(
     val profile: MyProfileResponse = MyProfileResponse(),
     val reviews: List<ReviewResponse> = emptyList(),
-    val totalElements: Int = 0,
-    val totalPages: Int = 0,
-    val number: Int = 0,
-    val size: Int = 0,
-    val first: Boolean = true,
-    val last: Boolean = true,
+    val nextCursor : String ?= null,
+    val hasNext : Boolean = false,
     val isLoading: Boolean = true,
 ) {
     data class MyProfileResponse(
@@ -57,7 +53,7 @@ data class ResponseMySeatRecord(
 
         private fun formattedSectionName(): String {
             val sectionNameSplits = sectionName.split("\n")
-            var section = if (sectionNameSplits.size >= 2) {
+            val section = if (sectionNameSplits.size >= 2) {
                 sectionNameSplits[0] + " " + sectionNameSplits[1]
             } else {
                 sectionName.trim()

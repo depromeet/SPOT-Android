@@ -13,21 +13,24 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import com.depromeet.presentation.R
+import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
-import com.depromeet.presentation.R
-import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
-import com.dpm.presentation.extension.loadAndCircle
+import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.seatrecord.adapter.RecordListItem
 import com.dpm.presentation.seatrecord.adapter.SeatRecordAdapter
+import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
+import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.ReviewActivity
 import com.dpm.presentation.util.CalendarUtil
+import com.dpm.presentation.util.Utils
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,6 +73,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun initView() {
+        initViewStatusBar()
         viewModel.getReviewDate()
         viewModel.getLocalProfile()
         initRecordAdapter()
@@ -107,6 +111,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         observeReviews()
         observeEvents()
         observeProfile()
+    }
+
+    private fun initViewStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+            setBlackSystemBarIconColor(window)
+        }
     }
 
     private fun initRecordAdapter() {
@@ -157,7 +168,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     val scrollTop = !binding.rvSeatRecord.canScrollVertically(-1)
                     val scrollBottom = !binding.rvSeatRecord.canScrollVertically(1)
                     if (scrollBottom && !isLoading && viewModel.reviews.value is UiState.Success) {
-                        if (!(viewModel.reviews.value as UiState.Success).data.last) {
+                        if ((viewModel.reviews.value as UiState.Success).data.hasNext) {
                             isLoading = true
                             viewModel.loadNextSeatRecords()
                         }
@@ -279,7 +290,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     "모두를 응원하는 Lv.", profile.level, " ${profile.levelTitle}"
                 )
             }
-            ivRecordProfile.loadAndCircle(profile.profileImage)
+            ivRecordProfile.loadAndCircleProfile(profile.profileImage)
             tvRecordNickname.text = profile.nickname
             tvRecordCount.text = "0"
             "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
@@ -344,7 +355,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             message = message,
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
-            iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 20
         ).show()
     }
 

@@ -1,4 +1,4 @@
-package com.dpm.presentation.home
+package com.dpm.presentation.home.dialog
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -78,7 +78,9 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                 pickSingleImageLauncher.launch("image/*")
             }
             clProfileEditRemove.setOnClickListener {
-                ProfileDeleteConfirmDialog().show(parentFragmentManager, ProfileDeleteConfirmDialog.TAG)
+                ProfileDeleteConfirmDialog().show(parentFragmentManager,
+                    ProfileDeleteConfirmDialog.TAG
+                )
                 dismiss()
             }
         }

@@ -1,6 +1,7 @@
 package com.dpm.designsystem
 
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.depromeet.designsystem.R
@@ -14,7 +15,6 @@ class SpotImageSnackBar(
     private val messageColor: Int,
     private val icon: Int,
     private val iconColor: Int,
-    private val marginHorizontal: Int,
     private val marginBottom: Int,
 ) {
     companion object {
@@ -24,7 +24,6 @@ class SpotImageSnackBar(
             messageColor: Int = R.color.white,
             icon: Int = R.drawable.ic_alert_circle,
             iconColor: Int = R.color.white,
-            marginHorizontal: Int = 16,
             marginBottom: Int = 94,
         ) = SpotImageSnackBar(
             view,
@@ -32,7 +31,6 @@ class SpotImageSnackBar(
             messageColor,
             icon,
             iconColor,
-            marginHorizontal,
             marginBottom
         )
     }
@@ -50,14 +48,18 @@ class SpotImageSnackBar(
     private fun initView() {
         with(snackbarLayout) {
             removeAllViews()
-            setPadding(
-                marginHorizontal.dpToPx(context),
-                0,
-                marginHorizontal.dpToPx(context),
-                marginBottom.dpToPx(context)
-            )
+            setPadding(0, 0, 0, marginBottom.dpToPx(context))
             setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
             addView(binding.root, 0)
+
+            setOnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_UP) {
+                    v.performClick()
+                    true
+                } else {
+                    false
+                }
+            }
         }
         with(binding) {
 

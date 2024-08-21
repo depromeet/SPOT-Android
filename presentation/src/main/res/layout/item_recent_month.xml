@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
         style="@style/TextAppearance.Spot.Title02"
         android:textColor="@color/color_foreground_heading"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,32 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rect_transparent_black03_fill_60"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="14dp">
+    android:background="@android:color/transparent">
 
-    <ImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="contentDescription"
-        tools:src="@drawable/ic_alert_circle" />
-
-    <TextView
-        android:id="@+id/tv_description"
-        style="@style/TextAppearance.Spot.Label08"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/rect_transparent_black03_fill_60"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="14dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/color_foreground_white"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="스크랩이 잠겨있어요🫢 곧 업데이트 예정이에요" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="contentDescription"
+            tools:src="@drawable/ic_alert_circle" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            style="@style/TextAppearance.Spot.Label08"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/color_foreground_white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="스크랩이 잠겨있어요🫢 곧 업데이트 예정이에요" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

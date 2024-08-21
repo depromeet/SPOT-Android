@@ -5,13 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="160dp">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/rect_59ffffff_fill_20"
+        android:elevation="8dp"
+        android:translationZ="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/csbv_record_title"
+        app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
+        app:layout_constraintStart_toStartOf="@id/csbv_record_title"
+        app:layout_constraintTop_toTopOf="@id/csbv_record_title" />
+
     <com.dpm.presentation.home.customview.CustomSpeechBubbleView
         android:id="@+id/csbv_record_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="55dp"
-        android:elevation="4dp"
+        android:elevation="12dp"
         android:paddingRight="10dp"
         app:backgroundColor="@color/color_background_white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,12 +36,13 @@
         app:textColor="@color/color_foreground_body_sebtext"
         tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
+
     <ImageView
         android:id="@+id/iv_record_profile"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/circle_white_fill"
+        android:background="@drawable/circle_gray50_fill_gray200_stroke"
         android:elevation="1dp"
         android:src="@drawable/ic_default_profile"
         app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
@@ -66,10 +79,10 @@
 
     <TextView
         android:id="@+id/tv_record_whole"
-        style="@style/TextAppearance.Spot.Subtitle01"
+        android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:text="@string/view_record_whole"
         android:textColor="@color/color_foreground_body_subtitle"
         app:layout_constraintEnd_toStartOf="@id/tv_record_count"

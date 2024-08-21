@@ -1,4 +1,4 @@
-package com.dpm.presentation.home
+package com.dpm.presentation.home.dialog
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

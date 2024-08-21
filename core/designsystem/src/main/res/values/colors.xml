@@ -133,4 +133,5 @@
 
     <!-- Etc -->
     <color name="color_80000000">#80000000</color>
+    <color name="color_59ffffff">#59FFFFFF</color>
 </resources>
