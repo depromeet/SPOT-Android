@@ -355,7 +355,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             message = message,
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
-            iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 20
         ).show()
     }
 
