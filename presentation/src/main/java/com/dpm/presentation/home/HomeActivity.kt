@@ -71,10 +71,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 is UiState.Empty -> Unit
                 is UiState.Failure -> {
                     makeSpotImageAppbar("경기장 정보를 불러오는데 실패하였습니다.")
+                    stadiumAdapter.submitList(emptyList())
                     setStadiumShimmer(true)
                 }
 
                 is UiState.Loading -> {
+                    stadiumAdapter.submitList(emptyList())
                     setStadiumShimmer(true)
                 }
 
@@ -175,12 +177,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun setStadiumShimmer(isLoading: Boolean) = with(binding) {
         if (isLoading) {
             shimmerHomeStadium.startShimmer()
-            rvHomeStadium.visibility = View.INVISIBLE
             shimmerHomeStadium.visibility = View.VISIBLE
 
         } else {
             shimmerHomeStadium.stopShimmer()
-            rvHomeStadium.visibility = View.VISIBLE
             shimmerHomeStadium.visibility = View.GONE
 
         }
@@ -195,10 +195,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
         tvHomeTitle.text = data.levelTitle
         ivHomeCharacter.load(data.mascotImageUrl)
-        if(data.reviewCntToLevelup == 0){
-            csbvHomeTitle.setTextPart("내가 바로 이 구역 직관왕!",number = null, suffix = null)
-        }else{
-            csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup,"장 더 올리면 레벨업!")
+        if (data.reviewCntToLevelup == 0) {
+            csbvHomeTitle.setTextPart("내가 바로 이 구역 직관왕!", number = null, suffix = null)
+        } else {
+            csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup, "장 더 올리면 레벨업!")
         }
 
     }
@@ -227,7 +227,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             message = message,
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
-            iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 94
         ).show()
     }
 }

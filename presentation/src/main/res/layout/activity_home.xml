@@ -157,7 +157,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
-        android:paddingStart="20dp"
+        android:paddingStart="100dp"
         app:layout_constraintBottom_toBottomOf="@id/rv_home_stadium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -168,21 +168,40 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <include layout="@layout/item_stadium_small_selection" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp">
+                <include layout="@layout/item_stadium_small_selection" />
+            </LinearLayout>
 
-            <include layout="@layout/item_stadium_small_selection" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp">
+                <include layout="@layout/item_stadium_small_selection" />
+            </LinearLayout>
 
-            <include layout="@layout/item_stadium_small_selection" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp">
+                <include layout="@layout/item_stadium_small_selection" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp">
+                <include layout="@layout/item_stadium_small_selection" />
+            </LinearLayout>
 
-            <include layout="@layout/item_stadium_small_selection" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp">
+                <include layout="@layout/item_stadium_small_selection" />
+            </LinearLayout>
 
-            <include layout="@layout/item_stadium_small_selection" />
-
-            <include layout="@layout/item_stadium_small_selection" />
-
-            <include layout="@layout/item_stadium_small_selection" />
-
-            <include layout="@layout/item_stadium_small_selection" />
         </LinearLayout>
 
 
@@ -194,6 +213,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
