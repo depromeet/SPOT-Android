@@ -13,6 +13,8 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
@@ -291,7 +293,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     "모두를 응원하는 Lv.", profile.level, " ${profile.levelTitle}"
                 )
             }
-            ivRecordProfile.loadAndCircle(profile.profileImage)
+            ivRecordProfile.clipToOutline = true
+            ivRecordProfile.load(profile.profileImage) {
+                placeholder(com.depromeet.designsystem.R.drawable.skeleton_gradient)
+                error(com.depromeet.designsystem.R.drawable.ic_default_profile)
+                transformations(CircleCropTransformation())
+            }
             tvRecordNickname.text = profile.nickname
             tvRecordCount.text = "0"
             "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
