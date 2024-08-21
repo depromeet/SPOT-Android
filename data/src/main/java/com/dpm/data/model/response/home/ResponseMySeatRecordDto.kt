@@ -12,7 +12,7 @@ data class ResponseMySeatRecordDto(
     @SerialName("reviews")
     val reviews: List<ResponseReviewWrapperDto>,
     @SerialName("nextCursor")
-    val NextCursor : String?,
+    val nextCursor : String?,
     @SerialName("hasNext")
     val hasNext : Boolean,
     @SerialName("filter")
@@ -164,7 +164,7 @@ data class ResponseMySeatRecordDto(
         fun ResponseMySeatRecordDto.toMySeatRecordResponse() = ResponseMySeatRecord(
             profile = memberInfoOnMyReview.toMyProfileResponse(),
             reviews = reviews.map { it.baseReview.toReviewResponse() },
-            nextCursor = NextCursor,
+            nextCursor = nextCursor,
             hasNext = hasNext,
             isLoading = false
         )
