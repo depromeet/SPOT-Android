@@ -3,7 +3,6 @@ package com.dpm.presentation.seatreview.dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
-import android.util.Log
 import android.view.View
 import android.view.View.FOCUS_DOWN
 import android.view.View.FOCUS_UP
@@ -212,7 +211,6 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                 icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
                 iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
                 marginBottom = 96,
-                marginHorizontal = 26,
             ).show()
         }
     }

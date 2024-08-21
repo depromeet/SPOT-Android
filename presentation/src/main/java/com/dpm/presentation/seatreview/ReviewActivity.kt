@@ -369,11 +369,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             when {
                 !(isSelectedGoodBtnFilled || isSelectedBadBtnFilled) && (isSelectedBlockFilled || (isSelectedColumnFilled || isSelectedNumberFilled)) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
-                    makeSpotImageAppbar("내 시야 후기를 등록해주세요", 67)
+                    makeSpotImageAppbar("내 시야 후기를 등록해주세요")
                 }
                 !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
-                    makeSpotImageAppbar("좌석을 선택해주세요", 88)
+                    makeSpotImageAppbar("좌석을 선택해주세요")
                 }
                 ((!isSelectedGoodBtnFilled && !isSelectedBadBtnFilled) || !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled))) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
@@ -446,14 +446,14 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun makeSpotImageAppbar(message: String, marginHorizontal: Int) {
+    private fun makeSpotImageAppbar(message: String) {
         SpotImageSnackBar.make(
             view = binding.root,
             message = message,
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
-            marginHorizontal = marginHorizontal,
+            marginBottom = 96,
         ).show()
     }
 }
