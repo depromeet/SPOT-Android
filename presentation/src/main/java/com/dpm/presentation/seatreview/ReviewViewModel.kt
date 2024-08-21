@@ -362,14 +362,6 @@ class ReviewViewModel @Inject constructor(
                 }
                 .onFailure { t ->
                     if (t is HttpException) {
-                        val errorCode = t.code() // HTTP 상태 코드 (403)
-                        val errorBody = t.response()?.errorBody()?.string() // 응답 본문
-                        val errorHeaders = t.response()?.headers()?.toString() // 응답 헤더
-
-                        Timber.e("POST REVIEW FAILURE: HTTP $errorCode")
-                        Timber.e("Error Body: $errorBody")
-                        Timber.e("Error Headers: $errorHeaders")
-                    } else {
                         Timber.e("POST REVIEW FAILURE: $t")
                     }
                 }
