@@ -37,6 +37,7 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.dpm.presentation.extension.noRippleClickable
 import com.dpm.presentation.mapper.toKeyword
+import com.dpm.presentation.util.toBlockContent
 import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
 import com.dpm.presentation.viewfinder.compose.LevelCard
 
@@ -82,7 +83,7 @@ fun DetailContentLayer(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = review.formattedNumber(),
+            text = review.toBlockContent(),
             style = SpotTheme.typography.subtitle02,
             color = SpotTheme.colors.foregroundWhite,
         )

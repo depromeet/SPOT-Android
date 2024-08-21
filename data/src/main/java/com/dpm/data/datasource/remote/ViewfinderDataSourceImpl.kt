@@ -32,7 +32,8 @@ class ViewfinderDataSourceImpl @Inject constructor(
             queryParam.seatNumber,
             queryParam.year,
             queryParam.month,
-            queryParam.page,
+            queryParam.cursor,
+            queryParam.sortBy,
             queryParam.size
         )
     }

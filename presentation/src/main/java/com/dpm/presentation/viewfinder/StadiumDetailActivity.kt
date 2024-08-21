@@ -13,6 +13,7 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.dpm.presentation.home.HomeActivity
+import com.dpm.presentation.util.toEmptyBlock
 import com.dpm.presentation.viewfinder.compose.StadiumDetailScreen
 import com.dpm.presentation.viewfinder.dialog.ReportDialog
 import com.dpm.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
@@ -54,7 +55,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         binding.composeView.setContent {
             MaterialTheme {
                 StadiumDetailScreen(
-                    blockNumber = viewModel.blockCode,
+                    emptyBlockName = toEmptyBlock(viewModel.stadiumId, viewModel.blockCode),
                     viewModel = viewModel,
                     onClickReviewPicture = { reviewContent, index, title ->
                         startToStadiumDetailPictureFragment(reviewContent, index, title)

@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.request.viewfinder.RequestBlockReviewQuery
 import com.depromeet.presentation.R
+import com.dpm.presentation.extension.noRippleClickable
+import com.dpm.presentation.viewfinder.viewmodel.Sort
 
 @Composable
 fun StadiumViewReviewHeader(
@@ -28,6 +30,8 @@ fun StadiumViewReviewHeader(
     modifier: Modifier = Modifier,
     onCancel: () -> Unit,
     onClickMonthly: () -> Unit,
+    onClickDateTime: (sortBy: String) -> Unit,
+    onClickLikeCount: (sortBy: String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -61,11 +65,33 @@ fun StadiumViewReviewHeader(
                 onClick = onClickMonthly,
                 onCancel = onCancel
             )
-            Text(
-                text = stringResource(id = R.string.viewfinder_latest),
-                style = SpotTheme.typography.caption01,
-                color = SpotTheme.colors.foregroundCaption
-            )
+            Row {
+                Text(
+                    text = stringResource(id = R.string.viewfinder_latest),
+                    style = SpotTheme.typography.caption01,
+                    color = when (reviewQuery.sortBy) {
+                        Sort.DATE_TIME.name -> SpotTheme.colors.foregroundHeading
+                        Sort.LIKES_COUNT.name -> SpotTheme.colors.foregroundCaption
+                        else -> SpotTheme.colors.foregroundCaption
+                    },
+                    modifier = Modifier.noRippleClickable {
+                        if (reviewQuery.sortBy != Sort.DATE_TIME.name) onClickDateTime(Sort.DATE_TIME.name)
+                    }
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = stringResource(id = R.string.viewfinder_agree),
+                    style = SpotTheme.typography.caption01,
+                    color = when (reviewQuery.sortBy) {
+                        Sort.DATE_TIME.name -> SpotTheme.colors.foregroundCaption
+                        Sort.LIKES_COUNT.name -> SpotTheme.colors.foregroundHeading
+                        else -> SpotTheme.colors.foregroundCaption
+                    },
+                    modifier = Modifier.noRippleClickable {
+                        if (reviewQuery.sortBy != Sort.LIKES_COUNT.name) onClickLikeCount(Sort.LIKES_COUNT.name)
+                    }
+                )
+            }
         }
         Spacer(modifier = Modifier.height(16.dp))
     }
@@ -83,12 +109,15 @@ private fun StadiumViewReviewHeaderPreview() {
                 seatNumber = null,
                 year = null,
                 month = null,
-                page = 0,
+                cursor = null,
+                sortBy = "DATE_TIME",
                 size = 10
             ),
             reviewCount = 100,
             onClickMonthly = {},
-            onCancel = {}
+            onCancel = {},
+            onClickDateTime = {},
+            onClickLikeCount = {}
         )
     }
 }

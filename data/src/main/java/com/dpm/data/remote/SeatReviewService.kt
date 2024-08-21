@@ -47,10 +47,9 @@ interface SeatReviewService {
         @Body image: RequestBody,
     )
 
-    @POST("/api/v1/blocks/{blockId}/seats/{seatNumber}/reviews")
+    @POST("/api/v1/blocks/{blockId}/reviews")
     suspend fun postSeatReview(
         @Path("blockId") blockId: Int,
-        @Path("seatNumber") seatNumber: Int,
         @Body requestPostSignupDto: RequestSeatReviewDto,
     )
 }

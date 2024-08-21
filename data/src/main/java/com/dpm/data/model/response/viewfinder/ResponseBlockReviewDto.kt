@@ -16,16 +16,10 @@ data class ResponseBlockReviewDto(
     val topReviewImages: List<ResponseTopReviewImagesDto>,
     @SerialName("totalElements")
     val totalElements: Long,
-    @SerialName("totalPages")
-    val totalPages: Int,
-    @SerialName("number")
-    val number: Int,
-    @SerialName("size")
-    val size: Int,
-    @SerialName("first")
-    val first: Boolean,
-    @SerialName("last")
-    val last: Boolean,
+    @SerialName("nextCursor")
+    val nextCursor: String?,
+    @SerialName("hasNext")
+    val hasNext: Boolean,
     @SerialName("filter")
     val filter: ResponseReviewFilterDto
 ) {
@@ -64,7 +58,7 @@ data class ResponseBlockReviewDto(
         @SerialName("row")
         val row: ResponseReviewRowDto,
         @SerialName("seat")
-        val seat: ResponseReviewSeatDto,
+        val seat: ResponseReviewSeatDto?,
         @SerialName("dateTime")
         val dateTime: String,
         @SerialName("content")
@@ -140,9 +134,9 @@ data class ResponseBlockReviewDto(
         @Serializable
         data class ResponseReviewSeatDto(
             @SerialName("id")
-            val id: Int,
+            val id: Int?,
             @SerialName("seatNumber")
-            val seatNumber: Int,
+            val seatNumber: Int?,
         )
     }
 
@@ -157,7 +151,7 @@ data class ResponseBlockReviewDto(
         @SerialName("rowNumber")
         val rowNumber: Int,
         @SerialName("seatNumber")
-        val seatNumber: Int,
+        val seatNumber: Int?,
     )
 
     @Serializable
@@ -179,11 +173,8 @@ fun ResponseBlockReviewDto.toBlockReviewResponse() = ResponseBlockReview(
     reviews = reviews.map { it.toReviewResponse() },
     topReviewImages = topReviewImages.map { it.toTopReviewImagesResponse() },
     totalElements = totalElements,
-    totalPages = totalPages,
-    number = number,
-    size = size,
-    first = first,
-    last = last,
+    nextCursor = nextCursor ?: "",
+    hasNext = hasNext,
     filter = filter.toReviewFilterResponse()
 )
 
@@ -200,7 +191,7 @@ fun ResponseBlockReviewDto.ResponseTopReviewImagesDto.toTopReviewImagesResponse(
         reviewId = reviewId,
         blockCode = blockCode,
         rowNumber = rowNumber,
-        seatNumber = seatNumber
+        seatNumber = seatNumber ?: 0
     )
 
 fun ResponseBlockReviewDto.ResponseReviewFilterDto.toReviewFilterResponse() =
@@ -219,7 +210,7 @@ fun ResponseBlockReviewDto.ResponseReviewDto.toReviewResponse() =
         section = section.toReviewSectionResponse(),
         block = block.toReviewBlockResponse(),
         row = row.toReviewRowResponse(),
-        seat = seat.toReviewSeatResponse(),
+        seat = seat?.toReviewSeatResponse() ?: ResponseBlockReview.ResponseReview.ResponseReviewSeat(),
         dateTime = dateTime,
         content = content ?: "",
         images = images.map { it.toReviewImageResponse() },
@@ -267,7 +258,7 @@ fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewSectionDto.toReviewSe
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewBlockDto.toReviewBlockResponse() =
     ResponseBlockReview.ResponseReview.ResponseReviewBlock(
         id = id,
-        code = code
+        code = code.replace("w", "")
     )
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewRowDto.toReviewRowResponse() =
@@ -278,7 +269,7 @@ fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewRowDto.toReviewRowRes
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewSeatDto.toReviewSeatResponse() =
     ResponseBlockReview.ResponseReview.ResponseReviewSeat(
-        id = id,
-        seatNumber = seatNumber
+        id = id ?: 0,
+        seatNumber = seatNumber ?: 0
     )
 

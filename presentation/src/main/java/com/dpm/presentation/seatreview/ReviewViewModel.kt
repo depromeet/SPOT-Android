@@ -1,6 +1,7 @@
 package com.dpm.presentation.seatreview
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
@@ -10,6 +11,7 @@ import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumName
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
+import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,6 +71,15 @@ class ReviewViewModel @Inject constructor(
     private val _selectedNumber = MutableStateFlow("")
     val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
 
+    val userSeatState = MutableLiveData<ValidSeat>()
+
+    private val _sectionItemSelected = MutableStateFlow(false)
+    val sectionItemSelected: StateFlow<Boolean> = _sectionItemSelected
+
+    fun updateItemSelected(isSelected: Boolean) {
+        _sectionItemSelected.value = isSelected
+    }
+
     // 서버 통신
 
     private val _stadiumNameState = MutableStateFlow<UiState<List<ResponseStadiumName>>>(UiState.Empty)
@@ -81,7 +92,6 @@ class ReviewViewModel @Inject constructor(
     val selectedSectionId: StateFlow<Int> = _selectedSectionId.asStateFlow()
 
     private val _selectedBlockId = MutableStateFlow(0)
-    val selectedBlockId: StateFlow<Int> = _selectedBlockId.asStateFlow()
 
     private val _stadiumSectionState = MutableStateFlow<UiState<ResponseStadiumSection>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<ResponseStadiumSection>> = _stadiumSectionState
@@ -122,7 +132,6 @@ class ReviewViewModel @Inject constructor(
     fun setPreSignedUrlImages(images: List<String>) {
         val newImages = images.map { removeQueryParameters(it) }.toSet()
         val currentImages = _preSignedUrlImages.value.map { removeQueryParameters(it) }.toSet()
-
         val updatedImages = (currentImages + newImages).toList()
         _preSignedUrlImages.value = updatedImages
     }
@@ -164,6 +173,32 @@ class ReviewViewModel @Inject constructor(
         _selectedNumber.value = number
     }
 
+    fun getBlockListName(blockCode: String): String {
+        return when {
+            selectedSectionId.value == 10 && blockCode.endsWith("w") -> {
+                when (val codeWithoutW = blockCode.removeSuffix("w")) {
+                    "101", "102", "121", "122" -> "레드-$codeWithoutW"
+                    "109", "114" -> "블루-$codeWithoutW"
+                    else -> codeWithoutW
+                }
+            }
+            selectedSectionId.value == 8 && blockCode.startsWith("exciting") -> {
+                when (blockCode) {
+                    "exciting1" -> "1루 익사이팅석"
+                    "exciting3" -> "3루 익사이팅석"
+                    else -> blockCode
+                }
+            }
+
+            selectedSectionId.value == 1 && blockCode.startsWith("premium") -> {
+                when (blockCode) {
+                    "premium" -> "프리미엄석"
+                    else -> blockCode
+                }
+            }
+            else -> blockCode
+        }
+    }
     fun getStadiumName() {
         viewModelScope.launch {
             _stadiumNameState.value = UiState.Loading
@@ -299,11 +334,13 @@ class ReviewViewModel @Inject constructor(
     fun postSeatReview() {
         viewModelScope.launch {
             val requestSeatReview = RequestSeatReview(
+                rowNumber = _selectedColumn.value.toIntOrNull(),
+                seatNumber = _selectedNumber.value.toIntOrNull(),
                 images = _preSignedUrlImages.value,
-                dateTime = _selectedDate.value,
                 good = _selectedGoodReview.value,
                 bad = _selectedBadReview.value,
                 content = detailReviewText.value,
+                dateTime = _selectedDate.value,
             )
             Timber.d("Selected Images: ${_preSignedUrlImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
@@ -312,12 +349,11 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Detail Review Text: ${detailReviewText.value}")
             Timber.d("Selected Stadium ID: ${_selectedStadiumId.value}")
             Timber.d("Selected Block ID: ${_selectedBlockId.value}")
+            Timber.d("Selected seatColumn: ${selectedColumn.value}")
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
-            Timber.d("Selected Number: ${selectedNumber.value}")
             _postReviewState.value = UiState.Loading
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
-                selectedNumber.value.toInt(),
                 requestSeatReview,
             )
                 .onSuccess {
@@ -326,7 +362,7 @@ class ReviewViewModel @Inject constructor(
                 }
                 .onFailure { t ->
                     if (t is HttpException) {
-                        Timber.e("POST REVIEW FAILURE : $t")
+                        Timber.e("POST REVIEW FAILURE: $t")
                     }
                 }
         }
@@ -337,7 +373,8 @@ class ReviewViewModel @Inject constructor(
         imageDataList: List<ByteArray>,
     ) {
         uploadImageToPreSignedUrl(
-            presignedUrl, imageDataList
+            presignedUrl,
+            imageDataList,
         )
     }
 }
