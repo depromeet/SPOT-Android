@@ -13,7 +13,7 @@ abstract class BindingBottomSheetDialog<B : ViewBinding>(
     private val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> B,
 ) : BottomSheetDialogFragment() {
 
-    var _binding: B? = null
+    private var _binding: B? = null
     protected val binding: B
         get() = requireNotNull(_binding) { "binding object is not initialized" }
 
