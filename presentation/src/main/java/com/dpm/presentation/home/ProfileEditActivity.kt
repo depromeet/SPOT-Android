@@ -17,6 +17,7 @@ import com.depromeet.presentation.databinding.ActivityProfileEditBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
+import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.adapter.BaseballTeamAdapter
@@ -36,7 +37,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 ) {
     companion object {
         private const val GRID_SPAN_COUNT = 2
-        private const val GRID_SPACING = 40
+        private const val GRID_SPACING = 10
         const val PROFILE_NAME = "profile_name"
         const val PROFILE_IMAGE = "profile_image"
         const val PROFILE_CHEER_TEAM_ID = "profile_cheer_team_id"
@@ -98,7 +99,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
         binding.rvProfileEditTeam.addItemDecoration(
             GridSpacingItemDecoration(
                 GRID_SPAN_COUNT,
-                GRID_SPACING
+                GRID_SPACING.dpToPx(this)
             )
         )
     }
