@@ -1,7 +1,6 @@
 package com.dpm.presentation.seatreview
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -73,6 +72,13 @@ class ReviewViewModel @Inject constructor(
     val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
 
     val userSeatState = MutableLiveData<ValidSeat>()
+
+    private val _sectionItemSelected = MutableStateFlow(false)
+    val sectionItemSelected: StateFlow<Boolean> = _sectionItemSelected
+
+    fun updateItemSelected(isSelected: Boolean) {
+        _sectionItemSelected.value = isSelected
+    }
 
     // 서버 통신
 
@@ -174,6 +180,20 @@ class ReviewViewModel @Inject constructor(
                     "101", "102", "121", "122" -> "레드-$codeWithoutW"
                     "109", "114" -> "블루-$codeWithoutW"
                     else -> codeWithoutW
+                }
+            }
+            selectedSectionId.value == 8 && blockCode.startsWith("exciting") -> {
+                when (blockCode) {
+                    "exciting1" -> "1루 익사이팅석"
+                    "exciting3" -> "3루 익사이팅석"
+                    else -> blockCode
+                }
+            }
+
+            selectedSectionId.value == 1 && blockCode.startsWith("premium") -> {
+                when (blockCode) {
+                    "premium" -> "프리미엄석"
+                    else -> blockCode
                 }
             }
             else -> blockCode
@@ -314,11 +334,13 @@ class ReviewViewModel @Inject constructor(
     fun postSeatReview() {
         viewModelScope.launch {
             val requestSeatReview = RequestSeatReview(
+                rowNumber = _selectedColumn.value.toIntOrNull(),
+                seatNumber = _selectedNumber.value.toIntOrNull(),
                 images = _preSignedUrlImages.value,
-                dateTime = _selectedDate.value,
                 good = _selectedGoodReview.value,
                 bad = _selectedBadReview.value,
                 content = detailReviewText.value,
+                dateTime = _selectedDate.value,
             )
             Timber.d("Selected Images: ${_preSignedUrlImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
@@ -327,12 +349,11 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Detail Review Text: ${detailReviewText.value}")
             Timber.d("Selected Stadium ID: ${_selectedStadiumId.value}")
             Timber.d("Selected Block ID: ${_selectedBlockId.value}")
+            Timber.d("Selected seatColumn: ${selectedColumn.value}")
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
-            Timber.d("Selected Number: ${selectedNumber.value}")
             _postReviewState.value = UiState.Loading
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
-                selectedNumber.value.toInt(),
                 requestSeatReview,
             )
                 .onSuccess {
@@ -341,7 +362,7 @@ class ReviewViewModel @Inject constructor(
                 }
                 .onFailure { t ->
                     if (t is HttpException) {
-                        Timber.e("POST REVIEW FAILURE : $t")
+                        Timber.e("POST REVIEW FAILURE: $t")
                     }
                 }
         }
