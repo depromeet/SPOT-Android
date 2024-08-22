@@ -36,6 +36,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private var textStyle: Int = 0
     private var triangleDirection: Int = 0
     private var textAppearance: Int = 0
+    private var triangleBias : Float = 0f
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView, defStyleAttr, 0)
@@ -82,6 +83,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                         getInt(R.styleable.CustomSpeechBubbleView_triangleDirection, 0)
                     textAppearance =
                         getResourceId(R.styleable.CustomSpeechBubbleView_textAppearance, 0)
+                    triangleBias = getFloat(R.styleable.CustomSpeechBubbleView_triangleBias, 0f)
 
 
                 } finally {
@@ -190,12 +192,12 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                 bubbleRect.set(0f, 0f, width, bubbleHeight)
                 canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
 
-                val triangleX = width / 2 - triangleWidth / 2
+                val triangleX = width * (0.5f + triangleBias / 2) - triangleWidth / 2
                 val triangleY = height - triangleHeight
 
                 bubblePath.moveTo(triangleX, triangleY)
                 bubblePath.lineTo(triangleX + triangleWidth, triangleY)
-                bubblePath.lineTo(width / 2, height)
+                bubblePath.lineTo(triangleX + triangleWidth / 2, height)
                 bubblePath.close()
             }
 
@@ -204,12 +206,12 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                 bubbleRect.set(0f, triangleHeight, width, bubbleHeight)
                 canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
 
-                val triangleX = width / 2 - triangleWidth / 2
+                val triangleX = width * (0.5f + triangleBias / 2) - triangleWidth / 2
                 val triangleY = 0f
 
                 bubblePath.moveTo(triangleX, triangleY + triangleHeight)
                 bubblePath.lineTo(triangleX + triangleWidth, triangleY + triangleHeight)
-                bubblePath.lineTo(width / 2, triangleY)
+                bubblePath.lineTo(triangleX + triangleWidth / 2, triangleY)
                 bubblePath.close()
             }
         }

@@ -23,6 +23,7 @@
             <enum name="bottom" value="0" />
             <enum name="top" value="1" />
         </attr>
+        <attr name="triangleBias" format="float" />
     </declare-styleable>
 
     <declare-styleable name="CustomTextAppearance">
