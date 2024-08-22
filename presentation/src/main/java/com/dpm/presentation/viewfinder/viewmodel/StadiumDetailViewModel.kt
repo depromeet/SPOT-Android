@@ -82,7 +82,7 @@ class StadiumDetailViewModel @Inject constructor(
     fun updateSort(sortBy: String) {
         if (_reviewFilter.value.sortBy != sortBy) {
             reset = true
-            _reviewFilter.value = _reviewFilter.value.copy(sortBy = sortBy)
+            _reviewFilter.value = _reviewFilter.value.copy(sortBy = sortBy, cursor = null)
             getBlockReviews(query = _reviewFilter.value)
         }
     }
