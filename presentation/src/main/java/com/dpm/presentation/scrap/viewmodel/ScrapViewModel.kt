@@ -5,12 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class ScrapTestData(
+data class ScrapData(
     val id: Int,
     val image: String,
     val stadiumName: String,
@@ -18,72 +17,72 @@ data class ScrapTestData(
     val isBookmark: Boolean,
 )
 
-fun getScrapData(): List<ScrapTestData> {
+fun getScrapData(): List<ScrapData> {
     return listOf(
-        ScrapTestData(
+        ScrapData(
             id = 1,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 네이비석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 2,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 레드석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 3,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 외야그린석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 4,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 오렌지석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 5,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 블루석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 6,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 네이비석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 7,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 레드석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 8,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 외야그린석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 9,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
             seatName = "1루 오렌지석 302블록 1열 1변",
             isBookmark = true
         ),
-        ScrapTestData(
+        ScrapData(
             id = 10,
             image = "https://picsum.photos/600/400",
             stadiumName = "잠실 야구장",
@@ -93,12 +92,13 @@ fun getScrapData(): List<ScrapTestData> {
     )
 }
 
-data class FilterTestData(
+data class FilterNameData(
+    val filterType: ScrapViewModel.ScrapFilterType,
     val name: String,
 )
 
 
-data class ScrapMonth(
+data class MonthFilterData(
     val month: Int,
     val isSelected: Boolean,
 ) {
@@ -107,23 +107,36 @@ data class ScrapMonth(
     }
 }
 
+data class GoodReviewData(
+    val name: String,
+)
+
+data class BadReviewData(
+    val name: String,
+)
 
 @HiltViewModel
 class ScrapViewModel @Inject constructor() : ViewModel() {
 
-    private val _scrap = MutableStateFlow<UiState<List<ScrapTestData>>>(UiState.Loading)
+    private var monthsSelected: List<MonthFilterData> = emptyList()
+    private var goodSelected: List<GoodReviewData> = emptyList()
+    private var badSelected: List<BadReviewData> = emptyList()
+
+
+    private val _scrap = MutableStateFlow<UiState<List<ScrapData>>>(UiState.Loading)
     val scrap = _scrap.asStateFlow()
 
-    val filter = MutableStateFlow<List<FilterTestData>>(emptyList())
+    private val _filter = MutableStateFlow<List<FilterNameData>>(emptyList())
+    val filter = _filter.asStateFlow()
 
-    private val _months = MutableStateFlow<List<ScrapMonth>>(emptyList())
+    private val _months = MutableStateFlow<List<MonthFilterData>>(emptyList())
     val months = _months.asStateFlow()
 
-    private val _selectedGoodReview = MutableStateFlow<List<String>>(emptyList())
-    val selectedGoodReview: StateFlow<List<String>> = _selectedGoodReview.asStateFlow()
+    private val _selectedGoodReview = MutableStateFlow<List<GoodReviewData>>(emptyList())
+    val selectedGoodReview = _selectedGoodReview.asStateFlow()
 
-    private val _selectedBadReview = MutableStateFlow<List<String>>(emptyList())
-    val selectedBadReview: StateFlow<List<String>> = _selectedBadReview.asStateFlow()
+    private val _selectedBadReview = MutableStateFlow<List<BadReviewData>>(emptyList())
+    val selectedBadReview = _selectedBadReview.asStateFlow()
 
 
     fun getScrapRecord() {
@@ -135,24 +148,47 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
     }
 
     fun deleteScrapRecord(id: Int) {
+        //TODO : 서버통신
         val currentState = _scrap.value
         if (currentState is UiState.Success) {
-            val scrapList: List<ScrapTestData> = currentState.data
+            val scrapList: List<ScrapData> = currentState.data
             val updatedList = scrapList.filter { it.id != id }
             _scrap.value = UiState.Success(updatedList)
         }
     }
 
-    fun setSelectedGoodReview(buttonTexts: List<String>) {
-        _selectedGoodReview.value = buttonTexts
+    fun deleteFilter(filterData: FilterNameData) {
+        _filter.value = filter.value.filter { it.filterType != filterData.filterType }
+        when (filterData.filterType) {
+            ScrapFilterType.MONTH -> {
+                _months.value = months.value.map { it.copy(isSelected = false) }
+                monthsSelected = _months.value
+            }
+
+            ScrapFilterType.REVIEW -> {
+                _selectedBadReview.value = emptyList()
+                _selectedGoodReview.value = emptyList()
+                goodSelected = emptyList()
+                badSelected = emptyList()
+            }
+
+            else -> {}
+        }
     }
 
-    fun setSelectedBadReview(buttonTexts: List<String>) {
-        _selectedBadReview.value = buttonTexts
+    fun setSelectedGoodReview(texts: List<String>) {
+        val updatedList: List<GoodReviewData> = texts.map { GoodReviewData(name = it) }
+        _selectedGoodReview.value = updatedList
+    }
+
+    fun setSelectedBadReview(texts: List<String>) {
+        val updatedList: List<BadReviewData> = texts.map { BadReviewData(name = it) }
+        _selectedBadReview.value = updatedList
     }
 
     fun getMonths() {
-        val monthList = (1..12).map { ScrapMonth(it, false) }.toMutableList()
+        if(_months.value.isNotEmpty()) return
+        val monthList = (1..12).map { MonthFilterData(it, false) }.toMutableList()
         _months.value = monthList
     }
 
@@ -166,5 +202,57 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun updateAllFilter() {
+        monthsSelected = months.value
+        goodSelected = selectedGoodReview.value
+        badSelected = selectedBadReview.value
+        _filter.value = processFilters()
+    }
+
+    fun resetAllFilter() {
+        _months.value = monthsSelected
+        _selectedGoodReview.value = goodSelected
+        _selectedBadReview.value = badSelected
+    }
+
+
+    private fun processFilters(): List<FilterNameData> {
+        val updatedList = mutableListOf<FilterNameData>()
+        updatedList.add(FilterNameData(ScrapFilterType.STADIUM, "잠실야구장"))
+        if (months.value.isNotEmpty()) {
+            when (months.value.count { it.isSelected }) {
+                0 -> {}
+                1 -> updatedList.add(
+                    FilterNameData(
+                        ScrapFilterType.MONTH,
+                        months.value.first().formattedMonth()
+                    )
+                )
+
+                else -> updatedList.add(
+                    FilterNameData(
+                        ScrapFilterType.MONTH,
+                        "${
+                            months.value.first().formattedMonth()
+                        } 외 ${months.value.count { it.isSelected }}개"
+                    )
+                )
+            }
+        }
+        if (selectedGoodReview.value.isNotEmpty() || selectedBadReview.value.isNotEmpty()) {
+            updatedList.add(
+                FilterNameData(
+                    ScrapFilterType.REVIEW,
+                    "키워드 ${selectedGoodReview.value.size + selectedBadReview.value.size}개"
+                )
+            )
+        }
+        return updatedList
+    }
+
+    enum class ScrapFilterType {
+        STADIUM, MONTH, REVIEW
+    }
 
 }
+

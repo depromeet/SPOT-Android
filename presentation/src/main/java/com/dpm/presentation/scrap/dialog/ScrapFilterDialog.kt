@@ -1,5 +1,6 @@
-package com.dpm.presentation.scrap
+package com.dpm.presentation.scrap.dialog
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -10,7 +11,6 @@ import com.depromeet.presentation.databinding.FragmentScrapFilterDialogBinding
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.designsystem.extension.dpToPx
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.extension.toast
 import com.dpm.presentation.scrap.adapter.ScrapMonthAdapter
 import com.dpm.presentation.scrap.adapter.ScrapMonthGridSpacingItemDecoration
 import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
@@ -72,50 +72,45 @@ class ScrapFilterDialog : BindingBottomSheetDialog<FragmentScrapFilterDialogBind
     private fun initEvent() {
         selectedGoodBtn.forEach { button ->
             button.setOnClickListener {
-                val selectedCount = selectedGoodBtn.count { it.isSelected }
+                button.isSelected = !button.isSelected
+                val selectedGoodButtonText =
+                    selectedGoodBtn.filter { it.isSelected }.map { it.text.toString() }
 
-                if (selectedCount < 3 || button.isSelected) {
-                    button.isSelected = !button.isSelected
-                    val selectedGoodButtonText =
-                        selectedGoodBtn.filter { it.isSelected }.map { it.text.toString() }
-
-                    viewModel.setSelectedGoodReview(selectedGoodButtonText)
-                } else {
-                    /** 추후 추가 되는지 안되는지에 따라서 수정 -> BAD도 */
-                    toast("후기 키워드는 각각 3개까지 선택할 수 있어요")
-                }
+                viewModel.setSelectedGoodReview(selectedGoodButtonText)
             }
         }
 
         selectedBadBtn.forEach { button ->
-            button.setOnSingleClickListener {
-                val selectedCount = selectedBadBtn.count { it.isSelected }
-
-                if (selectedCount < 3 || button.isSelected) {
-                    button.isSelected = !button.isSelected
-                    val selectedBadButtonText =
-                        selectedBadBtn.filter { it.isSelected }.map { it.text.toString() }
-
-                    viewModel.setSelectedBadReview(selectedBadButtonText)
-                } else {
-                    /** 추후 추가 되는지 안되는지에 따라서 수정 -> GOOD도 */
-                    toast("후기 키워드는 각각 3개까지 선택할 수 있어요")
-                }
+            button.setOnClickListener {
+                button.isSelected = !button.isSelected
+                val selectedBadButtonText =
+                    selectedBadBtn.filter { it.isSelected }.map { it.text.toString() }
+                viewModel.setSelectedBadReview(selectedBadButtonText)
             }
+        }
+
+        binding.btScrapSearch.setOnSingleClickListener {
+            viewModel.updateAllFilter()
+            dismiss()
         }
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        viewModel.resetAllFilter()
+    }
+
     private fun initObserve() {
-        viewModel.months.asLiveData().observe(this) {
+        viewModel.months.asLiveData().observe(viewLifecycleOwner) {
             monthAdapter.submitList(it)
         }
 
         viewModel.selectedGoodReview.asLiveData().observe(viewLifecycleOwner) { reviews ->
-            updateGoodReviewBtnState(reviews)
+            updateGoodReviewBtnState(reviews.map { it.name })
         }
 
         viewModel.selectedBadReview.asLiveData().observe(viewLifecycleOwner) { reviews ->
-            updateBadReviewBtnState(reviews)
+            updateBadReviewBtnState(reviews.map { it.name })
         }
     }
 

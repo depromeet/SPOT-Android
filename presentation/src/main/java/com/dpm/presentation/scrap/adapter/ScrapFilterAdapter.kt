@@ -1,12 +1,13 @@
 package com.dpm.presentation.scrap.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.databinding.ItemScrapFilterBinding
 import com.depromeet.presentation.databinding.ItemScrapFilterSelectedBinding
-import com.dpm.presentation.scrap.viewmodel.FilterTestData
+import com.dpm.presentation.scrap.viewmodel.FilterNameData
 import com.dpm.presentation.util.ItemDiffCallback
 import timber.log.Timber
 
@@ -17,13 +18,17 @@ enum class ScrapFilterViewType {
 
 class ScrapFilterAdapter(
     private val filterClick: () -> Unit,
-    private val selectedClick: (FilterTestData) -> Unit,
-) : ListAdapter<FilterTestData, RecyclerView.ViewHolder>(
+    private val selectedClick: (FilterNameData) -> Unit,
+) : ListAdapter<FilterNameData, RecyclerView.ViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.name == newItem.name },
-        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        onItemsTheSame = { oldItem, newItem -> Timber.d("test items -> ${newItem.filterType  == oldItem.filterType}")
+            oldItem.filterType == newItem.filterType},
+        onContentsTheSame = { oldItem, newItem -> Timber.d("test contents ->${newItem == oldItem}")
+            oldItem == newItem }
     )
 ) {
+
+
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) {
             ScrapFilterViewType.FILTER_ITEM.ordinal
@@ -63,7 +68,6 @@ class ScrapFilterAdapter(
             }
 
             is ScrapFilterSelectedViewHolder -> {
-                Timber.d("test pos -> $position")
                 holder.bind(currentList[position - 1])
             }
         }
@@ -71,6 +75,11 @@ class ScrapFilterAdapter(
 
     override fun getItemCount(): Int {
         return currentList.size + 1
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateItem(){
+        notifyDataSetChanged()
     }
 }
 
@@ -87,10 +96,10 @@ class ScrapFilterViewHolder(
 
 class ScrapFilterSelectedViewHolder(
     private val binding: ItemScrapFilterSelectedBinding,
-    private val selectedClick: (FilterTestData) -> Unit,
+    private val selectedClick: (FilterNameData) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: FilterTestData) = with(binding) {
-        root.setOnClickListener { selectedClick(item) }
+    fun bind(item: FilterNameData) = with(binding) {
+        ivClose.setOnClickListener { selectedClick(item) }
         tvScrapFilter.text = item.name
     }
 }

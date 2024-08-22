@@ -23,6 +23,7 @@
         tools:text="잠실야구장" />
 
     <ImageView
+        android:id="@+id/ivClose"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/ic_x_close_small"

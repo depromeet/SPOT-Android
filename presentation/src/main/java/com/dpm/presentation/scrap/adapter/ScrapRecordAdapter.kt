@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.databinding.ItemScrapRecordBinding
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.scrap.viewmodel.ScrapTestData
+import com.dpm.presentation.scrap.viewmodel.ScrapData
 import com.dpm.presentation.util.ItemDiffCallback
 
 
 class ScrapRecordAdapter(
-    private val scrapClick: (ScrapTestData) -> Unit,
-    private val recordClick: (ScrapTestData) -> Unit,
-) : ListAdapter<ScrapTestData, ScrapRecordViewHolder>(
+    private val scrapClick: (ScrapData) -> Unit,
+    private val recordClick: (ScrapData) -> Unit,
+) : ListAdapter<ScrapData, ScrapRecordViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItme -> oldItem.id == newItme.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -39,10 +39,10 @@ class ScrapRecordAdapter(
 
 class ScrapRecordViewHolder(
     private val binding: ItemScrapRecordBinding,
-    private val scrapClick: (ScrapTestData) -> Unit,
-    private val recordClick: (ScrapTestData) -> Unit,
+    private val scrapClick: (ScrapData) -> Unit,
+    private val recordClick: (ScrapData) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ScrapTestData) = with(binding) {
+    fun bind(item: ScrapData) = with(binding) {
         ivScrap.setOnSingleClickListener {
             scrapClick(item)
         }

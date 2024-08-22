@@ -14,6 +14,7 @@ import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.scrap.adapter.ScrapFilterAdapter
 import com.dpm.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.dpm.presentation.scrap.adapter.ScrapRecordAdapter
+import com.dpm.presentation.scrap.dialog.ScrapFilterDialog
 import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
 import com.dpm.presentation.viewfinder.StadiumActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,8 +80,9 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         }
 
         viewModel.filter.asLiveData().observe(this) {
-            Timber.d("testtest -> $it")
+            Timber.d("FILTER_TEST -> $it")
             scrapFilterAdapter.submitList(it) {
+                scrapFilterAdapter.updateItem()
                 binding.rvScrapFilter.scrollToPosition(0)
             }
         }
@@ -110,7 +112,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 ScrapFilterDialog().show(supportFragmentManager, ScrapFilterDialog.TAG)
             },
             selectedClick = {
-                //TODO : 삭제
+                viewModel.deleteFilter(it)
             }
         )
         binding.rvScrapFilter.adapter = scrapFilterAdapter

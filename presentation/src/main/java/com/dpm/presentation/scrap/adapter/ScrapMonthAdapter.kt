@@ -8,15 +8,15 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.databinding.ItemScrapMonthBinding
-import com.dpm.presentation.scrap.viewmodel.ScrapMonth
+import com.dpm.presentation.scrap.viewmodel.MonthFilterData
 import com.dpm.presentation.util.ItemDiffCallback
 
 
 class ScrapMonthAdapter(
-    private val monthClick: (ScrapMonth) -> Unit,
-) : ListAdapter<ScrapMonth, ScrapMonthViewHolder>(
+    private val monthClick: (MonthFilterData) -> Unit,
+) : ListAdapter<MonthFilterData, ScrapMonthViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.month == newItem.month },
+        onItemsTheSame = { oldItem, newItem -> oldItem == newItem },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
@@ -37,9 +37,9 @@ class ScrapMonthAdapter(
 
 class ScrapMonthViewHolder(
     private val binding: ItemScrapMonthBinding,
-    private val monthClick: (ScrapMonth) -> Unit,
+    private val monthClick: (MonthFilterData) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ScrapMonth) = with(binding) {
+    fun bind(item: MonthFilterData) = with(binding) {
         tvScrapMonth.setOnClickListener { monthClick(item) }
         tvScrapMonth.text = item.formattedMonth()
 
