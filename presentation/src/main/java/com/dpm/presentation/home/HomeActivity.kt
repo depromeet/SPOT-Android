@@ -86,8 +86,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
                 is UiState.Success -> {
                     setStadiumShimmer(false)
-                    stadiumAdapter.submitList(state.data)
-                    binding.rvHomeStadium.scrollToPosition(0)
+                    stadiumAdapter.submitList(state.data) {
+                        binding.rvHomeStadium.scrollToPosition(0)
+                    }
                 }
             }
         }
