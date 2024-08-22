@@ -81,9 +81,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun initEvent() {
         with(binding) {
-            recordSpotAppbar.setNavigationOnClickListener {
+            ivBack.setOnClickListener {
                 finish()
             }
+//            recordSpotAppbar.setNavigationOnClickListener {
+//                finish()
+//            }
             fabRecordUp.setOnClickListener {
                 rvSeatRecord.smoothScrollToPosition(0)
             }

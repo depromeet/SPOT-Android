@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="160dp">
+    android:layout_height="173dp">
 
     <View
         android:layout_width="0dp"
@@ -21,14 +21,13 @@
         android:id="@+id/csbv_record_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
         android:layout_marginBottom="55dp"
         android:elevation="12dp"
         android:paddingRight="10dp"
         app:backgroundColor="@color/color_background_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/iv_record_profile"
         app:paddingBottom="8dp"
         app:paddingLeft="10dp"
         app:paddingTop="8dp"
@@ -41,13 +40,13 @@
         android:id="@+id/iv_record_profile"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="39dp"
         android:background="@drawable/circle_gray50_fill_gray200_stroke"
         android:elevation="1dp"
         android:src="@drawable/ic_default_profile"
         app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
         app:layout_constraintStart_toStartOf="@id/csbv_record_title"
-        app:layout_constraintTop_toTopOf="@id/csbv_record_title"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="contentDescription" />
 
     <ImageView

@@ -28,21 +28,44 @@
         app:layout_constraintGuide_end="30dp" />
 
 
-    <com.dpm.designsystem.SpotAppbar
-        android:id="@+id/record_spot_appbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/color_background_tertiary"
-        android:text="@string/view_record_my"
-        android:textColor="@color/color_foreground_heading"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!--    <com.dpm.designsystem.SpotAppbar-->
+    <!--        android:id="@+id/record_spot_appbar"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/color_transparent"-->
+    <!--        android:text="@string/view_record_my"-->
+    <!--        android:textColor="@color/color_foreground_heading"-->
+    <!--        android:textSize="16sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:navigationIcon="@drawable/ic_chevron_left_big"-->
+    <!--        app:navigationIconColor="@color/color_foreground_body_sebtext"-->
+    <!--        app:navigationIconSize="24"-->
+    <!--        app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />-->
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/ic_chevron_left_big"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_chevron_left_big"
-        app:navigationIconColor="@color/color_foreground_body_sebtext"
-        app:navigationIconSize="24"
-        app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />
+        tools:ignore="contentDescription" />
+
+    <TextView
+        android:id="@+id/tvRecordTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="@string/view_record_my"
+        android:textAppearance="@style/TextAppearance.Spot.Label03"
+        android:textColor="@color/color_foreground_body_sebtext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +76,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
+        app:layout_constraintTop_toBottomOf="@id/ivBack">
 
         <View
             android:layout_width="0dp"
@@ -72,12 +95,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
+            android:layout_marginBottom="55dp"
             android:elevation="12dp"
             android:paddingRight="10dp"
             app:backgroundColor="@color/color_background_white"
+            app:layout_constraintBottom_toBottomOf="@id/iv_record_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:paddingBottom="12dp"
             app:paddingLeft="10dp"
             app:paddingRight="10dp"
@@ -90,13 +114,13 @@
             android:id="@+id/iv_record_profile"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="39dp"
             android:background="@drawable/circle_gray50_fill_gray200_stroke"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_default_profile"
             app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
             app:layout_constraintStart_toStartOf="@id/csbv_record_title"
-            app:layout_constraintTop_toTopOf="@id/csbv_record_title"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="contentDescription" />
 
         <ImageView
@@ -326,13 +350,14 @@
         android:id="@+id/rv_seat_record"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="0dp"
         android:orientation="vertical"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/record_spot_appbar" />
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
 
     <TextView
         android:id="@+id/tv_test"
@@ -351,11 +376,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <include layout="@layout/item_shimmer_record_profile" />
 
