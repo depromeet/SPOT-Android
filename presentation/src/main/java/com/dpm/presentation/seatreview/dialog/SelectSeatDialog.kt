@@ -2,6 +2,7 @@ package com.dpm.presentation.seatreview.dialog
 
 import android.os.Bundle
 import android.text.Editable
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.FOCUS_DOWN
 import android.view.View.GONE
@@ -21,6 +22,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectSeatBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.core.state.UiState
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
 import com.dpm.domain.model.seatreview.ValidSeat
@@ -60,11 +62,11 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         initEvent()
         initObserve()
     }
-
     private fun initView() {
         adapter = SelectSeatAdapter { position, sectionId ->
             val selectedSeatInfo = adapter.currentList[position]
             adapter.setItemSelected(position)
+            viewModel.updateItemSelected(true)
             viewModel.setSelectedSeatZone(selectedSeatInfo.name)
             viewModel.getSeatBlock(viewModel.selectedStadiumId.value, sectionId)
             viewModel.updateSelectedSectionId(sectionId)
@@ -80,6 +82,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         binding.ivHelpCircle.setOnSingleClickListener { onClickToggleSeatVisibility() }
         binding.ivWhatColumnChevron.setOnSingleClickListener { onClickToggleSeatVisibility() }
         binding.tvWhatColumn.setOnSingleClickListener { onClickToggleSeatVisibility() }
+        onClickStadiumName()
         onClickTabVisibility()
         onClickToggleSectionVisibility()
         onClickCheckOnlyColumn()
@@ -93,18 +96,107 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         initObserveSeatRange()
     }
 
+    private fun onClickStadiumName() {
+        binding.clSelectStadium.setOnSingleClickListener {
+            makeSpotImageAppbar("나중에 다른 구장도 추가될 예정이에요!")
+        }
+    }
+
+    private fun createPreventTouchListener(message: String): View.OnTouchListener {
+        return View.OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                makeSpotImageAppbar(message)
+                v.performClick()
+                true
+            } else {
+                false
+            }
+        }
+    }
     private fun onClickTabVisibility() {
         with(binding) {
-            llTabSelectSection.setOnSingleClickListener {
-                svSelectSeat.visibility = VISIBLE
-                clSeatBlock.visibility = INVISIBLE
-                svSeatNumber.visibility = INVISIBLE
-                tvSelectSeatLine.visibility = VISIBLE
-                tvSelectNumberLine.visibility = INVISIBLE
-                tvCompleteBtn.visibility = INVISIBLE
-                tvNextBtn.visibility = VISIBLE
-                tvSelectZone.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
-                tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_caption))
+            llTabSelectSeat.setOnSingleClickListener {
+                if (!viewModel.sectionItemSelected.value) {
+                    makeSpotImageAppbar("‘구역'을 먼저 선택해주세요")
+                    val preventTouchListener = createPreventTouchListener("‘구역'을 먼저 선택해주세요")
+                    spinnerBlock.setOnTouchListener(preventTouchListener)
+                    etColumn.setOnTouchListener(preventTouchListener)
+                    etNumber.setOnTouchListener(preventTouchListener)
+                    etOnlyColumn.setOnTouchListener(preventTouchListener)
+                } else {
+                    spinnerBlock.setOnTouchListener(null)
+                    etColumn.setOnTouchListener(null)
+                    etNumber.setOnTouchListener(null)
+                    etOnlyColumn.setOnTouchListener(null)
+                }
+                viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
+                if (viewModel.selectedSectionId.value == 10) {
+                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
+                    clColumnNumber.visibility = INVISIBLE
+                    clOnlyNumber.visibility = VISIBLE
+                    clOnlyColumnBtn.visibility = GONE
+                    clOnlyColumn.visibility = GONE
+                    val scale = context?.resources?.displayMetrics?.density
+                    val paddingInPx = (31 * scale!! + 0.5f).toInt()
+                    tvNoneColumnWarning.setPaddingRelative(paddingInPx, tvNoneColumnWarning.paddingTop, tvNoneColumnWarning.paddingEnd, tvNoneColumnWarning.paddingBottom)
+                } else {
+                    clColumnNumber.visibility = VISIBLE
+                    clOnlyNumber.visibility = INVISIBLE
+                    clOnlyColumn.visibility = INVISIBLE
+                    clOnlyColumnBtn.visibility = VISIBLE
+                    tvNoneColumnWarning.setPaddingRelative(tvNoneColumnWarning.paddingStart, tvNoneColumnWarning.paddingTop, tvNoneColumnWarning.paddingEnd, tvNoneColumnWarning.paddingBottom)
+                }
+                svSelectSeat.visibility = INVISIBLE
+                if (isColumnCheckEnabled) {
+                    svSeatNumber.visibility = VISIBLE
+                    btnCheckColumn.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_spot_green_fill_4)
+                    clColumnNumber.visibility = INVISIBLE
+                    clOnlyColumn.visibility = VISIBLE
+                }
+                svSeatNumber.visibility = VISIBLE
+                tvSelectSeatLine.visibility = INVISIBLE
+                tvSelectNumberLine.visibility = VISIBLE
+                tvCompleteBtn.visibility = VISIBLE
+                tvNextBtn.visibility = GONE
+                clSeatBlock.visibility = VISIBLE
+                tvSelectZone.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_caption))
+                tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
+            }
+            binding.llTabSelectSection.setOnSingleClickListener {
+                viewModel.selectedSeatZone.asLiveData().observe(viewLifecycleOwner) { zone ->
+                    if (zone.isNotEmpty()) {
+                        svSelectSeat.visibility = VISIBLE
+                        clSeatBlock.visibility = INVISIBLE
+                        svSeatNumber.visibility = INVISIBLE
+                        tvSelectSeatLine.visibility = VISIBLE
+                        tvSelectNumberLine.visibility = INVISIBLE
+                        tvCompleteBtn.visibility = INVISIBLE
+                        tvNextBtn.visibility = VISIBLE
+                        tvSelectZone.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
+                        tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_caption))
+                    }
+                }
+                if (viewModel.selectedBlock.value.isNotEmpty() && (viewModel.selectedColumn.value.isNotEmpty() || viewModel.selectedNumber.value.isNotEmpty())) {
+                    svSelectSeat.visibility = VISIBLE
+                    clSeatBlock.visibility = INVISIBLE
+                    svSeatNumber.visibility = INVISIBLE
+                    tvSelectSeatLine.visibility = VISIBLE
+                    tvSelectNumberLine.visibility = INVISIBLE
+                    tvSelectZone.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
+                    tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_caption))
+                    tvCompleteBtn.visibility = VISIBLE
+                    tvNextBtn.visibility = INVISIBLE
+                } else {
+                    svSelectSeat.visibility = VISIBLE
+                    clSeatBlock.visibility = INVISIBLE
+                    svSeatNumber.visibility = INVISIBLE
+                    tvSelectSeatLine.visibility = VISIBLE
+                    tvSelectNumberLine.visibility = INVISIBLE
+                    tvSelectZone.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
+                    tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_caption))
+                    tvCompleteBtn.visibility = INVISIBLE
+                    tvNextBtn.visibility = VISIBLE
+                }
             }
         }
     }
@@ -177,6 +269,10 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         with(binding) {
             tvNextBtn.setOnSingleClickListener {
                 viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
+                spinnerBlock.setOnTouchListener(null)
+                etColumn.setOnTouchListener(null)
+                etNumber.setOnTouchListener(null)
+                etOnlyColumn.setOnTouchListener(null)
                 if (viewModel.selectedSectionId.value == 10) {
                     clColumnNumber.visibility = INVISIBLE
                     clOnlyNumber.visibility = VISIBLE
@@ -185,6 +281,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     val scale = context?.resources?.displayMetrics?.density
                     val paddingInPx = (31 * scale!! + 0.5f).toInt()
                     tvNoneColumnWarning.setPaddingRelative(paddingInPx, tvNoneColumnWarning.paddingTop, tvNoneColumnWarning.paddingEnd, tvNoneColumnWarning.paddingBottom)
+                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
                 } else {
                     clColumnNumber.visibility = VISIBLE
                     clOnlyNumber.visibility = INVISIBLE
@@ -217,6 +314,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     putBoolean("isColumnCheckEnabled", isColumnCheckEnabled)
                 }
                 parentFragmentManager.setFragmentResult("selectSeatResult", result)
+                viewModel.updateItemSelected(false)
                 dismiss()
             }
         }
@@ -320,7 +418,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 viewModel.userSeatState.value = ValidSeat.INVALID_COLUMN
             } else if (matchingRowInfo != null) {
                 viewModel.userSeatState.value = ValidSeat.VALID
-            } else{
+            } else {
                 viewModel.userSeatState.value = ValidSeat.NONE
             }
         }
@@ -522,6 +620,20 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
 
                 else -> {}
             }
+        }
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        val parentView = binding.root.rootView
+        parentView?.let {
+            SpotImageSnackBar.make(
+                it,
+                message = message,
+                messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+                icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+                iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+                marginBottom = 96,
+            ).show()
         }
     }
 }

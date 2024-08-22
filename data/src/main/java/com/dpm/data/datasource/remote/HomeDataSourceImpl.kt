@@ -25,7 +25,8 @@ class HomeDataSourceImpl @Inject constructor(
 ) : HomeDataSource {
     override suspend fun getMySeatRecordData(requestMySeatRecordDto: RequestMySeatRecordDto): ResponseMySeatRecordDto {
         return homeApiService.getMySeatRecord(
-            page = requestMySeatRecordDto.page,
+            cursor = requestMySeatRecordDto.cursor,
+            sortBy = requestMySeatRecordDto.sortBy,
             size = requestMySeatRecordDto.size,
             year = requestMySeatRecordDto.year,
             month = requestMySeatRecordDto.month

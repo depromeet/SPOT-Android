@@ -40,6 +40,9 @@
 
 
     <!-- Color Token -->
+    <!-- Dark -->
+    <color name="color_dark_300">#FF333333</color>
+    
     <!-- Gray -->
     <color name="color_gray_00">#FFFFFFFF</color>
     <color name="color_gray_50">#FFF7F8FA</color>
@@ -130,4 +133,5 @@
 
     <!-- Etc -->
     <color name="color_80000000">#80000000</color>
+    <color name="color_59ffffff">#59FFFFFF</color>
 </resources>

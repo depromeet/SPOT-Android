@@ -44,6 +44,7 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.dpm.presentation.extension.noRippleClickable
 import com.dpm.presentation.mapper.toKeyword
+import com.dpm.presentation.util.toBlockContent
 
 private enum class ReviewContentShowMoreState {
     SHOW, HIDE, NOTHING
@@ -121,7 +122,7 @@ fun StadiumReviewContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = reviewContent.formattedNumber(),
+                text = reviewContent.toBlockContent(),
                 style = SpotTheme.typography.subtitle02,
                 color = SpotTheme.colors.foregroundHeading,
             )
@@ -236,6 +237,10 @@ fun StadiumReviewContent(
                     showMoreButtonState = ReviewContentShowMoreState.SHOW
                 }
             }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        ReviewContentBottom(
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp)
         )
     }
 }

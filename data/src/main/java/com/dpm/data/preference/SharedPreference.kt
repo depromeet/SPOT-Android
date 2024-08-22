@@ -75,4 +75,12 @@ class DefaultSharedPreference @Inject constructor(
                 putString("profileImage", value)
             }
         }
+
+    override var isFirstTime: Boolean
+        get() = preferences.getBoolean("isFirstTime", true)
+        set(value) {
+            preferences.edit(commit = true) {
+                putBoolean("isFirstTime", value)
+            }
+        }
 }

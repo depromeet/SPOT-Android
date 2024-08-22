@@ -70,9 +70,10 @@ class SeatRecordViewModel @Inject constructor(
         val dateState = date.value as? UiState.Success<ResponseReviewDate>
 
         val year = dateState?.data?.yearMonths?.firstOrNull { it.isClicked }?.year
-        val month = dateState?.data?.yearMonths?.firstOrNull { it.isClicked }?.months?.firstOrNull { it.isClicked }?.month
+        val month =
+            dateState?.data?.yearMonths?.firstOrNull { it.isClicked }?.months?.firstOrNull { it.isClicked }?.month
         page.value = 0
-        if(year == null || month == null){
+        if (year == null || month == null) {
             _reviews.value = UiState.Failure("유효하지 않은 날짜입니다.")
         }
 
@@ -80,9 +81,11 @@ class SeatRecordViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getMySeatRecord(
                 RequestMySeatRecord(
+                    cursor = null,
                     year = year,
                     month = month.takeIf { it != 0 },
-                    page = page.value
+                    size = 100,
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
@@ -90,7 +93,7 @@ class SeatRecordViewModel @Inject constructor(
                 if (data.reviews.isNotEmpty()) {
                     page.value += 1
                     _reviews.value = UiState.Success(data)
-                }else{
+                } else {
                     _reviews.value = UiState.Empty
                 }
             }.onFailure {
@@ -118,9 +121,11 @@ class SeatRecordViewModel @Inject constructor(
                 (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
             homeRepository.getMySeatRecord(
                 RequestMySeatRecord(
+                    cursor = (reviews.value as UiState.Success).data.nextCursor,
                     year = year,
                     month = month.takeIf { it != 0 },
-                    page = page.value
+                    size = 100,
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name
                 )
             ).onSuccess { data ->
                 Timber.d("NEXT_SEAT_RECORDS_SUCCESS : $data")
@@ -321,4 +326,8 @@ enum class EditUi {
     NONE,
     SEAT_RECORD,
     SEAT_DETAIL
+}
+
+enum class MySeatRecordSortBy {
+    DATE_TIME
 }

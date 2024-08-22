@@ -1,4 +1,4 @@
-package com.dpm.presentation.seatrecord
+package com.dpm.presentation.seatrecord.dialog
 
 import android.content.DialogInterface
 import android.graphics.Color
