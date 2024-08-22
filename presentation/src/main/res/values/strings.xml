@@ -108,6 +108,7 @@
     <string name="view_record_all">전체</string>
     <string name="record_remove">게시물 삭제</string>
     <string name="record_manage">게시물 관리</string>
+    <string name="view_record_help">도움 제공</string>
 
     <!-- viewDetail 관련-->
     <string name="record_edit">게시물 수정</string>
@@ -133,6 +134,7 @@
     <string name="setting_feedback_title">SPOT은 여러분의 피드백으로 성장해요!</string>
     <string name="setting_feedback_description">좋은 점, 개선할 점, 궁금한 점 모두 알려주세요</string>
     <string name="setting_manage_account">계정 관리</string>
+
 
 
 </resources>

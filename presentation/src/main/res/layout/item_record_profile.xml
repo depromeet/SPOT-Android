@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="173dp">
+    android:layout_height="wrap_content">
 
     <View
         android:layout_width="0dp"
@@ -25,9 +25,9 @@
         android:elevation="12dp"
         android:paddingRight="10dp"
         app:backgroundColor="@color/color_background_white"
+        app:layout_constraintBottom_toBottomOf="@id/iv_record_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/iv_record_profile"
         app:paddingBottom="8dp"
         app:paddingLeft="10dp"
         app:paddingTop="8dp"
@@ -78,28 +78,77 @@
 
     <TextView
         android:id="@+id/tv_record_whole"
-        android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
         android:text="@string/view_record_whole"
-        android:textColor="@color/color_foreground_body_subtitle"
-        app:layout_constraintEnd_toStartOf="@id/tv_record_count"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textAppearance="@style/TextAppearance.Spot.Body02"
+        android:textColor="@color/color_foreground_caption"
+        app:layout_constraintEnd_toStartOf="@id/vRecordDivider"
         app:layout_constraintTop_toBottomOf="@id/tv_record_nickname" />
 
     <TextView
         android:id="@+id/tv_record_count"
-        style="@style/TextAppearance.Spot.Subtitle03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:textColor="@color/color_foreground_caption"
-        app:layout_constraintBottom_toBottomOf="@id/tv_record_whole"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_record_whole"
-        app:layout_constraintTop_toTopOf="@id/tv_record_whole"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+        android:textColor="@color/color_foreground_body_subtitle"
+        app:layout_constraintEnd_toEndOf="@id/tv_record_whole"
+        app:layout_constraintStart_toStartOf="@id/tv_record_whole"
+        app:layout_constraintTop_toBottomOf="@id/tv_record_whole"
         tools:text="37" />
+
+    <View
+        android:id="@+id/vRecordDivider"
+        android:layout_width="1dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/color_stroke_tertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_record_nickname" />
+
+    <TextView
+        android:id="@+id/tvRecordHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/view_record_help"
+        android:textAppearance="@style/TextAppearance.Spot.Body02"
+        android:textColor="@color/color_foreground_caption"
+        app:layout_constraintStart_toEndOf="@id/vRecordDivider"
+        app:layout_constraintTop_toBottomOf="@id/tv_record_nickname" />
+
+    <ImageView
+        android:id="@+id/ivRecordHelpInfo"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_info_circle_line"
+        app:layout_constraintBottom_toBottomOf="@id/tvRecordHelp"
+        app:layout_constraintStart_toEndOf="@id/tvRecordHelp"
+        app:layout_constraintTop_toTopOf="@id/tvRecordHelp"
+        app:tint="@color/color_transfer_black_01" />
+
+    /
+
+    <TextView
+        android:id="@+id/tvRecordHelpCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="0"
+        android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+        android:textColor="@color/color_foreground_body_subtitle"
+        app:layout_constraintEnd_toEndOf="@id/tvRecordHelp"
+        app:layout_constraintStart_toStartOf="@id/tvRecordHelp"
+        app:layout_constraintTop_toBottomOf="@id/tvRecordHelp"
+        tools:text="0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
