@@ -111,6 +111,7 @@ class StadiumDetailViewModel @Inject constructor(
                                 (_detailUiState.value as StadiumDetailUiState.ReviewsData)
 
                             if (reset) {
+                                reset = false
                                 _detailUiState.value = reviewsData.copy(
                                     reviews = blockReviews.reviews,
                                     hasNext = blockReviews.hasNext,
