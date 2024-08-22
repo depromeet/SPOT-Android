@@ -6,65 +6,55 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clUploadDialog"
-        style="@style/TransparentDialogFragment"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="189dp"
-        android:background="@drawable/rect_white_fill_24"
         android:paddingHorizontal="16dp"
+        android:background="@drawable/rect_white_fill_24"
         android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clUploadTop"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvUpload"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingVertical="10dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="업로드"
+            android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+            android:textColor="@color/color_foreground_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvUpload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="업로드"
-                android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
-                android:textColor="@color/color_foreground_heading"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/ivExit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_x_upload_method"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/ivExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_x_upload_method"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUpload"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvUpload" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clUploadSight"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rect_background_secondary_fill_12"
+            android:layout_marginTop="26dp"
+            android:background="@drawable/sel_review_method_button"
             android:paddingBottom="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clUploadTop">
+            app:layout_constraintTop_toBottomOf="@+id/tvUpload">
 
             <ImageView
                 android:id="@+id/ivUploadSight"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:src="@drawable/ic_upload_sight_button"
@@ -74,7 +64,7 @@
 
             <TextView
                 android:id="@+id/tvUploadSightTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
                 android:gravity="center"
@@ -86,10 +76,11 @@
 
             <TextView
                 android:id="@+id/tvUploadSightSubTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
+                android:paddingHorizontal="24dp"
                 android:text="야구장 시야에 대한 자세한 후기를 공유해요"
                 android:textAppearance="@style/TextAppearance.Spot.Body03"
                 android:textColor="@color/color_foreground_caption"
@@ -100,10 +91,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clUploadIntuition"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/sel_review_method_button"
             android:layout_marginTop="8dp"
-            android:background="@drawable/rect_background_secondary_fill_12"
             android:paddingVertical="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,10 +102,10 @@
 
             <TextView
                 android:id="@+id/tvUploadIntuitionTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="직관 후기 등록"
+                android:text="직관후기 등록"
                 android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -122,10 +113,11 @@
 
             <TextView
                 android:id="@+id/tvUploadIntuitionSubTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
+                android:paddingHorizontal="51dp"
                 android:text="전반적인 경기의 순간을 간직해요"
                 android:textAppearance="@style/TextAppearance.Spot.Body03"
                 android:textColor="@color/color_foreground_caption"
