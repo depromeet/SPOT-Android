@@ -103,8 +103,7 @@
         android:paddingVertical="19dp"
         android:text="다음"
         android:textColor="@color/white"
-        android:textFontWeight="700"
-        android:textStyle="normal"
+        android:textAppearance="@style/TextAppearance.Spot.Label02"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
