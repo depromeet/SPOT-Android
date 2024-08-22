@@ -106,6 +106,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
                 viewModel.getReviewDate()
             }
+            ivRecordHelpInfo.setOnClickListener {
+                csbvHelpInfo.visibility = if (csbvHelpInfo.visibility == GONE) VISIBLE else GONE
+            }
+            csbvHelpInfo.setOnClickListener {
+                csbvHelpInfo.visibility = GONE
+            }
         }
     }
 

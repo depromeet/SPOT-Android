@@ -37,6 +37,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private var triangleDirection: Int = 0
     private var textAppearance: Int = 0
     private var triangleBias : Float = 0f
+    private var textColor : Int = 0
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView, defStyleAttr, 0)
@@ -84,7 +85,7 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                     textAppearance =
                         getResourceId(R.styleable.CustomSpeechBubbleView_textAppearance, 0)
                     triangleBias = getFloat(R.styleable.CustomSpeechBubbleView_triangleBias, 0f)
-
+                    textColor = getInt(R.styleable.CustomSpeechBubbleView_textColor, 0)
 
                 } finally {
                     recycle()
@@ -221,9 +222,11 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         // 텍스트 그리기
         var xOffset = paddingLeftValue
         textParts.forEachIndexed { index, textPart ->
-            textPaint.color = when (index) {
-                1 -> context.getColor(com.depromeet.designsystem.R.color.color_action_enabled)
-                else -> context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
+            textPaint.color = if (textColor != 0) textColor else {
+                when (index) {
+                    1 -> context.getColor(com.depromeet.designsystem.R.color.color_action_enabled)
+                    else -> context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
+                }
             }
 
             val textWidth = textPaint.measureText(textPart)

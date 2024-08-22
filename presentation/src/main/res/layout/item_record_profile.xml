@@ -133,9 +133,8 @@
         app:layout_constraintBottom_toBottomOf="@id/tvRecordHelp"
         app:layout_constraintStart_toEndOf="@id/tvRecordHelp"
         app:layout_constraintTop_toTopOf="@id/tvRecordHelp"
-        app:tint="@color/color_transfer_black_01" />
-
-    /
+        app:tint="@color/color_transfer_black_01"
+        tools:ignore="contentDescrription"/>
 
     <TextView
         android:id="@+id/tvRecordHelpCount"
@@ -149,6 +148,27 @@
         app:layout_constraintStart_toStartOf="@id/tvRecordHelp"
         app:layout_constraintTop_toBottomOf="@id/tvRecordHelp"
         tools:text="0" />
+
+    <com.dpm.presentation.home.customview.CustomSpeechBubbleView
+        android:id="@+id/csbvHelpInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationX="-32dp"
+        android:layout_marginBottom="6.5dp"
+        android:visibility="gone"
+        app:backgroundColor="@color/color_transfer_black_03"
+        app:layout_constraintBottom_toTopOf="@id/ivRecordHelpInfo"
+        app:layout_constraintEnd_toEndOf="@id/ivRecordHelpInfo"
+        app:layout_constraintStart_toStartOf="@id/ivRecordHelpInfo"
+        app:paddingLeft="16dp"
+        app:paddingRight="16dp"
+        app:paddingTop="12dp"
+        app:paddingBottom="12dp"
+        app:triangleBias="0.3"
+        app:triangleWidth="12dp"
+        app:triangleHeight="5dp"
+        app:textAppearance="@style/TextAppearance.Spot.Label12"
+        app:textColor="@color/color_foreground_white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
