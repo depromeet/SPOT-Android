@@ -9,6 +9,7 @@ import androidx.lifecycle.asLiveData
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentScrapFilterDialogBinding
 import com.dpm.core.base.BindingBottomSheetDialog
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.designsystem.extension.dpToPx
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.scrap.adapter.ScrapMonthAdapter
@@ -93,6 +94,10 @@ class ScrapFilterDialog : BindingBottomSheetDialog<FragmentScrapFilterDialogBind
             viewModel.updateAllFilter()
             dismiss()
         }
+
+        binding.clSelectStadium.setOnClickListener {
+            makeSpotImageAppbar("나중에 다른 구장도 추가될 예정이에요!")
+        }
     }
 
     override fun onCancel(dialog: DialogInterface) {
@@ -166,6 +171,17 @@ class ScrapFilterDialog : BindingBottomSheetDialog<FragmentScrapFilterDialogBind
         selectedBadBtn.forEach { button ->
             button.isSelected = selectedButtonText.contains(button.text.toString())
         }
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 94
+        ).show()
     }
 
 }
