@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import com.depromeet.presentation.R
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.presentation.extension.noRippleClickable
+import com.dpm.presentation.util.HighlightedText
+import com.dpm.presentation.util.MultiStyleText
 import kotlinx.coroutines.delay
 
 
@@ -42,14 +44,10 @@ fun KakaoSignupScreen(
     onKakaoLoginClick: () -> Unit = {}
 ) {
     val onBoardingList = listOf(
-        Triple("시야찾기로 원하는 야구장\n" +
-                "자리를 빠르게 알아봐요!", 0, 3),
-        Triple("내 시야 후기를 올려서\n" +
-                "캐릭터를 성장시켜요!", 0, 6),
-        Triple("내 소중한 시야 기록을\n" +
-                "한 자리에서 봐요!", 6, 10),
-        Triple("내 직관 후기를 기록하면서\n" +
-                "좌석 시야도 공유할 수 있어요", 0, 3)
+        Pair("시야찾기로 원하는 야구장\n자리를 빠르게 알아봐요!", listOf(0..3)),
+        Pair("내 시야 후기를 올려서\n캐릭터를 성장시켜요!", listOf(0..6)),
+        Pair("내 소중한 시야 기록을\n한 자리에서 봐요!", listOf(6..10)),
+        Pair("내 직관 후기를 기록하면서\n좌석 시야도 공유할 수 있어요", listOf(2..6, 14..19))
     )
 
     val onboardingImageList = listOf(
@@ -109,15 +107,13 @@ fun KakaoSignupScreen(
             ) { page ->
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        modifier = Modifier.padding(top = 44.dp, bottom = 20.dp),
+                    HighlightedText(
                         text = onBoardingList[page].first,
-                        fontSize = 22.sp,
-                        textAlign = TextAlign.Center,
-                        color = SpotTheme.colors.transferBlack03,
-                        fontWeight = FontWeight(600),
+                        style = SpotTheme.typography.title04,
+                        highlightRanges = onBoardingList[page].second,
+                        modifier = Modifier.padding(top = 44.dp, bottom = 20.dp)
                     )
                 }
             }
