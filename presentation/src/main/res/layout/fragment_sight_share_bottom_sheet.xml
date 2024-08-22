@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rect_white_fill_32"
+    android:paddingBottom="20dp">
+
+    <View
+        android:id="@+id/vHandler"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rect_gray600_fill_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvShareTitle"
+        style="@style/TextAppearance.Spot.Title04"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:gravity="center"
+        android:text="잠깐!\n좌석 시야를 공유해주실 수 있나요?"
+        android:textColor="@color/color_foreground_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/vHandler" />
+
+    <TextView
+        android:id="@+id/tvShareSubTitle"
+        style="@style/TextAppearance.Spot.Body03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="방금 전 올린 사진에서\n야구장 시야 사진만 선택하면 돼요."
+        android:textColor="@color/color_foreground_caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvShareTitle" />
+
+    <TextView
+        android:id="@+id/tvNowImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rect_background_primary_fill_4"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="5dp"
+        android:text="방금 올린 사진"
+        android:textColor="@color/color_foreground_body_subtitle"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvShareSubTitle" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNowImage">
+
+        <ImageView
+            android:id="@+id/ivFirstImage"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivSecondImage"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivFirstImage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivThirdImage"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivSecondImage"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.dpm.presentation.home.customview.CustomSpeechBubbleView
+        android:id="@+id/csbvSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="3.96dp"
+        android:elevation="12dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp"
+        app:backgroundColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/clButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:textAppearance="@style/TextAppearance.Spot.Caption04"
+        app:textColor="@color/color_foreground_body_subtitle">
+
+    </com.dpm.presentation.home.customview.CustomSpeechBubbleView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clSelectImage">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_background_secondary_fill_8"
+            android:gravity="center"
+            android:paddingHorizontal="18.5dp"
+            android:paddingVertical="19dp"
+            android:stateListAnimator="@null"
+            android:text="괜찮아요"
+            android:textAppearance="@style/TextAppearance.Spot.Label02"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnYes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="72dp"
+            android:background="@drawable/rect_spot_green_fill_8"
+            android:gravity="center"
+            android:paddingHorizontal="74dp"
+            android:paddingVertical="19dp"
+            android:stateListAnimator="@null"
+            android:text="네, 좋아요"
+            android:textAppearance="@style/TextAppearance.Spot.Label02"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnNo" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
