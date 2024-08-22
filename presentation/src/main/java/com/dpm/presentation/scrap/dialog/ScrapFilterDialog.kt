@@ -175,7 +175,7 @@ class ScrapFilterDialog : BindingBottomSheetDialog<FragmentScrapFilterDialogBind
 
     private fun makeSpotImageAppbar(message: String) {
         SpotImageSnackBar.make(
-            view = binding.root,
+            view = binding.root.rootView,
             message = message,
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
