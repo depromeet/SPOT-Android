@@ -5,18 +5,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.depromeet.presentation.R
-import com.depromeet.presentation.databinding.FragmentSelectReviewMethodDialogBinding
+import com.depromeet.presentation.databinding.FragmentSelectReviewTypeDialogBinding
 import com.dpm.core.base.BindingDialogFragment
+import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.ReviewActivity
-import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReviewMethodDialog : BindingDialogFragment<FragmentSelectReviewMethodDialogBinding>(
-    R.layout.fragment_select_review_method_dialog,
-    FragmentSelectReviewMethodDialogBinding::inflate,
+class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBinding>(
+    R.layout.fragment_select_review_type_dialog,
+    FragmentSelectReviewTypeDialogBinding::inflate,
 ) {
     private val viewModel: ReviewViewModel by activityViewModels()
 
