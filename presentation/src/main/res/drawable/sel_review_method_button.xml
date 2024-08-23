@@ -1,6 +1,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_selected="true">
+    <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <solid android:color="@color/color_background_positive" />
             <corners android:radius="12dp" />
@@ -8,7 +8,7 @@
         </shape>
     </item>
 
-    <item android:state_selected="false">
+    <item android:state_pressed="false">
         <shape android:shape="rectangle">
             <solid android:color="@color/color_background_secondary" />
             <corners android:radius="12dp" />
