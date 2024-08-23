@@ -77,11 +77,12 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
-                android:text="경기의 순간을 기록해보세요"
+                tools:text="경기의 순간을 간직해보세요"
                 android:textAppearance="@style/TextAppearance.Spot.Title02" />
 
             <LinearLayout
@@ -178,7 +179,7 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="98dp"
                                     android:gravity="center"
-                                    android:text="야구장 시야 사진을\n올려주세요"
+                                    tools:text="야구장 시야 사진을\n올려주세요"
                                     android:textAppearance="@style/TextAppearance.Spot.Subtitle01"
                                     android:textColor="@color/color_foreground_body_sebtext" />
 
@@ -496,7 +497,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16.5dp"
                     android:layout_marginStart="16dp"
-                    android:text="내 시야 후기"
+                    tools:text="내 시야 후기"
                     android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
                     android:textColor="@color/color_foreground_body_subtitle"
                     app:layout_constraintBottom_toBottomOf="parent"

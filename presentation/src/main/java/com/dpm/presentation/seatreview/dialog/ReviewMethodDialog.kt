@@ -1,5 +1,6 @@
 package com.dpm.presentation.seatreview.dialog
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -7,6 +8,8 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectReviewMethodDialogBinding
 import com.dpm.core.base.BindingDialogFragment
 import com.dpm.presentation.extension.setOnSingleClickListener
+import com.dpm.presentation.seatreview.ReviewActivity
+import com.dpm.presentation.seatreview.ReviewMethod
 import com.dpm.presentation.seatreview.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,13 +29,22 @@ class ReviewMethodDialog : BindingDialogFragment<FragmentSelectReviewMethodDialo
         super.onViewCreated(view, savedInstanceState)
         initEvent()
     }
-
     private fun initEvent() {
         binding.clUploadView.setOnSingleClickListener {
-            // TODO : 0.5초 -> 좌석 시야 등록 플로우 이동
+            viewModel.setReviewMethod(ReviewMethod.VIEW)
+            navigateToReviewActivity()
         }
         binding.clUploadIntuition.setOnSingleClickListener {
-            // TODO : 0.5초 -> 직관 후기 등록 플로우 이동
+            viewModel.setReviewMethod(ReviewMethod.INTUITION)
+            navigateToReviewActivity()
         }
+    }
+
+    private fun navigateToReviewActivity() {
+        startActivity(
+            Intent(requireContext(), ReviewActivity::class.java).apply {
+                putExtra("METHOD_KEY", viewModel.reviewMethod.value?.name)
+            },
+        )
     }
 }

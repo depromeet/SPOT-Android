@@ -51,6 +51,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
+    private val method by lazy { intent.getStringExtra("METHOD_KEY")?.let { ReviewMethod.valueOf(it) } }
     private val selectedImage: List<ImageView> by lazy {
         listOf(
             binding.ivFirstImage,
@@ -82,6 +83,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun initView() {
+        initMethodNaming()
         viewModel.getStadiumName()
         initDatePickerDialog()
         initUploadDialog()
@@ -107,6 +109,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         Utils(this).apply {
             setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
             setBlackSystemBarIconColor(window)
+        }
+    }
+
+    private fun initMethodNaming() {
+        when (method) {
+            ReviewMethod.VIEW -> {
+                binding.tvTitle.text = "좌석의 시야를 공유해보세요"
+                binding.tvAddImage.text = "야구장 시야 사진을\n올려주세요"
+                binding.tvReviewMySeat.text = "내 시야 후기"
+            }
+            ReviewMethod.INTUITION -> {
+                binding.tvTitle.text = "경기의 순간을 간직해보세요"
+                binding.tvAddImage.text = "직관후기 사진을\n올려주세요"
+                binding.tvReviewMySeat.text = "내 직관 후기"
+            }
+            else -> {}
         }
     }
 
@@ -253,7 +271,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             if (supportFragmentManager.findFragmentByTag(REVIEW_MY_SEAT_DIALOG) == null &&
                 supportFragmentManager.findFragmentByTag(SELECT_SEAT_DIALOG) == null
             ) {
-                ReviewMySeatDialog().show(supportFragmentManager, REVIEW_MY_SEAT_DIALOG)
+                ReviewMySeatDialog().apply {
+                    arguments = Bundle().apply { putString("METHOD_KEY", method?.name) }
+                }.show(supportFragmentManager, REVIEW_MY_SEAT_DIALOG)
             }
         }
 
