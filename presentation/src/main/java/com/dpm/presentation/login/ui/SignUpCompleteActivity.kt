@@ -21,6 +21,11 @@ class SignUpCompleteActivity : BaseActivity<ActivitySignupCompleteBinding>(
     }
 
     private fun initView() {
+        welcomeSetText()
+        welcomeImageSetAnimation()
+    }
+
+    private fun welcomeSetText() {
         val nickname = intent.getStringExtra("nickname") ?: ""
         val welcomeMessage = "${nickname}님 반가워요!"
 
@@ -34,6 +39,20 @@ class SignUpCompleteActivity : BaseActivity<ActivitySignupCompleteBinding>(
         )
 
         binding.tvSignupCompleteTitle.text = spannableString
+    }
+
+    private fun welcomeImageSetAnimation() {
+        binding.ivSignupComplete.apply {
+            alpha = 0f
+            scaleX = 0.5f
+            scaleY = 0.5f
+            animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(1000)
+                .start()
+        }
     }
 
     private fun initEvent() {

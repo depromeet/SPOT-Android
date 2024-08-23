@@ -88,7 +88,7 @@
 
     <TextView
         android:id="@+id/tv_login_info_withdraw"
-        style="@style/TextAppearance.Spot.Label08"
+        style="@style/TextAppearance.Spot.Body01"
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:gravity="center_vertical"
