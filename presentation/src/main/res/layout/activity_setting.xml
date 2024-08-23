@@ -21,17 +21,46 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <com.dpm.designsystem.SpotAppbar
-        android:id="@+id/appbar_setting"
-        style="@style/TextAppearance.Spot.Label03"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tbSetting"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/setting_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_chevron_left"
-        app:navigationIconColor="@color/color_foreground_body_sebtext" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ivSettingBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginVertical="14dp"
+            android:src="@drawable/ic_chevron_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정 및 개인정보"
+            android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivSettingMyProfile"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_setting_my_page"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="14dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_setting_feedback"
@@ -40,7 +69,7 @@
         android:background="@drawable/spot_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar_setting">
+        app:layout_constraintTop_toBottomOf="@id/tbSetting">
 
         <TextView
             android:id="@+id/tv_setting_feedback"
@@ -71,6 +100,7 @@
         <ImageView
             android:layout_width="108dp"
             android:layout_height="108dp"
+            android:layout_marginEnd="-10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/ic_setting_title_image" />
@@ -160,6 +190,7 @@
         app:layout_constraintEnd_toEndOf="@id/tv_setting_report"
         app:layout_constraintTop_toTopOf="@id/tv_setting_report"
         app:tint="@color/color_foreground_disabled"
+        android:src="@drawable/ic_setting_to_link"
         tools:ignore="contentDescription" />
 
     <View
@@ -260,7 +291,7 @@
 
     <TextView
         android:id="@+id/tv_setting_logout"
-        style="@style/TextAppearance.Spot.Label08"
+        style="@style/TextAppearance.Spot.Body01"
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:gravity="center_vertical"
