@@ -29,7 +29,7 @@ import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
-import com.dpm.presentation.seatreview.ReviewViewModel
+import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.dpm.presentation.seatreview.adapter.SelectSeatAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint

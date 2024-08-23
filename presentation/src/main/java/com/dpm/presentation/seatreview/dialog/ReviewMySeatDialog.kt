@@ -19,8 +19,8 @@ import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.seatreview.ReviewMethod
-import com.dpm.presentation.seatreview.ReviewViewModel
+import com.dpm.domain.model.seatreview.ReviewMethod
+import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -143,7 +143,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                 binding.tvWriteDetailReview.text = "더 자세한 시야 후기를 남길래요!"
                 binding.etDetailReview.hint = "시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요!"
             }
-            ReviewMethod.INTUITION -> {
+            ReviewMethod.FEED -> {
                 binding.tvReviewMySeat.text = "직관 후기"
                 binding.tvWriteDetailReview.text = "더 자세한 직관 후기를 남길래요!"
                 binding.etDetailReview.hint = "나의 경기 직관 후기를 작성해주세요! 그날의 날씨나 소소한 감상도 좋아요!"

@@ -1,4 +1,4 @@
-package com.dpm.presentation.seatreview
+package com.dpm.presentation.seatreview.viewmodel
 
 import android.net.Uri
 import android.util.Log
@@ -15,6 +15,7 @@ import com.dpm.domain.entity.response.seatreview.ResponseStadiumName
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.domain.repository.SeatReviewRepository
+import com.dpm.domain.model.seatreview.ReviewMethod
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
