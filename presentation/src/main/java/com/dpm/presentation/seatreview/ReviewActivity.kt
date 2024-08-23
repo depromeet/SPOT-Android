@@ -471,6 +471,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     dialogType?.let {
                         Intent(this, HomeActivity::class.java).apply {
                             putExtra("DIALOG_TYPE", it)
+                            putStringArrayListExtra("SELECTED_IMAGES", ArrayList(selectedImageUris))
                             startActivity(this)
                         }
                     }

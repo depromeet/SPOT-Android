@@ -34,6 +34,11 @@ class FeedUploadDialog : BindingDialogFragment<FragmentFeedUploadDialogBinding>(
     }
 
     private fun navigateToShareDialog() {
-        SeatShareDialog().show(parentFragmentManager, this.tag)
+        val selectedImageUris = arguments?.getStringArrayList("SELECTED_IMAGES") ?: arrayListOf()
+        SeatShareDialog().apply {
+            arguments = Bundle().apply {
+                putStringArrayList("SELECTED_IMAGES", ArrayList(selectedImageUris))
+            }
+        }.show(parentFragmentManager, this.tag)
     }
 }
