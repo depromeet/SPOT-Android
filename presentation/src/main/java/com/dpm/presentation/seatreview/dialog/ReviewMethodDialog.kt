@@ -9,8 +9,8 @@ import com.depromeet.presentation.databinding.FragmentSelectReviewMethodDialogBi
 import com.dpm.core.base.BindingDialogFragment
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.ReviewActivity
-import com.dpm.presentation.seatreview.ReviewMethod
-import com.dpm.presentation.seatreview.ReviewViewModel
+import com.dpm.domain.model.seatreview.ReviewMethod
+import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,8 +34,8 @@ class ReviewMethodDialog : BindingDialogFragment<FragmentSelectReviewMethodDialo
             viewModel.setReviewMethod(ReviewMethod.VIEW)
             navigateToReviewActivity()
         }
-        binding.clUploadIntuition.setOnSingleClickListener {
-            viewModel.setReviewMethod(ReviewMethod.INTUITION)
+        binding.clUploadFeed.setOnSingleClickListener {
+            viewModel.setReviewMethod(ReviewMethod.FEED)
             navigateToReviewActivity()
         }
     }
