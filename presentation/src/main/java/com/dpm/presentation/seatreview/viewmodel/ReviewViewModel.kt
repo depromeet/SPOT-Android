@@ -386,6 +386,5 @@ class ReviewViewModel @Inject constructor(
 
     fun setReviewMethod(method: ReviewMethod) {
         _reviewMethod.value = method
-        Log.d("minju",reviewMethod.value.toString())
     }
 }
