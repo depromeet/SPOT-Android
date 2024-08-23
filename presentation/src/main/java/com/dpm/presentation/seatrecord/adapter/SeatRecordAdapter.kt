@@ -139,7 +139,7 @@ class SeatRecordAdapter(
     }
 
     fun isHeader(position: Int): Boolean =
-        getItemViewType(position) == RecordViewType.DATE_ITEM.ordinal
+        getItemViewType(position) == RecordViewType.SELECT_REVIEW_ITEM.ordinal
 
     fun updateItemAt(index: Int, newItem: RecordListItem) {
         val newList = currentList.toMutableList()

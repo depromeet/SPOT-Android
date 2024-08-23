@@ -7,7 +7,7 @@ import com.depromeet.presentation.databinding.ItemRecordSelectReviewBinding
 import com.dpm.presentation.extension.setOnSingleClickListener
 
 class RecordSelectReviewViewHolder(
-    private val binding: ItemRecordSelectReviewBinding,
+    internal val binding: ItemRecordSelectReviewBinding,
     private val seatViewClick: () -> Unit,
     private val intuitiveViewClick: () -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {

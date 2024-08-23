@@ -7,6 +7,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.dpm.presentation.seatrecord.viewholder.RecordSelectReviewViewHolder
+import timber.log.Timber
 
 
 class HeaderItemDecoration(
@@ -32,7 +34,7 @@ class HeaderItemDecoration(
                 recyclerView: RecyclerView,
                 motionEvent: MotionEvent,
             ): Boolean {
-                return false
+                //return false
                 //TODO : 우선 false처리로 부모에서 처리 로 진행 추후 수정 예정
                 /**
                  *  1. 모두 false로 할 경우
@@ -42,25 +44,43 @@ class HeaderItemDecoration(
                  *  하지만 stickyheader 이후 header가 해제되었을 때 프로필 클릭이 안됨
                  *  만약 해결했다면 currentHeader에 대한 클릭 리스너를 처리해줘야함 -> 자식 클릭?
                  */
-//                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-//                    val y = motionEvent.y.toInt()
-//
-//                    val headerView = currentHeader?.second?.itemView ?: return false
-//                    val headerBottom = headerView.bottom + recyclerView.paddingTop
-//                    val headerTop = headerView.top + recyclerView.paddingTop
-//
-//                    Timber.d("test -> 위치 ${headerView.bottom} / ${headerView.top} / ${recyclerView.paddingTop}")
-//                    if (y in headerTop..headerBottom) {
-//                        Timber.d("test -> true니? ${y in (headerTop..headerBottom)}")
-//                        return true
-//                    }
-//                }
-//                Timber.d("test -> false니? ㅇㅇ")
-//                return false
+                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    val y = motionEvent.y.toInt()
+
+                    val headerView = currentHeader?.second?.itemView ?: return false
+                    val headerBottom = headerView.bottom + recyclerView.paddingTop
+                    val headerTop = headerView.top + recyclerView.paddingTop
+
+                    Timber.d("test -> 위치 ${headerView.bottom} / ${headerView.top} / ${recyclerView.paddingTop}")
+                    if (y in headerTop..headerBottom) {
+                        Timber.d("test -> true니? ${y in (headerTop..headerBottom)}")
+
+                        val headerPosition = currentHeader?.first ?: return false
+                        val headerViewHolder = currentHeader?.second ?: return false
+
+                        if (headerViewHolder is RecordSelectReviewViewHolder) {
+                            val seatViewBounds = Rect()
+                            val intuitiveViewBounds = Rect()
+
+                            headerViewHolder.binding.tvSeatView.getHitRect(seatViewBounds)
+                            headerViewHolder.binding.tvIntuitiveReview.getHitRect(intuitiveViewBounds)
+
+                            if (seatViewBounds.contains(motionEvent.x.toInt(), motionEvent.y.toInt())) {
+                                headerViewHolder.binding.tvSeatView.performClick()
+                            }
+
+                            if (intuitiveViewBounds.contains(motionEvent.x.toInt(), motionEvent.y.toInt())) {
+                                headerViewHolder.binding.tvIntuitiveReview.performClick()
+                            }
+
+                            return true
+                        }
+                    }
+                }
+                Timber.d("test -> false니? ㅇㅇ")
+                return false
 
             }
-
-
         })
     }
 

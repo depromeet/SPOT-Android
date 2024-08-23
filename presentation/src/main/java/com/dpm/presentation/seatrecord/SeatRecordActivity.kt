@@ -168,7 +168,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
         with(binding) {
             rvSeatRecord.adapter = adapter
-            /*
             rvSeatRecord.addItemDecoration(
                 HeaderItemDecoration(
                     binding.rvSeatRecord,
@@ -176,8 +175,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     isHeader = { position -> (rvSeatRecord.adapter as SeatRecordAdapter).isHeader(position) }
                 )
             )
-             */
-
             rvSeatRecord.addOnScrollListener(object : OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     val scrollTop = !binding.rvSeatRecord.canScrollVertically(-1)
@@ -217,7 +214,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     stopDateShimmer()
                     val reviewState = viewModel.reviews.value
                     if (reviewState is UiState.Success) {
-                        adapter.updateItemAt(1, RecordListItem.Date(state.data.yearMonths))
+                        adapter.updateItemAt(2, RecordListItem.Date(state.data.yearMonths))
                     } else {
                         adapter.submitList(
                             listOf(
@@ -307,6 +304,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     "모두를 응원하는 Lv.", profile.level, " ${profile.levelTitle}"
                 )
             }
+            csbvHelpInfo.setText("내 기록이 야구팬들에게 도움된 횟수에요!")
             ivRecordProfile.loadAndCircleProfile(profile.profileImage)
             tvRecordNickname.text = profile.nickname
             tvRecordCount.text = "0"
