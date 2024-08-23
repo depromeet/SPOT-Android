@@ -54,7 +54,7 @@
         android:paddingVertical="5dp"
         android:text="방금 올린 사진"
         android:textColor="@color/color_foreground_body_subtitle"
-        android:textSize="12dp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvShareSubTitle" />
