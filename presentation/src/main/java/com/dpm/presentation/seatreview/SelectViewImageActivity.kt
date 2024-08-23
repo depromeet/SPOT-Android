@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import com.depromeet.presentation.databinding.ActivitySelectViewImageBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.presentation.seatreview.adapter.SelectKeywordAdapter
+import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -80,7 +80,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clUploadIntuition"
+            android:id="@+id/clUploadFeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/sel_review_method_button"
@@ -91,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@id/clUploadView">
 
             <TextView
-                android:id="@+id/tvUploadIntuitionTitle"
+                android:id="@+id/tvUploadFeedTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -102,7 +102,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvUploadIntuitionSubTitle"
+                android:id="@+id/tvUploadFeedSubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -113,7 +113,7 @@
                 android:textColor="@color/color_foreground_caption"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvUploadIntuitionTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/tvUploadFeedTitle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
