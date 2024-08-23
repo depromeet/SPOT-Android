@@ -5,24 +5,28 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dpm.domain.entity.response.home.ResponseMySeatRecord
-import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.databinding.ItemRecordDateBinding
 import com.depromeet.presentation.databinding.ItemRecordProfileBinding
 import com.depromeet.presentation.databinding.ItemRecordReviewBinding
+import com.depromeet.presentation.databinding.ItemRecordSelectReviewBinding
+import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.presentation.seatrecord.viewholder.RecordDateViewHolder
 import com.dpm.presentation.seatrecord.viewholder.RecordProfileViewHolder
 import com.dpm.presentation.seatrecord.viewholder.RecordReviewViewHolder
+import com.dpm.presentation.seatrecord.viewholder.RecordSelectReviewViewHolder
 import timber.log.Timber
 
 enum class RecordViewType {
     PROFILE_ITEM,
+    SELECT_REVIEW_ITEM,
     DATE_ITEM,
     RECORD_ITEM
 }
 
 sealed class RecordListItem {
     data class Profile(val profile: ResponseMySeatRecord.MyProfileResponse) : RecordListItem()
+    object ReviewType : RecordListItem()
     data class Date(val reviewDates: List<ResponseReviewDate.YearMonths>) : RecordListItem()
     data class Record(val reviews: List<ResponseMySeatRecord.ReviewResponse>) : RecordListItem()
 }
@@ -33,6 +37,8 @@ class SeatRecordAdapter(
     private val monthClick: (Int) -> Unit,
     private val yearClick: (Int) -> Unit,
     private val profileEditClick: (ResponseMySeatRecord.MyProfileResponse) -> Unit,
+    private val seatViewClick: () -> Unit,
+    private val intuitiveViewClick: () -> Unit,
 ) : ListAdapter<RecordListItem, RecyclerView.ViewHolder>(
     RecordItemDiffCallback()
 ) {
@@ -40,6 +46,7 @@ class SeatRecordAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is RecordListItem.Profile -> RecordViewType.PROFILE_ITEM.ordinal
+            is RecordListItem.ReviewType -> RecordViewType.SELECT_REVIEW_ITEM.ordinal
             is RecordListItem.Date -> RecordViewType.DATE_ITEM.ordinal
             is RecordListItem.Record -> RecordViewType.RECORD_ITEM.ordinal
         }
@@ -55,6 +62,18 @@ class SeatRecordAdapter(
                         false
                     ),
                     editClick = profileEditClick
+                )
+            }
+
+            RecordViewType.SELECT_REVIEW_ITEM.ordinal -> {
+                RecordSelectReviewViewHolder(
+                    ItemRecordSelectReviewBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    ),
+                    seatViewClick = seatViewClick,
+                    intuitiveViewClick = intuitiveViewClick
                 )
             }
 
@@ -93,6 +112,13 @@ class SeatRecordAdapter(
                 val item = getItem(position) as? RecordListItem.Profile
                 item?.let {
                     holder.bind(it.profile)
+                }
+            }
+
+            is RecordSelectReviewViewHolder -> {
+                val item = getItem(position) as? RecordListItem.ReviewType
+                item?.let{
+                    holder.bind()
                 }
             }
 
@@ -137,6 +163,9 @@ class RecordItemDiffCallback : DiffUtil.ItemCallback<RecordListItem>() {
         return when {
             oldItem is RecordListItem.Record && newItem is RecordListItem.Record ->
                 oldItem.reviews == newItem.reviews
+
+            oldItem is RecordListItem.ReviewType && newItem is RecordListItem.ReviewType ->
+                oldItem == newItem
 
             oldItem is RecordListItem.Profile && newItem is RecordListItem.Profile ->
                 oldItem.profile == newItem.profile

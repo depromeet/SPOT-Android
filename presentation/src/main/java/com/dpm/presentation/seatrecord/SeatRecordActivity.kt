@@ -157,6 +157,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 viewModel.setEditReviewId(reviewId)
                 RecordEditDialog.newInstance(SEAT_RECORD_TAG)
                     .apply { show(supportFragmentManager, this.tag) }
+            },
+            seatViewClick = {
+
+            },
+            intuitiveViewClick = {
+
             }
         )
 
@@ -216,6 +222,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         adapter.submitList(
                             listOf(
                                 RecordListItem.Profile(ResponseMySeatRecord.MyProfileResponse()),
+                                RecordListItem.ReviewType,
                                 RecordListItem.Date(state.data.yearMonths),
                                 RecordListItem.Record(emptyList())
                             )
@@ -254,8 +261,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     val newRecordItem = RecordListItem.Record(state.data.reviews)
                     val newList = adapter.currentList.toMutableList()
                     newList[0] = newProfileItem
-                    newList[1] = newDateItem
-                    newList[2] = newRecordItem
+                    newList[1] = RecordListItem.ReviewType
+                    newList[2] = newDateItem
+                    newList[3] = newRecordItem
 
                     adapter.submitList(newList)
 
