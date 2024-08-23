@@ -24,12 +24,10 @@ import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
-import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
 import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
 import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
 import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
-import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,8 +50,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
         private const val DATE_PICKER_DIALOG_TAG = "DatePickerDialogTag"
         private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
-        private const val VIEW_UPLOAD_DIALOG = "ViewUploadDialog"
-        private const val FEED_UPLOAD_DIALOG = "FeedUploadDialog"
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
@@ -466,16 +462,17 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    when (method) {
-                        ReviewMethod.VIEW -> {
-                            ViewUploadDialog().show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
-                        }
+                    val dialogType = when (method) {
+                        ReviewMethod.VIEW -> ReviewMethod.VIEW
+                        ReviewMethod.FEED -> ReviewMethod.FEED
+                        else -> null
+                    }
 
-                        ReviewMethod.FEED -> {
-                            FeedUploadDialog().show(supportFragmentManager, FEED_UPLOAD_DIALOG)
+                    dialogType?.let {
+                        Intent(this, HomeActivity::class.java).apply {
+                            putExtra("DIALOG_TYPE", it)
+                            startActivity(this)
                         }
-
-                        else -> {}
                     }
                 }
 
