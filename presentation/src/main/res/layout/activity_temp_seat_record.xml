@@ -7,53 +7,58 @@
     android:background="@color/color_background_tertiary">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_start"
+        android:id="@+id/glStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_end"
+        android:id="@+id/glEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
+
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_bottom"
+        android:id="@+id/glBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="30dp" />
 
-
-    <com.dpm.designsystem.SpotAppbar
-        android:id="@+id/record_spot_appbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/color_background_tertiary"
-        android:text="@string/view_record_my"
-        android:textColor="@color/color_foreground_heading"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/ic_chevron_left_big"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_chevron_left_big"
-        app:navigationIconColor="@color/color_foreground_body_sebtext"
-        app:navigationIconSize="24"
-        app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />
+        tools:ignore="contentDescription" />
+
+    <TextView
+        android:id="@+id/tvRecordTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="@string/view_record_my"
+        android:textAppearance="@style/TextAppearance.Spot.Label03"
+        android:textColor="@color/color_foreground_body_sebtext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.dpm.designsystem.StickyNestedScrollView
-        android:id="@+id/ssv_record"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/ssvRecord"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/record_spot_appbar">
+        app:layout_constraintTop_toBottomOf="@id/ivBack">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_record_profile"
@@ -62,40 +67,39 @@
 
 
             <com.dpm.presentation.home.customview.CustomSpeechBubbleView
-                android:id="@+id/csbv_record_title"
-                style="@style/TextAppearance.Spot.Caption04"
+                android:id="@+id/csbvRecordTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginBottom="55dp"
-                android:elevation="4dp"
+                android:elevation="12dp"
                 android:paddingRight="10dp"
                 app:backgroundColor="@color/color_background_white"
+                app:layout_constraintBottom_toBottomOf="@id/iv_record_profile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:paddingBottom="8dp"
+                app:paddingBottom="12dp"
                 app:paddingLeft="10dp"
+                app:paddingRight="10dp"
                 app:paddingTop="8dp"
+                app:textAppearance="@style/TextAppearance.Spot.Caption04"
                 app:textColor="@color/color_foreground_body_sebtext"
-                app:textSize="11sp"
-                app:textStyle="medium"
                 tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
             <ImageView
                 android:id="@+id/iv_record_profile"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_marginTop="20dp"
-                android:elevation="1dp"
+                android:layout_marginTop="39dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_default_profile"
-                app:layout_constraintEnd_toEndOf="@id/csbv_record_title"
-                app:layout_constraintStart_toStartOf="@id/csbv_record_title"
-                app:layout_constraintTop_toTopOf="@id/csbv_record_title"
+                app:layout_constraintEnd_toEndOf="@id/csbvRecordTitle"
+                app:layout_constraintStart_toStartOf="@id/csbvRecordTitle"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="contentDescription" />
 
             <ImageView
-                android:id="@+id/iv_record_edit"
+                android:id="@+id/ivRecordEdit"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="47dp"
@@ -109,7 +113,7 @@
                 tools:ignore="contentDescription" />
 
             <TextView
-                android:id="@+id/tv_record_nickname"
+                android:id="@+id/tvRecordNickname"
                 style="@style/TextAppearance.Spot.Title03"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,156 +126,272 @@
                 tools:text="김영희" />
 
             <TextView
-                android:id="@+id/tv_record_whole"
-                style="@style/TextAppearance.Spot.Subtitle01"
+                android:id="@+id/tvRecordWhole"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/view_record_whole"
-                android:textColor="@color/color_foreground_body_subtitle"
-                app:layout_constraintEnd_toStartOf="@id/tv_record_count"
-                app:layout_constraintStart_toStartOf="@id/tv_record_nickname"
-                app:layout_constraintTop_toBottomOf="@id/tv_record_nickname" />
+                android:textAppearance="@style/TextAppearance.Spot.Body02"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintEnd_toStartOf="@id/vRecordDivider"
+                app:layout_constraintTop_toBottomOf="@id/tvRecordNickname" />
 
             <TextView
-                android:id="@+id/tv_record_count"
-                style="@style/TextAppearance.Spot.Subtitle03"
+                android:id="@+id/tvRecordCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:textColor="@color/color_foreground_caption"
-                app:layout_constraintBottom_toBottomOf="@id/tv_record_whole"
-                app:layout_constraintEnd_toEndOf="@id/tv_record_nickname"
-                app:layout_constraintStart_toEndOf="@id/tv_record_whole"
-                app:layout_constraintTop_toTopOf="@id/tv_record_whole"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintEnd_toEndOf="@id/tvRecordWhole"
+                app:layout_constraintStart_toStartOf="@id/tvRecordWhole"
+                app:layout_constraintTop_toBottomOf="@id/tvRecordWhole"
                 tools:text="37" />
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_record_profile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:elevation="3dp"
+            <View
+                android:id="@+id/vRecordDivider"
+                android:layout_width="1dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/color_stroke_tertiary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/tvRecordNickname" />
 
-                <include layout="@layout/item_shimmer_record_profile" />
+            <TextView
+                android:id="@+id/tvRecordHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/view_record_help"
+                android:textAppearance="@style/TextAppearance.Spot.Body02"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintStart_toEndOf="@id/vRecordDivider"
+                app:layout_constraintTop_toBottomOf="@id/tvRecordNickname" />
 
-            </com.facebook.shimmer.ShimmerFrameLayout>
+            <com.dpm.presentation.home.customview.CustomSpeechBubbleView
+                android:id="@+id/csbvHelpInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6.5dp"
+                android:translationX="-32dp"
+                android:visibility="gone"
+                app:backgroundColor="@color/color_transfer_black_03"
+                app:layout_constraintBottom_toTopOf="@id/ivRecordHelpInfo"
+                app:layout_constraintEnd_toEndOf="@id/ivRecordHelpInfo"
+                app:layout_constraintStart_toStartOf="@id/ivRecordHelpInfo"
+                app:paddingBottom="12dp"
+                app:paddingLeft="16dp"
+                app:paddingRight="16dp"
+                app:paddingTop="12dp"
+                app:textAppearance="@style/TextAppearance.Spot.Label12"
+                app:textColor="@color/color_foreground_white"
+                app:triangleBias="0.3"
+                app:triangleHeight="5dp"
+                app:triangleWidth="12dp" />
+
+
+            <ImageView
+                android:id="@+id/ivRecordHelpInfo"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_info_circle_line"
+                app:layout_constraintBottom_toBottomOf="@id/tvRecordHelp"
+                app:layout_constraintStart_toEndOf="@id/tvRecordHelp"
+                app:layout_constraintTop_toTopOf="@id/tvRecordHelp"
+                app:tint="@color/color_transfer_black_01"
+                tools:ignore="contentDescription" />
+
+            <TextView
+                android:id="@+id/tvRecordHelpCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="0"
+                android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
+                android:textColor="@color/color_foreground_body_subtitle"
+                app:layout_constraintEnd_toEndOf="@id/tvRecordHelp"
+                app:layout_constraintStart_toStartOf="@id/tvRecordHelp"
+                app:layout_constraintTop_toBottomOf="@id/tvRecordHelp"
+                tools:text="0" />
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_record_sticky_header"
+                android:id="@+id/clRecordStickyHeader"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/color_background_tertiary"
-                android:paddingBottom="10dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_record_whole">
+                app:layout_constraintTop_toBottomOf="@id/vRecordDivider">
 
-                <Spinner
-                    android:id="@+id/spinner_record_year"
-                    style="@style/TextAppearance.Spot.Subtitle01"
-                    android:layout_width="93dp"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/glCenter"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/sel_year_drop_down"
-                    android:dropDownWidth="103dp"
-                    android:gravity="bottom"
-                    android:popupBackground="@drawable/rect_white_fill_16"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="196dp" />
+
+                <TextView
+                    android:id="@+id/tvSeatView"
+                    style="@style/TextAppearance.Spot.Subtitle03"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:paddingTop="3dp"
+                    android:text="좌석시야"
+                    android:textColor="@color/color_foreground_body_subtitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/glCenter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_record_month"
+                <View
+                    android:id="@+id/vSeatViewDivider"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/rect_body_subtitle_fill_1"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/glCenter"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvIntuitiveReview"
+                    style="@style/TextAppearance.Spot.Subtitle03"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:paddingTop="3dp"
+                    android:text="직관후기"
+                    android:textColor="@color/color_foreground_body_subtitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spinner_record_year"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/item_date_month" />
+                    app:layout_constraintStart_toStartOf="@id/glCenter"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/vIntuitiveReviewDivider"
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rect_body_subtitle_fill_1"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/glCenter" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_record_month_detail"
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spinnerRecordYear"
+                style="@style/YearSpinner"
+                android:layout_width="93dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sel_year_drop_down"
+                android:dropDownWidth="103dp"
+                android:gravity="bottom"
+                android:popupBackground="@drawable/rect_white_fill_16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecordMonth"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerRecordYear"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_date_month" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecordMonthDetail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_record_sticky_header"
-                tools:itemCount="3"
+                app:layout_constraintTop_toBottomOf="@id/rvRecordMonth"
+                tools:itemCount="1"
                 tools:listitem="@layout/item_recent_month" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintTop_toBottomOf="@id/rvRecordMonthDetail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_record_sticky_header">
-
-                <include layout="@layout/item_shimmer_review_record" />
+                app:layout_constraintTop_toBottomOf="@id/rvRecordMonth">
 
                 <include layout="@layout/item_shimmer_review_record" />
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_record_none"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tvErrorYear"
+                style="@style/TextAppearance.Spot.Subtitle01"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/color_background_tertiary"
-                android:visibility="gone"
+                android:textColor="@color/color_foreground_heading"
+                app:layout_constraintStart_toStartOf="@id/spinnerRecordYear"
+                app:layout_constraintTop_toTopOf="@id/spinnerRecordYear"
+                tools:text="2024년" />
+
+            <TextView
+                android:id="@+id/tvErrorMonth"
+                style="@style/TextAppearance.Spot.Subtitle03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rect_spot_green_fill_999"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="9dp"
+                android:text="@string/view_record_all"
+                android:textColor="@color/color_foreground_white"
+                app:layout_constraintStart_toStartOf="@id/tvErrorYear"
+                app:layout_constraintTop_toBottomOf="@id/tvErrorYear" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clRecordEmpty"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_record_sticky_header">
-
-                <TextView
-                    android:id="@+id/tv_record_year"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/gray900"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="2024년" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/rect_gray900_fill_8"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="6dp"
-                    android:text="@string/view_record_all"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="@id/tv_record_year"
-                    app:layout_constraintTop_toBottomOf="@id/tv_record_year" />
+                app:layout_constraintTop_toBottomOf="@id/tvErrorMonth">
 
                 <ImageView
-                    android:id="@+id/iv_record_no_record"
+                    android:id="@+id/ivRecordNoRecord"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="50dp"
@@ -279,11 +399,11 @@
                     android:src="@drawable/ic_communication_empty"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="contentDescription" />
 
                 <TextView
-                    android:id="@+id/tv_record_no_record_description"
+                    android:id="@+id/tvRecordNoRecordDescription"
                     style="@style/TextAppearance.Spot.Title04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -293,10 +413,10 @@
                     android:textColor="@color/color_foreground_heading"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_record_no_record" />
+                    app:layout_constraintTop_toBottomOf="@id/ivRecordNoRecord" />
 
                 <TextView
-                    android:id="@+id/tv_record_no_record_advice"
+                    android:id="@+id/tvRecordNoRecordAdvice"
                     style="@style/TextAppearance.Spot.Body02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -306,38 +426,40 @@
                     android:textColor="@color/color_foreground_caption"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_description" />
+                    app:layout_constraintTop_toBottomOf="@id/tvRecordNoRecordDescription" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_record_write_record"
+                    android:id="@+id/btRecordWriteRecord"
                     style="@style/TextAppearance.Spot.Label05"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/rect_background_white_fill_999"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/rect_background_white_fill_gray200_stroke_999"
                     android:drawableEnd="@drawable/layer_list_plus_20"
                     android:drawablePadding="4dp"
                     android:drawableTint="@color/color_foreground_disabled"
                     android:paddingHorizontal="11dp"
                     android:paddingVertical="11dp"
+                    android:stateListAnimator="@null"
                     android:text="@string/home_write_record"
                     android:textColor="@color/color_foreground_body_subtitle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_record_no_record_advice" />
+                    app:layout_constraintTop_toBottomOf="@id/tvRecordNoRecordAdvice" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_home_fail"
+                android:id="@+id/cl_record_fail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_record_sticky_header">
+                app:layout_constraintTop_toBottomOf="@id/tvErrorMonth">
 
                 <ImageView
                     android:id="@+id/iv_record_fail"
@@ -378,18 +500,19 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_record_fail_description" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_record_fail_resfresh"
+                    android:id="@+id/bt_record_fail_refresh"
                     style="@style/TextAppearance.Spot.Label05"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/rect_background_white_fill_999"
+                    android:background="@drawable/rect_background_white_fill_gray200_stroke_999"
                     android:drawableEnd="@drawable/layer_list_refresh_20"
                     android:drawablePadding="4dp"
                     android:drawableTint="@color/color_foreground_disabled"
                     android:paddingHorizontal="11dp"
                     android:paddingVertical="11dp"
+                    android:stateListAnimator="@null"
                     android:text="@string/refresh"
                     android:textColor="@color/color_foreground_body_subtitle"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -416,7 +539,7 @@
         android:scaleType="center"
         android:src="@drawable/ic_up"
         app:layout_constraintBottom_toTopOf="@id/fab_record_plus"
-        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintEnd_toEndOf="@id/glEnd"
         tools:ignore="contentDescription" />
 
 
@@ -429,8 +552,8 @@
         android:padding="12dp"
         android:scaleType="center"
         android:src="@drawable/ic_plus_24"
-        app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
-        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintBottom_toBottomOf="@id/glBottom"
+        app:layout_constraintEnd_toEndOf="@id/glEnd"
         tools:ignore="contentDescription" />
 
     <FrameLayout

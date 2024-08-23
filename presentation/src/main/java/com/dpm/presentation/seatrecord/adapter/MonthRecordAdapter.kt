@@ -57,14 +57,13 @@ class MonthRecordViewHolder(
             binding.root.alpha = 0f
             binding.root.animate()
                 .alpha(1f)
-                .setDuration(300)
+                .setDuration(100)
                 .start()
         }
     }
 
 
     private fun initReviewAdapter() {
-        if (!::adapter.isInitialized) {
             adapter = RecentRecordAdapter()
             binding.rvRecentPost.adapter = adapter
             adapter.itemRecordClickListener =
@@ -89,6 +88,5 @@ class MonthRecordViewHolder(
                     Timber.d("test scroll $scrollBottom / $lastVisibleItemPosition / $itemCount")
                 }
             })
-        }
     }
 }

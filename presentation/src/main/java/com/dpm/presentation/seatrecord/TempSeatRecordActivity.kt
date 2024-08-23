@@ -3,33 +3,27 @@ package com.dpm.presentation.seatrecord
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import coil.transform.CircleCropTransformation
-import com.dpm.core.base.BaseActivity
-import com.dpm.core.state.UiState
-import com.dpm.designsystem.SpotSpinner
-import com.dpm.designsystem.extension.dpToPx
-import com.dpm.domain.entity.response.home.ResponseMySeatRecord
-import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityTempSeatRecordBinding
-import com.dpm.presentation.extension.toast
+import com.dpm.core.base.BaseActivity
+import com.dpm.core.state.UiState
+import com.dpm.designsystem.SpotDropDownSpinner
+import com.dpm.designsystem.SpotImageSnackBar
+import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.entity.response.home.ResponseReviewDate
+import com.dpm.presentation.extension.loadAndCircleProfile
+import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.seatrecord.adapter.DateMonthAdapter
-import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
@@ -47,8 +41,6 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
 ) {
     companion object {
         const val SEAT_RECORD_TAG = "seatRecord"
-        private const val START_SPACING_DP = 20
-        private const val BETWEEN_SPACING_DP = 8
         const val PROFILE_NAME = "profile_name"
         const val PROFILE_IMAGE = "profile_image"
         const val PROFILE_CHEER_TEAM = "profile_cheer_team"
@@ -56,9 +48,10 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
 
     private lateinit var dateMonthAdapter: DateMonthAdapter
     private lateinit var monthRecordAdapter: MonthRecordAdapter
+    private lateinit var yearAdapter: SpotDropDownSpinner<String>
     private val viewModel: SeatRecordViewModel by viewModels()
     private var isLoading: Boolean = false
-    private var isSpinnerInitialized = false
+
 
     private val editProfileLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -83,36 +76,50 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
 
     private fun initView() {
         initMonthAdapter()
-        setRefreshClicked()
         initReviewList()
         viewModel.getReviewDate()
+        viewModel.getLocalProfile()
     }
 
     private fun initEvent() {
         with(binding) {
-            recordSpotAppbar.setNavigationOnClickListener {
+            ivBack.setOnClickListener {
                 finish()
             }
             fabRecordUp.setOnClickListener {
                 ssvRecord.smoothScrollTo(0, 0)
             }
             fabRecordPlus.setOnClickListener {
-                Intent(this@TempSeatRecordActivity, ReviewActivity::class.java).apply {
-                    startActivity(
-                        this
-                    )
-                }
-            }
-            btRecordFailResfresh.setOnClickListener {
-                viewModel.getSeatRecords()
+                navigateToReviewActivity()
             }
             ivRecordEdit.setOnClickListener {
                 navigateToProfileEditActivity()
             }
+            ivRecordProfile.setOnClickListener {
+                navigateToProfileEditActivity()
+            }
             btRecordWriteRecord.setOnClickListener {
-                Intent(this@TempSeatRecordActivity, ReviewActivity::class.java).apply {
-                    startActivity(this)
+                navigateToReviewActivity()
+            }
+            btRecordFailRefresh.setOnSingleClickListener {
+                if (viewModel.reviews.value is UiState.Failure || viewModel.date.value is UiState.Failure) {
+                    makeSpotImageAppbar("리뷰를 불러오는데 실패하였습니다.")
                 }
+                viewModel.getReviewDate()
+            }
+            ivRecordHelpInfo.setOnClickListener {
+                csbvHelpInfo.visibility = if (csbvHelpInfo.visibility == GONE) VISIBLE else GONE
+            }
+            csbvHelpInfo.setOnClickListener {
+                csbvHelpInfo.visibility = GONE
+            }
+            tvSeatView.setOnSingleClickListener {
+                vSeatViewDivider.visibility = VISIBLE
+                vIntuitiveReviewDivider.visibility = GONE
+            }
+            tvIntuitiveReview.setOnSingleClickListener {
+                vSeatViewDivider.visibility = GONE
+                vIntuitiveReviewDivider.visibility = VISIBLE
             }
         }
     }
@@ -120,42 +127,34 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
     private fun initObserver() {
         observeDates()
         observeReviews()
+        observeProfile()
         observeEvents()
-    }
-
-    private fun setRefreshClicked() {
-        binding.btRecordFailResfresh.setOnClickListener {
-            if (viewModel.date.value is UiState.Success) {
-                viewModel.getSeatRecords()
-            } else {
-                viewModel.getReviewDate()
-            }
-        }
     }
 
     private fun observeDates() {
         viewModel.date.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    setReviewsVisibility(isExist = true)
+                    setErrorVisibility(SeatRecordErrorType.NONE)
                     setYearSpinner(state.data)
                     dateMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getSeatRecords()
                 }
 
                 is UiState.Empty -> {
-                    setReviewsVisibility(isExist = false)
-                    binding.shimmerRecord.visibility = GONE
+                    setErrorVisibility(SeatRecordErrorType.EMPTY)
+                    setShimmer(false)
                 }
 
                 is UiState.Loading -> {
-                    setReviewsVisibility(isExist = true)
+                    setShimmer(true)
                 }
 
                 is UiState.Failure -> {
-                    setReviewsVisibility(isExist = true)
-                    binding.clHomeFail.visibility = VISIBLE
+                    setErrorVisibility(SeatRecordErrorType.FAIL)
+
                     binding.rvRecordMonthDetail.visibility = GONE
+                    setShimmer(false)
                 }
 
             }
@@ -166,27 +165,26 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         viewModel.reviews.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
+                    setShimmer(false)
                     setProfile(state.data.profile)
                     updateReviewList(state.data.reviews)
-                    binding.clHomeFail.visibility = GONE
-                    binding.rvRecordMonthDetail.visibility = VISIBLE
                     isLoading = false
-                    setShimmer(false)
+                    setErrorVisibility(SeatRecordErrorType.NONE)
                 }
 
                 is UiState.Loading -> {
-                    setShimmer(true)
                 }
 
                 is UiState.Empty -> {
+                    setShimmer(false)
                     monthRecordAdapter.submitList(emptyList())
-                    toast("해당 월에 작성한 글이 없습니다.")
+                    makeSpotImageAppbar("해당 날짜에 작성한 글이 없습니다.")
                 }
 
                 is UiState.Failure -> {
+                    makeSpotImageAppbar("리뷰를 불러오는데 실패하였습니다.")
                     setShimmer(false)
-                    binding.clHomeFail.visibility = VISIBLE
-                    binding.rvRecordMonthDetail.visibility = GONE
+                    setErrorVisibility(SeatRecordErrorType.FAIL)
                 }
             }
         }
@@ -196,74 +194,59 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
                 moveConfirmationDialog()
+                viewModel.cancelDeleteEvent()
             }
         }
 
         viewModel.editClickedEvent.asLiveData().observe(this) { state ->
             if (state == EditUi.SEAT_RECORD) {
                 moveEditReview()
+                viewModel.cancelEditEvent()
             }
+        }
+    }
+
+    private fun observeProfile() {
+        viewModel.profile.asLiveData().observe(this) {
+            setProfile(it)
         }
     }
 
     private fun setProfile(data: ResponseMySeatRecord.MyProfileResponse) {
         with(binding) {
-//            if (data.teamId != null) {
-//                "${data.teamName}의 Lv.${data.level} ${data.levelTitle}".also {
-//                    csbvRecordTitle.setText(
-//                        it
-//                    )
-//                }
-//            } else {
-//                "모두를 응원하는 Lv.${data.level} ${data.levelTitle}".also { csbvRecordTitle.setText(it) }
-//            }
-            tvRecordNickname.text = data.nickname
-            tvRecordCount.text = data.reviewCount.toString()
-            ivRecordProfile.load(data.profileImage) {
-                transformations(CircleCropTransformation())
-                error(com.depromeet.designsystem.R.drawable.ic_default_profile)
+            if (data.teamId != null && data.teamId != 0) {
+                csbvRecordTitle.setTextPart(
+                    "${data.teamName}의 Lv.", data.level,
+                    " ${data.levelTitle}"
+                )
+
+            } else {
+                csbvRecordTitle.setTextPart(
+                    "모두를 응원하는 Lv.", data.level, " ${data.levelTitle}"
+                )
             }
+            csbvHelpInfo.setText("내 기록이 야구팬들에게 도움된 횟수에요!")
+            ivRecordProfile.loadAndCircleProfile(data.profileImage)
+            tvRecordNickname.text = data.nickname
+            tvRecordCount.text = "0"
+            tvRecordCount.text = data.reviewCount.toString()
         }
-    }
-
-    private fun createColoredLevelString(data: ResponseMySeatRecord.MyProfileResponse): SpannableString {
-        /** 커스텀뷰에 또 spannable을 적용해야한다니... */
-        val fullText = if (data.teamId != null) {
-            "${data.teamName}의 Lv.${data.level} ${data.levelTitle}"
-        } else {
-            "모두를 응원하는 Lv.${data.level} ${data.levelTitle}"
-        }
-        val spannableString = SpannableString(fullText)
-
-        val levelStartIndex = fullText.indexOf(data.level.toString())
-        val levelEndIndex = levelStartIndex + data.level.toString().length
-
-        spannableString.setSpan(
-            ForegroundColorSpan(getColor(com.depromeet.designsystem.R.color.color_action_enabled)),
-            levelStartIndex,
-            levelEndIndex,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        return spannableString
     }
 
     private fun setYearSpinner(data: ResponseReviewDate) {
-        if (isSpinnerInitialized) return
         val years = data.yearMonths.map { it.year }
         val yearList = years.map { "${it}년" }
+        val selectedYear = data.yearMonths.firstOrNull { it.isClicked }?.year
+        val selectedPosition = years.indexOf(selectedYear).takeIf { it >= 0 } ?: 0
 
-        val adapter = SpotSpinner(
-            this,
-            com.depromeet.designsystem.R.layout.item_spot_spinner_view,
-            com.depromeet.designsystem.R.layout.item_spot_spinner_dropdown,
-            yearList,
-            true,
-            com.depromeet.designsystem.R.color.color_foreground_heading,
-        )
-        with(binding.spinnerRecordYear) {
-            this.adapter = adapter
-            onItemSelectedListener =
+
+        if(!::yearAdapter.isInitialized){
+            yearAdapter = SpotDropDownSpinner(yearList, selectedPosition)
+            binding.spinnerRecordYear.adapter = yearAdapter
+
+
+            binding.spinnerRecordYear.setSelection(selectedPosition)
+            binding.spinnerRecordYear.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
                         parent: AdapterView<*>?,
@@ -271,50 +254,46 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
                         position: Int,
                         id: Long,
                     ) {
-                        adapter.setSelectedItemPosition(position)
-                        val selectedYear = yearList[position].filter { it.isDigit() }.toInt()
-                        viewModel.setSelectedYear(selectedYear)
+                        yearAdapter.setSelectedItemPosition(position)
+                        viewModel.setSelectedYear(years[position])
                         binding.ssvRecord.smoothScrollTo(0, 0)
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
                 }
+
+        }else {
+            yearAdapter.updateData(yearList, selectedPosition)
+            binding.spinnerRecordYear.setSelection(selectedPosition)
         }
-        isSpinnerInitialized = true
     }
 
     private fun initMonthAdapter() {
-        dateMonthAdapter = DateMonthAdapter(
-            monthClick = { month ->
-                viewModel.setSelectedMonth(month)
-                binding.ssvRecord.smoothScrollTo(0, 0)
-            }
-        )
-        binding.rvRecordMonth.adapter = dateMonthAdapter
-        binding.rvRecordMonth.addItemDecoration(
-            LinearSpacingItemDecoration(
-                START_SPACING_DP.dpToPx(this),
-                BETWEEN_SPACING_DP.dpToPx(this)
+        if(!::dateMonthAdapter.isInitialized){
+            dateMonthAdapter = DateMonthAdapter(
+                monthClick = { month ->
+                    viewModel.setSelectedMonth(month)
+                    binding.ssvRecord.smoothScrollTo(0, 0)
+                }
             )
-        )
+            binding.rvRecordMonth.adapter = dateMonthAdapter
+        }
     }
 
-    private fun setReviewsVisibility(isExist: Boolean) {
-        if (!isExist) {
-            with(binding) {
-                "${CalendarUtil.getCurrentYear()}년".also { tvRecordYear.text = it }
-                clRecordNone.visibility = VISIBLE
-                clRecordStickyHeader.visibility = GONE
-                rvRecordMonthDetail.visibility = GONE
-            }
-        } else {
-            with(binding) {
-                clRecordNone.visibility = GONE
-                clRecordStickyHeader.visibility = VISIBLE
-                rvRecordMonthDetail.visibility = VISIBLE
+    private fun View.setVisible(visible: Boolean) {
+        visibility = if (visible) VISIBLE else GONE
+    }
 
-                ssvRecord.header = binding.clRecordStickyHeader
-            }
+    private fun setErrorVisibility(errorType: SeatRecordErrorType) {
+        with(binding) {
+            rvRecordMonthDetail.setVisible(errorType == SeatRecordErrorType.NONE)
+            tvErrorMonth.setVisible(errorType != SeatRecordErrorType.NONE)
+            tvErrorYear.setVisible(errorType != SeatRecordErrorType.NONE)
+            "${CalendarUtil.getCurrentYear()}년".also { tvErrorYear.text = it }
+            clRecordEmpty.setVisible(errorType == SeatRecordErrorType.EMPTY)
+            clRecordFail.setVisible(errorType == SeatRecordErrorType.FAIL)
+            fabRecordUp.visibility = GONE
+            if(errorType == SeatRecordErrorType.NONE) ssvRecord.header = binding.clRecordStickyHeader
         }
     }
 
@@ -346,26 +325,22 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
 
             }
 
-        binding.rvRecordMonthDetail.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
 
-                val scrollBottom = !binding.rvRecordMonthDetail.canScrollVertically(1)
-
-                val layoutManager = binding.rvRecordMonthDetail.layoutManager as LinearLayoutManager
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                val itemCount = layoutManager.itemCount - 1
-
-                Timber.d("test 마지막 포지션 : $lastVisibleItemPosition 아이템 : $itemCount")
-
-//                val hasNextPage = (viewModel.reviews.value as? UiState.Success)?.data?.last == false
-//                if (lastVisibleItemPosition == itemCount && hasNextPage && !isLoading) {
-//                    isLoading = true
-//                    viewModel.loadNextSeatRecords()
-//                }
+        //TODO 이렇게 무한스크롤 하면 되네..
+        binding.ssvRecord.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
+                Timber.d("test 끝 도달")
+                val hasNextPage = (viewModel.reviews.value as? UiState.Success)?.data?.hasNext == true
+                if (hasNextPage && !isLoading){
+                    isLoading = true
+                    viewModel.loadNextSeatRecords()
+                }
             }
+            binding.fabRecordUp.visibility = if (scrollY == 0) GONE else VISIBLE
         })
     }
+
+
 
     private fun updateReviewList(reviews: List<ResponseMySeatRecord.ReviewResponse>) {
         val groupList =
@@ -389,6 +364,14 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         }
     }
 
+    private fun navigateToReviewActivity() {
+        Intent(this@TempSeatRecordActivity, ReviewActivity::class.java).apply {
+            startActivity(
+                this
+            )
+        }
+    }
+
     private fun moveConfirmationDialog() {
         ConfirmDeleteDialog.newInstance(SEAT_RECORD_TAG)
             .apply { show(supportFragmentManager, this.tag) }
@@ -403,11 +386,26 @@ class TempSeatRecordActivity : BaseActivity<ActivityTempSeatRecordBinding>(
         if (isLoading) {
             shimmerRecord.startShimmer()
             shimmerRecord.visibility = VISIBLE
-            shimmerRecordProfile.visibility = VISIBLE
         } else {
             shimmerRecord.stopShimmer()
             shimmerRecord.visibility = GONE
-            shimmerRecordProfile.visibility = GONE
         }
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 20
+        ).show()
+    }
+
+    enum class SeatRecordErrorType {
+        EMPTY,
+        FAIL,
+        NONE
     }
 }

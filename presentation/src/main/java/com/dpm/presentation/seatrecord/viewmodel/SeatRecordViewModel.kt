@@ -84,12 +84,13 @@ class SeatRecordViewModel @Inject constructor(
                     cursor = null,
                     year = year,
                     month = month.takeIf { it != 0 },
-                    size = 100,
+                    size = 10,
                     sortBy = MySeatRecordSortBy.DATE_TIME.name
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
                 _profile.value = data.profile
+                saveLocalProfile()
                 if (data.reviews.isNotEmpty()) {
                     page.value += 1
                     _reviews.value = UiState.Success(data)
@@ -114,6 +115,19 @@ class SeatRecordViewModel @Inject constructor(
         )
     }
 
+    fun saveLocalProfile() {
+        val currentState = _reviews.value
+        if(currentState is UiState.Success) {
+            val profile = currentState.data.profile
+            sharedPreference.level = profile.level
+            sharedPreference.profileImage = profile.profileImage
+            sharedPreference.nickname = profile.nickname
+            sharedPreference.teamId = profile.teamId!!
+            sharedPreference.teamName = profile.teamName!!
+            sharedPreference.levelTitle = profile.levelTitle
+        }
+    }
+
     fun loadNextSeatRecords() {
         viewModelScope.launch {
             val year = (date.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
@@ -124,7 +138,7 @@ class SeatRecordViewModel @Inject constructor(
                     cursor = (reviews.value as UiState.Success).data.nextCursor,
                     year = year,
                     month = month.takeIf { it != 0 },
-                    size = 100,
+                    size = 10,
                     sortBy = MySeatRecordSortBy.DATE_TIME.name
                 )
             ).onSuccess { data ->
@@ -246,7 +260,9 @@ class SeatRecordViewModel @Inject constructor(
                                 _reviews.value =
                                     UiState.Success(currentState.data.copy(reviews = updatedList))
                             }
-
+                            _profile.value = profile.value.copy(
+                                reviewCount = maxOf(0, profile.value.reviewCount - 1)
+                            )
                         }
                     }
                     .onFailure {
