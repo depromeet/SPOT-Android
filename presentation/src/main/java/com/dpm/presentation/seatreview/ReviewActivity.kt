@@ -24,10 +24,10 @@ import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
-import com.dpm.presentation.seatreview.dialog.DatePickerDialog
-import com.dpm.presentation.seatreview.dialog.ImageUploadDialog
-import com.dpm.presentation.seatreview.dialog.ReviewMySeatDialog
-import com.dpm.presentation.seatreview.dialog.SelectSeatDialog
+import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
+import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
+import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
+import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint

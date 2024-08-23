@@ -10,7 +10,7 @@ import com.dpm.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentEditReviewBinding
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
-import com.dpm.presentation.seatreview.dialog.DatePickerDialog
+import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
