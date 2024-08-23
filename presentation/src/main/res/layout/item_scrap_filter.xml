@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rect_background_white_fill_999"
+    android:paddingVertical="10dp"
+    android:layout_marginEnd="8dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="10dp">
+
+    <TextView
+        android:id="@+id/tvScrapFilter"
+        style="@style/TextAppearance.Spot.Label05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/scrap_filter"
+        android:textColor="@color/color_foreground_body_sebtext"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="필터" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_settings2"
+        app:layout_constraintBottom_toBottomOf="@id/tvScrapFilter"
+        app:layout_constraintTop_toTopOf="@id/tvScrapFilter"
+        app:layout_constraintStart_toEndOf="@id/tvScrapFilter"
+        android:layout_marginStart="4dp"
+        tools:ignore="contentDescription" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
