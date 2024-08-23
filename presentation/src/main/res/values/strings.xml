@@ -122,7 +122,10 @@
     <string name="five_level_to_title">야구정 VIP</string>
     <string name="six_level_to_title">전설의 직관러</string>
     <string name="unknown_level_to_title">알 수 없음</string>
-    
+
+    <!-- seatReview 관련-->
+    <string name="seat_review_no_view_image"><u>시야 사진이 없어요</u></string>
+
     <!-- Error -->
     <string name="error_reload">새로고침</string>
     <string name="error_server_content_title">정보를 불러올 수 없습니다.</string>
@@ -133,6 +136,4 @@
     <string name="setting_feedback_title">SPOT은 여러분의 피드백으로 성장해요!</string>
     <string name="setting_feedback_description">좋은 점, 개선할 점, 궁금한 점 모두 알려주세요</string>
     <string name="setting_manage_account">계정 관리</string>
-
-
 </resources>
