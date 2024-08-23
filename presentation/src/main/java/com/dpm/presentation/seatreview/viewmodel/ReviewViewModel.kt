@@ -1,6 +1,7 @@
-package com.dpm.presentation.seatreview.viewmodel
+package com.dpm.presentation.seatreview
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,6 @@ import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumName
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
-import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.domain.repository.SeatReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -333,7 +333,7 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    fun postSeatReview(reviewType: ReviewMethod) {
+    fun postSeatReview() {
         viewModelScope.launch {
             val requestSeatReview = RequestSeatReview(
                 rowNumber = _selectedColumn.value.toIntOrNull(),
@@ -343,8 +343,6 @@ class ReviewViewModel @Inject constructor(
                 bad = _selectedBadReview.value,
                 content = detailReviewText.value,
                 dateTime = _selectedDate.value,
-                reviewType = reviewType.toString(),
-
             )
             Timber.d("Selected Images: ${_preSignedUrlImages.value}")
             Timber.d("Selected Date: ${_selectedDate.value}")
@@ -355,7 +353,6 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Selected Block ID: ${_selectedBlockId.value}")
             Timber.d("Selected seatColumn: ${selectedColumn.value}")
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
-            Timber.d("Selected reviewType: $reviewType")
             _postReviewState.value = UiState.Loading
             seatReviewRepository.postSeatReview(
                 _selectedBlockId.value,
@@ -388,5 +385,6 @@ class ReviewViewModel @Inject constructor(
 
     fun setReviewMethod(method: ReviewMethod) {
         _reviewMethod.value = method
+        Log.d("minju",reviewMethod.value.toString())
     }
 }

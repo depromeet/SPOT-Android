@@ -20,15 +20,13 @@ import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
-import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
-import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
-import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
-import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
-import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
-import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
+import com.dpm.presentation.seatreview.dialog.DatePickerDialog
+import com.dpm.presentation.seatreview.dialog.ImageUploadDialog
+import com.dpm.presentation.seatreview.dialog.ReviewMySeatDialog
+import com.dpm.presentation.seatreview.dialog.SelectSeatDialog
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
@@ -121,7 +119,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 binding.tvAddImage.text = "야구장 시야 사진을\n올려주세요"
                 binding.tvReviewMySeat.text = "내 시야 후기"
             }
-            ReviewMethod.FEED -> {
+            ReviewMethod.INTUITION -> {
                 binding.tvTitle.text = "경기의 순간을 간직해보세요"
                 binding.tvAddImage.text = "직관후기 사진을\n올려주세요"
                 binding.tvReviewMySeat.text = "내 직관 후기"
@@ -445,15 +443,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun observeUploadImageToS3() {
         viewModel.count.asLiveData().observe(this) {
             if (it == selectedImageUris.size && it != 0) {
-                when (method) {
-                    ReviewMethod.VIEW -> {
-                        viewModel.postSeatReview(ReviewMethod.VIEW)
-                    }
-                    ReviewMethod.FEED -> {
-                        viewModel.postSeatReview(ReviewMethod.FEED)
-                    }
-                    else -> {}
-                }
+                viewModel.postSeatReview()
             }
         }
     }
