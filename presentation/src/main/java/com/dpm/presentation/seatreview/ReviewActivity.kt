@@ -445,8 +445,15 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun observeUploadImageToS3() {
         viewModel.count.asLiveData().observe(this) {
             if (it == selectedImageUris.size && it != 0) {
-                // TODO : 리뷰 타입 지정
-                viewModel.postSeatReview(ReviewMethod.VIEW)
+                when (method) {
+                    ReviewMethod.VIEW -> {
+                        viewModel.postSeatReview(ReviewMethod.VIEW)
+                    }
+                    ReviewMethod.FEED -> {
+                        viewModel.postSeatReview(ReviewMethod.FEED)
+                    }
+                    else -> {}
+                }
             }
         }
     }
