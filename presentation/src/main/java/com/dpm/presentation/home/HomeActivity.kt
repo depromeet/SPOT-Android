@@ -12,6 +12,7 @@ import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
+import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.home.adapter.StadiumAdapter
 import com.dpm.presentation.home.dialog.LevelDescriptionDialog
@@ -20,6 +21,8 @@ import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
 import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
+import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
+import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
@@ -34,6 +37,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val START_SPACING_DP = 16
         private const val BETWEEN_SPADING_DP = 8
+        private const val VIEW_UPLOAD_DIALOG = "ViewUploadDialog"
+        private const val FEED_UPLOAD_DIALOG = "FeedUploadDialog"
     }
 
     private val homeViewModel: HomeGuiViewModel by viewModels()
@@ -54,10 +59,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initView() {
+        initReviewDialog()
         initViewStatusBar()
         homeViewModel.getStadiums()
         setStadiumAdapter()
     }
+
+    private fun initReviewDialog() {
+        when (intent?.getSerializableExtra("DIALOG_TYPE") as? ReviewMethod) {
+            ReviewMethod.VIEW -> ViewUploadDialog().show(
+                supportFragmentManager,
+                VIEW_UPLOAD_DIALOG,
+            )
+            ReviewMethod.FEED -> FeedUploadDialog().show(
+                supportFragmentManager,
+                FEED_UPLOAD_DIALOG,
+            )
+            else -> {}
+        }
+    }
+
 
     private fun initEvent() = with(binding) {
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
