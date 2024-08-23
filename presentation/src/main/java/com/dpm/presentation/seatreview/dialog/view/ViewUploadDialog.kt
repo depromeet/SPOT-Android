@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentViewUploadDialogBinding
-import com.dpm.core.base.BindingBottomSheetDialog
+import com.dpm.core.base.BindingDialogFragment
 
-class ViewUploadDialog : BindingBottomSheetDialog<FragmentViewUploadDialogBinding>(
+class ViewUploadDialog : BindingDialogFragment<FragmentViewUploadDialogBinding>(
     R.layout.fragment_view_upload_dialog,
     FragmentViewUploadDialogBinding::inflate,
 ) {

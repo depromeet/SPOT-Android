@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/TransparentDialogFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="223dp"
-        android:paddingBottom="16dp"
+        android:padding="16dp"
         android:background="@drawable/rect_background_white_fill_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +20,7 @@
             android:id="@+id/ivCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="29dp"
+            android:layout_marginTop="13dp"
             android:padding="20dp"
             android:src="@drawable/ic_round_check_box"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +47,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="64dp"
-            android:text="이제 나의 후기를 시야 찾기에서 볼 수 있어요."
+            android:gravity="center"
+
+            android:text="     이제 나의 후기를 시야 찾기에서 볼 수 있어요.     "
             android:textColor="@color/color_foreground_caption"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,11 +60,11 @@
             style="@style/TextAppearance.Spot.Label02"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/rect_background_secondary_fill_8"
             android:gravity="center"
-            android:layout_marginStart="16dp"
             android:text="닫기"
+            android:stateListAnimator="@null"
             android:textColor="@color/color_foreground_body_sebtext"
             app:layout_constraintBottom_toBottomOf="@+id/btConfirmReview"
             app:layout_constraintEnd_toStartOf="@id/btConfirmReview"
@@ -75,16 +76,14 @@
             style="@style/TextAppearance.Spot.Label02"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_marginHorizontal="8dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/rect_spot_green_fill_8"
             android:gravity="center"
             android:text="확인하러 가기"
+            android:stateListAnimator="@null"
             android:textColor="@color/color_foreground_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnCancel"
             app:layout_constraintTop_toBottomOf="@+id/tvUploadSubTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
