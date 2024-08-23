@@ -9,7 +9,8 @@ sealed class StadiumDetailUiState {
         val keywords: List<ResponseBlockReview.ResponseKeyword>,
         val total: Long,
         val reviews: List<ResponseBlockReview.ResponseReview>,
-        val pageState: Boolean
+        val cursor: String,
+        val hasNext: Boolean
     ) : StadiumDetailUiState()
 
     data class Failed(

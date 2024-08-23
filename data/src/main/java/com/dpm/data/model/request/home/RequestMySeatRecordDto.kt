@@ -6,10 +6,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RequestMySeatRecordDto(
-    @SerialName("page")
-    val page: Int? = null,
+    @SerialName("cursor")
+    val cursor : String ?= null,
+    @SerialName("sortBy")
+    val sortBy : String,
     @SerialName("size")
-    val size: Int? = null,
+    val size: Int,
     @SerialName("year")
     val year: Int? = null,
     @SerialName("month")
@@ -17,7 +19,8 @@ data class RequestMySeatRecordDto(
 ) {
     companion object {
         fun RequestMySeatRecord.toMySeatRecordRequestDto() = RequestMySeatRecordDto(
-            page = page,
+            cursor = cursor,
+            sortBy = sortBy,
             size = size,
             year = year,
             month = month

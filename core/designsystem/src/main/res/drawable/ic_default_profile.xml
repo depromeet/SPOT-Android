@@ -4,10 +4,8 @@
     android:viewportWidth="46"
     android:viewportHeight="46">
   <path
-      android:strokeWidth="1"
       android:pathData="M23,0.5L23,0.5A22.5,22.5 0,0 1,45.5 23L45.5,23A22.5,22.5 0,0 1,23 45.5L23,45.5A22.5,22.5 0,0 1,0.5 23L0.5,23A22.5,22.5 0,0 1,23 0.5z"
-      android:fillColor="#F7F8FA"
-      android:strokeColor="#EAEBEE"/>
+      android:fillColor="#F7F8FA" />
   <group>
     <clip-path
         android:pathData="M8,19h29v8.598h-29z"/>

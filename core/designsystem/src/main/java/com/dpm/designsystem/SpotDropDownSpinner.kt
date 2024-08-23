@@ -1,6 +1,5 @@
 package com.dpm.designsystem
 
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,7 @@ class SpotDropDownSpinner<T>(
         val item = getItem(position)
 
         textView.setTextColor(parent.context.getColor(R.color.color_foreground_heading))
-        textView.setTypeface(null, Typeface.BOLD)
+        textView.setTextAppearance(R.style.TextAppearance_Spot_Subtitle01)
 
         textView.text = data[selectedItemPosition].toString()
 
@@ -50,10 +49,10 @@ class SpotDropDownSpinner<T>(
     private fun updateTextAppearance(textView: TextView, isSelected: Boolean) {
         if (isSelected) {
             textView.setTextColor(textView.context.getColor(R.color.color_foreground_heading))
-            textView.setTypeface(null, Typeface.BOLD)
+            textView.setTextAppearance(R.style.TextAppearance_Spot_Subtitle02)
         } else {
             textView.setTextColor(textView.context.getColor(R.color.color_foreground_body_sebtext))
-            textView.setTypeface(null, Typeface.NORMAL)
+            textView.setTextAppearance(R.style.TextAppearance_Spot_Body01)
         }
     }
 

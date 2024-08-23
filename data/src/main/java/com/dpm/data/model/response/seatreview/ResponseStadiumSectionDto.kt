@@ -16,14 +16,12 @@ data class ResponseStadiumSectionDto(
         @SerialName("id") val id: Int,
         @SerialName("name") val name: String,
         @SerialName("alias") val alias: String?,
-        @SerialName("color") val color: String,
     ) {
         fun toSelectionList(): ResponseStadiumSection.SectionListDto {
             return ResponseStadiumSection.SectionListDto(
                 id = id,
                 name = name,
                 alias = alias,
-                color = color
             )
         }
     }

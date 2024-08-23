@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.depromeet.presentation.R
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.request.viewfinder.RequestBlockReviewQuery
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
@@ -65,6 +67,7 @@ fun StadiumHeaderContent(
                 onChangeIsMore = onChangeIsMore
             )
             CustomTooltip(
+                content = stringResource(id = R.string.viewfinder_tooltip_description),
                 reviewFilter = reviewFilter,
                 modifier = Modifier.zIndex(1f)
             )
@@ -105,8 +108,9 @@ private fun StadiumHeaderContentPreview() {
             seatNumber = null,
             year = null,
             month = null,
-            page = 0,
-            size = 1
+            cursor = null,
+            sortBy = "DATE_TIME",
+            size = 10
         ),
         stadiumTitle = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭",
@@ -149,8 +153,9 @@ private fun StadiumHeaderContentIsMorePreview() {
             seatNumber = 12,
             year = null,
             month = null,
-            page = 0,
-            size = 1
+            cursor = null,
+            sortBy = "DATE_TIME",
+            size = 10
         ), stadiumTitle = "서울 잠실 야구장",
         seatContent = "오렌지석 207블럭",
         keywords = listOf(

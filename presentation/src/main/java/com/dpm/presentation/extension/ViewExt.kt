@@ -44,3 +44,12 @@ fun ImageView.loadAndCircle(image: Any) {
     }
     this.clipToOutline = true
 }
+
+fun ImageView.loadAndCircleProfile(image: Any) {
+    this.load(image) {
+        placeholder(com.depromeet.designsystem.R.drawable.skeleton_gradient)
+        error(com.depromeet.designsystem.R.drawable.ic_default_profile)
+        transformations(CircleCropTransformation())
+    }
+    this.clipToOutline = true
+}

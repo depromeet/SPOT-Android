@@ -13,12 +13,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+enum class Sort {
+    DATE_TIME, LIKES_COUNT;
+}
+
 @HiltViewModel
 class StadiumDetailViewModel @Inject constructor(
     private val viewfinderRepository: ViewfinderRepository
 ) : ViewModel() {
-    var stadiumId: Int = 0
     var blockCode: String = ""
+    var stadiumId: Int = 0
+    private var reset: Boolean = true
     private var blockRow: ResponseBlockRow? = null
 
     private val _detailUiState =
@@ -31,47 +36,57 @@ class StadiumDetailViewModel @Inject constructor(
     private val _bottomPadding = MutableStateFlow(0f)
     val bottomPadding = _bottomPadding.asStateFlow()
 
+    private val _currentIndex = MutableStateFlow(0)
+    val currentIndex = _currentIndex.asStateFlow()
+
     private val _reviewFilter = MutableStateFlow<RequestBlockReviewQuery>(
         RequestBlockReviewQuery(
             rowNumber = null,
             seatNumber = null,
             year = null,
             month = null,
-            page = 0,
-            size = 10
+            cursor = null,
+            sortBy = Sort.DATE_TIME.name,
+            size = 20
         )
     )
     val reviewFilter = _reviewFilter.asStateFlow()
 
+    fun updateCurrentIndex(index: Int) {
+        _currentIndex.value = index
+    }
 
     fun updateBottomPadding(padding: Float) {
         _bottomPadding.value = padding
     }
+
     fun updateScrollState(state: Boolean) {
         _scrollState.value = state
     }
 
     fun updateMonth(month: Int?) {
         if (month != _reviewFilter.value.month) {
-            _reviewFilter.value = _reviewFilter.value.copy(month = month, page = 0)
+            reset = true
+            _reviewFilter.value = _reviewFilter.value.copy(month = month, cursor = null)
             getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
         }
     }
 
     fun updateSeat(column: Int, number: Int? = null) {
+        reset = true
         _reviewFilter.value =
-            _reviewFilter.value.copy(rowNumber = column, seatNumber = number, page = 0)
+            _reviewFilter.value.copy(rowNumber = column, seatNumber = number, cursor = null)
         getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
+    }
+
+    fun updateSort(sortBy: String) {
+        _reviewFilter.value = _reviewFilter.value.copy(sortBy = sortBy)
+        getBlockReviews(query = _reviewFilter.value)
     }
 
     fun updateRequestPathVariable(stadiumId: Int, blockCode: String) {
         this.stadiumId = stadiumId
         this.blockCode = blockCode
-    }
-
-    fun updateQueryPage(callback: (query: RequestBlockReviewQuery) -> Unit) {
-        _reviewFilter.value = _reviewFilter.value.copy(page = _reviewFilter.value.page + 1)
-        callback(_reviewFilter.value)
     }
 
     fun getBlockReviews(
@@ -82,35 +97,43 @@ class StadiumDetailViewModel @Inject constructor(
         viewModelScope.launch {
             viewfinderRepository.getBlockReviews(stadiumId, blockCode, query)
                 .onSuccess { blockReviews ->
+                    _reviewFilter.value = _reviewFilter.value.copy(
+                        cursor = blockReviews.nextCursor
+                    )
                     if (blockReviews.topReviewImages.isEmpty() && blockReviews.reviews.isEmpty()) {
                         _detailUiState.value = StadiumDetailUiState.Empty
                     } else {
                         if (_detailUiState.value is StadiumDetailUiState.ReviewsData) {
                             val reviewsData =
                                 (_detailUiState.value as StadiumDetailUiState.ReviewsData)
-                            if (blockReviews.first) {
+
+                            if (reset) {
                                 _detailUiState.value = reviewsData.copy(
                                     reviews = blockReviews.reviews,
-                                    pageState = blockReviews.last,
-                                    total = blockReviews.totalElements
+                                    hasNext = blockReviews.hasNext,
+                                    total = blockReviews.totalElements,
+                                    cursor = blockReviews.nextCursor
                                 )
                             } else {
                                 val uReviewsData = reviewsData.reviews.toMutableList()
                                 uReviewsData.addAll(blockReviews.reviews)
                                 _detailUiState.value = reviewsData.copy(
                                     reviews = uReviewsData,
-                                    pageState = blockReviews.last
+                                    hasNext = blockReviews.hasNext,
+                                    cursor = blockReviews.nextCursor
                                 )
                             }
 
                         } else {
+                            reset = false
                             _detailUiState.value = StadiumDetailUiState.ReviewsData(
                                 topReviewImages = blockReviews.topReviewImages,
                                 stadiumContent = blockReviews.location,
                                 keywords = blockReviews.keywords,
                                 total = blockReviews.totalElements,
                                 reviews = blockReviews.reviews,
-                                pageState = blockReviews.last
+                                cursor = blockReviews.nextCursor,
+                                hasNext = blockReviews.hasNext
                             )
                         }
                     }
@@ -170,11 +193,13 @@ class StadiumDetailViewModel @Inject constructor(
     }
 
     fun clearSeat() {
+        reset = true
         _reviewFilter.value = _reviewFilter.value.copy(rowNumber = null, seatNumber = null)
         getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
     }
 
     fun clearMonth() {
+        reset = true
         _reviewFilter.value = _reviewFilter.value.copy(month = null)
         getBlockReviews(stadiumId, blockCode, _reviewFilter.value)
     }

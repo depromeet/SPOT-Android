@@ -1,4 +1,4 @@
-package com.dpm.presentation.home
+package com.dpm.presentation.home.dialog
 
 import android.os.Bundle
 import android.view.View
