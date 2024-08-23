@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/rect_white_fill_32"
     android:paddingBottom="20dp">
 
@@ -68,34 +69,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvNowImage">
 
-        <ImageView
-            android:id="@+id/ivFirstImage"
-            android:layout_width="84dp"
-            android:layout_height="84dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFirstImage"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
             android:background="@drawable/rect_transparent_fill_background_primary_line_8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ivSecondImage"
-            android:layout_width="84dp"
-            android:layout_height="84dp"
-            android:layout_marginStart="6dp"
+            <ImageView
+                android:id="@+id/ivFirstImage"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/spot_green" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clSecondImage"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_marginStart="4dp"
             android:background="@drawable/rect_transparent_fill_background_primary_line_8"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ivFirstImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/clFirstImage"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ivThirdImage"
-            android:layout_width="84dp"
-            android:layout_height="84dp"
-            android:layout_marginStart="6dp"
+            <ImageView
+                android:id="@+id/ivSecondImage"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/spot_green" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clThirdImage"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_marginStart="4dp"
             android:background="@drawable/rect_transparent_fill_background_primary_line_8"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ivSecondImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/clSecondImage"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivThirdImage"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/spot_green" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.dpm.presentation.home.customview.CustomSpeechBubbleView
@@ -118,7 +153,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -138,17 +173,15 @@
             android:textAppearance="@style/TextAppearance.Spot.Label02"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/btnYes" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnYes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="72dp"
             android:background="@drawable/rect_spot_green_fill_8"
             android:gravity="center"
-            android:paddingHorizontal="74dp"
             android:paddingVertical="19dp"
             android:stateListAnimator="@null"
             android:text="네, 좋아요"

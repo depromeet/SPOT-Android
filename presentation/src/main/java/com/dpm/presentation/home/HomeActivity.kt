@@ -66,15 +66,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initReviewDialog() {
+        val selectedImageUris = intent.getStringArrayListExtra("SELECTED_IMAGES") ?: arrayListOf()
         when (intent?.getSerializableExtra("DIALOG_TYPE") as? ReviewMethod) {
             ReviewMethod.VIEW -> ViewUploadDialog().show(
                 supportFragmentManager,
                 VIEW_UPLOAD_DIALOG,
             )
-            ReviewMethod.FEED -> FeedUploadDialog().show(
-                supportFragmentManager,
-                FEED_UPLOAD_DIALOG,
-            )
+            ReviewMethod.FEED -> FeedUploadDialog().apply {
+                arguments = Bundle().apply {
+                    putStringArrayList("SELECTED_IMAGES", ArrayList(selectedImageUris))
+                }
+            }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
             else -> {}
         }
     }
