@@ -51,10 +51,10 @@ fun KakaoSignupScreen(
     )
 
     val onboardingImageList = listOf(
-        R.drawable.ic_signup_image_1,
-        R.drawable.ic_signup_image_2,
-        R.drawable.ic_signup_image_3,
-        R.drawable.ic_signup_image_4
+        com.depromeet.designsystem.R.drawable.ic_signup_image_1,
+        com.depromeet.designsystem.R.drawable.ic_signup_image_2,
+        com.depromeet.designsystem.R.drawable.ic_signup_image_3,
+        com.depromeet.designsystem.R.drawable.ic_signup_image_4
     )
 
     val pageCount = onBoardingList.size
