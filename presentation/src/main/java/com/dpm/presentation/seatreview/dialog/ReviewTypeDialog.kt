@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentSelectReviewTypeDialogBinding
 import com.dpm.core.base.BindingDialogFragment
@@ -12,6 +13,8 @@ import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.ReviewActivity
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBinding>(
@@ -41,10 +44,13 @@ class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBin
     }
 
     private fun navigateToReviewActivity() {
-        startActivity(
-            Intent(requireContext(), ReviewActivity::class.java).apply {
-                putExtra("METHOD_KEY", viewModel.reviewMethod.value?.name)
-            },
-        )
+        lifecycleScope.launch {
+            delay(500)
+            startActivity(
+                Intent(requireContext(), ReviewActivity::class.java).apply {
+                    putExtra("METHOD_KEY", viewModel.reviewMethod.value?.name)
+                },
+            )
+        }
     }
 }
