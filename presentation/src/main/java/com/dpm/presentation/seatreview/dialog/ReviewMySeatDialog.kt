@@ -19,6 +19,7 @@ import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
+import com.dpm.presentation.seatreview.ReviewMethod
 import com.dpm.presentation.seatreview.ReviewViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,6 +69,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
         initEvent()
         initCompleteEvent()
         setupDetailReviewEditText()
+        initMethodNaming()
     }
 
     private fun restoreDetailReviewText() {
@@ -122,13 +124,31 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                     val selectedGoodButtonText =
                         selectedGoodBtn.filter { it.isSelected }.map { it.text.toString() }
 
-                    val totalSelectedCount = selectedGoodButtonText.size + selectedBadButtonText.size
+                    val totalSelectedCount =
+                        selectedGoodButtonText.size + selectedBadButtonText.size
                     viewModel.setReviewCount(totalSelectedCount)
                     viewModel.setSelectedBadReview(selectedBadButtonText)
                 } else {
                     makeSpotImageAppbar("후기 키워드는 각각 3개까지 선택할 수 있어요")
                 }
             }
+        }
+    }
+
+    private fun initMethodNaming() {
+        val method = arguments?.getString("METHOD_KEY")?.let { ReviewMethod.valueOf(it) }
+        when (method) {
+            ReviewMethod.VIEW -> {
+                binding.tvReviewMySeat.text = "시야 후기"
+                binding.tvWriteDetailReview.text = "더 자세한 시야 후기를 남길래요!"
+                binding.etDetailReview.hint = "시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요!"
+            }
+            ReviewMethod.INTUITION -> {
+                binding.tvReviewMySeat.text = "직관 후기"
+                binding.tvWriteDetailReview.text = "더 자세한 직관 후기를 남길래요!"
+                binding.etDetailReview.hint = "나의 경기 직관 후기를 작성해주세요! 그날의 날씨나 소소한 감상도 좋아요!"
+            }
+            else -> {}
         }
     }
 
