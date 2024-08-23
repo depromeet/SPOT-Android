@@ -31,18 +31,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/ivExit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_x_upload_method"
-            app:layout_constraintBottom_toBottomOf="@+id/tvUpload"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvUpload" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clUploadSight"
+            android:id="@+id/clUploadView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
@@ -63,7 +53,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvUploadSightTitle"
+                android:id="@+id/tvUploadViewTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
@@ -75,7 +65,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ivUploadSight" />
 
             <TextView
-                android:id="@+id/tvUploadSightSubTitle"
+                android:id="@+id/tvUploadViewSubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
@@ -86,7 +76,7 @@
                 android:textColor="@color/color_foreground_caption"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvUploadSightTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/tvUploadViewTitle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -98,7 +88,7 @@
             android:paddingVertical="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clUploadSight">
+            app:layout_constraintTop_toBottomOf="@id/clUploadView">
 
             <TextView
                 android:id="@+id/tvUploadIntuitionTitle"

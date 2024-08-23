@@ -28,14 +28,11 @@ class ReviewMethodDialog : BindingDialogFragment<FragmentSelectReviewMethodDialo
     }
 
     private fun initEvent() {
-        binding.clUploadSight.setOnSingleClickListener {
+        binding.clUploadView.setOnSingleClickListener {
             // TODO : 0.5초 -> 좌석 시야 등록 플로우 이동
         }
         binding.clUploadIntuition.setOnSingleClickListener {
             // TODO : 0.5초 -> 직관 후기 등록 플로우 이동
-        }
-        binding.ivExit.setOnSingleClickListener {
-            dismiss()
         }
     }
 }
