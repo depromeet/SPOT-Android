@@ -19,8 +19,7 @@ import com.dpm.presentation.home.dialog.LevelupDialog
 import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
 import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
-import com.dpm.presentation.seatreview.ReviewActivity
-import com.dpm.presentation.seatreview.dialog.ReviewMethodDialog
+import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
@@ -216,7 +215,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun navigateToReviewActivity() {
-        ReviewMethodDialog().show(supportFragmentManager, "MyDialog")
+        ReviewTypeDialog().show(supportFragmentManager, "MyDialog")
     }
 
     private fun setHomeFeedShimmer(isLoading: Boolean) = with(binding) {
