@@ -1,6 +1,8 @@
 package com.dpm.presentation.seatreview
 
 import android.net.Uri
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -376,5 +378,13 @@ class ReviewViewModel @Inject constructor(
             presignedUrl,
             imageDataList,
         )
+    }
+
+    private val _reviewMethod = MutableLiveData<ReviewMethod>()
+    val reviewMethod: LiveData<ReviewMethod> get() = _reviewMethod
+
+    fun setReviewMethod(method: ReviewMethod) {
+        _reviewMethod.value = method
+        Log.d("minju",reviewMethod.value.toString())
     }
 }
