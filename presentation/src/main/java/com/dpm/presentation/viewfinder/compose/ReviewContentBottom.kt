@@ -71,6 +71,45 @@ fun ReviewContentBottom(
 private fun ReviewContentBottomPreview() {
     ReviewContentBottom(
         isLike = false,
+        isScrap = false,
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ReviewContentBottomLikePreview() {
+    ReviewContentBottom(
+        isLike = true,
+        isScrap = false,
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ReviewContentBottomScrapPreview() {
+    ReviewContentBottom(
+        isLike = false,
+        isScrap = true,
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ReviewContentBottomLikeAndScrapPreview() {
+    ReviewContentBottom(
+        isLike = true,
         isScrap = true,
         likeCount = 0,
         onClickLike = {},

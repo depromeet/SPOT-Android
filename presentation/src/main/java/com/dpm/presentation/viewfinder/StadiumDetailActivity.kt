@@ -12,6 +12,7 @@ import com.dpm.core.base.BaseActivity
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
+import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.seatFeed
@@ -22,6 +23,7 @@ import com.dpm.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
 import com.dpm.presentation.viewfinder.dialog.StadiumSelectSeatDialog
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
@@ -36,6 +38,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         const val STADIUM_HEADER = "stadium_header"
         const val STADIUM_REVIEW_CONTENT = "stadium_review_content"
     }
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
 
     private val viewModel: StadiumDetailViewModel by viewModels()
 
@@ -60,6 +65,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
             MaterialTheme {
                 StadiumDetailScreen(
                     emptyBlockName = toEmptyBlock(viewModel.stadiumId, viewModel.blockCode),
+                    isFirstShare = sharedPreference.isFirstShare,
                     viewModel = viewModel,
                     onClickReviewPicture = { id, index, title ->
                         startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.MAIN_REVIEW)
@@ -94,8 +100,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     onClickTopImage = { id, index, title ->
                         startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.TOP_REVIEW)
                     },
-                    onClickLike = {},
-                    onClickScrap = {}
+                    onClickShare = {
+                        sharedPreference.isFirstShare = false
+                    }
                 )
             }
         }

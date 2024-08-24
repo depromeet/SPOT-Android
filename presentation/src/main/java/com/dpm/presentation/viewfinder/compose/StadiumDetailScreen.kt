@@ -41,6 +41,7 @@ import timber.log.Timber
 @Composable
 fun StadiumDetailScreen(
     emptyBlockName: String,
+    isFirstShare: Boolean,
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
@@ -50,11 +51,11 @@ fun StadiumDetailScreen(
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit,
     onClickGoBack: () -> Unit,
-    onClickLike: () -> Unit,
-    onClickScrap: () -> Unit,
+    onClickShare:() -> Unit = {},
     onRefresh: () -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
+    var isFirstShare by remember { mutableStateOf(isFirstShare) }
     val verticalScrollState = rememberLazyListState()
     val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
     val reviewFilter by viewModel.reviewFilter.collectAsStateWithLifecycle()
@@ -153,6 +154,8 @@ fun StadiumDetailScreen(
                         ) { index ->
                             StadiumReviewContent(
                                 context = context,
+                                isFirstShare = isFirstShare,
+                                firstReview = uiState.reviews[index] == uiState.reviews.firstOrNull(),
                                 reviewContent = uiState.reviews[index],
                                 onClick = { reviewContent, index ->
                                     onClickReviewPicture(
@@ -165,6 +168,8 @@ fun StadiumDetailScreen(
                                 onClickLike = viewModel::updateLike,
                                 onClickScrap = viewModel::updateScrap,
                                 onClickShare = {
+                                    onClickShare()
+                                    isFirstShare = false
                                     KakaoUtils().share(
                                         context,
                                         seatFeed(
@@ -200,6 +205,7 @@ fun StadiumDetailScreen(
 private fun StadiumDetailScreenPreview() {
     Box(modifier = Modifier.background(Color.White)) {
         StadiumDetailScreen(
+            isFirstShare = true,
             emptyBlockName = "207",
             onClickReviewPicture = { _, _, _ -> },
             onClickSelectSeat = {},
@@ -208,8 +214,6 @@ private fun StadiumDetailScreenPreview() {
             onClickGoBack = {},
             onRefresh = {},
             onClickTopImage = { _, _, _ -> },
-            onClickLike = {},
-            onClickScrap = {},
         )
     }
 }

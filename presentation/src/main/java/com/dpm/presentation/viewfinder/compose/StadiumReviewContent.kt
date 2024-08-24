@@ -53,11 +53,13 @@ private enum class ReviewContentShowMoreState {
 @Composable
 fun StadiumReviewContent(
     context: Context,
+    isFirstShare: Boolean,
+    firstReview: Boolean,
     reviewContent: ResponseBlockReview.ResponseReview,
     modifier: Modifier = Modifier,
     onClick: (reviewContent: ResponseBlockReview.ResponseReview, index: Int) -> Unit,
     onClickReport: () -> Unit,
-    onClickLike: (id: Long) -> Unit  = {},
+    onClickLike: (id: Long) -> Unit = {},
     onClickScrap: (id: Long) -> Unit = {},
     onClickShare: () -> Unit
 ) {
@@ -255,6 +257,16 @@ fun StadiumReviewContent(
             },
             onClickShare = onClickShare
         )
+        if (firstReview && isFirstShare) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                ShareTooltip(bias = 0.875f, content = "카카오톡으로 같이가는 친구에게 공유하기")
+            }
+        }
     }
 }
 
@@ -268,6 +280,8 @@ private fun StadiumReviewContentPreview() {
     ) {
         StadiumReviewContent(
             context = LocalContext.current,
+            isFirstShare = false,
+            firstReview = false,
             reviewContent = ResponseBlockReview.ResponseReview(
                 id = 1,
                 dateTime = "2023-03-01T19:00:00",
