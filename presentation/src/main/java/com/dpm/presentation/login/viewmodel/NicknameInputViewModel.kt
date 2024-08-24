@@ -1,5 +1,7 @@
 package com.dpm.presentation.login.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.domain.repository.HomeRepository
@@ -15,22 +17,22 @@ class NicknameInputViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
 ) : ViewModel() {
 
-    private val _nicknameInputState = MutableStateFlow<NicknameInputState>(NicknameInputState.EMPTY)
-    val nicknameInputState: StateFlow<NicknameInputState> = _nicknameInputState
+    private val _nicknameInputState = MutableLiveData<NicknameInputState>(NicknameInputState.EMPTY)
+    val nicknameInputState: LiveData<NicknameInputState> = _nicknameInputState
 
     private val _currentNickName = MutableStateFlow<String>("")
     val currentNickName: StateFlow<String> = _currentNickName
 
     fun validateNickname(nickname: String) {
         when {
-            nickname.isEmpty() -> _nicknameInputState.tryEmit(NicknameInputState.EMPTY)
-            nickname.length < 2 || nickname.length > 10 -> _nicknameInputState.tryEmit(
+            nickname.isEmpty() -> _nicknameInputState.value = NicknameInputState.EMPTY
+            nickname.length < 2 || nickname.length > 10 -> _nicknameInputState.value =(
                 NicknameInputState.INVALID_LENGTH
             )
-            !nickname.matches(Regex(NICKNAME_PATTERN)) -> _nicknameInputState.tryEmit(
+            !nickname.matches(Regex(NICKNAME_PATTERN)) -> _nicknameInputState.value = (
                 NicknameInputState.INVALID_CHARACTER
             )
-            else -> { _nicknameInputState.tryEmit(NicknameInputState.VALID) }
+            else -> { _nicknameInputState.value = (NicknameInputState.VALID) }
         }
         _currentNickName.tryEmit(nickname)
     }
@@ -39,10 +41,10 @@ class NicknameInputViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getDuplicateNickname(nickname)
                 .onSuccess {
-                    _nicknameInputState.tryEmit(NicknameInputState.NICKNAME_SUCCESS)
+                    _nicknameInputState.value = (NicknameInputState.NICKNAME_SUCCESS)
                 }
                 .onFailure {
-                    _nicknameInputState.tryEmit(NicknameInputState.DUPLICATE)
+                    _nicknameInputState.value = (NicknameInputState.DUPLICATE)
                 }
         }
     }

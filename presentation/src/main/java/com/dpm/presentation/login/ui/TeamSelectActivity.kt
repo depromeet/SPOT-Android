@@ -44,6 +44,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
                 is SignupUiState.SignUpSuccess -> {
                     Intent(this, SignUpCompleteActivity::class.java).apply {
                         putExtra("nickname", it.nickname)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(this)
                         finish()
                     }

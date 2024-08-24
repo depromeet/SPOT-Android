@@ -79,7 +79,7 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
     }
 
     private fun initObserver() = with(binding) {
-        signUpViewModel.nicknameInputState.asLiveData().observe(this@NicknameInputActivity) { state ->
+        signUpViewModel.nicknameInputState.observe(this@NicknameInputActivity) { state ->
             when (state) {
                 NicknameInputState.EMPTY -> {
                     clNicknameInputWarning.visibility = View.GONE
