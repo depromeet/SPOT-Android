@@ -130,7 +130,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 binding.tvAddImage.text = "직관후기 사진을\n올려주세요"
                 binding.tvReviewMySeat.text = "내 직관 후기"
             }
-            else -> {}
+            null -> {}
         }
     }
 
@@ -468,7 +468,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     ReviewMethod.FEED -> {
                         viewModel.postSeatReview(ReviewMethod.FEED)
                     }
-                    else -> {}
+                    null -> {}
                 }
             }
         }
