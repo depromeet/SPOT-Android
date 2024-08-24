@@ -54,7 +54,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_link_external"
+        android:src="@drawable/ic_setting_to_link"
         app:layout_constraintBottom_toBottomOf="@id/tv_terms_personal_info"
         app:layout_constraintEnd_toEndOf="@id/tv_terms_personal_info"
         app:layout_constraintTop_toTopOf="@id/tv_terms_personal_info" />
@@ -77,7 +77,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_link_external"
+        android:src="@drawable/ic_setting_to_link"
         app:layout_constraintBottom_toBottomOf="@id/tv_setting_terms_policy"
         app:layout_constraintEnd_toEndOf="@id/tv_setting_terms_policy"
         app:layout_constraintTop_toTopOf="@id/tv_setting_terms_policy" />

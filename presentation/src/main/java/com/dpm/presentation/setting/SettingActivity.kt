@@ -62,7 +62,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
     }
 
     private fun initView() {
-        binding.tvSettingAppVersion.text = packageManager.getPackageInfo(this.packageName, 0).versionName
+        binding.tvSettingAppVersion.text = "V.${packageManager.getPackageInfo(this.packageName, 0).versionName}"
     }
 
     private fun initEvent() = with(binding){

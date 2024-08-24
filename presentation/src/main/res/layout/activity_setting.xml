@@ -231,12 +231,12 @@
 
     <TextView
         android:id="@+id/tv_setting_app_version"
-        style="@style/TextAppearance.Spot.Body01"
+        style="@style/TextAppearance.Spot.Body03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingEnd="16dp"
         android:text="최신버전 V.0.0.2"
-        android:textColor="@color/color_foreground_heading"
+        android:textColor="@color/color_foreground_caption"
         app:layout_constraintBottom_toBottomOf="@id/tv_setting_app_version_title"
         app:layout_constraintEnd_toEndOf="@id/tv_setting_app_version_title"
         app:layout_constraintTop_toTopOf="@id/tv_setting_app_version_title" />
