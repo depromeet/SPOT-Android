@@ -41,7 +41,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     companion object {
         private const val DATE_FORMAT = "yyyy.MM.dd"
         private const val ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm"
-        private const val FRAGMENT_RESULT_KEY = "requestKey"
+        const val FRAGMENT_RESULT_KEY = "requestKey"
         private const val SELECTED_IMAGES = "selected_images"
         private const val MAX_SELECTED_IMAGES = 3
         private const val REVIEW_MY_SEAT_DIALOG = "ReviewMySeatDialog"

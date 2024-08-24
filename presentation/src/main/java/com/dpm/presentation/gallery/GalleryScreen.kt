@@ -79,12 +79,14 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun GalleryScreen(
+    screenType: String,
     onImagesSelected: (List<Uri>) -> Unit,
     onBackPressed: () -> Unit = { }
 ) {
-    CustomGallery(onImagesSelected) {
-        onBackPressed()
-    }
+    CustomGallery(
+        onImagesSelected = onImagesSelected,
+        onBackPressed = onBackPressed
+    )
 }
 
 @Composable
@@ -150,7 +152,12 @@ fun CustomGallery(
                             )
                         } else {
                             MultiStyleText(
-                                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 16.dp),
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd).padding(end = 16.dp)
+                                    .clickable {
+                                        onImagesSelected(selectedItems.map { it.imageResource })
+                                        onBackPressed()
+                                    },
                                 style = SpotTheme.typography.body02,
                                 textWithColors = arrayOf(
                                     Pair(
