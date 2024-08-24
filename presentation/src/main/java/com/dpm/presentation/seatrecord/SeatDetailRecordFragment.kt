@@ -67,7 +67,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private fun initObserver() {
-        viewModel.reviews.asLiveData().observe(viewLifecycleOwner) { state ->
+        viewModel.seatReviews.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
                     detailRecordAdapter.submitList(state.data.reviews)
@@ -81,7 +81,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
         }
 
-        viewModel.date.asLiveData().observe(viewLifecycleOwner){state ->
+        viewModel.seatDate.asLiveData().observe(viewLifecycleOwner){ state ->
             if (state is UiState.Empty)
                 detailRecordAdapter.submitList(emptyList())
         }
@@ -111,7 +111,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     private fun setDetailRecordAdapter() {
         detailRecordAdapter = DetailRecordAdapter(
-            (viewModel.reviews.value as UiState.Success).data.profile,
+            (viewModel.seatReviews.value as UiState.Success).data.profile,
             moreClick = { id ->
                 viewModel.setEditReviewId(id)
                 RecordEditDialog.newInstance(SEAT_RECORD_TAG)
@@ -123,17 +123,17 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             rvDetailRecord.adapter = detailRecordAdapter
 
             val position =
-                (viewModel.reviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                (viewModel.seatReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
             rvDetailRecord.scrollToPosition(position)
             rvDetailRecord.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
                     val scrollBottom = !rvDetailRecord.canScrollVertically(1)
-                    val hasNextPage = (viewModel.reviews.value as UiState.Success).data.hasNext
+                    val hasNextPage = (viewModel.seatReviews.value as UiState.Success).data.hasNext
                     if (scrollBottom && hasNextPage && !isLoading) {
                         isLoading = true
-                        viewModel.loadNextSeatRecords()
+                        viewModel.getNextSeatReviews()
                     }
                 }
             })

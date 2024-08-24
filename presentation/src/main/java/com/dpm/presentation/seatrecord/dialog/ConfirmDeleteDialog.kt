@@ -52,7 +52,7 @@ class ConfirmDeleteDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBin
         }
 
         binding.btConfirmCheck.setOnClickListener {
-            viewModel.removeReviewData()
+            viewModel.removeSeatReviewData()
             dismiss()
         }
         binding.btConfirmCancel.setOnClickListener {

@@ -291,7 +291,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Spinner
-                android:id="@+id/spinnerRecordYear"
+                android:id="@+id/spinnerSeatReviewYear"
                 style="@style/YearSpinner"
                 android:layout_width="93dp"
                 android:layout_height="wrap_content"
@@ -305,7 +305,7 @@
                 app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRecordMonth"
+                android:id="@+id/rvSeatReviewMonth"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
@@ -316,12 +316,45 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinnerRecordYear"
+                app:layout_constraintTop_toBottomOf="@id/spinnerSeatReviewYear"
                 tools:itemCount="10"
                 tools:listitem="@layout/item_date_month" />
 
+            <Spinner
+                android:id="@+id/spinnerIntuitiveReviewYear"
+                style="@style/YearSpinner"
+                android:layout_width="93dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sel_year_drop_down"
+                android:dropDownWidth="103dp"
+                android:gravity="bottom"
+                android:popupBackground="@drawable/rect_white_fill_16"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRecordMonthDetail"
+                android:id="@+id/rvIntuitiveReviewMonth"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerIntuitiveReviewYear"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_date_month" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSeatReview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
@@ -330,17 +363,40 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvRecordMonth"
+                app:layout_constraintTop_toBottomOf="@id/rvSeatReviewMonth"
                 tools:itemCount="1"
                 tools:listitem="@layout/item_recent_month" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvIntuitiveReview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvIntuitiveReviewMonth"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_recent_month" />
+
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:background="@android:color/transparent"
-                app:layout_constraintTop_toBottomOf="@id/rvRecordMonthDetail"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/rvSeatReview" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvIntuitiveReview" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_record"
@@ -351,7 +407,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvRecordMonth">
+                app:layout_constraintTop_toBottomOf="@id/rvSeatReviewMonth">
 
                 <include layout="@layout/item_shimmer_review_record" />
 
@@ -363,8 +419,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_foreground_heading"
-                app:layout_constraintStart_toStartOf="@id/spinnerRecordYear"
-                app:layout_constraintTop_toTopOf="@id/spinnerRecordYear"
+                app:layout_constraintStart_toStartOf="@id/spinnerSeatReviewYear"
+                app:layout_constraintTop_toTopOf="@id/spinnerSeatReviewYear"
                 tools:text="2024년" />
 
             <TextView

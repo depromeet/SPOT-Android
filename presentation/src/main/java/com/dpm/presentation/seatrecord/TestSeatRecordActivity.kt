@@ -74,7 +74,7 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
 
     private fun initView() {
         initViewStatusBar()
-        viewModel.getReviewDate()
+        viewModel.getSeatReviewDate()
         viewModel.getLocalProfile()
         initRecordAdapter()
     }
@@ -101,10 +101,10 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
 
             /** 로딩 실패 **/
             btRecordFailRefresh.setOnSingleClickListener {
-                if (viewModel.reviews.value is UiState.Failure || viewModel.date.value is UiState.Failure) {
+                if (viewModel.seatReviews.value is UiState.Failure || viewModel.seatDate.value is UiState.Failure) {
                     makeSpotImageAppbar("리뷰를 불러오는데 실패하였습니다.")
                 }
-                viewModel.getReviewDate()
+                viewModel.getSeatReviewDate()
             }
             ivRecordHelpInfo.setOnClickListener {
                 csbvHelpInfo.visibility = if (csbvHelpInfo.visibility == GONE) VISIBLE else GONE
@@ -143,11 +143,11 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
                 }
             },
             monthClick = { month ->
-                viewModel.setSelectedMonth(month)
+                viewModel.setSeatSelectedMonth(month)
                 binding.rvSeatRecord.smoothScrollToPosition(0)
             },
             yearClick = { year ->
-                viewModel.setSelectedYear(year)
+                viewModel.setSeatSelectedYear(year)
                 binding.rvSeatRecord.smoothScrollToPosition(0)
             },
             profileEditClick = {
@@ -183,10 +183,10 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     val scrollTop = !binding.rvSeatRecord.canScrollVertically(-1)
                     val scrollBottom = !binding.rvSeatRecord.canScrollVertically(1)
-                    if (scrollBottom && !isLoading && viewModel.reviews.value is UiState.Success) {
-                        if ((viewModel.reviews.value as UiState.Success).data.hasNext) {
+                    if (scrollBottom && !isLoading && viewModel.seatReviews.value is UiState.Success) {
+                        if ((viewModel.seatReviews.value as UiState.Success).data.hasNext) {
                             isLoading = true
-                            viewModel.loadNextSeatRecords()
+                            viewModel.getNextSeatReviews()
                         }
                     }
                     binding.fabRecordUp.visibility = if (scrollTop) GONE else VISIBLE
@@ -211,12 +211,12 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
 
 
     private fun observeDates() {
-        viewModel.date.asLiveData().observe(this) { state ->
+        viewModel.seatDate.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     setErrorVisibility(RecordErrorType.NONE)
                     stopDateShimmer()
-                    val reviewState = viewModel.reviews.value
+                    val reviewState = viewModel.seatReviews.value
                     if (reviewState is UiState.Success) {
                         adapter.updateItemAt(2, RecordListItem.Date(state.data.yearMonths))
                     } else {
@@ -229,7 +229,7 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
                             )
                         )
                     }
-                    viewModel.getSeatRecords()
+                    viewModel.getSeatReviews()
                 }
 
                 is UiState.Empty -> {
@@ -252,13 +252,13 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
     }
 
     private fun observeReviews() {
-        viewModel.reviews.asLiveData().observe(this) { state ->
+        viewModel.seatReviews.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
                     stopReviewShimmer()
                     val newProfileItem = RecordListItem.Profile(state.data.profile)
                     val newDateItem =
-                        RecordListItem.Date((viewModel.date.value as UiState.Success).data.yearMonths)
+                        RecordListItem.Date((viewModel.seatDate.value as UiState.Success).data.yearMonths)
                     val newRecordItem = RecordListItem.Record(state.data.reviews)
                     val newList = adapter.currentList.toMutableList()
                     newList[0] = newProfileItem
