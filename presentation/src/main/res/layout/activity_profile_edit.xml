@@ -184,6 +184,7 @@
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:background="@drawable/circle_white_fill"
                     tools:ignore="contentDescription"
                     tools:src="@drawable/ic_cheer_all_teams" />
 
