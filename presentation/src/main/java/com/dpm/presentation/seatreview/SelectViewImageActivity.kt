@@ -23,6 +23,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
     ActivitySelectViewImageBinding.inflate(it)
 }) {
+
+    companion object {
+        private const val REVIEW_DATA = "REVIEW_DATA"
+        private const val CANCEL_SNACKBAR = "CANCEL_SNACKBAR"
+        private const val UPLOAD_SNACKBAR = "UPLOAD_SNACKBAR"
+    }
     private val viewModel by viewModels<ReviewViewModel>()
     private val density by lazy { resources.displayMetrics.density }
     private val radiusPx by lazy { 8 * density }
@@ -38,7 +44,7 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
     private fun initView() {
         _adapter = SelectKeywordAdapter()
         binding.rvKeywordList.adapter = adapter
-        val reviewData = intent.getParcelableExtra<ReviewData>("REVIEW_DATA")
+        val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
         reviewData?.let {
             val totalReview = it.selectedGoodReview + it.selectedBadReview
             adapter.submitList(totalReview)
@@ -125,13 +131,13 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
         binding.tvCancel.setOnSingleClickListener {
             startActivity(
                 Intent(this, HomeActivity::class.java).putExtra(
-                    "CANCEL_SNACKBAR",
+                    CANCEL_SNACKBAR,
                     true,
                 ),
             ).also { finish() }
         }
         binding.tvUploadBtn.setOnSingleClickListener {
-            val reviewData = intent.getParcelableExtra<ReviewData>("REVIEW_DATA")
+            val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
             if (reviewData != null) {
                 viewModel.updateViewReview(
                     reviewData.selectedColumn,
@@ -147,7 +153,7 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
             viewModel.postSeatReview(ReviewMethod.VIEW)
             startActivity(
                 Intent(this, HomeActivity::class.java).putExtra(
-                    "UPLOAD_SNACKBAR",
+                    UPLOAD_SNACKBAR,
                     true,
                 ),
             ); finish()
