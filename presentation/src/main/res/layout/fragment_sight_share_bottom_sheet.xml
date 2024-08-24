@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/rect_white_fill_32"
+    android:background="@drawable/rect_background_tertiary_fill_8"
     android:paddingBottom="20dp">
 
     <View
@@ -144,10 +144,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="3.96dp"
-        android:elevation="12dp"
+        android:elevation="50dp"
         android:paddingHorizontal="10dp"
-        android:paddingVertical="8dp"
-        app:backgroundColor="@color/white"
+        app:backgroundColor="@color/color_background_white"
+        android:paddingVertical="10dp"
         app:layout_constraintBottom_toTopOf="@+id/clButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:textAppearance="@style/TextAppearance.Spot.Caption04"
