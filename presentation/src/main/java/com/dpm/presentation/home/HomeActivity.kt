@@ -91,6 +91,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 view = binding.root,
                 message = "시야찾기에 내 게시글이 올라갔어요!",
                 endMessage = "확인하러 가기",
+                marginBottom = 93,
             ) {
                 // TODO : onclick -> 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
             }.show()
