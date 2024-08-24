@@ -147,14 +147,17 @@ fun CustomGallery(
                     Box(modifier = Modifier.width(60.dp)) {
                         if (selectedItems.isEmpty()) {
                             Text(
-                                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 16.dp),
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd)
+                                    .padding(end = 16.dp),
                                 text = "선택",
                                 style = SpotTheme.typography.body02,
                             )
                         } else {
                             MultiStyleText(
                                 modifier = Modifier
-                                    .align(Alignment.CenterEnd).padding(end = 16.dp)
+                                    .align(Alignment.CenterEnd)
+                                    .padding(end = 16.dp)
                                     .clickable {
                                         onImagesSelected(selectedItems.map { it.imageResource })
                                         onBackPressed()
@@ -189,14 +192,29 @@ fun CustomGallery(
             } else if (galleryItems.isNotEmpty()) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3),
-                    contentPadding = PaddingValues(4.dp),
                 ) {
                     item(
                         span = { GridItemSpan(3) },
                         key = "gallery_top_title"
                     ) {
-                        Text("갤러리 제목입니당~~", modifier = Modifier.align(Alignment.CenterHorizontally))
-                        Spacer(modifier = Modifier.height(30.dp))
+                        Column {
+                            Spacer(modifier = Modifier.height(30.dp))
+                            Text(
+                                text = "\uD83D\uDC40 잊지 못할 직관 후기 사진을 남겨보세요 ⚾️",
+                                modifier = Modifier.fillMaxWidth(),
+                                style = SpotTheme.typography.subtitle02,
+                                textAlign = TextAlign.Center,
+                                color = SpotTheme.colors.foregroundBodySubtitle
+                            )
+                            Text(
+                                text = "사진, 영상 포함 최대 3장, 15mb까지 올릴 수 있어요",
+                                modifier = Modifier.fillMaxWidth(),
+                                style = SpotTheme.typography.body03,
+                                textAlign = TextAlign.Center,
+                                color = SpotTheme.colors.strokePositivePrimary
+                            )
+                            Spacer(modifier = Modifier.height(30.dp))
+                        }
                     }
 
                     items(galleryItems) { item ->
@@ -286,7 +304,7 @@ fun GalleryItemView(
 ) {
     Box(
         modifier = Modifier
-            .padding(4.dp)
+            .padding(0.5.dp)
             .aspectRatio(1f)
             .clickable { onClick() }
     ) {
@@ -299,9 +317,10 @@ fun GalleryItemView(
         if (isSelected) {
             Box(
                 modifier = Modifier
+                    .padding(8.dp)
                     .size(24.dp)
                     .align(Alignment.TopEnd)
-                    .background(Color.Red, shape = CircleShape)
+                    .background(SpotTheme.colors.strokePositivePrimary, shape = CircleShape)
             ) {
                 Text(
                     text = selectedIndex.toString(),
@@ -312,9 +331,11 @@ fun GalleryItemView(
         } else {
             Box(
                 modifier = Modifier
+                    .padding(8.dp)
                     .size(24.dp)
                     .align(Alignment.TopEnd)
-                    .border(2.dp, Color.Gray, CircleShape)
+                    .border(2.dp, Color.White, CircleShape)
+                    .background(SpotTheme.colors.transferBlack01, shape = CircleShape)
             )
         }
     }

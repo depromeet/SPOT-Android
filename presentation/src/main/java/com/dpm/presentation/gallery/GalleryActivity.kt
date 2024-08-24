@@ -4,11 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.compose.material.MaterialTheme
-import androidx.core.os.bundleOf
 import com.depromeet.presentation.databinding.ActivityGalleryBinding
 import com.dpm.core.base.BaseActivity
-import com.dpm.presentation.seatreview.dialog.ImageUploadDialog
-import com.dpm.presentation.seatreview.dialog.ImageUploadDialog.Companion.SELECTED_IMAGES
+import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog.Companion.SELECTED_IMAGES
 import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
 
