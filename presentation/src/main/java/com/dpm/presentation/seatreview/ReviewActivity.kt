@@ -1,5 +1,6 @@
 package com.dpm.presentation.seatreview
 
+import ReviewData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -20,13 +21,15 @@ import com.depromeet.presentation.databinding.ActivityReviewBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
+import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
-import com.dpm.presentation.seatreview.dialog.DatePickerDialog
-import com.dpm.presentation.seatreview.dialog.ImageUploadDialog
-import com.dpm.presentation.seatreview.dialog.ReviewMySeatDialog
-import com.dpm.presentation.seatreview.dialog.SelectSeatDialog
+import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
+import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
+import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
+import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
+import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
@@ -48,9 +51,13 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
         private const val DATE_PICKER_DIALOG_TAG = "DatePickerDialogTag"
         private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
+        private const val REVIEW_DATA = "REVIEW_DATA"
+        private const val METHOD_KEY = "METHOD_KEY"
+        private const val DIALOG_TYPE = "DIALOG_TYPE"
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
+    private val method by lazy { intent.getStringExtra(METHOD_KEY)?.let { ReviewMethod.valueOf(it) } }
     private val selectedImage: List<ImageView> by lazy {
         listOf(
             binding.ivFirstImage,
@@ -82,6 +89,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun initView() {
+        initMethodNaming()
         viewModel.getStadiumName()
         initDatePickerDialog()
         initUploadDialog()
@@ -107,6 +115,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         Utils(this).apply {
             setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
             setBlackSystemBarIconColor(window)
+        }
+    }
+
+    private fun initMethodNaming() {
+        when (method) {
+            ReviewMethod.VIEW -> {
+                binding.tvTitle.text = "좌석의 시야를 공유해보세요"
+                binding.tvAddImage.text = "야구장 시야 사진을\n올려주세요"
+                binding.tvReviewMySeat.text = "내 시야 후기"
+            }
+            ReviewMethod.FEED -> {
+                binding.tvTitle.text = "경기의 순간을 간직해보세요"
+                binding.tvAddImage.text = "직관후기 사진을\n올려주세요"
+                binding.tvReviewMySeat.text = "내 직관 후기"
+            }
+            null -> {}
         }
     }
 
@@ -178,6 +202,18 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                         tvColumn.visibility = VISIBLE
                         tvSeatNumber.text = number
                         tvSeatNumber.visibility = VISIBLE
+                        tvNumber.visibility = VISIBLE
+                    }
+
+                    2 -> {
+                        tvSeatColor.visibility = VISIBLE
+                        tvSeatColor.text = seatZone
+                        tvSeatBlock.text = viewModel.getBlockListName(block)
+                        tvBlock.visibility = VISIBLE
+                        tvColumnNumber.visibility = GONE
+                        tvColumn.visibility = GONE
+                        tvSeatNumber.visibility = VISIBLE
+                        tvSeatNumber.text = number
                         tvNumber.visibility = VISIBLE
                     }
 
@@ -253,7 +289,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             if (supportFragmentManager.findFragmentByTag(REVIEW_MY_SEAT_DIALOG) == null &&
                 supportFragmentManager.findFragmentByTag(SELECT_SEAT_DIALOG) == null
             ) {
-                ReviewMySeatDialog().show(supportFragmentManager, REVIEW_MY_SEAT_DIALOG)
+                ReviewMySeatDialog().apply {
+                    arguments = Bundle().apply { putString(METHOD_KEY, method?.name) }
+                }.show(supportFragmentManager, REVIEW_MY_SEAT_DIALOG)
             }
         }
 
@@ -423,7 +461,15 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun observeUploadImageToS3() {
         viewModel.count.asLiveData().observe(this) {
             if (it == selectedImageUris.size && it != 0) {
-                viewModel.postSeatReview()
+                when (method) {
+                    ReviewMethod.VIEW -> {
+                        viewModel.postSeatReview(ReviewMethod.VIEW)
+                    }
+                    ReviewMethod.FEED -> {
+                        viewModel.postSeatReview(ReviewMethod.FEED)
+                    }
+                    null -> {}
+                }
             }
         }
     }
@@ -432,11 +478,29 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    Intent(this, ReviewDoneActivity::class.java).apply {
-                        startActivity(this)
+                    val dialogType = when (method) {
+                        ReviewMethod.VIEW -> ReviewMethod.VIEW
+                        ReviewMethod.FEED -> ReviewMethod.FEED
+                        else -> null
+                    }
+                    val reviewData = ReviewData(
+                        selectedColumn = viewModel.selectedColumn.value,
+                        selectedNumber = viewModel.selectedNumber.value,
+                        preSignedUrlImages = viewModel.preSignedUrlImages.value,
+                        selectedGoodReview = viewModel.selectedGoodReview.value,
+                        selectedBadReview = viewModel.selectedBadReview.value,
+                        detailReviewText = viewModel.detailReviewText.value,
+                        selectedDate = viewModel.selectedDate.value,
+                        blockId = viewModel.selectedBlockId.value,
+                    )
+                    dialogType?.let {
+                        Intent(this, HomeActivity::class.java).apply {
+                            putExtra(DIALOG_TYPE, dialogType)
+                            putExtra(REVIEW_DATA, reviewData)
+                            startActivity(this)
+                        }
                     }
                 }
-
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
                 }

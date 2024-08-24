@@ -123,6 +123,9 @@
     <string name="six_level_to_title">전설의 직관러</string>
     <string name="unknown_level_to_title">알 수 없음</string>
 
+    <!-- seatReview 관련-->
+    <string name="seat_review_no_view_image"><u>시야 사진이 없어요</u></string>
+
     <!-- Error -->
     <string name="error_reload">새로고침</string>
     <string name="error_server_content_title">정보를 불러올 수 없습니다.</string>
@@ -133,7 +136,6 @@
     <string name="setting_feedback_title">SPOT은 여러분의 피드백으로 성장해요!</string>
     <string name="setting_feedback_description">좋은 점, 개선할 점, 궁금한 점 모두 알려주세요</string>
     <string name="setting_manage_account">계정 관리</string>
-
 
     <!-- Evaluation(평가) -->
     <string name="good_title">이런 점이 좋아요</string>
@@ -165,7 +167,4 @@
     <string name="scrap_filter_month">월별 시야</string>
     <string name="scrap_search">검색하기</string>
     <string name="stadium_jamsil">잠실야구장</string>
-
-
-
 </resources>
