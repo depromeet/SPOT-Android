@@ -4,34 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:background="@drawable/rect_transfer_black_03_fill_60">
+    android:background="@android:color/transparent">
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingVertical="19dp"
-        android:paddingStart="16dp"
-        android:textAppearance="@style/TextAppearance.Spot.Label08"
-        android:textColor="@color/color_foreground_white"
-        app:layout_constraintEnd_toStartOf="@id/tv_trigger"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="아직 잠실야구장만 이용할 수 있어요!" />
+        tools:background="@drawable/rect_transfer_black_03_fill_60">
 
-    <TextView
-        android:id="@+id/tv_trigger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="19dp"
-        android:paddingEnd="16dp"
-        android:textAppearance="@style/TextAppearance.Spot.Label08"
-        android:textColor="@color/color_foreground_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toEndOf="@id/tv_description"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="잠실야구장 시야보기" />
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="19dp"
+            android:paddingStart="16dp"
+            android:textAppearance="@style/TextAppearance.Spot.Label08"
+            android:textColor="@color/color_foreground_white"
+            app:layout_constraintEnd_toStartOf="@id/tv_trigger"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="아직 잠실야구장만 이용할 수 있어요!" />
+
+        <TextView
+            android:id="@+id/tv_trigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="19dp"
+            android:paddingEnd="16dp"
+            android:textAppearance="@style/TextAppearance.Spot.Label08"
+            android:textColor="@color/color_foreground_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/tv_description"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="잠실야구장 시야보기" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -91,6 +91,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initEvent() {
+        binding.root.setOnClickListener {
+            return@setOnClickListener
+        }
         onBackPressed()
         setOnClickSpotAppbar()
     }
@@ -120,10 +123,10 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
 
     private fun initSnackBar() {
         snackBar = SpotSnackBar.make(
-            binding.root.rootView,
-            com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
-            getString(R.string.viewfinder_snackbar_scrap),
-            getString(R.string.viewfinder_underscore_snackbar_scrap),
+            view = binding.root.rootView,
+            background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
+            message = getString(R.string.viewfinder_snackbar_scrap),
+            endMessage = getString(R.string.viewfinder_underscore_snackbar_scrap),
             onClick = {
                 // TODO : 스크랩 화면으로 이동
             })
