@@ -319,7 +319,8 @@
                     android:hint="@string/viewfinder_input_example"
                     android:inputType="number"
                     android:maxLength="5"
-                    android:padding="16dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="20dp"
                     android:textAppearance="@style/TextAppearance.Spot.Label03"
                     android:textColor="@color/color_foreground_heading"
                     android:textColorHint="@color/color_foreground_disabled"
@@ -354,12 +355,73 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clOnlyTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@id/tvNoneColumnWarning"
+                app:layout_constraintTop_toBottomOf="@+id/clSeatBlock">
+
+                <EditText
+                    android:id="@+id/etOnlyTable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/rect_background_secondary_fill_8"
+                    android:hint="@string/viewfinder_input_example"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="20dp"
+
+                    android:textAppearance="@style/TextAppearance.Spot.Label03"
+                    android:textColor="@color/color_foreground_heading"
+                    android:textColorHint="@color/color_foreground_disabled"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvOnlyTable"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivDeleteOnlyTable"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_x_circle"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/etOnlyTable"
+                    app:layout_constraintEnd_toEndOf="@id/etOnlyTable"
+                    app:layout_constraintTop_toTopOf="@id/etOnlyTable" />
+
+                <TextView
+                    android:id="@+id/tvOnlyTable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="번"
+                    android:textAppearance="@style/TextAppearance.Spot.Label03"
+                    android:textColor="@color/color_foreground_heading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/etOnlyTable"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clOnlyNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
                 android:visibility="invisible"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@id/tvNoneColumnWarning"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -387,7 +449,8 @@
                     android:hint="@string/viewfinder_input_example"
                     android:inputType="number"
                     android:maxLength="5"
-                    android:padding="16dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="20dp"
                     android:textAppearance="@style/TextAppearance.Spot.Label03"
                     android:textColor="@color/color_foreground_heading"
                     android:textColorHint="@color/color_foreground_disabled"
