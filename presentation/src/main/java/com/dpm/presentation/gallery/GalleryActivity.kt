@@ -19,9 +19,10 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding>(
     private fun initView() {
         binding.cvGallery.setContent {
             MaterialTheme {
-                GalleryScreen {
-
-                }
+                GalleryScreen(
+                    onImagesSelected = { },
+                    onBackPressed = { finish() }
+                )
             }
         }
     }

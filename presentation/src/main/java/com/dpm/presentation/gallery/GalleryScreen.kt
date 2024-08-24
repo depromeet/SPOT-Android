@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -40,8 +41,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,9 +56,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -63,6 +70,8 @@ import androidx.fragment.app.setFragmentResult
 import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.depromeet.presentation.R
+import com.dpm.designsystem.compose.ui.SpotTheme
+import com.dpm.presentation.util.MultiStyleText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,14 +79,18 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun GalleryScreen(
-    onImagesSelected: (List<Uri>) -> Unit
+    onImagesSelected: (List<Uri>) -> Unit,
+    onBackPressed: () -> Unit = { }
 ) {
-    CustomGallery(onImagesSelected)
+    CustomGallery(onImagesSelected) {
+        onBackPressed()
+    }
 }
 
 @Composable
 fun CustomGallery(
-    onImagesSelected : (List<Uri>) -> Unit
+    onImagesSelected : (List<Uri>) -> Unit,
+    onBackPressed: () -> Unit = { }
 ) {
     var galleryItems by remember { mutableStateOf<List<GalleryItem>>(emptyList()) }
     val selectedItems = remember { mutableStateListOf<GalleryItem>() }
@@ -106,54 +119,96 @@ fun CustomGallery(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("갤러리", style = MaterialTheme.typography.h6)
-            Button(
-                onClick = {
-                    onImagesSelected(selectedItems.map { it.imageResource })
-                }
-            ) {
-                Text("${selectedItems.size} 선택")
-            }
-        }
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        } else if (galleryItems.isNotEmpty()) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(4.dp),
-            ) {
-                item(
-                    span = { GridItemSpan(3) },
-                    key = "gallery_top_title"
-                ) {
-                    Text("갤러리 제목입니당~~", modifier = Modifier.align(Alignment.CenterHorizontally))
-                    Spacer(modifier = Modifier.height(30.dp))
-                }
-
-                items(galleryItems) { item ->
-                    GalleryItemView(
-                        item = item,
-                        isSelected = selectedItems.contains(item),
-                        selectedIndex = selectedItems.indexOf(item) + 1,
-                        onClick = {
-                            if (selectedItems.contains(item)) {
-                                selectedItems.remove(item)
-                            } else if (selectedItems.size < 3) {
-                                selectedItems.add(item)
-                            }
-                        }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "갤러리",
+                        style = SpotTheme.typography.subtitle02,
+                        textAlign = TextAlign.Center
                     )
+                },
+                navigationIcon = {
+                    Image(
+                        modifier = Modifier
+                            .padding(start = 14.dp, top = 8.dp, bottom = 8.dp)
+                            .clickable { onBackPressed() },
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
+                        contentDescription = "back"
+                    )
+                },
+                backgroundColor = Color.White,
+                actions = {
+                    Box(modifier = Modifier.width(60.dp)) {
+                        if (selectedItems.isEmpty()) {
+                            Text(
+                                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 16.dp),
+                                text = "선택",
+                                style = SpotTheme.typography.body02,
+                            )
+                        } else {
+                            MultiStyleText(
+                                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 16.dp),
+                                style = SpotTheme.typography.body02,
+                                textWithColors = arrayOf(
+                                    Pair(
+                                        "${selectedItems.size} 선택".substring(0, 1),
+                                        SpotTheme.colors.actionEnabled
+                                    ),
+                                    Pair(
+                                        "${selectedItems.size} 선택".substring(
+                                            1,
+                                            "${selectedItems.size} 선택".length
+                                        ), SpotTheme.colors.foregroundBodySebtext
+                                    )
+                                )
+                            )
+                        }
+                    }
                 }
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            } else if (galleryItems.isNotEmpty()) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    contentPadding = PaddingValues(4.dp),
+                ) {
+                    item(
+                        span = { GridItemSpan(3) },
+                        key = "gallery_top_title"
+                    ) {
+                        Text("갤러리 제목입니당~~", modifier = Modifier.align(Alignment.CenterHorizontally))
+                        Spacer(modifier = Modifier.height(30.dp))
+                    }
+
+                    items(galleryItems) { item ->
+                        GalleryItemView(
+                            item = item,
+                            isSelected = selectedItems.contains(item),
+                            selectedIndex = selectedItems.indexOf(item) + 1,
+                            onClick = {
+                                if (selectedItems.contains(item)) {
+                                    selectedItems.remove(item)
+                                } else if (selectedItems.size < 3) {
+                                    selectedItems.add(item)
+                                }
+                            }
+                        )
+                    }
+                }
+            } else {
+                Text("No images found", modifier = Modifier.align(Alignment.CenterHorizontally))
             }
-        } else {
-            Text("No images found", modifier = Modifier.align(Alignment.CenterHorizontally))
         }
     }
 }
