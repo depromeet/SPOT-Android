@@ -4,18 +4,20 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.depromeet.designsystem.R
 import com.depromeet.designsystem.databinding.SpotSnackbarBinding
 import com.google.android.material.snackbar.Snackbar
 
 class SpotSnackBar(
     view: View,
+    private val snackBarBackground: Int,
     private val message: String,
     private val endMessage: String,
     private val onClick: () -> Unit
 ) {
     companion object {
-        fun make(view: View, message: String = "", endMessage: String = "", onClick: () -> Unit) =
-            SpotSnackBar(view, message, endMessage, onClick)
+        fun make(view: View, background: Int = R.drawable.rect_transfer_black_03_fill_60, message: String = "", endMessage: String = "", onClick: () -> Unit) =
+            SpotSnackBar(view = view, snackBarBackground = background, message=  message, endMessage = endMessage, onClick = onClick)
     }
 
     private val context = view.context
@@ -33,7 +35,7 @@ class SpotSnackBar(
         with(snackbarLayout) {
             removeAllViews()
             setPadding(0, 0, 0, 0)
-            setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
+            setBackgroundResource(snackBarBackground)
             addView(snackbarBinding.root, 0)
         }
         with(snackbarBinding) {
