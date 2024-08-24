@@ -154,9 +154,9 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setTextPart(prefix: String?, number: Int?, suffix: String?) {
+    fun setTextPart(prefix: String?, middle: Any?, suffix: String?) {
         textParts[0] = prefix ?: ""
-        textParts[1] = number?.toString() ?: ""
+        textParts[1] = middle?.toString() ?: ""
         textParts[2] = suffix ?: ""
         requestLayout()
         invalidate()
