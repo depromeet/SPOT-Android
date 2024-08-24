@@ -33,6 +33,7 @@ import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.ReviewActivity
 import com.dpm.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -130,6 +131,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 rvIntuitiveReview.visibility = GONE
                 rvIntuitiveReviewMonth.visibility = GONE
                 spinnerIntuitiveReviewYear.visibility = GONE
+                if (viewModel.seatDate.value !is UiState.Success) {
+                    viewModel.getSeatReviewDate()
+                }
             }
             tvIntuitiveReview.setOnSingleClickListener {
                 tvSeatView.isSelected = false
@@ -138,15 +142,15 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 vSeatViewDivider.visibility = GONE
                 vIntuitiveReviewDivider.visibility = VISIBLE
 
-                rvIntuitiveReview.visibility = VISIBLE
-                rvIntuitiveReviewMonth.visibility = VISIBLE
-                spinnerIntuitiveReviewYear.visibility = VISIBLE
-
                 rvSeatReview.visibility = GONE
                 rvSeatReviewMonth.visibility = GONE
                 spinnerSeatReviewYear.visibility = GONE
 
-                if (viewModel.intuitiveDate.value is UiState.Loading) {
+                rvIntuitiveReview.visibility = VISIBLE
+                rvIntuitiveReviewMonth.visibility = VISIBLE
+                spinnerIntuitiveReviewYear.visibility = VISIBLE
+
+                if (viewModel.intuitiveDate.value !is UiState.Success) {
                     viewModel.getIntuitiveReviewDate()
                 }
             }
@@ -168,6 +172,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setSeatYearSpinner(state.data)
                     seatReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getSeatReviews()
+                    Timber.d("test seat---- > ${state.data.yearMonths}")
                 }
 
                 is UiState.Empty -> {
@@ -194,8 +199,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Success -> {
                     setErrorVisibility(SeatRecordErrorType.NONE)
                     setIntuitiveYearSpinner(state.data)
-                    seatReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
+                    intuitiveReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getIntuitiveReviews()
+                    Timber.d("test intuitive ---- > ${state.data.yearMonths}")
                 }
 
                 is UiState.Empty -> {
@@ -406,7 +412,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     binding.ssvRecord.smoothScrollTo(0, 0)
                 }
             )
-            binding.rvIntuitiveReviewMonth.adapter = seatReviewMonthAdapter
+            binding.rvIntuitiveReviewMonth.adapter = intuitiveReviewMonthAdapter
         }
     }
 
@@ -416,12 +422,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setErrorVisibility(errorType: SeatRecordErrorType) {
         with(binding) {
-            if(tvSeatView.isSelected){
-                rvSeatReview.setVisible(errorType == SeatRecordErrorType.NONE)
-            }
-            if(tvIntuitiveReview.isSelected){
-                rvIntuitiveReview.setVisible(errorType == SeatRecordErrorType.NONE)
-            }
             tvErrorMonth.setVisible(errorType != SeatRecordErrorType.NONE)
             tvErrorYear.setVisible(errorType != SeatRecordErrorType.NONE)
             "${CalendarUtil.getCurrentYear()}년".also { tvErrorYear.text = it }

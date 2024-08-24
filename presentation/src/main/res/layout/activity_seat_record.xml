@@ -83,7 +83,6 @@
                 app:paddingRight="10dp"
                 app:paddingTop="8dp"
                 app:textAppearance="@style/TextAppearance.Spot.Caption04"
-                app:textColor="@color/color_foreground_body_sebtext"
                 tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
             <ImageView
@@ -245,7 +244,7 @@
                     android:layout_height="0dp"
                     android:gravity="center"
                     android:paddingTop="3dp"
-                    android:text="좌석시야"
+                    android:text="@string/seat_record_seat_view"
                     android:textColor="@color/color_foreground_body_subtitle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/glCenter"
@@ -270,7 +269,7 @@
                     android:layout_height="0dp"
                     android:gravity="center"
                     android:paddingTop="3dp"
-                    android:text="직관후기"
+                    android:text="@string/seat_recotd_intuitive_view"
                     android:textColor="@color/color_foreground_body_subtitle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
