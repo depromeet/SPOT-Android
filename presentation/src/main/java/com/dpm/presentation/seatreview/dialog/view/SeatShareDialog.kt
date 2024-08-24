@@ -1,11 +1,12 @@
 package com.dpm.presentation.seatreview.dialog.view
 
+import ReviewData
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.fragment.app.activityViewModels
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.depromeet.presentation.R
@@ -13,13 +14,11 @@ import com.depromeet.presentation.databinding.FragmentSightShareBottomSheetBindi
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.SelectViewImageActivity
-import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 
 class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBinding>(
     R.layout.fragment_sight_share_bottom_sheet,
     FragmentSightShareBottomSheetBinding::inflate,
 ) {
-    private val viewModel: ReviewViewModel by activityViewModels()
     private val density by lazy { requireContext().resources.displayMetrics.density }
     private val radiusPx by lazy { 8 * density }
 
@@ -36,8 +35,16 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
     }
 
     private fun initEvent() {
+        val reviewData = arguments?.getParcelable<ReviewData>("REVIEW_DATA")
+        val selectedImageUris = arguments?.getStringArrayList("SELECTED_IMAGES") ?: arrayListOf()
         binding.btnYes.setOnSingleClickListener {
             startActivity(Intent(requireContext(), SelectViewImageActivity::class.java))
+            startActivity(
+                Intent(requireContext(), SelectViewImageActivity::class.java).apply {
+                    putExtra("REVIEW_DATA", reviewData)
+                    putExtra("SELECTED_IMAGES", selectedImageUris)
+                },
+            )
         }
         binding.btnNo.setOnSingleClickListener {
             dismiss()
@@ -49,8 +56,11 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
     }
 
     private fun getImagesUrl() {
-        val selectedImageUris = arguments?.getStringArrayList("SELECTED_IMAGES") ?: arrayListOf()
-        updateImageViews(selectedImageUris)
+        val reviewData = arguments?.getParcelable<ReviewData>("REVIEW_DATA")
+        // TODO : 버블 커스텀 뷰 머지 후 확인
+        if (reviewData != null) {
+            updateImageViews(reviewData.preSignedUrlImages)
+        }
     }
 
     private fun updateImageViews(urls: List<String>) {
@@ -60,15 +70,15 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
             binding.clThirdImage to binding.ivThirdImage,
         )
 
-        selectImages.forEachIndexed { index, (cardView, imageView) ->
+        selectImages.forEachIndexed { index, (view, image) ->
             if (index < urls.size) {
-                cardView.visibility = VISIBLE
+                view.visibility = VISIBLE
                 val imageUri = urls[index]
-                imageView.load(imageUri) {
+                image.load(imageUri) {
                     transformations(RoundedCornersTransformation(radiusPx))
                 }
             } else {
-                cardView.visibility = GONE
+                view.visibility = GONE
             }
         }
     }

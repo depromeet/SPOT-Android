@@ -1,5 +1,6 @@
 package com.dpm.presentation.seatreview
 
+import ReviewData
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.depromeet.presentation.databinding.ActivitySelectViewImageBinding
@@ -21,5 +22,6 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
         binding.rvKeywordList.adapter = adapter
         val mockData = listOf("Keyword 1", "Keyword 2", "Keyword 3", "Keyword 4", "Keyword 5")
         adapter.submitList(mockData)
+        val reviewData = intent.getParcelableExtra<ReviewData>("REVIEW_DATA")
     }
 }
