@@ -16,6 +16,10 @@ class FeedUploadDialog : BindingDialogFragment<FragmentFeedUploadDialogBinding>(
     FragmentFeedUploadDialogBinding::inflate,
 ) {
 
+    companion object {
+        private const val REVIEW_DATA = "REVIEW_DATA"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentMaterialDialogFragment)
@@ -35,10 +39,10 @@ class FeedUploadDialog : BindingDialogFragment<FragmentFeedUploadDialogBinding>(
     }
 
     private fun navigateToShareDialog() {
-        val reviewData = arguments?.getParcelable<ReviewData>("REVIEW_DATA")
+        val reviewData = arguments?.getParcelable<ReviewData>(REVIEW_DATA)
         SeatShareDialog().apply {
             arguments = Bundle().apply {
-                putParcelable("REVIEW_DATA", reviewData)
+                putParcelable(REVIEW_DATA, reviewData)
             }
         }.show(parentFragmentManager, this.tag)
     }

@@ -51,10 +51,13 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
         private const val DATE_PICKER_DIALOG_TAG = "DatePickerDialogTag"
         private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
+        private const val REVIEW_DATA = "REVIEW_DATA"
+        private const val METHOD_KEY = "METHOD_KEY"
+        private const val DIALOG_TYPE = "DIALOG_TYPE"
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-    private val method by lazy { intent.getStringExtra("METHOD_KEY")?.let { ReviewMethod.valueOf(it) } }
+    private val method by lazy { intent.getStringExtra(METHOD_KEY)?.let { ReviewMethod.valueOf(it) } }
     private val selectedImage: List<ImageView> by lazy {
         listOf(
             binding.ivFirstImage,
@@ -275,7 +278,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 supportFragmentManager.findFragmentByTag(SELECT_SEAT_DIALOG) == null
             ) {
                 ReviewMySeatDialog().apply {
-                    arguments = Bundle().apply { putString("METHOD_KEY", method?.name) }
+                    arguments = Bundle().apply { putString(METHOD_KEY, method?.name) }
                 }.show(supportFragmentManager, REVIEW_MY_SEAT_DIALOG)
             }
         }
@@ -480,8 +483,8 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     )
                     dialogType?.let {
                         Intent(this, HomeActivity::class.java).apply {
-                            putExtra("DIALOG_TYPE", dialogType)
-                            putExtra("REVIEW_DATA", reviewData)
+                            putExtra(DIALOG_TYPE, dialogType)
+                            putExtra(REVIEW_DATA, reviewData)
                             startActivity(this)
                         }
                     }

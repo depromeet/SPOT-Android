@@ -18,6 +18,11 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
     R.layout.fragment_sight_share_bottom_sheet,
     FragmentSightShareBottomSheetBinding::inflate,
 ) {
+
+    companion object {
+        private const val REVIEW_DATA = "REVIEW_DATA"
+    }
+
     private val density by lazy { requireContext().resources.displayMetrics.density }
     private val radiusPx by lazy { 8 * density }
 
@@ -30,16 +35,17 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
         super.onViewCreated(view, savedInstanceState)
         initEvent()
         initView()
+        // TODO : 균욱 오빠 버블 커스텀 뷰 머지 후 확인
         binding.csbvSelectImage.setText("시야 사진이 1장 이상인 경우 선택해주세요")
     }
 
     private fun initEvent() {
-        val reviewData = arguments?.getParcelable<ReviewData>("REVIEW_DATA")
+        val reviewData = arguments?.getParcelable<ReviewData>(REVIEW_DATA)
         binding.btnYes.setOnSingleClickListener {
             startActivity(Intent(requireContext(), SelectViewImageActivity::class.java))
             startActivity(
                 Intent(requireContext(), SelectViewImageActivity::class.java).apply {
-                    putExtra("REVIEW_DATA", reviewData)
+                    putExtra(REVIEW_DATA, reviewData)
                 },
             )
         }
@@ -53,8 +59,7 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
     }
 
     private fun getImagesUrl() {
-        val reviewData = arguments?.getParcelable<ReviewData>("REVIEW_DATA")
-        // TODO : 버블 커스텀 뷰 머지 후 확인
+        val reviewData = arguments?.getParcelable<ReviewData>(REVIEW_DATA)
         if (reviewData != null) {
             updateImageViews(reviewData.preSignedUrlImages)
         }

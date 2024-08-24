@@ -41,6 +41,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         private const val BETWEEN_SPADING_DP = 8
         private const val VIEW_UPLOAD_DIALOG = "ViewUploadDialog"
         private const val FEED_UPLOAD_DIALOG = "FeedUploadDialog"
+        private const val REVIEW_DATA = "REVIEW_DATA"
+        private const val DIALOG_TYPE = "DIALOG_TYPE"
+        private const val CANCEL_SNACKBAR = "CANCEL_SNACKBAR"
+        private const val UPLOAD_SNACKBAR = "UPLOAD_SNACKBAR"
     }
 
     private val homeViewModel: HomeGuiViewModel by viewModels()
@@ -68,27 +72,27 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initReviewDialog() {
-        val reviewData = intent.getParcelableExtra<ReviewData>("REVIEW_DATA")
+        val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
 
-        when (intent?.getSerializableExtra("DIALOG_TYPE") as? ReviewMethod) {
+        when (intent?.getSerializableExtra(DIALOG_TYPE) as? ReviewMethod) {
             ReviewMethod.VIEW -> ViewUploadDialog().show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
             ReviewMethod.FEED -> FeedUploadDialog().apply {
-                arguments = Bundle().apply { putParcelable("REVIEW_DATA", reviewData) }
+                arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
             }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
             else -> {}
         }
 
-        intent.getBooleanExtra("CANCEL_SNACKBAR", false).takeIf { it }?.run {
+        intent.getBooleanExtra(CANCEL_SNACKBAR, false).takeIf { it }?.run {
             makeSpotImageAppbar("다음에는 좌석 시야 공유도 기대할게요!")
         }
 
-        intent.getBooleanExtra("UPLOAD_SNACKBAR", false).takeIf { it }?.run {
+        intent.getBooleanExtra(UPLOAD_SNACKBAR, false).takeIf { it }?.run {
             SpotSnackBar.make(
                 view = binding.root,
                 message = "시야찾기에 내 게시글이 올라갔어요!",
                 endMessage = "확인하러 가기",
             ) {
-                // TODO : 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
+                // TODO : onclick -> 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
             }.show()
         }
     }

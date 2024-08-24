@@ -21,6 +21,9 @@ class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBin
     R.layout.fragment_select_review_type_dialog,
     FragmentSelectReviewTypeDialogBinding::inflate,
 ) {
+    companion object {
+        private const val METHOD_KEY = "METHOD_KEY"
+    }
     private val viewModel: ReviewViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +51,7 @@ class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBin
             delay(500)
             startActivity(
                 Intent(requireContext(), ReviewActivity::class.java).apply {
-                    putExtra("METHOD_KEY", viewModel.reviewMethod.value?.name)
+                    putExtra(METHOD_KEY, viewModel.reviewMethod.value?.name)
                 },
             )
         }

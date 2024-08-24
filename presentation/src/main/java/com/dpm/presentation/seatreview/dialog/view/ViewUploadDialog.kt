@@ -29,7 +29,7 @@ class ViewUploadDialog : BindingDialogFragment<FragmentViewUploadDialogBinding>(
             dismiss()
         }
         binding.btnConfirmReview.setOnSingleClickListener {
-            // TODO : 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
+            // TODO : 방금 작성한 시야 후기 상세 페이지 게시물 화면으로 이동
             startActivity(Intent(requireContext(), StadiumDetailActivity::class.java))
         }
     }
