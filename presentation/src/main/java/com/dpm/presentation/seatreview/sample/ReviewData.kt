@@ -3,6 +3,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ReviewData(
+    val blockId: Int,
     val selectedColumn: String,
     val selectedNumber: String,
     val preSignedUrlImages: List<String>,

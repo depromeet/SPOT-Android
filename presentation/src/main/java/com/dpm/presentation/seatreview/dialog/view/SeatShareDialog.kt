@@ -35,13 +35,11 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
 
     private fun initEvent() {
         val reviewData = arguments?.getParcelable<ReviewData>("REVIEW_DATA")
-        val selectedImageUris = arguments?.getStringArrayList("SELECTED_IMAGES") ?: arrayListOf()
         binding.btnYes.setOnSingleClickListener {
             startActivity(Intent(requireContext(), SelectViewImageActivity::class.java))
             startActivity(
                 Intent(requireContext(), SelectViewImageActivity::class.java).apply {
                     putExtra("REVIEW_DATA", reviewData)
-                    putExtra("SELECTED_IMAGES", selectedImageUris)
                 },
             )
         }

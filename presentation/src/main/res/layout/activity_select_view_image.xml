@@ -261,14 +261,15 @@
         android:gravity="center"
         android:paddingVertical="19dp"
         android:text="업로드"
+        android:enabled="false"
         android:textAppearance="@style/TextAppearance.Spot.Label02"
         android:textColor="@color/color_foreground_white"
-        app:layout_constraintBottom_toTopOf="@+id/tv_upload_btn"
+        app:layout_constraintBottom_toTopOf="@+id/tvCancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tv_upload_btn"
+        android:id="@+id/tvCancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
