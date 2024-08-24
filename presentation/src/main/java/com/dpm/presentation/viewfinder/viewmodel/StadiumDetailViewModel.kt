@@ -64,6 +64,66 @@ class StadiumDetailViewModel @Inject constructor(
         _scrollState.value = state
     }
 
+    fun updateLike(id: Long) {
+        viewModelScope.launch {
+            viewfinderRepository.updateLike(id.toInt())
+            _detailUiState.value = when (val currentState = _detailUiState.value) {
+                is StadiumDetailUiState.ReviewsData -> {
+                    val updatedReviews = currentState.reviews.map { review ->
+                        if (review.id == id) {
+                            if (review.isLike) {
+                                review.copy(
+                                    isLike = !review.isLike,
+                                    likesCount = review.likesCount - 1
+                                )
+                            } else {
+                                review.copy(
+                                    isLike = !review.isLike,
+                                    likesCount = review.likesCount + 1
+                                )
+                            }
+                        } else {
+                            review
+                        }
+                    }
+                    currentState.copy(reviews = updatedReviews)
+                }
+
+                else -> currentState
+            }
+        }
+    }
+
+    fun updateScrap(id: Long) {
+        viewModelScope.launch {
+            viewfinderRepository.updateScrap(id.toInt())
+            _detailUiState.value = when (val currentState = _detailUiState.value) {
+                is StadiumDetailUiState.ReviewsData -> {
+                    val updatedReviews = currentState.reviews.map { review ->
+                        if (review.id == id) {
+                            if (review.isScrap) {
+                                review.copy(
+                                    isScrap = !review.isScrap,
+                                    scrapsCount = review.scrapsCount - 1
+                                )
+                            } else {
+                                review.copy(
+                                    isScrap = !review.isScrap,
+                                    scrapsCount = review.scrapsCount + 1
+                                )
+                            }
+                        } else {
+                            review
+                        }
+                    }
+                    currentState.copy(reviews = updatedReviews)
+                }
+
+                else -> currentState
+            }
+        }
+    }
+
     fun updateMonth(month: Int?) {
         if (month != _reviewFilter.value.month) {
             reset = true
@@ -155,6 +215,15 @@ class StadiumDetailViewModel @Inject constructor(
                 this@StadiumDetailViewModel.blockRow = null
             }
         }
+    }
+
+    fun checkScrap(id: Long): Boolean {
+        (_detailUiState.value as StadiumDetailUiState.ReviewsData).reviews.map { review ->
+            if (review.id == id && review.isScrap) {
+                return true
+            }
+        }
+        return false
     }
 
     fun handleColumNumber(

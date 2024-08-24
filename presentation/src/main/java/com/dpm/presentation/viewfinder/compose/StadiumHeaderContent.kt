@@ -143,6 +143,8 @@ private fun StadiumHeaderContentPreview() {
                 isPositive = false
             )
         ),
+        isLike = false,
+        isScrap = false,
         likesCount = 1,
         scrapsCount = 0,
         reviewType = ""
@@ -236,6 +238,8 @@ private fun StadiumHeaderContentIsMorePreview() {
                 isPositive = false
             )
         ),
+        isLike = false,
+        isScrap = false,
         likesCount = 1,
         scrapsCount = 0,
         reviewType = ""

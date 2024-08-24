@@ -61,6 +61,8 @@ data class ResponseBlockReview(
         val content: String = "",
         val images: List<ResponseReviewImage> = emptyList(),
         val keywords: List<ResponseReviewKeyword> = emptyList(),
+        val isLike: Boolean,
+        val isScrap: Boolean,
         val likesCount: Long,
         val scrapsCount: Long,
         val reviewType: String,

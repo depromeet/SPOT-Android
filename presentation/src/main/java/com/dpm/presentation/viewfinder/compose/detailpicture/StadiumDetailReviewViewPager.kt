@@ -33,6 +33,8 @@ fun StadiumDetailReviewViewPager(
     visited: List<Boolean> = emptyList(),
     modifier: Modifier = Modifier,
     onLoadPaging: () -> Unit = {},
+    onClickLike: (id:Long) -> Unit = {},
+    onClickScrap: (id:Long) -> Unit = {},
     onClickShare: (imagePosition: Int) -> Unit = {}
 ) {
     if (pageIndex == reviews.size - 1 && hasNext) {
@@ -82,14 +84,15 @@ fun StadiumDetailReviewViewPager(
             DetailViewPagerLayer(
                 context = context,
                 isDimmed = isDimmed,
+                isLike = reviews[page].isLike,
                 likeCount = reviews[page].likesCount,
                 pictures = reviews[page].images,
                 verticalPagerState = verticalPagerState,
                 onClickLike = {
-                    // TODO : 좋아요 클릭
+                    onClickLike(reviews[page].id)
                 },
                 onClickScrap = {
-                    // TODO : 스크랩 클릭
+                    onClickScrap(reviews[page].id)
                 },
                 onClickShare = {
                     onClickShare(verticalPagerState.currentPage)
@@ -164,6 +167,8 @@ private fun StadiumDetailReviewViewPagerPreview() {
                     id = 2, content = "싫어요", isPositive = false
                 )
             ),
+            isLike = false,
+            isScrap = false,
             likesCount = 0,
             scrapsCount = 0,
             reviewType = ""
@@ -245,6 +250,8 @@ private fun StadiumDetailReviewViewPagerMorePreview() {
                     id = 2, content = "싫어요", isPositive = false
                 )
             ),
+            isLike = false,
+            isScrap = false,
             likesCount = 0,
             scrapsCount = 0,
             reviewType = ""

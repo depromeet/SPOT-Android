@@ -19,10 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.depromeet.designsystem.R
 import com.dpm.designsystem.compose.ui.SpotTheme
-import com.dpm.presentation.extension.noRippleClickable
 
 @Composable
 fun DetailReviewInteractionItems(
+    isLike: Boolean,
     likeCount: Long,
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit,
@@ -43,7 +43,7 @@ fun DetailReviewInteractionItems(
     ) {
         IconButton(onClick = onClickLike) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_like_inactive),
+                painter = painterResource(id = if (isLike) R.drawable.ic_like_active else R.drawable.ic_like_inactive),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.size(24.dp)
@@ -52,10 +52,12 @@ fun DetailReviewInteractionItems(
         Text(
             text = likeCount.toString(),
             style = SpotTheme.typography.label10,
-            color = SpotTheme.colors.foregroundWhite
+            color = if (isLike) SpotTheme.colors.actionEnabled else SpotTheme.colors.foregroundWhite
         )
         Spacer(modifier = Modifier.height(5.dp))
-        IconButton(onClick = onClickScrap) {
+        IconButton(onClick = {
+            onClickScrap()
+        }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_scrap),
                 contentDescription = null,
@@ -76,8 +78,21 @@ fun DetailReviewInteractionItems(
 
 @Preview
 @Composable
+private fun DetailReviewInteractionItemsLikePreview() {
+    DetailReviewInteractionItems(
+        isLike = true,
+        likeCount = 1,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
+}
+
+@Preview
+@Composable
 private fun DetailReviewInteractionItemsPreview() {
     DetailReviewInteractionItems(
+        isLike = false,
         likeCount = 1,
         onClickLike = {},
         onClickScrap = {},

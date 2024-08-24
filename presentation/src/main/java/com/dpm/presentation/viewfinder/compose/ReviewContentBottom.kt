@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +22,8 @@ import com.depromeet.designsystem.R
 
 @Composable
 fun ReviewContentBottom(
+    isLike: Boolean,
+    isScrap: Boolean,
     likeCount: Long,
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit,
@@ -30,6 +36,7 @@ fun ReviewContentBottom(
         verticalAlignment = Alignment.CenterVertically
     ) {
         LikeButton(
+            isLike = isLike,
             likeCount = likeCount,
             onClick = onClickLike
         )
@@ -39,7 +46,7 @@ fun ReviewContentBottom(
             ) {
                 Icon(
                     painter = painterResource(
-                        id = R.drawable.ic_scrap_inactive_button
+                        id = if (isScrap) R.drawable.ic_scrap_active_button else R.drawable.ic_scrap_inactive_button
                     ), contentDescription = null,
                     tint = Color.Unspecified
                 )
@@ -63,6 +70,8 @@ fun ReviewContentBottom(
 @Composable
 private fun ReviewContentBottomPreview() {
     ReviewContentBottom(
+        isLike = false,
+        isScrap = true,
         likeCount = 0,
         onClickLike = {},
         onClickScrap = {},

@@ -183,6 +183,8 @@ private fun StadiumPictureViewPagerPreview() {
                 isPositive = false
             )
         ),
+        isLike = true,
+        isScrap = true,
         likesCount = 1,
         scrapsCount = 0,
         reviewType = ""

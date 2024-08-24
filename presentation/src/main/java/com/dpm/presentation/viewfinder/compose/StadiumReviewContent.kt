@@ -57,8 +57,8 @@ fun StadiumReviewContent(
     modifier: Modifier = Modifier,
     onClick: (reviewContent: ResponseBlockReview.ResponseReview, index: Int) -> Unit,
     onClickReport: () -> Unit,
-    onClickLike: () -> Unit,
-    onClickScrap: () -> Unit,
+    onClickLike: (id: Long) -> Unit  = {},
+    onClickScrap: (id: Long) -> Unit = {},
     onClickShare: () -> Unit
 ) {
     val minimumLineLength = 3
@@ -243,10 +243,16 @@ fun StadiumReviewContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         ReviewContentBottom(
+            isLike = reviewContent.isLike,
+            isScrap = reviewContent.isScrap,
             likeCount = reviewContent.likesCount,
             modifier = Modifier.padding(start = 32.dp, end = 16.dp),
-            onClickLike = onClickLike,
-            onClickScrap = onClickScrap,
+            onClickLike = {
+                onClickLike(reviewContent.id)
+            },
+            onClickScrap = {
+                onClickScrap(reviewContent.id)
+            },
             onClickShare = onClickShare
         )
     }
@@ -319,15 +325,15 @@ private fun StadiumReviewContentPreview() {
                         isPositive = false
                     )
                 ),
+                isLike = false,
+                isScrap = false,
                 likesCount = 1,
                 scrapsCount = 0,
                 reviewType = ""
             ),
             onClick = { _, _ -> },
             onClickReport = {},
-            onClickLike = {},
-            onClickScrap = {},
-            onClickShare ={}
+            onClickShare = {}
         )
 
     }

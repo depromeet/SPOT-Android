@@ -61,6 +61,7 @@ fun StadiumDetailScreen(
     val detailUiState by viewModel.detailUiState.collectAsStateWithLifecycle()
     val currentIndex by viewModel.currentIndex.collectAsStateWithLifecycle()
 
+
     LaunchedEffect(key1 = scrollState) {
         verticalScrollState.scrollToItem(0)
         viewModel.updateScrollState(false)
@@ -161,8 +162,8 @@ fun StadiumDetailScreen(
                                     )
                                 },
                                 onClickReport = onClickReport,
-                                onClickLike = onClickLike,
-                                onClickScrap = onClickScrap,
+                                onClickLike = viewModel::updateLike,
+                                onClickScrap = viewModel::updateScrap,
                                 onClickShare = {
                                     KakaoUtils().share(
                                         context,

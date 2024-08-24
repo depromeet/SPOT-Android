@@ -45,6 +45,7 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 @Composable
 fun StadiumDetailPictureViewPager(
     context: Context,
+    isLike: Boolean,
     likeCount: Long,
     verticalPagerState: PagerState,
     pictures: List<ResponseBlockReview.ResponseReview.ResponseReviewImage>,
@@ -122,6 +123,7 @@ fun StadiumDetailPictureViewPager(
             contentAlignment = Alignment.CenterEnd
         ) {
             DetailReviewInteractionItems(
+                isLike = isLike,
                 likeCount = likeCount,
                 onClickLike = onClickLike,
                 onClickScrap = onClickScrap,
@@ -142,6 +144,7 @@ private fun StadiumDetailPictureViewPagerPreview() {
     }
     StadiumDetailPictureViewPager(
         context = LocalContext.current,
+        isLike = true,
         likeCount = 1,
         verticalPagerState = pagerState,
         pictures = listOf(
