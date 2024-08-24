@@ -459,6 +459,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         .apply { show(supportFragmentManager, this.tag) }
                 }
 
+                override fun onLikeClick(reviewId: Int) {
+                    //TODO : 좋아요 클릭
+                }
+
+                override fun onScrapClick(reviewId: Int) {
+                    //TODO : 스크랩 클릭
+                }
             }
 
         monthIntuitiveReviewAdapter = MonthRecordAdapter()
@@ -484,6 +491,14 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     viewModel.setEditReviewId(reviewId)
                     RecordEditDialog.newInstance(SEAT_RECORD_TAG)
                         .apply { show(supportFragmentManager, this.tag) }
+                }
+
+                override fun onLikeClick(reviewId: Int) {
+                    //TODO : 좋아요 클릭
+                }
+
+                override fun onScrapClick(reviewId: Int) {
+                    //TODO : 스크랩 클릭
                 }
             }
 

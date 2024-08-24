@@ -22,6 +22,8 @@ class MonthRecordAdapter() :
     interface OnItemRecordClickListener {
         fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
         fun onMoreRecordClick(reviewId: Int)
+        fun onLikeClick(reviewId: Int)
+        fun onScrapClick(reviewId: Int)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -74,6 +76,14 @@ class MonthRecordViewHolder(
 
                     override fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse) {
                         itemRecordClickListener?.onMoreRecordClick(item.id)
+                    }
+
+                    override fun onLikeClick(reviewId: Int) {
+                        itemRecordClickListener?.onLikeClick(reviewId)
+                    }
+
+                    override fun onScrapClick(reviewId: Int) {
+                        itemRecordClickListener?.onScrapClick(reviewId)
                     }
                 }
             binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener() {
