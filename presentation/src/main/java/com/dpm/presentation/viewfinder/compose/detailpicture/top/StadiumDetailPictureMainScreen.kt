@@ -30,100 +30,97 @@ fun StadiumDetailPictureMainScreen(
     reviewIndex: Int,
     bottomPadding: Float,
     isFirstLike: Boolean,
-    reviews: StadiumDetailUiState,
+    uiState: StadiumDetailUiState,
     modifier: Modifier = Modifier,
     stadiumDetailViewModel: StadiumDetailViewModel = viewModel(),
     onClickLike: () -> Unit = {},
     onClickScrap: (id: Long) -> Unit = {},
     onClickShare: () -> Unit = {}
 ) {
-    reviews.let { uiState ->
-        when (uiState) {
-            is StadiumDetailUiState.ReviewsData -> {
-                val visited = remember {
-                    mutableStateListOf(
-                        *List(uiState.reviews.size) { false }.toTypedArray()
-                    )
-                }
-
-                if (uiState.reviews.size - visited.size > 0) {
-                    visited.addAll(List(uiState.reviews.size - visited.size) { false })
-                }
-
-                val initPage by remember {
-                    mutableStateOf(uiState.reviews.indexOfFirst { it.id == reviewId })
-                }
-
-                val pagerState = rememberPagerState(
-                    pageCount = { uiState.reviews.size },
-                    initialPage = initPage
-                )
-
-                var pageIndex by remember {
-                    mutableStateOf(0)
-                }
-
-                var isFirstLikeState by remember {
-                    mutableStateOf(isFirstLike)
-                }
-
-                LaunchedEffect(key1 = pagerState) {
-                    snapshotFlow { pagerState.currentPage }.collect {
-                        pageIndex = it
-                        stadiumDetailViewModel.updateCurrentIndex(it)
-                        if (visited[it]) return@collect
-
-                        if (it == initPage) {
-                            visited[it] = true
-                        }
-
-                        if (!visited[it]) {
-                            visited[it] = true
-                        }
-                    }
-                }
-
-                StadiumDetailReviewViewPager(
-                    context = context,
-                    reviews = uiState.reviews,
-                    visited = visited,
-                    position = reviewIndex,
-                    isFirstLike = isFirstLikeState,
-                    hasNext = uiState.hasNext,
-                    pagerState = pagerState,
-                    pageIndex = pageIndex,
-                    bottomPadding = bottomPadding,
-                    modifier = modifier,
-                    onLoadPaging = stadiumDetailViewModel::getBlockReviews,
-                    onClickLike = { id ->
-                        onClickLike()
-                        isFirstLikeState = false
-                        stadiumDetailViewModel.updateLike(id)
-                    },
-                    onClickScrap = onClickScrap,
-                    onClickShare = { imagePosition ->
-                        onClickShare()
-                        KakaoUtils().share(
-                            context,
-                            seatFeed(
-                                title = uiState.kakaoShareSeatFeedTitle(pageIndex),
-                                description = "출처 : ${uiState.reviews[pageIndex].member.nickname}",
-                                imageUrl = uiState.reviews[pageIndex].images[imagePosition].url,
-                                queryParams = mapOf(
-                                    "stadiumId" to stadiumDetailViewModel.stadiumId.toString(),
-                                    "blockCode" to stadiumDetailViewModel.blockCode
-                                )
-                            ),
-                            onSuccess = { sharingIntent ->
-                                context.startActivity(sharingIntent)
-                            }
-                        )
-                    }
+    when(uiState) {
+        is StadiumDetailUiState.ReviewsData -> {
+            val visited = remember {
+                mutableStateListOf(
+                    *List(uiState.reviews.size) { false }.toTypedArray()
                 )
             }
 
-            else -> Unit
+            if (uiState.reviews.size - visited.size > 0) {
+                visited.addAll(List(uiState.reviews.size - visited.size) { false })
+            }
+
+            val initPage by remember {
+                mutableStateOf(uiState.reviews.indexOfFirst { it.id == reviewId })
+            }
+
+            val pagerState = rememberPagerState(
+                pageCount = { uiState.reviews.size },
+                initialPage = initPage
+            )
+
+            var pageIndex by remember {
+                mutableStateOf(0)
+            }
+
+            var isFirstLikeState by remember {
+                mutableStateOf(isFirstLike)
+            }
+
+            LaunchedEffect(key1 = pagerState) {
+                snapshotFlow { pagerState.currentPage }.collect {
+                    pageIndex = it
+                    stadiumDetailViewModel.updateCurrentIndex(it)
+                    if (visited[it]) return@collect
+
+                    if (it == initPage) {
+                        visited[it] = true
+                    }
+
+                    if (!visited[it]) {
+                        visited[it] = true
+                    }
+                }
+            }
+
+            StadiumDetailReviewViewPager(
+                context = context,
+                reviews = uiState.reviews,
+                visited = visited,
+                position = reviewIndex,
+                isFirstLike = isFirstLikeState,
+                hasNext = uiState.hasNext,
+                pagerState = pagerState,
+                pageIndex = pageIndex,
+                bottomPadding = bottomPadding,
+                modifier = modifier,
+                onLoadPaging = stadiumDetailViewModel::getBlockReviews,
+                onClickLike = { id ->
+                    onClickLike()
+                    isFirstLikeState = false
+                    stadiumDetailViewModel.updateLike(id)
+                },
+                onClickScrap = onClickScrap,
+                onClickShare = { imagePosition ->
+                    onClickShare()
+                    KakaoUtils().share(
+                        context,
+                        seatFeed(
+                            title = uiState.kakaoShareSeatFeedTitle(pageIndex),
+                            description = "출처 : ${uiState.reviews[pageIndex].member.nickname}",
+                            imageUrl = uiState.reviews[pageIndex].images[imagePosition].url,
+                            queryParams = mapOf(
+                                "stadiumId" to stadiumDetailViewModel.stadiumId.toString(),
+                                "blockCode" to stadiumDetailViewModel.blockCode
+                            )
+                        ),
+                        onSuccess = { sharingIntent ->
+                            context.startActivity(sharingIntent)
+                        }
+                    )
+                }
+            )
         }
+        else -> Unit
     }
 }
 
@@ -136,6 +133,6 @@ private fun StadiumDetailPictureMainScreenPreview() {
         reviewIndex = 0,
         bottomPadding = 0f,
         isFirstLike = false,
-        reviews = StadiumDetailUiState.Empty,
+        uiState = StadiumDetailUiState.Empty,
     )
 }

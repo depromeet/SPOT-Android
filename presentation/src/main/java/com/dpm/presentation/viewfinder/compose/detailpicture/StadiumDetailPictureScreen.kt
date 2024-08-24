@@ -31,7 +31,7 @@ fun StadiumDetailPictureScreen(
         DetailReviewEntryPoint.TOP_REVIEW.name -> {
             StadiumDetailPictureTopScreen(
                 context = context,
-                reviews = reviews.value,
+                uiState = reviews.value,
                 reviewId = reviewId,
                 reviewIndex = reviewIndex,
                 bottomPadding = bottomPadding,
@@ -46,7 +46,7 @@ fun StadiumDetailPictureScreen(
         DetailReviewEntryPoint.MAIN_REVIEW.name -> {
             StadiumDetailPictureMainScreen(
                 context = context,
-                reviews = reviews.value,
+                uiState = reviews.value,
                 reviewId = reviewId,
                 reviewIndex = reviewIndex,
                 bottomPadding = bottomPadding,
