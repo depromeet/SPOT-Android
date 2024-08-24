@@ -1,9 +1,11 @@
 package com.dpm.presentation.seatreview
 
+import ReviewData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -467,16 +469,23 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                         ReviewMethod.FEED -> ReviewMethod.FEED
                         else -> null
                     }
-
+                    val reviewData = ReviewData(
+                        selectedColumn = viewModel.selectedColumn.value,
+                        selectedNumber = viewModel.selectedNumber.value,
+                        preSignedUrlImages = viewModel.preSignedUrlImages.value,
+                        selectedGoodReview = viewModel.selectedGoodReview.value,
+                        selectedBadReview = viewModel.selectedBadReview.value,
+                        detailReviewText = viewModel.detailReviewText.value,
+                        selectedDate = viewModel.selectedDate.value,
+                    )
                     dialogType?.let {
                         Intent(this, HomeActivity::class.java).apply {
-                            putExtra("DIALOG_TYPE", it)
-                            putStringArrayListExtra("SELECTED_IMAGES", ArrayList(selectedImageUris))
+                            putExtra("DIALOG_TYPE", dialogType)
+                            putExtra("REVIEW_DATA", reviewData)
                             startActivity(this)
                         }
                     }
                 }
-
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
                 }

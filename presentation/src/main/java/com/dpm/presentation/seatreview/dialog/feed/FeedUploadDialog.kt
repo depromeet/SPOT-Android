@@ -1,6 +1,8 @@
 package com.dpm.presentation.seatreview.dialog.feed
 
+import ReviewData
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.depromeet.presentation.R
@@ -34,10 +36,10 @@ class FeedUploadDialog : BindingDialogFragment<FragmentFeedUploadDialogBinding>(
     }
 
     private fun navigateToShareDialog() {
-        val selectedImageUris = arguments?.getStringArrayList("SELECTED_IMAGES") ?: arrayListOf()
+        val reviewData = arguments?.getParcelable<ReviewData>("REVIEW_DATA")
         SeatShareDialog().apply {
             arguments = Bundle().apply {
-                putStringArrayList("SELECTED_IMAGES", ArrayList(selectedImageUris))
+                putParcelable("REVIEW_DATA", reviewData)
             }
         }.show(parentFragmentManager, this.tag)
     }

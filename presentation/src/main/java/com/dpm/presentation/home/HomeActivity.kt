@@ -1,7 +1,9 @@
 package com.dpm.presentation.home
 
+import ReviewData
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -66,7 +68,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initReviewDialog() {
-        val selectedImageUris = intent.getStringArrayListExtra("SELECTED_IMAGES") ?: arrayListOf()
+        val reviewData = intent.getParcelableExtra<ReviewData>("REVIEW_DATA")
         when (intent?.getSerializableExtra("DIALOG_TYPE") as? ReviewMethod) {
             ReviewMethod.VIEW -> ViewUploadDialog().show(
                 supportFragmentManager,
@@ -74,7 +76,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             )
             ReviewMethod.FEED -> FeedUploadDialog().apply {
                 arguments = Bundle().apply {
-                    putStringArrayList("SELECTED_IMAGES", ArrayList(selectedImageUris))
+                    putParcelable("REVIEW_DATA", reviewData)
                 }
             }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
             else -> {}
