@@ -10,6 +10,7 @@ import com.dpm.core.base.BaseActivity
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySettingBinding
 import com.dpm.presentation.extension.toast
+import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.login.ui.SignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,12 +62,18 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
     }
 
     private fun initView() {
-        binding.tvSettingAppVersion.text = packageManager.getPackageInfo(this.packageName, 0).versionName
+        binding.tvSettingAppVersion.text = "V.${packageManager.getPackageInfo(this.packageName, 0).versionName}"
     }
 
     private fun initEvent() = with(binding){
-        appbarSetting.setNavigationOnClickListener {
+        ivSettingBack.setOnClickListener {
             finish()
+        }
+
+        ivSettingMyProfile.setOnClickListener {
+            Intent(this@SettingActivity, ProfileEditActivity::class.java).apply {
+                startActivity(this)
+            }
         }
 
         clSettingFeedback.setOnClickListener {

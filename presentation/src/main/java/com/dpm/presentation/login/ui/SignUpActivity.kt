@@ -10,6 +10,7 @@ import com.dpm.presentation.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,6 +30,7 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>({
         lifecycleScope.launch {
             delay(1500)
             if (sharedPreference.token.isNotEmpty()) {
+                Timber.d("access token: ${sharedPreference.token}")
                 navigateToNextScreen(HomeActivity::class.java)
             } else {
                 navigateToNextScreen(KakaoSignupActivity::class.java)

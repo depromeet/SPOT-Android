@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/rect_white_fill_32">
 
     <View
@@ -22,7 +23,7 @@
         android:textColor="@color/color_foreground_heading"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="시야 후기"
+        tools:text="시야 후기"
         android:textAppearance="@style/TextAppearance.Spot.Label05"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -323,7 +324,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
-                    android:text="더 자세한 후기를 남길래요!"
+                    tools:text="더 자세한 후기를 남길래요!"
                     android:textAppearance="@style/TextAppearance.Spot.Subtitle04"
                     android:textColor="@color/color_foreground_heading" />
             </LinearLayout>
@@ -339,7 +340,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_gray200_fill_12"
-                    android:hint="시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요"
+                    tools:hint="시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요!"
                     android:inputType="textMultiLine"
                     android:maxLines="5"
                     android:paddingStart="16dp"

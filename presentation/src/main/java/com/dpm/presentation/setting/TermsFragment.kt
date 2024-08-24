@@ -19,6 +19,10 @@ class TermsFragment : BindingFragment<FragmentTermsBinding>(
     }
 
     private fun initClickListener() {
+        binding.root.setOnClickListener {
+            return@setOnClickListener
+        }
+
         binding.tvTermsPersonalInfo.setOnClickListener {
             Intent(
                 Intent.ACTION_VIEW, Uri.parse(
@@ -39,7 +43,7 @@ class TermsFragment : BindingFragment<FragmentTermsBinding>(
             }
         }
 
-        binding.appbarTerms.setNavigationOnClickListener {
+        binding.ivSettingBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }

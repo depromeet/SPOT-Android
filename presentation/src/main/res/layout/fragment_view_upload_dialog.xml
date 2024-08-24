@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/TransparentDialogFragment"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginHorizontal="16dp"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/rect_background_white_fill_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:padding="20dp"
+            android:src="@drawable/ic_round_check_box"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUploadComplete"
+            style="@style/TextAppearance.Spot.Title04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="좌석 시야 등록 완료!"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivCheck" />
+
+        <TextView
+            android:id="@+id/tvUploadSubTitle"
+            style="@style/TextAppearance.Spot.Body03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="64dp"
+            android:gravity="center"
+
+            android:text="     이제 나의 후기를 시야 찾기에서 볼 수 있어요.     "
+            android:textColor="@color/color_foreground_caption"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvUploadComplete" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancel"
+            style="@style/TextAppearance.Spot.Label02"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:paddingVertical="19dp"
+            android:background="@drawable/rect_background_secondary_fill_8"
+            android:gravity="center"
+            android:text="닫기"
+            android:stateListAnimator="@null"
+            android:textColor="@color/color_foreground_body_sebtext"
+            app:layout_constraintBottom_toBottomOf="@+id/btnConfirmReview"
+            app:layout_constraintEnd_toStartOf="@id/btnConfirmReview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnConfirmReview" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnConfirmReview"
+            style="@style/TextAppearance.Spot.Label02"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="40dp"
+            android:paddingVertical="19dp"
+            android:background="@drawable/rect_spot_green_fill_8"
+            android:gravity="center"
+            android:text="확인하러 가기"
+            android:stateListAnimator="@null"
+            android:textColor="@color/color_foreground_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnCancel"
+            app:layout_constraintTop_toBottomOf="@+id/tvUploadSubTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

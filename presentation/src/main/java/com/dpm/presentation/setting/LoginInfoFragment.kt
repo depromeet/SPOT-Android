@@ -53,9 +53,17 @@ class LoginInfoFragment : BindingFragment<FragmentLoginInfoBinding>(
     }
 
     private fun initClickListener() {
+        binding.root.setOnClickListener {
+            return@setOnClickListener
+        }
+
         binding.tvLoginInfoWithdraw.setOnClickListener {
             WithdrawDialog.newInstance("tag")
                 .show(parentFragmentManager, "tag")
+        }
+
+        binding.ivSettingBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
     }
 }

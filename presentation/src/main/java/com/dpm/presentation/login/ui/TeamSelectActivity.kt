@@ -35,14 +35,16 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
         signupViewModel.getBaseballTeam()
         signupViewModel.teamSelectUiState.asLiveData().observe(this) {
             when (it) {
-                SignupUiState.Failure -> { }
-                SignupUiState.Initial -> {
+                is SignupUiState.Failure -> { }
+                is SignupUiState.Initial -> {
                     initView()
                     initEvent()
                 }
-                SignupUiState.Loading -> { }
-                SignupUiState.SignUpSuccess -> {
+                is SignupUiState.Loading -> { }
+                is SignupUiState.SignUpSuccess -> {
                     Intent(this, SignUpCompleteActivity::class.java).apply {
+                        putExtra("nickname", it.nickname)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(this)
                         finish()
                     }
