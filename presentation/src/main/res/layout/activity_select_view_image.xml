@@ -79,65 +79,104 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSelectViewImage">
 
-            <ImageView
-                android:id="@+id/ivFirstImage"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clFirstImage"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
                 android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/ivFirstImageCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_uncheck"
-                app:layout_constraintBottom_toBottomOf="@+id/ivFirstImage"
-                app:layout_constraintEnd_toEndOf="@+id/ivFirstImage"
-                app:layout_constraintStart_toStartOf="@+id/ivFirstImage"
-                app:layout_constraintTop_toTopOf="@+id/ivFirstImage" />
+                <ImageView
+                    android:id="@+id/ivFirstImage"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/spot_green" />
 
-            <ImageView
-                android:id="@+id/ivSecondImage"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:layout_marginStart="6dp"
+
+                <ImageView
+                    android:id="@+id/ivFirstImageCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_uncheck"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivFirstImage"
+                    app:layout_constraintEnd_toEndOf="@+id/ivFirstImage"
+                    app:layout_constraintStart_toStartOf="@+id/ivFirstImage"
+                    app:layout_constraintTop_toTopOf="@+id/ivFirstImage" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSecondImage"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:layout_marginStart="4dp"
                 android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivFirstImage"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@id/clFirstImage"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/ivSecondImageCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_uncheck"
-                app:layout_constraintBottom_toBottomOf="@+id/ivSecondImage"
-                app:layout_constraintEnd_toEndOf="@+id/ivSecondImage"
-                app:layout_constraintStart_toStartOf="@+id/ivSecondImage"
-                app:layout_constraintTop_toTopOf="@+id/ivSecondImage" />
+                <ImageView
+                    android:id="@+id/ivSecondImage"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/spot_green" />
 
-            <ImageView
-                android:id="@+id/ivThirdImage"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:layout_marginStart="6dp"
+                <ImageView
+                    android:id="@+id/ivSecondImageCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_uncheck"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivSecondImage"
+                    app:layout_constraintEnd_toEndOf="@+id/ivSecondImage"
+                    app:layout_constraintStart_toStartOf="@+id/ivSecondImage"
+                    app:layout_constraintTop_toTopOf="@+id/ivSecondImage" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clThirdImage"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:layout_marginStart="4dp"
                 android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivSecondImage"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@id/clSecondImage"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/ivThirdImageCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_uncheck"
-                app:layout_constraintBottom_toBottomOf="@+id/ivThirdImage"
-                app:layout_constraintEnd_toEndOf="@+id/ivThirdImage"
-                app:layout_constraintStart_toStartOf="@+id/ivThirdImage"
-                app:layout_constraintTop_toTopOf="@+id/ivThirdImage" />
+                <ImageView
+                    android:id="@+id/ivThirdImage"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/spot_green" />
+
+                <ImageView
+                    android:id="@+id/ivThirdImageCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_uncheck"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivThirdImage"
+                    app:layout_constraintEnd_toEndOf="@+id/ivThirdImage"
+                    app:layout_constraintStart_toStartOf="@+id/ivThirdImage"
+                    app:layout_constraintTop_toTopOf="@+id/ivThirdImage" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clDescription"
@@ -175,8 +214,8 @@
                 android:id="@+id/tvDescriptionTwoDot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:text="·"
+                android:gravity="center"
                 android:textAppearance="@style/TextAppearance.Spot.Caption02"
                 android:textColor="@color/color_foreground_caption"
                 app:layout_constraintStart_toStartOf="parent"
@@ -197,16 +236,16 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvKeywordList"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvDescriptionTwoDot"
                 app:layout_constraintTop_toBottomOf="@+id/tvDescriptionTwo"
-                app:spanCount="3"
-                tools:itemCount="6"
+                app:spanCount="2"
+                tools:itemCount="3"
                 tools:listitem="@layout/item_select_view_keyword" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
