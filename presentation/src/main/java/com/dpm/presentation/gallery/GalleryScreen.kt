@@ -72,6 +72,7 @@ import coil.compose.rememberImagePainter
 import com.depromeet.presentation.R
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.presentation.util.MultiStyleText
+import com.dpm.presentation.util.ScreenType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -28,6 +28,7 @@ import com.dpm.presentation.gallery.GalleryActivity
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.home.dialog.UploadErrorDialog
 import com.dpm.presentation.seatreview.ReviewActivity.Companion.FRAGMENT_RESULT_KEY
+import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -71,7 +72,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     private fun initEvent() {
         binding.layoutGallery.setOnSingleClickListener {
             Intent(requireContext(), GalleryActivity::class.java).apply {
-                putExtra("screenType", "review")
+                putExtra("screenType", ScreenType.REVIEW)
                 galleryLauncher.launch(this)
             }
         }

@@ -13,7 +13,6 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.presentation.extension.dpToPx
-import com.dpm.presentation.gallery.GalleryActivity
 import com.dpm.presentation.home.adapter.StadiumAdapter
 import com.dpm.presentation.home.dialog.LevelDescriptionDialog
 import com.dpm.presentation.home.dialog.LevelupDialog
@@ -61,11 +60,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initEvent() = with(binding) {
-        ivHomeAppBar.setOnClickListener {
-            Intent(this@HomeActivity, GalleryActivity::class.java).apply {
-                startActivity(this)
-            }
-        }
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
         clHomeScrap.setOnClickListener {

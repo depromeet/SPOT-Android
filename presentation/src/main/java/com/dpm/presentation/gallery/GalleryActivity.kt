@@ -9,6 +9,7 @@ import com.depromeet.presentation.databinding.ActivityGalleryBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.presentation.seatreview.dialog.ImageUploadDialog
 import com.dpm.presentation.seatreview.dialog.ImageUploadDialog.Companion.SELECTED_IMAGES
+import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,13 +23,13 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding>(
     }
 
     private fun initView() {
-        val screenType = intent.getStringExtra("screenType") ?: "review"
+        val screenType = intent.getStringExtra("screenType") ?: ScreenType.REVIEW.name
         binding.cvGallery.setContent {
             MaterialTheme {
                 GalleryScreen(
                     screenType = screenType,
                     onImagesSelected = {
-                        if (screenType == "review") {
+                        if (screenType == ScreenType.REVIEW.name) {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putStringArrayListExtra(SELECTED_IMAGES, ArrayList(it.map { uri -> uri.toString() }))
                             })
