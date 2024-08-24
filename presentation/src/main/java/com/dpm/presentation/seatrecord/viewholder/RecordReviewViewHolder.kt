@@ -41,6 +41,14 @@ class RecordReviewViewHolder(
                     override fun onMoreRecordClick(reviewId: Int) {
                         editClick(reviewId)
                     }
+
+                    override fun onLikeClick(reviewId: Int) {
+
+                    }
+
+                    override fun onScrapClick(reviewId: Int) {
+
+                    }
                 }
         }
     }

@@ -116,7 +116,17 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
                 viewModel.setEditReviewId(id)
                 RecordEditDialog.newInstance(SEAT_RECORD_TAG)
                     .show(parentFragmentManager, RecordEditDialog.TAG)
+            },
+            likeClick = { id ->
+                //TODO 좋아요
+            },
+            scrapClick = { id ->
+                //TODO 스크랩
+            },
+            shareClick = { review ->
+                //TODO 공유
             }
+
         )
 
         with(binding) {
