@@ -2,6 +2,7 @@ package com.dpm.presentation.seatreview
 
 import ReviewData
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -110,9 +111,13 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
             val imageUri = image.tag as? String
             if (imageUri != null) {
                 val isSelected = selectedUris.contains(imageUri)
-                val drawableResId =
-                    if (isSelected) R.drawable.ic_check_green else R.drawable.ic_uncheck
+                val drawableResId = if (isSelected) R.drawable.ic_check_green else R.drawable.ic_uncheck
                 isChecked.setImageResource(drawableResId)
+                if (isSelected) {
+                    image.setColorFilter(Color.argb(77, 0, 0, 0))
+                } else {
+                    image.clearColorFilter()
+                }
             }
         }
     }
