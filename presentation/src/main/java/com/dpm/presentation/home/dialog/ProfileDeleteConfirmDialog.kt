@@ -1,4 +1,4 @@
-package com.dpm.presentation.home
+package com.dpm.presentation.home.dialog
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,7 +10,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentConfirmDeleteDialogBinding
 import com.dpm.core.base.BindingDialogFragment
 import com.dpm.presentation.home.viewmodel.ProfileEditViewModel
-import com.dpm.presentation.seatrecord.ConfirmDeleteDialog
+import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 
 class ProfileDeleteConfirmDialog : BindingDialogFragment<FragmentConfirmDeleteDialogBinding>(
     R.layout.fragment_confirm_delete_dialog,

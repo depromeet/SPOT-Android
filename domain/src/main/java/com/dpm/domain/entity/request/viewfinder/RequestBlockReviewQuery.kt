@@ -5,7 +5,8 @@ data class RequestBlockReviewQuery(
     val seatNumber: Int?,
     val year: Int?,
     val month: Int?,
-    val page: Int,
+    val cursor: String?,
+    val sortBy: String,
     val size: Int
 ) {
     fun rowNumberIsEmpty(): Boolean {

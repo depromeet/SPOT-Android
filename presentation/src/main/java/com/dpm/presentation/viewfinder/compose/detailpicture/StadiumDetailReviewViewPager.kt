@@ -1,6 +1,7 @@
 package com.dpm.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,13 +28,14 @@ fun StadiumDetailReviewViewPager(
     position: Int,
     pageState: Boolean,
     pagerState: PagerState,
+    pageIndex: Int,
     bottomPadding: Float,
     reviews: List<ResponseBlockReview.ResponseReview>,
     visited: List<Boolean>,
     modifier: Modifier = Modifier,
     onLoadPaging: () -> Unit,
 ) {
-    if (pagerState.currentPage == reviews.size - 1 && !pageState) {
+    if (pageIndex == reviews.size - 1 && pageState) {
         onLoadPaging()
     }
 
@@ -162,6 +164,7 @@ private fun StadiumDetailReviewViewPagerPreview() {
         position = 1,
         pageState = false,
         pagerState = pagerState,
+        pageIndex = 0,
         bottomPadding = 0f,
         onLoadPaging = {},
     )
@@ -239,6 +242,7 @@ private fun StadiumDetailReviewViewPagerMorePreview() {
         position = 1,
         pageState = false,
         pagerState = pagerState,
+        pageIndex = 0,
         bottomPadding = 0f,
         onLoadPaging = {},
     )

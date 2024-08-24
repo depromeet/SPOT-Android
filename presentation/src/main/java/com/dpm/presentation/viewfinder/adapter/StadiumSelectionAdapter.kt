@@ -67,23 +67,5 @@ internal class GridSpacingItemDecoration(
                 bottom = 20.dpToPx(view.context)
             }
         }
-
-
-
-//        if (position >= 0) {
-//            outRect.apply {
-//                left = spacing - column * spacing / spanCount
-//                right = (column + 1) * spacing / spanCount
-//                if (position < spanCount) top = spacing
-//                bottom = spacing
-//            }
-//        } else {
-//            outRect.apply {
-//                left = 0
-//                right = 0
-//                top = 0
-//                bottom = 0
-//            }
-//        }
     }
 }

@@ -23,7 +23,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
-import com.dpm.presentation.home.UploadErrorDialog
+import com.dpm.presentation.home.dialog.UploadErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 

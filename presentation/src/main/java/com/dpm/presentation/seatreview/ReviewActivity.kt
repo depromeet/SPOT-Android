@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.view.View.INVISIBLE
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
@@ -15,10 +15,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.dpm.core.base.BaseActivity
-import com.dpm.core.state.UiState
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityReviewBinding
+import com.dpm.core.base.BaseActivity
+import com.dpm.core.state.UiState
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
@@ -50,9 +51,27 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-    private val selectedImage: List<ImageView> by lazy { listOf(binding.ivFirstImage, binding.ivSecondImage, binding.ivThirdImage) }
-    private val selectedImageLayout: List<FrameLayout> by lazy { listOf(binding.layoutFirstImage, binding.layoutSecondImage, binding.layoutThirdImage) }
-    private val removeButtons: List<ImageView> by lazy { listOf(binding.ivRemoveFirstImage, binding.ivRemoveSecondImage, binding.ivRemoveThirdImage) }
+    private val selectedImage: List<ImageView> by lazy {
+        listOf(
+            binding.ivFirstImage,
+            binding.ivSecondImage,
+            binding.ivThirdImage,
+        )
+    }
+    private val selectedImageLayout: List<FrameLayout> by lazy {
+        listOf(
+            binding.layoutFirstImage,
+            binding.layoutSecondImage,
+            binding.layoutThirdImage,
+        )
+    }
+    private val removeButtons: List<ImageView> by lazy {
+        listOf(
+            binding.ivRemoveFirstImage,
+            binding.ivRemoveSecondImage,
+            binding.ivRemoveThirdImage,
+        )
+    }
     private var selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +87,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         initUploadDialog()
         initSeatReviewDialog()
         initViewStatusBar()
-        setupFragmentResultListener()
+        initSeatInfoView()
     }
 
     private fun initEvent() {
@@ -78,10 +97,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun initObserve() {
-        initObserveStadiumName()
-        initObservePreSignedUrl()
-        initObserveUploadImageToS3()
-        initObserveUploadReview()
+        observeStadiumName()
+        observePreSignedUrl()
+        observeUploadImageToS3()
+        observeUploadReview()
     }
 
     private fun initViewStatusBar() {
@@ -98,7 +117,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
         viewModel.reviewCount.asLiveData().observe(this) { count ->
             binding.tvMySeatReviewCount.text = "${count}개"
-            binding.layoutReviewNumber.visibility = if (count > 0) View.VISIBLE else View.GONE
+            binding.layoutReviewNumber.visibility = if (count > 0) VISIBLE else GONE
         }
 
         viewModel.selectedGoodReview.asLiveData().observe(this) { count ->
@@ -108,31 +127,83 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         viewModel.selectedBadReview.asLiveData().observe(this) { count ->
             updateNextButtonState()
         }
-
-        viewModel.selectedSeatZone.asLiveData().observe(this) { name ->
-            val formattedName = name.toString().replace("\n", "").replace("\r", "")
-            binding.tvSeatColor.text = formattedName
-            updateLayoutSeatInfoVisibility()
-            updateNextButtonState()
-        }
-
-        viewModel.selectedBlock.asLiveData().observe(this) { block ->
-            binding.tvSeatBlock.text = block.toString()
-            updateLayoutSeatInfoVisibility()
-            updateNextButtonState()
-        }
-
-        viewModel.selectedColumn.asLiveData().observe(this) { column ->
-            binding.tvColumnNumber.text = column.toString()
-            updateLayoutSeatInfoVisibility()
-        }
-
-        viewModel.selectedNumber.asLiveData().observe(this) { number ->
-            binding.tvSeatNumber.text = "${number}번"
-            updateLayoutSeatInfoVisibility()
-            updateNextButtonState()
-        }
     }
+
+    private fun initSeatInfoView() {
+        supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
+            val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
+            newSelectedImages?.let { addSelectedImages(it) }
+        }
+        supportFragmentManager.setFragmentResultListener("selectSeatResult", this) { _, bundle ->
+            binding.layoutSeatInfo.visibility = VISIBLE
+            val seatZone = bundle.getString("seatZone", "")
+            val block = bundle.getString("block", "")
+            val column = bundle.getString("column", "")
+            val number = bundle.getString("number", "")
+            val sectionId = bundle.getInt("sectionId", 0)
+            val isColumnCheckEnabled = bundle.getBoolean("isColumnCheckEnabled", false)
+            with(binding) {
+                when (sectionId) {
+                    10 -> {
+                        tvSeatColor.visibility = VISIBLE
+                        tvSeatColor.text = seatZone
+                        tvSeatBlock.text = viewModel.getBlockListName(block)
+                        tvBlock.visibility = VISIBLE
+                        tvColumnNumber.visibility = GONE
+                        tvColumn.visibility = GONE
+                        tvSeatNumber.visibility = VISIBLE
+                        tvSeatNumber.text = "W$number"
+                        tvNumber.visibility = VISIBLE
+                    }
+
+                    8 -> {
+                        tvSeatColor.visibility = GONE
+                        tvSeatBlock.text = viewModel.getBlockListName(block)
+                        tvBlock.visibility = GONE
+                        tvColumnNumber.visibility = VISIBLE
+                        tvColumnNumber.text = column
+                        tvColumn.visibility = VISIBLE
+                        tvSeatNumber.text = number
+                        tvSeatNumber.visibility = VISIBLE
+                        tvNumber.visibility = VISIBLE
+                    }
+
+                    1 -> {
+                        tvSeatColor.visibility = VISIBLE
+                        tvSeatColor.text = seatZone
+                        tvSeatBlock.text = viewModel.getBlockListName(block)
+                        tvBlock.visibility = VISIBLE
+                        tvColumnNumber.visibility = VISIBLE
+                        tvColumnNumber.text = column
+                        tvColumn.visibility = VISIBLE
+                        tvSeatNumber.text = number
+                        tvSeatNumber.visibility = VISIBLE
+                        tvNumber.visibility = VISIBLE
+                    }
+
+                    else -> {
+                        tvSeatColor.visibility = VISIBLE
+                        tvSeatColor.text = seatZone
+                        tvSeatBlock.text = block
+                        tvBlock.visibility = VISIBLE
+                        tvColumnNumber.visibility = VISIBLE
+                        tvColumnNumber.text = column
+                        tvColumn.visibility = VISIBLE
+                        if (isColumnCheckEnabled) {
+                            tvSeatNumber.visibility = GONE
+                            tvNumber.visibility = GONE
+                        } else {
+                            tvSeatNumber.text = number
+                            tvSeatNumber.visibility = VISIBLE
+                            tvNumber.visibility = VISIBLE
+                        }
+                    }
+                }
+            }
+        }
+        updateNextButtonState()
+    }
+
     private fun initDatePickerDialog() {
         binding.layoutDatePicker.setOnSingleClickListener {
             DatePickerDialog().show(supportFragmentManager, DATE_PICKER_DIALOG_TAG)
@@ -158,7 +229,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initObserveStadiumName() {
+    private fun observeStadiumName() {
         viewModel.stadiumNameState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -195,13 +266,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun setupFragmentResultListener() {
-        supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
-            val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
-            newSelectedImages?.let { addSelectedImages(it) }
-        }
-    }
-
     private fun addSelectedImages(newImageUris: List<String>) {
         selectedImageUris.addAll(newImageUris.filterNot { selectedImageUris.contains(it) })
         if (selectedImageUris.size > MAX_SELECTED_IMAGES) {
@@ -226,19 +290,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             viewModel.setSelectedImages(selectedImageUris)
         }
     }
-
-    private fun updateLayoutSeatInfoVisibility() {
-        val seatName = viewModel.selectedSeatZone.value
-        val block = viewModel.selectedBlock.value
-        val column = viewModel.selectedColumn.value
-        val number = viewModel.selectedNumber.value
-        if (listOf(seatName, block, column, number).any { it.isNullOrEmpty() }) {
-            binding.layoutSeatInfo.visibility = INVISIBLE
-        } else {
-            binding.layoutSeatInfo.visibility = VISIBLE
-        }
-    }
-
     private fun updateSelectedImages() {
         with(binding) {
             layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
@@ -272,13 +323,16 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         val isSelectedGoodBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
         val isSelectedBadBtnFilled = viewModel.selectedBadReview.value.isNotEmpty()
         val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
+        val isSelectedColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
         val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
 
         with(binding.tvUploadBtn) {
-            isEnabled =
-                isSelectedDateFilled && isSelectedImageFilled && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
-                isSelectedBlockFilled && isSelectedNumberFilled
-            if (isEnabled) {
+            val isReadyToUpload = isSelectedDateFilled && isSelectedImageFilled &&
+                (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
+                isSelectedBlockFilled &&
+                (isSelectedColumnFilled || isSelectedNumberFilled)
+
+            if (isReadyToUpload) {
                 setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
             } else {
                 setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
@@ -307,21 +361,41 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initEventUploadBtn() {
         binding.tvUploadBtn.setOnSingleClickListener {
-            val uniqueImageUris = selectedImageUris.distinct()
-            uniqueImageUris.forEach { imageUriString ->
-                val imageUri = Uri.parse(imageUriString)
-                val fileExtension = getFileExtension(this, imageUri)
-                val imageData = readImageData(this, imageUri)
-                if (imageData != null) {
-                    viewModel.requestPreSignedUrl(fileExtension)
-                } else {
-                    toast("파일을 읽을 수 없습니다.")
+            val isSelectedGoodBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
+            val isSelectedBadBtnFilled = viewModel.selectedBadReview.value.isNotEmpty()
+            val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
+            val isSelectedColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
+            val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
+            when {
+                !(isSelectedGoodBtnFilled || isSelectedBadBtnFilled) && (isSelectedBlockFilled || (isSelectedColumnFilled || isSelectedNumberFilled)) -> {
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                    makeSpotImageAppbar("내 시야 후기를 등록해주세요")
+                }
+                !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) -> {
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                    makeSpotImageAppbar("좌석을 선택해주세요")
+                }
+                ((!isSelectedGoodBtnFilled && !isSelectedBadBtnFilled) || !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled))) -> {
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                }
+                else -> {
+                    val uniqueImageUris = selectedImageUris.distinct()
+                    uniqueImageUris.forEach { imageUriString ->
+                        val imageUri = Uri.parse(imageUriString)
+                        val fileExtension = getFileExtension(this, imageUri)
+                        val imageData = readImageData(this, imageUri)
+                        if (imageData != null) {
+                            viewModel.requestPreSignedUrl(fileExtension)
+                        } else {
+                            toast("파일을 읽을 수 없습니다.")
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun initObservePreSignedUrl() {
+    private fun observePreSignedUrl() {
         viewModel.getPreSignedUrl.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -346,7 +420,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initObserveUploadImageToS3() {
+    private fun observeUploadImageToS3() {
         viewModel.count.asLiveData().observe(this) {
             if (it == selectedImageUris.size && it != 0) {
                 viewModel.postSeatReview()
@@ -354,7 +428,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initObserveUploadReview() {
+    private fun observeUploadReview() {
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
@@ -366,8 +440,20 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
                 }
+
                 else -> {}
             }
         }
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 96,
+        ).show()
     }
 }

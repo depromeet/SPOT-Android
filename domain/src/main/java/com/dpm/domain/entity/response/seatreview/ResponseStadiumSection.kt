@@ -8,6 +8,5 @@ data class ResponseStadiumSection(
         val id: Int,
         val name: String,
         val alias: String?,
-        val color: String,
     )
 }

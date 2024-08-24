@@ -9,11 +9,14 @@ fun getHTMLBody(svgString: String) = "<!DOCTYPE HTML>\n" +
         "        body {\n" +
         "            text-align: center;\n" +
         "        }\n" +
+        "       .container {\n" +
+        "            background-color: #F2F3F6;\n" +
+        "       }\n" +
         "    </style>\n" +
         "</head>\n" +
         "\n" +
-        "<body>\n" +
-        "    <div id=\"div\" class=\"container\">\n" +
+        "<body class=\"container\" style=\'margin: 0; padding:0\'>\n" +
+        "    <div class=\"container\">\n" +
         "\t\n" +
         svgString +
         "\n" +

@@ -11,8 +11,11 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.dpm.presentation.seatrecord.adapter.DetailRecordAdapter
+import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
+import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,7 +40,18 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+                setBlackSystemBarIconColor(window)
+            }
+        }
+    }
+
     private fun initView() {
+        initViewStatusBar()
         setDetailRecordAdapter()
     }
 
@@ -86,6 +100,15 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         }
     }
 
+    private fun initViewStatusBar() {
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+                setBlackSystemBarIconColor(window)
+            }
+        }
+    }
+
     private fun setDetailRecordAdapter() {
         detailRecordAdapter = DetailRecordAdapter(
             (viewModel.reviews.value as UiState.Success).data.profile,
@@ -107,7 +130,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
                     super.onScrolled(recyclerView, dx, dy)
 
                     val scrollBottom = !rvDetailRecord.canScrollVertically(1)
-                    val hasNextPage = !(viewModel.reviews.value as UiState.Success).data.last
+                    val hasNextPage = (viewModel.reviews.value as UiState.Success).data.hasNext
                     if (scrollBottom && hasNextPage && !isLoading) {
                         isLoading = true
                         viewModel.loadNextSeatRecords()
@@ -133,7 +156,8 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             message = message,
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
-            iconColor = com.depromeet.designsystem.R.color.color_error_secondary
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 20
         ).show()
     }
 
