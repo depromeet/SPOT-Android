@@ -3,7 +3,6 @@ package com.dpm.presentation.home
 import ReviewData
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -12,6 +11,7 @@ import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
+import com.dpm.designsystem.SpotSnackBar
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.domain.model.seatreview.ReviewMethod
@@ -69,19 +69,30 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
     private fun initReviewDialog() {
         val reviewData = intent.getParcelableExtra<ReviewData>("REVIEW_DATA")
+
         when (intent?.getSerializableExtra("DIALOG_TYPE") as? ReviewMethod) {
-            ReviewMethod.VIEW -> ViewUploadDialog().show(
-                supportFragmentManager,
-                VIEW_UPLOAD_DIALOG,
-            )
+            ReviewMethod.VIEW -> ViewUploadDialog().show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
             ReviewMethod.FEED -> FeedUploadDialog().apply {
-                arguments = Bundle().apply {
-                    putParcelable("REVIEW_DATA", reviewData)
-                }
+                arguments = Bundle().apply { putParcelable("REVIEW_DATA", reviewData) }
             }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
             else -> {}
         }
+
+        intent.getBooleanExtra("CANCEL_SNACKBAR", false).takeIf { it }?.run {
+            makeSpotImageAppbar("다음에는 좌석 시야 공유도 기대할게요!")
+        }
+
+        intent.getBooleanExtra("UPLOAD_SNACKBAR", false).takeIf { it }?.run {
+            SpotSnackBar.make(
+                view = binding.root,
+                message = "시야찾기에 내 게시글이 올라갔어요!",
+                endMessage = "확인하러 가기",
+            ) {
+                // TODO : 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
+            }.show()
+        }
     }
+
 
 
     private fun initEvent() = with(binding) {

@@ -2,7 +2,6 @@ package com.dpm.presentation.seatreview.dialog.feed
 
 import ReviewData
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.depromeet.presentation.R

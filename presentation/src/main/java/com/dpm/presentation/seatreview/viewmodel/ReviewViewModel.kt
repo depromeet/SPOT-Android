@@ -47,6 +47,39 @@ class ReviewViewModel @Inject constructor(
     private val _preSignedUrlImages = MutableStateFlow<List<String>>(emptyList())
     val preSignedUrlImages: StateFlow<List<String>> = _preSignedUrlImages.asStateFlow()
 
+    private val _selectViewImageUrl = MutableStateFlow<List<String>>(emptyList())
+    val selectViewImageUrl: StateFlow<List<String>> = _selectViewImageUrl
+
+    fun toggleImageSelection(imageUri: String) {
+        _selectViewImageUrl.value = _selectViewImageUrl.value.toMutableList().apply {
+            if (contains(imageUri)) {
+                remove(imageUri)
+            } else {
+                add(imageUri)
+            }
+        }
+    }
+
+    fun updateViewReview(
+        selectedColumn: String,
+        selectedNumber: String,
+        preSignedUrlImages: List<String>,
+        selectedGoodReview: List<String>,
+        selectedBadReview: List<String>,
+        detailReviewText: String,
+        selectedDate: String,
+        blockId: Int,
+    ) {
+        _selectedColumn.value = selectedColumn
+        _selectedNumber.value = selectedNumber
+        _preSignedUrlImages.value = preSignedUrlImages
+        _selectedGoodReview.value = selectedGoodReview
+        _selectedBadReview.value = selectedBadReview
+        _detailReviewText.value = detailReviewText
+        _selectedDate.value = selectedDate
+        _selectedBlockId.value = blockId
+    }
+
     // 시야 후기
 
     private val _reviewCount = MutableStateFlow(0)
@@ -58,7 +91,8 @@ class ReviewViewModel @Inject constructor(
     private val _selectedBadReview = MutableStateFlow<List<String>>(emptyList())
     val selectedBadReview: StateFlow<List<String>> = _selectedBadReview.asStateFlow()
 
-    val detailReviewText = MutableStateFlow("")
+    private val _detailReviewText = MutableStateFlow("")
+    val detailReviewText: StateFlow<String> = _detailReviewText.asStateFlow()
 
     // 좌석 선택
 
@@ -95,6 +129,7 @@ class ReviewViewModel @Inject constructor(
     val selectedSectionId: StateFlow<Int> = _selectedSectionId.asStateFlow()
 
     private val _selectedBlockId = MutableStateFlow(0)
+    val selectedBlockId: StateFlow<Int> = _selectedBlockId.asStateFlow()
 
     private val _stadiumSectionState = MutableStateFlow<UiState<ResponseStadiumSection>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<ResponseStadiumSection>> = _stadiumSectionState
@@ -157,7 +192,7 @@ class ReviewViewModel @Inject constructor(
     }
 
     fun setDetailReviewText(text: String) {
-        detailReviewText.value = text
+        _detailReviewText.value = text
     }
 
     fun setSelectedSeatZone(name: String) {
