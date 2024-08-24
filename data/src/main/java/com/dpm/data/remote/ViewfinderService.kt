@@ -5,6 +5,7 @@ import com.dpm.data.model.response.viewfinder.ResponseBlockRowDto
 import com.dpm.data.model.response.viewfinder.ResponseStadiumDto
 import com.dpm.data.model.response.viewfinder.ResponseStadiumsDto
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -35,4 +36,15 @@ interface ViewfinderService {
         @Path("stadiumId") stadiumId: Int,
         @Path("blockCode") blockCode: String
     ): ResponseBlockRowDto
+
+    @POST("/api/v1/reviews/{reviewId}/scrap")
+    suspend fun postScrap(
+        @Path("reviewId") reviewId: Int
+    )
+
+
+    @POST("/api/v1/reviews/{reviewId}/like")
+    suspend fun postLike(
+        @Path("reviewId") reviewId: Int
+    )
 }

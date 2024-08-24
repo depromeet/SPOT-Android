@@ -47,7 +47,7 @@ class DefaultSharedPreference @Inject constructor(
         }
 
     override var teamName: String
-        get() = preferences.getString("teamName","").orEmpty()
+        get() = preferences.getString("teamName", "").orEmpty()
         set(value) {
             preferences.edit(commit = true) {
                 putString("teamName", value)
@@ -64,12 +64,12 @@ class DefaultSharedPreference @Inject constructor(
         get() = preferences.getString("levelTitle", "").orEmpty()
         set(value) {
             preferences.edit(commit = true) {
-                putString("levelTitle",value)
+                putString("levelTitle", value)
             }
         }
 
     override var profileImage: String
-        get() = preferences.getString("profileImage","").orEmpty()
+        get() = preferences.getString("profileImage", "").orEmpty()
         set(value) {
             preferences.edit(commit = true) {
                 putString("profileImage", value)
@@ -81,6 +81,22 @@ class DefaultSharedPreference @Inject constructor(
         set(value) {
             preferences.edit(commit = true) {
                 putBoolean("isFirstTime", value)
+            }
+        }
+
+    override var isFirstShare: Boolean
+        get() = preferences.getBoolean("isFirstShare", true)
+        set(value) {
+            preferences.edit(commit = true) {
+                putBoolean("isFirstShare", value)
+            }
+        }
+
+    override var isFirstLike: Boolean
+        get() = preferences.getBoolean("isFirstLike", true)
+        set(value) {
+            preferences.edit(commit = true) {
+                putBoolean("isFirstLike", value)
             }
         }
 }

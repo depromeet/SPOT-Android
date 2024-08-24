@@ -4,7 +4,7 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 
 sealed class StadiumDetailUiState {
     data class ReviewsData(
-        val topReviewImages: List<ResponseBlockReview.ResponseTopReviewImages>,
+        val topReviewImages: List<ResponseBlockReview.ResponseReview>,
         val stadiumContent: ResponseBlockReview.ResponseLocation,
         val keywords: List<ResponseBlockReview.ResponseKeyword>,
         val total: Long,

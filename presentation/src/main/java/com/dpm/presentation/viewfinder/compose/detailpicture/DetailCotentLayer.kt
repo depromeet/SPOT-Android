@@ -262,7 +262,12 @@ private fun DetailContentLayerPreview() {
                 ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 2, content = "싫어요", isPositive = false
                 )
-            )
+            ),
+            isLike = false,
+            isScrap = false,
+            likesCount = 1,
+            scrapsCount = 1,
+            reviewType = ""
         )
     DetailContentLayer(
         context = LocalContext.current,

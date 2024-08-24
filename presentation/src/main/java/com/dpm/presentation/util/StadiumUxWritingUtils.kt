@@ -3,6 +3,7 @@ package com.dpm.presentation.util
 import com.dpm.domain.entity.response.viewfinder.BASE
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.dpm.domain.entity.response.viewfinder.base
+import com.dpm.presentation.viewfinder.uistate.StadiumDetailUiState
 
 /**
  * @UX_Writing : 야구장 구장 화면에서 블록 클릭 후, 블록 별 리뷰 화면의 [n루]•[구역]•[블록]
@@ -96,16 +97,23 @@ fun ResponseBlockReview.ResponseReview.toBlockContent(): String {
     return numberString
 }
 
-fun ResponseBlockReview.ResponseTopReviewImages.toBlockContent(): String {
-    var numberString = ""
-    if (blockCode.isNotEmpty()) {
-        numberString += if (blockCode in listOf("exciting1", "exciting3", "premium")) {
-            ""
-        } else {
-            "${blockCode}블록 "
-        }
+
+/**
+ * @UX_Writing : 카카오 공유하기 제목 -> 서울 잠실 야구장 1루 네이비석 101블록 3열 12번 좌석시야
+ * @author : 조관희
+ */
+fun StadiumDetailUiState.ReviewsData.kakaoShareSeatFeedTitle(
+    index: Int
+): String {
+    val base = when (stadiumContent.stadiumName.base(stadiumContent.blockCode)) {
+        BASE.Base1 -> "1루"
+        BASE.Base3 -> "3루"
+        else -> ""
     }
-    if (rowNumber > 0) numberString += "${rowNumber}열 "
-    if (seatNumber > 0) numberString += "${seatNumber}번"
-    return numberString
+    val section = base + stadiumContent.sectionName
+    val block = if (stadiumContent.blockCode in listOf("exciting1", "exciting3", "premium")) "" else "${stadiumContent.blockCode}블록"
+    val column = if (reviews[index].row.number == 0) "" else "${reviews[index].row.number}열"
+    val seatNumber = if (reviews[index].seat.seatNumber == 0) "" else "${reviews[index].seat.seatNumber}번"
+
+    return "${stadiumContent.stadiumName} $section $block $column $seatNumber 좌석시야"
 }

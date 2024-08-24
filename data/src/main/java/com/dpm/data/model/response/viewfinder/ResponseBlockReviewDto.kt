@@ -13,7 +13,7 @@ data class ResponseBlockReviewDto(
     @SerialName("reviews")
     val reviews: List<ResponseReviewDto>,
     @SerialName("topReviewImages")
-    val topReviewImages: List<ResponseTopReviewImagesDto>,
+    val topReviewImages: List<ResponseReviewDto>,
     @SerialName("totalElements")
     val totalElements: Long,
     @SerialName("nextCursor")
@@ -56,7 +56,7 @@ data class ResponseBlockReviewDto(
         @SerialName("block")
         val block: ResponseReviewBlockDto,
         @SerialName("row")
-        val row: ResponseReviewRowDto,
+        val row: ResponseReviewRowDto?,
         @SerialName("seat")
         val seat: ResponseReviewSeatDto?,
         @SerialName("dateTime")
@@ -67,8 +67,13 @@ data class ResponseBlockReviewDto(
         val images: List<ResponseReviewImageDto>,
         @SerialName("keywords")
         val keywords: List<ResponseReviewKeywordDto>,
-
-        ) {
+        @SerialName("likesCount")
+        val likesCount: Long,
+        @SerialName("scrapsCount")
+        val scrapsCount: Long,
+        @SerialName("reviewType")
+        val reviewType: String?,
+    ) {
         @Serializable
         data class ResponseReviewImageDto(
             @SerialName("id")
@@ -126,9 +131,9 @@ data class ResponseBlockReviewDto(
         @Serializable
         data class ResponseReviewRowDto(
             @SerialName("id")
-            val id: Int,
+            val id: Int?,
             @SerialName("number")
-            val number: Int,
+            val number: Int?,
         )
 
         @Serializable
@@ -139,20 +144,6 @@ data class ResponseBlockReviewDto(
             val seatNumber: Int?,
         )
     }
-
-    @Serializable
-    data class ResponseTopReviewImagesDto(
-        @SerialName("url")
-        val url: String,
-        @SerialName("reviewId")
-        val reviewId: Int,
-        @SerialName("blockCode")
-        val blockCode: String,
-        @SerialName("rowNumber")
-        val rowNumber: Int,
-        @SerialName("seatNumber")
-        val seatNumber: Int?,
-    )
 
     @Serializable
     data class ResponseReviewFilterDto(
@@ -171,7 +162,7 @@ fun ResponseBlockReviewDto.toBlockReviewResponse() = ResponseBlockReview(
     location = location?.toLocationResponse() ?: ResponseBlockReview.ResponseLocation(),
     keywords = keywords.map { it.toKeywordResponse() },
     reviews = reviews.map { it.toReviewResponse() },
-    topReviewImages = topReviewImages.map { it.toTopReviewImagesResponse() },
+    topReviewImages = topReviewImages.map { it.toReviewResponse() },
     totalElements = totalElements,
     nextCursor = nextCursor ?: "",
     hasNext = hasNext,
@@ -183,15 +174,6 @@ fun ResponseBlockReviewDto.ResponseKeywordDto.toKeywordResponse() =
         content = content,
         count = count,
         isPositive = isPositive
-    )
-
-fun ResponseBlockReviewDto.ResponseTopReviewImagesDto.toTopReviewImagesResponse() =
-    ResponseBlockReview.ResponseTopReviewImages(
-        url = url,
-        reviewId = reviewId,
-        blockCode = blockCode,
-        rowNumber = rowNumber,
-        seatNumber = seatNumber ?: 0
     )
 
 fun ResponseBlockReviewDto.ResponseReviewFilterDto.toReviewFilterResponse() =
@@ -209,12 +191,18 @@ fun ResponseBlockReviewDto.ResponseReviewDto.toReviewResponse() =
         stadium = stadium.toReviewStadiumResponse(),
         section = section.toReviewSectionResponse(),
         block = block.toReviewBlockResponse(),
-        row = row.toReviewRowResponse(),
-        seat = seat?.toReviewSeatResponse() ?: ResponseBlockReview.ResponseReview.ResponseReviewSeat(),
+        row = row?.toReviewRowResponse() ?: ResponseBlockReview.ResponseReview.ResponseReviewRow(),
+        seat = seat?.toReviewSeatResponse()
+            ?: ResponseBlockReview.ResponseReview.ResponseReviewSeat(),
         dateTime = dateTime,
         content = content ?: "",
         images = images.map { it.toReviewImageResponse() },
-        keywords = keywords.map { it.toReviewKeywordResponse() }
+        keywords = keywords.map { it.toReviewKeywordResponse() },
+        isLike = false,
+        isScrap = false,
+        likesCount = likesCount,
+        scrapsCount = scrapsCount,
+        reviewType = reviewType ?: ""
     )
 
 fun ResponseBlockReviewDto.ResponseLocationDto.toLocationResponse() =
@@ -263,8 +251,8 @@ fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewBlockDto.toReviewBloc
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewRowDto.toReviewRowResponse() =
     ResponseBlockReview.ResponseReview.ResponseReviewRow(
-        id = id,
-        number = number
+        id = id ?: 0,
+        number = number ?: 0
     )
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewSeatDto.toReviewSeatResponse() =

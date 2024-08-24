@@ -11,4 +11,6 @@ interface ViewfinderRepository {
     suspend fun getStadium(id : Int) : Result<ResponseStadium>
     suspend fun getBlockReviews(stadiumId:Int, blockCode: String, query: RequestBlockReviewQuery): Result<ResponseBlockReview>
     suspend fun getBlockRow(stadiumId: Int, blockCode: String): Result<ResponseBlockRow>
+    suspend fun updateScrap(reviewId: Int): Result<Unit>
+    suspend fun updateLike(reviewId: Int): Result<Unit>
 }

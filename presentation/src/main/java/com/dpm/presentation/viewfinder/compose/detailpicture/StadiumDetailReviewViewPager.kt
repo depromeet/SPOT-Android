@@ -1,7 +1,6 @@
 package com.dpm.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,16 +25,20 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 fun StadiumDetailReviewViewPager(
     context: Context,
     position: Int,
-    pageState: Boolean,
+    hasNext: Boolean = false,
+    isFirstLike: Boolean,
     pagerState: PagerState,
     pageIndex: Int,
     bottomPadding: Float,
     reviews: List<ResponseBlockReview.ResponseReview>,
-    visited: List<Boolean>,
+    visited: List<Boolean> = emptyList(),
     modifier: Modifier = Modifier,
-    onLoadPaging: () -> Unit,
+    onLoadPaging: () -> Unit = {},
+    onClickLike: (id: Long) -> Unit = {},
+    onClickScrap: (id: Long) -> Unit = {},
+    onClickShare: (imagePosition: Int) -> Unit = {}
 ) {
-    if (pageIndex == reviews.size - 1 && pageState) {
+    if (pageIndex == reviews.size - 1 && hasNext) {
         onLoadPaging()
     }
 
@@ -63,8 +66,10 @@ fun StadiumDetailReviewViewPager(
         )
 
         LaunchedEffect(key1 = Unit) {
-            if (!visited[page]) {
-                verticalPagerState.scrollToPage(0)
+            if (visited.isNotEmpty()) {
+                if (!visited[page]) {
+                    verticalPagerState.scrollToPage(0)
+                }
             }
         }
 
@@ -80,8 +85,20 @@ fun StadiumDetailReviewViewPager(
             DetailViewPagerLayer(
                 context = context,
                 isDimmed = isDimmed,
+                isLike = reviews[page].isLike,
+                isFirstLike = isFirstLike,
+                likeCount = reviews[page].likesCount,
                 pictures = reviews[page].images,
                 verticalPagerState = verticalPagerState,
+                onClickLike = {
+                    onClickLike(reviews[page].id)
+                },
+                onClickScrap = {
+                    onClickScrap(reviews[page].id)
+                },
+                onClickShare = {
+                    onClickShare(verticalPagerState.currentPage)
+                }
             )
             DetailContentLayer(
                 context = context,
@@ -151,7 +168,12 @@ private fun StadiumDetailReviewViewPagerPreview() {
                 ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 2, content = "싫어요", isPositive = false
                 )
-            )
+            ),
+            isLike = false,
+            isScrap = false,
+            likesCount = 0,
+            scrapsCount = 0,
+            reviewType = ""
         )
     )
     val pagerState = rememberPagerState(
@@ -160,9 +182,10 @@ private fun StadiumDetailReviewViewPagerPreview() {
     StadiumDetailReviewViewPager(
         context = LocalContext.current,
         reviews = reviews,
+        isFirstLike = true,
         visited = emptyList(),
         position = 1,
-        pageState = false,
+        hasNext = false,
         pagerState = pagerState,
         pageIndex = 0,
         bottomPadding = 0f,
@@ -229,7 +252,12 @@ private fun StadiumDetailReviewViewPagerMorePreview() {
                 ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
                     id = 2, content = "싫어요", isPositive = false
                 )
-            )
+            ),
+            isLike = false,
+            isScrap = false,
+            likesCount = 0,
+            scrapsCount = 0,
+            reviewType = ""
         )
     )
     val pagerState = rememberPagerState(
@@ -240,7 +268,8 @@ private fun StadiumDetailReviewViewPagerMorePreview() {
         reviews = reviews,
         visited = emptyList(),
         position = 1,
-        pageState = false,
+        isFirstLike = true,
+        hasNext = false,
         pagerState = pagerState,
         pageIndex = 0,
         bottomPadding = 0f,
