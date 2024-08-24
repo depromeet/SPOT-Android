@@ -18,17 +18,24 @@ import com.depromeet.designsystem.R
 
 @Composable
 fun ReviewContentBottom(
-    modifier: Modifier = Modifier
+    likeCount: Long,
+    modifier: Modifier = Modifier,
+    onClickLike: () -> Unit,
+    onClickScrap: () -> Unit,
+    onClickShare: () -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LikeButton()
+        LikeButton(
+            likeCount = likeCount,
+            onClick = onClickLike
+        )
         Row {
             IconButton(
-                onClick = { }
+                onClick = onClickScrap
             ) {
                 Icon(
                     painter = painterResource(
@@ -39,7 +46,7 @@ fun ReviewContentBottom(
             }
             Spacer(modifier = Modifier.width(6.dp))
             IconButton(
-                onClick = { }
+                onClick = onClickShare
             ) {
                 Icon(
                     painter = painterResource(
@@ -55,5 +62,10 @@ fun ReviewContentBottom(
 @Preview
 @Composable
 private fun ReviewContentBottomPreview() {
-    ReviewContentBottom()
+    ReviewContentBottom(
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
 }

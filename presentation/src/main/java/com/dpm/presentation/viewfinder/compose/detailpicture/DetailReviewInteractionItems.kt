@@ -2,6 +2,8 @@ package com.dpm.presentation.viewfinder.compose.detailpicture
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +23,11 @@ import com.dpm.presentation.extension.noRippleClickable
 
 @Composable
 fun DetailReviewInteractionItems(
-    modifier: Modifier = Modifier
+    likeCount: Long,
+    modifier: Modifier = Modifier,
+    onClickLike: () -> Unit,
+    onClickScrap: () -> Unit,
+    onClickShare: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -35,32 +41,34 @@ fun DetailReviewInteractionItems(
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = onClickLike) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_like_inactive),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(24.dp)
             )
         }
         Text(
-            text = 10.toString(),
+            text = likeCount.toString(),
             style = SpotTheme.typography.label10,
             color = SpotTheme.colors.foregroundWhite
         )
-        IconButton(onClick = { /*TODO*/ }) {
+        Spacer(modifier = Modifier.height(5.dp))
+        IconButton(onClick = onClickScrap) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_scrap),
                 contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier.size(23.dp)
+                tint = SpotTheme.colors.foregroundWhite,
+                modifier = Modifier.size(24.dp)
             )
         }
-        IconButton(onClick = { /*TODO*/ }) {
+        Spacer(modifier = Modifier.height(5.dp))
+        IconButton(onClick = onClickShare) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_share),
                 contentDescription = null,
-                tint = Color.Unspecified,
+                tint = SpotTheme.colors.foregroundWhite,
             )
         }
     }
@@ -69,5 +77,10 @@ fun DetailReviewInteractionItems(
 @Preview
 @Composable
 private fun DetailReviewInteractionItemsPreview() {
-    DetailReviewInteractionItems()
+    DetailReviewInteractionItems(
+        likeCount = 1,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
 }

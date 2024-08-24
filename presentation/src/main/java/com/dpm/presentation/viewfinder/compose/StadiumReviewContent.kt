@@ -39,9 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.depromeet.presentation.R
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
-import com.depromeet.presentation.R
 import com.dpm.presentation.extension.noRippleClickable
 import com.dpm.presentation.mapper.toKeyword
 import com.dpm.presentation.util.toBlockContent
@@ -56,7 +56,10 @@ fun StadiumReviewContent(
     reviewContent: ResponseBlockReview.ResponseReview,
     modifier: Modifier = Modifier,
     onClick: (reviewContent: ResponseBlockReview.ResponseReview, index: Int) -> Unit,
-    onClickReport: () -> Unit
+    onClickReport: () -> Unit,
+    onClickLike: () -> Unit,
+    onClickScrap: () -> Unit,
+    onClickShare: () -> Unit
 ) {
     val minimumLineLength = 3
     var showMoreButtonState by remember {
@@ -240,7 +243,11 @@ fun StadiumReviewContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         ReviewContentBottom(
-            modifier = Modifier.padding(start = 32.dp, end = 16.dp)
+            likeCount = reviewContent.likesCount,
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp),
+            onClickLike = onClickLike,
+            onClickScrap = onClickScrap,
+            onClickShare = onClickShare
         )
     }
 }
@@ -311,10 +318,16 @@ private fun StadiumReviewContentPreview() {
                         content = "",
                         isPositive = false
                     )
-                )
+                ),
+                likesCount = 1,
+                scrapsCount = 0,
+                reviewType = ""
             ),
             onClick = { _, _ -> },
-            onClickReport = {}
+            onClickReport = {},
+            onClickLike = {},
+            onClickScrap = {},
+            onClickShare ={}
         )
 
     }

@@ -1,6 +1,7 @@
 package com.dpm.presentation.viewfinder.compose
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,15 +20,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dpm.domain.entity.response.viewfinder.BASE
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
+import com.dpm.domain.entity.response.viewfinder.base
 import com.dpm.presentation.mapper.toKeyword
+import com.dpm.presentation.util.KakaoUtils
+import com.dpm.presentation.util.kakaoShareSeatFeedTitle
+import com.dpm.presentation.util.seatFeed
 import com.dpm.presentation.util.stadiumBlock
 import com.dpm.presentation.util.toTitle
 import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.uistate.StadiumDetailUiState
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
+import timber.log.Timber
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -36,11 +44,14 @@ fun StadiumDetailScreen(
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier,
     viewModel: StadiumDetailViewModel = viewModel(),
-    onClickReviewPicture: (reviewContent: ResponseBlockReview.ResponseReview, index: Int, title: String) -> Unit,
+    onClickReviewPicture: (id: Long, index: Int, title: String) -> Unit,
+    onClickTopImage: (id: Long, index: Int, title: String) -> Unit,
     onClickSelectSeat: () -> Unit,
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit,
     onClickGoBack: () -> Unit,
+    onClickLike: () -> Unit,
+    onClickScrap: () -> Unit,
     onRefresh: () -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
@@ -108,7 +119,10 @@ fun StadiumDetailScreen(
                             keywords = uiState.keywords.map { it.toKeyword() },
                             onChangeIsMore = { isMore = it },
                             onClickSelectSeat = onClickSelectSeat,
-                            onCancelSeat = viewModel::clearSeat
+                            onCancelSeat = viewModel::clearSeat,
+                            onClickTopImage = { id, index ->
+                                onClickTopImage(id, index, uiState.stadiumContent.toTitle())
+                            }
                         )
                         Spacer(modifier = Modifier.height(30.dp))
                     }
@@ -141,12 +155,35 @@ fun StadiumDetailScreen(
                                 reviewContent = uiState.reviews[index],
                                 onClick = { reviewContent, index ->
                                     onClickReviewPicture(
-                                        reviewContent,
+                                        reviewContent.id,
                                         index,
                                         uiState.stadiumContent.toTitle()
                                     )
                                 },
-                                onClickReport = onClickReport
+                                onClickReport = onClickReport,
+                                onClickLike = onClickLike,
+                                onClickScrap = onClickScrap,
+                                onClickShare = {
+                                    KakaoUtils().share(
+                                        context,
+                                        seatFeed(
+                                            title = uiState.kakaoShareSeatFeedTitle(index),
+                                            description = "출처 : ${uiState.reviews[index].member.nickname}",
+                                            imageUrl = uiState.reviews[index].images.firstOrNull()?.url
+                                                ?: "",
+                                            queryParams = mapOf(
+                                                "stadiumId" to viewModel.stadiumId.toString(),
+                                                "blockCode" to viewModel.blockCode
+                                            )
+                                        ),
+                                        onSuccess = { sharingIntent ->
+                                            context.startActivity(sharingIntent)
+                                        },
+                                        onFailure = {
+                                            Timber.e("error : ${it.message}")
+                                        }
+                                    )
+                                }
                             )
                             Spacer(modifier = Modifier.height(40.dp))
                         }
@@ -168,7 +205,10 @@ private fun StadiumDetailScreenPreview() {
             onClickFilterMonthly = {},
             onClickReport = {},
             onClickGoBack = {},
-            onRefresh = {}
+            onRefresh = {},
+            onClickTopImage = { _, _, _ -> },
+            onClickLike = {},
+            onClickScrap = {},
         )
     }
 }

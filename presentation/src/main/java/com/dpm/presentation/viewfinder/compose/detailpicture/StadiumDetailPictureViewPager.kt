@@ -1,6 +1,7 @@
 package com.dpm.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -20,6 +22,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,68 +45,92 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 @Composable
 fun StadiumDetailPictureViewPager(
     context: Context,
+    likeCount: Long,
     verticalPagerState: PagerState,
     pictures: List<ResponseBlockReview.ResponseReview.ResponseReviewImage>,
     modifier: Modifier = Modifier,
+    onClickLike: () -> Unit,
+    onClickScrap: () -> Unit,
+    onClickShare: () -> Unit
 ) {
-    Column(
+    Box(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
-        HorizontalPager(
-            modifier = Modifier,
-            state = verticalPagerState,
-        ) { page ->
-            AsyncImage(
-                model = ImageRequest.Builder(context)
-                    .data(pictures.getOrNull(page)?.url)
-                    .crossfade(true)
-                    .build(),
-                contentScale = ContentScale.FillWidth,
-                contentDescription = null,
-                placeholder = ColorPainter(Color.LightGray),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = ((context.resources.displayMetrics.heightPixels / context.resources.displayMetrics.density) * 0.58).dp)
-                    .clip(RectangleShape),
-
-                )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            Modifier
-                .wrapContentHeight()
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            repeat(verticalPagerState.pageCount) { iteration ->
-                if (verticalPagerState.currentPage == iteration) {
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(
-                                color = SpotTheme.colors.actionEnabled
-                            )
-                            .size(
-                                height = 6.dp,
-                                width = 15.dp
-                            )
+            HorizontalPager(
+                modifier = Modifier,
+                state = verticalPagerState,
+            ) { page ->
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(pictures.getOrNull(page)?.url)
+                        .crossfade(true)
+                        .build(),
+                    contentScale = ContentScale.FillWidth,
+                    contentDescription = null,
+                    placeholder = ColorPainter(Color.LightGray),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = ((context.resources.displayMetrics.heightPixels / context.resources.displayMetrics.density) * 0.58).dp)
+                        .clip(RectangleShape),
+
                     )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .clip(CircleShape)
-                            .background(
-                                color = SpotTheme.colors.backgroundPrimary
-                            )
-                            .size(6.dp)
-                    )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                repeat(verticalPagerState.pageCount) { iteration ->
+                    if (verticalPagerState.currentPage == iteration) {
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 4.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(
+                                    color = SpotTheme.colors.actionEnabled
+                                )
+                                .size(
+                                    height = 6.dp,
+                                    width = 15.dp
+                                )
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 4.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    color = SpotTheme.colors.backgroundPrimary
+                                )
+                                .size(6.dp)
+                        )
+                    }
                 }
             }
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 12.dp),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            DetailReviewInteractionItems(
+                likeCount = likeCount,
+                onClickLike = onClickLike,
+                onClickScrap = onClickScrap,
+                onClickShare = onClickShare
+            )
+        }
     }
+
+
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -112,6 +142,7 @@ private fun StadiumDetailPictureViewPagerPreview() {
     }
     StadiumDetailPictureViewPager(
         context = LocalContext.current,
+        likeCount = 1,
         verticalPagerState = pagerState,
         pictures = listOf(
             ResponseBlockReview.ResponseReview.ResponseReviewImage(
@@ -124,5 +155,8 @@ private fun StadiumDetailPictureViewPagerPreview() {
                 id = 1, url = ""
             )
         ),
+        onClickLike = { },
+        onClickScrap = { },
+        onClickShare = { }
     )
 }

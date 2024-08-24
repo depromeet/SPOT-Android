@@ -22,6 +22,10 @@ import com.dpm.presentation.viewfinder.dialog.ReportDialog
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+enum class DetailReviewEntryPoint {
+    TOP_REVIEW, MAIN_REVIEW
+}
+
 @AndroidEntryPoint
 class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictureBinding>(
     R.layout.fragment_stadium_detail_picture, FragmentStadiumDetailPictureBinding::inflate
@@ -51,13 +55,14 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
 
     private fun initView() {
         initWindowInsets()
-        getReviewExtra { reviewId, reviewIndex, title ->
+        getReviewExtra { reviewId, reviewIndex, title, type ->
             binding.spotAppbar.setText(title)
             binding.cvReviewContent.setContent {
                 MaterialTheme {
                     StadiumDetailPictureScreen(
                         reviewId = reviewId,
                         reviewIndex = reviewIndex,
+                        type = type,
                         stadiumDetailViewModel = stadiumDetailViewModel,
                     )
                 }
@@ -93,11 +98,12 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         }
     }
 
-    private fun getReviewExtra(callback: (id: Long, index: Int, title: String) -> Unit) {
+    private fun getReviewExtra(callback: (id: Long, index: Int, title: String, type: String) -> Unit) {
         val reviewId = arguments?.getLong(StadiumDetailActivity.REVIEW_ID) ?: return
         val reviewIndex = arguments?.getInt(StadiumDetailActivity.REVIEW_INDEX) ?: return
         val title = arguments?.getString(StadiumDetailActivity.REVIEW_TITLE_WITH_STADIUM) ?: return
-        callback(reviewId, reviewIndex, title)
+        val type = arguments?.getString(StadiumDetailActivity.REVIEW_TYPE) ?: return
+        callback(reviewId, reviewIndex, title, type)
     }
 
     private fun removeFragment() {
@@ -145,7 +151,10 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         utils.apply {
             requireActivity().apply {
                 setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
-                setNavigationBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+                setNavigationBarColor(
+                    window,
+                    com.depromeet.designsystem.R.color.color_background_white
+                )
                 setBlackSystemBarIconColor(window)
                 WindowCompat.setDecorFitsSystemWindows(window, true)
             }

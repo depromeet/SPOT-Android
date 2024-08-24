@@ -24,7 +24,9 @@ import com.dpm.presentation.extension.noRippleClickable
 
 @Composable
 fun LikeButton(
-    modifier: Modifier = Modifier
+    likeCount : Long,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -42,7 +44,7 @@ fun LikeButton(
                 vertical = 8.dp
             )
             .noRippleClickable {
-
+                onClick()
             },
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -61,7 +63,7 @@ fun LikeButton(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = 12.toString(),
+            text = likeCount.toString(),
             style = SpotTheme.typography.label09,
             color = SpotTheme.colors.foregroundDisabled
         )
@@ -71,5 +73,8 @@ fun LikeButton(
 @Preview
 @Composable
 private fun LikeButtonPreview() {
-    LikeButton()
+    LikeButton(
+        likeCount = 1,
+        onClick = {}
+    )
 }

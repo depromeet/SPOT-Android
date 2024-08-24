@@ -29,14 +29,16 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
+import com.dpm.presentation.extension.noRippleClickable
 import com.dpm.presentation.util.toBlockContent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StadiumPictureViewPager(
     context: Context,
-    topReviewImages: List<ResponseBlockReview.ResponseTopReviewImages>,
-    modifier: Modifier = Modifier
+    topReviewImages: List<ResponseBlockReview.ResponseReview>,
+    modifier: Modifier = Modifier,
+    onClick: (id: Long, index: Int) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { topReviewImages.size })
 
@@ -51,7 +53,7 @@ fun StadiumPictureViewPager(
         ) { page ->
             AsyncImage(
                 model = ImageRequest.Builder(context)
-                    .data(topReviewImages.getOrNull(page)?.url)
+                    .data(topReviewImages.getOrNull(page)?.images?.getOrNull(0)?.url)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
@@ -66,7 +68,10 @@ fun StadiumPictureViewPager(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RectangleShape),
+                    .clip(RectangleShape)
+                    .noRippleClickable {
+                        onClick(topReviewImages[page].id, page)
+                    },
             )
         }
 
@@ -121,24 +126,73 @@ fun StadiumPictureViewPager(
 @Preview
 @Composable
 private fun StadiumPictureViewPagerPreview() {
+    val review = ResponseBlockReview.ResponseReview(
+        id = 1,
+        dateTime = "2023-03-01T19:00:00",
+        content = "asdfsdfsafsfda",
+        images = listOf(
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
+                id = 1,
+                url = "https://picsum.photos/200/300"
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
+                id = 1,
+                url = "https://picsum.photos/200/300"
+            ),
+        ),
+        member = ResponseBlockReview.ResponseReview.ResponseReviewMember(
+            "https://picsum.photos/200/300",
+            nickname = "엘지의 왕자",
+            level = 0
+        ),
+        stadium = ResponseBlockReview.ResponseReview.ResponseReviewStadium(
+            id = 1,
+            name = "서울 잠실 야구장"
+        ),
+        section = ResponseBlockReview.ResponseReview.ResponseReviewSection(
+            id = 1,
+            name = "오렌지석",
+            alias = "응원석"
+        ),
+        block = ResponseBlockReview.ResponseReview.ResponseReviewBlock(
+            id = 1,
+            code = "207"
+        ),
+        row = ResponseBlockReview.ResponseReview.ResponseReviewRow(
+            id = 1,
+            number = 1
+        ),
+        seat = ResponseBlockReview.ResponseReview.ResponseReviewSeat(
+            id = 1,
+            seatNumber = 12
+        ),
+        keywords = listOf(
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            )
+        ),
+        likesCount = 1,
+        scrapsCount = 0,
+        reviewType = ""
+    )
     StadiumPictureViewPager(
         context = LocalContext.current,
         topReviewImages = listOf(
-            ResponseBlockReview.ResponseTopReviewImages(
-                url = "",
-                reviewId = 1,
-                blockCode = "207",
-                rowNumber = 1,
-                seatNumber = 12
-            ),
-            ResponseBlockReview.ResponseTopReviewImages(
-                url = "",
-                reviewId = 1,
-                blockCode = "207",
-                rowNumber = 1,
-                seatNumber = 12
-            ),
+            review, review
         ),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {_,_ ->}
     )
 }

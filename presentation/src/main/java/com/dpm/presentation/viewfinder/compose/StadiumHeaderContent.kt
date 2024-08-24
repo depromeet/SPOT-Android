@@ -30,10 +30,11 @@ fun StadiumHeaderContent(
     stadiumTitle: String,
     keywords: List<Keyword>,
     reviewFilter: RequestBlockReviewQuery,
-    topReviewImages: List<ResponseBlockReview.ResponseTopReviewImages>,
+    topReviewImages: List<ResponseBlockReview.ResponseReview>,
     modifier: Modifier = Modifier,
     onChangeIsMore: (Boolean) -> Unit,
     onClickSelectSeat: () -> Unit,
+    onClickTopImage:(id: Long, index: Int) -> Unit,
     onCancelSeat: () -> Unit
 ) {
     Column(
@@ -43,7 +44,8 @@ fun StadiumHeaderContent(
         StadiumPictureViewPager(
             context = context,
             topReviewImages = topReviewImages,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onClickTopImage
         )
         Spacer(modifier = Modifier.height(20.dp))
         StadiumAreaText(
@@ -84,24 +86,72 @@ fun StadiumHeaderContent(
 @Preview(showBackground = true)
 @Composable
 private fun StadiumHeaderContentPreview() {
+    val review = ResponseBlockReview.ResponseReview(
+        id = 1,
+        dateTime = "2023-03-01T19:00:00",
+        content = "asdfsdfsafsfda",
+        images = listOf(
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
+                id = 1,
+                url = "https://picsum.photos/200/300"
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
+                id = 1,
+                url = "https://picsum.photos/200/300"
+            ),
+        ),
+        member = ResponseBlockReview.ResponseReview.ResponseReviewMember(
+            "https://picsum.photos/200/300",
+            nickname = "엘지의 왕자",
+            level = 0
+        ),
+        stadium = ResponseBlockReview.ResponseReview.ResponseReviewStadium(
+            id = 1,
+            name = "서울 잠실 야구장"
+        ),
+        section = ResponseBlockReview.ResponseReview.ResponseReviewSection(
+            id = 1,
+            name = "오렌지석",
+            alias = "응원석"
+        ),
+        block = ResponseBlockReview.ResponseReview.ResponseReviewBlock(
+            id = 1,
+            code = "207"
+        ),
+        row = ResponseBlockReview.ResponseReview.ResponseReviewRow(
+            id = 1,
+            number = 1
+        ),
+        seat = ResponseBlockReview.ResponseReview.ResponseReviewSeat(
+            id = 1,
+            seatNumber = 12
+        ),
+        keywords = listOf(
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            )
+        ),
+        likesCount = 1,
+        scrapsCount = 0,
+        reviewType = ""
+    )
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = false,
         topReviewImages = listOf(
-            ResponseBlockReview.ResponseTopReviewImages(
-                url = "",
-                reviewId = 1,
-                blockCode = "207",
-                rowNumber = 1,
-                seatNumber = 12
-            ),
-            ResponseBlockReview.ResponseTopReviewImages(
-                url = "",
-                reviewId = 1,
-                blockCode = "207",
-                rowNumber = 1,
-                seatNumber = 12
-            ),
+            review, review
         ),
         reviewFilter = RequestBlockReviewQuery(
             rowNumber = null,
@@ -121,6 +171,7 @@ private fun StadiumHeaderContentPreview() {
         ),
         onChangeIsMore = {},
         onClickSelectSeat = {},
+        onClickTopImage = {_,_ ->},
         onCancelSeat = {}
     )
 }
@@ -128,25 +179,73 @@ private fun StadiumHeaderContentPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun StadiumHeaderContentIsMorePreview() {
+    val review = ResponseBlockReview.ResponseReview(
+        id = 1,
+        dateTime = "2023-03-01T19:00:00",
+        content = "asdfsdfsafsfda",
+        images = listOf(
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
+                id = 1,
+                url = "https://picsum.photos/200/300"
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewImage(
+                id = 1,
+                url = "https://picsum.photos/200/300"
+            ),
+        ),
+        member = ResponseBlockReview.ResponseReview.ResponseReviewMember(
+            "https://picsum.photos/200/300",
+            nickname = "엘지의 왕자",
+            level = 0
+        ),
+        stadium = ResponseBlockReview.ResponseReview.ResponseReviewStadium(
+            id = 1,
+            name = "서울 잠실 야구장"
+        ),
+        section = ResponseBlockReview.ResponseReview.ResponseReviewSection(
+            id = 1,
+            name = "오렌지석",
+            alias = "응원석"
+        ),
+        block = ResponseBlockReview.ResponseReview.ResponseReviewBlock(
+            id = 1,
+            code = "207"
+        ),
+        row = ResponseBlockReview.ResponseReview.ResponseReviewRow(
+            id = 1,
+            number = 1
+        ),
+        seat = ResponseBlockReview.ResponseReview.ResponseReviewSeat(
+            id = 1,
+            seatNumber = 12
+        ),
+        keywords = listOf(
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            ),
+            ResponseBlockReview.ResponseReview.ResponseReviewKeyword(
+                id = 1,
+                content = "",
+                isPositive = false
+            )
+        ),
+        likesCount = 1,
+        scrapsCount = 0,
+        reviewType = ""
+    )
     StadiumHeaderContent(
         context = LocalContext.current,
         isMore = true,
         topReviewImages = listOf(
-            ResponseBlockReview.ResponseTopReviewImages(
-                url = "",
-                reviewId = 1,
-                blockCode = "207",
-                rowNumber = 1,
-                seatNumber = 12
-
-            ),
-            ResponseBlockReview.ResponseTopReviewImages(
-                url = "",
-                reviewId = 1,
-                blockCode = "207",
-                rowNumber = 1,
-                seatNumber = 12
-            ),
+            review,
+            review,
         ),
         reviewFilter = RequestBlockReviewQuery(
             rowNumber = 1,
@@ -167,6 +266,7 @@ private fun StadiumHeaderContentIsMorePreview() {
         ),
         onChangeIsMore = {},
         onClickSelectSeat = {},
+        onClickTopImage = {_,_ ->},
         onCancelSeat = {}
     )
 }

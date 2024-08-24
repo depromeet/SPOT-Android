@@ -13,6 +13,8 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.dpm.presentation.home.HomeActivity
+import com.dpm.presentation.util.KakaoUtils
+import com.dpm.presentation.util.seatFeed
 import com.dpm.presentation.util.toEmptyBlock
 import com.dpm.presentation.viewfinder.compose.StadiumDetailScreen
 import com.dpm.presentation.viewfinder.dialog.ReportDialog
@@ -29,6 +31,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         const val REVIEW_ID = "review_id"
         const val REVIEW_INDEX = "review_index"
         const val REVIEW_TITLE_WITH_STADIUM = "review_title_with_stadium"
+        const val REVIEW_TYPE = "review_type"
+
         const val STADIUM_HEADER = "stadium_header"
         const val STADIUM_REVIEW_CONTENT = "stadium_review_content"
     }
@@ -57,8 +61,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                 StadiumDetailScreen(
                     emptyBlockName = toEmptyBlock(viewModel.stadiumId, viewModel.blockCode),
                     viewModel = viewModel,
-                    onClickReviewPicture = { reviewContent, index, title ->
-                        startToStadiumDetailPictureFragment(reviewContent, index, title)
+                    onClickReviewPicture = { id, index, title ->
+                        startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.MAIN_REVIEW)
                     },
                     onClickSelectSeat = {
                         StadiumSelectSeatDialog.apply {
@@ -86,7 +90,12 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     },
                     onRefresh = {
                         viewModel.getBlockReviews()
-                    }
+                    },
+                    onClickTopImage = { id, index, title ->
+                        startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.TOP_REVIEW)
+                    },
+                    onClickLike = {},
+                    onClickScrap = {}
                 )
             }
         }
@@ -121,15 +130,17 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun startToStadiumDetailPictureFragment(
-        reviewContent: ResponseBlockReview.ResponseReview,
+        id: Long,
         index: Int,
-        title: String
+        title: String,
+        type: DetailReviewEntryPoint
     ) {
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
             arguments = bundleOf(
-                REVIEW_ID to reviewContent.id,
+                REVIEW_ID to id,
                 REVIEW_INDEX to index,
-                REVIEW_TITLE_WITH_STADIUM to title
+                REVIEW_TITLE_WITH_STADIUM to title,
+                REVIEW_TYPE to type.name,
             )
         }
 
