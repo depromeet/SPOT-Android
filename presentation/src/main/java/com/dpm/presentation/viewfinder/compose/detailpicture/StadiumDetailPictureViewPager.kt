@@ -1,7 +1,6 @@
 package com.dpm.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,10 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -22,10 +21,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +41,7 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 fun StadiumDetailPictureViewPager(
     context: Context,
     isLike: Boolean,
+    isFirstLike: Boolean,
     likeCount: Long,
     verticalPagerState: PagerState,
     pictures: List<ResponseBlockReview.ResponseReview.ResponseReviewImage>,
@@ -116,6 +112,7 @@ fun StadiumDetailPictureViewPager(
                 }
             }
         }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -129,6 +126,15 @@ fun StadiumDetailPictureViewPager(
                 onClickScrap = onClickScrap,
                 onClickShare = onClickShare
             )
+            if (isFirstLike) {
+                LikeTooltip(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(y = (-32).dp),
+                    bias = 0.8f,
+                    content = "유용했다면, 도움돼요를 눌러주세요!",
+                )
+            }
         }
     }
 
@@ -146,6 +152,7 @@ private fun StadiumDetailPictureViewPagerPreview() {
         context = LocalContext.current,
         isLike = true,
         likeCount = 1,
+        isFirstLike = true,
         verticalPagerState = pagerState,
         pictures = listOf(
             ResponseBlockReview.ResponseReview.ResponseReviewImage(

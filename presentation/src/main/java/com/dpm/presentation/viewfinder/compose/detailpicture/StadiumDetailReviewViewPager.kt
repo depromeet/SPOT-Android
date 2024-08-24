@@ -26,6 +26,7 @@ fun StadiumDetailReviewViewPager(
     context: Context,
     position: Int,
     hasNext: Boolean = false,
+    isFirstLike: Boolean,
     pagerState: PagerState,
     pageIndex: Int,
     bottomPadding: Float,
@@ -33,8 +34,8 @@ fun StadiumDetailReviewViewPager(
     visited: List<Boolean> = emptyList(),
     modifier: Modifier = Modifier,
     onLoadPaging: () -> Unit = {},
-    onClickLike: (id:Long) -> Unit = {},
-    onClickScrap: (id:Long) -> Unit = {},
+    onClickLike: (id: Long) -> Unit = {},
+    onClickScrap: (id: Long) -> Unit = {},
     onClickShare: (imagePosition: Int) -> Unit = {}
 ) {
     if (pageIndex == reviews.size - 1 && hasNext) {
@@ -85,6 +86,7 @@ fun StadiumDetailReviewViewPager(
                 context = context,
                 isDimmed = isDimmed,
                 isLike = reviews[page].isLike,
+                isFirstLike = isFirstLike,
                 likeCount = reviews[page].likesCount,
                 pictures = reviews[page].images,
                 verticalPagerState = verticalPagerState,
@@ -180,6 +182,7 @@ private fun StadiumDetailReviewViewPagerPreview() {
     StadiumDetailReviewViewPager(
         context = LocalContext.current,
         reviews = reviews,
+        isFirstLike = true,
         visited = emptyList(),
         position = 1,
         hasNext = false,
@@ -265,6 +268,7 @@ private fun StadiumDetailReviewViewPagerMorePreview() {
         reviews = reviews,
         visited = emptyList(),
         position = 1,
+        isFirstLike = true,
         hasNext = false,
         pagerState = pagerState,
         pageIndex = 0,

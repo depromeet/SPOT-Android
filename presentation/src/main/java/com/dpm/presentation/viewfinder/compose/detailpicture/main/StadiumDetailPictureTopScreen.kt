@@ -29,10 +29,13 @@ fun StadiumDetailPictureTopScreen(
     reviewId: Long,
     reviewIndex: Int,
     bottomPadding: Float,
+    isFirstLike: Boolean,
     reviews: StadiumDetailUiState,
     modifier: Modifier = Modifier,
     stadiumDetailViewModel: StadiumDetailViewModel = viewModel(),
-    onClickScrap: (id: Long) -> Unit = {}
+    onClickLike: () -> Unit = {},
+    onClickScrap: (id: Long) -> Unit = {},
+    onClickShare: () -> Unit = {}
 ) {
     reviews.let { uiState ->
         when (uiState) {
@@ -45,6 +48,10 @@ fun StadiumDetailPictureTopScreen(
                     pageCount = { uiState.topReviewImages.size },
                     initialPage = initPage
                 )
+
+                var isFirstLikeState by remember {
+                    mutableStateOf(isFirstLike)
+                }
 
                 var pageIndex by remember {
                     mutableStateOf(0)
@@ -60,13 +67,19 @@ fun StadiumDetailPictureTopScreen(
                     context = context,
                     reviews = uiState.topReviewImages,
                     position = reviewIndex,
+                    isFirstLike = isFirstLikeState,
                     pagerState = pagerState,
                     pageIndex = pageIndex,
                     bottomPadding = bottomPadding,
                     modifier = modifier,
-                    onClickLike = stadiumDetailViewModel::updateLike,
+                    onClickLike = { id ->
+                        onClickLike()
+                        isFirstLikeState = false
+                        stadiumDetailViewModel.updateLike(id)
+                    },
                     onClickScrap = onClickScrap,
                     onClickShare = { imagePosition ->
+                        onClickShare()
                         KakaoUtils().share(
                             context,
                             seatFeed(
@@ -99,6 +112,7 @@ private fun StadiumDetailPictureTopScreenPreview() {
         reviewId = 1,
         reviewIndex = 0,
         bottomPadding = 0f,
+        isFirstLike = false,
         reviews = StadiumDetailUiState.Empty,
     )
 }

@@ -29,10 +29,13 @@ fun StadiumDetailPictureMainScreen(
     reviewId: Long,
     reviewIndex: Int,
     bottomPadding: Float,
+    isFirstLike: Boolean,
     reviews: StadiumDetailUiState,
     modifier: Modifier = Modifier,
     stadiumDetailViewModel: StadiumDetailViewModel = viewModel(),
-    onClickScrap: (id: Long) -> Unit = {}
+    onClickLike: () -> Unit = {},
+    onClickScrap: (id: Long) -> Unit = {},
+    onClickShare: () -> Unit = {}
 ) {
     reviews.let { uiState ->
         when (uiState) {
@@ -60,6 +63,10 @@ fun StadiumDetailPictureMainScreen(
                     mutableStateOf(0)
                 }
 
+                var isFirstLikeState by remember {
+                    mutableStateOf(isFirstLike)
+                }
+
                 LaunchedEffect(key1 = pagerState) {
                     snapshotFlow { pagerState.currentPage }.collect {
                         pageIndex = it
@@ -81,15 +88,21 @@ fun StadiumDetailPictureMainScreen(
                     reviews = uiState.reviews,
                     visited = visited,
                     position = reviewIndex,
+                    isFirstLike = isFirstLikeState,
                     hasNext = uiState.hasNext,
                     pagerState = pagerState,
                     pageIndex = pageIndex,
                     bottomPadding = bottomPadding,
                     modifier = modifier,
                     onLoadPaging = stadiumDetailViewModel::getBlockReviews,
-                    onClickLike = stadiumDetailViewModel::updateLike,
+                    onClickLike = { id ->
+                        onClickLike()
+                        isFirstLikeState = false
+                        stadiumDetailViewModel.updateLike(id)
+                    },
                     onClickScrap = onClickScrap,
                     onClickShare = { imagePosition ->
+                        onClickShare()
                         KakaoUtils().share(
                             context,
                             seatFeed(
@@ -122,6 +135,7 @@ private fun StadiumDetailPictureMainScreenPreview() {
         reviewId = 1,
         reviewIndex = 0,
         bottomPadding = 0f,
+        isFirstLike = false,
         reviews = StadiumDetailUiState.Empty,
     )
 }

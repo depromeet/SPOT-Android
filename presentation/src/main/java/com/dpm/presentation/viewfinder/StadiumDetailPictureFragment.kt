@@ -17,11 +17,13 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBinding
 import com.dpm.core.base.BindingFragment
 import com.dpm.designsystem.SpotSnackBar
+import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.compose.detailpicture.StadiumDetailPictureScreen
 import com.dpm.presentation.viewfinder.dialog.ReportDialog
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 enum class DetailReviewEntryPoint {
     TOP_REVIEW, MAIN_REVIEW
@@ -42,6 +44,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
             return fragment
         }
     }
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
 
     private val stadiumDetailViewModel: StadiumDetailViewModel by activityViewModels()
     private val utils by lazy {
@@ -66,11 +71,18 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                         reviewId = reviewId,
                         reviewIndex = reviewIndex,
                         type = type,
+                        isFirstLike = sharedPreference.isFirstLike,
                         stadiumDetailViewModel = stadiumDetailViewModel,
+                        onClickLike = {
+                            sharedPreference.isFirstLike = false
+                        },
                         onClickScrap = { id ->
                             if (stadiumDetailViewModel.checkScrap(id)) {
                                 snackBar.show()
                             }
+                        },
+                        onClickShare = {
+                            sharedPreference.isFirstShare = false
                         }
                     )
                 }

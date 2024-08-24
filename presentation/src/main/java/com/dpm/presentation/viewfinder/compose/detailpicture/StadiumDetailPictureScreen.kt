@@ -14,12 +14,15 @@ import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 
 @Composable
 fun StadiumDetailPictureScreen(
-    context: Context = LocalContext.current,
-    stadiumDetailViewModel: StadiumDetailViewModel = viewModel(),
     reviewId: Long,
     reviewIndex: Int,
     type: String,
-    onClickScrap: (id: Long) -> Unit = {}
+    isFirstLike: Boolean,
+    context: Context = LocalContext.current,
+    stadiumDetailViewModel: StadiumDetailViewModel = viewModel(),
+    onClickLike:() -> Unit = {},
+    onClickScrap: (id: Long) -> Unit = {},
+    onClickShare: () -> Unit = {}
 ) {
     val reviews = stadiumDetailViewModel.detailUiState.collectAsStateWithLifecycle()
     val bottomPadding by stadiumDetailViewModel.bottomPadding.collectAsStateWithLifecycle()
@@ -32,8 +35,11 @@ fun StadiumDetailPictureScreen(
                 reviewId = reviewId,
                 reviewIndex = reviewIndex,
                 bottomPadding = bottomPadding,
+                isFirstLike = isFirstLike,
                 stadiumDetailViewModel = stadiumDetailViewModel,
-                onClickScrap = onClickScrap
+                onClickLike = onClickLike,
+                onClickScrap = onClickScrap,
+                onClickShare = onClickShare
             )
         }
 
@@ -44,8 +50,11 @@ fun StadiumDetailPictureScreen(
                 reviewId = reviewId,
                 reviewIndex = reviewIndex,
                 bottomPadding = bottomPadding,
+                isFirstLike = isFirstLike,
                 stadiumDetailViewModel = stadiumDetailViewModel,
-                onClickScrap = onClickScrap
+                onClickLike = onClickLike,
+                onClickScrap = onClickScrap,
+                onClickShare = onClickShare
             )
         }
     }
@@ -55,6 +64,7 @@ fun StadiumDetailPictureScreen(
 @Composable
 private fun StadiumDetailPictureScreenMainPreview() {
     StadiumDetailPictureScreen(
+        isFirstLike = true,
         context = LocalContext.current,
         reviewId = 1,
         reviewIndex = 0,
@@ -66,6 +76,7 @@ private fun StadiumDetailPictureScreenMainPreview() {
 @Composable
 private fun StadiumDetailPictureScreenTopPreview() {
     StadiumDetailPictureScreen(
+        isFirstLike = true,
         context = LocalContext.current,
         reviewId = 1,
         reviewIndex = 0,
