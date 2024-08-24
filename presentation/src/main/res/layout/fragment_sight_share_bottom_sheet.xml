@@ -19,7 +19,8 @@
 
     <TextView
         android:id="@+id/tvShareTitle"
-        style="@style/TextAppearance.Spot.Title04"
+        android:textAppearance="@style/TextAppearance.Spot.Title04"
+        android:lineSpacingMultiplier="1.1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
@@ -32,7 +33,8 @@
 
     <TextView
         android:id="@+id/tvShareSubTitle"
-        style="@style/TextAppearance.Spot.Body03"
+        android:textAppearance="@style/TextAppearance.Spot.Body03"
+        android:lineSpacingMultiplier="1.2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
