@@ -205,6 +205,18 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                         tvNumber.visibility = VISIBLE
                     }
 
+                    2 -> {
+                        tvSeatColor.visibility = VISIBLE
+                        tvSeatColor.text = seatZone
+                        tvSeatBlock.text = viewModel.getBlockListName(block)
+                        tvBlock.visibility = VISIBLE
+                        tvColumnNumber.visibility = GONE
+                        tvColumn.visibility = GONE
+                        tvSeatNumber.visibility = VISIBLE
+                        tvSeatNumber.text = number
+                        tvNumber.visibility = VISIBLE
+                    }
+
                     else -> {
                         tvSeatColor.visibility = VISIBLE
                         tvSeatColor.text = seatZone
