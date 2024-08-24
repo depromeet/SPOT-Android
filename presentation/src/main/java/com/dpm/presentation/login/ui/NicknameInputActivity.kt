@@ -24,8 +24,16 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initView()
         initClickListener()
         initObserver()
+    }
+
+    private fun initView() {
+        binding.etProfileEditNickname.backgroundTintList = getColorStateList(
+            this@NicknameInputActivity,
+            com.depromeet.designsystem.R.color.color_gray_200
+        )
     }
 
     private fun initClickListener() = with(binding) {
@@ -53,7 +61,7 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
         etProfileEditNickname.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (etProfileEditNickname.text.isNotEmpty()) {
-                    //Todo : 서버 API 연동 및 닉네임 중복 검사
+                    signUpViewModel.checkDuplicateNickname(etProfileEditNickname.text.toString())
                 }
                 true
             } else {
@@ -66,18 +74,12 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
         }
 
         tvNicknameNextBtn.setOnClickListener {
-            //Todo : 서버 API 연동 및 닉네임 중복 검사
-            //임시로 응원하는 팀 선택 화면으로 이동
-            Intent(this@NicknameInputActivity, TeamSelectActivity::class.java).apply {
-                putExtra("nickname", etProfileEditNickname.text.toString())
-                putExtra("kakaoToken", intent.getStringExtra("kakaoToken"))
-                startActivity(this)
-            }
+            signUpViewModel.checkDuplicateNickname(etProfileEditNickname.text.toString())
         }
     }
 
     private fun initObserver() = with(binding) {
-        signUpViewModel.nicknameInputState.asLiveData().observe(this@NicknameInputActivity) { state ->
+        signUpViewModel.nicknameInputState.observe(this@NicknameInputActivity) { state ->
             when (state) {
                 NicknameInputState.EMPTY -> {
                     clNicknameInputWarning.visibility = View.GONE
@@ -86,6 +88,13 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
                 NicknameInputState.VALID -> {
                     clNicknameInputWarning.visibility = View.GONE
                     updateButtonEnabled(true)
+                }
+                NicknameInputState.NICKNAME_SUCCESS -> {
+                    Intent(this@NicknameInputActivity, TeamSelectActivity::class.java).apply {
+                        putExtra("nickname", etProfileEditNickname.text.toString())
+                        putExtra("kakaoToken", intent.getStringExtra("kakaoToken"))
+                        startActivity(this)
+                    }
                 }
                 NicknameInputState.INVALID_LENGTH -> {
                     clNicknameInputWarning.visibility = View.VISIBLE
