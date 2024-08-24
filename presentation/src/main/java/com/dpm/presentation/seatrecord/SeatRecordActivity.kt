@@ -131,6 +131,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 rvIntuitiveReview.visibility = GONE
                 rvIntuitiveReviewMonth.visibility = GONE
                 spinnerIntuitiveReviewYear.visibility = GONE
+
+                viewModel.setReviewState(SeatRecordViewModel.ReviewType.SEAT_REVIEW)
                 if (viewModel.seatDate.value !is UiState.Success) {
                     viewModel.getSeatReviewDate()
                 }
@@ -150,6 +152,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 rvIntuitiveReviewMonth.visibility = VISIBLE
                 spinnerIntuitiveReviewYear.visibility = VISIBLE
 
+                viewModel.setReviewState(SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
                 if (viewModel.intuitiveDate.value !is UiState.Success) {
                     viewModel.getIntuitiveReviewDate()
                 }
