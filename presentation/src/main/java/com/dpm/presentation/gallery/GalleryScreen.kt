@@ -85,6 +85,7 @@ fun GalleryScreen(
     onBackPressed: () -> Unit = { }
 ) {
     CustomGallery(
+        screenType = screenType,
         onImagesSelected = onImagesSelected,
         onBackPressed = onBackPressed
     )
@@ -92,6 +93,7 @@ fun GalleryScreen(
 
 @Composable
 fun CustomGallery(
+    screenType: String,
     onImagesSelected : (List<Uri>) -> Unit,
     onBackPressed: () -> Unit = { }
 ) {
@@ -108,7 +110,7 @@ fun CustomGallery(
                 isLoading = false
             }
         } else {
-            Toast.makeText(context, "권한이 거절되어있어용~", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "권한이 거절되어 있습니다.", Toast.LENGTH_SHORT).show()
             isLoading = false
         }
     }
@@ -154,28 +156,39 @@ fun CustomGallery(
                                 style = SpotTheme.typography.body02,
                             )
                         } else {
-                            MultiStyleText(
-                                modifier = Modifier
-                                    .align(Alignment.CenterEnd)
-                                    .padding(end = 16.dp)
-                                    .clickable {
-                                        onImagesSelected(selectedItems.map { it.imageResource })
-                                        onBackPressed()
-                                    },
-                                style = SpotTheme.typography.body02,
-                                textWithColors = arrayOf(
-                                    Pair(
-                                        "${selectedItems.size} 선택".substring(0, 1),
-                                        SpotTheme.colors.actionEnabled
-                                    ),
-                                    Pair(
-                                        "${selectedItems.size} 선택".substring(
-                                            1,
-                                            "${selectedItems.size} 선택".length
-                                        ), SpotTheme.colors.foregroundBodySebtext
+                            if (screenType == ScreenType.REVIEW.name) {
+                                MultiStyleText(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterEnd)
+                                        .padding(end = 16.dp)
+                                        .clickable {
+                                            onImagesSelected(selectedItems.map { it.imageResource })
+                                            onBackPressed()
+                                        },
+                                    style = SpotTheme.typography.body02,
+                                    textWithColors = arrayOf(
+                                        Pair(
+                                            "${selectedItems.size} 선택".substring(0, 1),
+                                            SpotTheme.colors.actionEnabled
+                                        ),
+                                        Pair(
+                                            "${selectedItems.size} 선택".substring(
+                                                1,
+                                                "${selectedItems.size} 선택".length
+                                            ), SpotTheme.colors.foregroundBodySebtext
+                                        )
                                     )
                                 )
-                            )
+                            } else {
+                                Text(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterEnd)
+                                        .padding(end = 16.dp),
+                                    text = "선택",
+                                    style = SpotTheme.typography.body02,
+                                    color = SpotTheme.colors.actionEnabled
+                                )
+                            }
                         }
                     }
                 }
@@ -188,7 +201,10 @@ fun CustomGallery(
                 .padding(it)
         ) {
             if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    color = SpotTheme.colors.actionEnabled
+                )
             } else if (galleryItems.isNotEmpty()) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3),
