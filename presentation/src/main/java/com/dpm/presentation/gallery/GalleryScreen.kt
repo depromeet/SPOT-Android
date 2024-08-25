@@ -247,14 +247,26 @@ fun CustomGallery(
 
                     items(galleryItems) { item ->
                         GalleryItemView(
+                            screenType = screenType,
                             item = item,
                             isSelected = selectedItems.contains(item),
                             selectedIndex = selectedItems.indexOf(item) + 1,
                             onClick = {
-                                if (selectedItems.contains(item)) {
-                                    selectedItems.remove(item)
-                                } else if (selectedItems.size < 3) {
-                                    selectedItems.add(item)
+                                if (screenType == ScreenType.REVIEW.name) {
+                                    if (selectedItems.contains(item)) {
+                                        selectedItems.remove(item)
+                                    } else if (selectedItems.size < 3) {
+                                        selectedItems.add(item)
+                                    }
+                                } else {
+                                    if (selectedItems.contains(item)) {
+                                        selectedItems.remove(item)
+                                    } else if (selectedItems.size < 1) {
+                                        selectedItems.add(item)
+                                    } else {
+                                        selectedItems.remove(selectedItems[0])
+                                        selectedItems.add(item)
+                                    }
                                 }
                             }
                         )
@@ -325,6 +337,7 @@ fun loadImages(context: Context, onComplete: (List<GalleryItem>) -> Unit) {
 
 @Composable
 fun GalleryItemView(
+    screenType: String,
     item: GalleryItem,
     isSelected: Boolean,
     selectedIndex: Int,
@@ -343,17 +356,28 @@ fun GalleryItemView(
         )
 
         if (isSelected) {
-            Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(24.dp)
-                    .align(Alignment.TopEnd)
-                    .background(SpotTheme.colors.strokePositivePrimary, shape = CircleShape)
-            ) {
-                Text(
-                    text = selectedIndex.toString(),
-                    color = Color.White,
-                    modifier = Modifier.align(Alignment.Center)
+            if (screenType == ScreenType.REVIEW.name) {
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(24.dp)
+                        .align(Alignment.TopEnd)
+                        .background(SpotTheme.colors.strokePositivePrimary, shape = CircleShape)
+                ) {
+                    Text(
+                        text = selectedIndex.toString(),
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            } else {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = com.depromeet.designsystem.R.drawable.ic_image_selected),
+                    contentDescription = "selected",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(24.dp)
+                        .align(Alignment.TopEnd)
                 )
             }
         } else {
