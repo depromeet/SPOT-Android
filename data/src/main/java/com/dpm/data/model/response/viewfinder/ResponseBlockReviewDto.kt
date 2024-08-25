@@ -73,7 +73,11 @@ data class ResponseBlockReviewDto(
         val scrapsCount: Long,
         @SerialName("reviewType")
         val reviewType: String?,
-    ) {
+        @SerialName("isLiked")
+        val isLiked: Boolean,
+        @SerialName("isScrapped")
+        val isScrapped: Boolean,
+        ) {
         @Serializable
         data class ResponseReviewImageDto(
             @SerialName("id")
@@ -198,11 +202,11 @@ fun ResponseBlockReviewDto.ResponseReviewDto.toReviewResponse() =
         content = content ?: "",
         images = images.map { it.toReviewImageResponse() },
         keywords = keywords.map { it.toReviewKeywordResponse() },
-        isLike = false,
-        isScrap = false,
+        isLike = isLiked,
+        isScrap = isScrapped,
         likesCount = likesCount,
         scrapsCount = scrapsCount,
-        reviewType = reviewType ?: ""
+        reviewType = reviewType ?: "",
     )
 
 fun ResponseBlockReviewDto.ResponseLocationDto.toLocationResponse() =

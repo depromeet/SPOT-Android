@@ -102,7 +102,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 endMessage = "확인하러 가기",
                 marginBottom = 93,
             ) {
-                // TODO : onclick -> 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
+                val reviewData = intent.getCompatibleParcelableExtra<ReviewData>(REVIEW_DATA)
+                if (reviewData != null) {
+                    Intent(this@HomeActivity, StadiumDetailActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        putExtra(SchemeKey.STADIUM_ID, reviewData.stadiumId)
+                        putExtra(SchemeKey.BLOCK_CODE, reviewData.blockCode)
+                        putExtra(SchemeKey.REVIEW_ID, reviewData.reviewId)
+                    }.let { startActivity(it) }
+                }
             }.show()
         }
     }
@@ -298,8 +306,22 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         val navReview =  intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
         if (navReview != null) {
             Intent(this, StadiumDetailActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(SchemeKey.STADIUM_ID, navReview.stadiumId)
                 putExtra(SchemeKey.BLOCK_CODE, navReview.blockCode)
+            }.let { startActivity(it) }
+        }
+        navigateToReviewDetail()
+    }
+
+    private fun navigateToReviewDetail() {
+        val navReviewDetail = intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(SchemeKey.NAV_REVIEW_DETAIL)
+        if (navReviewDetail != null) {
+            Intent(this, StadiumDetailActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                putExtra(SchemeKey.STADIUM_ID, navReviewDetail.stadiumId)
+                putExtra(SchemeKey.BLOCK_CODE, navReviewDetail.blockCode)
+                putExtra(SchemeKey.REVIEW_ID, navReviewDetail.reviewId)
             }.let { startActivity(it) }
         }
     }
