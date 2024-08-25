@@ -1,4 +1,4 @@
-package com.dpm.presentation.seatreview.dialog
+package com.dpm.presentation.seatreview.dialog.main
 
 import android.Manifest
 import android.annotation.SuppressLint

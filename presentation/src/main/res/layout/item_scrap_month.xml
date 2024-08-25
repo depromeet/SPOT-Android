@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_foreground_white">
+
+    <TextView
+        android:id="@+id/tvScrapMonth"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/rect_background_tertiary_fill_999"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Spot.Label08"
+        android:textColor="@color/color_foreground_body_subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1월" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

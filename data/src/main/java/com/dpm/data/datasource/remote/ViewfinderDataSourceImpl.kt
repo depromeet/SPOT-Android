@@ -41,4 +41,12 @@ class ViewfinderDataSourceImpl @Inject constructor(
     override suspend fun getBlockRow(stadiumId: Int, blockCode: String): ResponseBlockRowDto {
         return viewfinderService.getBlockRow(stadiumId, blockCode)
     }
+
+    override suspend fun updateScrap(reviewId: Int) {
+        viewfinderService.postScrap(reviewId)
+    }
+
+    override suspend fun updateLike(reviewId: Int) {
+        viewfinderService.postLike(reviewId)
+    }
 }

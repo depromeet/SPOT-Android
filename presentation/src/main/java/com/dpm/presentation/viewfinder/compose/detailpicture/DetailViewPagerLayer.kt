@@ -19,10 +19,16 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 @Composable
 fun DetailViewPagerLayer(
     context: Context,
+    isLike: Boolean,
+    likeCount: Long,
+    isFirstLike: Boolean,
     isDimmed: Boolean,
     verticalPagerState: PagerState,
     pictures: List<ResponseBlockReview.ResponseReview.ResponseReviewImage>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickLike: () -> Unit,
+    onClickScrap: () -> Unit,
+    onClickShare: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -32,9 +38,15 @@ fun DetailViewPagerLayer(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         StadiumDetailPictureViewPager(
+            isLike = isLike,
             context = context,
             pictures = pictures,
+            isFirstLike = isFirstLike,
+            likeCount = likeCount,
             verticalPagerState = verticalPagerState,
+            onClickLike = onClickLike,
+            onClickScrap = onClickScrap,
+            onClickShare = onClickShare
         )
     }
 }
@@ -63,7 +75,13 @@ private fun DetailViewPagerLayerPreview() {
     DetailViewPagerLayer(
         context = LocalContext.current,
         isDimmed = true,
+        isLike = true,
+        isFirstLike = true,
+        likeCount = 1,
         pictures = pictures,
-        verticalPagerState = pagerState
+        verticalPagerState = pagerState,
+        onClickLike = { },
+        onClickScrap = { },
+        onClickShare = { }
     )
 }

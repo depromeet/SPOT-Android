@@ -12,7 +12,12 @@ import com.dpm.core.base.BaseActivity
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
+import com.dpm.domain.preference.SharedPreference
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.HomeActivity
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.util.KakaoUtils
+import com.dpm.presentation.util.seatFeed
 import com.dpm.presentation.util.toEmptyBlock
 import com.dpm.presentation.viewfinder.compose.StadiumDetailScreen
 import com.dpm.presentation.viewfinder.dialog.ReportDialog
@@ -20,6 +25,7 @@ import com.dpm.presentation.viewfinder.dialog.StadiumFilterMonthsDialog
 import com.dpm.presentation.viewfinder.dialog.StadiumSelectSeatDialog
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
@@ -29,9 +35,14 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         const val REVIEW_ID = "review_id"
         const val REVIEW_INDEX = "review_index"
         const val REVIEW_TITLE_WITH_STADIUM = "review_title_with_stadium"
+        const val REVIEW_TYPE = "review_type"
+
         const val STADIUM_HEADER = "stadium_header"
         const val STADIUM_REVIEW_CONTENT = "stadium_review_content"
     }
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
 
     private val viewModel: StadiumDetailViewModel by viewModels()
 
@@ -43,10 +54,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun initView() {
-        getIdExtra { stadiumId, blockCode ->
+        getIdExtra { stadiumId, blockCode, reviewId ->
             viewModel.updateRequestPathVariable(stadiumId, blockCode)
             viewModel.getBlockReviews(stadiumId, blockCode)
             viewModel.getBlockRow(stadiumId, blockCode)
+            viewModel.reviewId = reviewId
         }
         initComposeView()
     }
@@ -56,9 +68,10 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
             MaterialTheme {
                 StadiumDetailScreen(
                     emptyBlockName = toEmptyBlock(viewModel.stadiumId, viewModel.blockCode),
+                    isFirstShare = sharedPreference.isFirstShare,
                     viewModel = viewModel,
-                    onClickReviewPicture = { reviewContent, index, title ->
-                        startToStadiumDetailPictureFragment(reviewContent, index, title)
+                    onClickReviewPicture = { id, index, title ->
+                        startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.MAIN_REVIEW)
                     },
                     onClickSelectSeat = {
                         StadiumSelectSeatDialog.apply {
@@ -86,6 +99,12 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     },
                     onRefresh = {
                         viewModel.getBlockReviews()
+                    },
+                    onClickTopImage = { id, index, title ->
+                        startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.TOP_REVIEW)
+                    },
+                    onClickShare = {
+                        sharedPreference.isFirstShare = false
                     }
                 )
             }
@@ -113,23 +132,26 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
     }
 
-    private fun getIdExtra(callback: (stadiumId: Int, blockCode: String) -> Unit) {
+    private fun getIdExtra(callback: (stadiumId: Int, blockCode: String, reviewId: Int) -> Unit) {
         callback(
-            intent?.getIntExtra(StadiumActivity.STADIUM_ID, 0) ?: 0,
-            intent?.getStringExtra(StadiumActivity.STADIUM_BLOCK_ID) ?: ""
+            intent?.getIntExtra(SchemeKey.STADIUM_ID, 0) ?: 0,
+            intent?.getStringExtra(SchemeKey.BLOCK_CODE) ?: "",
+            intent?.getIntExtra(SchemeKey.REVIEW_ID, 0) ?: 0
         )
     }
 
     private fun startToStadiumDetailPictureFragment(
-        reviewContent: ResponseBlockReview.ResponseReview,
+        id: Long,
         index: Int,
-        title: String
+        title: String,
+        type: DetailReviewEntryPoint
     ) {
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
             arguments = bundleOf(
-                REVIEW_ID to reviewContent.id,
+                REVIEW_ID to id,
                 REVIEW_INDEX to index,
-                REVIEW_TITLE_WITH_STADIUM to title
+                REVIEW_TITLE_WITH_STADIUM to title,
+                REVIEW_TYPE to type.name,
             )
         }
 

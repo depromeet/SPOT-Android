@@ -48,4 +48,16 @@ class ViewfinderRepositoryImpl @Inject constructor(
             viewfinderDataSource.getBlockRow(stadiumId, blockCode).toBlockRowResponse()
         }
     }
+
+    override suspend fun updateScrap(reviewId: Int): Result<Unit> {
+        return runCatching {
+            viewfinderDataSource.updateScrap(reviewId)
+        }
+    }
+
+    override suspend fun updateLike(reviewId: Int): Result<Unit> {
+        return runCatching {
+            viewfinderDataSource.updateLike(reviewId)
+        }
+    }
 }

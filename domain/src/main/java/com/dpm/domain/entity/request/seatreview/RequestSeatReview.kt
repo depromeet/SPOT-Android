@@ -8,4 +8,5 @@ data class RequestSeatReview(
     val bad: List<String>,
     val content: String?,
     val dateTime: String,
+    val reviewType: String?,
 )

@@ -15,4 +15,6 @@ interface ViewfinderDataSource {
         queryParam: RequestBlockReviewQueryDto
     ): ResponseBlockReviewDto
     suspend fun getBlockRow(stadiumId: Int, blockCode: String): ResponseBlockRowDto
+    suspend fun updateScrap(reviewId: Int)
+    suspend fun updateLike(reviewId: Int)
 }

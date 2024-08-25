@@ -1,4 +1,4 @@
-package com.dpm.presentation.seatreview.dialog
+package com.dpm.presentation.seatreview.dialog.main
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,7 @@ import com.dpm.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.CustomDatepickerBinding
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.seatreview.ReviewViewModel
+import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.dpm.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar

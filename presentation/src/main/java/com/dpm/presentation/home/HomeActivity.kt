@@ -1,7 +1,9 @@
 package com.dpm.presentation.home
 
+import ReviewData
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -10,19 +12,27 @@ import com.depromeet.presentation.databinding.ActivityHomeBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
+import com.dpm.designsystem.SpotSnackBar
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
+import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.dpToPx
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.adapter.StadiumAdapter
 import com.dpm.presentation.home.dialog.LevelDescriptionDialog
 import com.dpm.presentation.home.dialog.LevelupDialog
 import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
-import com.dpm.presentation.seatreview.ReviewActivity
+import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
+import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
+import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
+import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,6 +44,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val START_SPACING_DP = 16
         private const val BETWEEN_SPADING_DP = 8
+        private const val VIEW_UPLOAD_DIALOG = "ViewUploadDialog"
+        private const val FEED_UPLOAD_DIALOG = "FeedUploadDialog"
+        private const val REVIEW_DATA = "REVIEW_DATA"
+        private const val DIALOG_TYPE = "DIALOG_TYPE"
+        private const val CANCEL_SNACKBAR = "CANCEL_SNACKBAR"
+        private const val UPLOAD_SNACKBAR = "UPLOAD_SNACKBAR"
     }
 
     private val homeViewModel: HomeGuiViewModel by viewModels()
@@ -54,10 +70,40 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initView() {
+        initReviewDialog()
         initViewStatusBar()
         homeViewModel.getStadiums()
         setStadiumAdapter()
+        handleIntentExtra()
     }
+
+    private fun initReviewDialog() {
+        val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
+
+        when (intent?.getSerializableExtra(DIALOG_TYPE) as? ReviewMethod) {
+            ReviewMethod.VIEW -> ViewUploadDialog().show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
+            ReviewMethod.FEED -> FeedUploadDialog().apply {
+                arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
+            }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
+            else -> {}
+        }
+
+        intent.getBooleanExtra(CANCEL_SNACKBAR, false).takeIf { it }?.run {
+            makeSpotImageAppbar("다음에는 좌석 시야 공유도 기대할게요!")
+        }
+
+        intent.getBooleanExtra(UPLOAD_SNACKBAR, false).takeIf { it }?.run {
+            SpotSnackBar.make(
+                view = binding.root,
+                message = "시야찾기에 내 게시글이 올라갔어요!",
+                endMessage = "확인하러 가기",
+            ) {
+                // TODO : onclick -> 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
+            }.show()
+        }
+    }
+
+
 
     private fun initEvent() = with(binding) {
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
@@ -216,7 +262,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun navigateToReviewActivity() {
-        Intent(this, ReviewActivity::class.java).apply { startActivity(this) }
+        ReviewTypeDialog().show(supportFragmentManager, "MyDialog")
     }
 
     private fun setHomeFeedShimmer(isLoading: Boolean) = with(binding) {
@@ -242,5 +288,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
             marginBottom = 94
         ).show()
+    }
+
+    private fun handleIntentExtra() {
+        val navReview =  intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        if (navReview != null) {
+            Intent(this, StadiumDetailActivity::class.java).apply {
+                putExtra(SchemeKey.STADIUM_ID, navReview.stadiumId)
+                putExtra(SchemeKey.BLOCK_CODE, navReview.blockCode)
+            }.let { startActivity(it) }
+        }
     }
 }

@@ -89,7 +89,9 @@
     <string name="viewfinder_stadium_selection_sub_description">꾸준히 다른 구장에 대한 정보가 추가될 예정이에요</string>
     <string name="viewfinder_zoom_description">화면을 손가락으로 확대하여\n구역을 더 크게 보세요!</string>
     <string name="viewfinder_lock_warning_description">현재 잠실야구장만 이용할 수 있어요!</string>
+    <string name="viewfinder_snackbar_scrap">스크랩이 완료되었어요!</string>
     <string name="viewfinder_lock_warning_trigger">"<u>"잠실야구장 보기"</u>"</string>
+    <string name="viewfinder_underscore_snackbar_scrap">"<u>"스크랩으로 이동"</u>"</string>
     <string name="viewfinder_empty_block_description">다른 블록에서 새로운 시야를 찾아보세요!</string>
     <string name="viewfinder_tooltip_description">열과 번을 선택해 빠르게 자리를 찾아보세요⚡</string>
 
@@ -125,7 +127,10 @@
     <string name="five_level_to_title">야구정 VIP</string>
     <string name="six_level_to_title">전설의 직관러</string>
     <string name="unknown_level_to_title">알 수 없음</string>
-    
+
+    <!-- seatReview 관련-->
+    <string name="seat_review_no_view_image"><u>시야 사진이 없어요</u></string>
+
     <!-- Error -->
     <string name="error_reload">새로고침</string>
     <string name="error_server_content_title">정보를 불러올 수 없습니다.</string>
@@ -137,6 +142,35 @@
     <string name="setting_feedback_description">좋은 점, 개선할 점, 궁금한 점 모두 알려주세요</string>
     <string name="setting_manage_account">계정 관리</string>
 
+    <!-- Evaluation(평가) -->
+    <string name="good_title">이런 점이 좋아요</string>
+    <string name="good_one">💺️ 충분한 다리 공간</string>
+    <string name="good_two">🔥 생생한 응원 열기</string>
+    <string name="good_three">🏟️ 좋은 시야각</string>
+    <string name="good_four">🍃 선선한 그늘존</string>
+    <string name="good_five">🚶 가까운 출입구</string>
+    <string name="bad_title">이런 점이 아쉬워요</string>
+    <string name="bad_one">🌞 온종일 햇빛존</string>
+    <string name="bad_two">🤢 벌레가 많은 자리</string>
+    <string name="bad_three">🥅 신경쓰이는 그물망</string>
+    <string name="bad_four">🥲 시야방해 기둥</string>
+    <string name="bad_five">🥤 컵홀더가 없는 자리</string>
+    <string name="bad_six">📢 시끄러운 스피커</string>
+    <string name="bad_seven">🪟 유리막이 있는 자리</string>
 
+    <!-- 스크랩 -->
+    <string name="scrap_title">스크랩</string>
+    <string name="scrap_save_record">저장된 게시물</string>
+    <string name="scrap_empty_description">아직 스크랩한\n게시물이 없습니다.</string>
+    <string name="scrap_empty_advice">궁금한 야구장 시야를 찾아보세요!</string>
+    <string name="scrap_find_view">시야 찾으러 가기</string>
+    <string name="scrap_fail_advice">새로고침하여 다시 시도해주세요!</string>
+    <string name="scrap_fail_description">정보를 불러올 수 없습니다.</string>
+    <string name="scrap_filter">필터</string>
+    <string name="scrap_filter_title">필터</string>
+    <string name="scrap_filter_selection">야구장 선택</string>
+    <string name="scrap_filter_month">월별 시야</string>
+    <string name="scrap_search">검색하기</string>
+    <string name="stadium_jamsil">잠실야구장</string>
 
 </resources>

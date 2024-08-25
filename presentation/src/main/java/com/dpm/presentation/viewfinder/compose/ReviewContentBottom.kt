@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,28 +22,38 @@ import com.depromeet.designsystem.R
 
 @Composable
 fun ReviewContentBottom(
-    modifier: Modifier = Modifier
+    isLike: Boolean,
+    isScrap: Boolean,
+    likeCount: Long,
+    modifier: Modifier = Modifier,
+    onClickLike: () -> Unit,
+    onClickScrap: () -> Unit,
+    onClickShare: () -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LikeButton()
+        LikeButton(
+            isLike = isLike,
+            likeCount = likeCount,
+            onClick = onClickLike
+        )
         Row {
             IconButton(
-                onClick = { }
+                onClick = onClickScrap
             ) {
                 Icon(
                     painter = painterResource(
-                        id = R.drawable.ic_scrap_inactive_button
+                        id = if (isScrap) R.drawable.ic_scrap_active_button else R.drawable.ic_scrap_inactive_button
                     ), contentDescription = null,
                     tint = Color.Unspecified
                 )
             }
             Spacer(modifier = Modifier.width(6.dp))
             IconButton(
-                onClick = { }
+                onClick = onClickShare
             ) {
                 Icon(
                     painter = painterResource(
@@ -55,5 +69,51 @@ fun ReviewContentBottom(
 @Preview
 @Composable
 private fun ReviewContentBottomPreview() {
-    ReviewContentBottom()
+    ReviewContentBottom(
+        isLike = false,
+        isScrap = false,
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ReviewContentBottomLikePreview() {
+    ReviewContentBottom(
+        isLike = true,
+        isScrap = false,
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ReviewContentBottomScrapPreview() {
+    ReviewContentBottom(
+        isLike = false,
+        isScrap = true,
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ReviewContentBottomLikeAndScrapPreview() {
+    ReviewContentBottom(
+        isLike = true,
+        isScrap = true,
+        likeCount = 0,
+        onClickLike = {},
+        onClickScrap = {},
+        onClickShare = {}
+    )
 }

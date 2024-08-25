@@ -52,7 +52,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="18dp"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_edittext_close"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/et_profile_edit_nickname"
         app:layout_constraintEnd_toEndOf="@id/et_profile_edit_nickname"
@@ -103,8 +103,7 @@
         android:paddingVertical="19dp"
         android:text="다음"
         android:textColor="@color/white"
-        android:textFontWeight="700"
-        android:textStyle="normal"
+        android:textAppearance="@style/TextAppearance.Spot.Label02"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -92,6 +92,10 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
 
+        <activity android:name="com.dpm.presentation.seatreview.SelectViewImageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
         <activity android:name="com.dpm.presentation.seatreview.ReviewDoneActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
@@ -123,6 +127,10 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.dpm.presentation.login.ui.TeamSelectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.dpm.presentation.scrap.ScrapActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 

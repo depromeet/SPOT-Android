@@ -18,7 +18,7 @@ import javax.inject.Inject
 sealed class SignupUiState {
     object Initial : SignupUiState()
     object Loading : SignupUiState()
-    object SignUpSuccess : SignupUiState()
+    data class SignUpSuccess(val nickname: String) : SignupUiState()
     object Failure : SignupUiState()
 }
 
@@ -69,7 +69,7 @@ class SignUpViewModel @Inject constructor(
             ).onSuccess {
                 sharedPreference.token = it.jwtToken
                 sharedPreference.nickname = currentNickName
-                _teamSelectUiState.emit(SignupUiState.SignUpSuccess)
+                _teamSelectUiState.emit(SignupUiState.SignUpSuccess(currentNickName))
             }.onFailure {
                 _teamSelectUiState.emit(SignupUiState.Failure)
             }
@@ -97,5 +97,6 @@ enum class NicknameInputState {
     VALID,
     INVALID_LENGTH,
     INVALID_CHARACTER,
-    DUPLICATE
+    DUPLICATE,
+    NICKNAME_SUCCESS
 }

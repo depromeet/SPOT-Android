@@ -13,14 +13,21 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import com.dpm.core.base.BindingFragment
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBinding
+import com.dpm.core.base.BindingFragment
+import com.dpm.designsystem.SpotSnackBar
+import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.compose.detailpicture.StadiumDetailPictureScreen
 import com.dpm.presentation.viewfinder.dialog.ReportDialog
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+enum class DetailReviewEntryPoint {
+    TOP_REVIEW, MAIN_REVIEW
+}
 
 @AndroidEntryPoint
 class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictureBinding>(
@@ -38,10 +45,14 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         }
     }
 
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
     private val stadiumDetailViewModel: StadiumDetailViewModel by activityViewModels()
     private val utils by lazy {
         Utils(requireActivity())
     }
+    private lateinit var snackBar: SpotSnackBar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,14 +62,28 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
 
     private fun initView() {
         initWindowInsets()
-        getReviewExtra { reviewId, reviewIndex, title ->
+        initSnackBar()
+        getReviewExtra { reviewId, reviewIndex, title, type ->
             binding.spotAppbar.setText(title)
             binding.cvReviewContent.setContent {
                 MaterialTheme {
                     StadiumDetailPictureScreen(
                         reviewId = reviewId,
                         reviewIndex = reviewIndex,
+                        type = type,
+                        isFirstLike = sharedPreference.isFirstLike,
                         stadiumDetailViewModel = stadiumDetailViewModel,
+                        onClickLike = {
+                            sharedPreference.isFirstLike = false
+                        },
+                        onClickScrap = { id ->
+                            if (stadiumDetailViewModel.checkScrap(id)) {
+                                snackBar.show()
+                            }
+                        },
+                        onClickShare = {
+                            sharedPreference.isFirstShare = false
+                        }
                     )
                 }
             }
@@ -66,6 +91,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initEvent() {
+        binding.root.setOnClickListener {
+            return@setOnClickListener
+        }
         onBackPressed()
         setOnClickSpotAppbar()
     }
@@ -93,11 +121,23 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         }
     }
 
-    private fun getReviewExtra(callback: (id: Long, index: Int, title: String) -> Unit) {
+    private fun initSnackBar() {
+        snackBar = SpotSnackBar.make(
+            view = binding.root.rootView,
+            background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
+            message = getString(R.string.viewfinder_snackbar_scrap),
+            endMessage = getString(R.string.viewfinder_underscore_snackbar_scrap),
+            onClick = {
+                // TODO : 스크랩 화면으로 이동
+            })
+    }
+
+    private fun getReviewExtra(callback: (id: Long, index: Int, title: String, type: String) -> Unit) {
         val reviewId = arguments?.getLong(StadiumDetailActivity.REVIEW_ID) ?: return
         val reviewIndex = arguments?.getInt(StadiumDetailActivity.REVIEW_INDEX) ?: return
         val title = arguments?.getString(StadiumDetailActivity.REVIEW_TITLE_WITH_STADIUM) ?: return
-        callback(reviewId, reviewIndex, title)
+        val type = arguments?.getString(StadiumDetailActivity.REVIEW_TYPE) ?: return
+        callback(reviewId, reviewIndex, title, type)
     }
 
     private fun removeFragment() {
@@ -137,6 +177,7 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     override fun onDestroyView() {
+        snackBar.dismiss()
         resetWindowInsets()
         super.onDestroyView()
     }
@@ -145,7 +186,10 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
         utils.apply {
             requireActivity().apply {
                 setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
-                setNavigationBarColor(window, com.depromeet.designsystem.R.color.color_background_white)
+                setNavigationBarColor(
+                    window,
+                    com.depromeet.designsystem.R.color.color_background_white
+                )
                 setBlackSystemBarIconColor(window)
                 WindowCompat.setDecorFitsSystemWindows(window, true)
             }

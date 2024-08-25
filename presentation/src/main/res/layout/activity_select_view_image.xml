@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/ivExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_x_upload_method"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvShareTitle"
+        style="@style/TextAppearance.Spot.Title02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="68dp"
+        android:text="야구장 시야 사진만\n골라볼까요?"
+        android:textColor="@color/color_foreground_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvShareSubTitle"
+        style="@style/TextAppearance.Spot.Body03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:text="아래 정보가 시야 찾기에 자동 등록되어\n다른 사람들에게 도움을 줄 수 있어요!"
+        android:textColor="@color/color_foreground_caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvShareTitle" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rect_background_tertiary_fill_8"
+        android:paddingBottom="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvShareSubTitle">
+
+        <TextView
+            android:id="@+id/tvSelectViewImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rect_positive_primary_fill_4"
+            android:fontFamily="@font/pretendard_bold"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="5dp"
+            android:text="시야 사진만 선택해주세요"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clSelectImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSelectViewImage">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clFirstImage"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivFirstImage"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/spot_green" />
+
+
+                <ImageView
+                    android:id="@+id/ivFirstImageCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_uncheck"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivFirstImage"
+                    app:layout_constraintEnd_toEndOf="@+id/ivFirstImage"
+                    app:layout_constraintStart_toStartOf="@+id/ivFirstImage"
+                    app:layout_constraintTop_toTopOf="@+id/ivFirstImage" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSecondImage"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/clFirstImage"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivSecondImage"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/spot_green" />
+
+                <ImageView
+                    android:id="@+id/ivSecondImageCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_uncheck"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivSecondImage"
+                    app:layout_constraintEnd_toEndOf="@+id/ivSecondImage"
+                    app:layout_constraintStart_toStartOf="@+id/ivSecondImage"
+                    app:layout_constraintTop_toTopOf="@+id/ivSecondImage" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clThirdImage"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/rect_transparent_fill_background_primary_line_8"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/clSecondImage"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivThirdImage"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/spot_green" />
+
+                <ImageView
+                    android:id="@+id/ivThirdImageCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_uncheck"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivThirdImage"
+                    app:layout_constraintEnd_toEndOf="@+id/ivThirdImage"
+                    app:layout_constraintStart_toStartOf="@+id/ivThirdImage"
+                    app:layout_constraintTop_toTopOf="@+id/ivThirdImage" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clSelectImage">
+
+            <TextView
+                android:id="@+id/tvDescriptionOneDot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="·"
+                android:textAppearance="@style/TextAppearance.Spot.Caption02"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintBottom_toBottomOf="@+id/tvDescriptionOne"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvDescriptionOne" />
+
+            <TextView
+                android:id="@+id/tvDescriptionOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="얼굴이 드러난 사진은 빼주세요"
+                android:textAppearance="@style/TextAppearance.Spot.Caption02"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintStart_toEndOf="@id/tvDescriptionOneDot"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDescriptionTwoDot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="·"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.Spot.Caption02"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDescriptionOneDot"
+                app:layout_constraintTop_toTopOf="@id/tvDescriptionTwo" />
+
+            <TextView
+                android:id="@+id/tvDescriptionTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:text="음식이나 선수 위주가 아닌, 경기장이 잘 보이는 사진을 선택하면 좋아요"
+                android:textAppearance="@style/TextAppearance.Spot.Caption02"
+                android:textColor="@color/color_foreground_caption"
+                app:layout_constraintStart_toEndOf="@id/tvDescriptionTwoDot"
+                app:layout_constraintTop_toBottomOf="@id/tvDescriptionOne" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvKeywordList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintStart_toStartOf="@+id/tvDescriptionTwoDot"
+                app:layout_constraintTop_toBottomOf="@+id/tvDescriptionTwo"
+                app:spanCount="2"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_select_view_keyword" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvUploadBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rect_action_disabled_fill_8"
+        android:gravity="center"
+        android:paddingVertical="19dp"
+        android:text="업로드"
+        android:enabled="false"
+        android:textAppearance="@style/TextAppearance.Spot.Label02"
+        android:textColor="@color/color_foreground_white"
+        app:layout_constraintBottom_toTopOf="@+id/tvCancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/font_pretendard_semibold"
+        android:gravity="center"
+        android:text="@string/seat_review_no_view_image"
+        android:textColor="#474747"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

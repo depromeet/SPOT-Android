@@ -8,6 +8,10 @@ object KotlinDependencies {
     const val dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinDateTimeVersion}"
 }
 
+object JavaDependencies {
+    const val javaxInject = "javax.inject:javax.inject:1"
+}
+
 object AndroidXDependencies {
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtxVersion}"
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompatVersion}"

@@ -20,6 +20,8 @@ data class RequestSeatReviewDto(
     val content: String?,
     @SerialName("dateTime")
     val dateTime: String,
+    @SerialName("reviewType")
+    val reviewType: String?,
 )
 
 fun RequestSeatReview.toSeatReview() = RequestSeatReviewDto(
@@ -30,4 +32,5 @@ fun RequestSeatReview.toSeatReview() = RequestSeatReviewDto(
     bad = bad,
     content = content,
     dateTime = dateTime,
+    reviewType = reviewType,
 )
