@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.kakaoShareSeatFeedTitle
 import com.dpm.presentation.util.seatFeed
@@ -86,8 +87,8 @@ fun StadiumDetailPictureTopScreen(
                             description = "출처 : ${uiState.reviews[pageIndex].member.nickname}",
                             imageUrl = uiState.reviews[pageIndex].images[imagePosition].url,
                             queryParams = mapOf(
-                                "stadiumId" to stadiumDetailViewModel.stadiumId.toString(),
-                                "blockCode" to stadiumDetailViewModel.blockCode
+                                SchemeKey.STADIUM_ID to stadiumDetailViewModel.stadiumId.toString(),
+                                SchemeKey.BLOCK_CODE to stadiumDetailViewModel.blockCode
                             )
                         ),
                         onSuccess = { sharingIntent ->

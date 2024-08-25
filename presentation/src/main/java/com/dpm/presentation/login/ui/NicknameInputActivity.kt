@@ -11,8 +11,11 @@ import androidx.lifecycle.asLiveData
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentNicknameInputBinding
 import com.dpm.core.base.BaseActivity
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.login.viewmodel.NicknameInputState
 import com.dpm.presentation.login.viewmodel.NicknameInputViewModel
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -93,6 +96,15 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
                     Intent(this@NicknameInputActivity, TeamSelectActivity::class.java).apply {
                         putExtra("nickname", etProfileEditNickname.text.toString())
                         putExtra("kakaoToken", intent.getStringExtra("kakaoToken"))
+                        when (val data = handleIntentExtra()) {
+                            is SchemeState.NavReview -> {
+                                putExtra(SchemeKey.NAV_REVIEW, data)
+                            }
+                            is SchemeState.NavReviewDetail -> {
+                                putExtra(SchemeKey.NAV_REVIEW_DETAIL, data)
+                            }
+                            else -> Unit
+                        }
                         startActivity(this)
                     }
                 }
@@ -122,5 +134,20 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
         } else {
             tvNicknameNextBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
         }
+    }
+
+    private fun handleIntentExtra(): SchemeState {
+        val navReview = intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        if (navReview != null) {
+            return navReview
+        }
+
+        val navReviewDetail = intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(
+            SchemeKey.NAV_REVIEW_DETAIL)
+        if (navReviewDetail != null) {
+            return navReviewDetail
+        }
+
+        return SchemeState.Nothing
     }
 }
