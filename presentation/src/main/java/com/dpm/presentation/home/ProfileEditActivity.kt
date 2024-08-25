@@ -26,7 +26,7 @@ import com.dpm.presentation.home.dialog.ProfileImageUploadDialog
 import com.dpm.presentation.home.viewmodel.ProfileEditViewModel
 import com.dpm.presentation.home.viewmodel.ProfileEvents
 import com.dpm.presentation.login.viewmodel.NicknameInputState
-import com.dpm.presentation.seatrecord.TempSeatRecordActivity
+import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -279,9 +279,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
 
     private fun getDataExtra(callback: (name: String, profileImage: String, cheerTeam: Int) -> Unit) {
         callback(
-            intent?.getStringExtra(TempSeatRecordActivity.PROFILE_NAME) ?: "",
-            intent?.getStringExtra(TempSeatRecordActivity.PROFILE_IMAGE) ?: "",
-            intent?.getIntExtra(TempSeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
+            intent?.getStringExtra(SeatRecordActivity.PROFILE_NAME) ?: "",
+            intent?.getStringExtra(SeatRecordActivity.PROFILE_IMAGE) ?: "",
+            intent?.getIntExtra(SeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
         )
     }
 

@@ -3,6 +3,7 @@ package com.dpm.presentation.home
 import ReviewData
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -16,10 +17,13 @@ import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.dpToPx
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.adapter.StadiumAdapter
 import com.dpm.presentation.home.dialog.LevelDescriptionDialog
 import com.dpm.presentation.home.dialog.LevelupDialog
 import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
@@ -28,6 +32,7 @@ import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
+import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -69,13 +74,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         initViewStatusBar()
         homeViewModel.getStadiums()
         setStadiumAdapter()
+        handleIntentExtra()
     }
 
     private fun initReviewDialog() {
         val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
 
         when (intent?.getSerializableExtra(DIALOG_TYPE) as? ReviewMethod) {
-            ReviewMethod.VIEW -> ViewUploadDialog().show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
+            ReviewMethod.VIEW -> ViewUploadDialog().apply {
+                arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
+            }.show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
+
             ReviewMethod.FEED -> FeedUploadDialog().apply {
                 arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
             }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
@@ -91,8 +100,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 view = binding.root,
                 message = "시야찾기에 내 게시글이 올라갔어요!",
                 endMessage = "확인하러 가기",
+                marginBottom = 93,
             ) {
-                // TODO : onclick -> 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
+                val reviewData = intent.getCompatibleParcelableExtra<ReviewData>(REVIEW_DATA)
+                if (reviewData != null) {
+                    Intent(this@HomeActivity, StadiumDetailActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        putExtra(SchemeKey.STADIUM_ID, reviewData.stadiumId)
+                        putExtra(SchemeKey.BLOCK_CODE, reviewData.blockCode)
+                        putExtra(SchemeKey.REVIEW_ID, reviewData.reviewId)
+                    }.let { startActivity(it) }
+                }
             }.show()
         }
     }
@@ -126,8 +144,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
                 is UiState.Success -> {
                     setStadiumShimmer(false)
-                    stadiumAdapter.submitList(state.data)
-                    binding.rvHomeStadium.scrollToPosition(0)
+                    stadiumAdapter.submitList(state.data) {
+                        binding.rvHomeStadium.scrollToPosition(0)
+                    }
                 }
             }
         }
@@ -247,7 +266,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         tvHomeTitle.text = data.levelTitle
         ivHomeCharacter.load(data.mascotImageUrl)
         if (data.reviewCntToLevelup == 0) {
-            csbvHomeTitle.setTextPart("내가 바로 이 구역 직관왕!", number = null, suffix = null)
+            csbvHomeTitle.setTextPart("내가 바로 이 구역 직관왕!", null, null)
         } else {
             csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup, "장 더 올리면 레벨업!")
         }
@@ -281,5 +300,29 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
             marginBottom = 94
         ).show()
+    }
+
+    private fun handleIntentExtra() {
+        val navReview =  intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        if (navReview != null) {
+            Intent(this, StadiumDetailActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                putExtra(SchemeKey.STADIUM_ID, navReview.stadiumId)
+                putExtra(SchemeKey.BLOCK_CODE, navReview.blockCode)
+            }.let { startActivity(it) }
+        }
+        navigateToReviewDetail()
+    }
+
+    private fun navigateToReviewDetail() {
+        val navReviewDetail = intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(SchemeKey.NAV_REVIEW_DETAIL)
+        if (navReviewDetail != null) {
+            Intent(this, StadiumDetailActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                putExtra(SchemeKey.STADIUM_ID, navReviewDetail.stadiumId)
+                putExtra(SchemeKey.BLOCK_CODE, navReviewDetail.blockCode)
+                putExtra(SchemeKey.REVIEW_ID, navReviewDetail.reviewId)
+            }.let { startActivity(it) }
+        }
     }
 }

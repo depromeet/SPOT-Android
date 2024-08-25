@@ -130,6 +130,10 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
 
+        <activity android:name="com.dpm.presentation.gallery.GalleryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
         <activity android:name="com.dpm.presentation.scrap.ScrapActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>

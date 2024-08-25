@@ -6,6 +6,7 @@ import com.dpm.data.model.request.seatreview.RequestSeatReviewDto
 import com.dpm.data.model.response.seatreview.ResponsePreSignedUrlDto
 import com.dpm.data.model.response.seatreview.ResponseSeatBlockDto
 import com.dpm.data.model.response.seatreview.ResponseSeatRangeDto
+import com.dpm.data.model.response.seatreview.ResponseSeatReviewDto
 import com.dpm.data.model.response.seatreview.ResponseStadiumNameDto
 import com.dpm.data.model.response.seatreview.ResponseStadiumSectionDto
 import com.dpm.data.remote.SeatReviewService
@@ -59,7 +60,7 @@ class SeatReviewDataSourceImpl @Inject constructor(
     override suspend fun postSeatReviewData(
         blockId: Int,
         requestSeatReviewDto: RequestSeatReviewDto,
-    ) {
+    ): ResponseSeatReviewDto {
         return seatReviewService.postSeatReview(
             blockId,
             requestSeatReviewDto,

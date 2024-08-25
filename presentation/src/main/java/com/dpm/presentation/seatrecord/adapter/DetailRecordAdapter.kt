@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.depromeet.presentation.R
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.databinding.ItemSeatReviewDetailBinding
+import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
 import com.dpm.presentation.util.CalendarUtil
 import com.dpm.presentation.util.ItemDiffCallback
@@ -22,6 +24,9 @@ import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
 class DetailRecordAdapter(
     private val myProfile: ResponseMySeatRecord.MyProfileResponse,
     private val moreClick: (Int) -> Unit,
+    private val likeClick : (Int) -> Unit,
+    private val scrapClick : (Int) -> Unit,
+    private val shareClick : (ResponseMySeatRecord.ReviewResponse) -> Unit,
 ) : ListAdapter<ResponseMySeatRecord.ReviewResponse, ReviewDetailViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
@@ -37,7 +42,10 @@ class DetailRecordAdapter(
                     parent.context
                 ), parent, false
             ),
-            moreClick
+            moreClick = moreClick,
+            likeClick = likeClick,
+            scrapClick = scrapClick,
+            shareClick = shareClick
         )
     }
 
@@ -58,6 +66,9 @@ class DetailRecordAdapter(
 class ReviewDetailViewHolder(
     internal val binding: ItemSeatReviewDetailBinding,
     private val moreClick: (Int) -> Unit,
+    private val likeClick : (Int) -> Unit,
+    private val scrapClick : (Int) -> Unit,
+    private val shareClick : (ResponseMySeatRecord.ReviewResponse) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         private const val MAX_VISIBLE_CHIPS = Int.MAX_VALUE
@@ -68,9 +79,22 @@ class ReviewDetailViewHolder(
         profile: ResponseMySeatRecord.MyProfileResponse,
     ) {
         with(binding) {
-            binding.ivDetailMore.setOnClickListener {
+            setInteraction(item)
+
+            ivDetailMore.setOnClickListener {
                 moreClick(item.id)
             }
+            ivRecordScrap.setOnSingleClickListener {
+                likeClick(item.id)
+            }
+            ivRecordLike.setOnSingleClickListener {
+                scrapClick(item.id)
+            }
+            ivRecordShare.setOnClickListener {
+                shareClick(item)
+            }
+
+
 
             ivDetailProfileImage.load(profile.profileImage) {
                 transformations(CircleCropTransformation())
@@ -98,6 +122,18 @@ class ReviewDetailViewHolder(
                     }
                 }
             }
+        }
+    }
+
+    private fun setInteraction(item: ResponseMySeatRecord.ReviewResponse){
+        with(binding){
+            // TODO : 서버 완성되면 분기처리 해주기
+            tvRecordScrapCount.text = "0"
+            tvRecordLikeCount.text = "0"
+            ivRecordLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
+//            ivRecordLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
+            ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+//            ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
         }
     }
 

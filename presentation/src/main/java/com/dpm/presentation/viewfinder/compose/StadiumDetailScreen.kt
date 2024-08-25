@@ -14,7 +14,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +29,7 @@ import com.dpm.domain.entity.response.viewfinder.BASE
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.dpm.domain.entity.response.viewfinder.base
 import com.dpm.presentation.mapper.toKeyword
+import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.kakaoShareSeatFeedTitle
 import com.dpm.presentation.util.seatFeed
@@ -35,6 +38,8 @@ import com.dpm.presentation.util.toTitle
 import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.uistate.StadiumDetailUiState
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -62,10 +67,27 @@ fun StadiumDetailScreen(
     val detailUiState by viewModel.detailUiState.collectAsStateWithLifecycle()
     val currentIndex by viewModel.currentIndex.collectAsStateWithLifecycle()
 
-
     LaunchedEffect(key1 = scrollState) {
-        verticalScrollState.scrollToItem(0)
-        viewModel.updateScrollState(false)
+        if (viewModel.reviewId == 0){
+            verticalScrollState.scrollToItem(0)
+            viewModel.updateScrollState(false)
+        }
+    }
+
+    LaunchedEffect(key1 = detailUiState) {
+        if (viewModel.reviewId != 0) {
+            when (val data = detailUiState) {
+                is StadiumDetailUiState.ReviewsData -> {
+                    val index = data.reviews.indexOfFirst { it.id.toInt() == viewModel.reviewId }
+                    if (index != -1){
+                        verticalScrollState.scrollToItem(index + 1)
+                        viewModel.reviewId = 0
+                    }
+                }
+
+                else -> Unit
+            }
+        }
     }
 
     LaunchedEffect(key1 = verticalScrollState.firstVisibleItemScrollOffset) {
@@ -178,8 +200,8 @@ fun StadiumDetailScreen(
                                             imageUrl = uiState.reviews[index].images.firstOrNull()?.url
                                                 ?: "",
                                             queryParams = mapOf(
-                                                "stadiumId" to viewModel.stadiumId.toString(),
-                                                "blockCode" to viewModel.blockCode
+                                                SchemeKey.STADIUM_ID to viewModel.stadiumId.toString(),
+                                                SchemeKey.BLOCK_CODE to viewModel.blockCode
                                             )
                                         ),
                                         onSuccess = { sharingIntent ->

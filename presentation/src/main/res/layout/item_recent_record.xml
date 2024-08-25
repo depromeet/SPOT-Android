@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textAppearance="@style/TextAppearance.Spot.Subtitle04"
-        android:textColor="@color/color_foreground_body_sebtext"
+        android:textColor="@color/color_foreground_caption"
         app:layout_constraintEnd_toEndOf="@+id/tv_recent_date_day"
         app:layout_constraintStart_toStartOf="@id/tv_recent_date_day"
         app:layout_constraintTop_toBottomOf="@id/tv_recent_date_day"
@@ -76,16 +76,82 @@
             app:layout_constraintTop_toTopOf="@id/iv_recent_image" />
 
         <TextView
+            android:id="@+id/tvReviewTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Spot.Label11"
+            app:layout_constraintTop_toBottomOf="@id/iv_recent_image"
+            app:layout_constraintStart_toStartOf="@id/iv_recent_image"
+            android:text="좌석시야"
+            android:textColor="@color/color_stroke_positive_primary"
+            android:paddingVertical="3dp"
+            android:paddingHorizontal="4dp"
+            android:background="@drawable/rect_stroke_positive_primary_stroke_35"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="14dp"/>
+
+        <ImageView
+            android:id="@+id/ivRecordLike"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_like_inactive"
+            app:layout_constraintTop_toTopOf="@id/tvReviewTag"
+            app:layout_constraintBottom_toBottomOf="@id/tvReviewTag"
+            app:layout_constraintEnd_toStartOf="@id/tvRecordLikeCount"
+            android:layout_marginEnd="4dp"
+            tools:ignore="contentDescription"/>
+
+        <TextView
+            android:id="@+id/tvRecordLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_foreground_caption"
+            style="@style/TextAppearance.Spot.Label10"
+            app:layout_constraintTop_toTopOf="@id/ivRecordLike"
+            app:layout_constraintBottom_toBottomOf="@id/ivRecordLike"
+            app:layout_constraintEnd_toStartOf="@id/ivRecordScrap"
+            android:layout_marginEnd="8dp"
+            tools:text="15"/>
+
+        <ImageView
+            android:id="@+id/ivRecordScrap"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_scrap"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintTop_toTopOf="@id/tvReviewTag"
+            app:layout_constraintBottom_toBottomOf="@id/tvReviewTag"
+            app:layout_constraintEnd_toStartOf="@id/tvRecordScrapCount"
+            tools:ignore="contentDescription"/>
+
+        <TextView
+            android:id="@+id/tvRecordScrapCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_foreground_caption"
+            style="@style/TextAppearance.Spot.Label10"
+            app:layout_constraintTop_toTopOf="@id/ivRecordLike"
+            app:layout_constraintBottom_toBottomOf="@id/ivRecordLike"
+            app:layout_constraintEnd_toEndOf="@id/iv_recent_image"
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="4dp"
+            tools:text="15"/>
+
+
+
+
+
+        <TextView
             android:id="@+id/tv_recent_stadium_name"
             style="@style/TextAppearance.Spot.Subtitle02"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="6dp"
             android:layout_marginBottom="4dp"
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintStart_toStartOf="@id/iv_recent_image"
-            app:layout_constraintTop_toBottomOf="@id/iv_recent_image"
+            app:layout_constraintTop_toBottomOf="@id/tvReviewTag"
             tools:text="서울 잠실 야구장" />
 
         <TextView

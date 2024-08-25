@@ -47,6 +47,7 @@ dependencies {
         implementation(dateTime)
     }
 
+    implementation("com.google.accompanist:accompanist-permissions:0.28.0")
     AndroidXDependencies.run {
         implementation(coreKtx)
         implementation(appCompat)

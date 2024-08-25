@@ -10,6 +10,9 @@ java {
 }
 
 dependencies {
+    JavaDependencies.run {
+        implementation(javaxInject)
+    }
     KotlinDependencies.run {
         implementation(kotlin)
         implementation(coroutines)

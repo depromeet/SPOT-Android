@@ -1,8 +1,12 @@
 import android.os.Parcelable
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ReviewData(
+    val stadiumId: Int,
+    val blockCode: String,
+    val reviewId: Int,
     val blockId: Int,
     val selectedColumn: String,
     val selectedNumber: String,
@@ -12,3 +16,9 @@ data class ReviewData(
     val detailReviewText: String,
     val selectedDate: String,
 ) : Parcelable
+
+fun ReviewData.toNavReviewDetail() = SchemeState.NavReviewDetail(
+    stadiumId = stadiumId,
+    blockCode = blockCode,
+    reviewId = reviewId
+)

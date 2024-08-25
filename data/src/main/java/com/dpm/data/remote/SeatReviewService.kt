@@ -5,6 +5,7 @@ import com.dpm.data.model.request.seatreview.RequestSeatReviewDto
 import com.dpm.data.model.response.seatreview.ResponsePreSignedUrlDto
 import com.dpm.data.model.response.seatreview.ResponseSeatBlockDto
 import com.dpm.data.model.response.seatreview.ResponseSeatRangeDto
+import com.dpm.data.model.response.seatreview.ResponseSeatReviewDto
 import com.dpm.data.model.response.seatreview.ResponseStadiumNameDto
 import com.dpm.data.model.response.seatreview.ResponseStadiumSectionDto
 import okhttp3.RequestBody
@@ -51,5 +52,5 @@ interface SeatReviewService {
     suspend fun postSeatReview(
         @Path("blockId") blockId: Int,
         @Body requestPostSignupDto: RequestSeatReviewDto,
-    )
+    ): ResponseSeatReviewDto
 }
