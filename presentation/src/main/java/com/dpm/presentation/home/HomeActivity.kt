@@ -81,7 +81,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
 
         when (intent?.getSerializableExtra(DIALOG_TYPE) as? ReviewMethod) {
-            ReviewMethod.VIEW -> ViewUploadDialog().show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
+            ReviewMethod.VIEW -> ViewUploadDialog().apply {
+                arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
+            }.show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
+
             ReviewMethod.FEED -> FeedUploadDialog().apply {
                 arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
             }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
@@ -97,6 +100,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 view = binding.root,
                 message = "시야찾기에 내 게시글이 올라갔어요!",
                 endMessage = "확인하러 가기",
+                marginBottom = 93,
             ) {
                 // TODO : onclick -> 방금 작성한 시야 후기 상세페이지 게시물 화면으로 이동
             }.show()

@@ -6,6 +6,7 @@ import com.dpm.domain.entity.request.seatreview.RequestSeatReview
 import com.dpm.domain.entity.response.seatreview.ResponsePresignedUrl
 import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
+import com.dpm.domain.entity.response.seatreview.ResponseSeatReview
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumName
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 import com.dpm.domain.repository.SeatReviewRepository
@@ -77,12 +78,12 @@ class SeatReviewRepositoryImpl @Inject constructor(
     override suspend fun postSeatReview(
         blockId: Int,
         seatReviewInfo: RequestSeatReview,
-    ): Result<Unit> {
+    ): Result<ResponseSeatReview> {
         return runCatching {
             seatReviewDataSource.postSeatReviewData(
                 blockId,
                 seatReviewInfo.toSeatReview(),
-            )
+            ).toResponseSeatReview()
         }
     }
 }

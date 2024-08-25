@@ -484,6 +484,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                         else -> null
                     }
                     val reviewData = ReviewData(
+                        stadiumId = viewModel.selectedStadiumId.value,
+                        blockCode = viewModel.selectedBlock.value,
+                        reviewId = state.data.id,
                         selectedColumn = viewModel.selectedColumn.value,
                         selectedNumber = viewModel.selectedNumber.value,
                         preSignedUrlImages = viewModel.preSignedUrlImages.value,

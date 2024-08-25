@@ -1,7 +1,6 @@
 package com.dpm.presentation.seatreview.viewmodel
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import com.dpm.domain.entity.request.seatreview.RequestSeatReview
 import com.dpm.domain.entity.response.seatreview.ResponsePresignedUrl
 import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
+import com.dpm.domain.entity.response.seatreview.ResponseSeatReview
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumName
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 import com.dpm.domain.model.seatreview.ReviewMethod
@@ -144,8 +144,8 @@ class ReviewViewModel @Inject constructor(
         MutableStateFlow<UiState<ResponsePresignedUrl>>(UiState.Loading)
     val getPreSignedUrl = _getPreSignedUrl.asStateFlow()
 
-    private val _postReviewState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
-    val postReviewState: StateFlow<UiState<Unit>> = _postReviewState.asStateFlow()
+    private val _postReviewState = MutableStateFlow<UiState<ResponseSeatReview>>(UiState.Empty)
+    val postReviewState: StateFlow<UiState<ResponseSeatReview>> = _postReviewState.asStateFlow()
 
     fun updateSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
@@ -397,8 +397,8 @@ class ReviewViewModel @Inject constructor(
                 _selectedBlockId.value,
                 requestSeatReview,
             )
-                .onSuccess {
-                    _postReviewState.value = UiState.Success(Unit)
+                .onSuccess { id ->
+                    _postReviewState.value = UiState.Success(id)
                     Timber.d("POST REVIEW SUCCESS")
                 }
                 .onFailure { t ->
