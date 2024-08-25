@@ -13,11 +13,11 @@ import coil.transform.RoundedCornersTransformation
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySelectViewImageBinding
 import com.dpm.core.base.BaseActivity
+import com.dpm.core.state.UiState
 import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.seatreview.adapter.SelectKeywordAdapter
-import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +40,7 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
-        observeSelectedImageUris()
+        initObserve()
     }
 
     private fun initView() {
@@ -54,6 +54,32 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
         }
         setupImageSelection()
         initEvent()
+    }
+
+    private fun initObserve() {
+        observeSelectedImageUris()
+        viewModel.postReviewState.asLiveData().observe(this) { uiState ->
+            when (uiState) {
+                is UiState.Success -> {
+                    var reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
+                    reviewData = reviewData?.copy(
+                        reviewId = uiState.data.id
+                    )
+
+                    Intent(this, HomeActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        putExtra(UPLOAD_SNACKBAR, true)
+                        putExtra(REVIEW_DATA,reviewData)
+                    }.let {
+                        finish()
+                        startActivity(it)
+                    }
+                }
+                is UiState.Empty -> Unit
+                is UiState.Failure -> Unit
+                is UiState.Loading -> Unit
+            }
+        }
     }
 
     private fun updateImageViews(urls: List<String>) {
@@ -158,11 +184,6 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
             }
 
             viewModel.postSeatReview(ReviewMethod.VIEW)
-            startActivity(
-                Intent(this, HomeActivity::class.java)
-                    .putExtra(UPLOAD_SNACKBAR, true)
-                    .putExtra(REVIEW_DATA,reviewData)
-            ); finish()
         }
         binding.ivExit.setOnSingleClickListener {
             startActivity(Intent(this, HomeActivity::class.java))

@@ -1,4 +1,5 @@
 import android.os.Parcelable
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -15,3 +16,9 @@ data class ReviewData(
     val detailReviewText: String,
     val selectedDate: String,
 ) : Parcelable
+
+fun ReviewData.toNavReviewDetail() = SchemeState.NavReviewDetail(
+    stadiumId = stadiumId,
+    blockCode = blockCode,
+    reviewId = reviewId
+)

@@ -57,7 +57,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private val viewModel by viewModels<ReviewViewModel>()
-    private val method by lazy { intent.getStringExtra(METHOD_KEY)?.let { ReviewMethod.valueOf(it) } }
+    private val method by lazy {
+        intent.getStringExtra(METHOD_KEY)?.let { ReviewMethod.valueOf(it) }
+    }
     private val selectedImage: List<ImageView> by lazy {
         listOf(
             binding.ivFirstImage,
@@ -125,11 +127,13 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 binding.tvAddImage.text = "야구장 시야 사진을\n올려주세요"
                 binding.tvReviewMySeat.text = "내 시야 후기"
             }
+
             ReviewMethod.FEED -> {
                 binding.tvTitle.text = "경기의 순간을 간직해보세요"
                 binding.tvAddImage.text = "직관후기 사진을\n올려주세요"
                 binding.tvReviewMySeat.text = "내 직관 후기"
             }
+
             null -> {}
         }
     }
@@ -276,7 +280,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     }
                     observeReviewViewModel()
                 }
-                is UiState.Failure -> { toast("오류가 발생했습니다") }
+
+                is UiState.Failure -> {
+                    toast("오류가 발생했습니다")
+                }
+
                 is UiState.Loading -> {}
                 is UiState.Empty -> {}
                 else -> {}
@@ -328,6 +336,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             viewModel.setSelectedImages(selectedImageUris)
         }
     }
+
     private fun updateSelectedImages() {
         with(binding) {
             layoutAddDefaultImage.isVisible = selectedImageUris.isEmpty()
@@ -355,6 +364,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             tvImageCount.text = selectedImageUris.size.toString()
         }
     }
+
     private fun updateNextButtonState() {
         val isSelectedDateFilled = viewModel.selectedDate.value.isNotEmpty()
         val isSelectedImageFilled = viewModel.selectedImages.value.isNotEmpty()
@@ -366,9 +376,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
         with(binding.tvUploadBtn) {
             val isReadyToUpload = isSelectedDateFilled && isSelectedImageFilled &&
-                (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
-                isSelectedBlockFilled &&
-                (isSelectedColumnFilled || isSelectedNumberFilled)
+                    (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
+                    isSelectedBlockFilled &&
+                    (isSelectedColumnFilled || isSelectedNumberFilled)
 
             if (isReadyToUpload) {
                 setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
@@ -409,13 +419,16 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                     makeSpotImageAppbar("내 시야 후기를 등록해주세요")
                 }
+
                 !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                     makeSpotImageAppbar("좌석을 선택해주세요")
                 }
+
                 ((!isSelectedGoodBtnFilled && !isSelectedBadBtnFilled) || !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled))) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                 }
+
                 else -> {
                     val uniqueImageUris = selectedImageUris.distinct()
                     uniqueImageUris.forEach { imageUriString ->
@@ -465,9 +478,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     ReviewMethod.VIEW -> {
                         viewModel.postSeatReview(ReviewMethod.VIEW)
                     }
+
                     ReviewMethod.FEED -> {
                         viewModel.postSeatReview(ReviewMethod.FEED)
                     }
+
                     null -> {}
                 }
             }
@@ -498,12 +513,15 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     )
                     dialogType?.let {
                         Intent(this, HomeActivity::class.java).apply {
+                            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             putExtra(DIALOG_TYPE, dialogType)
                             putExtra(REVIEW_DATA, reviewData)
+                            finish()
                             startActivity(this)
                         }
                     }
                 }
+
                 is UiState.Failure -> {
                     toast("리뷰 등록 실패: $state")
                 }
