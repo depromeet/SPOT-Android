@@ -2,6 +2,7 @@ package com.dpm.presentation.seatreview.dialog.main
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -23,7 +24,11 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
+import com.dpm.presentation.gallery.GalleryActivity
+import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.home.dialog.UploadErrorDialog
+import com.dpm.presentation.seatreview.ReviewActivity.Companion.FRAGMENT_RESULT_KEY
+import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -34,15 +39,24 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
 ) {
 
     companion object {
-        private const val REQUEST_KEY = "requestKey"
-        private const val SELECTED_IMAGES = "selected_images"
+        const val REQUEST_KEY = "requestKey"
+        const val SELECTED_IMAGES = "selected_images"
         private const val IMAGE_TITLE = "image"
     }
 
     private var permissionRequired = arrayOf(Manifest.permission.CAMERA)
-    private lateinit var selectMultipleMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
     private var imageUri: Uri? = null
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedImages = result.data?.getStringArrayListExtra(SELECTED_IMAGES)
+            selectedImages?.let {
+                setFragmentResult(FRAGMENT_RESULT_KEY, bundleOf(SELECTED_IMAGES to it))
+                dismiss()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +71,10 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
 
     private fun initEvent() {
         binding.layoutGallery.setOnSingleClickListener {
-            selectMultipleMediaLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-            )
+            Intent(requireContext(), GalleryActivity::class.java).apply {
+                putExtra("screenType", ScreenType.REVIEW.name)
+                galleryLauncher.launch(this)
+            }
         }
         binding.layoutTakePhoto.setOnSingleClickListener {
             if (!checkUserPermission(requireContext())) {
@@ -72,18 +87,6 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     }
 
     private fun setupActivityResultLaunchers() {
-        selectMultipleMediaLauncher =
-            registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
-                val validUris = uris.filter { uri ->
-                    initCapacityLimitDialog(uri)
-                }
-                if (validUris.isNotEmpty()) {
-                    val uriList = validUris.map { it.toString() }
-                    setFragmentResult(REQUEST_KEY, bundleOf(SELECTED_IMAGES to uriList))
-                }
-                dismiss()
-            }
-
         takePhotoLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {

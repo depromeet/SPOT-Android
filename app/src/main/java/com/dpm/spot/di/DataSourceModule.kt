@@ -1,11 +1,13 @@
 package com.dpm.spot.di
 
+import com.dpm.data.datasource.AuthDataSource
 import com.dpm.data.datasource.ExampleDataSource
 import com.dpm.data.datasource.HomeDataSource
 import com.dpm.data.datasource.SeatReviewDataSource
 import com.dpm.data.datasource.SignupRemoteDataSource
 import com.dpm.data.datasource.ViewfinderDataSource
 import com.dpm.data.datasource.WebSvgDataSource
+import com.dpm.data.datasource.local.AuthDataSourceImpl
 import com.dpm.data.datasource.remote.ExampleDataSourcelmpl
 import com.dpm.data.datasource.remote.HomeDataSourceImpl
 import com.dpm.data.datasource.remote.SeatReviewDataSourceImpl
@@ -57,4 +59,10 @@ abstract class DataSourceModule {
     abstract fun bindSignupDataSource(
         signupDataSourceImpl: SignupRemoteDataSourceImpl,
     ): SignupRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthDataSource(
+        authDataSourceImpl: AuthDataSourceImpl
+    ): AuthDataSource
 }

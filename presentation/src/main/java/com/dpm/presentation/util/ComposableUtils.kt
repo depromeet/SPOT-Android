@@ -12,9 +12,10 @@ import androidx.compose.ui.text.withStyle
 import com.dpm.designsystem.compose.ui.SpotTheme
 
 @Composable
-fun MultiStyleText(style: TextStyle, vararg textWithColors: Pair<String, Color>) {
+fun MultiStyleText(modifier: Modifier = Modifier, style: TextStyle, vararg textWithColors: Pair<String, Color>) {
     Text(
-        buildAnnotatedString {
+        modifier = modifier,
+        text = buildAnnotatedString {
             textWithColors.forEach { (text, color) ->
                 withStyle(style = SpanStyle(color = color)) {
                     append(text)

@@ -104,12 +104,15 @@
     <string name="viewfinder_best_keyword_description_format">가장 많이 선정된 %s개의 키워드만 보여줘요</string>
     <string name="viewfinder_empty_block_review_description">%s에 등록된\n시야 후기가 없습니다.</string>
 
-    <!-- viewRecord -->
+    <!-- viewRecord / seatRecord -->
     <string name="view_record_my">시야 아카이빙</string>
     <string name="view_record_whole">전체 기록</string>
     <string name="view_record_all">전체</string>
     <string name="record_remove">게시물 삭제</string>
     <string name="record_manage">게시물 관리</string>
+    <string name="view_record_help">도움 제공</string>
+    <string name="seat_record_seat_view">좌석시야</string>
+    <string name="seat_recotd_intuitive_view">직관후기</string>
 
     <!-- viewDetail 관련-->
     <string name="record_edit">게시물 수정</string>
@@ -169,4 +172,5 @@
     <string name="scrap_filter_month">월별 시야</string>
     <string name="scrap_search">검색하기</string>
     <string name="stadium_jamsil">잠실야구장</string>
+
 </resources>

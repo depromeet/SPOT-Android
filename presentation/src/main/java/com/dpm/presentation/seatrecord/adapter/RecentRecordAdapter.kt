@@ -10,6 +10,7 @@ import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
 import com.dpm.presentation.extension.loadAndClip
+import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
 import com.dpm.presentation.util.CalendarUtil
 import com.dpm.presentation.util.ItemDiffCallback
@@ -25,6 +26,8 @@ class RecentRecordAdapter(
     interface OnItemRecordClickListener {
         fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
         fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse)
+        fun onLikeClick(reviewId : Int)
+        fun onScrapClick(reviewId : Int)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -47,6 +50,12 @@ class RecentRecordAdapter(
             }
             binding.ibRecentStadiumMore.setOnClickListener {
                 itemRecordClickListener?.onItemMoreClick(getItem(position))
+            }
+            binding.ivRecordScrap.setOnSingleClickListener {
+                itemRecordClickListener?.onScrapClick(getItem(position).id)
+            }
+            binding.ivRecordLike.setOnSingleClickListener {
+                itemRecordClickListener?.onLikeClick(getItem(position).id)
             }
 
         }
@@ -84,6 +93,10 @@ class RecentRecordViewHolder(
                     }
                 }
             }
+            //TODO : 추후 서버 통신 바뀌면 -> 스크랩, 좋아요 갱신 진행하기
+            tvRecordLikeCount.text = "0"
+            tvRecordScrapCount.text = "0"
+
         }
     }
 
