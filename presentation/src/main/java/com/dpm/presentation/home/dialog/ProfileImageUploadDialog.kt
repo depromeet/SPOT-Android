@@ -16,12 +16,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentProfileEditBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.presentation.extension.toast
+import com.dpm.presentation.gallery.GalleryActivity
 import com.dpm.presentation.home.viewmodel.ProfileEditViewModel
+import com.dpm.presentation.seatreview.ReviewActivity
+import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
+import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -30,12 +36,24 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
     R.layout.fragment_profile_edit_bottom_sheet,
     FragmentProfileEditBottomSheetBinding::inflate,
 ) {
+    companion object {
+        const val SELECTED_IMAGE = "selected_image"
+    }
 
     private val viewModel: ProfileEditViewModel by activityViewModels()
     private var permissionRequired = arrayOf(Manifest.permission.CAMERA)
     private lateinit var pickSingleImageLauncher: ActivityResultLauncher<String>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
     private var imageUri: Uri? = null
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedImages = result.data?.getStringExtra(SELECTED_IMAGE)
+            selectedImages?.let {
+                handleSelectedImage(Uri.parse(it))
+            }
+        }
+    }
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -75,7 +93,10 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                 }
             }
             clProfileEditGallery.setOnClickListener {
-                pickSingleImageLauncher.launch("image/*")
+                Intent(requireContext(), GalleryActivity::class.java).apply {
+                    putExtra("screenType", ScreenType.PROFILE.name)
+                    galleryLauncher.launch(this)
+                }
             }
             clProfileEditRemove.setOnClickListener {
                 ProfileDeleteConfirmDialog().show(parentFragmentManager,
