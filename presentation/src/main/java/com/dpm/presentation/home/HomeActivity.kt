@@ -3,6 +3,7 @@ package com.dpm.presentation.home
 import ReviewData
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -16,10 +17,13 @@ import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.dpToPx
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.adapter.StadiumAdapter
 import com.dpm.presentation.home.dialog.LevelDescriptionDialog
 import com.dpm.presentation.home.dialog.LevelupDialog
 import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
@@ -28,6 +32,7 @@ import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
+import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -69,6 +74,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         initViewStatusBar()
         homeViewModel.getStadiums()
         setStadiumAdapter()
+        handleIntentExtra()
     }
 
     private fun initReviewDialog() {
@@ -281,5 +287,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
             marginBottom = 94
         ).show()
+    }
+
+    private fun handleIntentExtra() {
+        val navReview =  intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        if (navReview != null) {
+            Intent(this, StadiumDetailActivity::class.java).apply {
+                putExtra(SchemeKey.STADIUM_ID, navReview.stadiumId)
+                putExtra(SchemeKey.BLOCK_CODE, navReview.blockCode)
+            }.let { startActivity(it) }
+        }
     }
 }

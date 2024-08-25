@@ -27,6 +27,7 @@ import com.dpm.domain.entity.response.viewfinder.BASE
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.dpm.domain.entity.response.viewfinder.base
 import com.dpm.presentation.mapper.toKeyword
+import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.kakaoShareSeatFeedTitle
 import com.dpm.presentation.util.seatFeed
@@ -178,8 +179,8 @@ fun StadiumDetailScreen(
                                             imageUrl = uiState.reviews[index].images.firstOrNull()?.url
                                                 ?: "",
                                             queryParams = mapOf(
-                                                "stadiumId" to viewModel.stadiumId.toString(),
-                                                "blockCode" to viewModel.blockCode
+                                                SchemeKey.STADIUM_ID to viewModel.stadiumId.toString(),
+                                                SchemeKey.BLOCK_CODE to viewModel.blockCode
                                             )
                                         ),
                                         onSuccess = { sharingIntent ->

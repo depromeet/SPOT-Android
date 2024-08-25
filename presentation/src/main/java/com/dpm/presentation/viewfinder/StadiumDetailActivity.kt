@@ -13,7 +13,9 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
 import com.dpm.domain.preference.SharedPreference
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.HomeActivity
+import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.seatFeed
 import com.dpm.presentation.util.toEmptyBlock
@@ -52,10 +54,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun initView() {
-        getIdExtra { stadiumId, blockCode ->
+        getIdExtra { stadiumId, blockCode, reviewId ->
             viewModel.updateRequestPathVariable(stadiumId, blockCode)
             viewModel.getBlockReviews(stadiumId, blockCode)
             viewModel.getBlockRow(stadiumId, blockCode)
+            viewModel.reviewId = reviewId
         }
         initComposeView()
     }
@@ -129,10 +132,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         }
     }
 
-    private fun getIdExtra(callback: (stadiumId: Int, blockCode: String) -> Unit) {
+    private fun getIdExtra(callback: (stadiumId: Int, blockCode: String, reviewId: Int) -> Unit) {
         callback(
-            intent?.getIntExtra(StadiumActivity.STADIUM_ID, 0) ?: 0,
-            intent?.getStringExtra(StadiumActivity.STADIUM_BLOCK_ID) ?: ""
+            intent?.getIntExtra(SchemeKey.STADIUM_ID, 0) ?: 0,
+            intent?.getStringExtra(SchemeKey.BLOCK_CODE) ?: "",
+            intent?.getIntExtra(SchemeKey.REVIEW_ID, 0) ?: 0
         )
     }
 

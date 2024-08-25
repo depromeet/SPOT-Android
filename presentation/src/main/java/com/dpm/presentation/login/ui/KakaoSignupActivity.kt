@@ -7,11 +7,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.lifecycle.asLiveData
 import com.depromeet.presentation.databinding.FragmentKakaoSignupBinding
 import com.dpm.core.base.BaseActivity
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.login.ui.compose.KakaoSignupScreen
 import com.dpm.presentation.login.viewmodel.KakaoSignupViewModel
 import com.dpm.presentation.login.viewmodel.LoginUiState
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -73,6 +76,15 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
             if (token.isNotEmpty()) {
                 Intent(this, NicknameInputActivity::class.java).apply {
                     putExtra("kakaoToken", token)
+                    when (val data = handleIntentExtra()) {
+                        is SchemeState.NavReview -> {
+                            putExtra(SchemeKey.NAV_REVIEW, data)
+                        }
+                        is SchemeState.NavReviewDetail -> {
+                            putExtra(SchemeKey.NAV_REVIEW_DETAIL, data)
+                        }
+                        else -> Unit
+                    }
                     startActivity(this)
                 }
             }
@@ -92,5 +104,20 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
                 LoginUiState.Initial -> { }
             }
         }
+    }
+
+    private fun handleIntentExtra(): SchemeState {
+        val navReview = intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        if (navReview != null) {
+            return navReview
+        }
+
+        val navReviewDetail = intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(
+            SchemeKey.NAV_REVIEW_DETAIL)
+        if (navReviewDetail != null) {
+            return navReviewDetail
+        }
+
+        return SchemeState.Nothing
     }
 }

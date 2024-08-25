@@ -8,7 +8,10 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import com.depromeet.presentation.databinding.ActivitySignupCompleteBinding
 import com.dpm.core.base.BaseActivity
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.HomeActivity
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 
 class SignUpCompleteActivity : BaseActivity<ActivitySignupCompleteBinding>(
     { ActivitySignupCompleteBinding.inflate(it) }
@@ -59,9 +62,33 @@ class SignUpCompleteActivity : BaseActivity<ActivitySignupCompleteBinding>(
         binding.tvSignupCompleteBtn.setOnClickListener {
             Intent(this, HomeActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                when (val data = handleIntentExtra()) {
+                    is SchemeState.NavReview -> {
+                        putExtra(SchemeKey.NAV_REVIEW, data)
+                    }
+                    is SchemeState.NavReviewDetail -> {
+                        putExtra(SchemeKey.NAV_REVIEW_DETAIL, data)
+                    }
+                    else -> Unit
+                }
                 startActivity(this)
                 finish()
             }
         }
+    }
+
+    private fun handleIntentExtra(): SchemeState {
+        val navReview = intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        if (navReview != null) {
+            return navReview
+        }
+
+        val navReviewDetail = intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(
+            SchemeKey.NAV_REVIEW_DETAIL)
+        if (navReviewDetail != null) {
+            return navReviewDetail
+        }
+
+        return SchemeState.Nothing
     }
 }

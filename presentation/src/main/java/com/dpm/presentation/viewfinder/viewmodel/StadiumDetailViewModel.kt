@@ -23,6 +23,7 @@ class StadiumDetailViewModel @Inject constructor(
 ) : ViewModel() {
     var blockCode: String = ""
     var stadiumId: Int = 0
+    var reviewId : Int = 0
     private var reset: Boolean = true
     private var blockRow: ResponseBlockRow? = null
 
