@@ -22,6 +22,8 @@ class MonthRecordAdapter() :
     interface OnItemRecordClickListener {
         fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
         fun onMoreRecordClick(reviewId: Int)
+        fun onLikeClick(reviewId: Int)
+        fun onScrapClick(reviewId: Int)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -57,14 +59,13 @@ class MonthRecordViewHolder(
             binding.root.alpha = 0f
             binding.root.animate()
                 .alpha(1f)
-                .setDuration(300)
+                .setDuration(100)
                 .start()
         }
     }
 
 
     private fun initReviewAdapter() {
-        if (!::adapter.isInitialized) {
             adapter = RecentRecordAdapter()
             binding.rvRecentPost.adapter = adapter
             adapter.itemRecordClickListener =
@@ -75,6 +76,14 @@ class MonthRecordViewHolder(
 
                     override fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse) {
                         itemRecordClickListener?.onMoreRecordClick(item.id)
+                    }
+
+                    override fun onLikeClick(reviewId: Int) {
+                        itemRecordClickListener?.onLikeClick(reviewId)
+                    }
+
+                    override fun onScrapClick(reviewId: Int) {
+                        itemRecordClickListener?.onScrapClick(reviewId)
                     }
                 }
             binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -89,6 +98,5 @@ class MonthRecordViewHolder(
                     Timber.d("test scroll $scrollBottom / $lastVisibleItemPosition / $itemCount")
                 }
             })
-        }
     }
 }

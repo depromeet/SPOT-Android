@@ -132,8 +132,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
                 is UiState.Success -> {
                     setStadiumShimmer(false)
-                    stadiumAdapter.submitList(state.data)
-                    binding.rvHomeStadium.scrollToPosition(0)
+                    stadiumAdapter.submitList(state.data) {
+                        binding.rvHomeStadium.scrollToPosition(0)
+                    }
                 }
             }
         }
@@ -253,7 +254,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         tvHomeTitle.text = data.levelTitle
         ivHomeCharacter.load(data.mascotImageUrl)
         if (data.reviewCntToLevelup == 0) {
-            csbvHomeTitle.setTextPart("내가 바로 이 구역 직관왕!", number = null, suffix = null)
+            csbvHomeTitle.setTextPart("내가 바로 이 구역 직관왕!", null, null)
         } else {
             csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup, "장 더 올리면 레벨업!")
         }
