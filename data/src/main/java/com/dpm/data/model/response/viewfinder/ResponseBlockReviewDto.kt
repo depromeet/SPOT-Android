@@ -101,7 +101,7 @@ data class ResponseBlockReviewDto(
             @SerialName("profileImage")
             val profileImage: String?,
             @SerialName("nickname")
-            val nickname: String,
+            val nickname: String?,
             @SerialName("level")
             val level: Int,
         )
@@ -231,7 +231,7 @@ fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewKeywordDto.toReviewKe
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewMemberDto.toReviewMemberResponse() =
     ResponseBlockReview.ResponseReview.ResponseReviewMember(
-        profileImage = profileImage ?: "", nickname = nickname, level = level
+        profileImage = profileImage ?: "", nickname = nickname?:"", level = level
     )
 
 fun ResponseBlockReviewDto.ResponseReviewDto.ResponseReviewStadiumDto.toReviewStadiumResponse() =
