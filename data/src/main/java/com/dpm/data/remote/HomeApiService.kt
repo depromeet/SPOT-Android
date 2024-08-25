@@ -2,7 +2,6 @@ package com.dpm.data.remote
 
 import com.dpm.data.model.request.home.RequestFileExtensionDto
 import com.dpm.data.model.request.home.RequestProfileEditDto
-import com.dpm.data.model.request.home.RequestScrapDto
 import com.dpm.data.model.response.home.ResponseBaseballTeamDto
 import com.dpm.data.model.response.home.ResponseDeleteReviewDto
 import com.dpm.data.model.response.home.ResponseHomeFeedDto
@@ -28,8 +27,8 @@ import retrofit2.http.Url
 interface HomeApiService {
     @GET("/api/v1/reviews")
     suspend fun getMySeatRecord(
-        @Query("cursor") cursor : String?,
-        @Query("sortBy") sortBy : String,
+        @Query("cursor") cursor: String?,
+        @Query("sortBy") sortBy: String,
         @Query("size") size: Int,
         @Query("year") year: Int?,
         @Query("month") month: Int?,
@@ -86,9 +85,12 @@ interface HomeApiService {
 
     @GET("api/v1/reviews/scraps")
     suspend fun getScrap(
-        @Query("cursor") cursor : String?,
-        @Query("size") size : Int,
-        @Query("sortBy") sortBy : String,
-        @Body body : RequestScrapDto
-    ) : ResponseScrapDto
+        @Query("cursor") cursor: String?,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String,
+        @Query("stadiumId") stadiumId: Int?,
+        @Query("months") months: List<Int>?,
+        @Query("good") good: List<String>?,
+        @Query("bad") bad: List<String>?,
+    ): ResponseScrapDto
 }

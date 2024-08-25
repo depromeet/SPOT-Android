@@ -28,14 +28,26 @@ data class ResponseScrap(
         val keywords: List<ResponseKeyword> = emptyList(),
         val likesCount: Int = 0,
         val scrapsCount: Int = 0,
-        val reviewType: String = "",
-    )
+        val reviewType: String? = "",
+        val isLiked: Boolean = false,
+        val isScrapped: Boolean = false,
+    ) {
+        fun formattedSectionName(): String =
+            if (seat != null) {
+                "${block.code}블록 ${row.number}열 ${seat.seatNumber}번"
+            } else {
+                "${block.code}블록 ${row.number}열 "
+            }
+
+    }
 
     data class ResponseMember(
         val profileImage: String? = null,
         val nickname: String = "",
         val level: Int = 0,
-    )
+    ) {
+        fun formattedLevel(): String = "Lv.$level"
+    }
 
     data class ResponseStadium(
         val id: Int = 0,

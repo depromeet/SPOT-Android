@@ -15,7 +15,7 @@ data class ResponseScrapDto(
     @SerialName("totalScrapCount")
     val totalScrapCount: Int,
     @SerialName("filter")
-    val filter: ResponseFilterDto
+    val filter: ResponseFilterDto,
 ) {
     @Serializable
     data class ResponseReviewWrapperDto(
@@ -26,7 +26,7 @@ data class ResponseScrapDto(
         @SerialName("sectionName")
         val sectionName: String,
         @SerialName("blockCode")
-        val blockCode: String
+        val blockCode: String,
     )
 
     @Serializable
@@ -58,7 +58,11 @@ data class ResponseScrapDto(
         @SerialName("scrapsCount")
         val scrapsCount: Int,
         @SerialName("reviewType")
-        val reviewType: String
+        val reviewType: String?,
+        @SerialName("isLiked")
+        val isLiked: Boolean,
+        @SerialName("isScrapped")
+        val isScrapped: Boolean,
     )
 
     @Serializable
@@ -68,7 +72,7 @@ data class ResponseScrapDto(
         @SerialName("nickname")
         val nickname: String,
         @SerialName("level")
-        val level: Int
+        val level: Int,
     )
 
     @Serializable
@@ -76,7 +80,7 @@ data class ResponseScrapDto(
         @SerialName("id")
         val id: Int,
         @SerialName("name")
-        val name: String
+        val name: String,
     )
 
     @Serializable
@@ -86,7 +90,7 @@ data class ResponseScrapDto(
         @SerialName("name")
         val name: String,
         @SerialName("alias")
-        val alias: String?
+        val alias: String?,
     )
 
     @Serializable
@@ -94,7 +98,7 @@ data class ResponseScrapDto(
         @SerialName("id")
         val id: Int,
         @SerialName("code")
-        val code: String
+        val code: String,
     )
 
     @Serializable
@@ -102,7 +106,7 @@ data class ResponseScrapDto(
         @SerialName("id")
         val id: Int,
         @SerialName("number")
-        val number: Int
+        val number: Int,
     )
 
     @Serializable
@@ -110,7 +114,7 @@ data class ResponseScrapDto(
         @SerialName("id")
         val id: Int,
         @SerialName("seatNumber")
-        val seatNumber: Int
+        val seatNumber: Int,
     )
 
     @Serializable
@@ -118,7 +122,7 @@ data class ResponseScrapDto(
         @SerialName("id")
         val id: Int,
         @SerialName("url")
-        val url: String
+        val url: String,
     )
 
     @Serializable
@@ -128,7 +132,7 @@ data class ResponseScrapDto(
         @SerialName("content")
         val content: String,
         @SerialName("isPositive")
-        val isPositive: Boolean
+        val isPositive: Boolean,
     )
 
     @Serializable
@@ -140,13 +144,13 @@ data class ResponseScrapDto(
         @SerialName("good")
         val good: List<String>,
         @SerialName("bad")
-        val bad: List<String>
+        val bad: List<String>,
     )
 }
 
 fun ResponseScrapDto.toResponseScrap(): ResponseScrap = ResponseScrap(
     reviews = reviews.map { it.toResponseReviewWrapper() },
-    nextCursor = nextCursor ?: "",
+    nextCursor = nextCursor,
     hasNext = hasNext,
     totalScrapCount = totalScrapCount,
     filter = filter.toResponseFilter()
@@ -175,7 +179,9 @@ fun ResponseScrapDto.ResponseReviewDto.toResponseBaseReview(): ResponseScrap.Res
         keywords = keywords.map { it.toResponseKeyword() },
         likesCount = likesCount,
         scrapsCount = scrapsCount,
-        reviewType = reviewType
+        reviewType = reviewType,
+        isLiked = isLiked,
+        isScrapped = isScrapped
     )
 
 fun ResponseScrapDto.ResponseMemberDto.toResponseMember(): ResponseScrap.ResponseMember =

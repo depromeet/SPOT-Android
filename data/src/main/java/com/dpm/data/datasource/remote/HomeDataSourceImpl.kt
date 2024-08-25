@@ -103,7 +103,10 @@ class HomeDataSourceImpl @Inject constructor(
             cursor = cursor,
             size = size,
             sortBy = sortBy,
-            body = requestScrapDto
+            stadiumId = requestScrapDto.stadiumId,
+            months = requestScrapDto.months,
+            good = requestScrapDto.good,
+            bad = requestScrapDto.bad
         )
     }
 
