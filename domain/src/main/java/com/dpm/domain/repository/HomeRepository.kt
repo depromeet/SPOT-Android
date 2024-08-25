@@ -2,6 +2,7 @@ package com.dpm.domain.repository
 
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.request.home.RequestProfileEdit
+import com.dpm.domain.entity.request.home.RequestScrap
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
 import com.dpm.domain.entity.response.home.ResponseDeleteReview
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
@@ -9,10 +10,11 @@ import com.dpm.domain.entity.response.home.ResponseLevelByPost
 import com.dpm.domain.entity.response.home.ResponseLevelUpInfo
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponsePresignedUrl
-import com.dpm.domain.entity.response.home.ResponseProfileEdit
 import com.dpm.domain.entity.response.home.ResponseProfile
+import com.dpm.domain.entity.response.home.ResponseProfileEdit
 import com.dpm.domain.entity.response.home.ResponseRecentReview
 import com.dpm.domain.entity.response.home.ResponseReviewDate
+import com.dpm.domain.entity.response.home.ResponseScrap
 
 interface HomeRepository {
     suspend fun getMySeatRecord(
@@ -48,9 +50,16 @@ interface HomeRepository {
         reviewId: Int,
     ): Result<ResponseDeleteReview>
 
-    suspend fun getLevelByPost() : Result<List<ResponseLevelByPost>>
+    suspend fun getLevelByPost(): Result<List<ResponseLevelByPost>>
 
-    suspend fun getHomeFeed() : Result<ResponseHomeFeed>
+    suspend fun getHomeFeed(): Result<ResponseHomeFeed>
 
-    suspend fun getLevelUpInfo(nextLevel : Int) : Result<ResponseLevelUpInfo>
+    suspend fun getLevelUpInfo(nextLevel: Int): Result<ResponseLevelUpInfo>
+
+    suspend fun getScrap(
+        size: Int,
+        sortBy: String,
+        cursor: String?,
+        requestScrap: RequestScrap,
+    ): Result<ResponseScrap>
 }

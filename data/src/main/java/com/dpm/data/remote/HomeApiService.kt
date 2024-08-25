@@ -2,6 +2,7 @@ package com.dpm.data.remote
 
 import com.dpm.data.model.request.home.RequestFileExtensionDto
 import com.dpm.data.model.request.home.RequestProfileEditDto
+import com.dpm.data.model.request.home.RequestScrapDto
 import com.dpm.data.model.response.home.ResponseBaseballTeamDto
 import com.dpm.data.model.response.home.ResponseDeleteReviewDto
 import com.dpm.data.model.response.home.ResponseHomeFeedDto
@@ -13,6 +14,7 @@ import com.dpm.data.model.response.home.ResponseProfileDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
+import com.dpm.data.model.response.home.ResponseScrapDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -82,4 +84,11 @@ interface HomeApiService {
         @Query("nextLevel") nextLevel: Int,
     ): ResponseLevelUpInfoDto
 
+    @GET("api/v1/reviews/scraps")
+    suspend fun getScrap(
+        @Query("cursor") cursor : String?,
+        @Query("size") size : Int,
+        @Query("sortBy") sortBy : String,
+        @Body body : RequestScrapDto
+    ) : ResponseScrapDto
 }
