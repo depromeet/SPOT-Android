@@ -3,6 +3,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ReviewData(
+    val stadiumId: Int,
+    val blockCode: String,
+    val reviewId: Int,
     val blockId: Int,
     val selectedColumn: String,
     val selectedNumber: String,

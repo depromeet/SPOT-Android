@@ -17,6 +17,7 @@ import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.seatreview.adapter.SelectKeywordAdapter
+import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -155,16 +156,16 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
                     reviewData.blockId,
                 )
             }
+
             viewModel.postSeatReview(ReviewMethod.VIEW)
             startActivity(
-                Intent(this, HomeActivity::class.java).putExtra(
-                    UPLOAD_SNACKBAR,
-                    true,
-                ),
+                Intent(this, HomeActivity::class.java)
+                    .putExtra(UPLOAD_SNACKBAR, true)
+                    .putExtra(REVIEW_DATA,reviewData)
             ); finish()
         }
         binding.ivExit.setOnSingleClickListener {
-            finish()
+            startActivity(Intent(this, HomeActivity::class.java))
         }
     }
 }

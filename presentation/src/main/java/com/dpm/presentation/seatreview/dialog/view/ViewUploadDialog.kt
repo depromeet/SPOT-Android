@@ -1,5 +1,6 @@
 package com.dpm.presentation.seatreview.dialog.view
 
+import ReviewData
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,10 @@ class ViewUploadDialog : BindingDialogFragment<FragmentViewUploadDialogBinding>(
     FragmentViewUploadDialogBinding::inflate,
 ) {
 
+    companion object {
+        private const val REVIEW_DATA = "REVIEW_DATA"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TransparentMaterialDialogFragment)
@@ -25,6 +30,7 @@ class ViewUploadDialog : BindingDialogFragment<FragmentViewUploadDialogBinding>(
     }
 
     private fun initEvent() {
+        val reviewData = arguments?.getParcelable<ReviewData>(REVIEW_DATA)
         binding.btnCancel.setOnSingleClickListener {
             dismiss()
         }

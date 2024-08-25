@@ -4,6 +4,7 @@ import com.dpm.domain.entity.request.seatreview.RequestSeatReview
 import com.dpm.domain.entity.response.seatreview.ResponsePresignedUrl
 import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
+import com.dpm.domain.entity.response.seatreview.ResponseSeatReview
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumName
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 
@@ -36,5 +37,5 @@ interface SeatReviewRepository {
     suspend fun postSeatReview(
         blockId: Int,
         seatReviewInfo: RequestSeatReview,
-    ): Result<Unit>
+    ): Result<ResponseSeatReview>
 }

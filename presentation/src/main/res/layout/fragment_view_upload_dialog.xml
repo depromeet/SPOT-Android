@@ -18,16 +18,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ivCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:padding="20dp"
-            android:src="@drawable/ic_round_check_box"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieCheck"
+            android:layout_width="105dp"
+            android:layout_height="105dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            android:layout_marginTop="29dp"
+            android:padding="5dp"
+            app:lottie_rawRes="@raw/check" />
 
         <TextView
             android:id="@+id/tvUploadComplete"
@@ -40,7 +43,7 @@
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/lottieCheck" />
 
         <TextView
             android:id="@+id/tvUploadSubTitle"

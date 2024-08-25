@@ -3,6 +3,7 @@ package com.dpm.presentation.home
 import ReviewData
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -75,7 +76,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
 
         when (intent?.getSerializableExtra(DIALOG_TYPE) as? ReviewMethod) {
-            ReviewMethod.VIEW -> ViewUploadDialog().show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
+            ReviewMethod.VIEW -> ViewUploadDialog().apply {
+                arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
+            }.show(supportFragmentManager, VIEW_UPLOAD_DIALOG)
+
             ReviewMethod.FEED -> FeedUploadDialog().apply {
                 arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
             }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
