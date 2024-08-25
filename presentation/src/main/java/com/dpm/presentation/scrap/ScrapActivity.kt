@@ -18,7 +18,7 @@ import com.dpm.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.dpm.presentation.scrap.adapter.ScrapRecordAdapter
 import com.dpm.presentation.scrap.dialog.ScrapFilterDialog
 import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
-import com.dpm.presentation.viewfinder.StadiumActivity
+import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -48,7 +48,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
 
     private fun initEvent() = with(binding) {
         btScrapEmptyView.setOnClickListener {
-            Intent(this@ScrapActivity, StadiumActivity::class.java).apply {
+            Intent(this@ScrapActivity, StadiumSelectionActivity::class.java).apply {
                 startActivity(this)
             }
         }
@@ -65,6 +65,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
             when (state) {
                 is UiState.Success -> {
                     scrapAdapter.submitList(state.data.reviews)
+                    setScrapScreenVisibility(ScrapScreenState.SUCCESS)
                 }
 
                 is UiState.Failure -> {
@@ -93,7 +94,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private fun initScrapAdapter() {
         scrapAdapter = ScrapRecordAdapter(
             scrapClick = {
-                viewModel.deleteScrapRecord(it.baseReview.id)
+                viewModel.updateScrap(it.baseReview.id)
             },
             recordClick = {
                 startScrapDetailPictureFragment()

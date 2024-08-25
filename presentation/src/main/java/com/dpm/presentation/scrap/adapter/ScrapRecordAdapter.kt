@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.depromeet.presentation.databinding.ItemScrapRecordBinding
 import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.presentation.extension.loadAndClip
@@ -50,10 +51,16 @@ class ScrapRecordViewHolder(
             recordClick(item)
         }
 
+
+        if (item.baseReview.isScrapped) {
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+        } else {
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+        }
         root.clipToOutline = true
         ivScrapImage.loadAndClip(item.baseReview.images[0].url)
         tvScrapStadium.text = item.stadiumName
-        tvScrapSeat.text = item.sectionName // TODO : 고쳐야함
+        tvScrapSeat.text = item.baseReview.formattedBaseToBlock()
     }
 }
 

@@ -1,5 +1,8 @@
 package com.dpm.domain.entity.response.home
 
+import com.dpm.domain.entity.response.viewfinder.BASE
+import com.dpm.domain.entity.response.viewfinder.base
+
 data class ResponseScrap(
     val reviews: List<ResponseReviewWrapper> = emptyList(),
     val nextCursor: String? = null,
@@ -32,12 +35,35 @@ data class ResponseScrap(
         val isLiked: Boolean = false,
         val isScrapped: Boolean = false,
     ) {
-        fun formattedSectionName(): String =
+        fun formattedBlockToSeat(): String =
             if (seat != null) {
-                "${block.code}블록 ${row.number}열 ${seat.seatNumber}번"
+                "${formattedBlockName()} ${row.number}열 ${seat.seatNumber}번"
             } else {
-                "${block.code}블록 ${row.number}열 "
+                "${formattedBlockName()} ${row.number}열 "
             }
+
+        fun formattedBaseToBlock() : String =
+            "${formattedBaseName()} ${formattedSectionName()} ${formattedBlockName()}"
+
+        private fun formattedBaseName() : String {
+            return when (stadium.name.base(block.code)){
+                BASE.Base1 -> "1루"
+                BASE.Base3 -> "3루"
+                else -> ""
+            }
+        }
+
+        private fun formattedSectionName(): String {
+            val sectionNameSplits = section.name.split("\n")
+            val section = if (sectionNameSplits.size >= 2) {
+                sectionNameSplits[0] + " " + sectionNameSplits[1]
+            } else {
+                section.name.trim()
+            }
+            return section
+        }
+
+        private fun formattedBlockName() = block.code.replace("w", "") + "블록"
 
     }
 

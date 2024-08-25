@@ -27,10 +27,9 @@
         android:layout_height="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_bookmark"
+        android:src="@drawable/ic_scrap_active"
         app:layout_constraintBottom_toBottomOf="@id/ivScrapImage"
         app:layout_constraintEnd_toEndOf="@id/ivScrapImage"
-        app:tint="@color/color_action_enabled"
         tools:ignore="contentDescription"/>
 
     <TextView
@@ -51,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="3dp"
         android:textColor="@color/color_foreground_body_sebtext"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvScrapStadium"
