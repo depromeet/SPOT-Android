@@ -376,9 +376,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
         with(binding.tvUploadBtn) {
             val isReadyToUpload = isSelectedDateFilled && isSelectedImageFilled &&
-                    (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
-                    isSelectedBlockFilled &&
-                    (isSelectedColumnFilled || isSelectedNumberFilled)
+                (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) &&
+                isSelectedBlockFilled &&
+                (isSelectedColumnFilled || isSelectedNumberFilled)
 
             if (isReadyToUpload) {
                 setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
@@ -423,10 +423,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                     makeSpotImageAppbar("좌석을 선택해주세요")
-                }
-
-                ((!isSelectedGoodBtnFilled && !isSelectedBadBtnFilled) || !(isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled))) -> {
-                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                 }
 
                 else -> {
