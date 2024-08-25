@@ -23,7 +23,6 @@
         android:id="@+id/ivBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:alpha="0.5"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +34,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/transparent_black01"
+        android:background="@color/color_b2000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +95,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvLikeCount"
-            app:tint="@color/color_foreground_white"
             tools:ignore="contentDescription" />
 
         <ImageView
@@ -121,6 +119,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/circle_stroke_tertiary_stroke_1"
+        android:padding="1dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_default_profile"
         app:layout_constraintBottom_toTopOf="@id/tvSectionName"
@@ -148,6 +147,8 @@
         android:layout_marginStart="4dp"
         android:background="@drawable/rect_spot_green_fill_2"
         android:textColor="@color/color_background_white"
+        android:paddingVertical="1.5dp"
+        android:paddingHorizontal="2dp"
         app:layout_constraintBottom_toBottomOf="@id/tvScrapNickname"
         app:layout_constraintStart_toEndOf="@id/tvScrapNickname"
         app:layout_constraintTop_toTopOf="@id/tvScrapNickname"

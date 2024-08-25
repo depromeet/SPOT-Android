@@ -62,6 +62,9 @@ class ScrapViewModel @Inject constructor(
     private val _selectedBadReview = MutableStateFlow<List<BadReviewData>>(emptyList())
     val selectedBadReview = _selectedBadReview.asStateFlow()
 
+    private val _currentPage = MutableStateFlow(0)
+    val currentPage = _currentPage.asStateFlow()
+
 
     fun getScrapRecord() {
         viewModelScope.launch {
@@ -134,6 +137,10 @@ class ScrapViewModel @Inject constructor(
             else -> {}
         }
         getScrapRecord()
+    }
+
+    fun setCurrentPage(page : Int) {
+        _currentPage.value = page
     }
 
     fun setSelectedGoodReview(texts: List<String>) {

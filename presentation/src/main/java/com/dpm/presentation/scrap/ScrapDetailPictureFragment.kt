@@ -38,8 +38,6 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     private fun initView() {
         initViewPager()
-
-
     }
 
     private fun initEvent() = with(binding) {
@@ -60,6 +58,9 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             when (state) {
                 is UiState.Success -> {
                     adapter.submitList(state.data.reviews)
+                    binding.vpScrap.post {
+                        binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
+                    }
                     isLoading = false
                 }
 
@@ -70,19 +71,34 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     private fun initViewPager() {
         adapter = ScrapDetailAdapter(
-            scrapClick = {},
-            likeClick = {},
-            shareClick = {}
+            scrapClick = {
+                viewModel.updateScrap(it)
+            },
+            likeClick = {
+                viewModel.updateLike(it)
+            },
+            shareClick = {
+                //TODO : 공유하기 클릭
+            }
         )
         binding.vpScrap.adapter = adapter
+
         setupPageChangeListener()
     }
 
     private fun setupPageChangeListener() {
         binding.vpScrap.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    viewModel.setCurrentPage(binding.vpScrap.currentItem)
+                }
+            }
+
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (!isLoading && position == adapter.itemCount - 2 && (viewModel.scrap.value as UiState.Success).data.hasNext) {
+                binding.spotAppbar.setText((viewModel.scrap.value as UiState.Success).data.reviews[position].baseReview.formattedStadiumToSection())
+                if (!isLoading && position >= adapter.itemCount - 2 && (viewModel.scrap.value as UiState.Success).data.hasNext) {
                     isLoading = true
                     viewModel.getNextScrapRecord()
                 }
@@ -117,4 +133,5 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                 }
             })
     }
+
 }

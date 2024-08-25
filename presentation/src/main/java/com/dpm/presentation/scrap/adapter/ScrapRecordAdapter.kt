@@ -16,7 +16,7 @@ import com.dpm.presentation.util.ItemDiffCallback
 
 class ScrapRecordAdapter(
     private val scrapClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
-    private val recordClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val recordClick: (Int) -> Unit,
 ) : ListAdapter<ResponseScrap.ResponseReviewWrapper, ScrapRecordViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.baseReview.id == newItem.baseReview.id },
@@ -34,21 +34,21 @@ class ScrapRecordAdapter(
     }
 
     override fun onBindViewHolder(holder: ScrapRecordViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 }
 
 class ScrapRecordViewHolder(
     private val binding: ItemScrapRecordBinding,
     private val scrapClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
-    private val recordClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val recordClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ResponseScrap.ResponseReviewWrapper) = with(binding) {
+    fun bind(item: ResponseScrap.ResponseReviewWrapper, position: Int) = with(binding) {
         ivScrap.setOnSingleClickListener {
             scrapClick(item)
         }
         root.setOnClickListener {
-            recordClick(item)
+            recordClick(position)
         }
 
 

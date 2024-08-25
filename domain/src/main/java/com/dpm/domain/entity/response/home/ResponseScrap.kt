@@ -35,6 +35,9 @@ data class ResponseScrap(
         val isLiked: Boolean = false,
         val isScrapped: Boolean = false,
     ) {
+        fun formattedStadiumToSection() : String =
+            "${stadium.name} ${formattedBaseName()} ${formattedSectionName()}"
+
         fun formattedBlockToSeat(): String =
             if (seat != null) {
                 "${formattedBlockName()} ${row.number}열 ${seat.seatNumber}번"

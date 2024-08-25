@@ -55,9 +55,10 @@ class ScrapDetailViewHolder(
 
     fun bind(item: ResponseScrap.ResponseReviewWrapper) = with(binding) {
         ivProfile.loadAndCircleProfile(item.baseReview.member.profileImage ?: "")
+        tvScrapNickname.text = item.baseReview.member.nickname
         tvSectionName.text = item.baseReview.member.nickname
         tvScrapLevel.text = item.baseReview.member.formattedLevel()
-        tvSectionName.text = item.baseReview.formattedSectionName()
+        tvSectionName.text = item.baseReview.formattedBlockToSeat()
         ivBackground.loadAndClip(item.baseReview.images[0].url)
         if (item.baseReview.content.isNotEmpty()) {
             tvScrapContent.text = item.baseReview.content
@@ -82,18 +83,28 @@ class ScrapDetailViewHolder(
             }
         }
         if (item.baseReview.isScrapped) {
-            ivLike.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
         } else {
-            ivLike.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
         }
 
         if (item.baseReview.isLiked) {
-            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_like_active)
+            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
         } else {
-            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
+            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
+        }
+
+        if (item.baseReview.content.isEmpty()) {
+            tvMore.visibility = GONE
         }
 
         root.setOnClickListener {
+            if (tvScrapContent.maxLines == Integer.MAX_VALUE) {
+                tvMore.visibility = VISIBLE
+                tvScrapContent.maxLines = 1
+            }
+        }
+        vpImage.setOnClickListener {
             if (tvScrapContent.maxLines == Integer.MAX_VALUE) {
                 tvMore.visibility = VISIBLE
                 tvScrapContent.maxLines = 1

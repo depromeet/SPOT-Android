@@ -18,6 +18,7 @@ import com.dpm.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.dpm.presentation.scrap.adapter.ScrapRecordAdapter
 import com.dpm.presentation.scrap.dialog.ScrapFilterDialog
 import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
+import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -97,14 +98,8 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 viewModel.updateScrap(it.baseReview.id)
             },
             recordClick = {
+                viewModel.setCurrentPage(it)
                 startScrapDetailPictureFragment()
-                supportFragmentManager.commit {
-                    replace(
-                        R.id.fcvScrap,
-                        ScrapDetailPictureFragment(),
-                        ScrapDetailPictureFragment.TAG
-                    )
-                }
             }
         )
         binding.rvScrapRecord.adapter = scrapAdapter
