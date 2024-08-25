@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.compose.material.MaterialTheme
 import com.depromeet.presentation.databinding.ActivityGalleryBinding
 import com.dpm.core.base.BaseActivity
+import com.dpm.presentation.home.dialog.ProfileImageUploadDialog.Companion.SELECTED_IMAGE
 import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog.Companion.SELECTED_IMAGES
 import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,10 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding>(
                             })
                             finish()
                         } else {
-
+                            setResult(Activity.RESULT_OK, Intent().apply {
+                                putExtra(SELECTED_IMAGE, it[0].toString())
+                            })
+                            finish()
                         }
                     },
                     onBackPressed = { finish() }

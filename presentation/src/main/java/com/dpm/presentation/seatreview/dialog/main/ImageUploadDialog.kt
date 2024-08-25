@@ -72,7 +72,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     private fun initEvent() {
         binding.layoutGallery.setOnSingleClickListener {
             Intent(requireContext(), GalleryActivity::class.java).apply {
-                putExtra("screenType", ScreenType.REVIEW)
+                putExtra("screenType", ScreenType.REVIEW.name)
                 galleryLauncher.launch(this)
             }
         }
