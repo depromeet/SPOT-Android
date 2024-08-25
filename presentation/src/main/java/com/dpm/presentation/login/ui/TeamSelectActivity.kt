@@ -9,11 +9,14 @@ import com.depromeet.presentation.databinding.FragmentTeamSelectBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
+import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.adapter.BaseballTeamAdapter
 import com.dpm.presentation.home.adapter.GridSpacingItemDecoration
 import com.dpm.presentation.login.viewmodel.SignUpViewModel
 import com.dpm.presentation.login.viewmodel.SignupUiState
+import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scheme.viewmodel.SchemeState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,6 +47,15 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
                 is SignupUiState.SignUpSuccess -> {
                     Intent(this, SignUpCompleteActivity::class.java).apply {
                         putExtra("nickname", it.nickname)
+                        when (val data = handleIntentExtra()) {
+                            is SchemeState.NavReview -> {
+                                putExtra(SchemeKey.NAV_REVIEW, data)
+                            }
+                            is SchemeState.NavReviewDetail -> {
+                                putExtra(SchemeKey.NAV_REVIEW_DETAIL, data)
+                            }
+                            else -> Unit
+                        }
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(this)
                         finish()
@@ -111,5 +123,20 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
                 binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
             }
         }
+    }
+
+    private fun handleIntentExtra(): SchemeState {
+        val navReview = intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        if (navReview != null) {
+            return navReview
+        }
+
+        val navReviewDetail = intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(
+            SchemeKey.NAV_REVIEW_DETAIL)
+        if (navReviewDetail != null) {
+            return navReviewDetail
+        }
+
+        return SchemeState.Nothing
     }
 }

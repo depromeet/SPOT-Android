@@ -64,7 +64,6 @@ fun LikeTooltip(
         Canvas(
             modifier = Modifier
                 .height(triangleHeight)
-                .offset(y = tooltipHeight.dp)
         ) {
             val trianglePath = Path().apply {
                 moveTo(tooltipWidth * bias, triangleHeight.toPx()) // 삼각형 꼭짓점

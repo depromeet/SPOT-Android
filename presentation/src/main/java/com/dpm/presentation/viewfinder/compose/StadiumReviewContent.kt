@@ -39,9 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.depromeet.presentation.R
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
-import com.depromeet.presentation.R
 import com.dpm.presentation.extension.noRippleClickable
 import com.dpm.presentation.mapper.toKeyword
 import com.dpm.presentation.util.toBlockContent
@@ -53,10 +53,15 @@ private enum class ReviewContentShowMoreState {
 @Composable
 fun StadiumReviewContent(
     context: Context,
+    isFirstShare: Boolean,
+    firstReview: Boolean,
     reviewContent: ResponseBlockReview.ResponseReview,
     modifier: Modifier = Modifier,
     onClick: (reviewContent: ResponseBlockReview.ResponseReview, index: Int) -> Unit,
-    onClickReport: () -> Unit
+    onClickReport: () -> Unit,
+    onClickLike: (id: Long) -> Unit = {},
+    onClickScrap: (id: Long) -> Unit = {},
+    onClickShare: () -> Unit
 ) {
     val minimumLineLength = 3
     var showMoreButtonState by remember {
@@ -240,8 +245,28 @@ fun StadiumReviewContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         ReviewContentBottom(
-            modifier = Modifier.padding(start = 32.dp, end = 16.dp)
+            isLike = reviewContent.isLike,
+            isScrap = reviewContent.isScrap,
+            likeCount = reviewContent.likesCount,
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp),
+            onClickLike = {
+                onClickLike(reviewContent.id)
+            },
+            onClickScrap = {
+                onClickScrap(reviewContent.id)
+            },
+            onClickShare = onClickShare
         )
+        if (firstReview && isFirstShare) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                ShareTooltip(bias = 0.875f, content = "카카오톡으로 같이가는 친구에게 공유하기")
+            }
+        }
     }
 }
 
@@ -255,6 +280,8 @@ private fun StadiumReviewContentPreview() {
     ) {
         StadiumReviewContent(
             context = LocalContext.current,
+            isFirstShare = false,
+            firstReview = false,
             reviewContent = ResponseBlockReview.ResponseReview(
                 id = 1,
                 dateTime = "2023-03-01T19:00:00",
@@ -311,10 +338,16 @@ private fun StadiumReviewContentPreview() {
                         content = "",
                         isPositive = false
                     )
-                )
+                ),
+                isLike = false,
+                isScrap = false,
+                likesCount = 1,
+                scrapsCount = 0,
+                reviewType = ""
             ),
             onClick = { _, _ -> },
-            onClickReport = {}
+            onClickReport = {},
+            onClickShare = {}
         )
 
     }

@@ -36,6 +36,8 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
     private var textStyle: Int = 0
     private var triangleDirection: Int = 0
     private var textAppearance: Int = 0
+    private var triangleBias : Float = 0f
+    private var textColor : Int = 0
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.CustomSpeechBubbleView, defStyleAttr, 0)
@@ -82,7 +84,8 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                         getInt(R.styleable.CustomSpeechBubbleView_triangleDirection, 0)
                     textAppearance =
                         getResourceId(R.styleable.CustomSpeechBubbleView_textAppearance, 0)
-
+                    triangleBias = getFloat(R.styleable.CustomSpeechBubbleView_triangleBias, 0f)
+                    textColor = getInt(R.styleable.CustomSpeechBubbleView_textColor, 0)
 
                 } finally {
                     recycle()
@@ -151,9 +154,9 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setTextPart(prefix: String?, number: Int?, suffix: String?) {
+    fun setTextPart(prefix: String?, middle: Any?, suffix: String?) {
         textParts[0] = prefix ?: ""
-        textParts[1] = number?.toString() ?: ""
+        textParts[1] = middle?.toString() ?: ""
         textParts[2] = suffix ?: ""
         requestLayout()
         invalidate()
@@ -190,12 +193,12 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                 bubbleRect.set(0f, 0f, width, bubbleHeight)
                 canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
 
-                val triangleX = width / 2 - triangleWidth / 2
+                val triangleX = width * (0.5f + triangleBias / 2) - triangleWidth / 2
                 val triangleY = height - triangleHeight
 
                 bubblePath.moveTo(triangleX, triangleY)
                 bubblePath.lineTo(triangleX + triangleWidth, triangleY)
-                bubblePath.lineTo(width / 2, height)
+                bubblePath.lineTo(triangleX + triangleWidth / 2, height)
                 bubblePath.close()
             }
 
@@ -204,12 +207,12 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
                 bubbleRect.set(0f, triangleHeight, width, bubbleHeight)
                 canvas.drawRoundRect(bubbleRect, cornerRadius, cornerRadius, bubblePaint)
 
-                val triangleX = width / 2 - triangleWidth / 2
+                val triangleX = width * (0.5f + triangleBias / 2) - triangleWidth / 2
                 val triangleY = 0f
 
                 bubblePath.moveTo(triangleX, triangleY + triangleHeight)
                 bubblePath.lineTo(triangleX + triangleWidth, triangleY + triangleHeight)
-                bubblePath.lineTo(width / 2, triangleY)
+                bubblePath.lineTo(triangleX + triangleWidth / 2, triangleY)
                 bubblePath.close()
             }
         }
@@ -219,9 +222,11 @@ class CustomSpeechBubbleView @JvmOverloads constructor(
         // 텍스트 그리기
         var xOffset = paddingLeftValue
         textParts.forEachIndexed { index, textPart ->
-            textPaint.color = when (index) {
-                1 -> context.getColor(com.depromeet.designsystem.R.color.color_action_enabled)
-                else -> context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
+            textPaint.color = if (textColor != 0) textColor else {
+                when (index) {
+                    1 -> context.getColor(com.depromeet.designsystem.R.color.color_action_enabled)
+                    else -> context.getColor(com.depromeet.designsystem.R.color.color_foreground_body_sebtext)
+                }
             }
 
             val textWidth = textPaint.measureText(textPart)

@@ -32,6 +32,28 @@ val mockDefaultFeed = FeedTemplate(
     )
 )
 
+fun seatFeed(
+    title: String,
+    description: String,
+    imageUrl: String,
+    queryParams: Map<String, String>
+) = FeedTemplate(
+    content = Content(
+        title = title,
+        description = description,
+        imageUrl = imageUrl,
+        link = Link()
+    ),
+    buttons = listOf(
+        Button(
+            title = "SPOT! 앱에서 열기",
+            link = Link(
+                androidExecutionParams = queryParams
+            )
+        )
+    )
+)
+
 class KakaoUtils() {
     fun share(
         context: Context,

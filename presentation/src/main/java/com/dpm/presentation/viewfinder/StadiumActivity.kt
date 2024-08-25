@@ -34,6 +34,7 @@ import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.extension.setMargins
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
+import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.util.SpannableStringUtils
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.adapter.StadiumSectionAdapter
@@ -62,8 +63,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     ActivityStadiumBinding.inflate(it)
 }) {
     companion object {
-        const val STADIUM_ID = "stadium_id"
-        const val STADIUM_BLOCK_ID = "stadium_block_id"
         private const val BASE_URL = "file:///android_asset/web/"
         private const val ENCODING_UTF8 = "UTF-8"
         private const val MIME_TYPE_TEXT_HTML = "text/html"
@@ -488,8 +487,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun startToStadiumDetailActivity(id: String) {
         Intent(this, StadiumDetailActivity::class.java).apply {
-            putExtra(STADIUM_ID, viewModel.stadiumId)
-            putExtra(STADIUM_BLOCK_ID, id)
+            putExtra(SchemeKey.STADIUM_ID, viewModel.stadiumId)
+            putExtra(SchemeKey.BLOCK_CODE, id)
         }.let(::startActivity)
     }
 

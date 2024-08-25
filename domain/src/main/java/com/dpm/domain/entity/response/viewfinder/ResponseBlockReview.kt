@@ -31,7 +31,7 @@ data class ResponseBlockReview(
     val location: ResponseLocation = ResponseLocation(),
     val keywords: List<ResponseKeyword> = emptyList(),
     val reviews: List<ResponseReview> = emptyList(),
-    val topReviewImages: List<ResponseTopReviewImages> = emptyList(),
+    val topReviewImages: List<ResponseReview> = emptyList(),
     val totalElements: Long = 0,
     val nextCursor: String = "",
     val hasNext: Boolean = false,
@@ -61,8 +61,12 @@ data class ResponseBlockReview(
         val content: String = "",
         val images: List<ResponseReviewImage> = emptyList(),
         val keywords: List<ResponseReviewKeyword> = emptyList(),
-
-        ) {
+        val isLike: Boolean,
+        val isScrap: Boolean,
+        val likesCount: Long,
+        val scrapsCount: Long,
+        val reviewType: String,
+    ) {
         data class ResponseReviewImage(
             val id: Int,
             val url: String = "",
@@ -97,7 +101,7 @@ data class ResponseBlockReview(
         )
 
         data class ResponseReviewRow(
-            val id: Int,
+            val id: Int = 0,
             val number: Int = 0,
         )
 
@@ -115,14 +119,6 @@ data class ResponseBlockReview(
             return dateTime.format(formatter)
         }
     }
-
-    data class ResponseTopReviewImages(
-        val url: String = "",
-        val reviewId: Int,
-        val blockCode: String = "",
-        val rowNumber: Int = 0,
-        val seatNumber: Int = 0,
-    )
 
     data class ResponseReviewFilter(
         val rowNumber: Int = 0,

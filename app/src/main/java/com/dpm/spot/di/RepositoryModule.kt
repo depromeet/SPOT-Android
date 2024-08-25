@@ -1,11 +1,13 @@
 package com.dpm.spot.di
 
+import com.dpm.data.repository.AuthRepositoryImpl
 import com.dpm.data.repository.ExampleRepositoryImpl
 import com.dpm.data.repository.HomeRepositoryImpl
 import com.dpm.data.repository.SeatReviewRepositoryImpl
 import com.dpm.data.repository.SignupRepositoryImpl
 import com.dpm.data.repository.ViewfinderRepositoryImpl
 import com.dpm.data.repository.WebSvgRepositoryImpl
+import com.dpm.domain.repository.AuthRepository
 import com.dpm.domain.repository.ExampleRepository
 import com.dpm.domain.repository.HomeRepository
 import com.dpm.domain.repository.SeatReviewRepository
@@ -57,4 +59,10 @@ abstract class RepositoryModule {
     abstract fun bindSignupRepository(
         signupRepositoryImpl: SignupRepositoryImpl,
     ): SignupRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 }

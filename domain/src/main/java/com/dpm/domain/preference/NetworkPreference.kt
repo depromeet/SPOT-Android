@@ -10,5 +10,7 @@ interface SharedPreference {
     var nickname: String
     var profileImage : String
     var isFirstTime: Boolean
+    var isFirstShare: Boolean
+    var isFirstLike: Boolean
     fun clear()
 }
