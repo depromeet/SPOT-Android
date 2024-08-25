@@ -124,13 +124,42 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 vSeatViewDivider.visibility = VISIBLE
                 vIntuitiveReviewDivider.visibility = GONE
 
-                rvSeatReview.visibility = VISIBLE
-                rvSeatReviewMonth.visibility = VISIBLE
-                spinnerSeatReviewYear.visibility = VISIBLE
+                when(viewModel.seatDate.value){
+                    is UiState.Success -> {
+                        rvSeatReview.visibility = VISIBLE
+                        rvSeatReviewMonth.visibility = VISIBLE
+                        spinnerSeatReviewYear.visibility = VISIBLE
+                        clRecordFail.visibility = GONE
+                        clRecordEmpty.visibility = GONE
+                        tvErrorYear.visibility = GONE
+                        tvErrorMonth.visibility = GONE
+                    }
+                    is UiState.Failure -> {
+                        rvSeatReview.visibility = GONE
+                        rvSeatReviewMonth.visibility = GONE
+                        spinnerSeatReviewYear.visibility = GONE
+                        clRecordFail.visibility = VISIBLE
+                        clRecordEmpty.visibility = GONE
+                        tvErrorYear.visibility = VISIBLE
+                        tvErrorMonth.visibility = VISIBLE
+                    }
+                    is UiState.Empty -> {
+                        rvSeatReview.visibility = GONE
+                        rvSeatReviewMonth.visibility = GONE
+                        spinnerSeatReviewYear.visibility = GONE
+                        clRecordFail.visibility = GONE
+                        clRecordEmpty.visibility = VISIBLE
+                        tvErrorYear.visibility = VISIBLE
+                        tvErrorMonth.visibility = VISIBLE
+                    }
+                    else -> {}
+                }
+
 
                 rvIntuitiveReview.visibility = GONE
                 rvIntuitiveReviewMonth.visibility = GONE
                 spinnerIntuitiveReviewYear.visibility = GONE
+
 
                 viewModel.setReviewState(SeatRecordViewModel.ReviewType.SEAT_REVIEW)
                 if (viewModel.seatDate.value !is UiState.Success) {
@@ -148,9 +177,36 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 rvSeatReviewMonth.visibility = GONE
                 spinnerSeatReviewYear.visibility = GONE
 
-                rvIntuitiveReview.visibility = VISIBLE
-                rvIntuitiveReviewMonth.visibility = VISIBLE
-                spinnerIntuitiveReviewYear.visibility = VISIBLE
+                when(viewModel.intuitiveDate.value){
+                    is UiState.Success -> {
+                        rvIntuitiveReview.visibility = VISIBLE
+                        rvIntuitiveReviewMonth.visibility = VISIBLE
+                        spinnerIntuitiveReviewYear.visibility = VISIBLE
+                        clRecordFail.visibility = GONE
+                        clRecordEmpty.visibility = GONE
+                        tvErrorYear.visibility = GONE
+                        tvErrorMonth.visibility = GONE
+                    }
+                    is UiState.Failure -> {
+                        rvIntuitiveReview.visibility = GONE
+                        rvIntuitiveReviewMonth.visibility = GONE
+                        spinnerIntuitiveReviewYear.visibility = GONE
+                        clRecordFail.visibility = VISIBLE
+                        clRecordEmpty.visibility = GONE
+                        tvErrorYear.visibility = VISIBLE
+                        tvErrorMonth.visibility = VISIBLE
+                    }
+                    is UiState.Empty -> {
+                        rvIntuitiveReview.visibility = GONE
+                        rvIntuitiveReviewMonth.visibility = GONE
+                        spinnerIntuitiveReviewYear.visibility = GONE
+                        clRecordFail.visibility = GONE
+                        clRecordEmpty.visibility = VISIBLE
+                        tvErrorYear.visibility = VISIBLE
+                        tvErrorMonth.visibility = VISIBLE
+                    }
+                    else -> {}
+                }
 
                 viewModel.setReviewState(SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
                 if (viewModel.intuitiveDate.value !is UiState.Success) {
@@ -425,6 +481,17 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setErrorVisibility(errorType: SeatRecordErrorType) {
         with(binding) {
+            //TODO : 아직 시야아카이빙한 게시물이 없습니다 고민하기
+            if(tvSeatView.isSelected){
+                rvSeatReview.setVisible(errorType == SeatRecordErrorType.NONE)
+                spinnerSeatReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
+                rvSeatReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
+            }
+            if(tvIntuitiveReview.isSelected){
+                rvIntuitiveReview.setVisible(errorType == SeatRecordErrorType.NONE)
+                spinnerIntuitiveReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
+                rvIntuitiveReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
+            }
             tvErrorMonth.setVisible(errorType != SeatRecordErrorType.NONE)
             tvErrorYear.setVisible(errorType != SeatRecordErrorType.NONE)
             "${CalendarUtil.getCurrentYear()}년".also { tvErrorYear.text = it }
