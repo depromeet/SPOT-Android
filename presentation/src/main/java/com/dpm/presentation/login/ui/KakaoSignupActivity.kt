@@ -15,6 +15,7 @@ import com.dpm.presentation.login.viewmodel.KakaoSignupViewModel
 import com.dpm.presentation.login.viewmodel.LoginUiState
 import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.scheme.viewmodel.SchemeState
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -46,9 +47,14 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
     private fun initComposeView() {
         binding.kakaoSignComposeView.setContent {
             MaterialTheme {
-                KakaoSignupScreen() {
-                    kakaoLoginCallBack()
-                }
+                KakaoSignupScreen(
+                    onKakaoLoginClick = {
+                        kakaoLoginCallBack()
+                    },
+                    onGoogleLoginClick = {
+                        onGoogleLogin()
+                    }
+                )
             }
         }
     }
@@ -69,6 +75,10 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
         } else {
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
+    }
+
+    private fun onGoogleLogin() {
+        //Todo GoogleLogin
     }
 
     private fun initObservers() {

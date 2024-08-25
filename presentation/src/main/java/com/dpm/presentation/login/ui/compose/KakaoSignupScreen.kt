@@ -3,6 +3,7 @@ package com.dpm.presentation.login.ui.compose
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,7 +42,8 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun KakaoSignupScreen(
-    onKakaoLoginClick: () -> Unit = {}
+    onKakaoLoginClick: () -> Unit = {},
+    onGoogleLoginClick: () -> Unit = {}
 ) {
     val onBoardingList = listOf(
         Pair("시야찾기로 원하는 야구장\n자리를 빠르게 알아봐요!", listOf(0..3)),
@@ -153,12 +155,12 @@ fun KakaoSignupScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 30.dp, horizontal = 40.dp)
+                    .padding(top = 30.dp, start = 40.dp, end = 40.dp)
                     .noRippleClickable {
                         onKakaoLoginClick()
                     }
                     .background(Color(0xFFFEE500), RoundedCornerShape(40.dp))
-                    .padding(horizontal = 40.dp, vertical = 16.dp),
+                    .padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -169,7 +171,31 @@ fun KakaoSignupScreen(
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = "카카오 로그인",
+                    text = "카카오로 3초만에 로그인",
+                    style = SpotTheme.typography.subtitle02
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 40.dp, end = 40.dp, bottom = 40.dp, top = 10.dp)
+                    .noRippleClickable {
+                        onGoogleLoginClick()
+                    }
+                    .border(1.dp, SpotTheme.colors.strokePrimary, RoundedCornerShape(40.dp))
+                    .padding(vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(id = com.depromeet.designsystem.R.drawable.ic_google_login),
+                    contentDescription = "google-login",
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = "구글 계정으로 로그인",
                     style = SpotTheme.typography.subtitle02
                 )
             }
