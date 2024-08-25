@@ -183,7 +183,11 @@ fun CustomGallery(
                                 Text(
                                     modifier = Modifier
                                         .align(Alignment.CenterEnd)
-                                        .padding(end = 16.dp),
+                                        .padding(end = 16.dp)
+                                        .clickable {
+                                            onImagesSelected(selectedItems.map { it.imageResource })
+                                            onBackPressed()
+                                        },
                                     text = "선택",
                                     style = SpotTheme.typography.body02,
                                     color = SpotTheme.colors.actionEnabled
@@ -216,14 +220,22 @@ fun CustomGallery(
                         Column {
                             Spacer(modifier = Modifier.height(30.dp))
                             Text(
-                                text = "\uD83D\uDC40 잊지 못할 직관 후기 사진을 남겨보세요 ⚾️",
+                                text = if (screenType == ScreenType.REVIEW.name) {
+                                    "\uD83D\uDC40 잊지 못할 직관 후기 사진을 남겨보세요 ⚾️"
+                                } else {
+                                    "프로필 사진을 선택해 주세요"
+                                },
                                 modifier = Modifier.fillMaxWidth(),
                                 style = SpotTheme.typography.subtitle02,
                                 textAlign = TextAlign.Center,
                                 color = SpotTheme.colors.foregroundBodySubtitle
                             )
                             Text(
-                                text = "사진, 영상 포함 최대 3장, 15mb까지 올릴 수 있어요",
+                                text = if (screenType == ScreenType.REVIEW.name) {
+                                    "사진, 영상 포함 최대 3장, 15mb까지 올릴 수 있어요"
+                                } else {
+                                   "최대 5MB까지 올릴 수 있어요"
+                                },
                                 modifier = Modifier.fillMaxWidth(),
                                 style = SpotTheme.typography.body03,
                                 textAlign = TextAlign.Center,
