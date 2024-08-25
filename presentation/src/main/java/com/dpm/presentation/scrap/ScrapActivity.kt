@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityScrapBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
@@ -62,7 +64,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         viewModel.scrap.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    scrapAdapter.submitList(state.data)
+                    scrapAdapter.submitList(state.data.reviews)
                 }
 
                 is UiState.Failure -> {
@@ -70,7 +72,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 }
 
                 is UiState.Loading -> {
-                    //TODO : shimmer skeleton 추가하기
+
                 }
 
                 is UiState.Empty -> {
@@ -91,10 +93,17 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private fun initScrapAdapter() {
         scrapAdapter = ScrapRecordAdapter(
             scrapClick = {
-                viewModel.deleteScrapRecord(it.id)
+                viewModel.deleteScrapRecord(it.baseReview.id)
             },
             recordClick = {
-                //TODO : 상세화면 이동
+                startScrapDetailPictureFragment()
+                supportFragmentManager.commit {
+                    replace(
+                        R.id.fcvScrap,
+                        ScrapDetailPictureFragment(),
+                        ScrapDetailPictureFragment.TAG
+                    )
+                }
             }
         )
         binding.rvScrapRecord.adapter = scrapAdapter
@@ -138,6 +147,16 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 clScrapEmpty.visibility = GONE
                 clScrapFail.visibility = VISIBLE
             }
+        }
+    }
+
+    private fun startScrapDetailPictureFragment() {
+        supportFragmentManager.commit {
+            replace(
+                R.id.fcvScrap,
+                ScrapDetailPictureFragment(),
+                ScrapDetailPictureFragment.TAG
+            )
         }
     }
 

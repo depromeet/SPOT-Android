@@ -7,18 +7,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.databinding.ItemScrapRecordBinding
+import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.scrap.viewmodel.ScrapData
 import com.dpm.presentation.util.ItemDiffCallback
 
 
 class ScrapRecordAdapter(
-    private val scrapClick: (ScrapData) -> Unit,
-    private val recordClick: (ScrapData) -> Unit,
-) : ListAdapter<ScrapData, ScrapRecordViewHolder>(
+    private val scrapClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val recordClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+) : ListAdapter<ResponseScrap.ResponseReviewWrapper, ScrapRecordViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItme -> oldItem.id == newItme.id },
+        onItemsTheSame = { oldItem, newItem -> oldItem.baseReview.id == newItem.baseReview.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
@@ -39,10 +39,10 @@ class ScrapRecordAdapter(
 
 class ScrapRecordViewHolder(
     private val binding: ItemScrapRecordBinding,
-    private val scrapClick: (ScrapData) -> Unit,
-    private val recordClick: (ScrapData) -> Unit,
+    private val scrapClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val recordClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ScrapData) = with(binding) {
+    fun bind(item: ResponseScrap.ResponseReviewWrapper) = with(binding) {
         ivScrap.setOnSingleClickListener {
             scrapClick(item)
         }
@@ -51,9 +51,9 @@ class ScrapRecordViewHolder(
         }
 
         root.clipToOutline = true
-        ivScrapImage.loadAndClip(item.image)
+        ivScrapImage.loadAndClip(item.baseReview.images[0].url)
         tvScrapStadium.text = item.stadiumName
-        tvScrapSeat.text = item.seatName
+        tvScrapSeat.text = item.sectionName // TODO : 고쳐야함
     }
 }
 

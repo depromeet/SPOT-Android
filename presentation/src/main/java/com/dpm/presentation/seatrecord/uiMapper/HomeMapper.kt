@@ -1,6 +1,7 @@
 package com.dpm.presentation.seatrecord.uiMapper
 
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.presentation.viewfinder.sample.Keyword
 
 /**
@@ -25,3 +26,11 @@ fun ResponseMySeatRecord.ReviewResponse.ReviewKeywordResponse.toUiKeyword() =
         type = if (isPositive) 1 else 0,
         like = 0
     )
+
+fun ResponseScrap.ResponseKeyword.toUiKeyword(): Keyword {
+    return Keyword(
+        message = content,
+        type = if (isPositive) 1 else 0,
+        like = 0
+    )
+}
