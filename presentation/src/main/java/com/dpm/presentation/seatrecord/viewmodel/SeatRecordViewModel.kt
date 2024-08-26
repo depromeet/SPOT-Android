@@ -10,6 +10,7 @@ import com.dpm.domain.entity.response.home.ResponseUserInfo
 import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
+import com.dpm.domain.repository.ViewfinderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val viewfinderRepository: ViewfinderRepository,
     private val sharedPreference: SharedPreference,
 ) : ViewModel() {
 
@@ -322,6 +324,67 @@ class SeatRecordViewModel @Inject constructor(
             }
             _intuitiveDate.value =
                 UiState.Success(currentState.data.copy(yearMonths = updatedYearMonths))
+        }
+    }
+
+
+    /** 직관 후기는 스크랩, 좋아요 없음 -> 좌석시야만 **/
+    fun updateLike(id: Int) {
+        viewModelScope.launch {
+            viewfinderRepository.updateLike(id).onSuccess {
+                val currentState = (_seatReviews.value as? UiState.Success)?.data
+                if (currentState != null) {
+                    val updatedList = currentState.reviews.map { review ->
+                        if(review.id == id){
+                            review.copy(
+                                isLiked = !review.isLiked,
+                                likesCount = if(review.isLiked){
+                                    review.likesCount - 1
+                                } else {
+                                    review.likesCount + 1
+                                }
+                            )
+                        } else {
+                            review
+                        }
+                    }
+
+                    _seatReviews.value = UiState.Success(
+                        data = currentState.copy(updatedList)
+                    )
+                }
+            }.onFailure {
+                Timber.d("좋아요 실패 $it")
+            }
+        }
+    }
+
+    fun updateScrap(id: Int) {
+        viewModelScope.launch {
+            viewfinderRepository.updateScrap(id).onSuccess {
+                val currentState = (_seatReviews.value as? UiState.Success)?.data
+                if(currentState!= null){
+                    val updatedList = currentState.reviews.map { review ->
+                        if(review.id == id){
+                            review.copy(
+                                isScrapped = !review.isScrapped,
+                                scrapsCount = if(review.isScrapped){
+                                    review.scrapsCount - 1
+                                } else {
+                                    review.scrapsCount + 1
+                                }
+                            )
+                        }else {
+                            review
+                        }
+                    }
+                    _seatReviews.value = UiState.Success(
+                        data = currentState.copy(reviews = updatedList)
+                    )
+                }
+            }.onFailure {
+                Timber.d("스크랩 실패 $it")
+            }
         }
     }
 

@@ -537,11 +537,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 override fun onLikeClick(reviewId: Int) {
-                    //TODO : 좋아요 클릭
+                    viewModel.updateLike(reviewId)
                 }
 
                 override fun onScrapClick(reviewId: Int) {
-                    //TODO : 스크랩 클릭
+                    viewModel.updateScrap(reviewId)
                 }
             }
 

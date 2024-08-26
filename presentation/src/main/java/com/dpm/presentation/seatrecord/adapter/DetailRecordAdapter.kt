@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemSeatReviewDetailBinding
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.model.seatrecord.RecordReviewType
+import com.dpm.domain.model.seatrecord.toTypeName
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
 import com.dpm.presentation.util.CalendarUtil
@@ -118,6 +121,25 @@ class ReviewDetailViewHolder(
                         )
                     }
                 }
+            }
+            when (item.reviewType) {
+                RecordReviewType.VIEW.name -> {
+                    tvReviewTag.text = RecordReviewType.VIEW.toTypeName()
+                    tvReviewTag.setBackgroundResource(R.drawable.rect_stroke_positive_primary_stroke_35)
+                }
+
+                RecordReviewType.FEED.name -> {
+                    tvReviewTag.text = RecordReviewType.FEED.toTypeName()
+                    tvReviewTag.setBackgroundResource(R.drawable.rect_error_primary_stroke_35)
+                    tvReviewTag.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_error_primary))
+                    tvRecordLikeCount.visibility = GONE
+                    ivRecordLike.visibility = GONE
+                    tvRecordScrapCount.visibility = GONE
+                    ivRecordScrap.visibility = GONE
+                    ivRecordShare.visibility = GONE
+                }
+
+                else -> {}
             }
         }
     }

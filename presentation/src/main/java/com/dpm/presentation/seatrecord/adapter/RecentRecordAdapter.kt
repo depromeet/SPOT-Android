@@ -105,11 +105,13 @@ class RecentRecordViewHolder(
                 RecordReviewType.VIEW.name -> {
                     tvReviewTag.text = RecordReviewType.VIEW.toTypeName()
                     tvReviewTag.setBackgroundResource(R.drawable.rect_stroke_positive_primary_stroke_35)
+
                 }
 
                 RecordReviewType.FEED.name -> {
                     tvReviewTag.text = RecordReviewType.FEED.toTypeName()
                     tvReviewTag.setBackgroundResource(R.drawable.rect_error_primary_stroke_35)
+                    tvReviewTag.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_error_primary))
                     tvRecordLikeCount.visibility = GONE
                     ivRecordLike.visibility = GONE
                     tvRecordScrapCount.visibility = GONE
