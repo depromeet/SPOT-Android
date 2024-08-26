@@ -20,6 +20,7 @@ import com.dpm.designsystem.SpotDropDownSpinner
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
+import com.dpm.domain.entity.response.home.ResponseUserInfo
 import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
@@ -47,11 +48,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private lateinit var seatReviewMonthAdapter: DateMonthAdapter
-    private lateinit var intuitiveReviewMonthAdapter : DateMonthAdapter
+    private lateinit var intuitiveReviewMonthAdapter: DateMonthAdapter
     private lateinit var monthSeatReviewAdapter: MonthRecordAdapter
     private lateinit var monthIntuitiveReviewAdapter: MonthRecordAdapter
     private lateinit var seatReviewYearAdapter: SpotDropDownSpinner<String>
-    private lateinit var intuitiveReviewYearAdapter : SpotDropDownSpinner<String>
+    private lateinit var intuitiveReviewYearAdapter: SpotDropDownSpinner<String>
     private val viewModel: SeatRecordViewModel by viewModels()
     private var isLoading: Boolean = false
 
@@ -82,7 +83,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         initIntuitiveMonthAdapter()
         initReviewList()
         viewModel.getSeatReviewDate()
-        viewModel.getLocalProfile()
+        viewModel.getProfile()
     }
 
     private fun initEvent() {
@@ -124,7 +125,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 vSeatViewDivider.visibility = VISIBLE
                 vIntuitiveReviewDivider.visibility = GONE
 
-                when(viewModel.seatDate.value){
+                when (viewModel.seatDate.value) {
                     is UiState.Success -> {
                         rvSeatReview.visibility = VISIBLE
                         rvSeatReviewMonth.visibility = VISIBLE
@@ -134,6 +135,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorYear.visibility = GONE
                         tvErrorMonth.visibility = GONE
                     }
+
                     is UiState.Failure -> {
                         rvSeatReview.visibility = GONE
                         rvSeatReviewMonth.visibility = GONE
@@ -143,6 +145,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorYear.visibility = VISIBLE
                         tvErrorMonth.visibility = VISIBLE
                     }
+
                     is UiState.Empty -> {
                         rvSeatReview.visibility = GONE
                         rvSeatReviewMonth.visibility = GONE
@@ -152,6 +155,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorYear.visibility = VISIBLE
                         tvErrorMonth.visibility = VISIBLE
                     }
+
                     else -> {}
                 }
 
@@ -177,7 +181,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 rvSeatReviewMonth.visibility = GONE
                 spinnerSeatReviewYear.visibility = GONE
 
-                when(viewModel.intuitiveDate.value){
+                when (viewModel.intuitiveDate.value) {
                     is UiState.Success -> {
                         rvIntuitiveReview.visibility = VISIBLE
                         rvIntuitiveReviewMonth.visibility = VISIBLE
@@ -187,6 +191,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorYear.visibility = GONE
                         tvErrorMonth.visibility = GONE
                     }
+
                     is UiState.Failure -> {
                         rvIntuitiveReview.visibility = GONE
                         rvIntuitiveReviewMonth.visibility = GONE
@@ -196,6 +201,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorYear.visibility = VISIBLE
                         tvErrorMonth.visibility = VISIBLE
                     }
+
                     is UiState.Empty -> {
                         rvIntuitiveReview.visibility = GONE
                         rvIntuitiveReviewMonth.visibility = GONE
@@ -205,6 +211,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorYear.visibility = VISIBLE
                         tvErrorMonth.visibility = VISIBLE
                     }
+
                     else -> {}
                 }
 
@@ -287,7 +294,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             when (state) {
                 is UiState.Success -> {
                     setShimmer(false)
-                    setProfile(state.data.profile)
                     updateSeatReviewList(state.data.reviews)
                     isLoading = false
                     setErrorVisibility(SeatRecordErrorType.NONE)
@@ -314,7 +320,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             when (state) {
                 is UiState.Success -> {
                     setShimmer(false)
-                    setProfile(state.data.profile)
                     updateIntuitiveReviewList(state.data.reviews)
                     isLoading = false
                     setErrorVisibility(SeatRecordErrorType.NONE)
@@ -360,7 +365,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setProfile(data: ResponseMySeatRecord.MyProfileResponse) {
+    private fun setProfile(data: ResponseUserInfo) {
         with(binding) {
             if (data.teamId != null && data.teamId != 0) {
                 csbvRecordTitle.setTextPart(
@@ -376,8 +381,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             csbvHelpInfo.setText("내 기록이 야구팬들에게 도움된 횟수에요!")
             ivRecordProfile.loadAndCircleProfile(data.profileImage)
             tvRecordNickname.text = data.nickname
-            tvRecordCount.text = "0"
             tvRecordCount.text = data.reviewCount.toString()
+            tvRecordHelpCount.text = data.totalLikes.toString()
         }
     }
 
@@ -416,7 +421,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
     }
 
-    private fun setIntuitiveYearSpinner(data : ResponseReviewDate) {
+    private fun setIntuitiveYearSpinner(data: ResponseReviewDate) {
         val years = data.yearMonths.map { it.year }
         val yearList = years.map { "${it}년" }
         val selectedYear = data.yearMonths.firstOrNull { it.isClicked }?.year
@@ -482,12 +487,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun setErrorVisibility(errorType: SeatRecordErrorType) {
         with(binding) {
             //TODO : 아직 시야아카이빙한 게시물이 없습니다 고민하기
-            if(tvSeatView.isSelected){
+            if (tvSeatView.isSelected) {
                 rvSeatReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerSeatReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvSeatReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
             }
-            if(tvIntuitiveReview.isSelected){
+            if (tvIntuitiveReview.isSelected) {
                 rvIntuitiveReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerIntuitiveReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvIntuitiveReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
@@ -601,23 +606,18 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun updateIntuitiveReviewList(reviews: List<ResponseMySeatRecord.ReviewResponse>) {
         val groupList =
             reviews.groupBy { CalendarUtil.getMonthFromDateFormat(it.date) }
-                .map { (month,reviews) ->
+                .map { (month, reviews) ->
                     MonthReviewData(month, reviews)
                 }
         monthIntuitiveReviewAdapter.submitList(groupList)
     }
 
     private fun navigateToProfileEditActivity() {
-        val currentState = viewModel.seatReviews.value
-        if (currentState is UiState.Success) {
-            editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
-                with(currentState.data) {
-                    putExtra(PROFILE_NAME, this.profile.nickname)
-                    putExtra(PROFILE_IMAGE, this.profile.profileImage)
-                    putExtra(PROFILE_CHEER_TEAM, this.profile.teamId)
-                }
-            })
-        }
+        editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
+            putExtra(PROFILE_NAME, viewModel.profile.value.nickname)
+            putExtra(PROFILE_IMAGE, viewModel.profile.value.profileImage)
+            putExtra(PROFILE_CHEER_TEAM, viewModel.profile.value.teamId)
+        })
     }
 
     private fun navigateToReviewActivity() {

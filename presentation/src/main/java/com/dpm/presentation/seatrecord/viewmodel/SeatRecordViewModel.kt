@@ -6,6 +6,7 @@ import com.dpm.core.state.UiState
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
+import com.dpm.domain.entity.response.home.ResponseUserInfo
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,7 +40,7 @@ class SeatRecordViewModel @Inject constructor(
     val intuitiveDate = _intuitiveDate.asStateFlow()
 
     private val _profile =
-        MutableStateFlow<ResponseMySeatRecord.MyProfileResponse>(ResponseMySeatRecord.MyProfileResponse())
+        MutableStateFlow(ResponseUserInfo())
     val profile = _profile.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(EditUi.NONE)
@@ -94,6 +95,19 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
+    fun getProfile() {
+        viewModelScope.launch {
+            homeRepository.getMyUserInfo()
+                .onSuccess { data ->
+                    _profile.value = data
+                    saveLocalProfile()
+                }
+                .onFailure {
+                    getLocalProfile()
+                }
+        }
+    }
+
 
     fun getSeatReviews() {
         val dateState = seatDate.value as? UiState.Success<ResponseReviewDate>
@@ -117,7 +131,7 @@ class SeatRecordViewModel @Inject constructor(
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
-                _profile.value = data.profile
+//                _profile.value = data.profile
                 saveLocalProfile()
                 if (data.reviews.isNotEmpty()) {
                     _seatReviews.value = UiState.Success(data)
@@ -176,16 +190,14 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     private fun saveLocalProfile() {
-        val currentState = _seatReviews.value
-        if (currentState is UiState.Success) {
-            val profile = currentState.data.profile
-            sharedPreference.level = profile.level
-            sharedPreference.profileImage = profile.profileImage
-            sharedPreference.nickname = profile.nickname
-            sharedPreference.teamId = profile.teamId!!
-            sharedPreference.teamName = profile.teamName!!
-            sharedPreference.levelTitle = profile.levelTitle
-        }
+        val profile = _profile.value
+        sharedPreference.level = profile.level
+        sharedPreference.profileImage = profile.profileImage
+        sharedPreference.nickname = profile.nickname
+        sharedPreference.teamId = profile.teamId ?: 0
+        sharedPreference.teamName = profile.teamName ?: ""
+        sharedPreference.levelTitle = profile.levelTitle
+
     }
 
     fun getNextSeatReviews() {

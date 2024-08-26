@@ -11,10 +11,10 @@ import com.dpm.data.model.response.home.ResponseLevelByPostDto
 import com.dpm.data.model.response.home.ResponseLevelUpInfoDto
 import com.dpm.data.model.response.home.ResponseMySeatRecordDto
 import com.dpm.data.model.response.home.ResponsePresignedUrlDto
-import com.dpm.data.model.response.home.ResponseProfileDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
+import com.dpm.data.model.response.home.ResponseUserInfoDto
 import com.dpm.data.remote.HomeApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -65,9 +65,6 @@ class HomeDataSourceImpl @Inject constructor(
         return homeApiService.getReviewDate()
     }
 
-    override suspend fun getProfile(): ResponseProfileDto {
-        return homeApiService.getProfileInfo()
-    }
 
     override suspend fun getRecentReview(): ResponseRecentReviewDto {
         return homeApiService.getRecentReview()
@@ -89,5 +86,9 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getLevelUpInfo(nextLevel: Int): ResponseLevelUpInfoDto {
         return homeApiService.getLevelUpInfo(nextLevel)
+    }
+
+    override suspend fun getUserInfo(): ResponseUserInfoDto {
+        return homeApiService.getUserInfo()
     }
 }

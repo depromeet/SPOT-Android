@@ -10,9 +10,9 @@ import com.dpm.domain.entity.response.home.ResponseLevelUpInfo
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponsePresignedUrl
 import com.dpm.domain.entity.response.home.ResponseProfileEdit
-import com.dpm.domain.entity.response.home.ResponseProfile
 import com.dpm.domain.entity.response.home.ResponseRecentReview
 import com.dpm.domain.entity.response.home.ResponseReviewDate
+import com.dpm.domain.entity.response.home.ResponseUserInfo
 
 interface HomeRepository {
     suspend fun getMySeatRecord(
@@ -40,17 +40,17 @@ interface HomeRepository {
 
     suspend fun getReviewDate(): Result<ResponseReviewDate>
 
-    suspend fun getProfile(): Result<ResponseProfile>
-
     suspend fun getRecentReview(): Result<ResponseRecentReview>
 
     suspend fun deleteReview(
         reviewId: Int,
     ): Result<ResponseDeleteReview>
 
-    suspend fun getLevelByPost() : Result<List<ResponseLevelByPost>>
+    suspend fun getLevelByPost(): Result<List<ResponseLevelByPost>>
 
-    suspend fun getHomeFeed() : Result<ResponseHomeFeed>
+    suspend fun getHomeFeed(): Result<ResponseHomeFeed>
 
-    suspend fun getLevelUpInfo(nextLevel : Int) : Result<ResponseLevelUpInfo>
+    suspend fun getLevelUpInfo(nextLevel: Int): Result<ResponseLevelUpInfo>
+
+    suspend fun getMyUserInfo(): Result<ResponseUserInfo>
 }

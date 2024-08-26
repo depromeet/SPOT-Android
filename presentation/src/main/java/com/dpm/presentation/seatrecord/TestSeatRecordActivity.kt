@@ -75,7 +75,7 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
     private fun initView() {
         initViewStatusBar()
         viewModel.getSeatReviewDate()
-        viewModel.getLocalProfile()
+//        viewModel.getLocalProfile()
         initRecordAdapter()
     }
 
@@ -290,7 +290,7 @@ class TestSeatRecordActivity : BaseActivity<ActivityTestSeatRecordBinding>(
 
     private fun observeProfile() {
         viewModel.profile.asLiveData().observe(this) {
-            profileNone(it)
+//            profileNone(it)
             //TODO : 리사이클러뷰 프로필
         }
     }

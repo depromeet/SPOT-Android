@@ -9,10 +9,10 @@ import com.dpm.data.model.response.home.ResponseLevelByPostDto
 import com.dpm.data.model.response.home.ResponseLevelUpInfoDto
 import com.dpm.data.model.response.home.ResponseMySeatRecordDto
 import com.dpm.data.model.response.home.ResponsePresignedUrlDto
-import com.dpm.data.model.response.home.ResponseProfileDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
+import com.dpm.data.model.response.home.ResponseUserInfoDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,8 +26,8 @@ import retrofit2.http.Url
 interface HomeApiService {
     @GET("/api/v1/reviews")
     suspend fun getMySeatRecord(
-        @Query("cursor") cursor : String?,
-        @Query("sortBy") sortBy : String,
+        @Query("cursor") cursor: String?,
+        @Query("sortBy") sortBy: String,
         @Query("size") size: Int,
         @Query("year") year: Int?,
         @Query("month") month: Int?,
@@ -60,9 +60,6 @@ interface HomeApiService {
     @GET("/api/v1/reviews/months")
     suspend fun getReviewDate(): ResponseReviewDateDto
 
-    @GET("/api/v1/members/memberInfo")
-    suspend fun getProfileInfo(): ResponseProfileDto
-
     @GET("/api/v1/reviews/recentReview")
     suspend fun getRecentReview(): ResponseRecentReviewDto
 
@@ -82,4 +79,6 @@ interface HomeApiService {
         @Query("nextLevel") nextLevel: Int,
     ): ResponseLevelUpInfoDto
 
+    @GET("/api/v1/reviews/userInfo")
+    suspend fun getUserInfo(): ResponseUserInfoDto
 }
