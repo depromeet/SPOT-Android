@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="72dp"
-    android:layout_height="match_parent">
+    android:layout_width="80dp"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_stadium"
@@ -42,6 +42,20 @@
         app:tint="@color/color_foreground_disabled"
         tools:ignore="ContentDescription"
         tools:src="@drawable/ic_lock" />
+
+    <TextView
+        android:id="@+id/tvNewBadge"
+        style="@style/TextAppearance.Spot.Caption05"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="46dp"
+        android:background="@drawable/circle_error_primary_fill"
+        android:gravity="center"
+        android:text="@string/home_new"
+        android:textColor="@color/color_foreground_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView

@@ -43,7 +43,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     companion object {
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val START_SPACING_DP = 16
-        private const val BETWEEN_SPADING_DP = 8
+        private const val BETWEEN_SPADING_DP = 0
         private const val VIEW_UPLOAD_DIALOG = "ViewUploadDialog"
         private const val FEED_UPLOAD_DIALOG = "FeedUploadDialog"
         private const val REVIEW_DATA = "REVIEW_DATA"

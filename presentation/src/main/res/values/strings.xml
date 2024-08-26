@@ -15,14 +15,15 @@
     <string name="home_no_record_advice">시야 사진을 올려서 아카이빙 해보세요!</string>
     <string name="home_fail_description">정보를 불러올 수 없습니다.</string>
     <string name="home_fail_advice">새로고침하여 다시 시도해 주세요!</string>
-    <string name="home_seat_archiving">시야 아카이빙</string>
-    <string name="home_seat_archiving_description">뜨거웠던 야구 직관 기록</string>
+    <string name="home_seat_archiving">나의 아카이빙</string>
+    <string name="home_seat_archiving_description">시야 및 직관후기 모음</string>
     <string name="home_scrap">스크랩</string>
     <string name="home_scrap_description">내가 스크랩한 시야 정보</string>
-    <string name="home_upload_review">시야 사진 올리기</string>
+    <string name="home_upload_review">등록하기</string>
     <string name="refresh">새로고침</string>
     <string name="home_profile_image_delete">프로필 삭제시 복구하기 어려워요</string>
     <string name="home_level_up">LEVEL UP!</string>
+    <string name="home_new">NEW</string>
         <!-- level -->
     <string name="one_level_to_title">직관 첫 걸음</string>
 
@@ -173,5 +174,6 @@
     <string name="scrap_search">검색하기</string>
     <string name="stadium_jamsil">잠실야구장</string>
     <string name="scrap_more"><u>더보기</u></string>
+
 
 </resources>
