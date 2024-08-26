@@ -2,6 +2,7 @@ package com.dpm.presentation.login.ui
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.lifecycle.asLiveData
@@ -15,7 +16,11 @@ import com.dpm.presentation.login.viewmodel.KakaoSignupViewModel
 import com.dpm.presentation.login.viewmodel.LoginUiState
 import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.scheme.viewmodel.SchemeState
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -28,6 +33,26 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
     FragmentKakaoSignupBinding.inflate(it)
 }) {
     private val signUpViewModel by viewModels<KakaoSignupViewModel>()
+
+    private val googleSignInClient: GoogleSignInClient by lazy { onGoogleLogin() }
+    private val googleAuthLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+
+        try {
+            val account = task.getResult(ApiException::class.java)
+
+            val userName = account.givenName
+            val serverAuth = account.serverAuthCode
+            account.idToken
+            Intent(this, NicknameInputActivity::class.java).apply {
+                putExtra("kakaoToken", account.idToken)
+                startActivity(this)
+            }
+
+        } catch (e: ApiException) {
+            Timber.e(e)
+        }
+    }
 
     private val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
@@ -52,7 +77,7 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
                         kakaoLoginCallBack()
                     },
                     onGoogleLoginClick = {
-                        onGoogleLogin()
+                        requestGoogleLogin()
                     }
                 )
             }
@@ -77,8 +102,19 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
         }
     }
 
-    private fun onGoogleLogin() {
-        //Todo GoogleLogin
+    private fun onGoogleLogin(): GoogleSignInClient {
+        val googleSignInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestServerAuthCode("513574163474-0jmn0tks8hiolpl9r7gmc037n5mcg64t.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(this, googleSignInOption)
+    }
+
+    private fun requestGoogleLogin() {
+        googleSignInClient.signOut()
+        val signInIntent = googleSignInClient.signInIntent
+        googleAuthLauncher.launch(signInIntent)
     }
 
     private fun initObservers() {

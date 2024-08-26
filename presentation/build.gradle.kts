@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":domain"))
     implementation(project(":core:designsystem"))
+    implementation("com.google.android.gms:play-services-auth:20.1.0")
     KotlinDependencies.run {
         implementation(kotlin)
         implementation(coroutines)
