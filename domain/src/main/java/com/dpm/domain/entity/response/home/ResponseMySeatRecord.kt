@@ -39,6 +39,19 @@ data class ResponseMySeatRecord(
             return "${formattedBaseName()} ${formattedSectionName()} ${formattedBlockName()} ${formattedRowNumber()} ${formattedSeatNumber()}"
         }
 
+        fun kakaoShareSeatFeedTitle() : String {
+            val base = when(stadiumName.base(blockCode)) {
+                BASE.Base1 -> "1루"
+                BASE.Base3 -> "3루"
+                else -> ""
+            }
+            val section = sectionName
+            val block = "${rowNumber} 열"
+            val seat = if(seatNumber == null) "" else "${seatNumber}번"
+
+            return "$stadiumName $base $section $block $seat"
+        }
+
         private fun formattedBaseName(): String {
             return when (stadiumName.base(blockCode)) {
                 BASE.Base1 -> "1루"

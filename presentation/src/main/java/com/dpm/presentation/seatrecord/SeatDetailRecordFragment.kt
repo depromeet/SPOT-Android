@@ -5,18 +5,23 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.presentation.R
+import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.dpm.core.base.BindingFragment
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
-import com.depromeet.presentation.R
-import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
+import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.Utils
+import com.dpm.presentation.util.seatFeed
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding>(
@@ -44,7 +49,10 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         super.onDestroyView()
         Utils(requireContext()).apply {
             requireActivity().apply {
-                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+                setStatusBarColor(
+                    window,
+                    com.depromeet.designsystem.R.color.color_background_tertiary
+                )
                 setBlackSystemBarIconColor(window)
             }
         }
@@ -70,18 +78,31 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         viewModel.seatReviews.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
-                    detailRecordAdapter.submitList(state.data.reviews)
-                    isLoading = false
+                    if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
+                        detailRecordAdapter.submitList(state.data.reviews)
+                        isLoading = false
+                    }
                 }
 
-                is UiState.Failure -> {}
-                is UiState.Loading -> {}
-                is UiState.Empty -> {}
+                else -> {}
             }
 
         }
 
-        viewModel.seatDate.asLiveData().observe(viewLifecycleOwner){ state ->
+        viewModel.intuitiveReviews.asLiveData().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW) {
+                        detailRecordAdapter.submitList(state.data.reviews)
+                        isLoading = false
+                    }
+                }
+
+                else -> {}
+            }
+        }
+
+        viewModel.seatDate.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state is UiState.Empty)
                 detailRecordAdapter.submitList(emptyList())
         }
@@ -117,15 +138,14 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
                     .show(parentFragmentManager, RecordEditDialog.TAG)
             },
             likeClick = { id ->
-                //TODO 좋아요
+                viewModel.updateLike(id)
             },
             scrapClick = { id ->
-                //TODO 스크랩
+                viewModel.updateScrap(id)
             },
-            shareClick = { review ->
-                //TODO 공유
+            shareClick = { review, position ->
+                shareLink(review, position)
             }
-
         )
 
         with(binding) {
@@ -168,6 +188,27 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
             marginBottom = 20
         ).show()
+    }
+
+    private fun shareLink(data: ResponseMySeatRecord.ReviewResponse, imagePosition: Int) {
+        KakaoUtils().share(
+            requireContext(),
+            seatFeed(
+                title = data.kakaoShareSeatFeedTitle(),
+                description = "출처 : ${data.member.nickname}",
+                imageUrl = data.images[imagePosition].url,
+                queryParams = mapOf(
+                    SchemeKey.STADIUM_ID to data.stadiumId.toString(),
+                    SchemeKey.BLOCK_CODE to data.blockCode
+                )
+            ),
+            onSuccess = { sharingIntent ->
+                requireContext().startActivity(sharingIntent)
+            },
+            onFailure = {
+                Timber.d("링크 공유 실패 : ${it.message}")
+            }
+        )
     }
 
 }

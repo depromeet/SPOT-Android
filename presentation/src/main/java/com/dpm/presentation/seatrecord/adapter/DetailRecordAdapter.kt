@@ -27,7 +27,7 @@ class DetailRecordAdapter(
     private val moreClick: (Int) -> Unit,
     private val likeClick: (Int) -> Unit,
     private val scrapClick: (Int) -> Unit,
-    private val shareClick: (ResponseMySeatRecord.ReviewResponse) -> Unit,
+    private val shareClick: (ResponseMySeatRecord.ReviewResponse, Int) -> Unit,
 ) : ListAdapter<ResponseMySeatRecord.ReviewResponse, ReviewDetailViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
@@ -69,7 +69,7 @@ class ReviewDetailViewHolder(
     private val moreClick: (Int) -> Unit,
     private val likeClick: (Int) -> Unit,
     private val scrapClick: (Int) -> Unit,
-    private val shareClick: (ResponseMySeatRecord.ReviewResponse) -> Unit,
+    private val shareClick: (ResponseMySeatRecord.ReviewResponse, Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         private const val MAX_VISIBLE_CHIPS = Int.MAX_VALUE
@@ -85,13 +85,13 @@ class ReviewDetailViewHolder(
                 moreClick(item.id)
             }
             ivRecordScrap.setOnSingleClickListener {
-                likeClick(item.id)
-            }
-            ivRecordLike.setOnSingleClickListener {
                 scrapClick(item.id)
             }
+            ivRecordLike.setOnSingleClickListener {
+                likeClick(item.id)
+            }
             ivRecordShare.setOnClickListener {
-                shareClick(item)
+                shareClick(item, vpDetailImage.currentItem)
             }
 
 
