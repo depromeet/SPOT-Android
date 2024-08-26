@@ -111,7 +111,6 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
     private fun setDetailRecordAdapter() {
         detailRecordAdapter = DetailRecordAdapter(
-            (viewModel.seatReviews.value as UiState.Success).data.profile,
             moreClick = { id ->
                 viewModel.setEditReviewId(id)
                 RecordEditDialog.newInstance(SEAT_RECORD_TAG)

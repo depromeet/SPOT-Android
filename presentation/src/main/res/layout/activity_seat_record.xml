@@ -65,6 +65,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/rect_59ffffff_fill_20"
+                android:elevation="8dp"
+                android:translationZ="4dp"
+                app:layout_constraintBottom_toBottomOf="@id/csbvRecordTitle"
+                app:layout_constraintEnd_toEndOf="@id/csbvRecordTitle"
+                app:layout_constraintStart_toStartOf="@id/csbvRecordTitle"
+                app:layout_constraintTop_toTopOf="@id/csbvRecordTitle" />
 
             <com.dpm.presentation.home.customview.CustomSpeechBubbleView
                 android:id="@+id/csbvRecordTitle"
@@ -85,17 +96,7 @@
                 app:textAppearance="@style/TextAppearance.Spot.Caption04"
                 tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="4dp"
-                android:background="@drawable/rect_59ffffff_fill_20"
-                android:elevation="8dp"
-                android:translationZ="4dp"
-                app:layout_constraintBottom_toBottomOf="@id/csbvRecordTitle"
-                app:layout_constraintEnd_toEndOf="@id/csbvRecordTitle"
-                app:layout_constraintStart_toStartOf="@id/csbvRecordTitle"
-                app:layout_constraintTop_toTopOf="@id/csbvRecordTitle" />
+
 
             <ImageView
                 android:id="@+id/iv_record_profile"
@@ -222,7 +223,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="0"
                 android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
                 android:textColor="@color/color_foreground_body_subtitle"
                 app:layout_constraintEnd_toEndOf="@id/tvRecordHelp"

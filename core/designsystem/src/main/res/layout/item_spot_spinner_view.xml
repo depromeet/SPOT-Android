@@ -4,7 +4,6 @@
     android:id="@+id/spot_spinner_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="0.5dp"
     android:paddingEnd="8dp"
     android:textColor="@color/color_foreground_heading"
     android:textSize="18sp"

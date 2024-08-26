@@ -1,14 +1,18 @@
 package com.dpm.presentation.seatrecord.adapter
 
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import coil.load
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
+import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.model.seatrecord.RecordReviewType
+import com.dpm.domain.model.seatrecord.toTypeName
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
@@ -26,8 +30,8 @@ class RecentRecordAdapter(
     interface OnItemRecordClickListener {
         fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
         fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse)
-        fun onLikeClick(reviewId : Int)
-        fun onScrapClick(reviewId : Int)
+        fun onLikeClick(reviewId: Int)
+        fun onScrapClick(reviewId: Int)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -93,9 +97,27 @@ class RecentRecordViewHolder(
                     }
                 }
             }
-            //TODO : 추후 서버 통신 바뀌면 -> 스크랩, 좋아요 갱신 진행하기
-            tvRecordLikeCount.text = "0"
-            tvRecordScrapCount.text = "0"
+            tvRecordLikeCount.text = item.likesCount.toString()
+            ivRecordLike.load(if (item.isLiked) com.depromeet.designsystem.R.drawable.ic_like_active else com.depromeet.designsystem.R.drawable.ic_like_inactive)
+            tvRecordScrapCount.text = item.scrapsCount.toString()
+            ivRecordScrap.load(if (item.isScrapped) com.depromeet.designsystem.R.drawable.ic_scrap_active else com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+            when (item.reviewType) {
+                RecordReviewType.VIEW.name -> {
+                    tvReviewTag.text = RecordReviewType.VIEW.toTypeName()
+                    tvReviewTag.setBackgroundResource(R.drawable.rect_stroke_positive_primary_stroke_35)
+                }
+
+                RecordReviewType.FEED.name -> {
+                    tvReviewTag.text = RecordReviewType.FEED.toTypeName()
+                    tvReviewTag.setBackgroundResource(R.drawable.rect_error_primary_stroke_35)
+                    tvRecordLikeCount.visibility = GONE
+                    ivRecordLike.visibility = GONE
+                    tvRecordScrapCount.visibility = GONE
+                    ivRecordScrap.visibility = GONE
+                }
+
+                else -> {}
+            }
 
         }
     }

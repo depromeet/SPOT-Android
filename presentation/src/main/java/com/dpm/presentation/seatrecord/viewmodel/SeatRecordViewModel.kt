@@ -7,6 +7,7 @@ import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -65,7 +66,9 @@ class SeatRecordViewModel @Inject constructor(
 
     fun getSeatReviewDate() {
         viewModelScope.launch {
-            homeRepository.getReviewDate()
+            homeRepository.getReviewDate(
+                reviewType = RecordReviewType.VIEW.name
+            )
                 .onSuccess { data ->
                     if (data.yearMonths.isNotEmpty()) {
                         _seatDate.value = UiState.Success(data)
@@ -81,7 +84,9 @@ class SeatRecordViewModel @Inject constructor(
 
     fun getIntuitiveReviewDate() {
         viewModelScope.launch {
-            homeRepository.getReviewDate()
+            homeRepository.getReviewDate(
+                reviewType = RecordReviewType.FEED.name
+            )
                 .onSuccess { data ->
                     if (data.yearMonths.isNotEmpty()) {
                         _intuitiveDate.value = UiState.Success(data)
@@ -127,12 +132,11 @@ class SeatRecordViewModel @Inject constructor(
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.VIEW
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
-//                _profile.value = data.profile
-                saveLocalProfile()
                 if (data.reviews.isNotEmpty()) {
                     _seatReviews.value = UiState.Success(data)
                 } else {
@@ -163,10 +167,10 @@ class SeatRecordViewModel @Inject constructor(
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.FEED
                 )
             ).onSuccess { data ->
-                saveLocalProfile()
                 if (data.reviews.isNotEmpty()) {
                     _intuitiveReviews.value = UiState.Success(data)
                 } else {
@@ -212,7 +216,8 @@ class SeatRecordViewModel @Inject constructor(
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.VIEW
                 )
             ).onSuccess { data ->
                 Timber.d("NEXT_SEAT_RECORDS_SUCCESS : $data")
@@ -228,22 +233,23 @@ class SeatRecordViewModel @Inject constructor(
     fun getNextIntuitiveReviews() {
         viewModelScope.launch {
             val year =
-                (seatDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
+                (intuitiveDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
             val month =
-                (seatDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
+                (intuitiveDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
             homeRepository.getMySeatRecord(
                 RequestMySeatRecord(
-                    cursor = (seatReviews.value as UiState.Success).data.nextCursor,
+                    cursor = (intuitiveReviews.value as UiState.Success).data.nextCursor,
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.FEED
                 )
             ).onSuccess { data ->
                 Timber.d("NEXT_SEAT_RECORDS_SUCCESS : $data")
                 val updatedReviewList =
-                    (_seatReviews.value as UiState.Success).data.reviews + data.reviews
-                _seatReviews.value = UiState.Success(data.copy(reviews = updatedReviewList))
+                    (_intuitiveReviews.value as UiState.Success).data.reviews + data.reviews
+                _intuitiveReviews.value = UiState.Success(data.copy(reviews = updatedReviewList))
             }.onFailure {
                 Timber.d("NEXT_SEAT_RECORDS_FAIL : $it")
             }
@@ -348,21 +354,6 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     fun updateProfile(nickname: String, profileImage: String, teamId: Int, teamName: String?) {
-        val currentState = _seatReviews.value
-        if (currentState is UiState.Success) {
-            val updatedProfile = currentState.data.profile.copy(
-                nickname = nickname,
-                profileImage = profileImage,
-                teamId = teamId,
-                teamName = teamName
-            )
-
-            val updatedData = currentState.data.copy(
-                profile = updatedProfile
-            )
-
-            _seatReviews.value = UiState.Success(updatedData)
-        }
         _profile.value = profile.value.copy(
             nickname = nickname, profileImage = profileImage, teamId = teamId, teamName = teamName
         )

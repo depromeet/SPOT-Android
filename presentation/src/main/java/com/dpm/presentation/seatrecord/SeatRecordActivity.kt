@@ -107,10 +107,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 navigateToReviewActivity()
             }
             btRecordFailRefresh.setOnSingleClickListener {
-                if (viewModel.seatReviews.value is UiState.Failure || viewModel.seatDate.value is UiState.Failure) {
-                    makeSpotImageAppbar("리뷰를 불러오는데 실패하였습니다.")
+                if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
+                    viewModel.getSeatReviewDate()
+                } else {
+                    viewModel.getIntuitiveReviewDate()
                 }
-                viewModel.getSeatReviewDate()
+                viewModel.getLocalProfile()
             }
             ivRecordHelpInfo.setOnClickListener {
                 csbvHelpInfo.visibility = if (csbvHelpInfo.visibility == GONE) VISIBLE else GONE
