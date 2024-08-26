@@ -37,6 +37,19 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tvTermsSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="개인정보 및 이용 약관"
+        android:textAppearance="@style/TextAppearance.Spot.Body03"
+        app:layout_constraintTop_toBottomOf="@id/tbSetting"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:textColor="@color/color_foreground_caption" />
+
+    <TextView
         android:id="@+id/tv_terms_personal_info"
         style="@style/TextAppearance.Spot.Body01"
         android:layout_width="0dp"
@@ -47,7 +60,7 @@
         android:textColor="@color/color_foreground_heading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tbSetting" />
+        app:layout_constraintTop_toBottomOf="@id/tvTermsSubTitle" />
 
     <ImageView
         android:id="@+id/iv_setting_terms2"

@@ -13,6 +13,7 @@ import com.dpm.data.model.response.home.ResponseProfileDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
+import com.dpm.data.model.response.home.ResponseScrapDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,8 +27,8 @@ import retrofit2.http.Url
 interface HomeApiService {
     @GET("/api/v1/reviews")
     suspend fun getMySeatRecord(
-        @Query("cursor") cursor : String?,
-        @Query("sortBy") sortBy : String,
+        @Query("cursor") cursor: String?,
+        @Query("sortBy") sortBy: String,
         @Query("size") size: Int,
         @Query("year") year: Int?,
         @Query("month") month: Int?,
@@ -82,4 +83,14 @@ interface HomeApiService {
         @Query("nextLevel") nextLevel: Int,
     ): ResponseLevelUpInfoDto
 
+    @GET("api/v1/reviews/scraps")
+    suspend fun getScrap(
+        @Query("cursor") cursor: String?,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String,
+        @Query("stadiumId") stadiumId: Int?,
+        @Query("months") months: List<Int>?,
+        @Query("good") good: List<String>?,
+        @Query("bad") bad: List<String>?,
+    ): ResponseScrapDto
 }

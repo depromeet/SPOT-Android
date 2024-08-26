@@ -3,100 +3,21 @@ package com.dpm.presentation.scrap.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
+import com.dpm.domain.entity.request.home.RequestScrap
+import com.dpm.domain.entity.response.home.ResponseScrap
+import com.dpm.domain.repository.HomeRepository
+import com.dpm.domain.repository.ViewfinderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
-
-data class ScrapData(
-    val id: Int,
-    val image: String,
-    val stadiumName: String,
-    val seatName: String,
-    val isBookmark: Boolean,
-)
-
-fun getScrapData(): List<ScrapData> {
-    return listOf(
-        ScrapData(
-            id = 1,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 네이비석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 2,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 레드석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 3,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 외야그린석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 4,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 오렌지석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 5,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 블루석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 6,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 네이비석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 7,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 레드석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 8,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 외야그린석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 9,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 오렌지석 302블록 1열 1변",
-            isBookmark = true
-        ),
-        ScrapData(
-            id = 10,
-            image = "https://picsum.photos/600/400",
-            stadiumName = "잠실 야구장",
-            seatName = "1루 블루석 302블록 1열 1변",
-            isBookmark = true
-        ),
-    )
-}
 
 data class FilterNameData(
     val filterType: ScrapViewModel.ScrapFilterType,
     val name: String,
 )
-
 
 data class MonthFilterData(
     val month: Int,
@@ -116,14 +37,17 @@ data class BadReviewData(
 )
 
 @HiltViewModel
-class ScrapViewModel @Inject constructor() : ViewModel() {
+class ScrapViewModel @Inject constructor(
+    private val homeRepository: HomeRepository,
+    private val viewfinderRepository: ViewfinderRepository,
+) : ViewModel() {
 
     private var monthsSelected: List<MonthFilterData> = emptyList()
     private var goodSelected: List<GoodReviewData> = emptyList()
     private var badSelected: List<BadReviewData> = emptyList()
 
 
-    private val _scrap = MutableStateFlow<UiState<List<ScrapData>>>(UiState.Loading)
+    private val _scrap = MutableStateFlow<UiState<ResponseScrap>>(UiState.Loading)
     val scrap = _scrap.asStateFlow()
 
     private val _filter = MutableStateFlow<List<FilterNameData>>(emptyList())
@@ -138,22 +62,60 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
     private val _selectedBadReview = MutableStateFlow<List<BadReviewData>>(emptyList())
     val selectedBadReview = _selectedBadReview.asStateFlow()
 
+    private val _currentPage = MutableStateFlow(0)
+    val currentPage = _currentPage.asStateFlow()
+
 
     fun getScrapRecord() {
         viewModelScope.launch {
-//            _scrap.value = UiState.Failure("실패")
-//            _scrap.value = UiState.Empty
-            _scrap.value = UiState.Success(getScrapData())
+            homeRepository.getScrap(
+                size = 100,
+                sortBy = ScrapSortType.DATE_TIME.name,
+                cursor = null,
+                requestScrap = RequestScrap(
+                    stadiumId = 1,
+                    months = monthsSelected.filter { it.isSelected }.map { it.month },
+                    good = goodSelected.map { it.name },
+                    bad = badSelected.map { it.name }
+                )
+            ).onSuccess { data ->
+                if (data.reviews.isNotEmpty()) {
+                    _scrap.value = UiState.Success(data)
+                } else {
+                    _scrap.value = UiState.Empty
+                }
+            }.onFailure { e ->
+                _scrap.value = UiState.Failure(e.message ?: "실패")
+            }
         }
     }
 
-    fun deleteScrapRecord(id: Int) {
-        //TODO : 서버통신
-        val currentState = _scrap.value
-        if (currentState is UiState.Success) {
-            val scrapList: List<ScrapData> = currentState.data
-            val updatedList = scrapList.filter { it.id != id }
-            _scrap.value = UiState.Success(updatedList)
+    fun getNextScrapRecord() {
+        viewModelScope.launch {
+            homeRepository.getScrap(
+                size = 100,
+                sortBy = ScrapSortType.DATE_TIME.name,
+                cursor = (_scrap.value as UiState.Success).data.nextCursor,
+                requestScrap = RequestScrap(
+                    stadiumId = 1,
+                    months = monthsSelected.filter { it.isSelected }.map { it.month },
+                    good = goodSelected.map { it.name },
+                    bad = badSelected.map { it.name }
+                )
+            ).onSuccess {
+                val updatedList =
+                    (scrap.value as UiState.Success).data.reviews.toMutableList().apply {
+                        addAll(it.reviews)
+                    }
+                val updatedScrap = ResponseScrap(
+                    reviews = updatedList,
+                    nextCursor = it.nextCursor,
+                    hasNext = it.hasNext,
+                    totalScrapCount = it.totalScrapCount,
+                    filter = it.filter
+                )
+                _scrap.value = UiState.Success(updatedScrap)
+            }.onFailure {}
         }
     }
 
@@ -174,6 +136,11 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
 
             else -> {}
         }
+        getScrapRecord()
+    }
+
+    fun setCurrentPage(page : Int) {
+        _currentPage.value = page
     }
 
     fun setSelectedGoodReview(texts: List<String>) {
@@ -187,7 +154,7 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
     }
 
     fun getMonths() {
-        if(_months.value.isNotEmpty()) return
+        if (_months.value.isNotEmpty()) return
         val monthList = (1..12).map { MonthFilterData(it, false) }.toMutableList()
         _months.value = monthList
     }
@@ -207,12 +174,70 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
         goodSelected = selectedGoodReview.value
         badSelected = selectedBadReview.value
         _filter.value = processFilters()
+        getScrapRecord()
     }
 
     fun resetAllFilter() {
         _months.value = monthsSelected
         _selectedGoodReview.value = goodSelected
         _selectedBadReview.value = badSelected
+    }
+
+    fun updateLike(id: Int) {
+        viewModelScope.launch {
+            viewfinderRepository.updateLike(id).onSuccess {
+                val currentState = (_scrap.value as? UiState.Success)?.data
+                if (currentState != null) {
+                    val updatedList = currentState.reviews.map { review ->
+                        if (review.baseReview.id == id) {
+                            review.copy(
+                                baseReview = review.baseReview.copy(
+                                    isLiked = !review.baseReview.isLiked,
+                                    likesCount = if (review.baseReview.isLiked) {
+                                        review.baseReview.likesCount - 1
+                                    } else {
+                                        review.baseReview.likesCount + 1
+                                    }
+                                )
+                            )
+                        } else {
+                            review
+                        }
+                    }
+
+                    _scrap.value = UiState.Success(
+                        data = currentState.copy(reviews = updatedList)
+                    )
+                }
+            }.onFailure {
+                Timber.d("test 좋아요 업데이트 실패 $it")
+            }
+        }
+    }
+
+    fun updateScrap(id: Int) {
+        viewModelScope.launch {
+            viewfinderRepository.updateScrap(id).onSuccess {
+                val currentState = (_scrap.value as UiState.Success).data
+                val updatedList = currentState.reviews.map { review ->
+                    if (review.baseReview.id == id) {
+                        review.copy(
+                            baseReview = review.baseReview.copy(
+                                isScrapped = !review.baseReview.isScrapped
+                            )
+                        )
+                    } else {
+                        review
+                    }
+                }
+                _scrap.value = UiState.Success(
+                    data = currentState.copy(reviews = updatedList)
+                )
+            }.onFailure {
+                Timber.d("test 스크랩 업데이트 실패 $it")
+            }
+        }
+
     }
 
 
@@ -225,7 +250,7 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
                 1 -> updatedList.add(
                     FilterNameData(
                         ScrapFilterType.MONTH,
-                        months.value.first().formattedMonth()
+                        monthsSelected.first { it.isSelected }.formattedMonth()
                     )
                 )
 
@@ -233,8 +258,8 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
                     FilterNameData(
                         ScrapFilterType.MONTH,
                         "${
-                            months.value.first().formattedMonth()
-                        } 외 ${months.value.count { it.isSelected }}개"
+                            monthsSelected.first { it.isSelected }.formattedMonth()
+                        } 외 ${months.value.count { it.isSelected } - 1}개"
                     )
                 )
             }
@@ -254,5 +279,8 @@ class ScrapViewModel @Inject constructor() : ViewModel() {
         STADIUM, MONTH, REVIEW
     }
 
+    enum class ScrapSortType {
+        DATE_TIME
+    }
 }
 

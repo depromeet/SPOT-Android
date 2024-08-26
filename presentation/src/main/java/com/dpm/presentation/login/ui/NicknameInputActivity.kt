@@ -53,10 +53,6 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
                 )
             } else {
                 ivNicknameClear.visibility = View.VISIBLE
-                etProfileEditNickname.backgroundTintList = getColorStateList(
-                    this@NicknameInputActivity,
-                    com.depromeet.designsystem.R.color.color_green_600
-                )
             }
             signUpViewModel.validateNickname(text.toString())
         }
@@ -89,6 +85,10 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
                     updateButtonEnabled(false)
                 }
                 NicknameInputState.VALID -> {
+                    etProfileEditNickname.backgroundTintList = getColorStateList(
+                        this@NicknameInputActivity,
+                        com.depromeet.designsystem.R.color.color_green_600
+                    )
                     clNicknameInputWarning.visibility = View.GONE
                     updateButtonEnabled(true)
                 }
@@ -109,16 +109,28 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
                     }
                 }
                 NicknameInputState.INVALID_LENGTH -> {
+                    etProfileEditNickname.backgroundTintList = getColorStateList(
+                        this@NicknameInputActivity,
+                        com.depromeet.designsystem.R.color.color_error_primary
+                    )
                     clNicknameInputWarning.visibility = View.VISIBLE
                     tvNicknameWarning.text = getString(R.string.profile_edit_error_length)
                     updateButtonEnabled(false)
                 }
                 NicknameInputState.INVALID_CHARACTER -> {
+                    etProfileEditNickname.backgroundTintList = getColorStateList(
+                        this@NicknameInputActivity,
+                        com.depromeet.designsystem.R.color.color_error_primary
+                    )
                     clNicknameInputWarning.visibility = View.VISIBLE
                     tvNicknameWarning.text = getString(R.string.profile_edit_error_type)
                     updateButtonEnabled(false)
                 }
                 NicknameInputState.DUPLICATE -> {
+                    etProfileEditNickname.backgroundTintList = getColorStateList(
+                        this@NicknameInputActivity,
+                        com.depromeet.designsystem.R.color.color_error_primary
+                    )
                     clNicknameInputWarning.visibility = View.VISIBLE
                     tvNicknameWarning.text = getString(R.string.profile_edit_error_duplicate)
                     updateButtonEnabled(false)
