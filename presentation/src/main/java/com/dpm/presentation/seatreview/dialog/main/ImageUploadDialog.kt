@@ -2,7 +2,6 @@ package com.dpm.presentation.seatreview.dialog.main
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -13,21 +12,20 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.dpm.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
+import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.gallery.GalleryActivity
-import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.home.dialog.UploadErrorDialog
 import com.dpm.presentation.seatreview.ReviewActivity.Companion.FRAGMENT_RESULT_KEY
+import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -71,6 +69,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
 
     private fun initEvent() {
         binding.layoutGallery.setOnSingleClickListener {
+            MixpanelManager.track("seat_review_select_image")
             Intent(requireContext(), GalleryActivity::class.java).apply {
                 putExtra("screenType", ScreenType.REVIEW.name)
                 galleryLauncher.launch(this)
@@ -80,6 +79,7 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
             if (!checkUserPermission(requireContext())) {
                 activityResultLauncher.launch(permissionRequired)
             } else {
+                MixpanelManager.track("seat_review_select_image")
                 initCameraLauncher()
             }
         }

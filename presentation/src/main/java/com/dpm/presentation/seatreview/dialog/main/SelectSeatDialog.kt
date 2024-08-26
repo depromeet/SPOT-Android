@@ -31,6 +31,7 @@ import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.seatreview.adapter.SelectSeatAdapter
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
+import com.dpm.presentation.util.MixpanelManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -116,6 +117,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private fun onClickTabVisibility() {
         with(binding) {
             llTabSelectSeat.setOnSingleClickListener {
+                MixpanelManager.track("seat_review_select_stadium_section")
                 if (!viewModel.sectionItemSelected.value) {
                     makeSpotImageAppbar("‘구역'을 먼저 선택해주세요")
                     val preventTouchListener = createPreventTouchListener("‘구역'을 먼저 선택해주세요")
@@ -294,6 +296,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
     private fun onClickNextBtnVisibility() {
         with(binding) {
             tvNextBtn.setOnSingleClickListener {
+                MixpanelManager.track("seat_review_select_stadium_section")
                 viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
                 spinnerBlock.setOnTouchListener(null)
                 etColumn.setOnTouchListener(null)
@@ -314,7 +317,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     )
                     makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
                     etOnlyTable.setText("")
-                    clOnlyTable.visibility= INVISIBLE
+                    clOnlyTable.visibility = INVISIBLE
                 } else if (viewModel.selectedSectionId.value == 2) {
                     clColumnNumber.visibility = INVISIBLE
                     clOnlyTable.visibility = VISIBLE
@@ -352,6 +355,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 tvSelectNumber.setTextColor(binding.root.context.colorOf(com.depromeet.designsystem.R.color.color_foreground_heading))
             }
             tvCompleteBtn.setOnSingleClickListener {
+                MixpanelManager.track("seat_review_select_row_column")
                 val selectedSeatZone = viewModel.selectedSeatZone.value
                 val selectedBlock = viewModel.selectedBlock.value
                 val selectedColumn = viewModel.selectedColumn.value
