@@ -6,20 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.depromeet.presentation.databinding.ItemScrapRecordBinding
+import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.scrap.viewmodel.ScrapData
 import com.dpm.presentation.util.ItemDiffCallback
 
 
 class ScrapRecordAdapter(
-    private val scrapClick: (ScrapData) -> Unit,
-    private val recordClick: (ScrapData) -> Unit,
-) : ListAdapter<ScrapData, ScrapRecordViewHolder>(
+    private val scrapClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val recordClick: (Int) -> Unit,
+) : ListAdapter<ResponseScrap.ResponseReviewWrapper, ScrapRecordViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItme -> oldItem.id == newItme.id },
-        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        onItemsTheSame = { oldItem, newItem -> oldItem.baseReview.id == newItem.baseReview.id },
+        onContentsTheSame = { oldItem, newItem -> oldItem.baseReview == newItem.baseReview }
     )
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScrapRecordViewHolder {
@@ -33,27 +34,34 @@ class ScrapRecordAdapter(
     }
 
     override fun onBindViewHolder(holder: ScrapRecordViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 }
 
 class ScrapRecordViewHolder(
     private val binding: ItemScrapRecordBinding,
-    private val scrapClick: (ScrapData) -> Unit,
-    private val recordClick: (ScrapData) -> Unit,
+    private val scrapClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val recordClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ScrapData) = with(binding) {
+    fun bind(item: ResponseScrap.ResponseReviewWrapper, position: Int) = with(binding) {
         ivScrap.setOnSingleClickListener {
             scrapClick(item)
         }
         root.setOnClickListener {
-            recordClick(item)
+            recordClick(position)
         }
 
-        root.clipToOutline = true
-        ivScrapImage.loadAndClip(item.image)
+
+        if (item.baseReview.isScrapped) {
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+        } else {
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+        }
+
+        ivScrapImage.loadAndClip(item.baseReview.images[0].url)
         tvScrapStadium.text = item.stadiumName
-        tvScrapSeat.text = item.seatName
+        tvScrapSeat.text = item.baseReview.formattedBaseToBlock()
+//        root.clipToOutline = true
     }
 }
 

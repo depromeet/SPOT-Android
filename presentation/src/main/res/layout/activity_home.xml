@@ -295,20 +295,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/home_scrap"
-            android:textColor="@color/color_foreground_disabled"
+            android:textColor="@color/color_foreground_heading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="4dp"
-            android:src="@drawable/ic_lock"
-            app:layout_constraintBottom_toBottomOf="@id/tv_scrap_title"
-            app:layout_constraintStart_toEndOf="@id/tv_scrap_title"
-            app:layout_constraintTop_toTopOf="@id/tv_scrap_title"
-            app:tint="@color/color_foreground_disabled"
-            tools:ignore="contentDescription" />
 
         <TextView
             android:id="@+id/tv_scrap_description"
@@ -317,7 +307,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/home_scrap_description"
-            android:textColor="@color/color_foreground_disabled"
+            android:textColor="@color/color_foreground_caption"
             app:layout_constraintStart_toStartOf="@id/tv_scrap_title"
             app:layout_constraintTop_toBottomOf="@id/tv_scrap_title" />
 

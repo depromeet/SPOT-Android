@@ -4,6 +4,7 @@ import com.dpm.data.datasource.HomeDataSource
 import com.dpm.data.model.request.home.RequestFileExtensionDto
 import com.dpm.data.model.request.home.RequestMySeatRecordDto
 import com.dpm.data.model.request.home.RequestProfileEditDto
+import com.dpm.data.model.request.home.RequestScrapDto
 import com.dpm.data.model.response.home.ResponseBaseballTeamDto
 import com.dpm.data.model.response.home.ResponseDeleteReviewDto
 import com.dpm.data.model.response.home.ResponseHomeFeedDto
@@ -15,6 +16,7 @@ import com.dpm.data.model.response.home.ResponseProfileDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
+import com.dpm.data.model.response.home.ResponseScrapDto
 import com.dpm.data.remote.HomeApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -90,4 +92,22 @@ class HomeDataSourceImpl @Inject constructor(
     override suspend fun getLevelUpInfo(nextLevel: Int): ResponseLevelUpInfoDto {
         return homeApiService.getLevelUpInfo(nextLevel)
     }
+
+    override suspend fun getScrap(
+        size: Int,
+        sortBy: String,
+        cursor: String?,
+        requestScrapDto: RequestScrapDto,
+    ): ResponseScrapDto {
+        return homeApiService.getScrap(
+            cursor = cursor,
+            size = size,
+            sortBy = sortBy,
+            stadiumId = requestScrapDto.stadiumId,
+            months = requestScrapDto.months,
+            good = requestScrapDto.good,
+            bad = requestScrapDto.bad
+        )
+    }
+
 }

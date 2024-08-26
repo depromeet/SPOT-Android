@@ -3,7 +3,6 @@ package com.dpm.presentation.home
 import ReviewData
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
@@ -24,6 +23,7 @@ import com.dpm.presentation.home.dialog.LevelupDialog
 import com.dpm.presentation.home.viewmodel.HomeGuiViewModel
 import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.scheme.viewmodel.SchemeState
+import com.dpm.presentation.scrap.ScrapActivity
 import com.dpm.presentation.seatrecord.SeatRecordActivity
 import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
@@ -88,6 +88,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             ReviewMethod.FEED -> FeedUploadDialog().apply {
                 arguments = Bundle().apply { putParcelable(REVIEW_DATA, reviewData) }
             }.show(supportFragmentManager, FEED_UPLOAD_DIALOG)
+
             else -> {}
         }
 
@@ -116,12 +117,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
 
-
     private fun initEvent() = with(binding) {
         clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
         clHomeScrap.setOnClickListener {
-            makeSpotImageAppbar("스크랩이 잠겨있어요\uD83E\uDEE2 곧 업데이트 예정이에요")
+            startScrapActivity()
         }
         clHomeUpload.setOnClickListener { navigateToReviewActivity() }
         ivHomeSetting.setOnClickListener { navigateToSettingActivity() }
@@ -226,6 +226,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         Intent(this, SeatRecordActivity::class.java).apply { startActivity(this) }
     }
 
+    private fun startScrapActivity() {
+        Intent(this, ScrapActivity::class.java).apply { startActivity(this) }
+    }
+
     private fun startStadiumActivity(stadium: ResponseStadiums) {
         val intent = Intent(
             this@HomeActivity,
@@ -303,7 +307,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun handleIntentExtra() {
-        val navReview =  intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
+        val navReview =
+            intent.getCompatibleParcelableExtra<SchemeState.NavReview>(SchemeKey.NAV_REVIEW)
         if (navReview != null) {
             Intent(this, StadiumDetailActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -315,7 +320,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun navigateToReviewDetail() {
-        val navReviewDetail = intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(SchemeKey.NAV_REVIEW_DETAIL)
+        val navReviewDetail =
+            intent.getCompatibleParcelableExtra<SchemeState.NavReviewDetail>(SchemeKey.NAV_REVIEW_DETAIL)
         if (navReviewDetail != null) {
             Intent(this, StadiumDetailActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

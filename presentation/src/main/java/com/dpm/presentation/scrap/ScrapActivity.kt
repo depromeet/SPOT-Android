@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.RecyclerView
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityScrapBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
@@ -16,7 +19,8 @@ import com.dpm.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.dpm.presentation.scrap.adapter.ScrapRecordAdapter
 import com.dpm.presentation.scrap.dialog.ScrapFilterDialog
 import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
-import com.dpm.presentation.viewfinder.StadiumActivity
+import com.dpm.presentation.util.Utils
+import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -27,6 +31,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private val viewModel: ScrapViewModel by viewModels()
     private lateinit var scrapAdapter: ScrapRecordAdapter
     private lateinit var scrapFilterAdapter: ScrapFilterAdapter
+    private var isLoading = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +46,13 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         viewModel.getScrapRecord()
         initScrapAdapter()
         initScrapFilterAdapter()
+        initViewStatusBar()
 
     }
 
     private fun initEvent() = with(binding) {
         btScrapEmptyView.setOnClickListener {
-            Intent(this@ScrapActivity, StadiumActivity::class.java).apply {
+            Intent(this@ScrapActivity, StadiumSelectionActivity::class.java).apply {
                 startActivity(this)
             }
         }
@@ -62,7 +68,9 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         viewModel.scrap.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    scrapAdapter.submitList(state.data)
+                    scrapAdapter.submitList(state.data.reviews)
+                    isLoading = false
+                    setScrapScreenVisibility(ScrapScreenState.SUCCESS)
                 }
 
                 is UiState.Failure -> {
@@ -70,7 +78,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 }
 
                 is UiState.Loading -> {
-                    //TODO : shimmer skeleton 추가하기
+
                 }
 
                 is UiState.Empty -> {
@@ -91,10 +99,11 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private fun initScrapAdapter() {
         scrapAdapter = ScrapRecordAdapter(
             scrapClick = {
-                viewModel.deleteScrapRecord(it.id)
+                viewModel.updateScrap(it.baseReview.id)
             },
             recordClick = {
-                //TODO : 상세화면 이동
+                viewModel.setCurrentPage(it)
+                startScrapDetailPictureFragment()
             }
         )
         binding.rvScrapRecord.adapter = scrapAdapter
@@ -104,6 +113,17 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
             )
         )
 
+        binding.rvScrapRecord.addOnScrollListener( object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val scrollBottom = !binding.rvScrapRecord.canScrollVertically(1)
+                if(scrollBottom && ! isLoading && (viewModel.scrap.value as UiState.Success).data.hasNext){
+                    viewModel.getNextScrapRecord()
+                    isLoading = true
+                }
+            }
+        })
     }
 
     private fun initScrapFilterAdapter() {
@@ -138,6 +158,23 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 clScrapEmpty.visibility = GONE
                 clScrapFail.visibility = VISIBLE
             }
+        }
+    }
+
+    private fun startScrapDetailPictureFragment() {
+        supportFragmentManager.commit {
+            replace(
+                R.id.fcvScrap,
+                ScrapDetailPictureFragment(),
+                ScrapDetailPictureFragment.TAG
+            )
+        }
+    }
+
+    private fun initViewStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+            setBlackSystemBarIconColor(window)
         }
     }
 
