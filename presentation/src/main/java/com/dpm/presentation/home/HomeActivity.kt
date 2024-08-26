@@ -101,7 +101,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 view = binding.root,
                 message = "시야찾기에 내 게시글이 올라갔어요!",
                 endMessage = "확인하러 가기",
-                marginBottom = 93,
+                marginBottom = 87,
             ) {
                 val reviewData = intent.getCompatibleParcelableExtra<ReviewData>(REVIEW_DATA)
                 if (reviewData != null) {
@@ -302,7 +302,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
-            marginBottom = 94
+            marginBottom = 87
         ).show()
     }
 
