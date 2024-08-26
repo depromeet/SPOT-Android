@@ -5,14 +5,17 @@ import com.dpm.data.mapper.toBaseballTeamResponse
 import com.dpm.data.mapper.toPresignedUrlResponse
 import com.dpm.data.model.request.home.RequestMySeatRecordDto.Companion.toMySeatRecordRequestDto
 import com.dpm.data.model.request.home.RequestProfileEditDto.Companion.toProfileEditRequestDto
+import com.dpm.data.model.request.home.toRequestScrapDto
 import com.dpm.data.model.response.home.ResponseDeleteReviewDto.Companion.toDeleteReviewResponse
 import com.dpm.data.model.response.home.ResponseMySeatRecordDto.Companion.toMySeatRecordResponse
 import com.dpm.data.model.response.home.ResponseProfileEditDto.Companion.toProfileEditResponse
 import com.dpm.data.model.response.home.ResponseRecentReviewDto.Companion.toRecentReviewResponse
 import com.dpm.data.model.response.home.ResponseReviewDateDto.Companion.toReviewDateResponse
 import com.dpm.data.model.response.home.toResponseUserInfo
+import com.dpm.data.model.response.home.toResponseScrap
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.request.home.RequestProfileEdit
+import com.dpm.domain.entity.request.home.RequestScrap
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
 import com.dpm.domain.entity.response.home.ResponseDeleteReview
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
@@ -24,6 +27,7 @@ import com.dpm.domain.entity.response.home.ResponseProfileEdit
 import com.dpm.domain.entity.response.home.ResponseRecentReview
 import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.domain.repository.HomeRepository
 import javax.inject.Inject
 
@@ -112,6 +116,22 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun getMyUserInfo(): Result<ResponseUserInfo> {
         return runCatching {
             homeDataSource.getUserInfo().toResponseUserInfo()
+        }
+    }
+
+    override suspend fun getScrap(
+        size: Int,
+        sortBy: String,
+        cursor: String?,
+        requestScrap: RequestScrap,
+    ): Result<ResponseScrap> {
+        return runCatching {
+            homeDataSource.getScrap(
+                size = size,
+                sortBy = sortBy,
+                cursor = cursor,
+                requestScrapDto = requestScrap.toRequestScrapDto()
+            ).toResponseScrap()
         }
     }
 }

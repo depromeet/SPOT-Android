@@ -2,6 +2,7 @@ package com.dpm.domain.repository
 
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.request.home.RequestProfileEdit
+import com.dpm.domain.entity.request.home.RequestScrap
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
 import com.dpm.domain.entity.response.home.ResponseDeleteReview
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
@@ -13,6 +14,7 @@ import com.dpm.domain.entity.response.home.ResponseProfileEdit
 import com.dpm.domain.entity.response.home.ResponseRecentReview
 import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.entity.response.home.ResponseScrap
 
 interface HomeRepository {
     suspend fun getMySeatRecord(
@@ -55,4 +57,11 @@ interface HomeRepository {
     suspend fun getLevelUpInfo(nextLevel: Int): Result<ResponseLevelUpInfo>
 
     suspend fun getMyUserInfo(): Result<ResponseUserInfo>
+
+    suspend fun getScrap(
+        size: Int,
+        sortBy: String,
+        cursor: String?,
+        requestScrap: RequestScrap,
+    ): Result<ResponseScrap>
 }

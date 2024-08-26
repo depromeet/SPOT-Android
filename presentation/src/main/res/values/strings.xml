@@ -172,5 +172,6 @@
     <string name="scrap_filter_month">월별 시야</string>
     <string name="scrap_search">검색하기</string>
     <string name="stadium_jamsil">잠실야구장</string>
+    <string name="scrap_more"><u>더보기</u></string>
 
 </resources>

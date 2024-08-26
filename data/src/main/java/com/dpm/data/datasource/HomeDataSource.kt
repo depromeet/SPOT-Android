@@ -2,6 +2,7 @@ package com.dpm.data.datasource
 
 import com.dpm.data.model.request.home.RequestMySeatRecordDto
 import com.dpm.data.model.request.home.RequestProfileEditDto
+import com.dpm.data.model.request.home.RequestScrapDto
 import com.dpm.data.model.response.home.ResponseBaseballTeamDto
 import com.dpm.data.model.response.home.ResponseDeleteReviewDto
 import com.dpm.data.model.response.home.ResponseHomeFeedDto
@@ -13,6 +14,7 @@ import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
 import com.dpm.data.model.response.home.ResponseUserInfoDto
+import com.dpm.data.model.response.home.ResponseScrapDto
 
 interface HomeDataSource {
     suspend fun getMySeatRecordData(
@@ -55,4 +57,11 @@ interface HomeDataSource {
     suspend fun getLevelUpInfo(nextLevel: Int): ResponseLevelUpInfoDto
 
     suspend fun getUserInfo(): ResponseUserInfoDto
+
+    suspend fun getScrap(
+        size: Int,
+        sortBy: String,
+        cursor : String?,
+        requestScrapDto: RequestScrapDto,
+    ): ResponseScrapDto
 }

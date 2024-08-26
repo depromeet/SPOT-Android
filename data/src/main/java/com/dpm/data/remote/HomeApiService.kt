@@ -12,6 +12,7 @@ import com.dpm.data.model.response.home.ResponsePresignedUrlDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
+import com.dpm.data.model.response.home.ResponseScrapDto
 import com.dpm.data.model.response.home.ResponseUserInfoDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -84,4 +85,15 @@ interface HomeApiService {
 
     @GET("/api/v1/reviews/userInfo")
     suspend fun getUserInfo(): ResponseUserInfoDto
+
+    @GET("api/v1/reviews/scraps")
+    suspend fun getScrap(
+        @Query("cursor") cursor: String?,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String,
+        @Query("stadiumId") stadiumId: Int?,
+        @Query("months") months: List<Int>?,
+        @Query("good") good: List<String>?,
+        @Query("bad") bad: List<String>?,
+    ): ResponseScrapDto
 }
