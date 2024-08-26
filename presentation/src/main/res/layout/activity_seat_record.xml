@@ -97,12 +97,13 @@
                 tools:text="LG 트윈스의 Lv.0 직관 꿈나무" />
 
 
-
             <ImageView
                 android:id="@+id/iv_record_profile"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="39dp"
+                android:padding="1dp"
+                android:background="@drawable/circle_stroke_tertiary_stroke_1"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_default_profile"
                 app:layout_constraintEnd_toEndOf="@id/csbvRecordTitle"
@@ -429,10 +430,10 @@
                 style="@style/TextAppearance.Spot.Subtitle01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/color_foreground_heading"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="16dp"
                 app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader"
                 tools:text="2024년" />
 
