@@ -151,18 +151,42 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         with(binding) {
             rvDetailRecord.adapter = detailRecordAdapter
 
-            val position =
-                (viewModel.seatReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+            val position = when (viewModel.currentReviewState.value) {
+                SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
+                    (viewModel.seatReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                }
+
+                SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
+                    (viewModel.intuitiveReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                }
+            }
+
             rvDetailRecord.scrollToPosition(position)
             rvDetailRecord.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
                     val scrollBottom = !rvDetailRecord.canScrollVertically(1)
-                    val hasNextPage = (viewModel.seatReviews.value as UiState.Success).data.hasNext
+                    val hasNextPage = when (viewModel.currentReviewState.value) {
+                        SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
+                            (viewModel.seatReviews.value as UiState.Success).data.hasNext
+                        }
+
+                        SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
+                            (viewModel.intuitiveReviews.value as UiState.Success).data.hasNext
+                        }
+                    }
                     if (scrollBottom && hasNextPage && !isLoading) {
                         isLoading = true
-                        viewModel.getNextSeatReviews()
+                        when (viewModel.currentReviewState.value) {
+                            SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
+                                viewModel.getNextSeatReviews()
+                            }
+
+                            SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
+                                viewModel.getNextIntuitiveReviews()
+                            }
+                        }
                     }
                 }
             })

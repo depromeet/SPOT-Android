@@ -584,9 +584,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
                 if (!isLoading) {
                     isLoading = true
-                    if (binding.tvSeatView.isSelected && (viewModel.seatReviews.value as? UiState.Success)?.data?.hasNext == true) {
+                    if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW
+                        && (viewModel.seatReviews.value as? UiState.Success)?.data?.hasNext == true
+                    ) {
                         viewModel.getNextSeatReviews()
-                    } else if (binding.tvIntuitiveReview.isSelected && (viewModel.intuitiveReviews.value as? UiState.Success)?.data?.hasNext == true) {
+                    } else if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW
+                        && (viewModel.intuitiveReviews.value as? UiState.Success)?.data?.hasNext == true
+                    ) {
                         viewModel.getNextIntuitiveReviews()
                     }
                 }
