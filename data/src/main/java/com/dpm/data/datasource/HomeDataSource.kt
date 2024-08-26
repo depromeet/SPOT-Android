@@ -38,7 +38,9 @@ interface HomeDataSource {
         nickname: String,
     )
 
-    suspend fun getReviewDate(): ResponseReviewDateDto
+    suspend fun getReviewDate(
+        reviewType: String?,
+    ): ResponseReviewDateDto
 
     suspend fun getRecentReview(): ResponseRecentReviewDto
 

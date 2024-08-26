@@ -73,9 +73,9 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getReviewDate(): Result<ResponseReviewDate> {
+    override suspend fun getReviewDate(reviewType : String?): Result<ResponseReviewDate> {
         return runCatching {
-            homeDataSource.getReviewDate().toReviewDateResponse()
+            homeDataSource.getReviewDate(reviewType).toReviewDateResponse()
         }
     }
 

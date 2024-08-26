@@ -16,6 +16,8 @@ data class RequestMySeatRecordDto(
     val year: Int? = null,
     @SerialName("month")
     val month: Int? = null,
+    @SerialName("reviewType")
+    val reviewType : String ?= null
 ) {
     companion object {
         fun RequestMySeatRecord.toMySeatRecordRequestDto() = RequestMySeatRecordDto(
@@ -23,7 +25,8 @@ data class RequestMySeatRecordDto(
             sortBy = sortBy,
             size = size,
             year = year,
-            month = month
+            month = month,
+            reviewType = reviewType?.name,
         )
     }
 }

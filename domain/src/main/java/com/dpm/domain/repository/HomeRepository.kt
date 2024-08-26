@@ -38,7 +38,9 @@ interface HomeRepository {
         nickname: String,
     ): Result<Unit>
 
-    suspend fun getReviewDate(): Result<ResponseReviewDate>
+    suspend fun getReviewDate(
+        reviewType : String?
+    ): Result<ResponseReviewDate>
 
     suspend fun getRecentReview(): Result<ResponseRecentReview>
 

@@ -31,6 +31,7 @@ interface HomeApiService {
         @Query("size") size: Int,
         @Query("year") year: Int?,
         @Query("month") month: Int?,
+        @Query("reviewType") reviewType: String?,
     ): ResponseMySeatRecordDto
 
     @GET("/api/v1/baseball-teams")
@@ -58,7 +59,9 @@ interface HomeApiService {
     )
 
     @GET("/api/v1/reviews/months")
-    suspend fun getReviewDate(): ResponseReviewDateDto
+    suspend fun getReviewDate(
+        @Query("reviewType") reviewType: String?
+    ): ResponseReviewDateDto
 
     @GET("/api/v1/reviews/recentReview")
     suspend fun getRecentReview(): ResponseRecentReviewDto

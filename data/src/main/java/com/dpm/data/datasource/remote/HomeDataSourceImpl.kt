@@ -29,7 +29,8 @@ class HomeDataSourceImpl @Inject constructor(
             sortBy = requestMySeatRecordDto.sortBy,
             size = requestMySeatRecordDto.size,
             year = requestMySeatRecordDto.year,
-            month = requestMySeatRecordDto.month
+            month = requestMySeatRecordDto.month,
+            reviewType = requestMySeatRecordDto.reviewType
         )
     }
 
@@ -61,8 +62,8 @@ class HomeDataSourceImpl @Inject constructor(
         return homeApiService.getDuplicateNickname(nickname)
     }
 
-    override suspend fun getReviewDate(): ResponseReviewDateDto {
-        return homeApiService.getReviewDate()
+    override suspend fun getReviewDate(reviewType : String?): ResponseReviewDateDto {
+        return homeApiService.getReviewDate(reviewType)
     }
 
 
