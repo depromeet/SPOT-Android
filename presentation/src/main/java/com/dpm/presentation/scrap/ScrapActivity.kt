@@ -7,6 +7,7 @@ import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityScrapBinding
 import com.dpm.core.base.BaseActivity
@@ -30,6 +31,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
     private val viewModel: ScrapViewModel by viewModels()
     private lateinit var scrapAdapter: ScrapRecordAdapter
     private lateinit var scrapFilterAdapter: ScrapFilterAdapter
+    private var isLoading = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +69,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
             when (state) {
                 is UiState.Success -> {
                     scrapAdapter.submitList(state.data.reviews)
+                    isLoading = false
                     setScrapScreenVisibility(ScrapScreenState.SUCCESS)
                 }
 
@@ -109,6 +112,18 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 spanCount = 2, spacing = 12.dpToPx(this), bottomSpacing = 40.dpToPx(this)
             )
         )
+
+        binding.rvScrapRecord.addOnScrollListener( object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val scrollBottom = !binding.rvScrapRecord.canScrollVertically(1)
+                if(scrollBottom && ! isLoading && (viewModel.scrap.value as UiState.Success).data.hasNext){
+                    viewModel.getNextScrapRecord()
+                    isLoading = true
+                }
+            }
+        })
     }
 
     private fun initScrapFilterAdapter() {
