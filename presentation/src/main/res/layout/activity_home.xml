@@ -232,7 +232,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_home_archiving"
         android:layout_width="0dp"
-        android:layout_height="223dp"
+        android:layout_height="233dp"
         android:layout_marginTop="33dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/rect_white_fill_12"
@@ -265,9 +265,9 @@
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="169dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_archiving_design"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -280,7 +280,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_home_scrap"
         android:layout_width="0dp"
-        android:layout_height="223dp"
+        android:layout_height="233dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/rect_white_fill_12"
         app:layout_constraintEnd_toStartOf="@id/gl_end"
@@ -312,9 +312,9 @@
             app:layout_constraintTop_toBottomOf="@id/tv_scrap_title" />
 
         <ImageView
-            android:layout_width="125dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="19dp"
+            android:layout_width="128dp"
+            android:layout_height="153dp"
+            android:layout_marginBottom="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_scrap_design"
             app:layout_constraintBottom_toBottomOf="parent"
