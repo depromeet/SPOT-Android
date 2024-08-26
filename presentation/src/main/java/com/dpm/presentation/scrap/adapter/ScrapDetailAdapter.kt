@@ -5,13 +5,20 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemScrapDetailBinding
 import com.dpm.domain.entity.response.home.ResponseScrap
+import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
@@ -52,6 +59,7 @@ class ScrapDetailViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var scrapImageAdapter: ScrapImageAdapter
+    private lateinit var indicators : MutableList<ImageView>
 
     fun bind(item: ResponseScrap.ResponseReviewWrapper) = with(binding) {
         ivProfile.loadAndCircleProfile(item.baseReview.member.profileImage ?: "")
@@ -68,6 +76,12 @@ class ScrapDetailViewHolder(
         scrapImageAdapter = ScrapImageAdapter()
         binding.vpImage.adapter = scrapImageAdapter
         scrapImageAdapter.submitList(item.baseReview.images.map { it.url })
+        setupIndicators(scrapImageAdapter.itemCount)
+        binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                updateIndicators(position)
+            }
+        })
         tvLikeCount.text = item.baseReview.likesCount.toString()
 
 
@@ -105,6 +119,8 @@ class ScrapDetailViewHolder(
             }
         }
 
+
+        //클릭 처리
         root.setOnClickListener {
             if (tvScrapContent.maxLines == Integer.MAX_VALUE) {
                 tvMore.visibility = VISIBLE
@@ -117,8 +133,6 @@ class ScrapDetailViewHolder(
                 tvScrapContent.maxLines = 1
             }
         }
-
-        //클릭 처리
         tvMore.setOnClickListener {
             if (tvScrapContent.maxLines == 1) {
                 tvMore.visibility = INVISIBLE
@@ -140,6 +154,56 @@ class ScrapDetailViewHolder(
         }
         ivShare.setOnSingleClickListener {
             shareClick(item, binding.vpImage.currentItem)
+        }
+    }
+
+    private fun setupIndicators(count: Int) {
+        indicators = mutableListOf()
+        binding.llIndicator.removeAllViews()
+        val context = binding.root.context
+
+        if (count < 2) {
+            binding.llIndicator.visibility = GONE
+        } else {
+            binding.llIndicator.visibility = VISIBLE
+            for (i in 0 until count) {
+                val indicator = ImageView(context).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        6.dpToPx(context), 6.dpToPx(context)
+                    ).apply {
+                        setMargins(4.dpToPx(context), 0, 4.dpToPx(context), 0)
+                    }
+                    scaleType = ImageView.ScaleType.FIT_XY
+                    setImageDrawable(ContextCompat.getDrawable(context, R.drawable.indicator_unselected))
+                }
+                indicators.add(indicator)
+                binding.llIndicator.addView(indicator)
+            }
+
+            updateIndicators(0)
+        }
+    }
+
+    private fun updateIndicators(selectedPosition: Int) {
+        val context = binding.root.context
+        for ((index, indicator) in indicators.withIndex()) {
+            val drawableResId = if (index == selectedPosition) {
+                R.drawable.indicator_selected
+            } else {
+                R.drawable.indicator_unselected
+            }
+
+            val size = if (index == selectedPosition) {
+                15.dpToPx(context)
+            } else {
+                6.dpToPx(context)
+            }
+
+            indicator.layoutParams = LinearLayout.LayoutParams(size, 6.dpToPx(context)).apply {
+                setMargins(4.dpToPx(context), 0, 4.dpToPx(context), 0)
+            }
+
+            indicator.setImageDrawable(ContextCompat.getDrawable(context, drawableResId))
         }
     }
 
