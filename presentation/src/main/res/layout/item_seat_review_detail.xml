@@ -133,6 +133,7 @@
         android:textColor="@color/color_foreground_white"
         app:layout_constraintBottom_toBottomOf="@id/vp_detail_image"
         app:layout_constraintEnd_toEndOf="@id/vp_detail_image"
+        style="@style/TextAppearance.Spot.Label09"
         tools:text="1/3" />
 
     <TextView

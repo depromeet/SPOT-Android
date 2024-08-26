@@ -32,6 +32,7 @@ import com.dpm.presentation.seatrecord.uiMapper.MonthReviewData
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.ReviewActivity
+import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -627,11 +628,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun navigateToReviewActivity() {
-        Intent(this@SeatRecordActivity, ReviewActivity::class.java).apply {
-            startActivity(
-                this
-            )
-        }
+        ReviewTypeDialog().show(supportFragmentManager, "MyDialog")
     }
 
     private fun moveConfirmationDialog() {

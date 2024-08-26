@@ -181,9 +181,7 @@ class ReviewDetailViewHolder(
                 tvDetailImageCount.visibility = GONE
             } else {
                 val text = "${position + 1}/${vpDetailImage.adapter?.itemCount ?: 0}"
-                tvDetailImageCount.text = SpannableStringBuilder(text).apply {
-                    applyBoldSpan(this, 0, (position + 1).toString().length)
-                }
+                tvDetailImageCount.text = text
             }
 
         }
