@@ -12,10 +12,16 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentScrapDetailPictureBinding
 import com.dpm.core.base.BindingFragment
 import com.dpm.core.state.UiState
+import com.dpm.domain.entity.response.home.ResponseScrap
+import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.scrap.adapter.ScrapDetailAdapter
 import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
+import com.dpm.presentation.util.KakaoUtils
+import com.dpm.presentation.util.Utils
+import com.dpm.presentation.util.seatFeed
 import com.dpm.presentation.viewfinder.dialog.ReportDialog
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBinding>(
@@ -38,6 +44,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     private fun initView() {
         initViewPager()
+        initViewStatusBar()
     }
 
     private fun initEvent() = with(binding) {
@@ -77,13 +84,26 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             likeClick = {
                 viewModel.updateLike(it)
             },
-            shareClick = {
-                //TODO : 공유하기 클릭
+            shareClick = { data, position ->
+                shareLink(data, position)
             }
         )
         binding.vpScrap.adapter = adapter
 
         setupPageChangeListener()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(
+                    window,
+                    com.depromeet.designsystem.R.color.color_background_tertiary
+                )
+                setBlackSystemBarIconColor(window)
+            }
+        }
     }
 
     private fun setupPageChangeListener() {
@@ -134,4 +154,32 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             })
     }
 
+    private fun initViewStatusBar() {
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_b2000000)
+            }
+        }
+    }
+
+    private fun shareLink(data: ResponseScrap.ResponseReviewWrapper, imagePosition: Int) {
+        KakaoUtils().share(
+            requireContext(),
+            seatFeed(
+                title = data.baseReview.kakaoShareSeatFeedTitle(),
+                description = "출처 : ${data.baseReview.member.nickname}",
+                imageUrl = data.baseReview.images[imagePosition].url,
+                queryParams = mapOf(
+                    SchemeKey.STADIUM_ID to data.baseReview.stadium.id.toString(),
+                    SchemeKey.BLOCK_CODE to data.baseReview.block.code
+                )
+            ),
+            onSuccess = { sharingIntent ->
+                requireContext().startActivity(sharingIntent)
+            },
+            onFailure = {
+                Timber.d("링크 공유 실패 : ${it.message}")
+            }
+        )
+    }
 }

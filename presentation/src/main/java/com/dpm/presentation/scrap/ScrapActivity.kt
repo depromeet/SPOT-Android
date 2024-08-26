@@ -44,6 +44,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         viewModel.getScrapRecord()
         initScrapAdapter()
         initScrapFilterAdapter()
+        initViewStatusBar()
 
     }
 
@@ -108,7 +109,6 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 spanCount = 2, spacing = 12.dpToPx(this), bottomSpacing = 40.dpToPx(this)
             )
         )
-
     }
 
     private fun initScrapFilterAdapter() {
@@ -153,6 +153,13 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 ScrapDetailPictureFragment(),
                 ScrapDetailPictureFragment.TAG
             )
+        }
+    }
+
+    private fun initViewStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+            setBlackSystemBarIconColor(window)
         }
     }
 

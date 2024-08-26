@@ -20,7 +20,7 @@ class ScrapRecordAdapter(
 ) : ListAdapter<ResponseScrap.ResponseReviewWrapper, ScrapRecordViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.baseReview.id == newItem.baseReview.id },
-        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        onContentsTheSame = { oldItem, newItem -> oldItem.baseReview == newItem.baseReview }
     )
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScrapRecordViewHolder {
@@ -57,10 +57,11 @@ class ScrapRecordViewHolder(
         } else {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
         }
-        root.clipToOutline = true
+
         ivScrapImage.loadAndClip(item.baseReview.images[0].url)
         tvScrapStadium.text = item.stadiumName
         tvScrapSeat.text = item.baseReview.formattedBaseToBlock()
+//        root.clipToOutline = true
     }
 }
 

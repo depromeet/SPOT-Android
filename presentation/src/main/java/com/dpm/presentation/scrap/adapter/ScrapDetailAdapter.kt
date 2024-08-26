@@ -22,7 +22,7 @@ import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
 class ScrapDetailAdapter(
     private val scrapClick: (Int) -> Unit,
     private val likeClick: (Int) -> Unit,
-    private val shareClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val shareClick: (ResponseScrap.ResponseReviewWrapper, Int) -> Unit,
 ) : ListAdapter<ResponseScrap.ResponseReviewWrapper, ScrapDetailViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { oldItem, newItem -> oldItem.baseReview.id == newItem.baseReview.id },
@@ -48,7 +48,7 @@ class ScrapDetailViewHolder(
     private val binding: ItemScrapDetailBinding,
     private val scrapClick: (Int) -> Unit,
     private val likeClick: (Int) -> Unit,
-    private val shareClick: (ResponseScrap.ResponseReviewWrapper) -> Unit,
+    private val shareClick: (ResponseScrap.ResponseReviewWrapper, Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var scrapImageAdapter: ScrapImageAdapter
@@ -94,8 +94,15 @@ class ScrapDetailViewHolder(
             ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
         }
 
-        if (item.baseReview.content.isEmpty()) {
-            tvMore.visibility = GONE
+        if(item.baseReview.content.isEmpty()){
+            tvMore.visibility = INVISIBLE
+        }
+        tvScrapContent.post {
+            if (tvScrapContent.layout != null) {
+                if (!(tvScrapContent.layout.getEllipsisCount(0) > 0)) {
+                    tvMore.visibility = INVISIBLE
+                }
+            }
         }
 
         root.setOnClickListener {
@@ -132,7 +139,7 @@ class ScrapDetailViewHolder(
             scrapClick(item.baseReview.id)
         }
         ivShare.setOnSingleClickListener {
-            shareClick(item)
+            shareClick(item, binding.vpImage.currentItem)
         }
     }
 

@@ -45,6 +45,19 @@ data class ResponseScrap(
                 "${formattedBlockName()} ${row.number}열 "
             }
 
+        fun kakaoShareSeatFeedTitle() : String {
+            val base = when(stadium.name.base(block.code)) {
+                BASE.Base1 -> "1루"
+                BASE.Base3 -> "3루"
+                else -> ""
+            }
+            val section = section.name
+            val block = "${row.number} 열"
+            val seat = if(seat == null) "" else "${seat.seatNumber}번"
+
+            return "${stadium.name} $base $section $block $seat"
+        }
+
         fun formattedBaseToBlock() : String =
             "${formattedBaseName()} ${formattedSectionName()} ${formattedBlockName()}"
 
@@ -55,6 +68,8 @@ data class ResponseScrap(
                 else -> ""
             }
         }
+
+
 
         private fun formattedSectionName(): String {
             val sectionNameSplits = section.name.split("\n")
