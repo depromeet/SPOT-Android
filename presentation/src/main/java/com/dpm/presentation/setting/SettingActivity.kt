@@ -1,8 +1,10 @@
 package com.dpm.presentation.setting
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
@@ -12,6 +14,7 @@ import com.depromeet.presentation.databinding.ActivitySettingBinding
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.login.ui.SignUpActivity
+import com.dpm.presentation.seatrecord.SeatRecordActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -20,6 +23,19 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
     ActivitySettingBinding::inflate
 ){
     private val viewModel : SettingViewModel by viewModels()
+
+    private val editProfileLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val nickname = data?.getStringExtra(ProfileEditActivity.PROFILE_NAME) ?: ""
+                val profileImage = data?.getStringExtra(ProfileEditActivity.PROFILE_IMAGE) ?: ""
+                val teamId = data?.getIntExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_ID, 0) ?: 0
+                val teamName = data?.getStringExtra(ProfileEditActivity.PROFILE_CHEER_TEAM_NAME)
+
+                viewModel.updateProfile(nickname, profileImage, teamId, teamName)
+            }
+        }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +79,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
 
     private fun initView() {
         binding.tvSettingAppVersion.text = "V.${packageManager.getPackageInfo(this.packageName, 0).versionName}"
+        viewModel.getProfile()
     }
 
     private fun initEvent() = with(binding){
@@ -71,9 +88,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
         }
 
         ivSettingMyProfile.setOnClickListener {
-            Intent(this@SettingActivity, ProfileEditActivity::class.java).apply {
-                startActivity(this)
-            }
+            navigateToProfileEditActivity()
         }
 
         clSettingFeedback.setOnClickListener {
@@ -123,5 +138,13 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(
             LogoutDialog.newInstance("tag")
                 .show(supportFragmentManager, "tag")
         }
+    }
+
+    private fun navigateToProfileEditActivity() {
+        editProfileLauncher.launch(Intent(this, ProfileEditActivity::class.java).apply {
+            putExtra(SeatRecordActivity.PROFILE_NAME, viewModel.profile.value.nickname)
+            putExtra(SeatRecordActivity.PROFILE_IMAGE, viewModel.profile.value.profileImage)
+            putExtra(SeatRecordActivity.PROFILE_CHEER_TEAM, viewModel.profile.value.teamId)
+        })
     }
 }

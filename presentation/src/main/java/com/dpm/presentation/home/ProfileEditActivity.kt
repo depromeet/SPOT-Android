@@ -16,6 +16,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityProfileEditBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
 import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.extension.loadAndCircleProfile
@@ -110,7 +111,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 viewModel.events.collect { event ->
                     when (event) {
                         is ProfileEvents.ShowSnackMessage -> {
-                            toast(event.message)
+                            //
                         }
                     }
                 }
@@ -178,11 +179,11 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 is UiState.Loading -> {}
                 is UiState.Success -> {}
                 is UiState.Failure -> {
-                    toast("이미지 업로드를 실패하였습니다. 다시 선택해주세요.")
+                    makeSpotImageAppbar("이미지 업로드를 실패하였습니다. 다시 선택해주세요.")
                 }
 
                 is UiState.Empty -> {
-                    toast("실패")
+                    makeSpotImageAppbar("이미지 업로드를 실패하였습니다. 다시 선택해주세요.")
                 }
             }
         }
@@ -201,11 +202,11 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 }
 
                 is UiState.Failure -> {
-                    toast("프로필 변경에 실패\n다시 시도바람")
+                    makeSpotImageAppbar("프로필 변경을 실패하였습니다. 다시 시도 바랍니다")
                 }
 
                 is UiState.Empty -> {
-                    toast("프로필 변경 실패\n다시 시도바람(빈값")
+                    makeSpotImageAppbar("프로필 변경을 실패하였습니다. 다시 시도 바랍니다")
                 }
 
                 is UiState.Loading -> {}
@@ -225,15 +226,15 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
                 }
 
                 is UiState.Loading -> {
-                    toast("로딩 중")
+
                 }
 
                 is UiState.Empty -> {
-                    toast("빈값 에러")
+                    makeSpotImageAppbar("팀불러오기를 실패하였습니다.")
                 }
 
                 is UiState.Failure -> {
-                    toast("통신 실패")
+                    makeSpotImageAppbar("팀불러오기를 실패하였습니다.")
                 }
             }
         }
@@ -283,6 +284,17 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(
             intent?.getStringExtra(SeatRecordActivity.PROFILE_IMAGE) ?: "",
             intent?.getIntExtra(SeatRecordActivity.PROFILE_CHEER_TEAM, 0) ?: 0
         )
+    }
+
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 20
+        ).show()
     }
 
 }
