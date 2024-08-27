@@ -266,7 +266,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initEventToHome() {
         binding.btnBack.setOnSingleClickListener {
-            Intent(this, HomeActivity::class.java).apply { startActivity(this) }
+            finish()
         }
     }
 
@@ -510,7 +510,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     )
                     dialogType?.let {
                         Intent(this, HomeActivity::class.java).apply {
-                            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             putExtra(DIALOG_TYPE, dialogType)
                             putExtra(REVIEW_DATA, reviewData)
                             finish()

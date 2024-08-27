@@ -1,5 +1,7 @@
 package com.dpm.presentation.scrap.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -8,11 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.depromeet.presentation.R
@@ -29,10 +29,10 @@ import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
 class ScrapDetailAdapter(
     private val scrapClick: (Int) -> Unit,
     private val likeClick: (Int) -> Unit,
-    private val shareClick: (ResponseScrap.ResponseReviewWrapper, Int) -> Unit,
-) : ListAdapter<ResponseScrap.ResponseReviewWrapper, ScrapDetailViewHolder>(
+    private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
+) : ListAdapter<ResponseScrap.ResponseBaseReview, ScrapDetailViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.baseReview.id == newItem.baseReview.id },
+        onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
 ) {
@@ -55,60 +55,53 @@ class ScrapDetailViewHolder(
     private val binding: ItemScrapDetailBinding,
     private val scrapClick: (Int) -> Unit,
     private val likeClick: (Int) -> Unit,
-    private val shareClick: (ResponseScrap.ResponseReviewWrapper, Int) -> Unit,
+    private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var scrapImageAdapter: ScrapImageAdapter
-    private lateinit var indicators : MutableList<ImageView>
+    private lateinit var indicators: MutableList<ImageView>
 
-    fun bind(item: ResponseScrap.ResponseReviewWrapper) = with(binding) {
-        ivProfile.loadAndCircleProfile(item.baseReview.member.profileImage ?: "")
-        tvScrapNickname.text = item.baseReview.member.nickname
-        tvSectionName.text = item.baseReview.member.nickname
-        tvScrapLevel.text = item.baseReview.member.formattedLevel()
-        tvSectionName.text = item.baseReview.formattedBlockToSeat()
-        ivBackground.loadAndClip(item.baseReview.images[0].url)
-        if (item.baseReview.content.isNotEmpty()) {
-            tvScrapContent.text = item.baseReview.content
+    fun bind(item: ResponseScrap.ResponseBaseReview) = with(binding) {
+        ivProfile.loadAndCircleProfile(item.member.profileImage ?: "")
+        tvScrapNickname.text = item.member.nickname
+        tvSectionName.text = item.member.nickname
+        tvScrapLevel.text = item.member.formattedLevel()
+        tvSectionName.text = item.formattedBlockToSeat()
+        tvLikeCount.text = item.likesCount.toString()
+        if (item.content.isNotEmpty()) {
+            tvScrapContent.text = item.content
         } else {
             tvScrapContent.visibility = GONE
         }
-        scrapImageAdapter = ScrapImageAdapter()
-        binding.vpImage.adapter = scrapImageAdapter
-        scrapImageAdapter.submitList(item.baseReview.images.map { it.url })
-        setupIndicators(scrapImageAdapter.itemCount)
-        binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                updateIndicators(position)
-            }
-        })
-        tvLikeCount.text = item.baseReview.likesCount.toString()
+        initScrapImageAdapter(item)
 
 
         cvScrapKeyword.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MaterialTheme {
                     KeywordFlowRow(
-                        keywords = item.baseReview.keywords.map { it.toUiKeyword() },
+                        keywords = item.keywords.map { it.toUiKeyword() },
                         overflowIndex = 2
                     )
                 }
             }
         }
-        if (item.baseReview.isScrapped) {
+        if (item.isScrapped) {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
         } else {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
         }
 
-        if (item.baseReview.isLiked) {
+
+        if (item.isLiked) {
             ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
+            tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_action_enabled))
         } else {
             ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
+            tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_foreground_white))
         }
 
-        if(item.baseReview.content.isEmpty()){
+        if (item.content.isEmpty()) {
             tvMore.visibility = INVISIBLE
         }
         tvScrapContent.post {
@@ -147,13 +140,44 @@ class ScrapDetailViewHolder(
             }
         }
         ivLike.setOnSingleClickListener {
-            likeClick(item.baseReview.id)
+            if (!item.isLiked) {
+                lottieLike.playAnimation()
+                ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
+                lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
+                        super.onAnimationEnd(animation, isReverse)
+                        likeClick(item.id)
+                    }
+                })
+            } else {
+                likeClick(item.id)
+            }
+
         }
         ivScrap.setOnSingleClickListener {
-            scrapClick(item.baseReview.id)
+            scrapClick(item.id)
         }
         ivShare.setOnSingleClickListener {
             shareClick(item, binding.vpImage.currentItem)
+        }
+    }
+
+    private fun initScrapImageAdapter(item: ResponseScrap.ResponseBaseReview) {
+        if(!::scrapImageAdapter.isInitialized){
+            scrapImageAdapter = ScrapImageAdapter()
+            binding.vpImage.adapter = scrapImageAdapter
+            scrapImageAdapter.submitList(item.images.map { it.url })
+            setupIndicators(scrapImageAdapter.itemCount)
+            binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    updateIndicators(position)
+                    if (position >= 0 && position < item.images.size) {
+                        binding.ivBackground.loadAndClip(item.images[position].url)
+                    } else {
+                        binding.ivBackground.loadAndClip(item.images[0].url)
+                    }
+                }
+            })
         }
     }
 
@@ -171,10 +195,15 @@ class ScrapDetailViewHolder(
                     layoutParams = LinearLayout.LayoutParams(
                         6.dpToPx(context), 6.dpToPx(context)
                     ).apply {
-                        setMargins(4.dpToPx(context), 0, 4.dpToPx(context), 0)
+                        setMargins(2.dpToPx(context), 0, 2.dpToPx(context), 0)
                     }
                     scaleType = ImageView.ScaleType.FIT_XY
-                    setImageDrawable(ContextCompat.getDrawable(context, R.drawable.indicator_unselected))
+                    setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.indicator_unselected
+                        )
+                    )
                 }
                 indicators.add(indicator)
                 binding.llIndicator.addView(indicator)
@@ -200,7 +229,7 @@ class ScrapDetailViewHolder(
             }
 
             indicator.layoutParams = LinearLayout.LayoutParams(size, 6.dpToPx(context)).apply {
-                setMargins(4.dpToPx(context), 0, 4.dpToPx(context), 0)
+                setMargins(2.dpToPx(context), 0, 2.dpToPx(context), 0)
             }
 
             indicator.setImageDrawable(ContextCompat.getDrawable(context, drawableResId))

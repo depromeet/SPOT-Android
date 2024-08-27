@@ -1,14 +1,20 @@
 package com.dpm.presentation.seatrecord.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import coil.load
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ItemRecentRecordBinding
+import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.model.seatrecord.RecordReviewType
+import com.dpm.domain.model.seatrecord.toTypeName
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
@@ -26,8 +32,8 @@ class RecentRecordAdapter(
     interface OnItemRecordClickListener {
         fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse)
         fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse)
-        fun onLikeClick(reviewId : Int)
-        fun onScrapClick(reviewId : Int)
+        fun onLikeClick(reviewId: Int)
+        fun onScrapClick(reviewId: Int)
     }
 
     var itemRecordClickListener: OnItemRecordClickListener? = null
@@ -45,17 +51,27 @@ class RecentRecordAdapter(
     override fun onBindViewHolder(holder: RecentRecordViewHolder, position: Int) {
         with(holder) {
             bind(getItem(position))
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 itemRecordClickListener?.onItemRecordClick(getItem(position))
             }
-            binding.ibRecentStadiumMore.setOnClickListener {
+            binding.ibRecentStadiumMore.setOnSingleClickListener {
                 itemRecordClickListener?.onItemMoreClick(getItem(position))
             }
             binding.ivRecordScrap.setOnSingleClickListener {
                 itemRecordClickListener?.onScrapClick(getItem(position).id)
             }
             binding.ivRecordLike.setOnSingleClickListener {
-                itemRecordClickListener?.onLikeClick(getItem(position).id)
+                if (!getItem(position).isLiked) {
+                    binding.lottieLike.playAnimation()
+                    binding.lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            super.onAnimationEnd(animation)
+                            itemRecordClickListener?.onLikeClick(getItem(position).id)
+                        }
+                    })
+                } else {
+                    itemRecordClickListener?.onLikeClick(getItem(position).id)
+                }
             }
 
         }
@@ -83,7 +99,6 @@ class RecentRecordViewHolder(
             tvRecentBlockName.text = item.formattedSeatName()
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {
-                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
                     MaterialTheme {
                         KeywordFlowRow(
@@ -93,9 +108,40 @@ class RecentRecordViewHolder(
                     }
                 }
             }
-            //TODO : 추후 서버 통신 바뀌면 -> 스크랩, 좋아요 갱신 진행하기
-            tvRecordLikeCount.text = "0"
-            tvRecordScrapCount.text = "0"
+            tvRecordLikeCount.text = item.likesCount.toString()
+            ivRecordLike.load(if (item.isLiked) com.depromeet.designsystem.R.drawable.ic_like_active else com.depromeet.designsystem.R.drawable.ic_like_inactive)
+            tvRecordScrapCount.text = item.scrapsCount.toString()
+            if (item.isScrapped) {
+                ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+            } else {
+                ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+                ivRecordScrap.setColorFilter(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_caption
+                    )
+                )
+            }
+            ivRecordScrap.load(if (item.isScrapped) com.depromeet.designsystem.R.drawable.ic_scrap_active else com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+            when (item.reviewType) {
+                RecordReviewType.VIEW.name -> {
+                    tvReviewTag.text = RecordReviewType.VIEW.toTypeName()
+                    tvReviewTag.setBackgroundResource(R.drawable.rect_stroke_positive_primary_stroke_35)
+
+                }
+
+                RecordReviewType.FEED.name -> {
+                    tvReviewTag.text = RecordReviewType.FEED.toTypeName()
+                    tvReviewTag.setBackgroundResource(R.drawable.rect_error_primary_stroke_35)
+                    tvReviewTag.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_error_primary))
+                    tvRecordLikeCount.visibility = GONE
+                    ivRecordLike.visibility = GONE
+                    tvRecordScrapCount.visibility = GONE
+                    ivRecordScrap.visibility = GONE
+                }
+
+                else -> {}
+            }
 
         }
     }

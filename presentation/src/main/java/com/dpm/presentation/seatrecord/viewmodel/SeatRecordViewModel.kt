@@ -6,8 +6,11 @@ import com.dpm.core.state.UiState
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
+import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
+import com.dpm.domain.repository.ViewfinderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val viewfinderRepository: ViewfinderRepository,
     private val sharedPreference: SharedPreference,
 ) : ViewModel() {
 
@@ -39,7 +43,7 @@ class SeatRecordViewModel @Inject constructor(
     val intuitiveDate = _intuitiveDate.asStateFlow()
 
     private val _profile =
-        MutableStateFlow<ResponseMySeatRecord.MyProfileResponse>(ResponseMySeatRecord.MyProfileResponse())
+        MutableStateFlow(ResponseUserInfo())
     val profile = _profile.asStateFlow()
 
     private val _deleteClickedEvent = MutableStateFlow(EditUi.NONE)
@@ -64,7 +68,9 @@ class SeatRecordViewModel @Inject constructor(
 
     fun getSeatReviewDate() {
         viewModelScope.launch {
-            homeRepository.getReviewDate()
+            homeRepository.getReviewDate(
+                reviewType = RecordReviewType.VIEW.name
+            )
                 .onSuccess { data ->
                     if (data.yearMonths.isNotEmpty()) {
                         _seatDate.value = UiState.Success(data)
@@ -80,7 +86,9 @@ class SeatRecordViewModel @Inject constructor(
 
     fun getIntuitiveReviewDate() {
         viewModelScope.launch {
-            homeRepository.getReviewDate()
+            homeRepository.getReviewDate(
+                reviewType = RecordReviewType.FEED.name
+            )
                 .onSuccess { data ->
                     if (data.yearMonths.isNotEmpty()) {
                         _intuitiveDate.value = UiState.Success(data)
@@ -90,6 +98,19 @@ class SeatRecordViewModel @Inject constructor(
                 }
                 .onFailure { e ->
                     _intuitiveDate.value = UiState.Failure(e.message ?: "실패")
+                }
+        }
+    }
+
+    fun getProfile() {
+        viewModelScope.launch {
+            homeRepository.getMyUserInfo()
+                .onSuccess { data ->
+                    _profile.value = data
+                    saveLocalProfile()
+                }
+                .onFailure {
+                    getLocalProfile()
                 }
         }
     }
@@ -113,12 +134,11 @@ class SeatRecordViewModel @Inject constructor(
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.VIEW
                 )
             ).onSuccess { data ->
                 Timber.d("GET_SEAT_RECORDS_TEST SUCCESS : $data")
-                _profile.value = data.profile
-                saveLocalProfile()
                 if (data.reviews.isNotEmpty()) {
                     _seatReviews.value = UiState.Success(data)
                 } else {
@@ -149,10 +169,10 @@ class SeatRecordViewModel @Inject constructor(
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.FEED
                 )
             ).onSuccess { data ->
-                saveLocalProfile()
                 if (data.reviews.isNotEmpty()) {
                     _intuitiveReviews.value = UiState.Success(data)
                 } else {
@@ -176,16 +196,14 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     private fun saveLocalProfile() {
-        val currentState = _seatReviews.value
-        if (currentState is UiState.Success) {
-            val profile = currentState.data.profile
-            sharedPreference.level = profile.level
-            sharedPreference.profileImage = profile.profileImage
-            sharedPreference.nickname = profile.nickname
-            sharedPreference.teamId = profile.teamId!!
-            sharedPreference.teamName = profile.teamName!!
-            sharedPreference.levelTitle = profile.levelTitle
-        }
+        val profile = _profile.value
+        sharedPreference.level = profile.level
+        sharedPreference.profileImage = profile.profileImage
+        sharedPreference.nickname = profile.nickname
+        sharedPreference.teamId = profile.teamId ?: 0
+        sharedPreference.teamName = profile.teamName ?: ""
+        sharedPreference.levelTitle = profile.levelTitle
+
     }
 
     fun getNextSeatReviews() {
@@ -200,7 +218,8 @@ class SeatRecordViewModel @Inject constructor(
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.VIEW
                 )
             ).onSuccess { data ->
                 Timber.d("NEXT_SEAT_RECORDS_SUCCESS : $data")
@@ -216,22 +235,23 @@ class SeatRecordViewModel @Inject constructor(
     fun getNextIntuitiveReviews() {
         viewModelScope.launch {
             val year =
-                (seatDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
+                (intuitiveDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.year
             val month =
-                (seatDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
+                (intuitiveDate.value as UiState.Success).data.yearMonths.first { it.isClicked }.months.first { it.isClicked }.month
             homeRepository.getMySeatRecord(
                 RequestMySeatRecord(
-                    cursor = (seatReviews.value as UiState.Success).data.nextCursor,
+                    cursor = (intuitiveReviews.value as UiState.Success).data.nextCursor,
                     year = year,
                     month = month.takeIf { it != 0 },
                     size = 10,
-                    sortBy = MySeatRecordSortBy.DATE_TIME.name
+                    sortBy = MySeatRecordSortBy.DATE_TIME.name,
+                    reviewType = RecordReviewType.FEED
                 )
             ).onSuccess { data ->
                 Timber.d("NEXT_SEAT_RECORDS_SUCCESS : $data")
                 val updatedReviewList =
-                    (_seatReviews.value as UiState.Success).data.reviews + data.reviews
-                _seatReviews.value = UiState.Success(data.copy(reviews = updatedReviewList))
+                    (_intuitiveReviews.value as UiState.Success).data.reviews + data.reviews
+                _intuitiveReviews.value = UiState.Success(data.copy(reviews = updatedReviewList))
             }.onFailure {
                 Timber.d("NEXT_SEAT_RECORDS_FAIL : $it")
             }
@@ -307,6 +327,67 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
+
+    /** 직관 후기는 스크랩, 좋아요 없음 -> 좌석시야만 **/
+    fun updateLike(id: Int) {
+        viewModelScope.launch {
+            viewfinderRepository.updateLike(id).onSuccess {
+                val currentState = (_seatReviews.value as? UiState.Success)?.data
+                if (currentState != null) {
+                    val updatedList = currentState.reviews.map { review ->
+                        if(review.id == id){
+                            review.copy(
+                                isLiked = !review.isLiked,
+                                likesCount = if(review.isLiked){
+                                    review.likesCount - 1
+                                } else {
+                                    review.likesCount + 1
+                                }
+                            )
+                        } else {
+                            review
+                        }
+                    }
+
+                    _seatReviews.value = UiState.Success(
+                        data = currentState.copy(updatedList)
+                    )
+                }
+            }.onFailure {
+                Timber.d("좋아요 실패 $it")
+            }
+        }
+    }
+
+    fun updateScrap(id: Int) {
+        viewModelScope.launch {
+            viewfinderRepository.updateScrap(id).onSuccess {
+                val currentState = (_seatReviews.value as? UiState.Success)?.data
+                if(currentState!= null){
+                    val updatedList = currentState.reviews.map { review ->
+                        if(review.id == id){
+                            review.copy(
+                                isScrapped = !review.isScrapped,
+                                scrapsCount = if(review.isScrapped){
+                                    review.scrapsCount - 1
+                                } else {
+                                    review.scrapsCount + 1
+                                }
+                            )
+                        }else {
+                            review
+                        }
+                    }
+                    _seatReviews.value = UiState.Success(
+                        data = currentState.copy(reviews = updatedList)
+                    )
+                }
+            }.onFailure {
+                Timber.d("스크랩 실패 $it")
+            }
+        }
+    }
+
     fun setReviewState(reviewType: ReviewType) {
         _currentReviewState.value = reviewType
     }
@@ -336,21 +417,6 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     fun updateProfile(nickname: String, profileImage: String, teamId: Int, teamName: String?) {
-        val currentState = _seatReviews.value
-        if (currentState is UiState.Success) {
-            val updatedProfile = currentState.data.profile.copy(
-                nickname = nickname,
-                profileImage = profileImage,
-                teamId = teamId,
-                teamName = teamName
-            )
-
-            val updatedData = currentState.data.copy(
-                profile = updatedProfile
-            )
-
-            _seatReviews.value = UiState.Success(updatedData)
-        }
         _profile.value = profile.value.copy(
             nickname = nickname, profileImage = profileImage, teamId = teamId, teamName = teamName
         )

@@ -9,11 +9,11 @@ import com.dpm.data.model.response.home.ResponseLevelByPostDto
 import com.dpm.data.model.response.home.ResponseLevelUpInfoDto
 import com.dpm.data.model.response.home.ResponseMySeatRecordDto
 import com.dpm.data.model.response.home.ResponsePresignedUrlDto
-import com.dpm.data.model.response.home.ResponseProfileDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
 import com.dpm.data.model.response.home.ResponseScrapDto
+import com.dpm.data.model.response.home.ResponseUserInfoDto
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -32,6 +32,7 @@ interface HomeApiService {
         @Query("size") size: Int,
         @Query("year") year: Int?,
         @Query("month") month: Int?,
+        @Query("reviewType") reviewType: String?,
     ): ResponseMySeatRecordDto
 
     @GET("/api/v1/baseball-teams")
@@ -59,10 +60,9 @@ interface HomeApiService {
     )
 
     @GET("/api/v1/reviews/months")
-    suspend fun getReviewDate(): ResponseReviewDateDto
-
-    @GET("/api/v1/members/memberInfo")
-    suspend fun getProfileInfo(): ResponseProfileDto
+    suspend fun getReviewDate(
+        @Query("reviewType") reviewType: String?
+    ): ResponseReviewDateDto
 
     @GET("/api/v1/reviews/recentReview")
     suspend fun getRecentReview(): ResponseRecentReviewDto
@@ -82,6 +82,9 @@ interface HomeApiService {
     suspend fun getLevelUpInfo(
         @Query("nextLevel") nextLevel: Int,
     ): ResponseLevelUpInfoDto
+
+    @GET("/api/v1/reviews/userInfo")
+    suspend fun getUserInfo(): ResponseUserInfoDto
 
     @GET("api/v1/reviews/scraps")
     suspend fun getScrap(

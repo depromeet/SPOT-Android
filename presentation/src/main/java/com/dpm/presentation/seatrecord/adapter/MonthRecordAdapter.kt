@@ -56,11 +56,6 @@ class MonthRecordViewHolder(
             initReviewAdapter()
             "${item.month}월".also { tvRecentMonth.text = it }
             adapter.submitList(item.reviews)
-            binding.root.alpha = 0f
-            binding.root.animate()
-                .alpha(1f)
-                .setDuration(100)
-                .start()
         }
     }
 

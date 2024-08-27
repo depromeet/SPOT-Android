@@ -8,10 +8,10 @@ import com.dpm.data.model.request.home.RequestProfileEditDto.Companion.toProfile
 import com.dpm.data.model.request.home.toRequestScrapDto
 import com.dpm.data.model.response.home.ResponseDeleteReviewDto.Companion.toDeleteReviewResponse
 import com.dpm.data.model.response.home.ResponseMySeatRecordDto.Companion.toMySeatRecordResponse
-import com.dpm.data.model.response.home.ResponseProfileDto.Companion.toProfileResponse
 import com.dpm.data.model.response.home.ResponseProfileEditDto.Companion.toProfileEditResponse
 import com.dpm.data.model.response.home.ResponseRecentReviewDto.Companion.toRecentReviewResponse
 import com.dpm.data.model.response.home.ResponseReviewDateDto.Companion.toReviewDateResponse
+import com.dpm.data.model.response.home.toResponseUserInfo
 import com.dpm.data.model.response.home.toResponseScrap
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.request.home.RequestProfileEdit
@@ -24,9 +24,9 @@ import com.dpm.domain.entity.response.home.ResponseLevelUpInfo
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponsePresignedUrl
 import com.dpm.domain.entity.response.home.ResponseProfileEdit
-import com.dpm.domain.entity.response.home.ResponseProfile
 import com.dpm.domain.entity.response.home.ResponseRecentReview
 import com.dpm.domain.entity.response.home.ResponseReviewDate
+import com.dpm.domain.entity.response.home.ResponseUserInfo
 import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.domain.repository.HomeRepository
 import javax.inject.Inject
@@ -77,15 +77,9 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getReviewDate(): Result<ResponseReviewDate> {
+    override suspend fun getReviewDate(reviewType : String?): Result<ResponseReviewDate> {
         return runCatching {
-            homeDataSource.getReviewDate().toReviewDateResponse()
-        }
-    }
-
-    override suspend fun getProfile(): Result<ResponseProfile> {
-        return runCatching {
-            homeDataSource.getProfile().toProfileResponse()
+            homeDataSource.getReviewDate(reviewType).toReviewDateResponse()
         }
     }
 
@@ -116,6 +110,12 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun getLevelUpInfo(nextLevel: Int): Result<ResponseLevelUpInfo> {
         return runCatching {
             homeDataSource.getLevelUpInfo(nextLevel).toLevelUpInfoResponse()
+        }
+    }
+
+    override suspend fun getMyUserInfo(): Result<ResponseUserInfo> {
+        return runCatching {
+            homeDataSource.getUserInfo().toResponseUserInfo()
         }
     }
 

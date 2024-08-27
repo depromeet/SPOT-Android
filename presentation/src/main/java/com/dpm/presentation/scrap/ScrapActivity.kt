@@ -62,13 +62,17 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         AppbarScrap.setNavigationOnClickListener {
             finish()
         }
+        fabScrapUp.setOnClickListener {
+            rvScrapRecord.smoothScrollToPosition(0)
+        }
     }
 
     private fun initObserver() {
         viewModel.scrap.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    scrapAdapter.submitList(state.data.reviews)
+                    binding.tvScrapCount.text = state.data.totalScrapCount.toString()
+                    scrapAdapter.submitList(state.data.reviews.toList())
                     isLoading = false
                     setScrapScreenVisibility(ScrapScreenState.SUCCESS)
                 }
@@ -107,21 +111,25 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
             }
         )
         binding.rvScrapRecord.adapter = scrapAdapter
+        binding.rvScrapRecord.itemAnimator = null
         binding.rvScrapRecord.addItemDecoration(
             ScrapGridSpacingItemDecoration(
                 spanCount = 2, spacing = 12.dpToPx(this), bottomSpacing = 40.dpToPx(this)
             )
         )
 
-        binding.rvScrapRecord.addOnScrollListener( object : RecyclerView.OnScrollListener(){
+        binding.rvScrapRecord.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val scrollBottom = !binding.rvScrapRecord.canScrollVertically(1)
-                if(scrollBottom && ! isLoading && (viewModel.scrap.value as UiState.Success).data.hasNext){
+                val scrollTop = !binding.rvScrapRecord.canScrollVertically(-1)
+
+                if (scrollBottom && !isLoading && (viewModel.scrap.value as UiState.Success).data.hasNext) {
                     viewModel.getNextScrapRecord()
                     isLoading = true
                 }
+                binding.fabScrapUp.visibility = if (scrollTop) GONE else VISIBLE
             }
         })
     }

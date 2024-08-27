@@ -69,7 +69,7 @@ class ScrapViewModel @Inject constructor(
     fun getScrapRecord() {
         viewModelScope.launch {
             homeRepository.getScrap(
-                size = 100,
+                size = 20,
                 sortBy = ScrapSortType.DATE_TIME.name,
                 cursor = null,
                 requestScrap = RequestScrap(
@@ -93,7 +93,7 @@ class ScrapViewModel @Inject constructor(
     fun getNextScrapRecord() {
         viewModelScope.launch {
             homeRepository.getScrap(
-                size = 100,
+                size = 20,
                 sortBy = ScrapSortType.DATE_TIME.name,
                 cursor = (_scrap.value as UiState.Success).data.nextCursor,
                 requestScrap = RequestScrap(

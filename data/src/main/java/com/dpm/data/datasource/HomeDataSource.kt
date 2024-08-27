@@ -10,10 +10,10 @@ import com.dpm.data.model.response.home.ResponseLevelByPostDto
 import com.dpm.data.model.response.home.ResponseLevelUpInfoDto
 import com.dpm.data.model.response.home.ResponseMySeatRecordDto
 import com.dpm.data.model.response.home.ResponsePresignedUrlDto
-import com.dpm.data.model.response.home.ResponseProfileDto
 import com.dpm.data.model.response.home.ResponseProfileEditDto
 import com.dpm.data.model.response.home.ResponseRecentReviewDto
 import com.dpm.data.model.response.home.ResponseReviewDateDto
+import com.dpm.data.model.response.home.ResponseUserInfoDto
 import com.dpm.data.model.response.home.ResponseScrapDto
 
 interface HomeDataSource {
@@ -40,9 +40,9 @@ interface HomeDataSource {
         nickname: String,
     )
 
-    suspend fun getReviewDate(): ResponseReviewDateDto
-
-    suspend fun getProfile(): ResponseProfileDto
+    suspend fun getReviewDate(
+        reviewType: String?,
+    ): ResponseReviewDateDto
 
     suspend fun getRecentReview(): ResponseRecentReviewDto
 
@@ -55,6 +55,8 @@ interface HomeDataSource {
     suspend fun getHomeFeed(): ResponseHomeFeedDto
 
     suspend fun getLevelUpInfo(nextLevel: Int): ResponseLevelUpInfoDto
+
+    suspend fun getUserInfo(): ResponseUserInfoDto
 
     suspend fun getScrap(
         size: Int,

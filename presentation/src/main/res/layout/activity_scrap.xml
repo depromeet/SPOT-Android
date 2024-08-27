@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/AppbarScrap">
 
         <TextView
-            android:id="@+id/tvScrapNoneTitle"
+            android:id="@+id/tvScrapTitle"
             style="@style/TextAppearance.Spot.Subtitle01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,15 +53,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvScrapNoneCount"
+            android:id="@+id/tvScrapCount"
             style="@style/TextAppearance.Spot.Subtitle03"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:textColor="@color/color_foreground_caption"
-            app:layout_constraintBottom_toBottomOf="@id/tvScrapNoneTitle"
-            app:layout_constraintStart_toEndOf="@id/tvScrapNoneTitle"
-            app:layout_constraintTop_toTopOf="@id/tvScrapNoneTitle"
+            app:layout_constraintBottom_toBottomOf="@id/tvScrapTitle"
+            app:layout_constraintStart_toEndOf="@id/tvScrapTitle"
+            app:layout_constraintTop_toTopOf="@id/tvScrapTitle"
             tools:text="0" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -74,7 +74,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScrapNoneCount"
+            app:layout_constraintTop_toBottomOf="@id/tvScrapTitle"
             tools:itemCount="5"
             tools:listitem="@layout/item_scrap_filter_selected"/>
 
@@ -122,18 +122,43 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="contentDescription" />
 
+<!--        <TextView-->
+<!--            android:id="@+id/tvScrapNoDescription"-->
+<!--            style="@style/TextAppearance.Spot.Title04"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/scrap_empty_description"-->
+<!--            android:textColor="@color/color_foreground_heading"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/ivNoScrap" />-->
+
         <TextView
-            android:id="@+id/tvScrapNoDescription"
+            android:id="@+id/tvScrapNoDescriptionOne"
             style="@style/TextAppearance.Spot.Title04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/scrap_empty_description"
+            android:text="@string/scrap_empty_description_one"
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivNoScrap" />
+
+        <TextView
+            android:id="@+id/tvScrapNoDescriptiontwo"
+            style="@style/TextAppearance.Spot.Title04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/scrap_empty_description_two"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoDescriptionOne" />
 
         <TextView
             android:id="@+id/tvScrapNoAdvice"
@@ -146,7 +171,7 @@
             android:textColor="@color/color_foreground_caption"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScrapNoDescription" />
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoDescriptiontwo" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btScrapEmptyView"
@@ -237,6 +262,21 @@
             app:layout_constraintTop_toBottomOf="@id/tvScrapFailAdvice" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/fabScrapUp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/circle_white_fill"
+        android:padding="12dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        android:src="@drawable/ic_up"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        tools:ignore="contentDescription" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcvScrap"

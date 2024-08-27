@@ -7,37 +7,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponseMySeatRecordDto(
-    @SerialName("memberInfoOnMyReview")
-    val memberInfoOnMyReview: ResponseMemberDto,
     @SerialName("reviews")
     val reviews: List<ResponseReviewWrapperDto>,
     @SerialName("nextCursor")
-    val nextCursor : String?,
+    val nextCursor: String?,
     @SerialName("hasNext")
-    val hasNext : Boolean,
+    val hasNext: Boolean,
     @SerialName("filter")
     val filter: ResponseFilterDto,
 ) {
-    @Serializable
-    data class ResponseMemberDto(
-        @SerialName("userId")
-        val userId: Int,
-        @SerialName("profileImageUrl")
-        val profileImageUrl: String?,
-        @SerialName("level")
-        val level: Int,
-        @SerialName("levelTitle")
-        val levelTitle: String,
-        @SerialName("nickname")
-        val nickname: String,
-        @SerialName("reviewCount")
-        val reviewCount: Int,
-        @SerialName("teamId")
-        val teamId: Int?,
-        @SerialName("teamName")
-        val teamName: String?,
-    )
-
 
     @Serializable
     data class ResponseReviewWrapperDto(
@@ -75,6 +53,16 @@ data class ResponseMySeatRecordDto(
         val images: List<ResponseReviewImageDto>,
         @SerialName("keywords")
         val keywords: List<ResponseReviewKeywordDto>,
+        @SerialName("likesCount")
+        val likesCount: Int,
+        @SerialName("scrapsCount")
+        val scrapsCount: Int,
+        @SerialName("reviewType")
+        val reviewType: String?,
+        @SerialName("isLiked")
+        val isLiked: Boolean,
+        @SerialName("isScrapped")
+        val isScrapped: Boolean,
     ) {
         @Serializable
         data class ResponseReviewKeywordDto(
@@ -162,24 +150,11 @@ data class ResponseMySeatRecordDto(
 
     companion object {
         fun ResponseMySeatRecordDto.toMySeatRecordResponse() = ResponseMySeatRecord(
-            profile = memberInfoOnMyReview.toMyProfileResponse(),
             reviews = reviews.map { it.baseReview.toReviewResponse() },
             nextCursor = nextCursor,
             hasNext = hasNext,
             isLoading = false
         )
-
-        private fun ResponseMemberDto.toMyProfileResponse() =
-            ResponseMySeatRecord.MyProfileResponse(
-                userId = userId,
-                profileImage = profileImageUrl ?: "",
-                level = level,
-                levelTitle = levelTitle,
-                nickname = nickname,
-                reviewCount = reviewCount,
-                teamId = teamId,
-                teamName = teamName
-            )
 
         private fun ResponseReviewDto.toReviewResponse() = ResponseMySeatRecord.ReviewResponse(
             id = id,
@@ -197,7 +172,12 @@ data class ResponseMySeatRecordDto(
             sectionName = section.name,
             member = member.toMemberResponse(),
             images = images.map { it.toReviewImageResponse() },
-            keywords = keywords.map { it.toReviewKeywordResponse() }
+            keywords = keywords.map { it.toReviewKeywordResponse() },
+            likesCount = likesCount,
+            scrapsCount = scrapsCount,
+            reviewType = reviewType ?: "",
+            isLiked = isLiked,
+            isScrapped = isScrapped
         )
 
         private fun ResponseReviewDto.ResponseMemberDto.toMemberResponse() =

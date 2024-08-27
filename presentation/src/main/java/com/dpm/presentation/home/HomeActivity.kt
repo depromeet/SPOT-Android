@@ -30,6 +30,7 @@ import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
 import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
 import com.dpm.presentation.setting.SettingActivity
+import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
 import com.dpm.presentation.viewfinder.StadiumDetailActivity
@@ -43,7 +44,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     companion object {
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val START_SPACING_DP = 16
-        private const val BETWEEN_SPADING_DP = 8
+        private const val BETWEEN_SPADING_DP = 0
         private const val VIEW_UPLOAD_DIALOG = "ViewUploadDialog"
         private const val FEED_UPLOAD_DIALOG = "FeedUploadDialog"
         private const val REVIEW_DATA = "REVIEW_DATA"
@@ -101,7 +102,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 view = binding.root,
                 message = "시야찾기에 내 게시글이 올라갔어요!",
                 endMessage = "확인하러 가기",
-                marginBottom = 93,
+                marginBottom = 87,
             ) {
                 val reviewData = intent.getCompatibleParcelableExtra<ReviewData>(REVIEW_DATA)
                 if (reviewData != null) {
@@ -118,12 +119,18 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
 
     private fun initEvent() = with(binding) {
-        clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
+        clHomeArchiving.setOnClickListener {
+            MixpanelManager.track("home_archiving")
+            startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
-        clHomeScrap.setOnClickListener {
+        clHomeScrap.setOnClickListener{
+            MixpanelManager.track("home_scrap")
             startScrapActivity()
         }
-        clHomeUpload.setOnClickListener { navigateToReviewActivity() }
+        clHomeUpload.setOnClickListener {
+            MixpanelManager.track("home_upload_view")
+            navigateToReviewActivity()
+        }
         ivHomeSetting.setOnClickListener { navigateToSettingActivity() }
     }
 
@@ -159,11 +166,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 }
 
                 is UiState.Loading -> {
+                    setHomeFeedVisibility(false)
                     setHomeFeedShimmer(true)
                 }
 
                 is UiState.Success -> {
                     setHomeFeed(state.data)
+                    setHomeFeedVisibility(true)
                     setHomeFeedShimmer(false)
                 }
             }
@@ -193,12 +202,22 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun setStadiumAdapter() {
         stadiumAdapter = StadiumAdapter(
             searchClick = {
+                MixpanelManager.track("home_find_view")
                 startStadiumSelectionActivity()
             },
             stadiumClick = {
                 if (!it.isActive) {
                     makeSpotImageAppbar("${it.name} 야구장은 곧 업데이트 예정이에요")
+                    SpotSnackBar.make(
+                        view = binding.root,
+                        message = "현재 잠실야구장만 이용할 수 있어요!",
+                        endMessage = "잠실야구장 보기",
+                        marginBottom = 87,
+                    ) {
+                        startStadiumActivity(it)
+                    }.show()
                 } else {
+                    MixpanelManager.track("home_find_view")
                     startStadiumActivity(it)
                 }
             }
@@ -259,6 +278,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
         }
     }
+    private fun setHomeFeedVisibility(isSuccess: Boolean) {
+        val visibility = if (isSuccess) View.VISIBLE else View.GONE
+        with(binding) {
+            csbvHomeTitle.visibility = visibility
+            tvHomeLevel.visibility = visibility
+            ivHomeInfo.visibility = visibility
+        }
+    }
 
     private fun setHomeFeed(data: ResponseHomeFeed) = with(binding) {
         "Lv.${data.level}".also { tvHomeLevel.text = it }
@@ -302,7 +329,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
-            marginBottom = 94
+            marginBottom = 87
         ).show()
     }
 

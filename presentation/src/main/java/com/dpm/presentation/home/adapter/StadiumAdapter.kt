@@ -64,7 +64,7 @@ class StadiumAdapter(
             }
 
             is StadiumSmallSelectionViewHolder -> {
-                holder.bind(currentList[position - 1])
+                holder.bind(currentList[position - 1], position)
             }
         }
     }
@@ -90,7 +90,7 @@ class StadiumSmallSelectionViewHolder(
     private val binding: ItemStadiumSmallSelectionBinding,
     private val teamClick: (ResponseStadiums) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ResponseStadiums) {
+    fun bind(item: ResponseStadiums, position : Int) {
         binding.root.setOnClickListener {
             teamClick(item)
         }
@@ -102,5 +102,6 @@ class StadiumSmallSelectionViewHolder(
         } else {
             binding.ivStadiumLock.visibility = VISIBLE
         }
+        binding.tvNewBadge.visibility = if(position == 1)  VISIBLE else GONE
     }
 }

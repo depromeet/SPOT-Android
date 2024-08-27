@@ -4,22 +4,11 @@ import com.dpm.domain.entity.response.viewfinder.BASE
 import com.dpm.domain.entity.response.viewfinder.base
 
 data class ResponseMySeatRecord(
-    val profile: MyProfileResponse = MyProfileResponse(),
     val reviews: List<ReviewResponse> = emptyList(),
-    val nextCursor : String ?= null,
-    val hasNext : Boolean = false,
+    val nextCursor: String? = null,
+    val hasNext: Boolean = false,
     val isLoading: Boolean = true,
 ) {
-    data class MyProfileResponse(
-        val userId: Int = 0,
-        val profileImage: String = "",
-        val level: Int = 0,
-        val levelTitle: String = "",
-        val nickname: String = "",
-        val reviewCount: Int = 0,
-        val teamId: Int? = null,
-        val teamName: String? = "",
-    )
 
     data class ReviewResponse(
         val id: Int,
@@ -38,9 +27,29 @@ data class ResponseMySeatRecord(
         val member: MemberResponse = MemberResponse(),
         val images: List<ReviewImageResponse> = emptyList(),
         val keywords: List<ReviewKeywordResponse> = emptyList(),
+        val likesCount: Int = 0,
+        val scrapsCount: Int = 0,
+        val reviewType: String = "",
+        val isLiked: Boolean = false,
+        val isScrapped: Boolean = false,
     ) {
+        fun formattedLevel(): String = "Lv.${member.level}"
+
         fun formattedSeatName(): String {
             return "${formattedBaseName()} ${formattedSectionName()} ${formattedBlockName()} ${formattedRowNumber()} ${formattedSeatNumber()}"
+        }
+
+        fun kakaoShareSeatFeedTitle() : String {
+            val base = when(stadiumName.base(blockCode)) {
+                BASE.Base1 -> "1루"
+                BASE.Base3 -> "3루"
+                else -> ""
+            }
+            val section = sectionName
+            val block = "${rowNumber} 열"
+            val seat = if(seatNumber == null) "" else "${seatNumber}번"
+
+            return "$stadiumName $base $section $block $seat"
         }
 
         private fun formattedBaseName(): String {
