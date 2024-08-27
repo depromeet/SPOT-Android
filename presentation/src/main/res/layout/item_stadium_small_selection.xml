@@ -67,8 +67,8 @@
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="@color/color_foreground_body_sebtext"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/iv_stadium"
+        app:layout_constraintStart_toStartOf="@id/iv_stadium"
         app:layout_constraintTop_toBottomOf="@id/iv_stadium"
         tools:text="서울\n잠실야구장" />
 

@@ -153,8 +153,7 @@
         android:paddingVertical="10dp"
         app:layout_constraintBottom_toTopOf="@+id/clButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:textAppearance="@style/TextAppearance.Spot.Caption04"
-        app:textColor="@color/color_foreground_body_subtitle">
+        app:textAppearance="@style/TextAppearance.Spot.Caption04">
 
     </com.dpm.presentation.home.customview.CustomSpeechBubbleView>
 

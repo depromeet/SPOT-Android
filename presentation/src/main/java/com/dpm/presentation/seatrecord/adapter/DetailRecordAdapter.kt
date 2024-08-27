@@ -154,6 +154,12 @@ class ReviewDetailViewHolder(
             )
             if (item.isScrapped) {
                 ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+                ivRecordScrap.setColorFilter(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_action_enabled
+                    )
+                )
             } else {
                 ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
                 ivRecordScrap.setColorFilter(

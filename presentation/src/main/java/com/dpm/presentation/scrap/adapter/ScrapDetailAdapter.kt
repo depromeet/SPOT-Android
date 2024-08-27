@@ -90,6 +90,12 @@ class ScrapDetailViewHolder(
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
         } else {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+            ivScrap.setColorFilter(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    com.depromeet.designsystem.R.color.color_foreground_caption
+                )
+            )
         }
 
 
@@ -163,12 +169,13 @@ class ScrapDetailViewHolder(
     }
 
     private fun initScrapImageAdapter(item: ResponseScrap.ResponseBaseReview) {
-        if(!::scrapImageAdapter.isInitialized){
+        if (!::scrapImageAdapter.isInitialized) {
             scrapImageAdapter = ScrapImageAdapter()
             binding.vpImage.adapter = scrapImageAdapter
             scrapImageAdapter.submitList(item.images.map { it.url })
             setupIndicators(scrapImageAdapter.itemCount)
-            binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            binding.vpImage.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     updateIndicators(position)
                     if (position >= 0 && position < item.images.size) {
