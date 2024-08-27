@@ -48,9 +48,9 @@ var allIds = Array.from(allElements)
     .map(el => el.id)
 allIds.forEach(id => {
     var element = document.getElementById(id);
-    if (element) {
-        element.classList.add("unclick");
-    }
+//    if (element) {
+//        element.classList.add("unclick");
+//    }
 })
 // ==========================================
 
@@ -155,7 +155,7 @@ function removeStyle() {
     allIds.forEach(id => {
         var element = document.getElementById(id);
         if (element) {
-            element.classList.add("unclick");
+            element.classList.remove("unclick");
             element.classList.remove("unselected");
         }
     })

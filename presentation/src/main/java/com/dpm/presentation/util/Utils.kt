@@ -21,6 +21,11 @@ import androidx.core.view.updateLayoutParams
 class Utils(
     private val context: Context
 ) {
+    /**
+     * 네비게이션 하단 바 높이
+     */
+    val navigationHeight = context.resources.getIdentifier("navigation_bar_height","dimen","android").let { context.resources.getDimensionPixelSize(it) }
+
     fun restartApp(toastMsg: String?) {
         val packageManager = context.packageManager
         val packageName = context.packageName
