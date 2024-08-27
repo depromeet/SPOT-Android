@@ -76,8 +76,8 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                         onClickLike = {
                             sharedPreference.isFirstLike = false
                         },
-                        onClickScrap = { id ->
-                            if (stadiumDetailViewModel.checkScrap(id)) {
+                        onClickScrap = { isScrap ->
+                            if (isScrap) {
                                 snackBar.show()
                             }
                         },

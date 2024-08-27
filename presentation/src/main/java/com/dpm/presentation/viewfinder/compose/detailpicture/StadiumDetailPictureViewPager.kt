@@ -21,6 +21,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,8 +35,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieClipSpec
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieAnimatable
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.depromeet.designsystem.R
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -50,6 +59,13 @@ fun StadiumDetailPictureViewPager(
     onClickScrap: () -> Unit,
     onClickShare: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.lottie_like)
+    )
+    val lottieAnimatable = rememberLottieAnimatable()
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -115,14 +131,24 @@ fun StadiumDetailPictureViewPager(
 
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 12.dp),
+                .fillMaxWidth(),
             contentAlignment = Alignment.CenterEnd
         ) {
             DetailReviewInteractionItems(
                 isLike = isLike,
                 likeCount = likeCount,
-                onClickLike = onClickLike,
+                onClickLike = {
+                    if (!isLike) {
+                        scope.launch {
+                            lottieAnimatable.animate(
+                                composition = composition,
+                                clipSpec = LottieClipSpec.Frame(0, 1200),
+                                initialProgress = 0f
+                            )
+                        }
+                    }
+                    onClickLike()
+                },
                 onClickScrap = onClickScrap,
                 onClickShare = onClickShare
             )
@@ -130,9 +156,22 @@ fun StadiumDetailPictureViewPager(
                 LikeTooltip(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .offset(y = (-32).dp),
-                    bias = 0.8f,
+                        .offset(y = (-32).dp)
+                        .padding(end = 12.dp),
+                    bias = 0.85f,
                     content = "유용했다면, 도움돼요를 눌러주세요!",
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .offset(y = (-34).dp)
+                    .size(72.dp)
+            ) {
+                LottieAnimation(
+                    composition = composition,
+                    progress = { lottieAnimatable.progress },
+                    contentScale = ContentScale.FillHeight
                 )
             }
         }
