@@ -5,6 +5,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -100,6 +101,17 @@ class RecentRecordViewHolder(
             tvRecordLikeCount.text = item.likesCount.toString()
             ivRecordLike.load(if (item.isLiked) com.depromeet.designsystem.R.drawable.ic_like_active else com.depromeet.designsystem.R.drawable.ic_like_inactive)
             tvRecordScrapCount.text = item.scrapsCount.toString()
+            if (item.isScrapped) {
+                ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+            } else {
+                ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+                ivRecordScrap.setColorFilter(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_caption
+                    )
+                )
+            }
             ivRecordScrap.load(if (item.isScrapped) com.depromeet.designsystem.R.drawable.ic_scrap_active else com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
             when (item.reviewType) {
                 RecordReviewType.VIEW.name -> {

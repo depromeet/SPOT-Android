@@ -474,7 +474,7 @@
 
                 <TextView
                     android:id="@+id/tvRecordNoRecordDescription"
-                    style="@style/TextAppearance.Spot.Title04"
+                    android:textAppearance="@style/TextAppearance.Spot.Title04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

@@ -6,6 +6,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -105,7 +106,7 @@ class ReviewDetailViewHolder(
             tvDetailStadium.text = item.stadiumName
             tvDetailBlock.text = item.formattedSeatName()
             tvDetailDate.text = CalendarUtil.getFormattedDate(item.date)
-            if (item.content.isBlank()) {
+            if (item.content.isEmpty()) {
                 tvDetailContent.visibility = GONE
             } else {
                 tvDetailContent.text = item.content
@@ -152,10 +153,17 @@ class ReviewDetailViewHolder(
                 if (item.isLiked) com.depromeet.designsystem.R.drawable.ic_like_active
                 else com.depromeet.designsystem.R.drawable.ic_like_inactive
             )
-            ivRecordScrap.load(
-                if (item.isScrapped) com.depromeet.designsystem.R.drawable.ic_scrap_active
-                else com.depromeet.designsystem.R.drawable.ic_scrap_inactive
-            )
+            if (item.isScrapped) {
+                ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+            } else {
+                ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
+                ivRecordScrap.setColorFilter(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_foreground_caption
+                    )
+                )
+            }
         }
     }
 
