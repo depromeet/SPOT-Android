@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 enum class Sort {
@@ -67,120 +68,132 @@ class StadiumDetailViewModel @Inject constructor(
 
     fun updateLike(id: Long) {
         viewModelScope.launch {
-            viewfinderRepository.updateLike(id.toInt())
-            _detailUiState.value = when (val currentState = _detailUiState.value) {
-                is StadiumDetailUiState.ReviewsData -> {
-                    val updatedReviews = currentState.reviews.map { review ->
-                        if (review.id == id) {
-                            if (review.isLike) {
-                                review.copy(
-                                    isLike = !review.isLike,
-                                    likesCount = review.likesCount - 1
-                                )
+            viewfinderRepository.updateLike(id.toInt()).onSuccess {
+                _detailUiState.value = when (val currentState = _detailUiState.value) {
+                    is StadiumDetailUiState.ReviewsData -> {
+                        val updatedReviews = currentState.reviews.map { review ->
+                            if (review.id == id) {
+                                if (review.isLike) {
+                                    review.copy(
+                                        isLike = !review.isLike,
+                                        likesCount = review.likesCount - 1
+                                    )
+                                } else {
+                                    review.copy(
+                                        isLike = !review.isLike,
+                                        likesCount = review.likesCount + 1
+                                    )
+                                }
                             } else {
-                                review.copy(
-                                    isLike = !review.isLike,
-                                    likesCount = review.likesCount + 1
-                                )
+                                review
                             }
-                        } else {
-                            review
                         }
+                        currentState.copy(reviews = updatedReviews)
                     }
-                    currentState.copy(reviews = updatedReviews)
-                }
 
-                else -> currentState
+                    else -> currentState
+                }
+            }.onFailure {
+                Timber.e("error : ${it.message}")
             }
         }
     }
 
     fun updateTopReviewLike(id: Long) {
         viewModelScope.launch {
-            viewfinderRepository.updateLike(id.toInt())
-            _detailUiState.value = when (val currentState = _detailUiState.value) {
-                is StadiumDetailUiState.ReviewsData -> {
-                    val updatedReviews = currentState.topReviewImages.map { review ->
-                        if (review.id == id) {
-                            if (review.isLike) {
-                                review.copy(
-                                    isLike = !review.isLike,
-                                    likesCount = review.likesCount - 1
-                                )
+            viewfinderRepository.updateLike(id.toInt()).onSuccess {
+                _detailUiState.value = when (val currentState = _detailUiState.value) {
+                    is StadiumDetailUiState.ReviewsData -> {
+                        val updatedReviews = currentState.topReviewImages.map { review ->
+                            if (review.id == id) {
+                                if (review.isLike) {
+                                    review.copy(
+                                        isLike = !review.isLike,
+                                        likesCount = review.likesCount - 1
+                                    )
+                                } else {
+                                    review.copy(
+                                        isLike = !review.isLike,
+                                        likesCount = review.likesCount + 1
+                                    )
+                                }
                             } else {
-                                review.copy(
-                                    isLike = !review.isLike,
-                                    likesCount = review.likesCount + 1
-                                )
+                                review
                             }
-                        } else {
-                            review
                         }
+                        currentState.copy(topReviewImages = updatedReviews)
                     }
-                    currentState.copy(topReviewImages = updatedReviews)
-                }
 
-                else -> currentState
+                    else -> currentState
+                }
+            }.onFailure {
+                Timber.e("error : ${it.message}")
             }
         }
     }
 
     fun updateScrap(id: Long) {
         viewModelScope.launch {
-            viewfinderRepository.updateScrap(id.toInt())
-            _detailUiState.value = when (val currentState = _detailUiState.value) {
-                is StadiumDetailUiState.ReviewsData -> {
-                    val updatedReviews = currentState.reviews.map { review ->
-                        if (review.id == id) {
-                            if (review.isScrap) {
-                                review.copy(
-                                    isScrap = !review.isScrap,
-                                    scrapsCount = review.scrapsCount - 1
-                                )
+            viewfinderRepository.updateScrap(id.toInt()).onSuccess {
+                _detailUiState.value = when (val currentState = _detailUiState.value) {
+                    is StadiumDetailUiState.ReviewsData -> {
+                        val updatedReviews = currentState.reviews.map { review ->
+                            if (review.id == id) {
+                                if (review.isScrap) {
+                                    review.copy(
+                                        isScrap = !review.isScrap,
+                                        scrapsCount = review.scrapsCount - 1
+                                    )
+                                } else {
+                                    review.copy(
+                                        isScrap = !review.isScrap,
+                                        scrapsCount = review.scrapsCount + 1
+                                    )
+                                }
                             } else {
-                                review.copy(
-                                    isScrap = !review.isScrap,
-                                    scrapsCount = review.scrapsCount + 1
-                                )
+                                review
                             }
-                        } else {
-                            review
                         }
+                        currentState.copy(reviews = updatedReviews)
                     }
-                    currentState.copy(reviews = updatedReviews)
-                }
 
-                else -> currentState
+                    else -> currentState
+                }
+            }.onFailure {
+                Timber.e("error : ${it.message}")
             }
         }
     }
 
     fun updateTopReviewScrap(id: Long) {
         viewModelScope.launch {
-            viewfinderRepository.updateScrap(id.toInt())
-            _detailUiState.value = when (val currentState = _detailUiState.value) {
-                is StadiumDetailUiState.ReviewsData -> {
-                    val updatedReviews = currentState.topReviewImages.map { review ->
-                        if (review.id == id) {
-                            if (review.isScrap) {
-                                review.copy(
-                                    isScrap = !review.isScrap,
-                                    scrapsCount = review.scrapsCount - 1
-                                )
+            viewfinderRepository.updateScrap(id.toInt()).onSuccess {
+                _detailUiState.value = when (val currentState = _detailUiState.value) {
+                    is StadiumDetailUiState.ReviewsData -> {
+                        val updatedReviews = currentState.topReviewImages.map { review ->
+                            if (review.id == id) {
+                                if (review.isScrap) {
+                                    review.copy(
+                                        isScrap = !review.isScrap,
+                                        scrapsCount = review.scrapsCount - 1
+                                    )
+                                } else {
+                                    review.copy(
+                                        isScrap = !review.isScrap,
+                                        scrapsCount = review.scrapsCount + 1
+                                    )
+                                }
                             } else {
-                                review.copy(
-                                    isScrap = !review.isScrap,
-                                    scrapsCount = review.scrapsCount + 1
-                                )
+                                review
                             }
-                        } else {
-                            review
                         }
+                        currentState.copy(topReviewImages = updatedReviews)
                     }
-                    currentState.copy(topReviewImages = updatedReviews)
-                }
 
-                else -> currentState
+                    else -> currentState
+                }
+            }.onFailure {
+                Timber.e("error : ${it.message}")
             }
         }
     }

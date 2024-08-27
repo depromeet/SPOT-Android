@@ -110,6 +110,7 @@ fun StadiumReviewContent(
                             )
                         )
                     ),
+                    error = painterResource(id = com.depromeet.designsystem.R.drawable.ic_default_profile),
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
@@ -294,15 +295,16 @@ fun StadiumReviewContent(
                     contentScale = ContentScale.FillHeight
                 )
             }
-        }
-        if (firstReview && isFirstShare) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                ShareTooltip(bias = 0.875f, content = "카카오톡으로 같이가는 친구에게 공유하기")
+            if (firstReview && isFirstShare) {
+                Box(
+                    modifier = Modifier
+                        .offset(y = 45.dp)
+                        .fillMaxWidth()
+                        .padding(end = 16.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    ShareTooltip(bias = 0.875f, content = "카카오톡으로 같이가는 친구에게 공유하기")
+                }
             }
         }
     }
