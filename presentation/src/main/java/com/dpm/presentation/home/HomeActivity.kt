@@ -30,6 +30,7 @@ import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
 import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
 import com.dpm.presentation.setting.SettingActivity
+import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.StadiumActivity
 import com.dpm.presentation.viewfinder.StadiumDetailActivity
@@ -118,12 +119,18 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
 
     private fun initEvent() = with(binding) {
-        clHomeArchiving.setOnClickListener { startSeatRecordActivity() }
+        clHomeArchiving.setOnClickListener {
+            MixpanelManager.track("home_archiving")
+            startSeatRecordActivity() }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
-        clHomeScrap.setOnClickListener {
+        clHomeScrap.setOnClickListener{
+            MixpanelManager.track("home_scrap")
             startScrapActivity()
         }
-        clHomeUpload.setOnClickListener { navigateToReviewActivity() }
+        clHomeUpload.setOnClickListener {
+            MixpanelManager.track("home_upload_view")
+            navigateToReviewActivity()
+        }
         ivHomeSetting.setOnClickListener { navigateToSettingActivity() }
     }
 
@@ -193,12 +200,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun setStadiumAdapter() {
         stadiumAdapter = StadiumAdapter(
             searchClick = {
+                MixpanelManager.track("home_find_view")
                 startStadiumSelectionActivity()
             },
             stadiumClick = {
                 if (!it.isActive) {
                     makeSpotImageAppbar("${it.name} 야구장은 곧 업데이트 예정이에요")
                 } else {
+                    MixpanelManager.track("home_find_view")
                     startStadiumActivity(it)
                 }
             }
