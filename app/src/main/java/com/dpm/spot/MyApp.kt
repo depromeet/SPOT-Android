@@ -19,10 +19,10 @@ class MyApp : Application() {
         } else {
             FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
             FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-            // MixpanelManager.initialize(this)
+            MixpanelManager.initialize(this)
         }
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
         // TODO : 데이터 트래킹 Dev 작동 확인 -> release 모드 실행
-        MixpanelManager.initialize(this)
+//        MixpanelManager.initialize(this)
     }
 }
