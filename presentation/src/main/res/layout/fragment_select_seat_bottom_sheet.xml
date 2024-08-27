@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="구역선택"
+                    android:layout_marginHorizontal="4dp"
                     android:textAppearance="@style/TextAppearance.Spot.Label05"
                     android:textColor="@color/color_foreground_heading"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -54,7 +55,7 @@
                     android:id="@+id/tvSelectSeatLine"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="11.5dp"
                     android:background="@drawable/rect_gray900_fill"
                     android:gravity="center" />
             </LinearLayout>
@@ -63,7 +64,7 @@
                 android:id="@+id/llTabSelectSeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="20dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -71,6 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:layout_marginHorizontal="4dp"
                     android:text="좌석선택"
                     android:textAppearance="@style/TextAppearance.Spot.Label05"
                     android:textColor="@color/color_foreground_caption"
@@ -80,7 +82,7 @@
                     android:id="@+id/tvSelectNumberLine"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="11.5dp"
                     android:visibility="invisible"
                     android:background="@drawable/rect_gray900_fill"
                     android:gravity="center" />
