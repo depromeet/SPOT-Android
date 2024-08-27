@@ -194,6 +194,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         type: DetailReviewEntryPoint
     ) {
         MixpanelManager.track("viewfinder_check_view")
+        scrapActiveSnackBar.dismiss()
+        scrapInActiveSnackBar.dismiss()
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
             arguments = bundleOf(
                 REVIEW_ID to id,

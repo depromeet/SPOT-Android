@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Snackbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -192,9 +193,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     override fun onDestroyView() {
+        resetWindowInsets()
         scrapActiveSnackBar.dismiss()
         scrapInActiveSnackBar.dismiss()
-        resetWindowInsets()
         super.onDestroyView()
     }
 
