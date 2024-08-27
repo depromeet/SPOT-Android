@@ -70,7 +70,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
         viewModel.scrap.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
-                    adapter.submitList(state.data.reviews)
+                    adapter.submitList(state.data.reviews.map { it.baseReview })
                     binding.vpScrap.post {
                         binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
                     }
@@ -95,7 +95,6 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             }
         )
         binding.vpScrap.adapter = adapter
-
         setupPageChangeListener()
     }
 
@@ -152,16 +151,16 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             })
     }
 
-    private fun shareLink(data: ResponseScrap.ResponseReviewWrapper, imagePosition: Int) {
+    private fun shareLink(data: ResponseScrap.ResponseBaseReview, imagePosition: Int) {
         KakaoUtils().share(
             requireContext(),
             seatFeed(
-                title = data.baseReview.kakaoShareSeatFeedTitle(),
-                description = "출처 : ${data.baseReview.member.nickname}",
-                imageUrl = data.baseReview.images[imagePosition].url,
+                title = data.kakaoShareSeatFeedTitle(),
+                description = "출처 : ${data.member.nickname}",
+                imageUrl = data.images[imagePosition].url,
                 queryParams = mapOf(
-                    SchemeKey.STADIUM_ID to data.baseReview.stadium.id.toString(),
-                    SchemeKey.BLOCK_CODE to data.baseReview.block.code
+                    SchemeKey.STADIUM_ID to data.stadium.id.toString(),
+                    SchemeKey.BLOCK_CODE to data.block.code
                 )
             ),
             onSuccess = { sharingIntent ->
