@@ -44,10 +44,13 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
             val userName = account.givenName
             val serverAuth = account.serverAuthCode
             account.idToken
-            Intent(this, NicknameInputActivity::class.java).apply {
-                putExtra("kakaoToken", account.idToken)
-                startActivity(this)
-            }
+
+            signUpViewModel.updateGoogleToken(account.serverAuthCode.orEmpty())
+
+//            Intent(this, NicknameInputActivity::class.java).apply {
+//                putExtra("kakaoToken", account.idToken)
+//                startActivity(this)
+//            }
 
         } catch (e: ApiException) {
             Timber.e(e)

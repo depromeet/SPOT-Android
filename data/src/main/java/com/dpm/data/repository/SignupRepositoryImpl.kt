@@ -23,6 +23,15 @@ class SignupRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getSignupV2(
+        snsProvider: String,
+        accessToken: String
+    ): Result<SignupTokenModel> {
+        return runCatching {
+            signupRemoteDataSource.getSignupV2(snsProvider, accessToken).toSignupTokenModel()
+        }
+    }
+
     override suspend fun deleteWithdraw(): Result<Unit> {
         return runCatching {
             signupRemoteDataSource.deleteWithdraw()

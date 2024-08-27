@@ -51,4 +51,21 @@ class KakaoSignupViewModel @Inject constructor(
         }
     }
 
+    fun updateGoogleToken(token: String) {
+        viewModelScope.launch {
+            _loginUiState.emit(LoginUiState.Loading)
+            signupRepository.getSignupV2("GOOGLE", token)
+                .onSuccess {
+                    if (it.jwtToken.isEmpty()) {
+                        _kakaoToken.value = token
+                    } else {
+                        sharedPreference.token = it.jwtToken
+                        _loginUiState.emit(LoginUiState.LoginSuccess)
+                    }
+                }.onFailure {
+                    _kakaoToken.value = token
+                }
+        }
+    }
+
 }

@@ -20,6 +20,12 @@ interface SignupService {
         @Path("accessToken") accessToken: String,
     ): ResponsePostSignupDto
 
+    @GET("/api/v2/members/{snsProvider}/{token}")
+    suspend fun getSignupMemberV2(
+        @Path("snsProvider") snsProvider: String,
+        @Path("token") accessToken: String,
+    ): ResponsePostSignupDto
+
     @DELETE("/api/v1/members")
     suspend fun deleteSignupMember()
 }
