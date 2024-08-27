@@ -30,6 +30,7 @@ import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
 import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
+import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException

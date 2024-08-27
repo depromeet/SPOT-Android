@@ -12,9 +12,10 @@ android {
 
     defaultConfig {
         minSdk = Constants.minSdk
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        // TODO : 데이터 트래킹 Dev 작동 확인 -> prod.mixpanel_token 교체
+        buildConfigField("String", "MIXPANEL_TOKEN", getApiKey("dev.mixpanel_token"))
     }
 
     composeOptions {
@@ -34,6 +35,10 @@ android {
         buildConfig = true
         compose = true
     }
+}
+
+fun getApiKey(propertyKey: String): String {
+    return com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 dependencies {
@@ -107,6 +112,9 @@ dependencies {
 
     Compose.forEach {
         implementation(it)
+    }
+    MixpanelDependencies.run {
+        implementation(mixpanel)
     }
 }
 
