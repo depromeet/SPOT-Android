@@ -35,7 +35,7 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
         super.onViewCreated(view, savedInstanceState)
         initEvent()
         initView()
-        binding.csbvSelectImage.setTextPart("시야 사진이 ", 1, "인 경우 선택해주세요")
+        binding.csbvSelectImage.setTextPart("시야 사진이 ", "1장", "인 경우 선택해주세요")
     }
 
     private fun initEvent() {
