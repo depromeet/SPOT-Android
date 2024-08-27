@@ -17,10 +17,11 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReviewMySeatBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.designsystem.SpotImageSnackBar
+import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
+import com.dpm.presentation.util.MixpanelManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -197,6 +198,7 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
     private fun initCompleteEvent() {
         binding.tvCompleteBtn.setOnSingleClickListener {
             if (binding.tvCompleteBtn.isEnabled) {
+                MixpanelManager.track("seat_review_seat_review")
                 dismiss()
             }
         }

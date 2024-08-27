@@ -99,6 +99,10 @@ object FirebaseDependencies {
     const val remoteConfig = "com.google.firebase:firebase-config-ktx"
 }
 
+object MixpanelDependencies{
+    const val mixpanel = "com.mixpanel.android:mixpanel-android:7.+"
+}
+
 val Compose = listOf(
     "androidx.activity:activity-compose:${Versions.activityKtxVersion}",
     "androidx.compose.material:material:${Versions.composeVersion}",
