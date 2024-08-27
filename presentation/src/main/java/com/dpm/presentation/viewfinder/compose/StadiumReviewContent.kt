@@ -110,6 +110,7 @@ fun StadiumReviewContent(
                             )
                         )
                     ),
+                    error = painterResource(id = com.depromeet.designsystem.R.drawable.ic_default_profile),
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
