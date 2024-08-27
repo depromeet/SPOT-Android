@@ -31,9 +31,9 @@ import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.uiMapper.MonthReviewData
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
-import com.dpm.presentation.seatreview.ReviewActivity
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.util.CalendarUtil
+import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -80,6 +80,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun initView() {
+        initViewStatusBar()
         initSeatMonthAdapter()
         initIntuitiveMonthAdapter()
         initReviewList()
@@ -365,6 +366,13 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun observeProfile() {
         viewModel.profile.asLiveData().observe(this) {
             setProfile(it)
+        }
+    }
+
+    private fun initViewStatusBar() {
+        Utils(this).apply {
+            setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+            setBlackSystemBarIconColor(window)
         }
     }
 

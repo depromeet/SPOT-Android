@@ -80,7 +80,11 @@ class ScrapDetailViewHolder(
         binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 updateIndicators(position)
-                ivBackground.loadAndClip(item.images[position].url)
+                if (position >= 0 && position < item.images.size) {
+                    ivBackground.loadAndClip(item.images[position].url)
+                } else {
+                    ivBackground.loadAndClip(item.images[0].url)
+                }
             }
         })
 
