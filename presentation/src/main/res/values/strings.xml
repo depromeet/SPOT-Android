@@ -114,6 +114,8 @@
     <string name="view_record_help">도움 제공</string>
     <string name="seat_record_seat_view">좌석시야</string>
     <string name="seat_recotd_intuitive_view">직관후기</string>
+    <string name="seat_record_empty_description_one">아직 아카이빙한</string>
+    <string name="seat_record_empty_description_two">게시물이 없습니다.</string>
 
     <!-- viewDetail 관련-->
     <string name="record_edit">게시물 수정</string>
@@ -163,6 +165,8 @@
     <string name="scrap_title">스크랩</string>
     <string name="scrap_save_record">저장된 게시물</string>
     <string name="scrap_empty_description">아직 스크랩한\n게시물이 없습니다.</string>
+    <string name="scrap_empty_description_one">아직 스크랩한</string>
+    <string name="scrap_empty_description_two">게시물이 없습니다.</string>
     <string name="scrap_empty_advice">궁금한 야구장 시야를 찾아보세요!</string>
     <string name="scrap_find_view">시야 찾으러 가기</string>
     <string name="scrap_fail_advice">새로고침하여 다시 시도해주세요!</string>
@@ -174,6 +178,7 @@
     <string name="scrap_search">검색하기</string>
     <string name="stadium_jamsil">잠실야구장</string>
     <string name="scrap_more"><u>더보기</u></string>
+
 
 
 </resources>

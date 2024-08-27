@@ -105,7 +105,7 @@
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginTop="92dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clScrapTop">
@@ -122,18 +122,43 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="contentDescription" />
 
+<!--        <TextView-->
+<!--            android:id="@+id/tvScrapNoDescription"-->
+<!--            style="@style/TextAppearance.Spot.Title04"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/scrap_empty_description"-->
+<!--            android:textColor="@color/color_foreground_heading"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/ivNoScrap" />-->
+
         <TextView
-            android:id="@+id/tvScrapNoDescription"
+            android:id="@+id/tvScrapNoDescriptionOne"
             style="@style/TextAppearance.Spot.Title04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/scrap_empty_description"
+            android:text="@string/scrap_empty_description_one"
             android:textColor="@color/color_foreground_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivNoScrap" />
+
+        <TextView
+            android:id="@+id/tvScrapNoDescriptiontwo"
+            style="@style/TextAppearance.Spot.Title04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/scrap_empty_description_two"
+            android:textColor="@color/color_foreground_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoDescriptionOne" />
 
         <TextView
             android:id="@+id/tvScrapNoAdvice"
@@ -146,7 +171,7 @@
             android:textColor="@color/color_foreground_caption"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScrapNoDescription" />
+            app:layout_constraintTop_toBottomOf="@id/tvScrapNoDescriptiontwo" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btScrapEmptyView"
