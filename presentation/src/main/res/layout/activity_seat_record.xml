@@ -454,7 +454,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clRecordEmpty"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -464,7 +465,6 @@
                     android:id="@+id/ivRecordNoRecord"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginTop="50dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_communication_empty"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -472,18 +472,43 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="contentDescription" />
 
+<!--                <TextView-->
+<!--                    android:id="@+id/tvRecordNoRecordDescription"-->
+<!--                    style="@style/TextAppearance.Spot.Title04"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="@string/home_no_record_description"-->
+<!--                    android:textColor="@color/color_foreground_heading"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/ivRecordNoRecord" />-->
+
                 <TextView
-                    android:id="@+id/tvRecordNoRecordDescription"
-                    android:textAppearance="@style/TextAppearance.Spot.Title04"
+                    android:id="@+id/tvRecordNoRecordDescriptionFirst"
+                    style="@style/TextAppearance.Spot.Title04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="@string/home_no_record_description"
+                    android:text="아직 아카이빙한"
                     android:textColor="@color/color_foreground_heading"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivRecordNoRecord" />
+
+                <TextView
+                    android:id="@+id/tvRecordNoRecordDescriptionSecond"
+                    style="@style/TextAppearance.Spot.Title04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="게시물이 없습니다."
+                    android:textColor="@color/color_foreground_heading"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvRecordNoRecordDescriptionFirst" />
 
                 <TextView
                     android:id="@+id/tvRecordNoRecordAdvice"
@@ -496,7 +521,7 @@
                     android:textColor="@color/color_foreground_caption"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvRecordNoRecordDescription" />
+                    app:layout_constraintTop_toBottomOf="@id/tvRecordNoRecordDescriptionSecond" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btRecordWriteRecord"
@@ -526,7 +551,8 @@
                 android:id="@+id/cl_record_fail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:layout_marginTop="20dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvErrorMonth">
@@ -535,7 +561,6 @@
                     android:id="@+id/iv_record_fail"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginTop="50dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_communication_error"
                     app:layout_constraintEnd_toEndOf="parent"

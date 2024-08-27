@@ -166,11 +166,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 }
 
                 is UiState.Loading -> {
+                    setHomeFeedVisibility(false)
                     setHomeFeedShimmer(true)
                 }
 
                 is UiState.Success -> {
                     setHomeFeed(state.data)
+                    setHomeFeedVisibility(true)
                     setHomeFeedShimmer(false)
                 }
             }
@@ -274,6 +276,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             shimmerHomeStadium.stopShimmer()
             shimmerHomeStadium.visibility = View.GONE
 
+        }
+    }
+    private fun setHomeFeedVisibility(isSuccess: Boolean) {
+        val visibility = if (isSuccess) View.VISIBLE else View.GONE
+        with(binding) {
+            csbvHomeTitle.visibility = visibility
+            tvHomeLevel.visibility = visibility
+            ivHomeInfo.visibility = visibility
         }
     }
 

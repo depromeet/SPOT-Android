@@ -50,6 +50,7 @@
         android:layout_height="32dp"
         android:layout_marginStart="46dp"
         android:layout_marginTop="46dp"
+        android:visibility="gone"
         android:background="@drawable/circle_error_primary_fill"
         android:gravity="center"
         android:text="@string/home_new"
