@@ -14,6 +14,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumSelectionBinding
 import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.home.HomeActivity
+import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.SpannableStringUtils
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.adapter.GridSpacingItemDecoration
@@ -150,6 +151,7 @@ class StadiumSelectionActivity : BaseActivity<ActivityStadiumSelectionBinding>({
     }
 
     private fun startStadiumActivity(stadium: ResponseStadiums) {
+        MixpanelManager.track("viewfinder_select_stadium")
         val intent = Intent(
             this@StadiumSelectionActivity,
             StadiumActivity::class.java

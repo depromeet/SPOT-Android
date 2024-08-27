@@ -35,6 +35,7 @@ import com.dpm.presentation.extension.setMargins
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.SpannableStringUtils
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.adapter.StadiumSectionAdapter
@@ -486,6 +487,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
     }
 
     private fun startToStadiumDetailActivity(id: String) {
+        MixpanelManager.track("viewfinder_select_block")
         Intent(this, StadiumDetailActivity::class.java).apply {
             putExtra(SchemeKey.STADIUM_ID, viewModel.stadiumId)
             putExtra(SchemeKey.BLOCK_CODE, id)

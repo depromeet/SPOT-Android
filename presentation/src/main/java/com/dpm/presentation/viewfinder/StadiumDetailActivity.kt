@@ -17,6 +17,7 @@ import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.util.KakaoUtils
+import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.seatFeed
 import com.dpm.presentation.util.toEmptyBlock
 import com.dpm.presentation.viewfinder.compose.StadiumDetailScreen
@@ -74,6 +75,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                         startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.MAIN_REVIEW)
                     },
                     onClickSelectSeat = {
+                        MixpanelManager.track("viewfinder_select_seat")
                         StadiumSelectSeatDialog.apply {
                             newInstance().show(
                                 supportFragmentManager, TAG
@@ -146,6 +148,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         title: String,
         type: DetailReviewEntryPoint
     ) {
+        MixpanelManager.track("viewfinder_check_view")
         val fragment = StadiumDetailPictureFragment.newInstance().apply {
             arguments = bundleOf(
                 REVIEW_ID to id,
