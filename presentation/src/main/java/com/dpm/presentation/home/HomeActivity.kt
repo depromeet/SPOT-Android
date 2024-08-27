@@ -206,6 +206,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             stadiumClick = {
                 if (!it.isActive) {
                     makeSpotImageAppbar("${it.name} 야구장은 곧 업데이트 예정이에요")
+                    SpotSnackBar.make(
+                        view = binding.root,
+                        message = "현재 잠실야구장만 이용할 수 있어요!",
+                        endMessage = "잠실야구장 보기",
+                        marginBottom = 87,
+                    ) {
+                        startStadiumActivity(it)
+                    }.show()
                 } else {
                     MixpanelManager.track("home_find_view")
                     startStadiumActivity(it)
