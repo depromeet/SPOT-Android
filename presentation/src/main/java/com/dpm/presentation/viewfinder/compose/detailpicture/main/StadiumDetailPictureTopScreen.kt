@@ -18,7 +18,6 @@ import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.kakaoShareSeatFeedTitle
 import com.dpm.presentation.util.seatFeed
-import com.dpm.presentation.viewfinder.DetailReviewEntryPoint
 import com.dpm.presentation.viewfinder.compose.detailpicture.StadiumDetailReviewViewPager
 import com.dpm.presentation.viewfinder.uistate.StadiumDetailUiState
 import com.dpm.presentation.viewfinder.viewmodel.StadiumDetailViewModel
@@ -75,7 +74,7 @@ fun StadiumDetailPictureTopScreen(
                 onClickLike = { id ->
                     onClickLike()
                     isFirstLikeState = false
-                    stadiumDetailViewModel.updateLike(id)
+                    stadiumDetailViewModel.updateTopReviewLike(id)
                 },
                 onClickScrap = onClickScrap,
                 onClickShare = { imagePosition ->

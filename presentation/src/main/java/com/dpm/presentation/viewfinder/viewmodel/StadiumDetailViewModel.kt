@@ -95,6 +95,36 @@ class StadiumDetailViewModel @Inject constructor(
         }
     }
 
+    fun updateTopReviewLike(id: Long) {
+        viewModelScope.launch {
+            viewfinderRepository.updateLike(id.toInt())
+            _detailUiState.value = when (val currentState = _detailUiState.value) {
+                is StadiumDetailUiState.ReviewsData -> {
+                    val updatedReviews = currentState.topReviewImages.map { review ->
+                        if (review.id == id) {
+                            if (review.isLike) {
+                                review.copy(
+                                    isLike = !review.isLike,
+                                    likesCount = review.likesCount - 1
+                                )
+                            } else {
+                                review.copy(
+                                    isLike = !review.isLike,
+                                    likesCount = review.likesCount + 1
+                                )
+                            }
+                        } else {
+                            review
+                        }
+                    }
+                    currentState.copy(topReviewImages = updatedReviews)
+                }
+
+                else -> currentState
+            }
+        }
+    }
+
     fun updateScrap(id: Long) {
         viewModelScope.launch {
             viewfinderRepository.updateScrap(id.toInt())
@@ -118,6 +148,36 @@ class StadiumDetailViewModel @Inject constructor(
                         }
                     }
                     currentState.copy(reviews = updatedReviews)
+                }
+
+                else -> currentState
+            }
+        }
+    }
+
+    fun updateTopReviewScrap(id: Long) {
+        viewModelScope.launch {
+            viewfinderRepository.updateScrap(id.toInt())
+            _detailUiState.value = when (val currentState = _detailUiState.value) {
+                is StadiumDetailUiState.ReviewsData -> {
+                    val updatedReviews = currentState.topReviewImages.map { review ->
+                        if (review.id == id) {
+                            if (review.isScrap) {
+                                review.copy(
+                                    isScrap = !review.isScrap,
+                                    scrapsCount = review.scrapsCount - 1
+                                )
+                            } else {
+                                review.copy(
+                                    isScrap = !review.isScrap,
+                                    scrapsCount = review.scrapsCount + 1
+                                )
+                            }
+                        } else {
+                            review
+                        }
+                    }
+                    currentState.copy(topReviewImages = updatedReviews)
                 }
 
                 else -> currentState
@@ -220,6 +280,15 @@ class StadiumDetailViewModel @Inject constructor(
 
     fun checkScrap(id: Long): Boolean {
         (_detailUiState.value as StadiumDetailUiState.ReviewsData).reviews.map { review ->
+            if (review.id == id && review.isScrap) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun checkTopReviewScrap(id: Long): Boolean {
+        (_detailUiState.value as StadiumDetailUiState.ReviewsData).topReviewImages.map { review ->
             if (review.id == id && review.isScrap) {
                 return true
             }

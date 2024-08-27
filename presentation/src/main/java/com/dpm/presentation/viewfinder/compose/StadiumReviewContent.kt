@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,9 +20,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,12 +42,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieClipSpec
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieAnimatable
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.depromeet.presentation.R
 import com.dpm.designsystem.compose.ui.SpotTheme
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.dpm.presentation.extension.noRippleClickable
 import com.dpm.presentation.mapper.toKeyword
 import com.dpm.presentation.util.toBlockContent
+import kotlinx.coroutines.launch
 
 private enum class ReviewContentShowMoreState {
     SHOW, HIDE, NOTHING
@@ -67,6 +76,12 @@ fun StadiumReviewContent(
     var showMoreButtonState by remember {
         mutableStateOf(ReviewContentShowMoreState.NOTHING)
     }
+    val scope = rememberCoroutineScope()
+
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(com.depromeet.designsystem.R.raw.lottie_like)
+    )
+    val lottieAnimatable = rememberLottieAnimatable()
 
     Column(
         modifier = modifier
@@ -244,19 +259,42 @@ fun StadiumReviewContent(
             }
         )
         Spacer(modifier = Modifier.height(12.dp))
-        ReviewContentBottom(
-            isLike = reviewContent.isLike,
-            isScrap = reviewContent.isScrap,
-            likeCount = reviewContent.likesCount,
-            modifier = Modifier.padding(start = 32.dp, end = 16.dp),
-            onClickLike = {
-                onClickLike(reviewContent.id)
-            },
-            onClickScrap = {
-                onClickScrap(reviewContent.id)
-            },
-            onClickShare = onClickShare
-        )
+        Box(modifier = Modifier) {
+            ReviewContentBottom(
+                isLike = reviewContent.isLike,
+                isScrap = reviewContent.isScrap,
+                likeCount = reviewContent.likesCount,
+                modifier = Modifier.padding(start = 32.dp, end = 16.dp),
+                onClickLike = {
+                    if (!reviewContent.isLike) {
+                        scope.launch {
+                            lottieAnimatable.animate(
+                                composition = composition,
+                                clipSpec = LottieClipSpec.Frame(0, 1200),
+                                initialProgress = 0f
+                            )
+                        }
+                    }
+                    onClickLike(reviewContent.id)
+                },
+                onClickScrap = {
+                    onClickScrap(reviewContent.id)
+                },
+                onClickShare = onClickShare
+            )
+            Box(
+                modifier = Modifier
+                    .offset(y = (-35).dp)
+                    .padding(start = 18.dp)
+                    .size(72.dp)
+            ) {
+                LottieAnimation(
+                    composition = composition,
+                    progress = { lottieAnimatable.progress },
+                    contentScale = ContentScale.FillHeight
+                )
+            }
+        }
         if (firstReview && isFirstShare) {
             Box(
                 modifier = Modifier

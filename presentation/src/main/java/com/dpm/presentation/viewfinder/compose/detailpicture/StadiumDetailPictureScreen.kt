@@ -20,8 +20,8 @@ fun StadiumDetailPictureScreen(
     isFirstLike: Boolean,
     context: Context = LocalContext.current,
     stadiumDetailViewModel: StadiumDetailViewModel = viewModel(),
-    onClickLike:() -> Unit = {},
-    onClickScrap: (id: Long) -> Unit = {},
+    onClickLike: () -> Unit = {},
+    onClickScrap: (isScrap: Boolean) -> Unit = {},
     onClickShare: () -> Unit = {}
 ) {
     val reviews = stadiumDetailViewModel.detailUiState.collectAsStateWithLifecycle()
@@ -38,7 +38,9 @@ fun StadiumDetailPictureScreen(
                 isFirstLike = isFirstLike,
                 stadiumDetailViewModel = stadiumDetailViewModel,
                 onClickLike = onClickLike,
-                onClickScrap = onClickScrap,
+                onClickScrap = { id ->
+                    onClickScrap(stadiumDetailViewModel.checkTopReviewScrap(id))
+                },
                 onClickShare = onClickShare
             )
         }
@@ -53,7 +55,9 @@ fun StadiumDetailPictureScreen(
                 isFirstLike = isFirstLike,
                 stadiumDetailViewModel = stadiumDetailViewModel,
                 onClickLike = onClickLike,
-                onClickScrap = onClickScrap,
+                onClickScrap = { id ->
+                    onClickScrap(stadiumDetailViewModel.checkScrap(id))
+                },
                 onClickShare = onClickShare
             )
         }
