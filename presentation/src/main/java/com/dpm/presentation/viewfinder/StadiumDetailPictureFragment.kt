@@ -1,5 +1,6 @@
 package com.dpm.presentation.viewfinder
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.depromeet.presentation.databinding.FragmentStadiumDetailPictureBindin
 import com.dpm.core.base.BindingFragment
 import com.dpm.designsystem.SpotSnackBar
 import com.dpm.domain.preference.SharedPreference
+import com.dpm.presentation.scrap.ScrapActivity
 import com.dpm.presentation.util.Utils
 import com.dpm.presentation.viewfinder.compose.detailpicture.StadiumDetailPictureScreen
 import com.dpm.presentation.viewfinder.dialog.ReportDialog
@@ -128,7 +130,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
             message = getString(R.string.viewfinder_snackbar_scrap),
             endMessage = getString(R.string.viewfinder_underscore_snackbar_scrap),
             onClick = {
-                // TODO : 스크랩 화면으로 이동
+                Intent(requireContext(), ScrapActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }.let { startActivity(it) }
             })
     }
 
