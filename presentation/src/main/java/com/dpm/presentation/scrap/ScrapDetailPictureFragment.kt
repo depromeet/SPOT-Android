@@ -2,7 +2,13 @@ package com.dpm.presentation.scrap
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
@@ -44,7 +50,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     private fun initView() {
         initViewPager()
-        initViewStatusBar()
+        initWindowInsets()
     }
 
     private fun initEvent() = with(binding) {
@@ -95,15 +101,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Utils(requireContext()).apply {
-            requireActivity().apply {
-                setStatusBarColor(
-                    window,
-                    com.depromeet.designsystem.R.color.color_background_tertiary
-                )
-                setBlackSystemBarIconColor(window)
-            }
-        }
+        resetWindowInsets()
     }
 
     private fun setupPageChangeListener() {
@@ -154,14 +152,6 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             })
     }
 
-    private fun initViewStatusBar() {
-        Utils(requireContext()).apply {
-            requireActivity().apply {
-                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_b2000000)
-            }
-        }
-    }
-
     private fun shareLink(data: ResponseScrap.ResponseReviewWrapper, imagePosition: Int) {
         KakaoUtils().share(
             requireContext(),
@@ -181,5 +171,41 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                 Timber.d("링크 공유 실패 : ${it.message}")
             }
         )
+    }
+
+    private fun initWindowInsets() {
+
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(window, R.color.transparent)
+                setNavigationBarColor(window, com.depromeet.designsystem.R.color.black)
+                setWhiteSystemBarIconColor(window)
+                WindowCompat.setDecorFitsSystemWindows(window, false)
+            }
+
+            ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    binding.spotAppbar.updatePadding(top = insets.top)
+                    binding.vpScrap.updatePadding(bottom = insets.bottom)
+                }
+                WindowInsetsCompat.CONSUMED
+            }
+        }
+    }
+
+    private fun resetWindowInsets() {
+        Utils(requireContext()).apply {
+            requireActivity().apply {
+                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+                setNavigationBarColor(
+                    window,
+                    com.depromeet.designsystem.R.color.color_background_tertiary
+                )
+                setBlackSystemBarIconColor(window)
+                WindowCompat.setDecorFitsSystemWindows(window, true)
+            }
+        }
     }
 }
