@@ -96,6 +96,7 @@ dependencies {
         implementation(progressView)
         implementation(balloon)
         implementation(lottie)
+        implementation(lottieCompose)
         implementation(kakaoLogin)
         implementation(kakaoShare)
         implementation(indicator)
