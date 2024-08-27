@@ -3,21 +3,30 @@ package com.dpm.presentation.viewfinder
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.dpm.core.base.BaseActivity
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivityStadiumDetailBinding
+import com.dpm.designsystem.SpotSnackBar
+import com.dpm.designsystem.extension.dpToPx
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.scrap.ScrapActivity
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.MixpanelManager
+import com.dpm.presentation.util.Utils
 import com.dpm.presentation.util.seatFeed
 import com.dpm.presentation.util.toEmptyBlock
 import com.dpm.presentation.viewfinder.compose.StadiumDetailScreen
@@ -45,6 +54,9 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     @Inject
     lateinit var sharedPreference: SharedPreference
 
+    private lateinit var scrapActiveSnackBar: SpotSnackBar
+    private lateinit var scrapInActiveSnackBar: SpotSnackBar
+
     private val viewModel: StadiumDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +74,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
             viewModel.reviewId = reviewId
         }
         initComposeView()
+        initSnackBar()
     }
 
     private fun initComposeView() {
@@ -105,6 +118,16 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
                     onClickTopImage = { id, index, title ->
                         startToStadiumDetailPictureFragment(id, index, title, DetailReviewEntryPoint.TOP_REVIEW)
                     },
+                    onClickLike = { },
+                    onClickScrap = { isScrap ->
+                        if (isScrap) {
+                            scrapActiveSnackBar.dismiss()
+                            scrapInActiveSnackBar.show()
+                        } else {
+                            scrapInActiveSnackBar.dismiss()
+                            scrapActiveSnackBar.show()
+                        }
+                    },
                     onClickShare = {
                         sharedPreference.isFirstShare = false
                     }
@@ -132,6 +155,28 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
             if (it) binding.btnUp.visibility = View.VISIBLE
             else binding.btnUp.visibility = View.INVISIBLE
         }
+    }
+
+    private fun initSnackBar() {
+        val navigationHeight = (Utils(this).navigationHeight / resources.displayMetrics.density).toInt()
+        scrapActiveSnackBar = SpotSnackBar.make(
+            view = binding.root.rootView,
+            background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
+            message = getString(R.string.viewfinder_snackbar_scrap),
+            endMessage = getString(R.string.viewfinder_underscore_snackbar_scrap),
+            marginBottom = navigationHeight,
+            onClick = {
+                Intent(this, ScrapActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }.let { startActivity(it) }
+            })
+        scrapInActiveSnackBar = SpotSnackBar.make(
+            view = binding.root.rootView,
+            background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
+            message = getString(R.string.viewfinder_inactive_snackbar_scrap),
+            marginBottom = navigationHeight,
+            onClick = {}
+        )
     }
 
     private fun getIdExtra(callback: (stadiumId: Int, blockCode: String, reviewId: Int) -> Unit) {

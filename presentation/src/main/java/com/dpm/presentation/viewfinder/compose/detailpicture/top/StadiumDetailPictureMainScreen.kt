@@ -102,9 +102,7 @@ fun StadiumDetailPictureMainScreen(
                 },
                 onClickScrap = { id ->
                     onClickScrap(id)
-                    if (!stadiumDetailViewModel.checkScrap(id)) {
-                        stadiumDetailViewModel.updateScrap(id)
-                    }
+                    stadiumDetailViewModel.updateScrap(id)
                 },
                 onClickShare = { imagePosition ->
                     onClickShare()

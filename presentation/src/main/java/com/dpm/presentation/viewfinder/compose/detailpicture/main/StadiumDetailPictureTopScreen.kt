@@ -78,9 +78,7 @@ fun StadiumDetailPictureTopScreen(
                 },
                 onClickScrap = { id ->
                     onClickScrap(id)
-                    if (!stadiumDetailViewModel.checkTopReviewScrap(id)) {
-                        stadiumDetailViewModel.updateTopReviewScrap(id)
-                    }
+                    stadiumDetailViewModel.updateTopReviewScrap(id)
                 },
                 onClickShare = { imagePosition ->
                     onClickShare()
