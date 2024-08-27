@@ -73,20 +73,7 @@ class ScrapDetailViewHolder(
         } else {
             tvScrapContent.visibility = GONE
         }
-        scrapImageAdapter = ScrapImageAdapter()
-        binding.vpImage.adapter = scrapImageAdapter
-        scrapImageAdapter.submitList(item.images.map { it.url })
-        setupIndicators(scrapImageAdapter.itemCount)
-        binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                updateIndicators(position)
-                if (position >= 0 && position < item.images.size) {
-                    ivBackground.loadAndClip(item.images[position].url)
-                } else {
-                    ivBackground.loadAndClip(item.images[0].url)
-                }
-            }
-        })
+        initScrapImageAdapter(item)
 
 
         cvScrapKeyword.apply {
@@ -155,6 +142,7 @@ class ScrapDetailViewHolder(
         ivLike.setOnSingleClickListener {
             if (!item.isLiked) {
                 lottieLike.playAnimation()
+                ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
                 lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
                         super.onAnimationEnd(animation, isReverse)
@@ -171,6 +159,25 @@ class ScrapDetailViewHolder(
         }
         ivShare.setOnSingleClickListener {
             shareClick(item, binding.vpImage.currentItem)
+        }
+    }
+
+    private fun initScrapImageAdapter(item: ResponseScrap.ResponseBaseReview) {
+        if(!::scrapImageAdapter.isInitialized){
+            scrapImageAdapter = ScrapImageAdapter()
+            binding.vpImage.adapter = scrapImageAdapter
+            scrapImageAdapter.submitList(item.images.map { it.url })
+            setupIndicators(scrapImageAdapter.itemCount)
+            binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    updateIndicators(position)
+                    if (position >= 0 && position < item.images.size) {
+                        binding.ivBackground.loadAndClip(item.images[position].url)
+                    } else {
+                        binding.ivBackground.loadAndClip(item.images[0].url)
+                    }
+                }
+            })
         }
     }
 

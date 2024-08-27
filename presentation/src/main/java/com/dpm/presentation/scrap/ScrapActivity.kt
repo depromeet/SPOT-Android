@@ -62,6 +62,9 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         AppbarScrap.setNavigationOnClickListener {
             finish()
         }
+        fabScrapUp.setOnClickListener {
+            rvScrapRecord.smoothScrollToPosition(0)
+        }
     }
 
     private fun initObserver() {
@@ -120,10 +123,13 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 super.onScrolled(recyclerView, dx, dy)
 
                 val scrollBottom = !binding.rvScrapRecord.canScrollVertically(1)
+                val scrollTop = !binding.rvScrapRecord.canScrollVertically(-1)
+
                 if (scrollBottom && !isLoading && (viewModel.scrap.value as UiState.Success).data.hasNext) {
                     viewModel.getNextScrapRecord()
                     isLoading = true
                 }
+                binding.fabScrapUp.visibility = if (scrollTop) GONE else VISIBLE
             }
         })
     }

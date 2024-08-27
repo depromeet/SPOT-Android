@@ -71,10 +71,8 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             when (state) {
                 is UiState.Success -> {
                     adapter.submitList(state.data.reviews.map { it.baseReview }.toList())
-                    if (binding.vpScrap.currentItem != viewModel.currentPage.value) {
-                        binding.vpScrap.post {
-                            binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
-                        }
+                    binding.vpScrap.post {
+                        binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
                     }
                     isLoading = false
                 }

@@ -86,6 +86,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         initReviewList()
         viewModel.getSeatReviewDate()
         viewModel.getProfile()
+        binding.fabRecordUp.visibility = GONE
     }
 
     private fun initEvent() {
