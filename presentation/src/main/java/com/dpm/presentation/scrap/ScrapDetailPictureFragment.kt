@@ -70,9 +70,11 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
         viewModel.scrap.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
-                    adapter.submitList(state.data.reviews.map { it.baseReview })
-                    binding.vpScrap.post {
-                        binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
+                    adapter.submitList(state.data.reviews.map { it.baseReview }.toList())
+                    if (binding.vpScrap.currentItem != viewModel.currentPage.value) {
+                        binding.vpScrap.post {
+                            binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
+                        }
                     }
                     isLoading = false
                 }
@@ -197,7 +199,10 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     private fun resetWindowInsets() {
         Utils(requireContext()).apply {
             requireActivity().apply {
-                setStatusBarColor(window, com.depromeet.designsystem.R.color.color_background_tertiary)
+                setStatusBarColor(
+                    window,
+                    com.depromeet.designsystem.R.color.color_background_tertiary
+                )
                 setNavigationBarColor(
                     window,
                     com.depromeet.designsystem.R.color.color_background_tertiary

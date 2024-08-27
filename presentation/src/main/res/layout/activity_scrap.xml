@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/AppbarScrap">
 
         <TextView
-            android:id="@+id/tvScrapNoneTitle"
+            android:id="@+id/tvScrapTitle"
             style="@style/TextAppearance.Spot.Subtitle01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,15 +53,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvScrapNoneCount"
+            android:id="@+id/tvScrapCount"
             style="@style/TextAppearance.Spot.Subtitle03"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:textColor="@color/color_foreground_caption"
-            app:layout_constraintBottom_toBottomOf="@id/tvScrapNoneTitle"
-            app:layout_constraintStart_toEndOf="@id/tvScrapNoneTitle"
-            app:layout_constraintTop_toTopOf="@id/tvScrapNoneTitle"
+            app:layout_constraintBottom_toBottomOf="@id/tvScrapTitle"
+            app:layout_constraintStart_toEndOf="@id/tvScrapTitle"
+            app:layout_constraintTop_toTopOf="@id/tvScrapTitle"
             tools:text="0" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -74,7 +74,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScrapNoneCount"
+            app:layout_constraintTop_toBottomOf="@id/tvScrapTitle"
             tools:itemCount="5"
             tools:listitem="@layout/item_scrap_filter_selected"/>
 

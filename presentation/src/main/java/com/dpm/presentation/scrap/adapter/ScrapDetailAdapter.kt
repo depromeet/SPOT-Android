@@ -1,5 +1,7 @@
 package com.dpm.presentation.scrap.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -8,11 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.depromeet.presentation.R
@@ -59,7 +59,7 @@ class ScrapDetailViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var scrapImageAdapter: ScrapImageAdapter
-    private lateinit var indicators : MutableList<ImageView>
+    private lateinit var indicators: MutableList<ImageView>
 
     fun bind(item: ResponseScrap.ResponseBaseReview) = with(binding) {
         ivProfile.loadAndCircleProfile(item.member.profileImage ?: "")
@@ -67,7 +67,7 @@ class ScrapDetailViewHolder(
         tvSectionName.text = item.member.nickname
         tvScrapLevel.text = item.member.formattedLevel()
         tvSectionName.text = item.formattedBlockToSeat()
-        ivBackground.loadAndClip(item.images[0].url)
+        tvLikeCount.text = item.likesCount.toString()
         if (item.content.isNotEmpty()) {
             tvScrapContent.text = item.content
         } else {
@@ -80,13 +80,12 @@ class ScrapDetailViewHolder(
         binding.vpImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 updateIndicators(position)
+                ivBackground.loadAndClip(item.images[position].url)
             }
         })
-        tvLikeCount.text = item.likesCount.toString()
 
 
         cvScrapKeyword.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MaterialTheme {
                     KeywordFlowRow(
@@ -102,13 +101,16 @@ class ScrapDetailViewHolder(
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
         }
 
+
         if (item.isLiked) {
             ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
+            tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_action_enabled))
         } else {
             ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
+            tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_foreground_white))
         }
 
-        if(item.content.isEmpty()){
+        if (item.content.isEmpty()) {
             tvMore.visibility = INVISIBLE
         }
         tvScrapContent.post {
@@ -147,7 +149,18 @@ class ScrapDetailViewHolder(
             }
         }
         ivLike.setOnSingleClickListener {
-            likeClick(item.id)
+            if (!item.isLiked) {
+                lottieLike.playAnimation()
+                lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
+                        super.onAnimationEnd(animation, isReverse)
+                        likeClick(item.id)
+                    }
+                })
+            } else {
+                likeClick(item.id)
+            }
+
         }
         ivScrap.setOnSingleClickListener {
             scrapClick(item.id)
@@ -174,7 +187,12 @@ class ScrapDetailViewHolder(
                         setMargins(2.dpToPx(context), 0, 2.dpToPx(context), 0)
                     }
                     scaleType = ImageView.ScaleType.FIT_XY
-                    setImageDrawable(ContextCompat.getDrawable(context, R.drawable.indicator_unselected))
+                    setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.indicator_unselected
+                        )
+                    )
                 }
                 indicators.add(indicator)
                 binding.llIndicator.addView(indicator)
