@@ -54,6 +54,7 @@ class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBin
                     putExtra(METHOD_KEY, viewModel.reviewMethod.value?.name)
                 },
             )
+            dismiss()
         }
     }
 }
