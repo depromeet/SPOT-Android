@@ -38,7 +38,7 @@ fun StadiumDetailPictureMainScreen(
     onClickScrap: (id: Long) -> Unit = {},
     onClickShare: () -> Unit = {}
 ) {
-    when(uiState) {
+    when (uiState) {
         is StadiumDetailUiState.ReviewsData -> {
             val visited = remember {
                 mutableStateListOf(
@@ -100,7 +100,12 @@ fun StadiumDetailPictureMainScreen(
                     isFirstLikeState = false
                     stadiumDetailViewModel.updateLike(id)
                 },
-                onClickScrap = onClickScrap,
+                onClickScrap = { id ->
+                    onClickScrap(id)
+                    if (!stadiumDetailViewModel.checkScrap(id)) {
+                        stadiumDetailViewModel.updateScrap(id)
+                    }
+                },
                 onClickShare = { imagePosition ->
                     onClickShare()
                     KakaoUtils().share(
@@ -121,6 +126,7 @@ fun StadiumDetailPictureMainScreen(
                 }
             )
         }
+
         else -> Unit
     }
 }

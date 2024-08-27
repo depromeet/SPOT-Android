@@ -76,7 +76,12 @@ fun StadiumDetailPictureTopScreen(
                     isFirstLikeState = false
                     stadiumDetailViewModel.updateTopReviewLike(id)
                 },
-                onClickScrap = onClickScrap,
+                onClickScrap = { id ->
+                    onClickScrap(id)
+                    if (!stadiumDetailViewModel.checkTopReviewScrap(id)) {
+                        stadiumDetailViewModel.updateTopReviewScrap(id)
+                    }
+                },
                 onClickShare = { imagePosition ->
                     onClickShare()
                     KakaoUtils().share(

@@ -85,6 +85,7 @@ fun StadiumDetailReviewViewPager(
             DetailViewPagerLayer(
                 context = context,
                 isDimmed = isDimmed,
+                isScrap = reviews[page].isScrap,
                 isLike = reviews[page].isLike,
                 isFirstLike = isFirstLike,
                 likeCount = reviews[page].likesCount,

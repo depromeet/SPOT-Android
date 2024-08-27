@@ -42,7 +42,9 @@ fun seatFeed(
         title = title,
         description = description,
         imageUrl = imageUrl,
-        link = Link()
+        link = Link(
+            androidExecutionParams = queryParams
+        )
     ),
     buttons = listOf(
         Button(

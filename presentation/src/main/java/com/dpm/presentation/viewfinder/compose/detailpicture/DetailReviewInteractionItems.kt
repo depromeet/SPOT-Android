@@ -1,5 +1,6 @@
 package com.dpm.presentation.viewfinder.compose.detailpicture
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import com.dpm.designsystem.compose.ui.SpotTheme
 
 @Composable
 fun DetailReviewInteractionItems(
+    isScrap: Boolean,
     isLike: Boolean,
     likeCount: Long,
     modifier: Modifier = Modifier,
@@ -63,12 +65,20 @@ fun DetailReviewInteractionItems(
         IconButton(onClick = {
             onClickScrap()
         }, modifier.size(24.dp)) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_scrap),
-                contentDescription = null,
-                tint = SpotTheme.colors.foregroundWhite,
-                modifier = Modifier.size(24.dp)
-            )
+            if (isScrap) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_scrap_active),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_scrap),
+                    contentDescription = null,
+                    tint = SpotTheme.colors.foregroundWhite,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
         Spacer(modifier = Modifier.height(20.dp))
         IconButton(onClick = onClickShare, modifier.size(24.dp)) {
@@ -86,6 +96,7 @@ fun DetailReviewInteractionItems(
 @Composable
 private fun DetailReviewInteractionItemsLikePreview() {
     DetailReviewInteractionItems(
+        isScrap = false,
         isLike = true,
         likeCount = 1,
         onClickLike = {},
@@ -98,6 +109,7 @@ private fun DetailReviewInteractionItemsLikePreview() {
 @Composable
 private fun DetailReviewInteractionItemsPreview() {
     DetailReviewInteractionItems(
+        isScrap = true,
         isLike = false,
         likeCount = 1,
         onClickLike = {},
