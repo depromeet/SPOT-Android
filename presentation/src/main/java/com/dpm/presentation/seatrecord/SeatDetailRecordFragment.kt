@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatDetailRecordBinding
 import com.dpm.core.base.BindingFragment
@@ -79,7 +80,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             when (state) {
                 is UiState.Success -> {
                     if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
-                        detailRecordAdapter.submitList(state.data.reviews)
+                        detailRecordAdapter.submitList(state.data.reviews.toList())
                         isLoading = false
                     }
                 }
@@ -93,7 +94,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             when (state) {
                 is UiState.Success -> {
                     if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW) {
-                        detailRecordAdapter.submitList(state.data.reviews)
+                        detailRecordAdapter.submitList(state.data.reviews.toList())
                         isLoading = false
                     }
                 }
@@ -150,6 +151,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
         with(binding) {
             rvDetailRecord.adapter = detailRecordAdapter
+            (rvDetailRecord.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
             val position = when (viewModel.currentReviewState.value) {
                 SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {

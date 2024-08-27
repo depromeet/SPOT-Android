@@ -161,6 +161,17 @@
         android:layout_marginEnd="4dp"
         tools:ignore="contentDescription"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieLike"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:scaleType="centerCrop"
+        app:lottie_autoPlay="false"
+        app:layout_constraintBottom_toBottomOf="@id/tvReviewTag"
+        app:layout_constraintEnd_toEndOf="@id/ivRecordLike"
+        app:layout_constraintStart_toStartOf="@id/ivRecordLike"
+        app:lottie_rawRes="@raw/lottie_like" />
+
     <TextView
         android:id="@+id/tvRecordLikeCount"
         android:layout_width="wrap_content"

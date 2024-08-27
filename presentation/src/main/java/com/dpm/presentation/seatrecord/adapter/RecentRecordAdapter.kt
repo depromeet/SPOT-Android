@@ -1,10 +1,11 @@
 package com.dpm.presentation.seatrecord.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -50,17 +51,27 @@ class RecentRecordAdapter(
     override fun onBindViewHolder(holder: RecentRecordViewHolder, position: Int) {
         with(holder) {
             bind(getItem(position))
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 itemRecordClickListener?.onItemRecordClick(getItem(position))
             }
-            binding.ibRecentStadiumMore.setOnClickListener {
+            binding.ibRecentStadiumMore.setOnSingleClickListener {
                 itemRecordClickListener?.onItemMoreClick(getItem(position))
             }
             binding.ivRecordScrap.setOnSingleClickListener {
                 itemRecordClickListener?.onScrapClick(getItem(position).id)
             }
             binding.ivRecordLike.setOnSingleClickListener {
-                itemRecordClickListener?.onLikeClick(getItem(position).id)
+                if (!getItem(position).isLiked) {
+                    binding.lottieLike.playAnimation()
+                    binding.lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            super.onAnimationEnd(animation)
+                            itemRecordClickListener?.onLikeClick(getItem(position).id)
+                        }
+                    })
+                } else {
+                    itemRecordClickListener?.onLikeClick(getItem(position).id)
+                }
             }
 
         }
@@ -88,7 +99,6 @@ class RecentRecordViewHolder(
             tvRecentBlockName.text = item.formattedSeatName()
             tvRecentStadiumName.text = item.stadiumName
             cvDetailKeyword.apply {
-                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
                     MaterialTheme {
                         KeywordFlowRow(

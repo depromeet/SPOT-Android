@@ -1,11 +1,9 @@
 package com.dpm.presentation.seatrecord.adapter
 
-import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +19,6 @@ import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
 import com.dpm.presentation.util.CalendarUtil
 import com.dpm.presentation.util.ItemDiffCallback
-import com.dpm.presentation.util.applyBoldSpan
 import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
 
 class DetailRecordAdapter(
@@ -89,6 +86,9 @@ class ReviewDetailViewHolder(
                 scrapClick(item.id)
             }
             ivRecordLike.setOnSingleClickListener {
+                if(!item.isLiked){
+                    lottieLike.playAnimation()
+                }
                 likeClick(item.id)
             }
             ivRecordShare.setOnClickListener {
@@ -113,7 +113,6 @@ class ReviewDetailViewHolder(
             }
             initImageViewPager(item.images.map { it.url })
             cvDetailKeyword.apply {
-                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
                     MaterialTheme {
                         KeywordFlowRow(

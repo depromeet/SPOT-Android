@@ -505,7 +505,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             "${CalendarUtil.getCurrentYear()}년".also { tvErrorYear.text = it }
             clRecordEmpty.setVisible(errorType == SeatRecordErrorType.EMPTY)
             clRecordFail.setVisible(errorType == SeatRecordErrorType.FAIL)
-            fabRecordUp.visibility = GONE
             if (errorType == SeatRecordErrorType.NONE) ssvRecord.header =
                 binding.clRecordStickyHeader
         }
