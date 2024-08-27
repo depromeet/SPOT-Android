@@ -19,6 +19,7 @@ import com.dpm.domain.entity.response.viewfinder.ResponseBlockReview
 @Composable
 fun DetailViewPagerLayer(
     context: Context,
+    isScrap: Boolean,
     isLike: Boolean,
     likeCount: Long,
     isFirstLike: Boolean,
@@ -38,6 +39,7 @@ fun DetailViewPagerLayer(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         StadiumDetailPictureViewPager(
+            isScrap = isScrap,
             isLike = isLike,
             context = context,
             pictures = pictures,
@@ -75,6 +77,7 @@ private fun DetailViewPagerLayerPreview() {
     DetailViewPagerLayer(
         context = LocalContext.current,
         isDimmed = true,
+        isScrap = true,
         isLike = true,
         isFirstLike = true,
         likeCount = 1,

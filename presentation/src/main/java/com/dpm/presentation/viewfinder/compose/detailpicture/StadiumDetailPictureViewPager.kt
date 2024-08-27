@@ -50,6 +50,7 @@ import kotlinx.coroutines.launch
 fun StadiumDetailPictureViewPager(
     context: Context,
     isLike: Boolean,
+    isScrap: Boolean,
     isFirstLike: Boolean,
     likeCount: Long,
     verticalPagerState: PagerState,
@@ -135,6 +136,7 @@ fun StadiumDetailPictureViewPager(
             contentAlignment = Alignment.CenterEnd
         ) {
             DetailReviewInteractionItems(
+                isScrap = isScrap,
                 isLike = isLike,
                 likeCount = likeCount,
                 onClickLike = {
@@ -189,6 +191,7 @@ private fun StadiumDetailPictureViewPagerPreview() {
     }
     StadiumDetailPictureViewPager(
         context = LocalContext.current,
+        isScrap = true,
         isLike = true,
         likeCount = 1,
         isFirstLike = true,
