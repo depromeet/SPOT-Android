@@ -428,10 +428,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                     makeSpotImageAppbar("좌석을 선택해주세요")
                 }
-
                 (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) && (isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && !(isSelectedImageFilled) -> {
-                binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
-                makeSpotImageAppbar("사진을 등록해주세요")
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                    makeSpotImageAppbar("사진을 등록해주세요")
             }
 
                 else -> {
