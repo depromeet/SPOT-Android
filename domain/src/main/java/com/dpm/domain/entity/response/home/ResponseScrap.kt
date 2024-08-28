@@ -80,7 +80,7 @@ data class ResponseScrap(
             }
             return when(block.code){
                 in listOf("101w", "102w", "122w", "121w", "109w", "114w","exciting1","exciting3","premium") -> ""
-                else -> section
+                else -> "$section "
             }
         }
 
