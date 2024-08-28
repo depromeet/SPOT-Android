@@ -265,6 +265,16 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
+                    android:id="@+id/vStickyDivider"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/color_stroke_secondary"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <View
                     android:id="@+id/vSeatViewDivider"
                     android:layout_width="0dp"
                     android:layout_height="2dp"
@@ -307,12 +317,12 @@
                 style="@style/YearSpinner"
                 android:layout_width="93dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/sel_year_drop_down"
                 android:dropDownWidth="103dp"
                 android:gravity="bottom"
-                android:popupBackground="@drawable/rect_white_fill_16"
+                android:popupBackground="@drawable/rect_white_fill_8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader" />
 
@@ -337,12 +347,12 @@
                 style="@style/YearSpinner"
                 android:layout_width="93dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/sel_year_drop_down"
                 android:dropDownWidth="103dp"
                 android:gravity="bottom"
-                android:popupBackground="@drawable/rect_white_fill_16"
+                android:popupBackground="@drawable/rect_white_fill_8"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader" />
@@ -370,6 +380,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
+                android:paddingTop="16dp"
+                android:clipToPadding="false"
                 android:orientation="vertical"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -384,6 +396,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
+                android:paddingTop="16dp"
+                android:clipToPadding="false"
                 android:orientation="vertical"
                 android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

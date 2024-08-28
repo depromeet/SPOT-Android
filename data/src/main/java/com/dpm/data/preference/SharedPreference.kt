@@ -39,7 +39,7 @@ class DefaultSharedPreference @Inject constructor(
     }
 
     override var level: Int
-        get() = preferences.getInt("level", 0)
+        get() = preferences.getInt("level", -1)
         set(value) {
             preferences.edit(commit = true) {
                 putInt("level", value)

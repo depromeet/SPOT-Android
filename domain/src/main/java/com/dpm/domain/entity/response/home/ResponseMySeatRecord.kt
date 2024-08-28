@@ -36,48 +36,62 @@ data class ResponseMySeatRecord(
         fun formattedLevel(): String = "Lv.${member.level}"
 
         fun formattedSeatName(): String {
-            return "${formattedBaseName()} ${formattedSectionName()} ${formattedBlockName()} ${formattedRowNumber()} ${formattedSeatNumber()}"
+            return "${formattedBaseName()}${formattedSectionName()}${formattedBlockName()}${formattedRowNumber()}${formattedSeatNumber()}"
         }
 
         fun kakaoShareSeatFeedTitle() : String {
             val base = when(stadiumName.base(blockCode)) {
-                BASE.Base1 -> "1루"
-                BASE.Base3 -> "3루"
+                BASE.Base1 -> "1루 "
+                BASE.Base3 -> "3루 "
                 else -> ""
             }
             val section = sectionName
-            val block = "${rowNumber} 열"
-            val seat = if(seatNumber == null) "" else "${seatNumber}번"
+            val block = "${rowNumber} 열 "
+            val seat = if(seatNumber == null) "" else "${seatNumber}번 "
 
-            return "$stadiumName $base $section $block $seat"
+            return "$stadiumName $base $section $block $seat".trim()
         }
 
         private fun formattedBaseName(): String {
             return when (stadiumName.base(blockCode)) {
-                BASE.Base1 -> "1루"
-                BASE.Base3 -> "3루"
+                BASE.Base1 -> "1루 "
+                BASE.Base3 -> "3루 "
                 else -> ""
             }
         }
 
         private fun formattedSectionName(): String {
+
             val sectionNameSplits = sectionName.split("\n")
             val section = if (sectionNameSplits.size >= 2) {
                 sectionNameSplits[0] + " " + sectionNameSplits[1]
             } else {
                 sectionName.trim()
             }
-            return section
+            return when(blockCode){
+                in listOf("101w", "102w", "122w", "121w", "109w", "114w","exciting1","exciting3","premium") -> ""
+                else -> section
+            }
         }
 
-        private fun formattedBlockName() = blockCode.replace("w", "") + "블록"
+        private fun formattedBlockName() = when(stadiumId) {
+            1 -> {
+                when(blockCode) {
+                    in listOf("101w", "102w", "122w", "121w", "109w", "114w") -> "휠체어석 ${blockCode.replace("w", "")}블록 "
+                    in listOf("exciting1") -> "1루 익사이팅석 "
+                    in listOf("exciting3") -> "3루 익사이팅석 "
+                    in listOf("premium") -> "프리미엄석 "
+                    else -> "${blockCode}블록 "
+                }
+            }
+            else -> ""
+        }
 
-
-        private fun formattedRowNumber() = "${rowNumber}열"
+        private fun formattedRowNumber() = "${rowNumber}열 "
 
         private fun formattedSeatNumber() = when (seatNumber) {
             null -> ""
-            else -> "${seatNumber}번"
+            else -> "${seatNumber}번 "
         }
 
         data class ReviewImageResponse(

@@ -6,6 +6,7 @@ import com.dpm.domain.entity.request.viewfinder.RequestBlockReviewQuery
 import com.dpm.domain.entity.response.viewfinder.ResponseBlockRow
 import com.dpm.domain.model.viewfinder.Seat
 import com.dpm.domain.repository.ViewfinderRepository
+import com.dpm.presentation.global.GlobalVariable
 import com.dpm.presentation.viewfinder.uistate.StadiumDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -148,7 +149,7 @@ class StadiumDetailViewModel @Inject constructor(
                                     review.copy(
                                         isScrap = !review.isScrap,
                                         scrapsCount = review.scrapsCount + 1
-                                    )
+                                    ).also { GlobalVariable.isScrap = true }
                                 }
                             } else {
                                 review

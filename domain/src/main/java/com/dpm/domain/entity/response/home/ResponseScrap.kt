@@ -36,35 +36,35 @@ data class ResponseScrap(
         val isScrapped: Boolean = false,
     ) {
         fun formattedStadiumToSection() : String =
-            "${stadium.name} ${formattedBaseName()} ${formattedSectionName()}"
+            "${stadium.name} ${formattedBaseName()} ${formattedSectionName()}".trim()
 
         fun formattedBlockToSeat(): String =
             if (seat != null) {
-                "${formattedBlockName()} ${row.number}열 ${seat.seatNumber}번"
+                "${formattedBlockName()} ${row.number}열 ${seat.seatNumber}번 "
             } else {
                 "${formattedBlockName()} ${row.number}열 "
             }
 
         fun kakaoShareSeatFeedTitle() : String {
             val base = when(stadium.name.base(block.code)) {
-                BASE.Base1 -> "1루"
-                BASE.Base3 -> "3루"
+                BASE.Base1 -> "1루 "
+                BASE.Base3 -> "3루 "
                 else -> ""
             }
             val section = section.name
-            val block = "${row.number} 열"
-            val seat = if(seat == null) "" else "${seat.seatNumber}번"
+            val block = "${row.number}열 "
+            val seat = if(seat == null) "" else "${seat.seatNumber}번 "
 
-            return "${stadium.name} $base $section $block $seat"
+            return "${stadium.name}$base$section$block$seat".trim()
         }
 
         fun formattedBaseToBlock() : String =
-            "${formattedBaseName()} ${formattedSectionName()} ${formattedBlockName()}"
+            "${formattedBaseName()}${formattedSectionName()}${formattedBlockName()}".trim()
 
         private fun formattedBaseName() : String {
             return when (stadium.name.base(block.code)){
-                BASE.Base1 -> "1루"
-                BASE.Base3 -> "3루"
+                BASE.Base1 -> "1루 "
+                BASE.Base3 -> "3루 "
                 else -> ""
             }
         }
@@ -78,10 +78,24 @@ data class ResponseScrap(
             } else {
                 section.name.trim()
             }
-            return section
+            return when(block.code){
+                in listOf("101w", "102w", "122w", "121w", "109w", "114w","exciting1","exciting3","premium") -> ""
+                else -> "$section "
+            }
         }
 
-        private fun formattedBlockName() = block.code.replace("w", "") + "블록"
+        private fun formattedBlockName() = when(stadium.id) {
+            1 -> {
+                when(block.code) {
+                    in listOf("101w", "102w", "122w", "121w", "109w", "114w") -> "휠체어석 ${block.code.replace("w", "")}블록 "
+                    in listOf("exciting1") -> "1루 익사이팅석 "
+                    in listOf("exciting3") -> "3루 익사이팅석 "
+                    in listOf("premium") -> "프리미엄석 "
+                    else -> "${block.code}블록 "
+                }
+            }
+            else -> ""
+        }
 
     }
 

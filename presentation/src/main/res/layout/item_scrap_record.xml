@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="3dp"
+    android:elevation="8dp"
+    android:outlineSpotShadowColor="@color/transparent_black01"
+    android:layout_height="193dp"
     android:background="@drawable/rect_white_fill_8"
     android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/ivScrapImage"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="140dp"
         android:background="@drawable/rect_foreground_white_fill_top_8"
         android:scaleType="centerCrop"
         android:src="@drawable/skeleton_gradient"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -55,6 +55,5 @@
         app:layout_constraintStart_toStartOf="@id/tvScrapStadium"
         app:layout_constraintTop_toBottomOf="@id/tvScrapStadium"
         tools:text="1루 네이비석 304블록" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

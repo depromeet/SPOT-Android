@@ -35,7 +35,6 @@ import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.util.CalendarUtil
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -243,7 +242,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setSeatYearSpinner(state.data)
                     seatReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getSeatReviews()
-                    Timber.d("test seat---- > ${state.data.yearMonths}")
+                    setSeatYearSpinnerBackground()
                 }
 
                 is UiState.Empty -> {
@@ -272,7 +271,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setIntuitiveYearSpinner(state.data)
                     intuitiveReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getIntuitiveReviews()
-                    Timber.d("test intuitive ---- > ${state.data.yearMonths}")
+                    setIntuitiveYearSpinnerBackground()
                 }
 
                 is UiState.Empty -> {
@@ -349,6 +348,28 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             }
         }
     }
+
+    private fun setSeatYearSpinnerBackground() =
+        when ((viewModel.seatDate.value as UiState.Success).data.yearMonths.size) {
+            0, 1 -> {
+                binding.spinnerSeatReviewYear.background = null
+            }
+
+            else -> {
+                binding.spinnerSeatReviewYear.setBackgroundResource(com.depromeet.designsystem.R.drawable.sel_year_drop_down)
+            }
+        }
+
+    private fun setIntuitiveYearSpinnerBackground() =
+        when ((viewModel.intuitiveDate.value as UiState.Success).data.yearMonths.size) {
+            0, 1 -> {
+                binding.spinnerIntuitiveReviewYear.background = null
+            }
+
+            else -> {
+                binding.spinnerIntuitiveReviewYear.setBackgroundResource(com.depromeet.designsystem.R.drawable.sel_year_drop_down)
+            }
+        }
 
     private fun observeEvents() {
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
@@ -429,6 +450,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
                 }
 
+
         } else {
             seatReviewYearAdapter.updateData(yearList, selectedPosition)
             binding.spinnerSeatReviewYear.setSelection(selectedPosition)
@@ -500,13 +522,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setErrorVisibility(errorType: SeatRecordErrorType) {
         with(binding) {
-            //TODO : 아직 시야아카이빙한 게시물이 없습니다 고민하기
-            if (tvSeatView.isSelected) {
+            if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
                 rvSeatReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerSeatReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvSeatReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
             }
-            if (tvIntuitiveReview.isSelected) {
+            if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW) {
                 rvIntuitiveReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerIntuitiveReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvIntuitiveReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
@@ -648,7 +669,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
 
     private fun moveEditReview() {
-
+        makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
     }
 
     private fun setShimmer(isLoading: Boolean) = with(binding) {

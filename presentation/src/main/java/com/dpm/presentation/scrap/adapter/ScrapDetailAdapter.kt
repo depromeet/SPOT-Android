@@ -88,12 +88,18 @@ class ScrapDetailViewHolder(
         }
         if (item.isScrapped) {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+            ivScrap.setColorFilter(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    com.depromeet.designsystem.R.color.color_action_enabled
+                )
+            )
         } else {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
             ivScrap.setColorFilter(
                 ContextCompat.getColor(
                     binding.root.context,
-                    com.depromeet.designsystem.R.color.color_foreground_caption
+                    com.depromeet.designsystem.R.color.color_foreground_white
                 )
             )
         }
