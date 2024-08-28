@@ -133,7 +133,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                 }
                 viewModel.updateSelectedSectionId(viewModel.selectedSectionId.value)
                 if (viewModel.selectedSectionId.value == 10) {
-                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
                     clColumnNumber.visibility = INVISIBLE
                     clOnlyNumber.visibility = VISIBLE
                     clOnlyColumnBtn.visibility = GONE
@@ -315,7 +314,6 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         tvNoneColumnWarning.paddingEnd,
                         tvNoneColumnWarning.paddingBottom,
                     )
-                    makeSpotImageAppbar("휠체어석의 ‘열’은 수정할 수 없어요")
                     etOnlyTable.setText("")
                     clOnlyTable.visibility = INVISIBLE
                 } else if (viewModel.selectedSectionId.value == 2) {
