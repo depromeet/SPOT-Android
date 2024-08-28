@@ -95,7 +95,11 @@ class NicknameInputActivity: BaseActivity<FragmentNicknameInputBinding>({
                 NicknameInputState.NICKNAME_SUCCESS -> {
                     Intent(this@NicknameInputActivity, TeamSelectActivity::class.java).apply {
                         putExtra("nickname", etProfileEditNickname.text.toString())
-                        putExtra("kakaoToken", intent.getStringExtra("kakaoToken"))
+                        intent.getStringExtra("googleToken")?.let {
+                            putExtra("googleToken", it)
+                        } ?: run {
+                            putExtra("kakaoToken", intent.getStringExtra("kakaoToken"))
+                        }
                         when (val data = handleIntentExtra()) {
                             is SchemeState.NavReview -> {
                                 putExtra(SchemeKey.NAV_REVIEW, data)

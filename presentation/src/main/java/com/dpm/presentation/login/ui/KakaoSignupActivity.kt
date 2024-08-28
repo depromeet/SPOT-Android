@@ -139,6 +139,24 @@ class KakaoSignupActivity : BaseActivity<FragmentKakaoSignupBinding>({
             }
         }
 
+        signUpViewModel.googleToken.observe(this) { token ->
+            if (token.isNotEmpty()) {
+                Intent(this, NicknameInputActivity::class.java).apply {
+                    putExtra("googleToken", token)
+                    when (val data = handleIntentExtra()) {
+                        is SchemeState.NavReview -> {
+                            putExtra(SchemeKey.NAV_REVIEW, data)
+                        }
+                        is SchemeState.NavReviewDetail -> {
+                            putExtra(SchemeKey.NAV_REVIEW_DETAIL, data)
+                        }
+                        else -> Unit
+                    }
+                    startActivity(this)
+                }
+            }
+        }
+
         signUpViewModel.loginUiState.asLiveData().observe(this) { state ->
             when (state) {
                 LoginUiState.LoginSuccess -> {

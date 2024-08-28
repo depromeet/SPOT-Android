@@ -94,10 +94,17 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
         }
 
         binding.tvSelectedTeamNextBtn.setOnClickListener {
-            signupViewModel.signUp(
-                intent.getStringExtra("kakaoToken") ?: "",
-                intent.getStringExtra("nickname") ?: ""
-            )
+            intent.getStringExtra("googleToken")?.let {
+                signupViewModel.signUpV2(
+                    it,
+                    intent.getStringExtra("nickname") ?: ""
+                )
+            } ?: run {
+                signupViewModel.signUp(
+                    intent.getStringExtra("kakaoToken") ?: "",
+                    intent.getStringExtra("nickname") ?: ""
+                )
+            }
         }
 
         binding.tvProfileEditNoTeam.setOnClickListener {

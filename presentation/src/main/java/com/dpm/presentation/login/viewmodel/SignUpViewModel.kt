@@ -76,6 +76,27 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun signUpV2(
+        googleToken: String,
+        currentNickName: String
+    ) {
+        viewModelScope.launch {
+            signupRepository.postSignup(
+                PostSignupModel(
+                    idCode = googleToken,
+                    nickname = currentNickName,
+                    teamId = cheerTeam.value
+                )
+            ).onSuccess {
+                sharedPreference.token = it.jwtToken
+                sharedPreference.nickname = currentNickName
+                _teamSelectUiState.emit(SignupUiState.SignUpSuccess(currentNickName))
+            }.onFailure {
+                _teamSelectUiState.emit(SignupUiState.Failure)
+            }
+        }
+    }
+
     fun setClickedBaseballTeam(id: Int) {
         val currentState = team.value
         if (currentState is UiState.Success) {

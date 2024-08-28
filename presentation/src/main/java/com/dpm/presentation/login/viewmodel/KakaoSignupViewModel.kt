@@ -28,6 +28,9 @@ class KakaoSignupViewModel @Inject constructor(
     private val _kakaoToken = MutableLiveData<String>()
     val kakaoToken: LiveData<String> = _kakaoToken
 
+    private val _googleToken = MutableLiveData<String>()
+    val googleToken: LiveData<String> = _googleToken
+
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
     val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
 
@@ -57,13 +60,13 @@ class KakaoSignupViewModel @Inject constructor(
             signupRepository.getSignupV2("GOOGLE", token)
                 .onSuccess {
                     if (it.jwtToken.isEmpty()) {
-                        _kakaoToken.value = token
+                        _googleToken.value = token
                     } else {
                         sharedPreference.token = it.jwtToken
                         _loginUiState.emit(LoginUiState.LoginSuccess)
                     }
                 }.onFailure {
-                    _kakaoToken.value = token
+                    _googleToken.value = token
                 }
         }
     }
