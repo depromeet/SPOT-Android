@@ -221,7 +221,10 @@ fun StadiumDetailScreen(
                                     )
                                 }
                             )
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            if (uiState.reviews.size - 1 == index) {
+                                Spacer(modifier = Modifier.height(60.dp))
+                            }
                         }
                     }
                 }
