@@ -14,6 +14,10 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
+import androidx.core.view.marginLeft
+import androidx.core.view.marginRight
+import androidx.core.view.marginTop
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
@@ -27,6 +31,7 @@ import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
 import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
 import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.presentation.extension.colorOf
+import com.dpm.presentation.extension.setMargins
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.seatreview.adapter.SelectSeatAdapter
@@ -146,12 +151,24 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         tvNoneColumnWarning.paddingEnd,
                         tvNoneColumnWarning.paddingBottom,
                     )
+                    val marginInPx = (20 * scale!! + 0.5f).toInt()
+                    clColumnNumberDescription.setMargins(clColumnNumberDescription.marginLeft, marginInPx, clColumnNumberDescription.marginRight, clColumnNumberDescription.marginBottom)
                     clOnlyTable.visibility = INVISIBLE
                 } else if (viewModel.selectedSectionId.value == 2) {
                     clColumnNumber.visibility = INVISIBLE
                     clOnlyTable.visibility = VISIBLE
                     clOnlyNumber.visibility = INVISIBLE
                     clOnlyColumnBtn.visibility = GONE
+                    tvOnlyColumn.visibility = GONE
+                    val scale = context?.resources?.displayMetrics?.density
+                    val marginInPx = (20 * scale!! + 0.5f).toInt()
+                    clColumnNumberDescription.setMargins(clColumnNumberDescription.marginLeft, marginInPx, clColumnNumberDescription.marginRight, clColumnNumberDescription.marginBottom)
+                    tvNoneColumnWarning.setPaddingRelative(
+                        tvNoneColumnWarning.paddingStart,
+                        tvNoneColumnWarning.paddingTop,
+                        tvNoneColumnWarning.paddingEnd,
+                        tvNoneColumnWarning.paddingBottom,
+                    )
                     clOnlyColumn.visibility = GONE
                     etOnlyNumber.setText("")
                 } else {
@@ -160,6 +177,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     clOnlyColumn.visibility = INVISIBLE
                     clOnlyTable.visibility = INVISIBLE
                     clOnlyColumnBtn.visibility = VISIBLE
+                    val scale = context?.resources?.displayMetrics?.density
+                    val marginInPx = (30 * scale!! + 0.5f).toInt()
+                    clColumnNumberDescription.setMargins(clColumnNumberDescription.marginLeft, clColumnNumberDescription.marginRight, marginInPx, clColumnNumberDescription.marginBottom)
                     tvNoneColumnWarning.setPaddingRelative(
                         tvNoneColumnWarning.paddingStart,
                         tvNoneColumnWarning.paddingTop,
@@ -314,6 +334,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                         tvNoneColumnWarning.paddingEnd,
                         tvNoneColumnWarning.paddingBottom,
                     )
+                    val marginInPx = (20 * scale!! + 0.5f).toInt()
+                    clColumnNumberDescription.setMargins(clColumnNumberDescription.marginLeft, marginInPx, clColumnNumberDescription.marginRight, clColumnNumberDescription.marginBottom)
                     etOnlyTable.setText("")
                     clOnlyTable.visibility = INVISIBLE
                 } else if (viewModel.selectedSectionId.value == 2) {
@@ -321,6 +343,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     clOnlyTable.visibility = VISIBLE
                     clOnlyColumnBtn.visibility = GONE
                     clOnlyColumn.visibility = GONE
+                    val scale = context?.resources?.displayMetrics?.density
+                    val marginInPx = (20 * scale!! + 0.5f).toInt()
+                    clColumnNumberDescription.setMargins(clColumnNumberDescription.marginLeft, marginInPx, clColumnNumberDescription.marginRight, clColumnNumberDescription.marginBottom)
                     clOnlyNumber.visibility = GONE
                     tvNoneColumnWarning.setPaddingRelative(
                         0,
@@ -336,12 +361,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     clOnlyColumn.visibility = INVISIBLE
                     clOnlyColumnBtn.visibility = VISIBLE
                     tvNoneColumnWarning.setPaddingRelative(
-                        0,
+                        10,
                         tvNoneColumnWarning.paddingTop,
                         tvNoneColumnWarning.paddingEnd,
                         tvNoneColumnWarning.paddingBottom,
                     )
                 }
+                val scale = context?.resources?.displayMetrics?.density
+                val marginInPx = (30 * scale!! + 0.5f).toInt()
+                clColumnNumberDescription.setMargins(clColumnNumberDescription.marginLeft, marginInPx, clColumnNumberDescription.marginRight, clColumnNumberDescription.marginBottom)
                 svSelectSeat.visibility = INVISIBLE
                 svSeatNumber.visibility = VISIBLE
                 tvSelectSeatLine.visibility = INVISIBLE
@@ -526,9 +554,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
         when (viewModel.userSeatState.value) {
             ValidSeat.INVALID_COLUMN -> {
                 with(binding) {
-                    etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_error_primary_line_8)
                     etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                    etOnlyColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etOnlyColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_error_primary_line_8)
                     tvNoneColumnWarning.text = "존재하지 않는 열이에요"
                     tvNoneColumnWarning.visibility = VISIBLE
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
@@ -537,9 +565,9 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
             ValidSeat.INVALID_NUMBER -> {
                 with(binding) {
-                    etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-                    etOnlyNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-                    etOnlyTable.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                    etOnlyNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                    etOnlyTable.setBackgroundResource(R.drawable.rect_background_secondary_fill_error_primary_line_8)
                     tvNoneColumnWarning.text = "존재하지 않는 번이에요"
                     tvNoneColumnWarning.visibility = VISIBLE
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
@@ -548,8 +576,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
             ValidSeat.INVALID_COLUMN_NUMBER -> {
                 with(binding) {
-                    etColumn.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
-                    etNumber.setBackgroundResource(R.drawable.rect_gray50_fill_red1_line_12)
+                    etColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_error_primary_line_8)
+                    etNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_error_primary_line_8)
                     tvNoneColumnWarning.text = "존재하지 않는 열과 번이에요"
                     tvNoneColumnWarning.visibility = VISIBLE
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
@@ -563,7 +591,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     etOnlyColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     etOnlyNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     etOnlyTable.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                    tvNoneColumnWarning.visibility = INVISIBLE
+                    tvNoneColumnWarning.visibility = GONE
                     tvCompleteBtn.isEnabled = true
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
                 }
@@ -575,7 +603,7 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
                     etOnlyColumn.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     etOnlyNumber.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
                     etOnlyTable.setBackgroundResource(R.drawable.rect_background_secondary_fill_8)
-                    tvNoneColumnWarning.visibility = INVISIBLE
+                    tvNoneColumnWarning.visibility = GONE
                     tvCompleteBtn.isEnabled = false
                     tvCompleteBtn.setBackgroundResource(R.drawable.rect_gray200_fill_6)
                 }
