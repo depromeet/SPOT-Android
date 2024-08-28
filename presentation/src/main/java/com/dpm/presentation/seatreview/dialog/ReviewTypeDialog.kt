@@ -44,6 +44,9 @@ class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBin
             viewModel.setReviewMethod(ReviewMethod.FEED)
             navigateToReviewActivity()
         }
+        binding.ivExit.setOnSingleClickListener {
+            dismiss()
+        }
     }
 
     private fun navigateToReviewActivity() {

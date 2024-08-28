@@ -10,8 +10,6 @@ import com.dpm.core.base.BindingDialogFragment
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.scheme.SchemeKey
-import com.dpm.presentation.scheme.viewmodel.SchemeState
-import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import toNavReviewDetail
 
 class ViewUploadDialog : BindingDialogFragment<FragmentViewUploadDialogBinding>(
