@@ -7,6 +7,7 @@ import com.dpm.domain.entity.request.home.RequestScrap
 import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.domain.repository.HomeRepository
 import com.dpm.domain.repository.ViewfinderRepository
+import com.dpm.presentation.global.GlobalVariable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -87,6 +88,12 @@ class ScrapViewModel @Inject constructor(
             }.onFailure { e ->
                 _scrap.value = UiState.Failure(e.message ?: "실패")
             }
+        }
+    }
+
+    fun reloadScrap() {
+        if(GlobalVariable.isScrap && _scrap.value is UiState.Empty) {
+            getScrapRecord()
         }
     }
 
