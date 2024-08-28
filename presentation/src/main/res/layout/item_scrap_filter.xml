@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/rect_background_white_fill_999"
+    android:background="@drawable/rect_gray200_stroke_999"
     android:paddingVertical="10dp"
     android:layout_marginEnd="8dp"
     android:paddingStart="12dp"
@@ -30,7 +30,8 @@
         app:layout_constraintTop_toTopOf="@id/tvScrapFilter"
         app:layout_constraintStart_toEndOf="@id/tvScrapFilter"
         android:layout_marginStart="4dp"
-        tools:ignore="contentDescription" />
+        tools:ignore="contentDescription"
+        app:tint="@color/color_gray_400"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
