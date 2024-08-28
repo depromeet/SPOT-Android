@@ -1,10 +1,7 @@
 package com.dpm.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -20,14 +17,19 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,6 +77,17 @@ fun StadiumDetailPictureViewPager(
     )
     val lottieAnimatable = rememberLottieAnimatable()
 
+    var animated by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = isNextPage) {
+        animated = isNextPage
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (animated) 1f else 0.2f,
+        animationSpec = tween(durationMillis = 300), label = ""
+    )
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -99,8 +112,7 @@ fun StadiumDetailPictureViewPager(
                         .fillMaxWidth()
                         .heightIn(max = ((context.resources.displayMetrics.heightPixels / context.resources.displayMetrics.density) * 0.58).dp)
                         .clip(RectangleShape),
-
-                    )
+                )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -167,10 +179,16 @@ fun StadiumDetailPictureViewPager(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .offset(y = (-32).dp)
-                        .padding(end = 12.dp),
+                        .padding(end = 12.dp)
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                            transformOrigin = TransformOrigin.Center
+                        }
+                        .wrapContentSize(Alignment.Center),
                     bias = 0.85f,
                     content = "유용했다면, 도움돼요를 눌러주세요!",
-                    isNextPage = isNextPage
+                    animated = animated
                 )
             }
             Box(

@@ -35,7 +35,7 @@ fun LikeTooltip(
     triangleWidth: Dp = 12.dp,
     triangleHeight: Dp = 5.dp,
     content: String,
-    isNextPage: Boolean,
+    animated: Boolean,
     modifier: Modifier = Modifier
 ) {
     var tooltipWidth by remember {
@@ -45,25 +45,9 @@ fun LikeTooltip(
         mutableStateOf(0f)
     }
 
-    var animated by remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = isNextPage) {
-        animated = true
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = if (animated) 1f else 0.2f,
-        animationSpec = tween(durationMillis = 500), label = ""
-    )
-
     Column(
         modifier = modifier
-            .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
-                transformOrigin = TransformOrigin.Center // 중앙을 기준으로 변환
-            }
-            .wrapContentSize(Alignment.Center) // Column을 중앙에 배치
+
     ) {
         Box(modifier = Modifier
             .onGloballyPositioned { layoutCoordinates ->
@@ -122,6 +106,6 @@ private fun LikeTooltipPreview() {
         triangleWidth = 8.dp,
         triangleHeight = 4.dp,
         content = "유용했다면, 도움돼요를 눌러주세요!",
-        isNextPage = false
+        animated = true
     )
 }
