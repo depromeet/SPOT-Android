@@ -30,7 +30,6 @@ import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
 import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
-import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
@@ -259,7 +258,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun initUploadDialog() {
-        binding.btnAddImage.setOnClickListener {
+        binding.btnAddImage.setOnSingleClickListener {
+            ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
+        }
+        binding.llAddImage.setOnSingleClickListener {
             ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
     }
@@ -415,6 +417,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
             val isSelectedColumnFilled = viewModel.selectedColumn.value.isNotEmpty()
             val isSelectedNumberFilled = viewModel.selectedNumber.value.isNotEmpty()
+            val isSelectedImageFilled = viewModel.selectedImages.value.isNotEmpty()
             when {
                 !(isSelectedGoodBtnFilled || isSelectedBadBtnFilled) && (isSelectedBlockFilled || (isSelectedColumnFilled || isSelectedNumberFilled)) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
@@ -425,6 +428,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                     makeSpotImageAppbar("좌석을 선택해주세요")
                 }
+                (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) && (isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && !(isSelectedImageFilled) -> {
+                    binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+                    makeSpotImageAppbar("사진을 등록해주세요")
+            }
 
                 else -> {
                     val uniqueImageUris = selectedImageUris.distinct()

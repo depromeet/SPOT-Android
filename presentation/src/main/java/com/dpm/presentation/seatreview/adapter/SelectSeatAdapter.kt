@@ -26,7 +26,7 @@ class SelectSeatAdapter(
         com.depromeet.designsystem.R.drawable.oval_section_navy,
         com.depromeet.designsystem.R.drawable.oval_section_exciting,
         com.depromeet.designsystem.R.drawable.oval_section_green,
-        com.depromeet.designsystem.R.drawable.ic_wheelchair,
+        com.depromeet.designsystem.R.drawable.ic_wheel_chair,
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {

@@ -37,12 +37,20 @@ class ReviewTypeDialog : BindingDialogFragment<FragmentSelectReviewTypeDialogBin
     }
     private fun initEvent() {
         binding.clUploadView.setOnSingleClickListener {
+            binding.clUploadView.setBackgroundResource(R.drawable.rect_background_positive_fill_secondary_line_12)
+            binding.clUploadFeed.setBackgroundResource(R.drawable.rect_background_secondary_fill_12)
             viewModel.setReviewMethod(ReviewMethod.VIEW)
             navigateToReviewActivity()
         }
         binding.clUploadFeed.setOnSingleClickListener {
+            binding.clUploadView.setBackgroundResource(R.drawable.rect_background_secondary_fill_12)
+            binding.clUploadFeed.setBackgroundResource(R.drawable.rect_background_positive_fill_secondary_line_12)
             viewModel.setReviewMethod(ReviewMethod.FEED)
             navigateToReviewActivity()
+        }
+
+        binding.ivExit.setOnSingleClickListener{
+            dismiss()
         }
     }
 

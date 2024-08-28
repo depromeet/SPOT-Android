@@ -41,7 +41,7 @@ fun LikeButton(
                 shape = RoundedCornerShape(72.dp)
             )
             .padding(
-                horizontal = 10.dp,
+                horizontal = 13.dp,
                 vertical = 8.dp
             )
             .noRippleClickable {
@@ -58,7 +58,7 @@ fun LikeButton(
             modifier = Modifier.size(24.dp),
             tint = Color.Unspecified
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = "너무 도움돼요",
             style = SpotTheme.typography.label11,
@@ -68,7 +68,7 @@ fun LikeButton(
         Text(
             text = likeCount.toString(),
             style = SpotTheme.typography.label09,
-            color = if (isLike) SpotTheme.colors.actionEnabled else SpotTheme.colors.strokeTertiary
+            color = if (isLike) SpotTheme.colors.actionEnabled else SpotTheme.colors.foregroundCaption
         )
     }
 }
@@ -78,6 +78,16 @@ fun LikeButton(
 private fun LikeButtonPreview() {
     LikeButton(
         isLike = true,
+        likeCount = 1,
+        onClick = {}
+    )
+}
+
+@Preview
+@Composable
+private fun LikeButtonFalsePreview() {
+    LikeButton(
+        isLike = false,
         likeCount = 1,
         onClick = {}
     )

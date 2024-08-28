@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -36,9 +37,12 @@ fun ReviewContentBottom(
             likeCount = likeCount,
             onClick = onClickLike
         )
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             IconButton(
-                onClick = onClickScrap
+                onClick = onClickScrap,
+                modifier = Modifier.size(40.dp)
             ) {
                 Icon(
                     painter = painterResource(
@@ -49,7 +53,8 @@ fun ReviewContentBottom(
             }
             Spacer(modifier = Modifier.width(6.dp))
             IconButton(
-                onClick = onClickShare
+                onClick = onClickShare,
+                modifier = Modifier.size(40.dp)
             ) {
                 Icon(
                     painter = painterResource(
