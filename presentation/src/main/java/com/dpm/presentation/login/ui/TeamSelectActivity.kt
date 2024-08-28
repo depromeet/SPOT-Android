@@ -104,6 +104,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
             signupViewModel.setClickedBaseballTeam(0)
             binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_positive_fill_positive_secondary_stroke_8)
             binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
+            binding.tvSelectedTeamNextBtn.isEnabled = true
         }
     }
 
@@ -121,6 +122,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
                 signupViewModel.setClickedBaseballTeam(item.id)
                 binding.tvProfileEditNoTeam.setBackgroundResource(com.depromeet.designsystem.R.drawable.rect_background_tertiary_fill_8)
                 binding.tvSelectedTeamNextBtn.setBackgroundResource(R.drawable.rect_main_fill_6)
+                binding.tvSelectedTeamNextBtn.isEnabled = true
             }
         }
     }
