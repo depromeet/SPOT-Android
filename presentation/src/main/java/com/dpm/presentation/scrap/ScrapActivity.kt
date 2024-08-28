@@ -71,8 +71,8 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         viewModel.scrap.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    binding.tvScrapCount.text = state.data.totalScrapCount.toString()
-                    scrapAdapter.submitList(state.data.reviews.toList())
+                    binding.tvScrapCount.text = state.data.totalScrapCount .toString()
+                    scrapAdapter.submitList(state.data.reviews)
                     isLoading = false
                     setScrapScreenVisibility(ScrapScreenState.SUCCESS)
                 }

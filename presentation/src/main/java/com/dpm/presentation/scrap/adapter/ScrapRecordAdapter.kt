@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.depromeet.presentation.databinding.ItemScrapRecordBinding
 import com.dpm.domain.entity.response.home.ResponseScrap
+import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.util.ItemDiffCallback
@@ -44,6 +45,8 @@ class ScrapRecordViewHolder(
     private val recordClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ResponseScrap.ResponseReviewWrapper, position: Int) = with(binding) {
+        itemView.layoutParams.height = 193.dpToPx(itemView.context)
+
         ivScrap.setOnSingleClickListener {
             scrapClick(item)
         }
