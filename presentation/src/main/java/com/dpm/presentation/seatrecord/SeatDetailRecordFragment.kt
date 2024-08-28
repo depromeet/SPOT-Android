@@ -202,7 +202,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private fun moveEditReview() {
-        makeSpotImageAppbar("수정은 추후에 열릴 예정입니다!")
+        makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
     }
 
     private fun makeSpotImageAppbar(message: String) {

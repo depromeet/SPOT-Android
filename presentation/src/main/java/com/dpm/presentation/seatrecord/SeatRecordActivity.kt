@@ -647,7 +647,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
 
     private fun moveEditReview() {
-
+        makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
     }
 
     private fun setShimmer(isLoading: Boolean) = with(binding) {
