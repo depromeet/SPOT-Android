@@ -30,7 +30,6 @@ import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
 import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
-import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.FileNotFoundException
@@ -259,7 +258,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun initUploadDialog() {
-        binding.btnAddImage.setOnClickListener {
+        binding.btnAddImage.setOnSingleClickListener {
+            ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
+        }
+        binding.llAddImage.setOnSingleClickListener {
             ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
     }
