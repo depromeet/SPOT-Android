@@ -21,6 +21,7 @@ class StadiumSectionRecommendViewHolder(
         binding.tvTitle.text = item.name
         if (item.isActive) {
             binding.root.setBackgroundResource(R.drawable.rect_spot_green_fill_999)
+            binding.tvTitle.setTextAppearance(R.style.TextAppearance_Spot_Label07)
             binding.tvTitle.setTextColor(
                 ContextCompat.getColor(
                     binding.root.context,
@@ -29,6 +30,7 @@ class StadiumSectionRecommendViewHolder(
             )
         } else {
             binding.root.setBackgroundResource(R.drawable.rect_background_white_fill_999)
+            binding.tvTitle.setTextAppearance(R.style.TextAppearance_Spot_Label08)
             binding.tvTitle.setTextColor(
                 ContextCompat.getColor(
                     binding.root.context,

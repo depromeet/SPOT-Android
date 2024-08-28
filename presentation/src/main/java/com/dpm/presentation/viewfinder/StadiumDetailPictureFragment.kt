@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Snackbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -54,7 +55,8 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     private val utils by lazy {
         Utils(requireActivity())
     }
-    private lateinit var snackBar: SpotSnackBar
+    private lateinit var scrapActiveSnackBar: SpotSnackBar
+    private lateinit var scrapInActiveSnackBar: SpotSnackBar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,7 +82,11 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                         },
                         onClickScrap = { isScrap ->
                             if (isScrap) {
-                                snackBar.show()
+                                scrapActiveSnackBar.dismiss()
+                                scrapInActiveSnackBar.show()
+                            } else {
+                                scrapInActiveSnackBar.dismiss()
+                                scrapActiveSnackBar.show()
                             }
                         },
                         onClickShare = {
@@ -124,7 +130,7 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     private fun initSnackBar() {
-        snackBar = SpotSnackBar.make(
+        scrapActiveSnackBar = SpotSnackBar.make(
             view = binding.root.rootView,
             background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
             message = getString(R.string.viewfinder_snackbar_scrap),
@@ -134,6 +140,12 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }.let { startActivity(it) }
             })
+        scrapInActiveSnackBar = SpotSnackBar.make(
+            view = binding.root.rootView,
+            background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
+            message = getString(R.string.viewfinder_inactive_snackbar_scrap),
+            onClick = {}
+        )
     }
 
     private fun getReviewExtra(callback: (id: Long, index: Int, title: String, type: String) -> Unit) {
@@ -181,8 +193,9 @@ class StadiumDetailPictureFragment : BindingFragment<FragmentStadiumDetailPictur
     }
 
     override fun onDestroyView() {
-        snackBar.dismiss()
         resetWindowInsets()
+        scrapActiveSnackBar.dismiss()
+        scrapInActiveSnackBar.dismiss()
         super.onDestroyView()
     }
 

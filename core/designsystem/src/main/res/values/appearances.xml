@@ -190,6 +190,14 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="TextAppearance.Spot.Caption01.White" parent="TextAppearance.Spot">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="android:lineSpacingMultiplier">1.4</item>
+        <item name="android:lineSpacingExtra">0dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/color_foreground_white</item>
+    </style>
+
     <style name="TextAppearance.Spot.Caption02" parent="TextAppearance.Spot">
         <item name="android:fontFamily">@font/font_pretendard_medium</item>
         <item name="android:lineSpacingMultiplier">1.4</item>

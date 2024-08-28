@@ -1,7 +1,9 @@
 package com.dpm.presentation.viewfinder
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -90,6 +92,19 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         initView()
         initEvent()
         initObserve()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (behavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            if (ev?.action == MotionEvent.ACTION_DOWN) {
+                val rect = Rect()
+                binding.clBottomSheet.getGlobalVisibleRect(rect)
+                if (!rect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
 
@@ -206,7 +221,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             object : StadiumSectionRecommendAdapter.OnItemFilterClickListener {
                 override fun onItemFilterClick(recommend: ResponseStadium.ResponseBlockTags) {
                     viewModel.updateBlockFilter(recommend)
-                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     setSectionText(
                         getString(com.depromeet.presentation.R.string.viewfinder_find_section_description),
                         R.color.color_foreground_caption
@@ -320,14 +334,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                binding.btnRefresh.setMargins(
-                    0, 0, 0,
-                    (((binding.clBottomSheet.height / resources.displayMetrics.density) - BOTTOM_SHEET_PEEK_HEIGHT) * slideOffset).dpToPx(
-                        this@StadiumActivity
-                    )
-                            + BOTTOM_SHEET_PEEK_HEIGHT.dpToPx(this@StadiumActivity)
-                            + BUTTON_BOTTOM_MARGIN.dpToPx(this@StadiumActivity)
-                )
                 binding.clTipContainer.setMargins(
                     TIP_CONTAINER_HORIZONTAL_MARGIN.dpToPx(this@StadiumActivity),
                     0,
@@ -372,6 +378,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun setTipContainerByFilter(description: String, ranges: List<Pair<Int, Int>>) {
         setTextZoomDescriptionColorMulti(description, ranges)
+        binding.tvZoomDescription.setTextAppearance(R.style.TextAppearance_Spot_Caption01_White)
+        binding.tvZoomDescription.setLineSpacing(0f, 1.3f)
         binding.ivPinchZoom.setImageResource(R.drawable.ic_tip)
         binding.ivPinchZoom.layoutParams.height = 52.dpToPx(this)
         binding.ivPinchZoom.layoutParams.width = 52.dpToPx(this)
