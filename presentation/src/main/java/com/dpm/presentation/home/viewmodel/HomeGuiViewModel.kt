@@ -84,7 +84,7 @@ class HomeGuiViewModel @Inject constructor(
     }
 
     private fun checkLevelUp(level: Int) {
-        if (sharedPreference.level < level) {
+        if (sharedPreference.level < level && sharedPreference.level != -1) {
             levelState.value = true
         }
         sharedPreference.level = level
