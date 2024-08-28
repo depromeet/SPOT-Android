@@ -34,7 +34,7 @@ class StadiumSectionViewHolder(
             7 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_navy)
             8 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_exciting)
             9 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.oval_section_green)
-            10 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.ic_wheelchair)
+            10 -> binding.ivSeatColor.setImageResource(com.depromeet.designsystem.R.drawable.ic_wheel_chair)
         }
     }
 }
