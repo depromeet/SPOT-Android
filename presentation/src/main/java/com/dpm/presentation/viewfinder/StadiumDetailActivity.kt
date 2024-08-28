@@ -161,7 +161,6 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
         val navigationHeight = (Utils(this).navigationHeight / resources.displayMetrics.density).toInt()
         scrapActiveSnackBar = SpotSnackBar.make(
             view = binding.root.rootView,
-            background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
             message = getString(R.string.viewfinder_snackbar_scrap),
             endMessage = getString(R.string.viewfinder_underscore_snackbar_scrap),
             marginBottom = navigationHeight,
@@ -172,7 +171,6 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
             })
         scrapInActiveSnackBar = SpotSnackBar.make(
             view = binding.root.rootView,
-            background = com.depromeet.designsystem.R.drawable.rect_body_subtitle_fill_60,
             message = getString(R.string.viewfinder_inactive_snackbar_scrap),
             marginBottom = navigationHeight,
             onClick = {}
