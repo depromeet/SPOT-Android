@@ -221,7 +221,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
             object : StadiumSectionRecommendAdapter.OnItemFilterClickListener {
                 override fun onItemFilterClick(recommend: ResponseStadium.ResponseBlockTags) {
                     viewModel.updateBlockFilter(recommend)
-                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     setSectionText(
                         getString(com.depromeet.presentation.R.string.viewfinder_find_section_description),
                         R.color.color_foreground_caption
@@ -288,7 +287,6 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         stadiumSectionAdapter.itemSectionClickListener =
             object : StadiumSectionAdapter.OnItemSectionClickListener {
                 override fun onItemSectionClick(section: Section) {
-                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     binding.clTipContainer.visibility = GONE
                     viewModel.updateSections(section)
                     viewModel.refreshFilter()
@@ -380,6 +378,8 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
 
     private fun setTipContainerByFilter(description: String, ranges: List<Pair<Int, Int>>) {
         setTextZoomDescriptionColorMulti(description, ranges)
+        binding.tvZoomDescription.setTextAppearance(R.style.TextAppearance_Spot_Caption01_White)
+        binding.tvZoomDescription.setLineSpacing(0f, 1.3f)
         binding.ivPinchZoom.setImageResource(R.drawable.ic_tip)
         binding.ivPinchZoom.layoutParams.height = 52.dpToPx(this)
         binding.ivPinchZoom.layoutParams.width = 52.dpToPx(this)

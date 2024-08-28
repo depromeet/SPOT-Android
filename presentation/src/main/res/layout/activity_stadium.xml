@@ -162,13 +162,13 @@
                 android:id="@+id/tvZoomDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:text="@string/viewfinder_zoom_description"
-                android:textAppearance="@style/TextAppearance.Spot.Caption01"
+                android:textAppearance="@style/TextAppearance.Spot.Subtitle02"
                 android:textColor="@color/color_foreground_white"
+                app:layout_constraintTop_toTopOf="@id/ivPinchZoom"
+                app:layout_constraintBottom_toBottomOf="@id/ivPinchZoom"
                 app:layout_constraintEnd_toStartOf="@id/ivPinchZoom"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTip" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivPinchZoom"
