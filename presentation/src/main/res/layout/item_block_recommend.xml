@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:elevation="3dp"
     android:background="@drawable/rect_background_white_fill_999">
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="13dp"
         android:paddingHorizontal="12dp"
-        android:textAppearance="@style/TextAppearance.Spot.Label08"
+        android:paddingVertical="13dp"
         android:textColor="@color/color_foreground_body_subtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="🌤️ 햇빛 피하기" />
+        tools:text="🌤️ 햇빛 피하기"
+        tools:textAppearance="@style/TextAppearance.Spot.Label08" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -67,6 +67,14 @@ fun StadiumDetailPictureMainScreen(
                 mutableStateOf(isFirstLike)
             }
 
+            var isNextPage by remember {
+                mutableStateOf(false)
+            }
+
+            LaunchedEffect(key1 = pagerState.isScrollInProgress) {
+                isNextPage = !pagerState.isScrollInProgress
+            }
+
             LaunchedEffect(key1 = pagerState) {
                 snapshotFlow { pagerState.currentPage }.collect {
                     pageIndex = it
@@ -89,6 +97,7 @@ fun StadiumDetailPictureMainScreen(
                 visited = visited,
                 position = reviewIndex,
                 isFirstLike = isFirstLikeState,
+                isNextPage = isNextPage,
                 hasNext = uiState.hasNext,
                 pagerState = pagerState,
                 pageIndex = pageIndex,
@@ -102,9 +111,7 @@ fun StadiumDetailPictureMainScreen(
                 },
                 onClickScrap = { id ->
                     onClickScrap(id)
-                    if (!stadiumDetailViewModel.checkScrap(id)) {
-                        stadiumDetailViewModel.updateScrap(id)
-                    }
+                    stadiumDetailViewModel.updateScrap(id)
                 },
                 onClickShare = { imagePosition ->
                     onClickShare()

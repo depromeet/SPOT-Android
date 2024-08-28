@@ -56,7 +56,9 @@ fun StadiumDetailScreen(
     onClickFilterMonthly: () -> Unit,
     onClickReport: () -> Unit,
     onClickGoBack: () -> Unit,
-    onClickShare:() -> Unit = {},
+    onClickLike:(isLike: Boolean) -> Unit = {},
+    onClickScrap:(isScrap: Boolean) -> Unit = {},
+    onClickShare: () -> Unit = {},
     onRefresh: () -> Unit
 ) {
     var isMore by remember { mutableStateOf(false) }
@@ -68,7 +70,7 @@ fun StadiumDetailScreen(
     val currentIndex by viewModel.currentIndex.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = scrollState) {
-        if (viewModel.reviewId == 0){
+        if (viewModel.reviewId == 0) {
             verticalScrollState.scrollToItem(0)
             viewModel.updateScrollState(false)
         }
@@ -79,7 +81,7 @@ fun StadiumDetailScreen(
             when (val data = detailUiState) {
                 is StadiumDetailUiState.ReviewsData -> {
                     val index = data.reviews.indexOfFirst { it.id.toInt() == viewModel.reviewId }
-                    if (index != -1){
+                    if (index != -1) {
                         verticalScrollState.scrollToItem(index + 1)
                         viewModel.reviewId = 0
                     }
@@ -187,8 +189,14 @@ fun StadiumDetailScreen(
                                     )
                                 },
                                 onClickReport = onClickReport,
-                                onClickLike = viewModel::updateLike,
-                                onClickScrap = viewModel::updateScrap,
+                                onClickLike = { id ->
+                                    onClickLike(uiState.reviews[index].isLike)
+                                    viewModel.updateLike(id)
+                                },
+                                onClickScrap = { id ->
+                                    onClickScrap(uiState.reviews[index].isScrap)
+                                    viewModel.updateScrap(id)
+                                },
                                 onClickShare = {
                                     onClickShare()
                                     isFirstShare = false
@@ -213,7 +221,10 @@ fun StadiumDetailScreen(
                                     )
                                 }
                             )
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            if (uiState.reviews.size - 1 == index) {
+                                Spacer(modifier = Modifier.height(76.dp))
+                            }
                         }
                     }
                 }
