@@ -35,7 +35,6 @@ import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.util.CalendarUtil
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
@@ -450,6 +449,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {}
                 }
+
 
         } else {
             seatReviewYearAdapter.updateData(yearList, selectedPosition)

@@ -322,7 +322,7 @@
                 android:background="@drawable/sel_year_drop_down"
                 android:dropDownWidth="103dp"
                 android:gravity="bottom"
-                android:popupBackground="@drawable/rect_white_fill_16"
+                android:popupBackground="@drawable/rect_white_fill_8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader" />
 
@@ -352,7 +352,7 @@
                 android:background="@drawable/sel_year_drop_down"
                 android:dropDownWidth="103dp"
                 android:gravity="bottom"
-                android:popupBackground="@drawable/rect_white_fill_16"
+                android:popupBackground="@drawable/rect_white_fill_8"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clRecordStickyHeader" />
