@@ -86,7 +86,7 @@
             android:text="좌석시야"
             android:textColor="@color/color_stroke_positive_primary"
             android:paddingVertical="3dp"
-            android:paddingHorizontal="4dp"
+            android:paddingHorizontal="6dp"
             android:background="@drawable/rect_stroke_positive_primary_stroke_35"
             android:layout_marginStart="6dp"
             android:layout_marginTop="14dp"/>

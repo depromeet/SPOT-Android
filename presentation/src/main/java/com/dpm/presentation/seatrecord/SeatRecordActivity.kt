@@ -243,7 +243,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setSeatYearSpinner(state.data)
                     seatReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getSeatReviews()
-                    Timber.d("test seat---- > ${state.data.yearMonths}")
+                    setSeatYearSpinnerBackground()
                 }
 
                 is UiState.Empty -> {
@@ -272,7 +272,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     setIntuitiveYearSpinner(state.data)
                     intuitiveReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getIntuitiveReviews()
-                    Timber.d("test intuitive ---- > ${state.data.yearMonths}")
+                    setIntuitiveYearSpinnerBackground()
                 }
 
                 is UiState.Empty -> {
@@ -349,6 +349,28 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             }
         }
     }
+
+    private fun setSeatYearSpinnerBackground() =
+        when ((viewModel.seatDate.value as UiState.Success).data.yearMonths.size) {
+            0, 1 -> {
+                binding.spinnerSeatReviewYear.background = null
+            }
+
+            else -> {
+                binding.spinnerSeatReviewYear.setBackgroundResource(com.depromeet.designsystem.R.drawable.sel_year_drop_down)
+            }
+        }
+
+    private fun setIntuitiveYearSpinnerBackground() =
+        when ((viewModel.intuitiveDate.value as UiState.Success).data.yearMonths.size) {
+            0, 1 -> {
+                binding.spinnerIntuitiveReviewYear.background = null
+            }
+
+            else -> {
+                binding.spinnerIntuitiveReviewYear.setBackgroundResource(com.depromeet.designsystem.R.drawable.sel_year_drop_down)
+            }
+        }
 
     private fun observeEvents() {
         viewModel.deleteClickedEvent.asLiveData().observe(this) { state ->
