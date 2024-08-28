@@ -291,9 +291,6 @@ private fun checkAndRequestPermission(
                 else -> permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
             }
         }
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
-            onPermissionGranted()
-        }
         else -> {
             when (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 PackageManager.PERMISSION_GRANTED -> onPermissionGranted()
