@@ -56,6 +56,14 @@ fun StadiumDetailPictureTopScreen(
                 mutableStateOf(0)
             }
 
+            var isNextPage by remember {
+                mutableStateOf(false)
+            }
+
+            LaunchedEffect(key1 = pagerState.isScrollInProgress) {
+                isNextPage = !pagerState.isScrollInProgress
+            }
+
             LaunchedEffect(key1 = pagerState) {
                 snapshotFlow { pagerState.currentPage }.collect {
                     pageIndex = it
@@ -67,6 +75,7 @@ fun StadiumDetailPictureTopScreen(
                 reviews = uiState.topReviewImages,
                 position = reviewIndex,
                 isFirstLike = isFirstLikeState,
+                isNextPage = isNextPage,
                 pagerState = pagerState,
                 pageIndex = pageIndex,
                 bottomPadding = bottomPadding,

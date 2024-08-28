@@ -1,6 +1,11 @@
 package com.dpm.presentation.viewfinder.compose.detailpicture
 
 import android.content.Context
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +59,7 @@ fun StadiumDetailPictureViewPager(
     isLike: Boolean,
     isScrap: Boolean,
     isFirstLike: Boolean,
+    isNextPage: Boolean,
     likeCount: Long,
     verticalPagerState: PagerState,
     pictures: List<ResponseBlockReview.ResponseReview.ResponseReviewImage>,
@@ -154,7 +162,7 @@ fun StadiumDetailPictureViewPager(
                 onClickScrap = onClickScrap,
                 onClickShare = onClickShare
             )
-            if (isFirstLike) {
+            if (isFirstLike && isNextPage) {
                 LikeTooltip(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -162,6 +170,7 @@ fun StadiumDetailPictureViewPager(
                         .padding(end = 12.dp),
                     bias = 0.85f,
                     content = "유용했다면, 도움돼요를 눌러주세요!",
+                    isNextPage = isNextPage
                 )
             }
             Box(
@@ -195,6 +204,7 @@ private fun StadiumDetailPictureViewPagerPreview() {
         isLike = true,
         likeCount = 1,
         isFirstLike = true,
+        isNextPage = true,
         verticalPagerState = pagerState,
         pictures = listOf(
             ResponseBlockReview.ResponseReview.ResponseReviewImage(
