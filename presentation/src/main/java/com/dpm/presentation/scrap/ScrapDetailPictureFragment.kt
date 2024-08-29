@@ -41,6 +41,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     private val viewModel: ScrapViewModel by activityViewModels()
     private lateinit var adapter: ScrapDetailAdapter
     private var isLoading: Boolean = false
+    private var snackbar: SpotSnackBar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,22 +82,23 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             scrapClick = { id, isScrap ->
                 viewModel.updateScrap(id)
                 if (isScrap) {
-                    SpotSnackBar.make(
+                    snackbar = SpotSnackBar.make(
                         view = binding.root,
                         message = "스크랩이 해제되었어요!",
                         marginBottom = 20,
                         onClick = {},
-                    ).show()
+                    )
                 } else {
-                    SpotSnackBar.make(
+                    snackbar = SpotSnackBar.make(
                         view = binding.root,
                         message = "스크랩이 완료되었어요!",
                         endMessage = "스크랩으로 이동",
                         marginBottom = 20,
                     ) {
                         removeFragment()
-                    }.show()
+                    }
                 }
+                snackbar?.show()
             },
             likeClick = {
                 viewModel.updateLike(it)
@@ -112,6 +114,8 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     override fun onDestroyView() {
         super.onDestroyView()
         resetWindowInsets()
+        snackbar?.dismiss()
+        snackbar = null
     }
 
     private fun setupPageChangeListener() {
