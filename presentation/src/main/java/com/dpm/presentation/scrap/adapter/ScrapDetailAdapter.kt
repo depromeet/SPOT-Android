@@ -54,7 +54,7 @@ class ScrapDetailAdapter(
 }
 
 class ScrapDetailViewHolder(
-    private val binding: ItemScrapDetailBinding,
+    internal val binding: ItemScrapDetailBinding,
     private val scrapClick: (Int, Boolean) -> Unit,
     private val likeClick: (Int) -> Unit,
     private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
@@ -70,6 +70,7 @@ class ScrapDetailViewHolder(
         tvScrapLevel.text = item.member.formattedLevel()
         tvSectionName.text = item.formattedBlockToSeat()
         tvLikeCount.text = item.likesCount.toString()
+        binding.csbvLikeDescription.setTextPart("유용했다면,","도움돼요","를 눌러주세요!")
         if (item.content.isNotEmpty()) {
             tvScrapContent.text = item.content
         } else {

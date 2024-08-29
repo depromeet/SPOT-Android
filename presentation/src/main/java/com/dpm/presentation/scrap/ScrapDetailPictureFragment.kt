@@ -2,7 +2,11 @@ package com.dpm.presentation.scrap
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -24,6 +28,7 @@ import com.dpm.designsystem.SpotSnackBar
 import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.scrap.adapter.ScrapDetailAdapter
+import com.dpm.presentation.scrap.adapter.ScrapDetailViewHolder
 import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.Utils
@@ -44,6 +49,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     private lateinit var adapter: ScrapDetailAdapter
     private var isLoading: Boolean = false
     private var snackbar: SpotSnackBar? = null
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,6 +83,12 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
             isLoading = false
         }
+
+        viewModel.isFirstLike.asLiveData().observe(viewLifecycleOwner) { isFirstLike ->
+            if (!isFirstLike) {
+                hideLikeDescriptionView()
+            }
+        }
     }
 
     private fun initViewPager() {
@@ -87,6 +99,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                     snackbar = SpotSnackBar.make(
                         view = binding.root,
                         message = "스크랩이 해제되었어요!",
+                        background = R.drawable.rect_gray800_fill_60,
                         marginBottom = 20,
                         onClick = {},
                     )
@@ -94,6 +107,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                     snackbar = SpotSnackBar.make(
                         view = binding.root,
                         message = "스크랩이 완료되었어요!",
+                        background = R.drawable.rect_gray800_fill_60,
                         endMessage = "스크랩으로 이동",
                         marginBottom = 20,
                     ) {
@@ -124,11 +138,22 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     }
 
     private fun setupPageChangeListener() {
+
         binding.vpScrap.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
                 if (state == ViewPager2.SCROLL_STATE_IDLE) {
                     viewModel.setCurrentPage(binding.vpScrap.currentItem)
+                    if (viewModel.isFirstLike.value)
+                        updateRecyclerViewVisibility(true)
+                    else
+                        hideLikeDescriptionView()
+                } else {
+                    if (viewModel.isFirstLike.value) {
+                        updateRecyclerViewVisibility(false)
+                    }
+                    else
+                        hideLikeDescriptionView()
                 }
             }
 
@@ -141,6 +166,48 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                 }
             }
         })
+    }
+
+    private fun hideLikeDescriptionView() {
+        val recyclerView = binding.vpScrap.getChildAt(0) as RecyclerView
+        for (i in 0 until recyclerView.childCount) {
+            val child = recyclerView.getChildAt(i)
+            val viewHolder = recyclerView.getChildViewHolder(child) as? ScrapDetailViewHolder
+            viewHolder?.binding?.csbvLikeDescription?.visibility = GONE
+        }
+    }
+
+    private fun updateRecyclerViewVisibility(isVisible: Boolean) {
+        if (!viewModel.isFirstLike.value) return
+
+        val recyclerView = binding.vpScrap.getChildAt(0) as RecyclerView
+        for (i in 0 until recyclerView.childCount) {
+            val child = recyclerView.getChildAt(i)
+            val viewHolder = recyclerView.getChildViewHolder(child) as? ScrapDetailViewHolder
+            viewHolder?.let {
+                val scaleAnimation = if (isVisible) {
+                    ScaleAnimation(
+                        0.2f, 1f,
+                        0.2f, 1f,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF, 0.5f
+                    ).apply {
+                        duration = 300
+                    }
+                } else {
+                    ScaleAnimation(
+                        1f, 0.2f,
+                        1f, 0.2f,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF, 0.5f
+                    ).apply {
+                        duration = 300
+                    }
+                }
+                it.binding.csbvLikeDescription.startAnimation(scaleAnimation)
+                it.binding.csbvLikeDescription.visibility = if (isVisible) VISIBLE else GONE
+            }
+        }
     }
 
 
@@ -181,6 +248,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             ),
             onSuccess = { sharingIntent ->
                 requireContext().startActivity(sharingIntent)
+                viewModel.updateIsFirstShare(true)
             },
             onFailure = {
                 Timber.d("링크 공유 실패 : ${it.message}")

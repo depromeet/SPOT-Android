@@ -71,6 +71,9 @@ class ScrapViewModel @Inject constructor(
     private val _currentPage = MutableStateFlow(0)
     val currentPage = _currentPage.asStateFlow()
 
+    private val _isFirstLike = MutableStateFlow(sharedPreference.isFirstLike)
+    val isFirstLike = _isFirstLike.asStateFlow()
+
 
     fun getScrapRecord() {
         viewModelScope.launch {
@@ -95,6 +98,11 @@ class ScrapViewModel @Inject constructor(
                 _scrap.value = UiState.Failure(e.message ?: "실패")
             }
         }
+    }
+
+    fun updateIsFirstLike(isFirstLike : Boolean) {
+        sharedPreference.isFirstLike = isFirstLike
+        _isFirstLike.value = isFirstLike
     }
 
     fun updateIsFirstShare(isFirstShare : Boolean) {
@@ -219,6 +227,7 @@ class ScrapViewModel @Inject constructor(
     }
 
     fun updateLike(id: Int) {
+        updateIsFirstLike(false)
         viewModelScope.launch {
             viewfinderRepository.updateLike(id).onSuccess {
                 val currentState = (_scrap.value as? UiState.Success)?.data
