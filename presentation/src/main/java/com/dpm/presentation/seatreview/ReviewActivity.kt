@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -29,6 +30,7 @@ import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
 import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.seatreview.dialog.main.ReviewMySeatDialog
 import com.dpm.presentation.seatreview.dialog.main.SelectSeatDialog
+import com.dpm.presentation.seatreview.dialog.main.UnSavedDataDialog
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.dpm.presentation.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +53,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
         private const val DATE_PICKER_DIALOG_TAG = "DatePickerDialogTag"
         private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
+        private const val UNSAVED_DATA_DIALOG = "UnsavedDataDialog"
         private const val REVIEW_DATA = "REVIEW_DATA"
         private const val METHOD_KEY = "METHOD_KEY"
         private const val DIALOG_TYPE = "DIALOG_TYPE"
@@ -103,7 +106,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun initEvent() {
         initEventUploadBtn()
         initEventRemoveBtn()
-        initEventToHome()
+        initEventToBack()
     }
 
     private fun initObserve() {
@@ -141,6 +144,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun observeReviewViewModel() {
         viewModel.selectedImages.asLiveData().observe(this) { image ->
             updateNextButtonState()
+            initEventToBack()
         }
 
         viewModel.reviewCount.asLiveData().observe(this) { count ->
@@ -150,10 +154,15 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
         viewModel.selectedGoodReview.asLiveData().observe(this) { count ->
             updateNextButtonState()
+            initEventToBack()
         }
 
         viewModel.selectedBadReview.asLiveData().observe(this) { count ->
             updateNextButtonState()
+            initEventToBack()
+        }
+        viewModel.selectedBlock.asLiveData().observe(this){
+            initEventToBack()
         }
     }
 
@@ -266,9 +275,17 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         }
     }
 
-    private fun initEventToHome() {
+    private fun initEventToBack() {
+        val isSelectedImageFilled = viewModel.selectedImages.value.isNotEmpty()
+        val isSelectedGoodBtnFilled = viewModel.selectedGoodReview.value.isNotEmpty()
+        val isSelectedBadBtnFilled = viewModel.selectedBadReview.value.isNotEmpty()
+        val isSelectedBlockFilled = viewModel.selectedBlock.value.isNotEmpty()
         binding.btnBack.setOnSingleClickListener {
-            finish()
+            if (isSelectedImageFilled || isSelectedGoodBtnFilled || isSelectedBadBtnFilled || isSelectedBlockFilled) {
+                UnSavedDataDialog().show(supportFragmentManager, UNSAVED_DATA_DIALOG)
+            } else {
+                finish()
+            }
         }
     }
 
@@ -431,7 +448,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 (isSelectedGoodBtnFilled || isSelectedBadBtnFilled) && (isSelectedBlockFilled && (isSelectedColumnFilled || isSelectedNumberFilled)) && !(isSelectedImageFilled) -> {
                     binding.tvUploadBtn.setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
                     makeSpotImageAppbar("사진을 등록해주세요")
-            }
+                }
 
                 else -> {
                     val uniqueImageUris = selectedImageUris.distinct()
