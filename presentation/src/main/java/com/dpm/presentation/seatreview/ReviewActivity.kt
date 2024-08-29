@@ -178,6 +178,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             val number = bundle.getString("number", "")
             val sectionId = bundle.getInt("sectionId", 0)
             val isColumnCheckEnabled = bundle.getBoolean("isColumnCheckEnabled", false)
+            updateNextButtonState()
             with(binding) {
                 when (sectionId) {
                     10 -> {
