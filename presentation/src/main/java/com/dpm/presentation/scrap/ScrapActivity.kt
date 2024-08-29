@@ -14,7 +14,6 @@ import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.extension.dpToPx
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.global.GlobalVariable
 import com.dpm.presentation.scrap.adapter.ScrapFilterAdapter
 import com.dpm.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.dpm.presentation.scrap.adapter.ScrapRecordAdapter

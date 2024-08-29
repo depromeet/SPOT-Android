@@ -4,6 +4,7 @@ import ReviewData
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.viewModels
@@ -104,14 +105,14 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
     }
 
     private fun setupImageSelection() {
-        val selectImage = listOf(
-            binding.ivFirstImage to binding.ivFirstImageCheck,
-            binding.ivSecondImage to binding.ivSecondImageCheck,
-            binding.ivThirdImage to binding.ivThirdImageCheck,
+        val selectImageContainers = listOf(
+            binding.clFirstImage to binding.ivFirstImage,
+            binding.clSecondImage to binding.ivSecondImage,
+            binding.clThirdImage to binding.ivThirdImage
         )
 
-        selectImage.forEach { (image, isChecked) ->
-            image.setOnSingleClickListener {
+        selectImageContainers.forEach { (container, image) ->
+            container.setOnClickListener {
                 val imageUri = image.tag as? String
                 if (imageUri != null) {
                     viewModel.toggleImageSelection(imageUri)
