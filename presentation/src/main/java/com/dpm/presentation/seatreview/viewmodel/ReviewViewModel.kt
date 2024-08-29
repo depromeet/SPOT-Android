@@ -1,6 +1,7 @@
 package com.dpm.presentation.seatreview.viewmodel
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -393,19 +394,23 @@ class ReviewViewModel @Inject constructor(
             Timber.d("Selected seatNumber: ${selectedNumber.value}")
             Timber.d("Selected reviewType: $reviewType")
             _postReviewState.value = UiState.Loading
-            seatReviewRepository.postSeatReview(
-                _selectedBlockId.value,
-                requestSeatReview,
-            )
-                .onSuccess { id ->
+
+            try {
+                seatReviewRepository.postSeatReview(
+                    _selectedBlockId.value,
+                    requestSeatReview,
+                ).onSuccess { id ->
                     _postReviewState.value = UiState.Success(id)
+                    Log.d("minju3", "뷰모델 성공")
                     Timber.d("POST REVIEW SUCCESS")
+                }.onFailure { t ->
+                    Log.d("minju3", "뷰모델 실패")
+                    Timber.e(t, "POST REVIEW FAILURE: ${t.message}")
                 }
-                .onFailure { t ->
-                    if (t is HttpException) {
-                        Timber.e("POST REVIEW FAILURE: $t")
-                    }
-                }
+            } catch (e: Exception) {
+                Log.d("minju3", "뷰모델 예외 발생")
+                Timber.e(e, "Exception in postSeatReview")
+            }
         }
     }
 
