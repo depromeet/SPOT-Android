@@ -102,14 +102,10 @@ class ScrapDetailViewHolder(
 
 
         if (item.isLiked) {
-            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active){
-                crossfade(true)
-            }
+            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
             tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_action_enabled))
         } else {
-            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive){
-                crossfade(true)
-            }
+            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
             tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_foreground_white))
         }
 

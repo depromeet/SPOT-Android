@@ -21,6 +21,7 @@ import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
 import com.dpm.presentation.util.CalendarUtil
 import com.dpm.presentation.util.ItemDiffCallback
 import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
+import timber.log.Timber
 
 class RecentRecordAdapter(
 ) : ListAdapter<ResponseMySeatRecord.ReviewResponse, RecentRecordViewHolder>(
@@ -63,15 +64,8 @@ class RecentRecordAdapter(
             binding.ivRecordLike.setOnSingleClickListener {
                 if (!getItem(position).isLiked) {
                     binding.lottieLike.playAnimation()
-                    binding.lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            super.onAnimationEnd(animation)
-                            itemRecordClickListener?.onLikeClick(getItem(position).id)
-                        }
-                    })
-                } else {
-                    itemRecordClickListener?.onLikeClick(getItem(position).id)
                 }
+                itemRecordClickListener?.onLikeClick(getItem(position).id)
             }
 
         }
@@ -113,6 +107,12 @@ class RecentRecordViewHolder(
             tvRecordScrapCount.text = item.scrapsCount.toString()
             if (item.isScrapped) {
                 ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
+                ivRecordScrap.setColorFilter(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        com.depromeet.designsystem.R.color.color_action_enabled
+                    )
+                )
             } else {
                 ivRecordScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
                 ivRecordScrap.setColorFilter(
