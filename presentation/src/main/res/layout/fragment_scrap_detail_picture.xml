@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:elevation="4dp"
+        android:text=""
         android:textColor="@color/color_foreground_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +22,7 @@
         app:navigationIcon="@drawable/ic_chevron_left_big"
         app:navigationIconColor="@color/color_foreground_white"
         app:navigationIconSize="24"
-        app:titleTextAppearance="@style/TextAppearance.Spot.Label03"
-        android:text=""/>
+        app:titleTextAppearance="@style/TextAppearance.Spot.Label03" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vpScrap"
@@ -33,5 +33,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.dpm.presentation.home.customview.CustomSpeechBubbleView
+        android:id="@+id/csbvLikeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="160dp"
+        android:visibility="gone"
+        app:backgroundColor="@color/color_background_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:paddingBottom="8dp"
+        app:paddingLeft="10dp"
+        app:paddingRight="10dp"
+        app:paddingTop="8dp"
+        app:textAppearance="@style/TextAppearance.Spot.Caption04"
+        app:triangleBias="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

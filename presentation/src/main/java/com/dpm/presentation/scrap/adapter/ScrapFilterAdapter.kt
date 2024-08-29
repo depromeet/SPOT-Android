@@ -2,12 +2,14 @@ package com.dpm.presentation.scrap.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.depromeet.presentation.databinding.ItemScrapFilterBinding
 import com.depromeet.presentation.databinding.ItemScrapFilterSelectedBinding
 import com.dpm.presentation.scrap.viewmodel.FilterNameData
+import com.dpm.presentation.scrap.viewmodel.ScrapViewModel
 import com.dpm.presentation.util.ItemDiffCallback
 import timber.log.Timber
 
@@ -88,6 +90,7 @@ class ScrapFilterViewHolder(
     private val filterClick: () -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind() {
+        binding.root.clipToOutline = true
         binding.root.setOnClickListener {
             filterClick()
         }
@@ -99,6 +102,11 @@ class ScrapFilterSelectedViewHolder(
     private val selectedClick: (FilterNameData) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: FilterNameData) = with(binding) {
+        /** 현재 잠실야구장만 있어 임시 처리**/
+        if(item.filterType == ScrapViewModel.ScrapFilterType.STADIUM){
+            ivClose.visibility = GONE
+        }
+        root.clipToOutline = true
         ivClose.setOnClickListener { selectedClick(item) }
         tvScrapFilter.text = item.name
     }

@@ -2,14 +2,13 @@ package com.dpm.presentation.seatrecord.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.depromeet.presentation.databinding.ItemRecentMonthBinding
+import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.seatrecord.uiMapper.MonthReviewData
 import com.dpm.presentation.util.ItemDiffCallback
-import timber.log.Timber
 
 
 class MonthRecordAdapter() :
@@ -49,49 +48,41 @@ class MonthRecordViewHolder(
     private val itemRecordClickListener: MonthRecordAdapter.OnItemRecordClickListener?,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private lateinit var adapter: RecentRecordAdapter
+    private lateinit var adapter : RecentRecordAdapter
 
     fun bind(item: MonthReviewData) {
         with(binding) {
-            initReviewAdapter()
+            initReviewAdapter(item)
             "${item.month}월".also { tvRecentMonth.text = it }
-            adapter.submitList(item.reviews)
         }
     }
 
 
-    private fun initReviewAdapter() {
+    private fun initReviewAdapter(item : MonthReviewData) {
+        if(!::adapter.isInitialized){
             adapter = RecentRecordAdapter()
             binding.rvRecentPost.adapter = adapter
-            adapter.itemRecordClickListener =
-                object : RecentRecordAdapter.OnItemRecordClickListener {
-                    override fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse) {
-                        itemRecordClickListener?.onItemRecordClick(item)
-                    }
-
-                    override fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse) {
-                        itemRecordClickListener?.onMoreRecordClick(item.id)
-                    }
-
-                    override fun onLikeClick(reviewId: Int) {
-                        itemRecordClickListener?.onLikeClick(reviewId)
-                    }
-
-                    override fun onScrapClick(reviewId: Int) {
-                        itemRecordClickListener?.onScrapClick(reviewId)
-                    }
+            (binding.rvRecentPost.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+            binding.rvRecentPost.itemAnimator = null
+        }
+        adapter.submitList(item.reviews.toList())
+        adapter.itemRecordClickListener =
+            object : RecentRecordAdapter.OnItemRecordClickListener {
+                override fun onItemRecordClick(item: ResponseMySeatRecord.ReviewResponse) {
+                    itemRecordClickListener?.onItemRecordClick(item)
                 }
-            binding.rvRecentPost.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
 
-                    val scrollBottom = !binding.rvRecentPost.canScrollVertically(1)
-                    val layoutManager = binding.rvRecentPost.layoutManager as LinearLayoutManager
-                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    val itemCount = layoutManager.itemCount - 1
-
-                    Timber.d("test scroll $scrollBottom / $lastVisibleItemPosition / $itemCount")
+                override fun onItemMoreClick(item: ResponseMySeatRecord.ReviewResponse) {
+                    itemRecordClickListener?.onMoreRecordClick(item.id)
                 }
-            })
+
+                override fun onLikeClick(reviewId: Int) {
+                    itemRecordClickListener?.onLikeClick(reviewId)
+                }
+
+                override fun onScrapClick(reviewId: Int) {
+                    itemRecordClickListener?.onScrapClick(reviewId)
+                }
+            }
     }
 }
