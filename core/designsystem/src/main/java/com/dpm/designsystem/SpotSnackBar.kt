@@ -10,18 +10,18 @@ import com.depromeet.designsystem.databinding.SpotSnackbarBinding
 import com.dpm.designsystem.extension.dpToPx
 import com.google.android.material.snackbar.Snackbar
 
-
 class SpotSnackBar(
     view: View,
     private val snackBarBackground: Int,
     private val message: String,
     private val marginBottom: Int,
     private val endMessage: String,
-    private val onClick: () -> Unit
+    private val onClick: () -> Unit,
+    private val visibleDialog: () -> Unit = {},
 ) {
     companion object {
-        fun make(view: View, background: Int = R.drawable.rect_transfer_black_03_fill_60, marginBottom: Int = 0, message: String = "", endMessage: String = "", onClick: () -> Unit) =
-            SpotSnackBar(view = view, snackBarBackground = background, marginBottom = marginBottom, message=  message, endMessage = endMessage, onClick = onClick)
+        fun make(view: View, background: Int = R.drawable.rect_transfer_black_03_fill_60, marginBottom: Int = 0, message: String = "", endMessage: String = "", onClick: () -> Unit, visibleDialog: () -> Unit = {}) =
+            SpotSnackBar(view = view, snackBarBackground = background, marginBottom = marginBottom, message = message, endMessage = endMessage, onClick = onClick, visibleDialog = visibleDialog)
     }
 
     private val context = view.context
@@ -57,6 +57,11 @@ class SpotSnackBar(
             tvTrigger.text = endMessage
             clContainer.setBackgroundResource(snackBarBackground)
         }
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                visibleDialog()
+            }
+        })
     }
 
     private fun initEvent() {

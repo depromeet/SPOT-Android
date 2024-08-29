@@ -110,9 +110,9 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                         background = R.drawable.rect_gray800_fill_60,
                         endMessage = "스크랩으로 이동",
                         marginBottom = 20,
-                    ) {
-                        removeFragment()
-                    }
+                        onClick = { removeFragment() }
+
+                    )
                 }
                 snackbar?.show()
             },

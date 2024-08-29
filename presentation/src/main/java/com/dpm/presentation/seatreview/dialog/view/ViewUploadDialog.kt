@@ -10,6 +10,7 @@ import com.dpm.core.base.BindingDialogFragment
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.seatreview.sample.LevelUpManager
 import toNavReviewDetail
 
 class ViewUploadDialog : BindingDialogFragment<FragmentViewUploadDialogBinding>(
@@ -34,6 +35,7 @@ class ViewUploadDialog : BindingDialogFragment<FragmentViewUploadDialogBinding>(
     private fun initEvent() {
         val reviewData = arguments?.getParcelable<ReviewData>(REVIEW_DATA)
         binding.btnCancel.setOnSingleClickListener {
+            LevelUpManager.triggerLevelUp()
             dismiss()
         }
         binding.btnConfirmReview.setOnSingleClickListener {

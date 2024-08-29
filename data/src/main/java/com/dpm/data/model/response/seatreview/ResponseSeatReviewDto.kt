@@ -9,7 +9,7 @@ data class ResponseSeatReviewDto(
     @SerialName("id")
     val id: Int,
     @SerialName("member")
-    val member: Member,
+    val member: Member?,
     @SerialName("stadium")
     val stadium: Stadium,
     @SerialName("section")
@@ -19,7 +19,7 @@ data class ResponseSeatReviewDto(
     @SerialName("row")
     val row: Row,
     @SerialName("seat")
-    val seat: Seat,
+    val seat: Seat?,
     @SerialName("dateTime")
     val dateTime: String,
     @SerialName("content")
@@ -39,7 +39,7 @@ data class ResponseSeatReviewDto(
     @Serializable
     data class Member(
         @SerialName("profileImage")
-        val profileImage: String,
+        val profileImage: String?,
         @SerialName("nickname")
         val nickname: String,
         @SerialName("level")
@@ -85,7 +85,7 @@ data class ResponseSeatReviewDto(
         @SerialName("id")
         val id: Int,
         @SerialName("seatNumber")
-        val seatNumber: Int,
+        val seatNumber: Int?,
     )
 
     @Serializable

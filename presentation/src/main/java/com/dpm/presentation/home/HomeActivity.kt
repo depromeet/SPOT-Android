@@ -15,6 +15,7 @@ import com.dpm.designsystem.SpotSnackBar
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.domain.model.seatreview.ReviewMethod
+import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.adapter.StadiumAdapter
@@ -29,6 +30,7 @@ import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
 import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
+import com.dpm.presentation.seatreview.sample.LevelUpManager
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
@@ -36,11 +38,15 @@ import com.dpm.presentation.viewfinder.StadiumActivity
 import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding>(
-    ActivityHomeBinding::inflate
+    ActivityHomeBinding::inflate,
 ) {
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
     companion object {
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val START_SPACING_DP = 16
@@ -59,15 +65,48 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         initView()
         initEvent()
         initObserver()
+
+        if (intent.getBooleanExtra("IS_VISIBLE_LEVELUP_DIALOG", false)) {
+            homeViewModel.getHomeFeed(isVisibleDialog = true) {
+                if (sharedPreference.level < it.level) {
+                    LevelupDialog(
+                        it.levelTitle,
+                        it.level,
+                        it.mascotImageUrl,
+                    ).show(supportFragmentManager, LevelupDialog.TAG)
+                }
+                sharedPreference.teamId = it.teamId ?: 0
+                sharedPreference.levelTitle = it.levelTitle
+                sharedPreference.teamName = it.teamName ?: ""
+                sharedPreference.level = it.level
+            }
+        }
+
+        LevelUpManager.setOnLevelUpListener {
+            homeViewModel.getHomeFeed(isVisibleDialog = true) {
+                if (sharedPreference.level < it.level) {
+                    LevelupDialog(
+                        it.levelTitle,
+                        it.level,
+                        it.mascotImageUrl,
+                    ).show(supportFragmentManager, LevelupDialog.TAG)
+                }
+                sharedPreference.teamId = it.teamId ?: 0
+                sharedPreference.levelTitle = it.levelTitle
+                sharedPreference.teamName = it.teamName ?: ""
+                sharedPreference.level = it.level
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        homeViewModel.getHomeFeed()
+        if (!(intent.getBooleanExtra("IS_VISIBLE_LEVELUP_DIALOG", false))) {
+            homeViewModel.getHomeFeed()
+        }
     }
 
     private fun initView() {
@@ -104,17 +143,34 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 message = "시야찾기에 내 게시글이 올라갔어요!",
                 endMessage = "확인하러 가기",
                 marginBottom = 87,
-            ) {
-                val reviewData = intent.getCompatibleParcelableExtra<ReviewData>(REVIEW_DATA)
-                if (reviewData != null) {
-                    Intent(this@HomeActivity, StadiumDetailActivity::class.java).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        putExtra(SchemeKey.STADIUM_ID, reviewData.stadiumId)
-                        putExtra(SchemeKey.BLOCK_CODE, reviewData.blockCode)
-                        putExtra(SchemeKey.REVIEW_ID, reviewData.reviewId)
-                    }.let { startActivity(it) }
+                onClick = {
+                    val reviewData = intent.getCompatibleParcelableExtra<ReviewData>(REVIEW_DATA)
+                    if (reviewData != null) {
+                        Intent(this@HomeActivity, StadiumDetailActivity::class.java).apply {
+                            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            putExtra(SchemeKey.STADIUM_ID, reviewData.stadiumId)
+                            putExtra(SchemeKey.BLOCK_CODE, reviewData.blockCode)
+                            putExtra(SchemeKey.REVIEW_ID, reviewData.reviewId)
+                            putExtra("IMAGE_UPLOAD", true)
+                        }.let { startActivity(it) }
+                    }
+                },
+                visibleDialog = {
+                    homeViewModel.getHomeFeed(isVisibleDialog = true) {
+                        if (sharedPreference.level < it.level) {
+                            LevelupDialog(
+                                it.levelTitle,
+                                it.level,
+                                it.mascotImageUrl,
+                            ).show(supportFragmentManager, LevelupDialog.TAG)
+                        }
+                        sharedPreference.teamId = it.teamId ?: 0
+                        sharedPreference.levelTitle = it.levelTitle
+                        sharedPreference.teamName = it.teamName ?: ""
+                        sharedPreference.level = it.level
+                    }
                 }
-            }.show()
+            ).show()
         }
     }
 
@@ -126,9 +182,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun initEvent() = with(binding) {
         clHomeArchiving.setOnClickListener {
             MixpanelManager.track("home_archiving")
-            startSeatRecordActivity() }
+            startSeatRecordActivity()
+        }
         ivHomeInfo.setOnClickListener { showLevelDescriptionDialog() }
-        clHomeScrap.setOnClickListener{
+        clHomeScrap.setOnClickListener {
             MixpanelManager.track("home_scrap")
             startScrapActivity()
         }
@@ -181,19 +238,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                     setHomeFeedShimmer(false)
                 }
             }
-
-        }
-
-        homeViewModel.levelState.asLiveData().observe(this) {
-            val currentState = homeViewModel.homeFeed.value
-            if (it && currentState is UiState.Success) {
-                LevelupDialog(
-                    currentState.data.levelTitle,
-                    currentState.data.level,
-                    currentState.data.mascotImageUrl
-                ).show(supportFragmentManager, LevelupDialog.TAG)
-                homeViewModel.levelState.value = false
-            }
         }
     }
 
@@ -218,30 +262,29 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                         message = "현재 잠실야구장만 이용할 수 있어요!",
                         endMessage = "잠실야구장 보기",
                         marginBottom = 87,
-                    ) {
-                        startStadiumActivity(it)
-                    }.show()
+                        onClick = {startStadiumActivity(it)}
+                    ) .show()
+
                 } else {
                     MixpanelManager.track("home_find_view")
                     startStadiumActivity(it)
                 }
-            }
+            },
         )
         binding.rvHomeStadium.adapter = stadiumAdapter
         binding.rvHomeStadium.addItemDecoration(
             LinearSpacingItemDecoration(
                 START_SPACING_DP.dpToPx(this),
-                BETWEEN_SPADING_DP.dpToPx(this)
-            )
+                BETWEEN_SPADING_DP.dpToPx(this),
+            ),
         )
         binding.rvHomeStadium.itemAnimator = null
     }
 
-
     private fun startStadiumSelectionActivity() {
         Intent(this@HomeActivity, StadiumSelectionActivity::class.java).apply {
             startActivity(
-                this
+                this,
             )
         }
     }
@@ -257,7 +300,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     private fun startStadiumActivity(stadium: ResponseStadiums) {
         val intent = Intent(
             this@HomeActivity,
-            StadiumActivity::class.java
+            StadiumActivity::class.java,
         ).apply {
             if (stadium.id != 1) {
                 putExtra(STADIUM_EXTRA_ID, 1)
@@ -276,11 +319,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         if (isLoading) {
             shimmerHomeStadium.startShimmer()
             shimmerHomeStadium.visibility = View.VISIBLE
-
         } else {
             shimmerHomeStadium.stopShimmer()
             shimmerHomeStadium.visibility = View.GONE
-
         }
     }
     private fun setHomeFeedVisibility(isSuccess: Boolean) {
@@ -306,7 +347,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         } else {
             csbvHomeTitle.setTextPart("시야 사진 ", data.reviewCntToLevelup, "장 더 올리면 레벨업!")
         }
-
     }
 
     private fun navigateToReviewActivity() {
@@ -334,7 +374,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
             icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
-            marginBottom = 87
+            marginBottom = 87,
         ).show()
     }
 
@@ -360,6 +400,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 putExtra(SchemeKey.STADIUM_ID, navReviewDetail.stadiumId)
                 putExtra(SchemeKey.BLOCK_CODE, navReviewDetail.blockCode)
                 putExtra(SchemeKey.REVIEW_ID, navReviewDetail.reviewId)
+                putExtra("IMAGE_UPLOAD", true)
             }.let { startActivity(it) }
         }
     }

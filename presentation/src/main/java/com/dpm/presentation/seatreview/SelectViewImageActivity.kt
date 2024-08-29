@@ -63,13 +63,13 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
                 is UiState.Success -> {
                     var reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
                     reviewData = reviewData?.copy(
-                        reviewId = uiState.data.id
+                        reviewId = uiState.data.id,
                     )
 
                     Intent(this, HomeActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         putExtra(UPLOAD_SNACKBAR, true)
-                        putExtra(REVIEW_DATA,reviewData)
+                        putExtra(REVIEW_DATA, reviewData)
                     }.let {
                         finish()
                         startActivity(it)
@@ -104,14 +104,14 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
     }
 
     private fun setupImageSelection() {
-        val selectImage = listOf(
-            binding.ivFirstImage to binding.ivFirstImageCheck,
-            binding.ivSecondImage to binding.ivSecondImageCheck,
-            binding.ivThirdImage to binding.ivThirdImageCheck,
+        val selectImageContainers = listOf(
+            binding.clFirstImage to binding.ivFirstImage,
+            binding.clSecondImage to binding.ivSecondImage,
+            binding.clThirdImage to binding.ivThirdImage,
         )
 
-        selectImage.forEach { (image, isChecked) ->
-            image.setOnSingleClickListener {
+        selectImageContainers.forEach { (container, image) ->
+            container.setOnClickListener {
                 val imageUri = image.tag as? String
                 if (imageUri != null) {
                     viewModel.toggleImageSelection(imageUri)
@@ -161,12 +161,16 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
 
     private fun initEvent() {
         binding.tvCancel.setOnSingleClickListener {
-            startActivity(
-                Intent(this, HomeActivity::class.java).putExtra(
-                    CANCEL_SNACKBAR,
-                    true,
-                ),
-            ).also { finish() }
+            if (intent.getBooleanExtra("IMAGE_UPLOAD", false)) {
+                startToHomeActivity()
+            } else {
+                startActivity(
+                    Intent(this, HomeActivity::class.java).putExtra(
+                        CANCEL_SNACKBAR,
+                        true,
+                    ),
+                ).also { finish() }
+            }
         }
         binding.tvUploadBtn.setOnSingleClickListener {
             val reviewData = intent.getParcelableExtra<ReviewData>(REVIEW_DATA)
@@ -186,7 +190,20 @@ class SelectViewImageActivity : BaseActivity<ActivitySelectViewImageBinding>({
             viewModel.postSeatReview(ReviewMethod.VIEW)
         }
         binding.ivExit.setOnSingleClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
+            if (intent.getBooleanExtra("IMAGE_UPLOAD", false)) {
+                startToHomeActivity()
+            } else {
+                finish()
+            }
+        }
+    }
+
+    private fun startToHomeActivity() {
+        Intent(this, HomeActivity::class.java).apply {
+            putExtra("IS_VISIBLE_LEVELUP_DIALOG", true)
+            putExtra(CANCEL_SNACKBAR, true)
+            startActivity(this)
+            finishAffinity()
         }
     }
 }

@@ -167,7 +167,6 @@ class ReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBottomSh
                         svSeatReview.fullScroll(FOCUS_DOWN)
                     }
                 } else {
-                    tvBlank.visibility = GONE
                     svSeatReview.post {
                         svSeatReview.fullScroll(FOCUS_UP)
                     }

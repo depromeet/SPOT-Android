@@ -1,5 +1,7 @@
 package com.dpm.presentation.home.viewmodel
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
@@ -38,7 +40,7 @@ class HomeGuiViewModel @Inject constructor(
     private val _levelUpInfo = MutableStateFlow<UiState<ResponseLevelUpInfo>>(UiState.Loading)
     val levelUpInfo = _levelUpInfo.asStateFlow()
 
-    val levelState = MutableStateFlow(false)
+    val levelState = MutableLiveData(false)
 
     fun getStadiums() {
         viewModelScope.launch {
@@ -53,7 +55,6 @@ class HomeGuiViewModel @Inject constructor(
     fun getLevelDescription() {
         viewModelScope.launch {
             homeRepository.getLevelByPost().onSuccess {
-
                 _levelDescriptions.value = UiState.Success(it)
             }.onFailure {
                 _levelDescriptions.value = UiState.Failure(it.message.toString())
@@ -61,12 +62,18 @@ class HomeGuiViewModel @Inject constructor(
         }
     }
 
-    fun getHomeFeed() {
+    fun getHomeFeed(
+        isVisibleDialog: Boolean = false,
+        onSuccess : (ResponseHomeFeed) -> Unit = {}
+    ) {
         viewModelScope.launch {
             homeRepository.getHomeFeed().onSuccess {
                 _homeFeed.value = UiState.Success(it)
-                putProfileInfo(it)
-
+                if (isVisibleDialog) {
+                    onSuccess(it)
+                } else {
+                    putProfileInfo(it)
+                }
             }.onFailure {
                 _homeFeed.value = UiState.Failure(it.message.toString())
             }
@@ -83,18 +90,9 @@ class HomeGuiViewModel @Inject constructor(
         }
     }
 
-    private fun checkLevelUp(level: Int) {
-        if (sharedPreference.level < level && sharedPreference.level != -1) {
-            levelState.value = true
-        }
-        sharedPreference.level = level
-    }
-
     private fun putProfileInfo(data : ResponseHomeFeed){
-        checkLevelUp(data.level)
         sharedPreference.teamId = data.teamId ?: 0
         sharedPreference.levelTitle = data.levelTitle
         sharedPreference.teamName = data.teamName ?: ""
-        sharedPreference.level = data.level
     }
 }

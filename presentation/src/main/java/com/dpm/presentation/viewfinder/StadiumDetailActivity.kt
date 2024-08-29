@@ -24,6 +24,7 @@ import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.scrap.ScrapActivity
+import com.dpm.presentation.seatreview.sample.LevelUpManager
 import com.dpm.presentation.util.KakaoUtils
 import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
@@ -138,7 +139,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 
     private fun initEvent() {
         binding.spotAppbar.setNavigationOnClickListener {
-            finish()
+            if (intent.getBooleanExtra("IMAGE_UPLOAD", false)) {
+                startToHomeActivity()
+            } else {
+                finish()
+            }
         }
 
         binding.spotAppbar.setMenuOnClickListener {
@@ -209,10 +214,8 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun startToHomeActivity() {
-        Intent(
-            this,
-            HomeActivity::class.java
-        ).apply {
+        Intent(this, HomeActivity::class.java).apply {
+            putExtra("IS_VISIBLE_LEVELUP_DIALOG", true)
             startActivity(this)
             finishAffinity()
         }
