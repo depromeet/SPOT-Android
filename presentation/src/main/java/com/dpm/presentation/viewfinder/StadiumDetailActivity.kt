@@ -139,7 +139,11 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
 
     private fun initEvent() {
         binding.spotAppbar.setNavigationOnClickListener {
-            finish()
+            if (intent.getBooleanExtra("IMAGE_UPLOAD", false)) {
+                startToHomeActivity()
+            } else {
+                finish()
+            }
         }
 
         binding.spotAppbar.setMenuOnClickListener {
@@ -210,11 +214,7 @@ class StadiumDetailActivity : BaseActivity<ActivityStadiumDetailBinding>({
     }
 
     private fun startToHomeActivity() {
-        LevelUpManager.triggerLevelUp()
-        Intent(
-            this,
-            HomeActivity::class.java
-        ).apply {
+        Intent(this, HomeActivity::class.java).apply {
             putExtra("IS_VISIBLE_LEVELUP_DIALOG", true)
             startActivity(this)
             finishAffinity()

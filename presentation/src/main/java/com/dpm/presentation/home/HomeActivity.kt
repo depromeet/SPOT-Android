@@ -15,6 +15,7 @@ import com.dpm.designsystem.SpotSnackBar
 import com.dpm.domain.entity.response.home.ResponseHomeFeed
 import com.dpm.domain.entity.response.viewfinder.ResponseStadiums
 import com.dpm.domain.model.seatreview.ReviewMethod
+import com.dpm.domain.preference.SharedPreference
 import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.home.adapter.StadiumAdapter
@@ -37,11 +38,16 @@ import com.dpm.presentation.viewfinder.StadiumActivity
 import com.dpm.presentation.viewfinder.StadiumDetailActivity
 import com.dpm.presentation.viewfinder.StadiumSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding>(
     ActivityHomeBinding::inflate
 ) {
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
     companion object {
         const val STADIUM_EXTRA_ID = "stadium_id"
         private const val START_SPACING_DP = 16
@@ -65,45 +71,44 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         initEvent()
         initObserver()
 
-        if (intent.getBooleanExtra("IS_VISIBLE_LEVELUP_DIALOG",false)){
-            LevelUpManager.triggerLevelUp2()
-            homeViewModel.getHomeFeed()
+        if (intent.getBooleanExtra("IS_VISIBLE_LEVELUP_DIALOG",false)) {
+            homeViewModel.getHomeFeed(isVisibleDialog = true) {
+                if (sharedPreference.level < it.level) {
+                    LevelupDialog(
+                        it.levelTitle,
+                        it.level,
+                        it.mascotImageUrl
+                    ).show(supportFragmentManager, LevelupDialog.TAG)
+                }
+                sharedPreference.teamId = it.teamId ?: 0
+                sharedPreference.levelTitle = it.levelTitle
+                sharedPreference.teamName = it.teamName ?: ""
+                sharedPreference.level = it.level
+            }
         }
 
         LevelUpManager.setOnLevelUpListener {
-            homeViewModel.levelState.observe(this) {
-                val currentState = homeViewModel.homeFeed.value
-                if (it && currentState is UiState.Success) {
+            homeViewModel.getHomeFeed(isVisibleDialog = true) {
+                if (sharedPreference.level < it.level) {
                     LevelupDialog(
-                        currentState.data.levelTitle,
-                        currentState.data.level,
-                        currentState.data.mascotImageUrl
+                        it.levelTitle,
+                        it.level,
+                        it.mascotImageUrl
                     ).show(supportFragmentManager, LevelupDialog.TAG)
-                    homeViewModel.levelState.value = false
                 }
+                sharedPreference.teamId = it.teamId ?: 0
+                sharedPreference.levelTitle = it.levelTitle
+                sharedPreference.teamName = it.teamName ?: ""
+                sharedPreference.level = it.level
             }
-           // homeViewModel.getHomeFeed()
-        }
-
-        LevelUpManager.setOnLevelUpListener2 {
-            homeViewModel.levelState.observe(this) {
-                val currentState = homeViewModel.homeFeed.value
-                if (it && currentState is UiState.Success) {
-                    LevelupDialog(
-                        currentState.data.levelTitle,
-                        currentState.data.level,
-                        currentState.data.mascotImageUrl
-                    ).show(supportFragmentManager, LevelupDialog.TAG)
-                    homeViewModel.levelState.value = false
-                }
-            }
-            homeViewModel.getHomeFeed()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        homeViewModel.getHomeFeed()
+        if (!(intent.getBooleanExtra("IS_VISIBLE_LEVELUP_DIALOG",false))) {
+            homeViewModel.getHomeFeed()
+        }
     }
 
     private fun initView() {
@@ -147,6 +152,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                         putExtra(SchemeKey.STADIUM_ID, reviewData.stadiumId)
                         putExtra(SchemeKey.BLOCK_CODE, reviewData.blockCode)
                         putExtra(SchemeKey.REVIEW_ID, reviewData.reviewId)
+                        putExtra("IMAGE_UPLOAD", true)
                     }.let { startActivity(it) }
                 }
             }.show()
@@ -381,6 +387,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                 putExtra(SchemeKey.STADIUM_ID, navReviewDetail.stadiumId)
                 putExtra(SchemeKey.BLOCK_CODE, navReviewDetail.blockCode)
                 putExtra(SchemeKey.REVIEW_ID, navReviewDetail.reviewId)
+                putExtra("IMAGE_UPLOAD", true)
             }.let { startActivity(it) }
         }
     }
