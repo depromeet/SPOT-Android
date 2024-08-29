@@ -19,7 +19,7 @@ data class ResponseSeatReviewDto(
     @SerialName("row")
     val row: Row,
     @SerialName("seat")
-    val seat: Seat,
+    val seat: Seat?,
     @SerialName("dateTime")
     val dateTime: String,
     @SerialName("content")
