@@ -58,7 +58,7 @@ data class ResponseScrap(
             }
             val seat = if(seat == null) "" else "${seat.seatNumber}번 "
 
-            return "${stadium.name} ${formattedBaseName()}${formattedSectionName()}${formattedBlockName()}$seat".trim()
+            return "${stadium.name} ${formattedBaseName()}${formattedSectionName()}${formattedBlockToSeat()}".trim()
         }
 
         fun formattedBaseToBlock() : String =
