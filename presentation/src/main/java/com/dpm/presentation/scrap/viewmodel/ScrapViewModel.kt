@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
 import com.dpm.domain.entity.request.home.RequestScrap
 import com.dpm.domain.entity.response.home.ResponseScrap
+import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
 import com.dpm.domain.repository.ViewfinderRepository
 import com.dpm.presentation.global.GlobalVariable
@@ -41,6 +42,7 @@ data class BadReviewData(
 class ScrapViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val viewfinderRepository: ViewfinderRepository,
+    private val sharedPreference: SharedPreference
 ) : ViewModel() {
 
     private var monthsSelected: List<MonthFilterData> = emptyList()
@@ -95,6 +97,10 @@ class ScrapViewModel @Inject constructor(
         }
     }
 
+    fun updateIsFirstShare(isFirstShare : Boolean) {
+        sharedPreference.isFirstShare = isFirstShare
+    }
+
     fun getDetailScrap() {
         _detailScrap.value = (_scrap.value as UiState.Success).data.reviews
     }
@@ -106,10 +112,10 @@ class ScrapViewModel @Inject constructor(
     }
 
     fun updateScrapRecord() {
-        val currentState = (_scrap.value as UiState.Success).data
         if(_detailScrap.value.count { it.baseReview.isScrapped } == 0){
             _scrap.value = UiState.Empty
         }else{
+            val currentState = (_scrap.value as UiState.Success).data
             _scrap.value = UiState.Success(currentState.copy(
                 reviews = _detailScrap.value.filter { it.baseReview.isScrapped }
             ))
@@ -264,7 +270,12 @@ class ScrapViewModel @Inject constructor(
         viewModelScope.launch {
             viewfinderRepository.updateScrap(id).onSuccess {
                 val currentState = (_scrap.value as UiState.Success).data
-                _scrap.value = UiState.Success(currentState.copy(reviews = currentState.reviews.filter { it.baseReview.id != id }))
+                val updatedList = currentState.reviews.filter { it.baseReview.id != id }
+                _scrap.value = if(updatedList.isEmpty()){
+                    UiState.Empty
+                }else {
+                    UiState.Success(currentState.copy(reviews = currentState.reviews.filter { it.baseReview.id != id }))
+                }
                 val detailScrapUpdatedList = detailScrap.value.map { review ->
                     if(review.baseReview.id == id){
                         review.copy(
