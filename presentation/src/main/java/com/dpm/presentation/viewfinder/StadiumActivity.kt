@@ -71,7 +71,7 @@ class StadiumActivity : BaseActivity<ActivityStadiumBinding>({
         private const val MIME_TYPE_TEXT_HTML = "text/html"
 
         private const val BOTTOM_SHEET_PEEK_HEIGHT = 76 // 바텀 시트 peek 높이
-        private const val BUTTON_BOTTOM_MARGIN = 24 // 버튼과 바텀 시트 사이 간격
+        private const val BUTTON_BOTTOM_MARGIN = 22 // 버튼과 바텀 시트 사이 간격
 
         private const val TIP_CONTAINER_HORIZONTAL_MARGIN = 16
     }
