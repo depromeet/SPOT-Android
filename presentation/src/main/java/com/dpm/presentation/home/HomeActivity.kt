@@ -29,6 +29,7 @@ import com.dpm.presentation.seatrecord.adapter.LinearSpacingItemDecoration
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
 import com.dpm.presentation.seatreview.dialog.feed.FeedUploadDialog
 import com.dpm.presentation.seatreview.dialog.view.ViewUploadDialog
+import com.dpm.presentation.seatreview.sample.LevelUpManager
 import com.dpm.presentation.setting.SettingActivity
 import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.Utils
@@ -63,6 +64,41 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         initView()
         initEvent()
         initObserver()
+
+        if (intent.getBooleanExtra("IS_VISIBLE_LEVELUP_DIALOG",false)){
+            LevelUpManager.triggerLevelUp2()
+            homeViewModel.getHomeFeed()
+        }
+
+        LevelUpManager.setOnLevelUpListener {
+            homeViewModel.levelState.observe(this) {
+                val currentState = homeViewModel.homeFeed.value
+                if (it && currentState is UiState.Success) {
+                    LevelupDialog(
+                        currentState.data.levelTitle,
+                        currentState.data.level,
+                        currentState.data.mascotImageUrl
+                    ).show(supportFragmentManager, LevelupDialog.TAG)
+                    homeViewModel.levelState.value = false
+                }
+            }
+           // homeViewModel.getHomeFeed()
+        }
+
+        LevelUpManager.setOnLevelUpListener2 {
+            homeViewModel.levelState.observe(this) {
+                val currentState = homeViewModel.homeFeed.value
+                if (it && currentState is UiState.Success) {
+                    LevelupDialog(
+                        currentState.data.levelTitle,
+                        currentState.data.level,
+                        currentState.data.mascotImageUrl
+                    ).show(supportFragmentManager, LevelupDialog.TAG)
+                    homeViewModel.levelState.value = false
+                }
+            }
+            homeViewModel.getHomeFeed()
+        }
     }
 
     override fun onResume() {
@@ -116,6 +152,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             }.show()
         }
     }
+
 
 
     private fun initEvent() = with(binding) {
@@ -179,17 +216,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
 
         }
 
-        homeViewModel.levelState.asLiveData().observe(this) {
-            val currentState = homeViewModel.homeFeed.value
-            if (it && currentState is UiState.Success) {
-                LevelupDialog(
-                    currentState.data.levelTitle,
-                    currentState.data.level,
-                    currentState.data.mascotImageUrl
-                ).show(supportFragmentManager, LevelupDialog.TAG)
-                homeViewModel.levelState.value = false
-            }
-        }
     }
 
     private fun initViewStatusBar() {

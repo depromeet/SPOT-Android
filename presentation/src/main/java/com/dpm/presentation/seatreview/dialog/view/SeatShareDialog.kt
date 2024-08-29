@@ -13,6 +13,7 @@ import com.depromeet.presentation.databinding.FragmentSightShareBottomSheetBindi
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.SelectViewImageActivity
+import com.dpm.presentation.seatreview.sample.LevelUpManager
 
 class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBinding>(
     R.layout.fragment_sight_share_bottom_sheet,
@@ -49,6 +50,8 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
             )
         }
         binding.btnNo.setOnSingleClickListener {
+            //TODO
+            LevelUpManager.triggerLevelUp()
             dismiss()
         }
     }

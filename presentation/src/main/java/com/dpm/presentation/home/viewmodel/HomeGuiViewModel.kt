@@ -1,5 +1,6 @@
 package com.dpm.presentation.home.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
@@ -38,7 +39,7 @@ class HomeGuiViewModel @Inject constructor(
     private val _levelUpInfo = MutableStateFlow<UiState<ResponseLevelUpInfo>>(UiState.Loading)
     val levelUpInfo = _levelUpInfo.asStateFlow()
 
-    val levelState = MutableStateFlow(false)
+    val levelState = MutableLiveData(false)
 
     fun getStadiums() {
         viewModelScope.launch {
@@ -84,9 +85,7 @@ class HomeGuiViewModel @Inject constructor(
     }
 
     private fun checkLevelUp(level: Int) {
-        if (sharedPreference.level < level && sharedPreference.level != -1) {
-            levelState.value = true
-        }
+        levelState.value = true
         sharedPreference.level = level
     }
 
