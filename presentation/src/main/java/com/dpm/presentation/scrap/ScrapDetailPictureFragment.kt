@@ -18,6 +18,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentScrapDetailPictureBinding
 import com.dpm.core.base.BindingFragment
 import com.dpm.core.state.UiState
+import com.dpm.designsystem.SpotSnackBar
 import com.dpm.domain.entity.response.home.ResponseScrap
 import com.dpm.presentation.scheme.SchemeKey
 import com.dpm.presentation.scrap.adapter.ScrapDetailAdapter
@@ -84,8 +85,25 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     private fun initViewPager() {
         adapter = ScrapDetailAdapter(
-            scrapClick = {
-                viewModel.updateScrap(it)
+            scrapClick = { id, isScrap ->
+                viewModel.updateScrap(id)
+                if (isScrap) {
+                    SpotSnackBar.make(
+                        view = binding.root,
+                        message = "스크랩이 해제되었어요!",
+                        marginBottom = 20,
+                        onClick = {},
+                    ).show()
+                } else {
+                    SpotSnackBar.make(
+                        view = binding.root,
+                        message = "스크랩이 완료되었어요!",
+                        endMessage = "스크랩으로 이동",
+                        marginBottom = 20,
+                    ) {
+                        finishFragment()
+                    }.show()
+                }
             },
             likeClick = {
                 viewModel.updateLike(it)
@@ -141,12 +159,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
         requireActivity().onBackPressedDispatcher
             .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val fragment = parentFragmentManager.findFragmentByTag(TAG)
-                    if (fragment != null) {
-                        parentFragmentManager.beginTransaction()
-                            .remove(fragment)
-                            .commit()
-                    }
+                    finishFragment()
                 }
             })
     }
@@ -208,6 +221,15 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                 setBlackSystemBarIconColor(window)
                 WindowCompat.setDecorFitsSystemWindows(window, true)
             }
+        }
+    }
+
+    private fun finishFragment() {
+        val fragment = parentFragmentManager.findFragmentByTag(TAG)
+        if (fragment != null) {
+            parentFragmentManager.beginTransaction()
+                .remove(fragment)
+                .commit()
         }
     }
 }

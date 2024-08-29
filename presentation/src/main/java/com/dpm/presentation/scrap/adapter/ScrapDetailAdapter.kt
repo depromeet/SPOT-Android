@@ -27,7 +27,7 @@ import com.dpm.presentation.util.ItemDiffCallback
 import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
 
 class ScrapDetailAdapter(
-    private val scrapClick: (Int) -> Unit,
+    private val scrapClick: (Int, Boolean) -> Unit,
     private val likeClick: (Int) -> Unit,
     private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
 ) : ListAdapter<ResponseScrap.ResponseBaseReview, ScrapDetailViewHolder>(
@@ -53,7 +53,7 @@ class ScrapDetailAdapter(
 
 class ScrapDetailViewHolder(
     private val binding: ItemScrapDetailBinding,
-    private val scrapClick: (Int) -> Unit,
+    private val scrapClick: (Int, Boolean) -> Unit,
     private val likeClick: (Int) -> Unit,
     private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -167,7 +167,7 @@ class ScrapDetailViewHolder(
 
         }
         ivScrap.setOnSingleClickListener {
-            scrapClick(item.id)
+            scrapClick(item.id, item.isScrapped)
         }
         ivShare.setOnSingleClickListener {
             shareClick(item, binding.vpImage.currentItem)
@@ -199,31 +199,26 @@ class ScrapDetailViewHolder(
         binding.llIndicator.removeAllViews()
         val context = binding.root.context
 
-        if (count < 2) {
-            binding.llIndicator.visibility = GONE
-        } else {
-            binding.llIndicator.visibility = VISIBLE
-            for (i in 0 until count) {
-                val indicator = ImageView(context).apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        6.dpToPx(context), 6.dpToPx(context)
-                    ).apply {
-                        setMargins(2.dpToPx(context), 0, 2.dpToPx(context), 0)
-                    }
-                    scaleType = ImageView.ScaleType.FIT_XY
-                    setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.indicator_unselected
-                        )
-                    )
+        for (i in 0 until count) {
+            val indicator = ImageView(context).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    6.dpToPx(context), 6.dpToPx(context)
+                ).apply {
+                    setMargins(2.dpToPx(context), 0, 2.dpToPx(context), 0)
                 }
-                indicators.add(indicator)
-                binding.llIndicator.addView(indicator)
+                scaleType = ImageView.ScaleType.FIT_XY
+                setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.indicator_unselected
+                    )
+                )
             }
-
-            updateIndicators(0)
+            indicators.add(indicator)
+            binding.llIndicator.addView(indicator)
         }
+
+        updateIndicators(0)
     }
 
     private fun updateIndicators(selectedPosition: Int) {
