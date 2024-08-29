@@ -51,6 +51,9 @@ class ScrapViewModel @Inject constructor(
     private val _scrap = MutableStateFlow<UiState<ResponseScrap>>(UiState.Loading)
     val scrap = _scrap.asStateFlow()
 
+    private val _detailScrap = MutableStateFlow<List<ResponseScrap.ResponseReviewWrapper>>(emptyList())
+    val detailScrap = _detailScrap.asStateFlow()
+
     private val _filter = MutableStateFlow<List<FilterNameData>>(emptyList())
     val filter = _filter.asStateFlow()
 
@@ -82,6 +85,7 @@ class ScrapViewModel @Inject constructor(
             ).onSuccess { data ->
                 if (data.reviews.isNotEmpty()) {
                     _scrap.value = UiState.Success(data)
+                    _detailScrap.value = data.reviews
                 } else {
                     _scrap.value = UiState.Empty
                 }
@@ -91,11 +95,27 @@ class ScrapViewModel @Inject constructor(
         }
     }
 
+    fun getDetailScrap() {
+        _detailScrap.value = (_scrap.value as UiState.Success).data.reviews
+    }
+
     fun reloadScrap() {
         if(GlobalVariable.isScrap && _scrap.value is UiState.Empty) {
             getScrapRecord()
         }
     }
+
+    fun updateScrapRecord() {
+        val currentState = (_scrap.value as UiState.Success).data
+        if(_detailScrap.value.count { it.baseReview.isScrapped } == 0){
+            _scrap.value = UiState.Empty
+        }else{
+            _scrap.value = UiState.Success(currentState.copy(
+                reviews = _detailScrap.value.filter { it.baseReview.isScrapped }
+            ))
+        }
+    }
+
 
     fun getNextScrapRecord() {
         viewModelScope.launch {
@@ -122,6 +142,8 @@ class ScrapViewModel @Inject constructor(
                     filter = it.filter
                 )
                 _scrap.value = UiState.Success(updatedScrap)
+                val currentDetailScrap = _detailScrap.value
+                _detailScrap.value = currentDetailScrap + it.reviews
             }.onFailure {}
         }
     }
@@ -211,7 +233,23 @@ class ScrapViewModel @Inject constructor(
                             review
                         }
                     }
-
+                    val updatedDetailList = detailScrap.value.map { review ->
+                        if(review.baseReview.id == id){
+                            review.copy(
+                                baseReview = review.baseReview.copy(
+                                    isLiked = !review.baseReview.isLiked,
+                                    likesCount =  if (review.baseReview.isLiked) {
+                                        review.baseReview.likesCount - 1
+                                    } else {
+                                        review.baseReview.likesCount + 1
+                                    }
+                                )
+                            )
+                        } else {
+                            review
+                        }
+                    }
+                    _detailScrap.value = updatedDetailList
                     _scrap.value = UiState.Success(
                         data = currentState.copy(reviews = updatedList)
                     )
@@ -226,8 +264,9 @@ class ScrapViewModel @Inject constructor(
         viewModelScope.launch {
             viewfinderRepository.updateScrap(id).onSuccess {
                 val currentState = (_scrap.value as UiState.Success).data
-                val updatedList = currentState.reviews.map { review ->
-                    if (review.baseReview.id == id) {
+                _scrap.value = UiState.Success(currentState.copy(reviews = currentState.reviews.filter { it.baseReview.id != id }))
+                val detailScrapUpdatedList = detailScrap.value.map { review ->
+                    if(review.baseReview.id == id){
                         review.copy(
                             baseReview = review.baseReview.copy(
                                 isScrapped = !review.baseReview.isScrapped
@@ -237,9 +276,7 @@ class ScrapViewModel @Inject constructor(
                         review
                     }
                 }
-                _scrap.value = UiState.Success(
-                    data = currentState.copy(reviews = updatedList)
-                )
+                _detailScrap.value = detailScrapUpdatedList
             }.onFailure {
                 Timber.d("test 스크랩 업데이트 실패 $it")
             }

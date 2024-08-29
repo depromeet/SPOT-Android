@@ -73,16 +73,15 @@ class ScrapDetailViewHolder(
         }
         initScrapImageAdapter(item)
 
-        cvScrapKeyword.apply {
-            setContent {
-                MaterialTheme {
-                    KeywordFlowRow(
-                        keywords = item.keywords.map { it.toUiKeyword() },
-                        overflowIndex = 2
-                    )
-                }
+        cvScrapKeyword.setContent {
+            MaterialTheme {
+                KeywordFlowRow(
+                    keywords = item.keywords.map { it.toUiKeyword() },
+                    overflowIndex = 2
+                )
             }
         }
+
         if (item.isScrapped) {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
             ivScrap.setColorFilter(
@@ -103,10 +102,14 @@ class ScrapDetailViewHolder(
 
 
         if (item.isLiked) {
-            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
+            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active){
+                crossfade(true)
+            }
             tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_action_enabled))
         } else {
-            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive)
+            ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_inactive){
+                crossfade(true)
+            }
             tvLikeCount.setTextColor(binding.root.context.getColor(com.depromeet.designsystem.R.color.color_foreground_white))
         }
 

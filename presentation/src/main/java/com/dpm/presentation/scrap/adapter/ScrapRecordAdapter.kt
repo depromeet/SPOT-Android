@@ -49,6 +49,7 @@ class ScrapRecordViewHolder(
         root.clipToOutline = true
 
         ivScrap.setOnSingleClickListener {
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
             scrapClick(item)
         }
         root.setOnClickListener {

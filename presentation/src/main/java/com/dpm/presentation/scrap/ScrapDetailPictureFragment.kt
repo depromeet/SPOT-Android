@@ -52,6 +52,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     private fun initView() {
         initViewPager()
         initWindowInsets()
+        viewModel.getDetailScrap()
     }
 
     private fun initEvent() = with(binding) {
@@ -68,18 +69,10 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     }
 
     private fun initObserve() {
-        viewModel.scrap.asLiveData().observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Success -> {
-                    adapter.submitList(state.data.reviews.map { it.baseReview }.toList())
-                    binding.vpScrap.post {
-                        binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
-                    }
-                    isLoading = false
-                }
-
-                else -> {}
-            }
+        viewModel.detailScrap.asLiveData().observe(viewLifecycleOwner) { data ->
+            adapter.submitList(data.map { it.baseReview }.toList())
+            binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
+            isLoading = false
         }
     }
 
@@ -101,7 +94,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                         endMessage = "스크랩으로 이동",
                         marginBottom = 20,
                     ) {
-                        finishFragment()
+                        removeFragment()
                     }.show()
                 }
             },
@@ -132,7 +125,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.spotAppbar.setText((viewModel.scrap.value as UiState.Success).data.reviews[position].baseReview.formattedStadiumToSection())
+                binding.spotAppbar.setText(viewModel.detailScrap.value[position].baseReview.formattedStadiumToSection())
                 if (!isLoading && position >= adapter.itemCount - 2 && (viewModel.scrap.value as UiState.Success).data.hasNext) {
                     isLoading = true
                     viewModel.getNextScrapRecord()
@@ -147,6 +140,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
     }
 
     private fun removeFragment() {
+        viewModel.updateScrapRecord()
         val fragment = parentFragmentManager.findFragmentByTag(TAG)
         if (fragment != null) {
             parentFragmentManager.commit {
@@ -159,7 +153,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
         requireActivity().onBackPressedDispatcher
             .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    finishFragment()
+                    removeFragment()
                 }
             })
     }
@@ -224,12 +218,4 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
         }
     }
 
-    private fun finishFragment() {
-        val fragment = parentFragmentManager.findFragmentByTag(TAG)
-        if (fragment != null) {
-            parentFragmentManager.beginTransaction()
-                .remove(fragment)
-                .commit()
-        }
-    }
 }
