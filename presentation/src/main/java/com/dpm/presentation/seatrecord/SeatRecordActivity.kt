@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.dpm.core.base.BaseActivity
@@ -545,7 +546,9 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun initReviewList() {
         monthSeatReviewAdapter = MonthRecordAdapter()
         binding.rvSeatReview.adapter = monthSeatReviewAdapter
+//        (binding.rvSeatReview.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         binding.rvSeatReview.itemAnimator = null
+
 
         monthSeatReviewAdapter.itemRecordClickListener =
             object : MonthRecordAdapter.OnItemRecordClickListener {

@@ -1,7 +1,5 @@
 package com.dpm.presentation.seatrecord.adapter
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.ViewGroup
@@ -21,7 +19,6 @@ import com.dpm.presentation.seatrecord.uiMapper.toUiKeyword
 import com.dpm.presentation.util.CalendarUtil
 import com.dpm.presentation.util.ItemDiffCallback
 import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
-import timber.log.Timber
 
 class RecentRecordAdapter(
 ) : ListAdapter<ResponseMySeatRecord.ReviewResponse, RecentRecordViewHolder>(

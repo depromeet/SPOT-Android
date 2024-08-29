@@ -30,8 +30,12 @@ class ScrapDetailAdapter(
     private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
 ) : ListAdapter<ResponseScrap.ResponseBaseReview, ScrapDetailViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
-        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        onItemsTheSame = { oldItem, newItem ->
+            oldItem.id == newItem.id
+        },
+        onContentsTheSame = { oldItem, newItem ->
+            oldItem == newItem
+        }
     )
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScrapDetailViewHolder {
@@ -152,18 +156,6 @@ class ScrapDetailViewHolder(
                 lottieLike.playAnimation()
             }
             likeClick(item.id)
-//            if (!item.isLiked) {
-//                lottieLike.playAnimation()
-//                ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
-//                lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
-//                    override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
-//                        super.onAnimationEnd(animation, isReverse)
-//                        likeClick(item.id)
-//                    }
-//                })
-//            } else {
-//                likeClick(item.id)
-//            }
         }
         ivScrap.setOnSingleClickListener {
             scrapClick(item.id, item.isScrapped)

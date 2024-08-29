@@ -13,6 +13,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager2.widget.ViewPager2
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentScrapDetailPictureBinding
@@ -108,6 +110,9 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             }
         )
         binding.vpScrap.adapter = adapter
+        val recyclerView = binding.vpScrap.getChildAt(0) as RecyclerView
+        (recyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+        recyclerView.itemAnimator = null
         setupPageChangeListener()
     }
 

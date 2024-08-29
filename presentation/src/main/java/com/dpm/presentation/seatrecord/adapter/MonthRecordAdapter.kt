@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.depromeet.presentation.databinding.ItemRecentMonthBinding
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.seatrecord.uiMapper.MonthReviewData
@@ -58,8 +59,12 @@ class MonthRecordViewHolder(
 
 
     private fun initReviewAdapter(item : MonthReviewData) {
-        adapter = RecentRecordAdapter()
-        binding.rvRecentPost.adapter = adapter
+        if(!::adapter.isInitialized){
+            adapter = RecentRecordAdapter()
+            binding.rvRecentPost.adapter = adapter
+            (binding.rvRecentPost.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+            binding.rvRecentPost.itemAnimator = null
+        }
         adapter.submitList(item.reviews.toList())
         adapter.itemRecordClickListener =
             object : RecentRecordAdapter.OnItemRecordClickListener {
