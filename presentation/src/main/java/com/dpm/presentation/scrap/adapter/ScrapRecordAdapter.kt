@@ -46,6 +46,7 @@ class ScrapRecordViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ResponseScrap.ResponseReviewWrapper, position: Int) = with(binding) {
         itemView.layoutParams.height = 193.dpToPx(itemView.context)
+        root.clipToOutline = true
 
         ivScrap.setOnSingleClickListener {
             scrapClick(item)
@@ -64,7 +65,6 @@ class ScrapRecordViewHolder(
         ivScrapImage.loadAndClip(item.baseReview.images[0].url)
         tvScrapStadium.text = item.stadiumName
         tvScrapSeat.text = item.baseReview.formattedBaseToBlock()
-//        root.clipToOutline = true
     }
 }
 
