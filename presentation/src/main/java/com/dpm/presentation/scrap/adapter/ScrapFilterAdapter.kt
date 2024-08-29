@@ -88,6 +88,7 @@ class ScrapFilterViewHolder(
     private val filterClick: () -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind() {
+        binding.root.clipToOutline = true
         binding.root.setOnClickListener {
             filterClick()
         }
@@ -99,6 +100,7 @@ class ScrapFilterSelectedViewHolder(
     private val selectedClick: (FilterNameData) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: FilterNameData) = with(binding) {
+        root.clipToOutline = true
         ivClose.setOnClickListener { selectedClick(item) }
         tvScrapFilter.text = item.name
     }

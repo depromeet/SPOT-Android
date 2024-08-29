@@ -72,6 +72,7 @@ class ScrapGridSpacingItemDecoration(
     private val spanCount: Int,
     private val spacing: Int = 0,
     private val bottomSpacing: Int = 0,
+    private val borderMargin : Int = 0
 ) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
@@ -89,9 +90,9 @@ class ScrapGridSpacingItemDecoration(
             val row = position / spanCount
 
             with(outRect) {
-                left = if (column == 0) 3 else spacing / 2
-                right = if (column == spanCount - 1) 3 else spacing / 2
-                top = if (row == 0) 3 else spacing
+                left = if (column == 0) borderMargin else spacing / 2
+                right = if (column == spanCount - 1) borderMargin else spacing / 2
+                top = if (row == 0) 6 else spacing
 
                 bottom = if (row == totalRows - 1) bottomSpacing else 0
             }

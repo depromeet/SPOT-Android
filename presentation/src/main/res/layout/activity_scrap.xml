@@ -76,20 +76,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvScrapTitle"
             tools:itemCount="5"
-            tools:listitem="@layout/item_scrap_filter_selected"/>
+            tools:listitem="@layout/item_scrap_filter_selected" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- 자연스러운 dropshadow를 위해 전체 마진 dp -3했음 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvScrapRecord"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="13dp"
-        android:paddingTop="9dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
         android:clipToPadding="false"
-        android:layout_marginEnd="13dp"
         android:orientation="vertical"
+        android:paddingTop="6dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,18 +121,18 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="contentDescription" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/tvScrapNoDescription"-->
-<!--            style="@style/TextAppearance.Spot.Title04"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/scrap_empty_description"-->
-<!--            android:textColor="@color/color_foreground_heading"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/ivNoScrap" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/tvScrapNoDescription"-->
+        <!--            style="@style/TextAppearance.Spot.Title04"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="8dp"-->
+        <!--            android:gravity="center"-->
+        <!--            android:text="@string/scrap_empty_description"-->
+        <!--            android:textColor="@color/color_foreground_heading"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/ivNoScrap" />-->
 
         <TextView
             android:id="@+id/tvScrapNoDescriptionOne"
@@ -267,25 +266,25 @@
         android:id="@+id/fabScrapUp"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/circle_white_fill"
         android:padding="12dp"
         android:scaleType="center"
-        android:visibility="gone"
         android:src="@drawable/ic_up"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
         tools:ignore="contentDescription" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcvScrap"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
