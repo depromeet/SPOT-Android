@@ -606,6 +606,8 @@
                 android:layout_marginTop="10dp"
                 android:drawableStart="@drawable/ic_select_seat_error"
                 android:drawablePadding="4dp"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:text="존재하지 않는 열이에요"
                 android:textAppearance="@style/TextAppearance.Spot.Label12"
                 android:textColor="@color/color_error_primary"
