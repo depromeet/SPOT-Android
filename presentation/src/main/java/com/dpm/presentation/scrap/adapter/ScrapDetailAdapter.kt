@@ -1,7 +1,5 @@
 package com.dpm.presentation.scrap.adapter
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -75,7 +73,6 @@ class ScrapDetailViewHolder(
         }
         initScrapImageAdapter(item)
 
-
         cvScrapKeyword.apply {
             setContent {
                 MaterialTheme {
@@ -118,7 +115,7 @@ class ScrapDetailViewHolder(
         }
         tvScrapContent.post {
             if (tvScrapContent.layout != null) {
-                if (!(tvScrapContent.layout.getEllipsisCount(0) > 0)) {
+                if (tvScrapContent.layout.getEllipsisCount(0) <= 0) {
                     tvMore.visibility = INVISIBLE
                 }
             }
@@ -154,17 +151,20 @@ class ScrapDetailViewHolder(
         ivLike.setOnSingleClickListener {
             if (!item.isLiked) {
                 lottieLike.playAnimation()
-                ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
-                lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
-                        super.onAnimationEnd(animation, isReverse)
-                        likeClick(item.id)
-                    }
-                })
-            } else {
-                likeClick(item.id)
             }
-
+            likeClick(item.id)
+//            if (!item.isLiked) {
+//                lottieLike.playAnimation()
+//                ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
+//                lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
+//                    override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
+//                        super.onAnimationEnd(animation, isReverse)
+//                        likeClick(item.id)
+//                    }
+//                })
+//            } else {
+//                likeClick(item.id)
+//            }
         }
         ivScrap.setOnSingleClickListener {
             scrapClick(item.id, item.isScrapped)
@@ -178,20 +178,21 @@ class ScrapDetailViewHolder(
         if (!::scrapImageAdapter.isInitialized) {
             scrapImageAdapter = ScrapImageAdapter()
             binding.vpImage.adapter = scrapImageAdapter
-            scrapImageAdapter.submitList(item.images.map { it.url })
-            setupIndicators(scrapImageAdapter.itemCount)
-            binding.vpImage.registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    updateIndicators(position)
-                    if (position >= 0 && position < item.images.size) {
-                        binding.ivBackground.loadAndClip(item.images[position].url)
-                    } else {
-                        binding.ivBackground.loadAndClip(item.images[0].url)
-                    }
-                }
-            })
         }
+
+        scrapImageAdapter.submitList(item.images.map { it.url })
+        setupIndicators(scrapImageAdapter.itemCount)
+        binding.vpImage.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                updateIndicators(position)
+                if (position >= 0 && position < item.images.size) {
+                    binding.ivBackground.loadAndClip(item.images[position].url)
+                } else {
+                    binding.ivBackground.loadAndClip(item.images[0].url)
+                }
+            }
+        })
     }
 
     private fun setupIndicators(count: Int) {
