@@ -46,11 +46,11 @@ class SeatShareDialog : BindingBottomSheetDialog<FragmentSightShareBottomSheetBi
             startActivity(
                 Intent(requireContext(), SelectViewImageActivity::class.java).apply {
                     putExtra(REVIEW_DATA, reviewData)
+                    putExtra("IMAGE_UPLOAD", true)
                 },
             )
         }
         binding.btnNo.setOnSingleClickListener {
-            //TODO
             LevelUpManager.triggerLevelUp()
             dismiss()
         }
