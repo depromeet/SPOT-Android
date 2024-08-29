@@ -46,8 +46,10 @@ class ScrapRecordViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ResponseScrap.ResponseReviewWrapper, position: Int) = with(binding) {
         itemView.layoutParams.height = 193.dpToPx(itemView.context)
+        root.clipToOutline = true
 
         ivScrap.setOnSingleClickListener {
+            ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_inactive)
             scrapClick(item)
         }
         root.setOnClickListener {
@@ -64,7 +66,6 @@ class ScrapRecordViewHolder(
         ivScrapImage.loadAndClip(item.baseReview.images[0].url)
         tvScrapStadium.text = item.stadiumName
         tvScrapSeat.text = item.baseReview.formattedBaseToBlock()
-//        root.clipToOutline = true
     }
 }
 
@@ -72,6 +73,7 @@ class ScrapGridSpacingItemDecoration(
     private val spanCount: Int,
     private val spacing: Int = 0,
     private val bottomSpacing: Int = 0,
+    private val borderMargin : Int = 0
 ) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
@@ -89,9 +91,9 @@ class ScrapGridSpacingItemDecoration(
             val row = position / spanCount
 
             with(outRect) {
-                left = if (column == 0) 3 else spacing / 2
-                right = if (column == spanCount - 1) 3 else spacing / 2
-                top = if (row == 0) 3 else spacing
+                left = if (column == 0) borderMargin else spacing / 2
+                right = if (column == spanCount - 1) borderMargin else spacing / 2
+                top = if (row == 0) 6 else spacing
 
                 bottom = if (row == totalRows - 1) bottomSpacing else 0
             }

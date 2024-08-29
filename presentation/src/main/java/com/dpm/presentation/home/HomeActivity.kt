@@ -71,6 +71,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
     }
 
     private fun initView() {
+        setLayoutBorder()
         initReviewDialog()
         initViewStatusBar()
         homeViewModel.getStadiums()
@@ -117,6 +118,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
     }
 
+    private fun setLayoutBorder(){
+        binding.clHomeArchiving.clipToOutline = true
+        binding.clHomeScrap.clipToOutline = true
+    }
 
     private fun initEvent() = with(binding) {
         clHomeArchiving.setOnClickListener {

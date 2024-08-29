@@ -1,7 +1,5 @@
 package com.dpm.presentation.scrap.adapter
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -27,13 +25,17 @@ import com.dpm.presentation.util.ItemDiffCallback
 import com.dpm.presentation.viewfinder.compose.KeywordFlowRow
 
 class ScrapDetailAdapter(
-    private val scrapClick: (Int) -> Unit,
+    private val scrapClick: (Int, Boolean) -> Unit,
     private val likeClick: (Int) -> Unit,
     private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
 ) : ListAdapter<ResponseScrap.ResponseBaseReview, ScrapDetailViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
-        onContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        onItemsTheSame = { oldItem, newItem ->
+            oldItem.id == newItem.id
+        },
+        onContentsTheSame = { oldItem, newItem ->
+            oldItem == newItem
+        }
     )
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScrapDetailViewHolder {
@@ -52,8 +54,8 @@ class ScrapDetailAdapter(
 }
 
 class ScrapDetailViewHolder(
-    private val binding: ItemScrapDetailBinding,
-    private val scrapClick: (Int) -> Unit,
+    internal val binding: ItemScrapDetailBinding,
+    private val scrapClick: (Int, Boolean) -> Unit,
     private val likeClick: (Int) -> Unit,
     private val shareClick: (ResponseScrap.ResponseBaseReview, Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -68,6 +70,7 @@ class ScrapDetailViewHolder(
         tvScrapLevel.text = item.member.formattedLevel()
         tvSectionName.text = item.formattedBlockToSeat()
         tvLikeCount.text = item.likesCount.toString()
+        binding.csbvLikeDescription.setTextPart("유용했다면,","도움돼요","를 눌러주세요!")
         if (item.content.isNotEmpty()) {
             tvScrapContent.text = item.content
         } else {
@@ -75,17 +78,15 @@ class ScrapDetailViewHolder(
         }
         initScrapImageAdapter(item)
 
-
-        cvScrapKeyword.apply {
-            setContent {
-                MaterialTheme {
-                    KeywordFlowRow(
-                        keywords = item.keywords.map { it.toUiKeyword() },
-                        overflowIndex = 2
-                    )
-                }
+        cvScrapKeyword.setContent {
+            MaterialTheme {
+                KeywordFlowRow(
+                    keywords = item.keywords.map { it.toUiKeyword() },
+                    overflowIndex = 2
+                )
             }
         }
+
         if (item.isScrapped) {
             ivScrap.load(com.depromeet.designsystem.R.drawable.ic_scrap_active)
             ivScrap.setColorFilter(
@@ -118,7 +119,7 @@ class ScrapDetailViewHolder(
         }
         tvScrapContent.post {
             if (tvScrapContent.layout != null) {
-                if (!(tvScrapContent.layout.getEllipsisCount(0) > 0)) {
+                if (tvScrapContent.layout.getEllipsisCount(0) <= 0) {
                     tvMore.visibility = INVISIBLE
                 }
             }
@@ -154,20 +155,11 @@ class ScrapDetailViewHolder(
         ivLike.setOnSingleClickListener {
             if (!item.isLiked) {
                 lottieLike.playAnimation()
-                ivLike.load(com.depromeet.designsystem.R.drawable.ic_like_active)
-                lottieLike.addAnimatorListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
-                        super.onAnimationEnd(animation, isReverse)
-                        likeClick(item.id)
-                    }
-                })
-            } else {
-                likeClick(item.id)
             }
-
+            likeClick(item.id)
         }
         ivScrap.setOnSingleClickListener {
-            scrapClick(item.id)
+            scrapClick(item.id, item.isScrapped)
         }
         ivShare.setOnSingleClickListener {
             shareClick(item, binding.vpImage.currentItem)
@@ -178,20 +170,21 @@ class ScrapDetailViewHolder(
         if (!::scrapImageAdapter.isInitialized) {
             scrapImageAdapter = ScrapImageAdapter()
             binding.vpImage.adapter = scrapImageAdapter
-            scrapImageAdapter.submitList(item.images.map { it.url })
-            setupIndicators(scrapImageAdapter.itemCount)
-            binding.vpImage.registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    updateIndicators(position)
-                    if (position >= 0 && position < item.images.size) {
-                        binding.ivBackground.loadAndClip(item.images[position].url)
-                    } else {
-                        binding.ivBackground.loadAndClip(item.images[0].url)
-                    }
-                }
-            })
         }
+
+        scrapImageAdapter.submitList(item.images.map { it.url })
+        setupIndicators(scrapImageAdapter.itemCount)
+        binding.vpImage.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                updateIndicators(position)
+                if (position >= 0 && position < item.images.size) {
+                    binding.ivBackground.loadAndClip(item.images[position].url)
+                } else {
+                    binding.ivBackground.loadAndClip(item.images[0].url)
+                }
+            }
+        })
     }
 
     private fun setupIndicators(count: Int) {
@@ -199,31 +192,26 @@ class ScrapDetailViewHolder(
         binding.llIndicator.removeAllViews()
         val context = binding.root.context
 
-        if (count < 2) {
-            binding.llIndicator.visibility = GONE
-        } else {
-            binding.llIndicator.visibility = VISIBLE
-            for (i in 0 until count) {
-                val indicator = ImageView(context).apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        6.dpToPx(context), 6.dpToPx(context)
-                    ).apply {
-                        setMargins(2.dpToPx(context), 0, 2.dpToPx(context), 0)
-                    }
-                    scaleType = ImageView.ScaleType.FIT_XY
-                    setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.indicator_unselected
-                        )
-                    )
+        for (i in 0 until count) {
+            val indicator = ImageView(context).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    6.dpToPx(context), 6.dpToPx(context)
+                ).apply {
+                    setMargins(2.dpToPx(context), 0, 2.dpToPx(context), 0)
                 }
-                indicators.add(indicator)
-                binding.llIndicator.addView(indicator)
+                scaleType = ImageView.ScaleType.FIT_XY
+                setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.indicator_unselected
+                    )
+                )
             }
-
-            updateIndicators(0)
+            indicators.add(indicator)
+            binding.llIndicator.addView(indicator)
         }
+
+        updateIndicators(0)
     }
 
     private fun updateIndicators(selectedPosition: Int) {

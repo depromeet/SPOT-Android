@@ -14,7 +14,6 @@ import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.extension.dpToPx
 import com.dpm.presentation.extension.setOnSingleClickListener
-import com.dpm.presentation.global.GlobalVariable
 import com.dpm.presentation.scrap.adapter.ScrapFilterAdapter
 import com.dpm.presentation.scrap.adapter.ScrapGridSpacingItemDecoration
 import com.dpm.presentation.scrap.adapter.ScrapRecordAdapter
@@ -77,7 +76,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         viewModel.scrap.asLiveData().observe(this) { state ->
             when (state) {
                 is UiState.Success -> {
-                    binding.tvScrapCount.text = state.data.totalScrapCount .toString()
+                    binding.tvScrapCount.text = state.data.totalScrapCount.toString()
                     scrapAdapter.submitList(state.data.reviews)
                     isLoading = false
                     setScrapScreenVisibility(ScrapScreenState.SUCCESS)
@@ -120,7 +119,8 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
         binding.rvScrapRecord.itemAnimator = null
         binding.rvScrapRecord.addItemDecoration(
             ScrapGridSpacingItemDecoration(
-                spanCount = 2, spacing = 12.dpToPx(this), bottomSpacing = 40.dpToPx(this)
+                spanCount = 2, spacing = 12.dpToPx(this), bottomSpacing = 40.dpToPx(this),
+                borderMargin = 16.dpToPx(this)
             )
         )
 

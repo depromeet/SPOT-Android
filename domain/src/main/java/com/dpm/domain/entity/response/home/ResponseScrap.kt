@@ -8,7 +8,7 @@ data class ResponseScrap(
     val nextCursor: String? = null,
     val hasNext: Boolean = false,
     val totalScrapCount: Int = 0,
-    val filter: ResponseFilter,
+    val filter: ResponseFilter = ResponseFilter(),
 ) {
     data class ResponseReviewWrapper(
         val baseReview: ResponseBaseReview,
@@ -35,8 +35,13 @@ data class ResponseScrap(
         val isLiked: Boolean = false,
         val isScrapped: Boolean = false,
     ) {
+        /**
+         * @param
+         * formatted는 띄워쓰기 x parameter들은 띄워쓰기 o 일괄 적용
+         * 띄워쓰기가 모두 적용되어있기 때문에 마지막에 trim 일괄 적용
+         */
         fun formattedStadiumToSection() : String =
-            "${stadium.name} ${formattedBaseName()} ${formattedSectionName()}".trim()
+            "${stadium.name} ${formattedBaseName()}${formattedSectionName()}".trim()
 
         fun formattedBlockToSeat(): String =
             if (seat != null) {
@@ -51,11 +56,9 @@ data class ResponseScrap(
                 BASE.Base3 -> "3루 "
                 else -> ""
             }
-            val section = section.name
-            val block = "${row.number}열 "
             val seat = if(seat == null) "" else "${seat.seatNumber}번 "
 
-            return "${stadium.name}$base$section$block$seat".trim()
+            return "${stadium.name} ${formattedBaseName()}${formattedSectionName()}${formattedBlockToSeat()}".trim()
         }
 
         fun formattedBaseToBlock() : String =
@@ -79,7 +82,11 @@ data class ResponseScrap(
                 section.name.trim()
             }
             return when(block.code){
-                in listOf("101w", "102w", "122w", "121w", "109w", "114w","exciting1","exciting3","premium") -> ""
+                in listOf("101w", "102w", "122w", "121w") -> "휠체어석-레드"
+                in listOf("109w", "114w") -> "휠체어석-블루"
+                in listOf("exciting1") -> "1루 익사이팅석 "
+                in listOf("exciting3") -> "3루 익사이팅석 "
+                in listOf("premium") -> "프리미엄석 "
                 else -> "$section "
             }
         }
@@ -87,10 +94,8 @@ data class ResponseScrap(
         private fun formattedBlockName() = when(stadium.id) {
             1 -> {
                 when(block.code) {
-                    in listOf("101w", "102w", "122w", "121w", "109w", "114w") -> "휠체어석 ${block.code.replace("w", "")}블록 "
-                    in listOf("exciting1") -> "1루 익사이팅석 "
-                    in listOf("exciting3") -> "3루 익사이팅석 "
-                    in listOf("premium") -> "프리미엄석 "
+                    in listOf("101w", "102w", "122w", "121w", "109w", "114w") -> "${block.code.replace("w", "")}블록 "
+                    in listOf("exciting1","exciting3","premium") -> ""
                     else -> "${block.code}블록 "
                 }
             }

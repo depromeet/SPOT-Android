@@ -48,8 +48,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
     <LinearLayout
         android:id="@+id/llIndicator"
@@ -121,6 +123,23 @@
             tools:ignore="contentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.dpm.presentation.home.customview.CustomSpeechBubbleView
+        android:id="@+id/csbvLikeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:visibility="gone"
+        app:backgroundColor="@color/color_background_white"
+        app:layout_constraintBottom_toBottomOf="@id/lottieLike"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="35dp"
+        app:paddingBottom="8dp"
+        app:paddingLeft="10dp"
+        app:paddingRight="10dp"
+        app:paddingTop="8dp"
+        app:textAppearance="@style/TextAppearance.Spot.Caption04"
+        app:triangleBias="0.7" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieLike"
