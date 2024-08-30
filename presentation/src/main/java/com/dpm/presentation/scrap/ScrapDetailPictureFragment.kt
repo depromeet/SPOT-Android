@@ -79,7 +79,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     private fun initObserve() {
         viewModel.detailScrap.asLiveData().observe(viewLifecycleOwner) { data ->
-            adapter.submitList(data.map { it.baseReview }.toList())
+            adapter.submitList(data.reviews.map { it.baseReview }.toList())
             binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
             isLoading = false
         }
@@ -159,7 +159,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.spotAppbar.setText(viewModel.detailScrap.value[position].baseReview.formattedStadiumToSection())
+                binding.spotAppbar.setText(viewModel.detailScrap.value.reviews[position].baseReview.formattedStadiumToSection())
                 if (!isLoading && position >= adapter.itemCount - 2 && (viewModel.scrap.value as UiState.Success).data.hasNext) {
                     isLoading = true
                     viewModel.getNextScrapRecord()
