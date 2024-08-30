@@ -126,10 +126,6 @@ class ScrapViewModel @Inject constructor(
             _scrap.value = UiState.Success( detailScrap.value.copy(
                 reviews = _detailScrap.value.reviews.filter { it.baseReview.isScrapped }
             ))
-//            val currentState = (_scrap.value as UiState.Success).data
-//            _scrap.value = UiState.Success(currentState.copy(
-//                reviews = _detailScrap.value.reviews.filter { it.baseReview.isScrapped }
-//            ))
         }
     }
 
