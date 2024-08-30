@@ -53,7 +53,7 @@ class ScrapViewModel @Inject constructor(
     private val _scrap = MutableStateFlow<UiState<ResponseScrap>>(UiState.Loading)
     val scrap = _scrap.asStateFlow()
 
-    private val _detailScrap = MutableStateFlow<List<ResponseScrap.ResponseReviewWrapper>>(emptyList())
+    private val _detailScrap = MutableStateFlow<ResponseScrap>(ResponseScrap())
     val detailScrap = _detailScrap.asStateFlow()
 
     private val _filter = MutableStateFlow<List<FilterNameData>>(emptyList())
@@ -90,7 +90,7 @@ class ScrapViewModel @Inject constructor(
             ).onSuccess { data ->
                 if (data.reviews.isNotEmpty()) {
                     _scrap.value = UiState.Success(data)
-                    _detailScrap.value = data.reviews
+                    _detailScrap.value = data
                 } else {
                     _scrap.value = UiState.Empty
                 }
@@ -110,7 +110,7 @@ class ScrapViewModel @Inject constructor(
     }
 
     fun getDetailScrap() {
-        _detailScrap.value = (_scrap.value as UiState.Success).data.reviews
+        _detailScrap.value = (_scrap.value as UiState.Success).data
     }
 
     fun reloadScrap() {
@@ -120,12 +120,11 @@ class ScrapViewModel @Inject constructor(
     }
 
     fun updateScrapRecord() {
-        if(_detailScrap.value.count { it.baseReview.isScrapped } == 0){
+        if(_detailScrap.value.reviews.count { it.baseReview.isScrapped } == 0){
             _scrap.value = UiState.Empty
         }else{
-            val currentState = (_scrap.value as UiState.Success).data
-            _scrap.value = UiState.Success(currentState.copy(
-                reviews = _detailScrap.value.filter { it.baseReview.isScrapped }
+            _scrap.value = UiState.Success( detailScrap.value.copy(
+                reviews = _detailScrap.value.reviews.filter { it.baseReview.isScrapped }
             ))
         }
     }
@@ -156,8 +155,8 @@ class ScrapViewModel @Inject constructor(
                     filter = it.filter
                 )
                 _scrap.value = UiState.Success(updatedScrap)
-                val currentDetailScrap = _detailScrap.value
-                _detailScrap.value = currentDetailScrap + it.reviews
+                val currentDetailScrap = _detailScrap.value.reviews
+                _detailScrap.value = detailScrap.value.copy(reviews = currentDetailScrap + it.reviews)
             }.onFailure {}
         }
     }
@@ -248,7 +247,7 @@ class ScrapViewModel @Inject constructor(
                             review
                         }
                     }
-                    val updatedDetailList = detailScrap.value.map { review ->
+                    val updatedDetailList = detailScrap.value.reviews.map { review ->
                         if(review.baseReview.id == id){
                             review.copy(
                                 baseReview = review.baseReview.copy(
@@ -264,7 +263,7 @@ class ScrapViewModel @Inject constructor(
                             review
                         }
                     }
-                    _detailScrap.value = updatedDetailList
+                    _detailScrap.value = detailScrap.value.copy(reviews = updatedDetailList)
                     _scrap.value = UiState.Success(
                         data = currentState.copy(reviews = updatedList)
                     )
@@ -278,14 +277,19 @@ class ScrapViewModel @Inject constructor(
     fun updateScrap(id: Int) {
         viewModelScope.launch {
             viewfinderRepository.updateScrap(id).onSuccess {
-                val currentState = (_scrap.value as UiState.Success).data
-                val updatedList = currentState.reviews.filter { it.baseReview.id != id }
-                _scrap.value = if(updatedList.isEmpty()){
-                    UiState.Empty
-                }else {
-                    UiState.Success(currentState.copy(reviews = currentState.reviews.filter { it.baseReview.id != id }))
+                val currentState = _scrap.value
+                if (currentState is UiState.Success) {
+                    val updatedList = currentState.data.reviews.filter { it.baseReview.id != id }
+                    _scrap.value = if (updatedList.isEmpty()) {
+                        UiState.Empty
+                    } else {
+                        UiState.Success(currentState.data.copy(reviews = updatedList))
+                    }
+                } else if (currentState is UiState.Empty) {
+                    _scrap.value = UiState.Empty
                 }
-                val detailScrapUpdatedList = detailScrap.value.map { review ->
+
+                val detailScrapUpdatedList = detailScrap.value.reviews.map { review ->
                     if(review.baseReview.id == id){
                         review.copy(
                             baseReview = review.baseReview.copy(
@@ -296,7 +300,7 @@ class ScrapViewModel @Inject constructor(
                         review
                     }
                 }
-                _detailScrap.value = detailScrapUpdatedList
+                _detailScrap.value = detailScrap.value.copy(reviews = detailScrapUpdatedList)
             }.onFailure {
                 Timber.d("test 스크랩 업데이트 실패 $it")
             }
