@@ -515,13 +515,15 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             }
         }
         if (binding.clOnlyColumn.isVisible) {
-            viewModel.userSeatState.value = ValidSeat.NONE
-            if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
-                viewModel.userSeatState.value = ValidSeat.INVALID_COLUMN
-            } else if (matchingRowInfo != null) {
-                viewModel.userSeatState.value = ValidSeat.VALID
-            } else {
+            if (range.code == viewModel.selectedBlock.value) {
                 viewModel.userSeatState.value = ValidSeat.NONE
+                if (matchingRowInfo == null && viewModel.selectedColumn.value.isNotEmpty()) {
+                    viewModel.userSeatState.value = ValidSeat.INVALID_COLUMN
+                } else if (matchingRowInfo != null) {
+                    viewModel.userSeatState.value = ValidSeat.VALID
+                } else {
+                    viewModel.userSeatState.value = ValidSeat.NONE
+                }
             }
         }
         if (binding.clOnlyNumber.isVisible) {
