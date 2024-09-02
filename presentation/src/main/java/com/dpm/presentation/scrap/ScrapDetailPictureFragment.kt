@@ -79,8 +79,9 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
 
     private fun initObserve() {
         viewModel.detailScrap.asLiveData().observe(viewLifecycleOwner) { data ->
-            adapter.submitList(data.reviews.map { it.baseReview }.toList())
-            binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
+            adapter.submitList(data.reviews.map { it.baseReview }.toList()){
+                binding.vpScrap.setCurrentItem(viewModel.currentPage.value, false)
+            }
             isLoading = false
         }
 
@@ -151,8 +152,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
                 } else {
                     if (viewModel.isFirstLike.value) {
                         updateRecyclerViewVisibility(false)
-                    }
-                    else
+                    } else
                         hideLikeDescriptionView()
                 }
             }
@@ -160,7 +160,7 @@ class ScrapDetailPictureFragment : BindingFragment<FragmentScrapDetailPictureBin
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 binding.spotAppbar.setText(viewModel.detailScrap.value.reviews[position].baseReview.formattedStadiumToSection())
-                if (!isLoading && position >= adapter.itemCount - 2 && (viewModel.scrap.value as UiState.Success).data.hasNext) {
+                if (!isLoading && position >= adapter.itemCount - 2 && viewModel.scrap.value is UiState.Success && viewModel.detailScrap.value.hasNext) {
                     isLoading = true
                     viewModel.getNextScrapRecord()
                 }

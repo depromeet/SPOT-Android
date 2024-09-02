@@ -131,7 +131,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 val scrollBottom = !binding.rvScrapRecord.canScrollVertically(1)
                 val scrollTop = !binding.rvScrapRecord.canScrollVertically(-1)
 
-                if (scrollBottom && !isLoading && (viewModel.scrap.value as UiState.Success).data.hasNext) {
+                if (scrollBottom && !isLoading && viewModel.scrap.value is UiState.Success && (viewModel.scrap.value as UiState.Success).data.hasNext) {
                     viewModel.getNextScrapRecord()
                     isLoading = true
                 }
