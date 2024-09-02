@@ -541,7 +541,8 @@ class SelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSheetB
             val matchingCode = range.rowInfo.find { range.code == viewModel.selectedBlock.value }
             val selectedSeatNumber = viewModel.selectedNumber.value.toInt()
             if (matchingCode != null && viewModel.selectedNumber.value.isNotEmpty()) {
-                if (matchingCode.seatNumList.contains(selectedSeatNumber)) {
+                val allSeatNumbers = range.rowInfo.flatMap { it.seatNumList }
+                if (allSeatNumbers.contains(selectedSeatNumber)) {
                     viewModel.userSeatState.value = ValidSeat.VALID
                 } else {
                     viewModel.userSeatState.value = ValidSeat.INVALID_NUMBER
