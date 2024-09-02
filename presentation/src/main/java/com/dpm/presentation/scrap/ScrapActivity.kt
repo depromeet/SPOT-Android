@@ -77,8 +77,11 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
             when (state) {
                 is UiState.Success -> {
                     binding.tvScrapCount.text = state.data.totalScrapCount.toString()
-                    scrapAdapter.submitList(state.data.reviews)
-                    isLoading = false
+                    scrapAdapter.submitList(state.data.reviews) {
+                        binding.rvScrapRecord.invalidateItemDecorations()
+                        isLoading = false
+                    }
+
                     setScrapScreenVisibility(ScrapScreenState.SUCCESS)
                 }
 
