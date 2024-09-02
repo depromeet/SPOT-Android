@@ -77,8 +77,11 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
             when (state) {
                 is UiState.Success -> {
                     binding.tvScrapCount.text = state.data.totalScrapCount.toString()
-                    scrapAdapter.submitList(state.data.reviews)
-                    isLoading = false
+                    scrapAdapter.submitList(state.data.reviews) {
+                        binding.rvScrapRecord.invalidateItemDecorations()
+                        isLoading = false
+                    }
+
                     setScrapScreenVisibility(ScrapScreenState.SUCCESS)
                 }
 
@@ -131,7 +134,7 @@ class ScrapActivity : BaseActivity<ActivityScrapBinding>(
                 val scrollBottom = !binding.rvScrapRecord.canScrollVertically(1)
                 val scrollTop = !binding.rvScrapRecord.canScrollVertically(-1)
 
-                if (scrollBottom && !isLoading && (viewModel.scrap.value as UiState.Success).data.hasNext) {
+                if (scrollBottom && !isLoading && viewModel.scrap.value is UiState.Success && (viewModel.scrap.value as UiState.Success).data.hasNext) {
                     viewModel.getNextScrapRecord()
                     isLoading = true
                 }

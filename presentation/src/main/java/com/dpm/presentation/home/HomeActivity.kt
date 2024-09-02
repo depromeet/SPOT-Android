@@ -174,7 +174,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
         }
     }
 
-    private fun setLayoutBorder(){
+    private fun setLayoutBorder() {
         binding.clHomeArchiving.clipToOutline = true
         binding.clHomeScrap.clipToOutline = true
     }
@@ -224,6 +224,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             when (state) {
                 is UiState.Empty -> Unit
                 is UiState.Failure -> {
+                    binding.tvHomeTeam.text = if(sharedPreference.teamId == 0){
+                        "모두를 응원하는"
+                    } else {
+                        sharedPreference.teamName
+                    }
                     makeSpotImageAppbar("내 정보 불러오기를 실패하였습니다.\uD83E\uDEE2")
                 }
 
@@ -262,8 +267,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
                         message = "현재 잠실야구장만 이용할 수 있어요!",
                         endMessage = "잠실야구장 보기",
                         marginBottom = 87,
-                        onClick = {startStadiumActivity(it)}
-                    ) .show()
+                        onClick = { startStadiumActivity(it) }
+                    ).show()
 
                 } else {
                     MixpanelManager.track("home_find_view")
@@ -324,6 +329,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(
             shimmerHomeStadium.visibility = View.GONE
         }
     }
+
     private fun setHomeFeedVisibility(isSuccess: Boolean) {
         val visibility = if (isSuccess) View.VISIBLE else View.GONE
         with(binding) {

@@ -42,7 +42,7 @@ data class BadReviewData(
 class ScrapViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val viewfinderRepository: ViewfinderRepository,
-    private val sharedPreference: SharedPreference
+    private val sharedPreference: SharedPreference,
 ) : ViewModel() {
 
     private var monthsSelected: List<MonthFilterData> = emptyList()
@@ -100,12 +100,12 @@ class ScrapViewModel @Inject constructor(
         }
     }
 
-    fun updateIsFirstLike(isFirstLike : Boolean) {
+    fun updateIsFirstLike(isFirstLike: Boolean) {
         sharedPreference.isFirstLike = isFirstLike
         _isFirstLike.value = isFirstLike
     }
 
-    fun updateIsFirstShare(isFirstShare : Boolean) {
+    fun updateIsFirstShare(isFirstShare: Boolean) {
         sharedPreference.isFirstShare = isFirstShare
     }
 
@@ -114,16 +114,16 @@ class ScrapViewModel @Inject constructor(
     }
 
     fun reloadScrap() {
-        if(GlobalVariable.isScrap && _scrap.value is UiState.Empty) {
+        if (GlobalVariable.isScrap && _scrap.value is UiState.Empty) {
             getScrapRecord()
         }
     }
 
     fun updateScrapRecord() {
-        if(_detailScrap.value.reviews.count { it.baseReview.isScrapped } == 0){
+        if (_detailScrap.value.reviews.count { it.baseReview.isScrapped } == 0) {
             _scrap.value = UiState.Empty
-        }else{
-            _scrap.value = UiState.Success( detailScrap.value.copy(
+        } else {
+            _scrap.value = UiState.Success(detailScrap.value.copy(
                 reviews = _detailScrap.value.reviews.filter { it.baseReview.isScrapped }
             ))
         }
@@ -131,6 +131,8 @@ class ScrapViewModel @Inject constructor(
 
 
     fun getNextScrapRecord() {
+        val data = (_scrap.value as? UiState.Success)?.data ?: return
+        if (!data.hasNext || data.nextCursor == null) return
         viewModelScope.launch {
             homeRepository.getScrap(
                 size = 20,
@@ -156,7 +158,14 @@ class ScrapViewModel @Inject constructor(
                 )
                 _scrap.value = UiState.Success(updatedScrap)
                 val currentDetailScrap = _detailScrap.value.reviews
-                _detailScrap.value = detailScrap.value.copy(reviews = currentDetailScrap + it.reviews)
+                _detailScrap.value =
+                    detailScrap.value.copy(
+                        reviews = currentDetailScrap + it.reviews,
+                        nextCursor = it.nextCursor,
+                        hasNext = it.hasNext,
+                        totalScrapCount = it.totalScrapCount,
+                        filter = it.filter
+                    )
             }.onFailure {}
         }
     }
@@ -181,7 +190,7 @@ class ScrapViewModel @Inject constructor(
         getScrapRecord()
     }
 
-    fun setCurrentPage(page : Int) {
+    fun setCurrentPage(page: Int) {
         _currentPage.value = page
     }
 
@@ -248,11 +257,11 @@ class ScrapViewModel @Inject constructor(
                         }
                     }
                     val updatedDetailList = detailScrap.value.reviews.map { review ->
-                        if(review.baseReview.id == id){
+                        if (review.baseReview.id == id) {
                             review.copy(
                                 baseReview = review.baseReview.copy(
                                     isLiked = !review.baseReview.isLiked,
-                                    likesCount =  if (review.baseReview.isLiked) {
+                                    likesCount = if (review.baseReview.isLiked) {
                                         review.baseReview.likesCount - 1
                                     } else {
                                         review.baseReview.likesCount + 1
@@ -290,7 +299,7 @@ class ScrapViewModel @Inject constructor(
                 }
 
                 val detailScrapUpdatedList = detailScrap.value.reviews.map { review ->
-                    if(review.baseReview.id == id){
+                    if (review.baseReview.id == id) {
                         review.copy(
                             baseReview = review.baseReview.copy(
                                 isScrapped = !review.baseReview.isScrapped
