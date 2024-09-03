@@ -15,8 +15,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentUploadBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
@@ -24,7 +22,6 @@ import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
 import com.dpm.presentation.gallery.GalleryActivity
 import com.dpm.presentation.home.dialog.UploadErrorDialog
-import com.dpm.presentation.seatreview.ReviewActivity.Companion.FRAGMENT_RESULT_KEY
 import com.dpm.presentation.util.MixpanelManager
 import com.dpm.presentation.util.ScreenType
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,15 +43,19 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
     private var imageUri: Uri? = null
 
-    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val selectedImages = result.data?.getStringArrayListExtra(SELECTED_IMAGES)
-            selectedImages?.let {
-                setFragmentResult(FRAGMENT_RESULT_KEY, bundleOf(SELECTED_IMAGES to it))
-                dismiss()
+    private var onActivityResultHandler: ((ArrayList<String>) -> Unit)? = null
+
+    private val galleryLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedImages = result.data?.getStringArrayListExtra(SELECTED_IMAGES)
+                selectedImages?.let {
+                    onActivityResultHandler?.invoke(it)
+                    //setFragmentResult(FRAGMENT_RESULT_KEY, bundleOf(SELECTED_IMAGES to it))
+                    dismiss()
+                }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,10 +93,11 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
                 if (result.resultCode == RESULT_OK) {
                     imageUri?.let { uri ->
                         if (initCapacityLimitDialog(uri)) {
-                            setFragmentResult(
-                                REQUEST_KEY,
-                                bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
-                            )
+                            onActivityResultHandler?.invoke(arrayListOf(uri.toString()))
+//                            setFragmentResult(
+//                                REQUEST_KEY,
+//                                bundleOf(SELECTED_IMAGES to arrayListOf(uri.toString())),
+//                            )
                         }
                         dismiss()
                     }
@@ -168,4 +170,9 @@ class ImageUploadDialog : BindingBottomSheetDialog<FragmentUploadBottomSheetBind
             storageDir,
         )
     }
+
+    fun setOnActivityResultHandler(handler: (ArrayList<String>) -> Unit) {
+        onActivityResultHandler = handler
+    }
+
 }
