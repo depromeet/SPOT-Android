@@ -181,5 +181,10 @@
     <string name="scrap_more"><u>더보기</u></string>
 
 
+    <!-- 게시물 수정 -->
+    <string name="edit_review_title">게시물 수정</string>
+    <string name="edit_review_select_seat">좌석 선택</string>
+    <string name="edit_review_upload">업로드</string>
+
 
 </resources>

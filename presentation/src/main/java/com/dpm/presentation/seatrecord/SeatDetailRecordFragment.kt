@@ -3,6 +3,7 @@ package com.dpm.presentation.seatrecord
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -13,6 +14,7 @@ import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REIVIEW_TAG
 import com.dpm.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
@@ -112,12 +114,14 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         viewModel.deleteClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {
                 moveConfirmationDialog()
+                viewModel.cancelDeleteEvent()
             }
         }
 
         viewModel.editClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {
                 moveEditReview()
+                viewModel.cancelEditEvent()
             }
         }
     }
@@ -202,7 +206,16 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private fun moveEditReview() {
-        makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
+        viewModel.setEditReview(viewModel.editReviewId.value)
+        parentFragmentManager.commit {
+            replace(
+                R.id.fcv_record,
+                EditReviewFragment(),
+                EDIT_REIVIEW_TAG
+            )
+            addToBackStack(null)
+        }
+        //makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
     }
 
     private fun makeSpotImageAppbar(message: String) {

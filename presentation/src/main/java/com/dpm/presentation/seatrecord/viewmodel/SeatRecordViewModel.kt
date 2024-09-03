@@ -58,12 +58,13 @@ class SeatRecordViewModel @Inject constructor(
     private val _clickedReviewId = MutableStateFlow(0)
     val clickedReviewId = _clickedReviewId.asStateFlow()
 
+    private val _currentReviewState = MutableStateFlow(ReviewType.SEAT_REVIEW)
+    val currentReviewState = _currentReviewState.asStateFlow()
+
+    /** 리뷰 수정 관련 데이터 **/
     private val _editReview =
         MutableStateFlow(ResponseMySeatRecord.ReviewResponse(id = 0, stadiumId = 0))
     val editReview = _editReview.asStateFlow()
-
-    private val _currentReviewState = MutableStateFlow(ReviewType.SEAT_REVIEW)
-    val currentReviewState = _currentReviewState.asStateFlow()
 
 
     fun getSeatReviewDate() {
@@ -335,10 +336,10 @@ class SeatRecordViewModel @Inject constructor(
                 val currentState = (_seatReviews.value as? UiState.Success)?.data
                 if (currentState != null) {
                     val updatedList = currentState.reviews.map { review ->
-                        if(review.id == id){
+                        if (review.id == id) {
                             review.copy(
                                 isLiked = !review.isLiked,
-                                likesCount = if(review.isLiked){
+                                likesCount = if (review.isLiked) {
                                     review.likesCount - 1
                                 } else {
                                     review.likesCount + 1
@@ -363,18 +364,18 @@ class SeatRecordViewModel @Inject constructor(
         viewModelScope.launch {
             viewfinderRepository.updateScrap(id).onSuccess {
                 val currentState = (_seatReviews.value as? UiState.Success)?.data
-                if(currentState!= null){
+                if (currentState != null) {
                     val updatedList = currentState.reviews.map { review ->
-                        if(review.id == id){
+                        if (review.id == id) {
                             review.copy(
                                 isScrapped = !review.isScrapped,
-                                scrapsCount = if(review.isScrapped){
+                                scrapsCount = if (review.isScrapped) {
                                     review.scrapsCount - 1
                                 } else {
                                     review.scrapsCount + 1
                                 }
                             )
-                        }else {
+                        } else {
                             review
                         }
                     }
@@ -629,9 +630,20 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
+    /** 게시물 수정 관련 로직 */
     fun setEditReview(reviewId: Int) {
-        _editReview.value = (_seatReviews.value as UiState.Success).data.reviews.first {
-            it.id == reviewId
+        _editReview.value = when (currentReviewState.value) {
+            ReviewType.SEAT_REVIEW -> {
+                (_seatReviews.value as UiState.Success).data.reviews.first {
+                    it.id == reviewId
+                }
+            }
+
+            ReviewType.INTUITIVE_REVIEW -> {
+                (_intuitiveReviews.value as UiState.Success).data.reviews.first {
+                    it.id == reviewId
+                }
+            }
         }
     }
 

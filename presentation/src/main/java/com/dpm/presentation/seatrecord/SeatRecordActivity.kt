@@ -12,7 +12,6 @@ import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.dpm.core.base.BaseActivity
@@ -25,6 +24,7 @@ import com.dpm.domain.entity.response.home.ResponseUserInfo
 import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
+import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REIVIEW_TAG
 import com.dpm.presentation.seatrecord.adapter.DateMonthAdapter
 import com.dpm.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
@@ -546,7 +546,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun initReviewList() {
         monthSeatReviewAdapter = MonthRecordAdapter()
         binding.rvSeatReview.adapter = monthSeatReviewAdapter
-//        (binding.rvSeatReview.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         binding.rvSeatReview.itemAnimator = null
 
 
@@ -606,11 +605,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 override fun onLikeClick(reviewId: Int) {
-                    //TODO : 좋아요 클릭
+                    /**좋아요 클릭 없음 */
                 }
 
                 override fun onScrapClick(reviewId: Int) {
-                    //TODO : 스크랩 클릭
+                    /**스크랩 클릭 없음 */
                 }
             }
 
@@ -672,7 +671,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
 
     private fun moveEditReview() {
-        makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
+        viewModel.setEditReview(viewModel.editReviewId.value)
+        supportFragmentManager.commit {
+            replace(
+                R.id.fcv_record,
+                EditReviewFragment(),
+                EDIT_REIVIEW_TAG
+            )
+            addToBackStack(null)
+        }
+        //makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
     }
 
     private fun setShimmer(isLoading: Boolean) = with(binding) {

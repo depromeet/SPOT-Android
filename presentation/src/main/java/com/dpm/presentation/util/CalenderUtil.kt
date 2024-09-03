@@ -70,6 +70,13 @@ object CalendarUtil {
         return parsedDate.format(outputFormatter)
     }
 
+    fun getFormattedDotDate(date: String): String {
+        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
+        val parsedDate = LocalDateTime.parse(date, formatter)
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy.M.d", Locale.KOREAN)
+        return parsedDate.format(outputFormatter)
+    }
+
     fun getCurrentYear(): Int {
         val today = LocalDate.now()
         return today.year
