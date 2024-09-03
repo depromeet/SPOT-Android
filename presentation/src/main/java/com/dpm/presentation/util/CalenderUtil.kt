@@ -13,6 +13,11 @@ object CalendarUtil {
     private const val ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
     private const val DATE_FORMAT = "yyyy-MM-dd HH:mm"
 
+    private val ISO_DATE_FORMATTER = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
+    private val DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT)
+    private val DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy년 M월 d일", Locale.KOREAN)
+    private val DOT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy.M.d", Locale.KOREAN)
+
     fun formatCalendarDate(calendar: Calendar): String {
         return SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(calendar.time)
     }
@@ -39,42 +44,39 @@ object CalendarUtil {
         return calendar.get(Calendar.DAY_OF_MONTH)
     }
 
-    fun getYearFromDateFormat(date : String) : Int {
-        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
-        val parsedDate = LocalDateTime.parse(date, formatter)
-        return parsedDate.year
+    private fun parseDate(date: String): LocalDateTime {
+        return listOf(ISO_DATE_FORMATTER, DATE_FORMATTER).asSequence()
+            .mapNotNull { formatter ->
+                runCatching {
+                    LocalDateTime.parse(date, formatter)
+                }.getOrNull()
+            }
+            .firstOrNull()
+            ?: throw IllegalArgumentException("지원하지 않는 날짜 형식입니다: $date")
+    }
+
+    fun getYearFromDateFormat(date: String): Int {
+        return parseDate(date).year
     }
 
     fun getMonthFromDateFormat(date: String): Int {
-        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
-        val parsedDate = LocalDateTime.parse(date, formatter)
-        return parsedDate.monthValue
+        return parseDate(date).monthValue
     }
 
     fun getDayOfMonthFromDateFormat(date: String): Int {
-        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
-        val parsedDate = LocalDateTime.parse(date, formatter)
-        return parsedDate.dayOfMonth
+        return parseDate(date).dayOfMonth
     }
 
     fun getDayOfWeekFromDateFormat(date: String): String {
-        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
-        val parsedDate = LocalDateTime.parse(date, formatter)
-        return parsedDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
+        return parseDate(date).dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
     }
 
     fun getFormattedDate(date: String): String {
-        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
-        val parsedDate = LocalDateTime.parse(date, formatter)
-        val outputFormatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일", Locale.KOREAN)
-        return parsedDate.format(outputFormatter)
+        return parseDate(date).format(DISPLAY_FORMATTER)
     }
 
     fun getFormattedDotDate(date: String): String {
-        val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
-        val parsedDate = LocalDateTime.parse(date, formatter)
-        val outputFormatter = DateTimeFormatter.ofPattern("yyyy.M.d", Locale.KOREAN)
-        return parsedDate.format(outputFormatter)
+        return parseDate(date).format(DOT_DATE_FORMATTER)
     }
 
     fun getCurrentYear(): Int {
