@@ -11,10 +11,13 @@ import androidx.lifecycle.asLiveData
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentEditReviewBinding
 import com.dpm.core.base.BindingFragment
+import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.extension.loadAndClip
+import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.dialog.EditDatePickerDialog
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
+import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,12 +27,9 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     FragmentEditReviewBinding::inflate
 ) {
     companion object {
-        private const val DATE_FORMAT = "yyyy.MM.dd"
-        private const val ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm"
-        private const val FRAGMENT_RESULT_KEY = "requestKey"
-        private const val SELECTED_IMAGES = "selected_images"
         private const val MAX_SELECTED_IMAGES = 3
         const val EDIT_REIVIEW_TAG = "editReview"
+        private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
     }
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
@@ -55,7 +55,6 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             binding.ivRemoveThirdImage
         )
     }
-    private val selectedImageUris: MutableList<String> = mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,7 +69,9 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     }
 
     private fun initEvent() {
-        initDatePickerDialog()
+        initDatePickerDialogEvent()
+        initUploadEvent()
+        initEventRemoveButton()
     }
 
     private fun initObserver() {
@@ -83,10 +84,30 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 
     }
 
-    private fun initDatePickerDialog() {
+    private fun initDatePickerDialogEvent() {
         binding.layoutDatePicker.setOnClickListener {
             EditDatePickerDialog().show(parentFragmentManager, EditDatePickerDialog.TAG)
         }
+    }
+
+    private fun initUploadEvent() {
+        binding.llAddImage.setOnSingleClickListener {
+            imageUploadResultHandler()
+            //ImageUploadDialog().show(parentFragmentManager, IMAGE_UPLOAD_DIALOG)
+        }
+        binding.btnAddImage.setOnSingleClickListener {
+            imageUploadResultHandler()
+            //ImageUploadDialog().show(parentFragmentManager, IMAGE_UPLOAD_DIALOG)
+        }
+    }
+
+    private fun imageUploadResultHandler() {
+        val imageUploadDialog = ImageUploadDialog().apply {
+            setOnActivityResultHandler { selectedImages ->
+                addSelectedImages(selectedImages)
+            }
+        }
+        imageUploadDialog.show(parentFragmentManager, IMAGE_UPLOAD_DIALOG)
     }
 
     private fun initMethodNaming(reviewType: SeatRecordViewModel.ReviewType) {
@@ -115,8 +136,11 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             binding.llAddImage.visibility = VISIBLE
             selectedImageLayout.forEach { it.visibility = GONE }
         } else {
+            when(images.size){
+                MAX_SELECTED_IMAGES -> binding.layoutAddImageButton.visibility = GONE
+                else -> binding.layoutAddImageButton.visibility = VISIBLE
+            }
             binding.llAddImage.visibility = GONE
-
             images.forEachIndexed { index, image ->
                 selectedImage[index].loadAndClip(image)
                 selectedImageLayout[index].visibility = VISIBLE
@@ -141,6 +165,38 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             }
             tvReviewCount.text = keyWordSize.toString()
         }
+    }
+
+    private fun initEventRemoveButton() {
+        removeButtons.forEachIndexed { index, button ->
+            button.setOnSingleClickListener {
+                viewModel.removeEditImage(index)
+            }
+        }
+    }
+
+
+    private fun addSelectedImages(newImageUris: List<String>) {
+        val newSelectedImage: MutableList<String> = if (viewModel.editReview.value.images.size + newImageUris.size > MAX_SELECTED_IMAGES) {
+            makeSpotImageAppbar("사진은 최대 3장 선택할 수 있어요")
+            newImageUris.take(MAX_SELECTED_IMAGES - viewModel.editReview.value.images.size)
+                .toMutableList()
+        } else {
+            newImageUris.toMutableList()
+        }
+        viewModel.addEditSelectedImages(newSelectedImage)
+    }
+
+
+    private fun makeSpotImageAppbar(message: String) {
+        SpotImageSnackBar.make(
+            view = binding.root.rootView,
+            message = message,
+            messageColor = com.depromeet.designsystem.R.color.color_foreground_white,
+            icon = com.depromeet.designsystem.R.drawable.ic_alert_circle,
+            iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
+            marginBottom = 96
+        ).show()
     }
 
 }

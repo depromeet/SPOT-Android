@@ -66,6 +66,8 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow(ResponseMySeatRecord.ReviewResponse(id = 0, stadiumId = 0))
     val editReview = _editReview.asStateFlow()
 
+    private var initialEditImages = mutableListOf<String>()
+
 
     fun getSeatReviewDate() {
         viewModelScope.launch {
@@ -632,6 +634,7 @@ class SeatRecordViewModel @Inject constructor(
 
     /** 게시물 수정 관련 로직 */
     fun setEditReview(reviewId: Int) {
+        initialEditImages.clear()
         _editReview.value = when (currentReviewState.value) {
             ReviewType.SEAT_REVIEW -> {
                 (_seatReviews.value as UiState.Success).data.reviews.first {
@@ -645,12 +648,32 @@ class SeatRecordViewModel @Inject constructor(
                 }
             }
         }
+        initialEditImages = _editReview.value.images.map { it.url }.toMutableList()
+
     }
 
     fun updateEditSelectedDate(date : String){
         _editReview.value = editReview.value.copy(date = date)
     }
 
+    fun addEditSelectedImages(images : List<String>) {
+        _editReview.value = editReview.value.copy(images = editReview.value.images +  images.map {
+            ResponseMySeatRecord.ReviewResponse.ReviewImageResponse(id = 0, url = it)
+        })
+    }
+
+    fun removeEditImage(index : Int){
+        if (index < editReview.value.images.size){
+            val updatedImages = editReview.value.images.toMutableList().apply { removeAt(index) }
+            _editReview.value = editReview.value.copy(images = updatedImages)
+        }
+    }
+
+    /***
+     * TODO : !!!!
+     * 추후에 수정 업로드 진행할때 -> 사진에 대해서 기존에 INITIAL이랑 구분해서 PRESIGNED 받아와야함
+     * 즉, 기존 URL이랑 같으면 -> 패스 / 다르면 -> presignedurl 받아와서 업로드 진행
+     */
 
 }
 

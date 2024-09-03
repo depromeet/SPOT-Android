@@ -139,7 +139,7 @@
                             android:id="@+id/tv_image_count"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            tools:text="0"
+                            tools:text="2"
                             android:textAppearance="@style/TextAppearance.Spot.Body03"
                             android:textColor="@color/color_action_enabled" />
 
@@ -147,6 +147,7 @@
                             android:id="@+id/tv_image_total_count"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="1dp"
                             android:text="/3"
                             android:textAppearance="@style/TextAppearance.Spot.Body03"
                             android:textColor="@color/color_foreground_body_sebtext"
