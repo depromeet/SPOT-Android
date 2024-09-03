@@ -647,6 +647,10 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
+    fun updateEditSelectedDate(date : String){
+        _editReview.value = editReview.value.copy(date = date)
+    }
+
 
 }
 

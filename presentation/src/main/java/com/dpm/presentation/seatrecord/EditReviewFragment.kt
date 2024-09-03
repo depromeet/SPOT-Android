@@ -13,8 +13,8 @@ import com.depromeet.presentation.databinding.FragmentEditReviewBinding
 import com.dpm.core.base.BindingFragment
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.extension.loadAndClip
+import com.dpm.presentation.seatrecord.dialog.EditDatePickerDialog
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
-import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
 import com.dpm.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -85,7 +85,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 
     private fun initDatePickerDialog() {
         binding.layoutDatePicker.setOnClickListener {
-            DatePickerDialog().show(parentFragmentManager, "DatePickerDialogTag")
+            EditDatePickerDialog().show(parentFragmentManager, EditDatePickerDialog.TAG)
         }
     }
 
