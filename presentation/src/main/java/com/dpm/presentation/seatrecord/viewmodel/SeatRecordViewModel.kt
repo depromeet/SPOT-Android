@@ -7,12 +7,15 @@ import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
+import com.dpm.domain.repository.SeatReviewRepository
 import com.dpm.domain.repository.ViewfinderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -22,6 +25,7 @@ import javax.inject.Inject
 class SeatRecordViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val viewfinderRepository: ViewfinderRepository,
+    private val seatReviewRepository: SeatReviewRepository,
     private val sharedPreference: SharedPreference,
 ) : ViewModel() {
 
@@ -67,6 +71,10 @@ class SeatRecordViewModel @Inject constructor(
     val editReview = _editReview.asStateFlow()
 
     private var initialEditImages = mutableListOf<String>()
+
+    private val _stadiumSectionState =
+        MutableStateFlow<UiState<ResponseStadiumSection>>(UiState.Empty)
+    val stadiumSectionState: StateFlow<UiState<ResponseStadiumSection>> = _stadiumSectionState
 
 
     fun getSeatReviewDate() {
@@ -652,18 +660,18 @@ class SeatRecordViewModel @Inject constructor(
 
     }
 
-    fun updateEditSelectedDate(date : String){
+    fun updateEditSelectedDate(date: String) {
         _editReview.value = editReview.value.copy(date = date)
     }
 
-    fun addEditSelectedImages(images : List<String>) {
-        _editReview.value = editReview.value.copy(images = editReview.value.images +  images.map {
+    fun addEditSelectedImages(images: List<String>) {
+        _editReview.value = editReview.value.copy(images = editReview.value.images + images.map {
             ResponseMySeatRecord.ReviewResponse.ReviewImageResponse(id = 0, url = it)
         })
     }
 
-    fun removeEditImage(index : Int){
-        if (index < editReview.value.images.size){
+    fun removeEditImage(index: Int) {
+        if (index < editReview.value.images.size) {
             val updatedImages = editReview.value.images.toMutableList().apply { removeAt(index) }
             _editReview.value = editReview.value.copy(images = updatedImages)
         }
@@ -674,6 +682,27 @@ class SeatRecordViewModel @Inject constructor(
      * 추후에 수정 업로드 진행할때 -> 사진에 대해서 기존에 INITIAL이랑 구분해서 PRESIGNED 받아와야함
      * 즉, 기존 URL이랑 같으면 -> 패스 / 다르면 -> presignedurl 받아와서 업로드 진행
      */
+
+
+    fun getStadiumSection(stadiumId: Int) {
+        viewModelScope.launch {
+            _stadiumSectionState.value = UiState.Loading
+            seatReviewRepository.getStadiumSection(
+                stadiumId
+            ).onSuccess { section ->
+                if (section == null) {
+                    _stadiumSectionState.value = UiState.Empty
+                    return@launch
+                }
+                _stadiumSectionState.value = when {
+                    section.sectionList.isEmpty() -> UiState.Empty
+                    else -> UiState.Success(section)
+                }
+            }.onFailure { it ->
+                _stadiumSectionState.value = UiState.Failure(it.toString())
+            }
+        }
+    }
 
 }
 

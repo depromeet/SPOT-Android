@@ -16,6 +16,7 @@ import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.dialog.EditDatePickerDialog
+import com.dpm.presentation.seatrecord.dialog.EditSelectSeatDialog
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.util.CalendarUtil
@@ -30,6 +31,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         private const val MAX_SELECTED_IMAGES = 3
         const val EDIT_REIVIEW_TAG = "editReview"
         private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
+        private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
     }
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
@@ -72,6 +74,8 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         initDatePickerDialogEvent()
         initUploadEvent()
         initEventRemoveButton()
+        initSeatSelect()
+        initReviewSelect()
     }
 
     private fun initObserver() {
@@ -136,7 +140,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             binding.llAddImage.visibility = VISIBLE
             selectedImageLayout.forEach { it.visibility = GONE }
         } else {
-            when(images.size){
+            when (images.size) {
                 MAX_SELECTED_IMAGES -> binding.layoutAddImageButton.visibility = GONE
                 else -> binding.layoutAddImageButton.visibility = VISIBLE
             }
@@ -177,14 +181,27 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 
 
     private fun addSelectedImages(newImageUris: List<String>) {
-        val newSelectedImage: MutableList<String> = if (viewModel.editReview.value.images.size + newImageUris.size > MAX_SELECTED_IMAGES) {
-            makeSpotImageAppbar("사진은 최대 3장 선택할 수 있어요")
-            newImageUris.take(MAX_SELECTED_IMAGES - viewModel.editReview.value.images.size)
-                .toMutableList()
-        } else {
-            newImageUris.toMutableList()
-        }
+        val newSelectedImage: MutableList<String> =
+            if (viewModel.editReview.value.images.size + newImageUris.size > MAX_SELECTED_IMAGES) {
+                makeSpotImageAppbar("사진은 최대 3장 선택할 수 있어요")
+                newImageUris.take(MAX_SELECTED_IMAGES - viewModel.editReview.value.images.size)
+                    .toMutableList()
+            } else {
+                newImageUris.toMutableList()
+            }
         viewModel.addEditSelectedImages(newSelectedImage)
+    }
+
+    private fun initSeatSelect() {
+        binding.layoutSeatSelection.setOnSingleClickListener {
+            EditSelectSeatDialog().show(parentFragmentManager, SELECT_SEAT_DIALOG)
+        }
+    }
+
+
+    private fun initReviewSelect() {
+        binding.layoutSeatReview.setOnSingleClickListener {
+        }
     }
 
 
