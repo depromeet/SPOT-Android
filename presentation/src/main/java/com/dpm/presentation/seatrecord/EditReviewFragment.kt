@@ -16,6 +16,7 @@ import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.dialog.EditDatePickerDialog
+import com.dpm.presentation.seatrecord.dialog.EditReviewMySeatDialog
 import com.dpm.presentation.seatrecord.dialog.EditSelectSeatDialog
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
@@ -32,6 +33,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         const val EDIT_REIVIEW_TAG = "editReview"
         private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
         private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
+        private const val REVIEW_MY_SEAT_DIALOG = "ReviewMySeatDialog"
     }
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
@@ -201,6 +203,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 
     private fun initReviewSelect() {
         binding.layoutSeatReview.setOnSingleClickListener {
+            EditReviewMySeatDialog().show(parentFragmentManager, REVIEW_MY_SEAT_DIALOG)
         }
     }
 

@@ -109,6 +109,15 @@ class SeatRecordViewModel @Inject constructor(
 
     val userSeatState = MutableLiveData<ValidSeat>()
 
+    private val _selectedGoodReview = MutableStateFlow<List<String>>(emptyList())
+    val selectedGoodReview: StateFlow<List<String>> = _selectedGoodReview.asStateFlow()
+
+    private val _selectedBadReview = MutableStateFlow<List<String>>(emptyList())
+    val selectedBadReview: StateFlow<List<String>> = _selectedBadReview.asStateFlow()
+
+    private val _detailReviewText = MutableStateFlow("")
+    val detailReviewText: StateFlow<String> = _detailReviewText.asStateFlow()
+
     fun getSeatReviewDate() {
         viewModelScope.launch {
             homeRepository.getReviewDate(
@@ -750,10 +759,11 @@ class SeatRecordViewModel @Inject constructor(
         _seatRangeState.value = UiState.Empty
     }
 
-    fun updateEditReview(){
+    fun updateEditReview() {
         _editReview.value = editReview.value.copy(
             stadiumId = selectedStadiumId.value,
-            stadiumName = editReview.value.stadiumName, /** -> 추후 수정*/
+            stadiumName = editReview.value.stadiumName,
+            /** -> 추후 수정*/
             blockId = selectedBlockId.value,
             blockCode = selectedBlockName.value,
             rowNumber = selectedColumn.value.toIntOrNull() ?: 0,
@@ -764,7 +774,7 @@ class SeatRecordViewModel @Inject constructor(
     }
 
     fun getSeatBlock() {
-        if(selectedStadiumId.value == 0 || selectedSectionId.value == 0) return
+        if (selectedStadiumId.value == 0 || selectedSectionId.value == 0) return
         viewModelScope.launch {
             _seatBlockState.value = UiState.Loading
             seatReviewRepository.getSeatBlock(
@@ -791,6 +801,7 @@ class SeatRecordViewModel @Inject constructor(
                     else -> codeWithoutW
                 }
             }
+
             selectedSectionId.value == 8 && blockCode.startsWith("exciting") -> {
                 when (blockCode) {
                     "exciting1" -> "1루 익사이팅석"
@@ -805,6 +816,7 @@ class SeatRecordViewModel @Inject constructor(
                     else -> blockCode
                 }
             }
+
             else -> blockCode
         }
     }
@@ -821,7 +833,7 @@ class SeatRecordViewModel @Inject constructor(
         _selectedSectionId.value = sectionId
     }
 
-    fun updateSelectedStadiumId(stadiumId : Int){
+    fun updateSelectedStadiumId(stadiumId: Int) {
         _selectedStadiumId.value = stadiumId
     }
 
@@ -837,8 +849,40 @@ class SeatRecordViewModel @Inject constructor(
         _selectedSectionName.value = name
     }
 
+    fun setDetailReviewText(text: String) {
+        _detailReviewText.value = text
+    }
+
+    fun setSelectedGoodReview(buttonTexts: List<String>) {
+        _selectedGoodReview.value = buttonTexts
+    }
+
+    fun setSelectedBadReview(buttonTexts: List<String>) {
+        _selectedBadReview.value = buttonTexts
+    }
+
+    fun updateEditReviewDetail() {
+        val goodKeywords = _selectedGoodReview.value.map {
+            ResponseMySeatRecord.ReviewResponse.ReviewKeywordResponse(
+                content = it,
+                isPositive = true
+            )
+        }
+        val badKeywords = _selectedBadReview.value.map {
+            ResponseMySeatRecord.ReviewResponse.ReviewKeywordResponse(
+                content = it,
+                isPositive = false
+            )
+        }
+        _editReview.value = editReview.value.copy(
+            keywords = goodKeywords + badKeywords,
+            content = detailReviewText.value
+        )
+    }
+
+
     fun getSeatRange() {
-        if(selectedStadiumId.value == 0 || selectedSectionId.value == 0) return
+        if (selectedStadiumId.value == 0 || selectedSectionId.value == 0) return
         viewModelScope.launch {
             _seatRangeState.value = UiState.Loading
             seatReviewRepository.getSeatRange(
