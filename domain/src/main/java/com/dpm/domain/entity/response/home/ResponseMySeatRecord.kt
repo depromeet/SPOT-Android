@@ -58,7 +58,7 @@ data class ResponseMySeatRecord(
             val section = if (sectionNameSplits.size >= 2) {
                 sectionNameSplits[0] + " " + sectionNameSplits[1]
             } else {
-                sectionName.trim()
+                "${sectionName.trim()} "
             }
             return when(blockCode){
                 in listOf("101w", "102w", "122w", "121w", "109w", "114w","exciting1","exciting3","premium") -> ""
@@ -69,8 +69,8 @@ data class ResponseMySeatRecord(
         private fun formattedBlockName() = when(stadiumId) {
             1 -> {
                 when(blockCode) {
-                    in listOf("101w", "102w", "122w", "121w") -> "휠체어석-레드 ${blockCode.replace("w", "")}블록"
-                    in listOf("109w", "114w") -> "휠체어석-블루 ${blockCode.replace("w", "")}블록"
+                    in listOf("101w", "102w", "122w", "121w") -> "휠체어석-레드 ${blockCode.replace("w", "")}블록 "
+                    in listOf("109w", "114w") -> "휠체어석-블루 ${blockCode.replace("w", "")}블록 "
                     in listOf("exciting1") -> "1루 익사이팅석 "
                     in listOf("exciting3") -> "3루 익사이팅석 "
                     in listOf("premium") -> "프리미엄석 "
@@ -80,8 +80,10 @@ data class ResponseMySeatRecord(
             else -> ""
         }
 
-        private fun formattedRowNumber() = "${rowNumber}열 "
-
+        private fun formattedRowNumber() = when(rowNumber) {
+            0 -> ""
+            else ->"${rowNumber}열 "
+        }
         private fun formattedSeatNumber() = when (seatNumber) {
             null -> ""
             else -> "${seatNumber}번 "

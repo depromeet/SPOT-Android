@@ -1,5 +1,6 @@
 package com.dpm.presentation.seatrecord.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
@@ -7,8 +8,11 @@ import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.entity.response.seatreview.ResponseSeatBlock
+import com.dpm.domain.entity.response.seatreview.ResponseSeatRange
 import com.dpm.domain.entity.response.seatreview.ResponseStadiumSection
 import com.dpm.domain.model.seatrecord.RecordReviewType
+import com.dpm.domain.model.seatreview.ValidSeat
 import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
 import com.dpm.domain.repository.SeatReviewRepository
@@ -76,6 +80,34 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow<UiState<ResponseStadiumSection>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<ResponseStadiumSection>> = _stadiumSectionState
 
+    private val _seatBlockState = MutableStateFlow<UiState<List<ResponseSeatBlock>>>(UiState.Empty)
+    val seatBlockState: StateFlow<UiState<List<ResponseSeatBlock>>> = _seatBlockState
+
+    private val _seatRangeState = MutableStateFlow<UiState<List<ResponseSeatRange>>>(UiState.Empty)
+    val seatRangeState: StateFlow<UiState<List<ResponseSeatRange>>> = _seatRangeState
+
+    private val _selectedStadiumId = MutableStateFlow(0)
+    val selectedStadiumId = _selectedStadiumId.asStateFlow()
+
+    private val _selectedSectionId = MutableStateFlow(0)
+    val selectedSectionId = _selectedSectionId.asStateFlow()
+
+    private val _selectedBlockId = MutableStateFlow(0)
+    val selectedBlockId: StateFlow<Int> = _selectedBlockId.asStateFlow()
+
+    private val _selectedBlockName = MutableStateFlow("")
+    val selectedBlockName: StateFlow<String> = _selectedBlockName.asStateFlow()
+
+    private val _selectedColumn = MutableStateFlow("")
+    val selectedColumn: StateFlow<String> = _selectedColumn.asStateFlow()
+
+    private val _selectedNumber = MutableStateFlow("")
+    val selectedNumber: StateFlow<String> = _selectedNumber.asStateFlow()
+
+    private val _selectedSectionName = MutableStateFlow("")
+    val selectedSectionName = _selectedSectionName.asStateFlow()
+
+    val userSeatState = MutableLiveData<ValidSeat>()
 
     fun getSeatReviewDate() {
         viewModelScope.launch {
@@ -704,6 +736,125 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
+
+    fun initSelectedValue() {
+        _selectedStadiumId.value = 0
+        _selectedSectionId.value = 0
+        _selectedBlockId.value = 0
+        _selectedBlockName.value = ""
+        _selectedColumn.value = ""
+        _selectedNumber.value = ""
+        _selectedSectionName.value = ""
+        _stadiumSectionState.value = UiState.Empty
+        _seatBlockState.value = UiState.Empty
+        _seatRangeState.value = UiState.Empty
+    }
+
+    fun updateEditReview(){
+        _editReview.value = editReview.value.copy(
+            stadiumId = selectedStadiumId.value,
+            stadiumName = editReview.value.stadiumName, /** -> 추후 수정*/
+            blockId = selectedBlockId.value,
+            blockCode = selectedBlockName.value,
+            rowNumber = selectedColumn.value.toIntOrNull() ?: 0,
+            seatNumber = selectedNumber.value.toIntOrNull(),
+            sectionId = selectedSectionId.value,
+            sectionName = selectedSectionName.value
+        )
+    }
+
+    fun getSeatBlock() {
+        if(selectedStadiumId.value == 0 || selectedSectionId.value == 0) return
+        viewModelScope.launch {
+            _seatBlockState.value = UiState.Loading
+            seatReviewRepository.getSeatBlock(
+                selectedStadiumId.value,
+                selectedSectionId.value
+            ).onSuccess { blocks ->
+                if (blocks.isEmpty()) {
+                    _seatBlockState.value = UiState.Empty
+                } else {
+                    _seatBlockState.value = UiState.Success(blocks)
+                }
+            }.onFailure { message ->
+                _seatBlockState.value = UiState.Failure(message.toString())
+            }
+        }
+    }
+
+    fun getBlockListName(blockCode: String): String {
+        return when {
+            selectedSectionId.value == 10 && blockCode.endsWith("w") -> {
+                when (val codeWithoutW = blockCode.removeSuffix("w")) {
+                    "101", "102", "121", "122" -> "레드-$codeWithoutW"
+                    "109", "114" -> "블루-$codeWithoutW"
+                    else -> codeWithoutW
+                }
+            }
+            selectedSectionId.value == 8 && blockCode.startsWith("exciting") -> {
+                when (blockCode) {
+                    "exciting1" -> "1루 익사이팅석"
+                    "exciting3" -> "3루 익사이팅석"
+                    else -> blockCode
+                }
+            }
+
+            selectedSectionId.value == 1 && blockCode.startsWith("premium") -> {
+                when (blockCode) {
+                    "premium" -> "프리미엄석"
+                    else -> blockCode
+                }
+            }
+            else -> blockCode
+        }
+    }
+
+    fun setSelectedBlock(block: String) {
+        _selectedBlockName.value = block
+    }
+
+    fun updateSelectedBlockId(blockId: Int) {
+        _selectedBlockId.value = blockId
+    }
+
+    fun updateSelectedSectionId(sectionId: Int) {
+        _selectedSectionId.value = sectionId
+    }
+
+    fun updateSelectedStadiumId(stadiumId : Int){
+        _selectedStadiumId.value = stadiumId
+    }
+
+    fun setSelectedColumn(column: String) {
+        _selectedColumn.value = column
+    }
+
+    fun setSelectedNumber(number: String) {
+        _selectedNumber.value = number
+    }
+
+    fun setSelectedSeatZone(name: String) {
+        _selectedSectionName.value = name
+    }
+
+    fun getSeatRange() {
+        if(selectedStadiumId.value == 0 || selectedSectionId.value == 0) return
+        viewModelScope.launch {
+            _seatRangeState.value = UiState.Loading
+            seatReviewRepository.getSeatRange(
+                selectedStadiumId.value,
+                selectedSectionId.value
+            ).onSuccess { data ->
+                if (data.isNotEmpty()) {
+                    _seatRangeState.value = UiState.Success(data)
+                } else {
+                    _seatRangeState.value = UiState.Empty
+                }
+            }.onFailure { message ->
+                _seatRangeState.value = UiState.Failure(message.toString())
+            }
+        }
+    }
 }
 
 enum class EditUi {
