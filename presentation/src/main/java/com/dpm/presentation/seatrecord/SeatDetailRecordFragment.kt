@@ -168,11 +168,19 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
             val position = when (viewModel.currentReviewState.value) {
                 SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
-                    (viewModel.seatReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                    if(viewModel.seatReviews.value is UiState.Success){
+                        (viewModel.seatReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                    }else{
+                        0
+                    }
                 }
 
                 SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
-                    (viewModel.intuitiveReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                    if(viewModel.intuitiveReviews.value is UiState.Success){
+                        (viewModel.intuitiveReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                    }else{
+                        0
+                    }
                 }
             }
 
@@ -184,11 +192,19 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
                     val scrollBottom = !rvDetailRecord.canScrollVertically(1)
                     val hasNextPage = when (viewModel.currentReviewState.value) {
                         SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
-                            (viewModel.seatReviews.value as UiState.Success).data.hasNext
+                            if(viewModel.seatReviews.value is UiState.Success){
+                                (viewModel.seatReviews.value as UiState.Success).data.hasNext
+                            }else{
+                                false
+                            }
                         }
 
                         SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
-                            (viewModel.intuitiveReviews.value as UiState.Success).data.hasNext
+                            if(viewModel.intuitiveReviews.value is UiState.Success){
+                                (viewModel.intuitiveReviews.value as UiState.Success).data.hasNext
+                            }else{
+                                false
+                            }
                         }
                     }
                     if (scrollBottom && hasNextPage && !isLoading) {

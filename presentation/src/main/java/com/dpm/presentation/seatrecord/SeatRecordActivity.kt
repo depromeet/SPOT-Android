@@ -316,7 +316,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Empty -> {
                     setShimmer(false)
                     monthSeatReviewAdapter.submitList(emptyList())
-                    makeSpotImageAppbar("해당 날짜에 작성한 글이 없습니다.")
                     setErrorVisibility(SeatRecordErrorType.EMPTY)
                 }
 
@@ -345,7 +344,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Empty -> {
                     setShimmer(false)
                     monthSeatReviewAdapter.submitList(emptyList())
-                    makeSpotImageAppbar("해당 날짜에 작성한 글이 없습니다.")
                     setErrorVisibility(SeatRecordErrorType.EMPTY)
                 }
 

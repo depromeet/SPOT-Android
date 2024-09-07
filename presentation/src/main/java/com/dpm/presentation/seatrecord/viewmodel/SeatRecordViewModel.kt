@@ -594,10 +594,11 @@ class SeatRecordViewModel @Inject constructor(
             }
             val existingClickedYear = updatedYearMonths.find { it.isClicked }?.year
             if (existingClickedYear != null) {
-                _seatDate.value = if (updatedYearMonths.isEmpty()) {
-                    UiState.Empty
+                if (updatedYearMonths.isEmpty()) {
+                    _seatDate.value = UiState.Empty
+                    _seatReviews.value = UiState.Empty
                 } else {
-                    UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
+                    _seatDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
                 }
             } else {
                 val highestYear = updatedYearMonths.maxOfOrNull { it.year }
@@ -616,11 +617,12 @@ class SeatRecordViewModel @Inject constructor(
                         yearMonth
                     }
                 }
-                _seatDate.value = if (updatedYearMonths.isEmpty()) {
-                    UiState.Empty
+                if (updatedYearMonths.isEmpty()) {
+                    _seatDate.value = UiState.Empty
+                    _seatReviews.value = UiState.Empty
                 } else {
                     Timber.d("test updatedYearMonthsWithClicked -> $updatedYearMonthsWithClicked")
-                    UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
+                    _seatDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
                 }
             }
         }
@@ -650,10 +652,11 @@ class SeatRecordViewModel @Inject constructor(
             }
             val existingClickedYear = updatedYearMonths.find { it.isClicked }?.year
             if (existingClickedYear != null) {
-                _intuitiveDate.value = if (updatedYearMonths.isEmpty()) {
-                    UiState.Empty
+                if (updatedYearMonths.isEmpty()) {
+                    _intuitiveDate.value = UiState.Empty
+                    _intuitiveReviews.value = UiState.Empty
                 } else {
-                    UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
+                    _intuitiveDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
                 }
             } else {
                 val highestYear = updatedYearMonths.maxOfOrNull { it.year }
@@ -672,10 +675,11 @@ class SeatRecordViewModel @Inject constructor(
                         yearMonth
                     }
                 }
-                _intuitiveDate.value = if (updatedYearMonths.isEmpty()) {
-                    UiState.Empty
+                if (updatedYearMonths.isEmpty()) {
+                    _intuitiveDate.value = UiState.Empty
+                    _intuitiveReviews.value = UiState.Empty
                 } else {
-                    UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
+                    _intuitiveDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
                 }
             }
         }
@@ -759,7 +763,7 @@ class SeatRecordViewModel @Inject constructor(
         _seatRangeState.value = UiState.Empty
     }
 
-    fun updateEditReview() {
+    fun updateEditReviewSeat() {
         _editReview.value = editReview.value.copy(
             stadiumId = selectedStadiumId.value,
             stadiumName = editReview.value.stadiumName,
@@ -898,6 +902,10 @@ class SeatRecordViewModel @Inject constructor(
                 _seatRangeState.value = UiState.Failure(message.toString())
             }
         }
+    }
+
+    fun requestPresignedUrl(){
+
     }
 }
 
