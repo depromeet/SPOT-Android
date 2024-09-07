@@ -73,11 +73,15 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     }
 
     private fun initEvent() {
+        binding.root.setOnClickListener {
+            return@setOnClickListener
+        }
         initDatePickerDialogEvent()
         initUploadEvent()
         initEventRemoveButton()
         initSeatSelect()
         initReviewSelect()
+        initUploadButton()
     }
 
     private fun initObserver() {
@@ -99,11 +103,9 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     private fun initUploadEvent() {
         binding.llAddImage.setOnSingleClickListener {
             imageUploadResultHandler()
-            //ImageUploadDialog().show(parentFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
         binding.btnAddImage.setOnSingleClickListener {
             imageUploadResultHandler()
-            //ImageUploadDialog().show(parentFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
     }
 
@@ -178,6 +180,12 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             button.setOnSingleClickListener {
                 viewModel.removeEditImage(index)
             }
+        }
+    }
+
+    private fun initUploadButton() = with(binding) {
+        tvUploadBtn.setOnSingleClickListener {
+            //TODO : 업로드 진행
         }
     }
 
