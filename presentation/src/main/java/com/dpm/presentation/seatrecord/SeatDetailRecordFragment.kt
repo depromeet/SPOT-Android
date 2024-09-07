@@ -106,8 +106,17 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         }
 
         viewModel.seatDate.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state is UiState.Empty)
+            if (state is UiState.Empty && viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW){
                 detailRecordAdapter.submitList(emptyList())
+                makeSpotImageAppbar("모든 시야후기가 삭제되었습니다!")
+            }
+        }
+
+        viewModel.intuitiveDate.asLiveData().observe(viewLifecycleOwner) { state ->
+            if (state is UiState.Empty && viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW){
+                detailRecordAdapter.submitList(emptyList())
+                makeSpotImageAppbar("모든 직관후기가 삭제되었습니다!")
+            }
         }
 
 

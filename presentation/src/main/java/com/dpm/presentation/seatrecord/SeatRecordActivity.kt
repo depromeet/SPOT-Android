@@ -237,6 +237,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeDates() {
         viewModel.seatDate.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
+                return@observe
             when (state) {
                 is UiState.Success -> {
                     setErrorVisibility(SeatRecordErrorType.NONE)
@@ -266,6 +268,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
 
         viewModel.intuitiveDate.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW)
+                return@observe
             when (state) {
                 is UiState.Success -> {
                     setErrorVisibility(SeatRecordErrorType.NONE)
@@ -296,6 +300,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeReviews() {
         viewModel.seatReviews.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
+                return@observe
             when (state) {
                 is UiState.Success -> {
                     setShimmer(false)
@@ -323,6 +329,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
 
         viewModel.intuitiveReviews.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW)
+                return@observe
             when (state) {
                 is UiState.Success -> {
                     setShimmer(false)
