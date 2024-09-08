@@ -14,8 +14,15 @@ android {
         minSdk = Constants.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        // TODO : 데이터 트래킹 Dev 작동 확인 -> prod.mixpanel_token 교체
-        buildConfigField("String", "MIXPANEL_TOKEN", getApiKey("prod.mixpanel_token"))
+    }
+
+    buildTypes {
+        getByName("debug") {
+            buildConfigField("String", "MIXPANEL_TOKEN", getApiKey("dev.mixpanel_token"))
+        }
+        getByName("release") {
+            buildConfigField("String", "MIXPANEL_TOKEN", getApiKey("prod.mixpanel_token"))
+        }
     }
 
     composeOptions {
