@@ -18,6 +18,7 @@ import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REVIEW_
 import com.dpm.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
+import com.dpm.presentation.seatrecord.uistate.EditableUiState
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.util.KakaoUtils
@@ -106,14 +107,14 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         }
 
         viewModel.seatDate.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state is UiState.Empty && viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW){
+            if (state is EditableUiState.Empty && viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW){
                 detailRecordAdapter.submitList(emptyList())
                 makeSpotImageAppbar("모든 시야후기가 삭제되었습니다!")
             }
         }
 
         viewModel.intuitiveDate.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state is UiState.Empty && viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW){
+            if (state is EditableUiState.Empty && viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW){
                 detailRecordAdapter.submitList(emptyList())
                 makeSpotImageAppbar("모든 직관후기가 삭제되었습니다!")
             }
