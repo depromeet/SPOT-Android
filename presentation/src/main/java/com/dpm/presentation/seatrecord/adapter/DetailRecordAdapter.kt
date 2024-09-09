@@ -73,6 +73,8 @@ class ReviewDetailViewHolder(
         private const val MAX_VISIBLE_CHIPS = Int.MAX_VALUE
     }
 
+    private lateinit var adapter: SeatImageAdapter
+
     fun bind(
         item: ResponseMySeatRecord.ReviewResponse,
     ) {
@@ -86,7 +88,7 @@ class ReviewDetailViewHolder(
                 scrapClick(item.id)
             }
             ivRecordLike.setOnSingleClickListener {
-                if(!item.isLiked){
+                if (!item.isLiked) {
                     lottieLike.playAnimation()
                 }
                 likeClick(item.id)
@@ -173,18 +175,23 @@ class ReviewDetailViewHolder(
     }
 
     private fun initImageViewPager(imageList: List<String>) {
-        val adapter = SeatImageAdapter()
-        with(binding) {
-            vpDetailImage.adapter = adapter
-            adapter.submitList(imageList)
-            setViewPagerCountText(0)
-
-            vpDetailImage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    setViewPagerCountText(position)
+        if (!::adapter.isInitialized) {
+            adapter = SeatImageAdapter()
+            with(binding) {
+                vpDetailImage.adapter = adapter
+                adapter.submitList(imageList){
+                    setViewPagerCountText(0)
                 }
-            })
+            }
+        }else{
+            adapter.submitList(imageList)
         }
+        binding.vpDetailImage.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                setViewPagerCountText(position)
+            }
+        })
     }
 
     private fun setViewPagerCountText(position: Int) {
