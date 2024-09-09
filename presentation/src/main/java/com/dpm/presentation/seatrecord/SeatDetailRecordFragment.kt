@@ -14,7 +14,7 @@ import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.scheme.SchemeKey
-import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REIVIEW_TAG
+import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REVIEW_TAG
 import com.dpm.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
@@ -236,7 +236,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             replace(
                 R.id.fcv_record,
                 EditReviewFragment(),
-                EDIT_REIVIEW_TAG
+                EDIT_REVIEW_TAG
             )
             addToBackStack(null)
         }

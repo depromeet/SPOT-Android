@@ -84,4 +84,18 @@ object CalendarUtil {
         return today.year
     }
 
+    fun formatToDateFormat(dateString: String): String {
+        return try {
+            val dateTime = LocalDateTime.parse(dateString, ISO_DATE_FORMATTER)
+            dateTime.format(DATE_FORMATTER)
+        } catch (e: Exception) {
+            try {
+                val dateTime = LocalDateTime.parse(dateString, DATE_FORMATTER)
+                dateTime.format(DATE_FORMATTER)
+            } catch (e: Exception) {
+                ""
+            }
+        }
+    }
+
 }

@@ -1,16 +1,21 @@
 package com.dpm.presentation.seatrecord
 
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentEditReviewBinding
 import com.dpm.core.base.BindingFragment
+import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.extension.loadAndClip
@@ -22,6 +27,9 @@ import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
 import com.dpm.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.FileNotFoundException
+import java.io.InputStream
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
@@ -30,11 +38,14 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 ) {
     companion object {
         private const val MAX_SELECTED_IMAGES = 3
-        const val EDIT_REIVIEW_TAG = "editReview"
+        const val EDIT_REVIEW_TAG = "editReview"
         private const val IMAGE_UPLOAD_DIALOG = "ImageUploadDialog"
         private const val SELECT_SEAT_DIALOG = "SelectSeatDialog"
         private const val REVIEW_MY_SEAT_DIALOG = "ReviewMySeatDialog"
     }
+
+    @Inject
+    lateinit var s3Url: String
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
 
@@ -68,13 +79,17 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         initObserver()
     }
 
+
     private fun initView() {
         initMethodNaming(viewModel.currentReviewState.value)
     }
 
-    private fun initEvent() {
-        binding.root.setOnClickListener {
+    private fun initEvent() = with(binding) {
+        root.setOnClickListener {
             return@setOnClickListener
+        }
+        btnBack.setOnSingleClickListener {
+            removeFragment()
         }
         initDatePickerDialogEvent()
         initUploadEvent()
@@ -82,6 +97,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         initSeatSelect()
         initReviewSelect()
         initUploadButton()
+        onBackPressed()
     }
 
     private fun initObserver() {
@@ -90,8 +106,10 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             setImages(it.images.map { it.url })
             setSeatName(it.formattedSeatName())
             setCountReview(it)
+            checkUploadStatus(it)
         }
-
+        observeUploadImagesCount()
+        observeUploadEditReview()
     }
 
     private fun initDatePickerDialogEvent() {
@@ -175,6 +193,18 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         }
     }
 
+    private fun checkUploadStatus(data: ResponseMySeatRecord.ReviewResponse) {
+        val isImagesFilled = data.images.isNotEmpty()
+        with(binding.tvUploadBtn) {
+            if (isImagesFilled) {
+                setBackgroundResource(R.drawable.rect_action_enabled_fill_8)
+            } else {
+                setBackgroundResource(R.drawable.rect_action_disabled_fill_8)
+            }
+        }
+
+    }
+
     private fun initEventRemoveButton() {
         removeButtons.forEachIndexed { index, button ->
             button.setOnSingleClickListener {
@@ -185,8 +215,43 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 
     private fun initUploadButton() = with(binding) {
         tvUploadBtn.setOnSingleClickListener {
-            //TODO : 업로드 진행
+            val images = viewModel.editReview.value.images
+            when {
+                /** 등록과 달리 수정은 사진을 제외(모두 삭제하는 경우)하고 기본값들이 있음 */
+                images.isEmpty() -> {
+                    makeSpotImageAppbar("사진을 등록해주세요")
+                }
+
+                else -> {
+                    images.forEachIndexed { index, image ->
+                        if (image.url.contains(s3Url)) {
+                            viewModel.updatePresignedUrl(index, image.url)
+                        } else {
+                            val imageUri = Uri.parse(image.url)
+                            val fileExtension = getFileExtension(requireContext(), imageUri)
+                            val imageData = readImageData(requireContext(), imageUri)
+                            if (imageData != null) {
+                                image.url
+                                viewModel.requestPresignedUrl(index, fileExtension, imageData)
+                            }
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    removeFragment()
+                }
+            })
+    }
+
+    private fun removeFragment() {
+        parentFragmentManager.popBackStack()
     }
 
 
@@ -215,6 +280,38 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         }
     }
 
+    private fun observeUploadImagesCount() {
+        viewModel.uploadImageCount.asLiveData().observe(viewLifecycleOwner) { cnt ->
+            if (viewModel.editReview.value.images.size == cnt) {
+                viewModel.putEditReview()
+            }
+        }
+    }
+
+    private fun observeUploadEditReview() {
+        viewModel.putReviewState.asLiveData().observe(viewLifecycleOwner) { state ->
+            //TODO : 로딩 다이얼로그 처리 및 추후 처리 방안 설정
+            when (state) {
+                is UiState.Success -> {
+                    makeSpotImageAppbar("게시물 수정 성공!")
+                    removeFragment()
+                }
+
+                is UiState.Empty -> {
+
+                }
+
+                is UiState.Loading -> {
+
+                }
+
+                is UiState.Failure -> {
+                    makeSpotImageAppbar("게시물 수정 실패..")
+                }
+            }
+        }
+    }
+
 
     private fun makeSpotImageAppbar(message: String) {
         SpotImageSnackBar.make(
@@ -225,6 +322,25 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             iconColor = com.depromeet.designsystem.R.color.color_error_secondary,
             marginBottom = 96
         ).show()
+    }
+
+    private fun getFileExtension(context: Context, uri: Uri): String {
+        val mimeType = context.contentResolver.getType(uri)
+        return mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(it) } ?: ""
+    }
+
+    private fun getFileInputStream(context: Context, uri: Uri): InputStream? {
+        return try {
+            context.contentResolver.openInputStream(uri)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun readImageData(context: Context, uri: Uri): ByteArray? {
+        val inputStream = getFileInputStream(context, uri)
+        return inputStream?.use { it.readBytes() }
     }
 
 }

@@ -1,9 +1,11 @@
 package com.dpm.presentation.seatrecord.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dpm.core.state.UiState
+import com.dpm.domain.entity.request.home.RequestEditReview
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
@@ -17,6 +19,9 @@ import com.dpm.domain.preference.SharedPreference
 import com.dpm.domain.repository.HomeRepository
 import com.dpm.domain.repository.SeatReviewRepository
 import com.dpm.domain.repository.ViewfinderRepository
+import com.dpm.presentation.util.CalendarUtil.formatToDateFormat
+import com.dpm.presentation.util.CalendarUtil.getMonthFromDateFormat
+import com.dpm.presentation.util.CalendarUtil.getYearFromDateFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +36,12 @@ class SeatRecordViewModel @Inject constructor(
     private val viewfinderRepository: ViewfinderRepository,
     private val seatReviewRepository: SeatReviewRepository,
     private val sharedPreference: SharedPreference,
+    private val s3Url: String,
 ) : ViewModel() {
+
+    companion object {
+        const val MAX_IMAGE_CNT = 3
+    }
 
     enum class ReviewType {
         SEAT_REVIEW,
@@ -74,8 +84,6 @@ class SeatRecordViewModel @Inject constructor(
         MutableStateFlow(ResponseMySeatRecord.ReviewResponse(id = 0, stadiumId = 0))
     val editReview = _editReview.asStateFlow()
 
-    private var initialEditImages = mutableListOf<String>()
-
     private val _stadiumSectionState =
         MutableStateFlow<UiState<ResponseStadiumSection>>(UiState.Empty)
     val stadiumSectionState: StateFlow<UiState<ResponseStadiumSection>> = _stadiumSectionState
@@ -117,6 +125,15 @@ class SeatRecordViewModel @Inject constructor(
 
     private val _detailReviewText = MutableStateFlow("")
     val detailReviewText: StateFlow<String> = _detailReviewText.asStateFlow()
+
+    private val _putReviewState =
+        MutableStateFlow<UiState<ResponseMySeatRecord.ReviewResponse>>(UiState.Empty)
+    val putReviewState = _putReviewState.asStateFlow()
+
+    private val _uploadImageCount = MutableStateFlow(0)
+    val uploadImageCount = _uploadImageCount.asStateFlow()
+
+    private var presignedUrls = MutableList(MAX_IMAGE_CNT) { "" }
 
     fun getSeatReviewDate() {
         viewModelScope.launch {
@@ -598,7 +615,8 @@ class SeatRecordViewModel @Inject constructor(
                     _seatDate.value = UiState.Empty
                     _seatReviews.value = UiState.Empty
                 } else {
-                    _seatDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
+                    _seatDate.value =
+                        UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
                 }
             } else {
                 val highestYear = updatedYearMonths.maxOfOrNull { it.year }
@@ -622,7 +640,8 @@ class SeatRecordViewModel @Inject constructor(
                     _seatReviews.value = UiState.Empty
                 } else {
                     Timber.d("test updatedYearMonthsWithClicked -> $updatedYearMonthsWithClicked")
-                    _seatDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
+                    _seatDate.value =
+                        UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
                 }
             }
         }
@@ -656,7 +675,8 @@ class SeatRecordViewModel @Inject constructor(
                     _intuitiveDate.value = UiState.Empty
                     _intuitiveReviews.value = UiState.Empty
                 } else {
-                    _intuitiveDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
+                    _intuitiveDate.value =
+                        UiState.Success(dateState.data.copy(yearMonths = updatedYearMonths))
                 }
             } else {
                 val highestYear = updatedYearMonths.maxOfOrNull { it.year }
@@ -679,7 +699,8 @@ class SeatRecordViewModel @Inject constructor(
                     _intuitiveDate.value = UiState.Empty
                     _intuitiveReviews.value = UiState.Empty
                 } else {
-                    _intuitiveDate.value = UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
+                    _intuitiveDate.value =
+                        UiState.Success(dateState.data.copy(yearMonths = updatedYearMonthsWithClicked))
                 }
             }
         }
@@ -687,7 +708,6 @@ class SeatRecordViewModel @Inject constructor(
 
     /** 게시물 수정 관련 로직 */
     fun setEditReview(reviewId: Int) {
-        initialEditImages.clear()
         _editReview.value = when (currentReviewState.value) {
             ReviewType.SEAT_REVIEW -> {
                 (_seatReviews.value as UiState.Success).data.reviews.first {
@@ -701,8 +721,27 @@ class SeatRecordViewModel @Inject constructor(
                 }
             }
         }
-        initialEditImages = _editReview.value.images.map { it.url }.toMutableList()
+        removeEditValue()
+    }
 
+    private fun removeEditValue() {
+        _stadiumSectionState.value = UiState.Empty
+        _seatBlockState.value = UiState.Empty
+        _seatRangeState.value = UiState.Empty
+        _selectedStadiumId.value = 0
+        _selectedSectionId.value = 0
+        _selectedBlockId.value = 0
+        _selectedBlockName.value = ""
+        _selectedColumn.value = ""
+        _selectedNumber.value = ""
+        _selectedSectionName.value = ""
+        userSeatState.value = ValidSeat.VALID
+        _selectedGoodReview.value = emptyList()
+        _selectedBadReview.value = emptyList()
+        _detailReviewText.value = ""
+        _putReviewState.value = UiState.Empty
+        _uploadImageCount.value = 0
+        presignedUrls = MutableList(MAX_IMAGE_CNT) { "" }
     }
 
     fun updateEditSelectedDate(date: String) {
@@ -750,7 +789,7 @@ class SeatRecordViewModel @Inject constructor(
     }
 
 
-    fun initSelectedValue() {
+    fun initSelectedSeatValue() {
         _selectedStadiumId.value = 0
         _selectedSectionId.value = 0
         _selectedBlockId.value = 0
@@ -770,7 +809,7 @@ class SeatRecordViewModel @Inject constructor(
             /** -> 추후 수정*/
             blockId = selectedBlockId.value,
             blockCode = selectedBlockName.value,
-            rowNumber = selectedColumn.value.toIntOrNull() ?: 0,
+            rowNumber = selectedColumn.value.toIntOrNull() ?: 1,
             seatNumber = selectedNumber.value.toIntOrNull(),
             sectionId = selectedSectionId.value,
             sectionName = selectedSectionName.value
@@ -904,9 +943,167 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
-    fun requestPresignedUrl(){
+    fun requestPresignedUrl(index: Int, fileExtension: String, imageData: ByteArray) {
+        viewModelScope.launch {
+            seatReviewRepository.postReviewImagePresigned(fileExtension)
+                .onSuccess { response ->
+                    uploadReviewImageToPresignedUrl(response.presignedUrl, imageData, index)
+                }
+                .onFailure { t ->
+                    Timber.e("presignedUrl 받아오기 실패 : $t")
+                }
+        }
+    }
+
+    fun updatePresignedUrl(index: Int, imageUrl: String) {
+        presignedUrls[index] = imageUrl
+        plusUploadImageCount()
+    }
+
+    private fun uploadReviewImageToPresignedUrl(
+        presignedUrl: String,
+        imageData: ByteArray,
+        index: Int,
+    ) {
+        viewModelScope.launch {
+            seatReviewRepository.putImagePreSignedUrl(presignedUrl, imageData)
+                .onSuccess {
+                    presignedUrls[index] = removeQueryParameters(presignedUrl)
+                    plusUploadImageCount()
+                }
+                .onFailure { t ->
+                    Timber.e("presignedUrl 업로드 실패 : $presignedUrl / $t")
+                }
+        }
+    }
+
+    private fun plusUploadImageCount() {
+        _uploadImageCount.value = uploadImageCount.value + 1
+    }
+
+    fun putEditReview() {
+        viewModelScope.launch {
+            val requestEditReview = RequestEditReview(
+                stadiumId = editReview.value.stadiumId,
+                blockId = editReview.value.blockId,
+                rowNumber = if (editReview.value.rowNumber == 0) null else editReview.value.rowNumber,
+                seatNumber = if (editReview.value.seatNumber == 0) null else editReview.value.seatNumber,
+                images = presignedUrls.filter { it.isNotEmpty() },
+                dateTime = formatToDateFormat(editReview.value.date),
+                good = editReview.value.keywords.filter { it.isPositive }.map { it.content },
+                bad = editReview.value.keywords.filter { !it.isPositive }.map { it.content },
+                content = editReview.value.content,
+                reviewType = if (currentReviewState.value == ReviewType.SEAT_REVIEW) RecordReviewType.VIEW.name else RecordReviewType.FEED.name
+            )
+
+            Timber.d("editReview -> Selected Images: ${presignedUrls.filter { it.isNotEmpty() }}")
+            Timber.d("editReview -> Selected Date: ${formatToDateFormat(editReview.value.date)}")
+            Timber.d(
+                "editReview -> Good Review: ${
+                    editReview.value.keywords.filter { it.isPositive }.map { it.content }
+                }"
+            )
+            Timber.d(
+                "editReview -> etail Review Text: ${
+                    editReview.value.keywords.filter { !it.isPositive }.map { it.content }
+                }"
+            )
+            Timber.d("editReview -> Selected Stadium ID: ${editReview.value.stadiumId}")
+            Timber.d("editReview -> Selected Block ID: ${editReview.value.blockId}")
+            Timber.d("editReview -> Selected seatColumn(row): ${editReview.value.rowNumber}")
+            Timber.d("editReview -> Selected seatNumber: ${editReview.value.seatNumber}")
+            Timber.d("editReview -> Selected reviewType: ${if (currentReviewState.value == ReviewType.SEAT_REVIEW) RecordReviewType.VIEW.name else RecordReviewType.FEED.name}")
+
+            _putReviewState.value = UiState.Loading
+
+            /**
+             * TODO : 만약에 날짜가 달라지면 또 어덯게 처리를 해야하나?
+             * 1. success를 하였을 때
+             *   a.날짜 년도만 달라진다면 -> 현재 보여주는 날짜에서 지워주고 그 해당 년도로 업데이트를 해야할지?
+             *   b.달만 달라진다면 -> 현재 해당상태가 달인지(전체 달) 아니면 특정 달인지에 대해서 케이스 처리
+             *   c.년도, 달이 달라진다면 -> 음..
+             *     case 1) 달라졌을때 존재하지 않는다면 -> 년도,월 데이터를 업데이트를 해줘야함
+             *     case 2) 달라졌지만 존재한다면 -> 현재 클릭한 것이 아니라면 없애주고 처리를 해줘야할듯?
+             *   d. 달라지지 않는 경우 -> 그대로 진행 (해당 id에 대한 리스트 업데이트만 해주면 됨)
+             * 2. 통신 실패 -> 다시 처음부터 진행?
+             *    FAILURE -> 메세지 -> 다시 클릭 -> FAIL 체크 -> 통신만 진행
+             */
+            homeRepository.putEditReview(
+                editReview.value.id,
+                requestEditReview
+            ).onSuccess { review ->
+                val dateState = seatDate.value as? UiState.Success<ResponseReviewDate>
+                val selectedYear = dateState?.data?.yearMonths?.firstOrNull { it.isClicked }?.year
+                val selectedMonth =
+                    dateState?.data?.yearMonths?.firstOrNull { it.isClicked }?.months?.firstOrNull { it.isClicked }?.month
+                val editYear = getYearFromDateFormat(review.date)
+                val editMonth = getMonthFromDateFormat(review.date)
+                Timber.d("date 비교 : selectedYear : $selectedYear, selectedMonth : $selectedMonth, editYear : $editYear, editMonth : $editMonth")
+//                if(selectedYear != editYear || selectedMonth != editMonth) {
+//                    updateDate(editYear, editMonth)
+//                }else {
+                when (currentReviewState.value) {
+                    ReviewType.SEAT_REVIEW -> {
+                        val currentState = _seatReviews.value
+                        if (currentState is UiState.Success) {
+                            val reviewList = currentState.data.reviews.toMutableList()
+                            val index = reviewList.indexOfFirst { it.id == review.id }
+                            if (index != -1) {
+                                reviewList[index] = review
+                            }
+                            _seatReviews.value = currentState.copy(
+                                data = currentState.data.copy(reviews = reviewList)
+                            )
+                        }
+                    }
+
+                    ReviewType.INTUITIVE_REVIEW -> {
+                        val currentState = _intuitiveReviews.value
+                        if (currentState is UiState.Success) {
+                            val reviewList = currentState.data.reviews.toMutableList()
+                            val index = reviewList.indexOfFirst { it.id == review.id }
+                            if (index != -1) {
+                                reviewList[index] = review
+                            }
+                            _intuitiveReviews.value = currentState.copy(
+                                data = currentState.data.copy(reviews = reviewList)
+                            )
+                        }
+                    }
+                }
+                _putReviewState.value = UiState.Success(review)
+//                }
+            }.onFailure {
+                _putReviewState.value = UiState.Failure(it.message.toString())
+            }
+        }
+
 
     }
+
+    private fun updateDate(newYear: Int, newMonth: Int) {
+        when (currentReviewState.value) {
+            ReviewType.SEAT_REVIEW -> {
+                val exists = (_seatDate.value as UiState.Success).data.yearMonths
+                    .find { it.year == newYear }
+                    ?.months
+                    ?.any { it.month == newMonth } == true
+            }
+
+            ReviewType.INTUITIVE_REVIEW -> {
+                val exists = (_intuitiveDate.value as UiState.Success).data.yearMonths
+                    .find { it.year == newYear }
+                    ?.months
+                    ?.any { it.month == newMonth } == true
+            }
+        }
+    }
+
+    private fun removeQueryParameters(url: String): String {
+        val uri = Uri.parse(url)
+        return uri.buildUpon().clearQuery().build().toString()
+    }
+
 }
 
 enum class EditUi {
