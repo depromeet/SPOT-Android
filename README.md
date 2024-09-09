@@ -1,4 +1,4 @@
-<img src="https://github.com/user-attachments/assets/5dad458a-64c3-4caa-932e-d6fb645471bc" width=120 />
+<img src="https://github.com/user-attachments/assets/b6eeca99-3f2e-479c-8767-2500eb93419e" width=120 />
 
 # ⚾️✨ SPOT! - 야구장 시야 공유 서비스
 <p align="center"><img src="https://github.com/user-attachments/assets/649f9f8f-92dd-4365-ac20-88279b9f6b29" width=1300></p>
@@ -12,10 +12,11 @@
 ⚾️ SPOT! ⚾️은 야구 팬들을 위해 **야구장 시야 찾기**부터 **야구 직관 후기 아카이빙**까지 제공해 만족스러운 야구장 직관 경험을 돕고 있어요.
 </br>
 </br>
+
 ## ✨ CONTRIBUTORS
 |                                   윤성식<br/>([@Yoon Seong Sik](https://github.com/SsongSik))                                    |                                      노균욱<br/>([@BENDENG1](https://github.com/BENDENG1))                                       |                                  박민주<br/>([@Minju Park](https://github.com/minju1459))                                   |                                    조관희<br/>([@Jokwanhee](https://github.com/Jokwanhee))                                     |
 |:---------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|
-| <img width="200px" src="https://github.com/user-attachments/assets/f9c62e48-d121-4613-ae88-f1aad8ae3a1e"/> | <img width="200px" src="https://github.com/user-attachments/assets/874c1c57-5bd0-4d74-8a24-641c97d5897e"/> | <img width="200px" src="https://github.com/user-attachments/assets/c4080e1c-b242-42f9-9027-6d8a191c6745"/> | <img width="200px" src="https://github.com/user-attachments/assets/65b0a3b6-a1c3-4d73-93ce-c860eadd0e74"/> |
+| <img width="200px" src="https://github.com/user-attachments/assets/f9c62e48-d121-4613-ae88-f1aad8ae3a1e"/> | <img width="200px" src="https://github.com/user-attachments/assets/f4c41e8b-2924-4eac-a140-29f49cc29ac0"/> | <img width="200px" src="https://github.com/user-attachments/assets/c4080e1c-b242-42f9-9027-6d8a191c6745"/> | <img width="200px" src="https://github.com/user-attachments/assets/65b0a3b6-a1c3-4d73-93ce-c860eadd0e74"/> |
 |                                                      `온보딩`<br/>`설정`                                                      |                                               `홈`<br/>`시야 아카이빙`                                              |                                          `시야(직관)등록`                                           |                                                      `시야 찾기`                                                      |
 </br>
 
