@@ -1,5 +1,6 @@
 package com.dpm.domain.repository
 
+import com.dpm.domain.entity.request.home.RequestEditReview
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.request.home.RequestProfileEdit
 import com.dpm.domain.entity.request.home.RequestScrap
@@ -64,4 +65,9 @@ interface HomeRepository {
         cursor: String?,
         requestScrap: RequestScrap,
     ): Result<ResponseScrap>
+
+    suspend fun putEditReview(
+        reviewId : Int,
+        requestEditReview : RequestEditReview
+    ) : Result<ResponseMySeatRecord.ReviewResponse>
 }

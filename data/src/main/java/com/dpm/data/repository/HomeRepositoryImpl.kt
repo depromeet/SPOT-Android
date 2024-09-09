@@ -5,14 +5,17 @@ import com.dpm.data.mapper.toBaseballTeamResponse
 import com.dpm.data.mapper.toPresignedUrlResponse
 import com.dpm.data.model.request.home.RequestMySeatRecordDto.Companion.toMySeatRecordRequestDto
 import com.dpm.data.model.request.home.RequestProfileEditDto.Companion.toProfileEditRequestDto
+import com.dpm.data.model.request.home.toRequestEditReviewDto
 import com.dpm.data.model.request.home.toRequestScrapDto
 import com.dpm.data.model.response.home.ResponseDeleteReviewDto.Companion.toDeleteReviewResponse
 import com.dpm.data.model.response.home.ResponseMySeatRecordDto.Companion.toMySeatRecordResponse
+import com.dpm.data.model.response.home.ResponseMySeatRecordDto.Companion.toReviewResponse
 import com.dpm.data.model.response.home.ResponseProfileEditDto.Companion.toProfileEditResponse
 import com.dpm.data.model.response.home.ResponseRecentReviewDto.Companion.toRecentReviewResponse
 import com.dpm.data.model.response.home.ResponseReviewDateDto.Companion.toReviewDateResponse
 import com.dpm.data.model.response.home.toResponseUserInfo
 import com.dpm.data.model.response.home.toResponseScrap
+import com.dpm.domain.entity.request.home.RequestEditReview
 import com.dpm.domain.entity.request.home.RequestMySeatRecord
 import com.dpm.domain.entity.request.home.RequestProfileEdit
 import com.dpm.domain.entity.request.home.RequestScrap
@@ -132,6 +135,18 @@ class HomeRepositoryImpl @Inject constructor(
                 cursor = cursor,
                 requestScrapDto = requestScrap.toRequestScrapDto()
             ).toResponseScrap()
+        }
+    }
+
+    override suspend fun putEditReview(
+        reviewId: Int,
+        requestEditReview: RequestEditReview,
+    ): Result<ResponseMySeatRecord.ReviewResponse> {
+        return kotlin.runCatching {
+            homeDataSource.putEditReview(
+                reviewId = reviewId,
+                requestEditReview.toRequestEditReviewDto()
+            ).toReviewResponse()
         }
     }
 }

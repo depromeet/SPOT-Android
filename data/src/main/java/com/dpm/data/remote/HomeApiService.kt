@@ -1,5 +1,6 @@
 package com.dpm.data.remote
 
+import com.dpm.data.model.request.home.RequestEditReviewDto
 import com.dpm.data.model.request.home.RequestFileExtensionDto
 import com.dpm.data.model.request.home.RequestProfileEditDto
 import com.dpm.data.model.response.home.ResponseBaseballTeamDto
@@ -96,4 +97,10 @@ interface HomeApiService {
         @Query("good") good: List<String>?,
         @Query("bad") bad: List<String>?,
     ): ResponseScrapDto
+
+    @PUT("api/v1/reviews/{reviewId}")
+    suspend fun putEditReview(
+        @Path("reviewId") reviewId: Int,
+        @Body body: RequestEditReviewDto,
+    ) : ResponseMySeatRecordDto.ResponseReviewDto
 }

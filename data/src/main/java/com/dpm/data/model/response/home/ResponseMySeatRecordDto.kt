@@ -156,7 +156,7 @@ data class ResponseMySeatRecordDto(
             isLoading = false
         )
 
-        private fun ResponseReviewDto.toReviewResponse() = ResponseMySeatRecord.ReviewResponse(
+        fun ResponseReviewDto.toReviewResponse() = ResponseMySeatRecord.ReviewResponse(
             id = id,
             stadiumId = stadium.id,
             stadiumName = stadium.name,
