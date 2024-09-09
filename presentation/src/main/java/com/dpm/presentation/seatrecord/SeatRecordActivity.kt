@@ -24,7 +24,7 @@ import com.dpm.domain.entity.response.home.ResponseUserInfo
 import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
-import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REIVIEW_TAG
+import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REVIEW_TAG
 import com.dpm.presentation.seatrecord.adapter.DateMonthAdapter
 import com.dpm.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
@@ -682,7 +682,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             replace(
                 R.id.fcv_record,
                 EditReviewFragment(),
-                EDIT_REIVIEW_TAG
+                EDIT_REVIEW_TAG
             )
             addToBackStack(null)
         }

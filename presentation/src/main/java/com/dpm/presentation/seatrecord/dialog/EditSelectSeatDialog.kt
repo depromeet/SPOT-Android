@@ -64,7 +64,7 @@ class EditSelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSh
     }
 
     private fun initView() {
-        viewModel.initSelectedValue()
+        viewModel.initSelectedSeatValue()
         updatedState()
         viewModel.getStadiumSection(viewModel.editReview.value.stadiumId)
         adapter = SelectSeatAdapter { position, sectionId ->
@@ -387,7 +387,7 @@ class EditSelectSeatDialog : BindingBottomSheetDialog<FragmentSelectSeatBottomSh
 
     private fun onClickFinish() {
         binding.tvCompleteBtn.setOnSingleClickListener {
-            viewModel.updateEditReview()
+            viewModel.updateEditReviewSeat()
             dismiss()
         }
     }
