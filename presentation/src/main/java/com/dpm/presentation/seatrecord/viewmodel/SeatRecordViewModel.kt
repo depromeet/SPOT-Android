@@ -1039,40 +1039,82 @@ class SeatRecordViewModel @Inject constructor(
                 val editYear = getYearFromDateFormat(review.date)
                 val editMonth = getMonthFromDateFormat(review.date)
                 Timber.d("date 비교 : selectedYear : $selectedYear, selectedMonth : $selectedMonth, editYear : $editYear, editMonth : $editMonth")
-//                if(selectedYear != editYear || selectedMonth != editMonth) {
-//                    updateDate(editYear, editMonth)
-//                }else {
-                when (currentReviewState.value) {
-                    ReviewType.SEAT_REVIEW -> {
-                        val currentState = _seatReviews.value
-                        if (currentState is UiState.Success) {
-                            val reviewList = currentState.data.reviews.toMutableList()
-                            val index = reviewList.indexOfFirst { it.id == review.id }
-                            if (index != -1) {
-                                reviewList[index] = review
+                if(selectedYear != editYear || selectedMonth != editMonth) {
+                    when (currentReviewState.value) {
+                        ReviewType.SEAT_REVIEW -> {
+                            val currentState = _seatReviews.value
+                            if (currentState is UiState.Success) {
+                                val reviewList = currentState.data.reviews.toMutableList()
+                                val index = reviewList.indexOfFirst { it.id == review.id }
+
+                                if (index != -1) {
+                                    if (selectedMonth == 0 || selectedMonth == editMonth) {
+                                        reviewList[index] = review
+                                    } else {
+                                        updateDate(editYear,editMonth)
+                                        reviewList.removeAt(index)
+                                    }
+                                }
+
+                                _seatReviews.value = currentState.copy(
+                                    data = currentState.data.copy(reviews = reviewList)
+                                )
                             }
-                            _seatReviews.value = currentState.copy(
-                                data = currentState.data.copy(reviews = reviewList)
-                            )
+                        }
+
+                        ReviewType.INTUITIVE_REVIEW -> {
+                            val currentState = _intuitiveReviews.value
+                            if (currentState is UiState.Success) {
+                                val reviewList = currentState.data.reviews.toMutableList()
+                                val index = reviewList.indexOfFirst { it.id == review.id }
+
+                                if (index != -1) {
+                                    if (selectedMonth == 0 || selectedMonth == editMonth) {
+                                        reviewList[index] = review
+                                    } else {
+                                        updateDate(editYear,editMonth)
+                                        reviewList.removeAt(index)
+                                    }
+                                }
+
+                                _intuitiveReviews.value = currentState.copy(
+                                    data = currentState.data.copy(reviews = reviewList)
+                                )
+                            }
                         }
                     }
-
-                    ReviewType.INTUITIVE_REVIEW -> {
-                        val currentState = _intuitiveReviews.value
-                        if (currentState is UiState.Success) {
-                            val reviewList = currentState.data.reviews.toMutableList()
-                            val index = reviewList.indexOfFirst { it.id == review.id }
-                            if (index != -1) {
-                                reviewList[index] = review
+                }else {
+                    when (currentReviewState.value) {
+                        ReviewType.SEAT_REVIEW -> {
+                            val currentState = _seatReviews.value
+                            if (currentState is UiState.Success) {
+                                val reviewList = currentState.data.reviews.toMutableList()
+                                val index = reviewList.indexOfFirst { it.id == review.id }
+                                if (index != -1) {
+                                    reviewList[index] = review
+                                }
+                                _seatReviews.value = currentState.copy(
+                                    data = currentState.data.copy(reviews = reviewList)
+                                )
                             }
-                            _intuitiveReviews.value = currentState.copy(
-                                data = currentState.data.copy(reviews = reviewList)
-                            )
+                        }
+
+                        ReviewType.INTUITIVE_REVIEW -> {
+                            val currentState = _intuitiveReviews.value
+                            if (currentState is UiState.Success) {
+                                val reviewList = currentState.data.reviews.toMutableList()
+                                val index = reviewList.indexOfFirst { it.id == review.id }
+                                if (index != -1) {
+                                    reviewList[index] = review
+                                }
+                                _intuitiveReviews.value = currentState.copy(
+                                    data = currentState.data.copy(reviews = reviewList)
+                                )
+                            }
                         }
                     }
                 }
                 _putReviewState.value = UiState.Success(review)
-//                }
             }.onFailure {
                 _putReviewState.value = UiState.Failure(it.message.toString())
             }
