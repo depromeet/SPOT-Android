@@ -20,6 +20,7 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
+import com.dpm.presentation.global.LoadingDialog
 import com.dpm.presentation.seatrecord.dialog.EditDatePickerDialog
 import com.dpm.presentation.seatrecord.dialog.EditReviewMySeatDialog
 import com.dpm.presentation.seatrecord.dialog.EditSelectSeatDialog
@@ -48,6 +49,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     lateinit var s3Url: String
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
+    private lateinit var loadingDialog : LoadingDialog
 
     private val selectedImage: List<ImageView> by lazy {
         listOf(
@@ -82,6 +84,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 
     private fun initView() {
         initMethodNaming(viewModel.currentReviewState.value)
+        loadingDialog = LoadingDialog(requireContext())
     }
 
     private fun initEvent() = with(binding) {
@@ -223,6 +226,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
                 }
 
                 else -> {
+                    showLoading()
                     images.forEachIndexed { index, image ->
                         if (image.url.contains(s3Url)) {
                             viewModel.updatePresignedUrl(index, image.url)
@@ -294,20 +298,15 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
             when (state) {
                 is UiState.Success -> {
                     makeSpotImageAppbar("게시물 수정 성공!")
+                    dismissLoading()
                     removeFragment()
-                }
-
-                is UiState.Empty -> {
-
-                }
-
-                is UiState.Loading -> {
-
                 }
 
                 is UiState.Failure -> {
                     makeSpotImageAppbar("게시물 수정 실패..")
+                    dismissLoading()
                 }
+                else -> {}
             }
         }
     }
@@ -341,6 +340,19 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     private fun readImageData(context: Context, uri: Uri): ByteArray? {
         val inputStream = getFileInputStream(context, uri)
         return inputStream?.use { it.readBytes() }
+    }
+
+    private fun showLoading(){
+        loadingDialog.show()
+    }
+
+    private fun dismissLoading() {
+        loadingDialog.dismiss()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        dismissLoading()
     }
 
 }
