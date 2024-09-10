@@ -24,6 +24,7 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.model.seatreview.ReviewMethod
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.extension.toast
+import com.dpm.presentation.global.LoadingDialog
 import com.dpm.presentation.home.HomeActivity
 import com.dpm.presentation.seatreview.dialog.main.DatePickerDialog
 import com.dpm.presentation.seatreview.dialog.main.ImageUploadDialog
@@ -58,6 +59,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
         private const val DIALOG_TYPE = "DIALOG_TYPE"
     }
 
+    private lateinit var loadingDialog: LoadingDialog
     private val viewModel by viewModels<ReviewViewModel>()
     private val method by lazy {
         intent.getStringExtra(METHOD_KEY)?.let { ReviewMethod.valueOf(it) }
@@ -160,7 +162,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
             updateNextButtonState()
             initEventToBack()
         }
-        viewModel.selectedBlock.asLiveData().observe(this){
+        viewModel.selectedBlock.asLiveData().observe(this) {
             initEventToBack()
         }
     }
@@ -269,11 +271,11 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun initUploadDialog() {
         binding.btnAddImage.setOnSingleClickListener {
             imageUploadResultHandler()
-            //ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
+            // ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
         binding.llAddImage.setOnSingleClickListener {
             imageUploadResultHandler()
-            //ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
+            // ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
     }
 
@@ -524,7 +526,17 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     private fun observeUploadReview() {
         viewModel.postReviewState.asLiveData().observe(this) { state ->
             when (state) {
+                is UiState.Loading -> {
+                    if (!::loadingDialog.isInitialized) {
+                        loadingDialog = LoadingDialog(this)
+                    }
+                    loadingDialog.show()
+                }
                 is UiState.Success -> {
+                    if (::loadingDialog.isInitialized && loadingDialog.isShowing) {
+                        loadingDialog.dismiss()
+                    }
+
                     val dialogType = when (method) {
                         ReviewMethod.VIEW -> ReviewMethod.VIEW
                         ReviewMethod.FEED -> ReviewMethod.FEED
@@ -555,6 +567,9 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
                 }
 
                 is UiState.Failure -> {
+                    if (::loadingDialog.isInitialized && loadingDialog.isShowing) {
+                        loadingDialog.dismiss()
+                    }
                     toast("리뷰 등록 실패: $state")
                 }
 
