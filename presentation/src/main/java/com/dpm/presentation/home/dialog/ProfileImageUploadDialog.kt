@@ -174,7 +174,7 @@ class ProfileImageUploadDialog() : BindingBottomSheetDialog<FragmentProfileEditB
                 dismiss()
             } else {
                 val fileExtension = getFileExtension(uri)
-                if (fileExtension != "png" && fileExtension != "jpeg" && fileExtension != "jpg") {
+                if (fileExtension != "png" && fileExtension != "jpeg" && fileExtension != "jpg" && fileExtension != "heic") {
                     val fragment = UploadErrorDialog(
                         getString(R.string.upload_error_extension_description),
                         null,
