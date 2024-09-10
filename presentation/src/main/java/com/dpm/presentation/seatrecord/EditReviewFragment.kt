@@ -261,13 +261,12 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
 
 
     private fun addSelectedImages(newImageUris: List<String>) {
-        val newSelectedImage: MutableList<String> =
+        val newSelectedImage: List<String> =
             if (viewModel.editReview.value.images.size + newImageUris.size > MAX_SELECTED_IMAGES) {
                 makeSpotImageAppbar("사진은 최대 3장 선택할 수 있어요")
                 newImageUris.take(MAX_SELECTED_IMAGES - viewModel.editReview.value.images.size)
-                    .toMutableList()
             } else {
-                newImageUris.toMutableList()
+                newImageUris
             }
         viewModel.addEditSelectedImages(newSelectedImage)
     }
