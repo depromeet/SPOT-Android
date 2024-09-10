@@ -166,10 +166,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
     }
 
     private fun initSeatInfoView() {
-        supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
-            val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
-            newSelectedImages?.let { addSelectedImages(it) }
-        }
+//        supportFragmentManager.setFragmentResultListener(FRAGMENT_RESULT_KEY, this) { _, bundle ->
+//            val newSelectedImages = bundle.getStringArrayList(SELECTED_IMAGES)
+//            newSelectedImages?.let { addSelectedImages(it) }
+//        }
         supportFragmentManager.setFragmentResultListener("selectSeatResult", this) { _, bundle ->
             binding.layoutSeatInfo.visibility = VISIBLE
             val seatZone = bundle.getString("seatZone", "")
@@ -268,11 +268,22 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>({
 
     private fun initUploadDialog() {
         binding.btnAddImage.setOnSingleClickListener {
-            ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
+            imageUploadResultHandler()
+            //ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
         binding.llAddImage.setOnSingleClickListener {
-            ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
+            imageUploadResultHandler()
+            //ImageUploadDialog().show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
         }
+    }
+
+    private fun imageUploadResultHandler() {
+        val imageUploadDialog = ImageUploadDialog().apply {
+            setOnActivityResultHandler { selectedImages ->
+                addSelectedImages(selectedImages)
+            }
+        }
+        imageUploadDialog.show(supportFragmentManager, IMAGE_UPLOAD_DIALOG)
     }
 
     private fun initEventToBack() {

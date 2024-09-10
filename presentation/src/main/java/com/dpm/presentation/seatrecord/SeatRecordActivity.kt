@@ -12,7 +12,6 @@ import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.ActivitySeatRecordBinding
 import com.dpm.core.base.BaseActivity
@@ -22,14 +21,17 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
+import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REVIEW_TAG
 import com.dpm.presentation.seatrecord.adapter.DateMonthAdapter
 import com.dpm.presentation.seatrecord.adapter.MonthRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
 import com.dpm.presentation.seatrecord.uiMapper.MonthReviewData
+import com.dpm.presentation.seatrecord.uistate.EditableUiState
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.seatreview.dialog.ReviewTypeDialog
@@ -110,7 +112,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 navigateToReviewActivity()
             }
             btRecordFailRefresh.setOnSingleClickListener {
-                if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
+                if (viewModel.currentReviewState.value == RecordReviewType.VIEW) {
                     viewModel.getSeatReviewDate()
                 } else {
                     viewModel.getIntuitiveReviewDate()
@@ -131,7 +133,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 vIntuitiveReviewDivider.visibility = GONE
 
                 when (viewModel.seatDate.value) {
-                    is UiState.Success -> {
+                    is EditableUiState.DataState -> {
                         rvSeatReview.visibility = VISIBLE
                         rvSeatReviewMonth.visibility = VISIBLE
                         spinnerSeatReviewYear.visibility = VISIBLE
@@ -141,7 +143,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorMonth.visibility = GONE
                     }
 
-                    is UiState.Failure -> {
+                    is EditableUiState.Failure -> {
                         rvSeatReview.visibility = GONE
                         rvSeatReviewMonth.visibility = GONE
                         spinnerSeatReviewYear.visibility = GONE
@@ -151,7 +153,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorMonth.visibility = VISIBLE
                     }
 
-                    is UiState.Empty -> {
+                    is EditableUiState.Empty -> {
                         rvSeatReview.visibility = GONE
                         rvSeatReviewMonth.visibility = GONE
                         spinnerSeatReviewYear.visibility = GONE
@@ -170,8 +172,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 spinnerIntuitiveReviewYear.visibility = GONE
 
 
-                viewModel.setReviewState(SeatRecordViewModel.ReviewType.SEAT_REVIEW)
-                if (viewModel.seatDate.value !is UiState.Success) {
+                viewModel.setReviewState(RecordReviewType.VIEW)
+                if (viewModel.seatDate.value !is EditableUiState.DataState) {
                     viewModel.getSeatReviewDate()
                 }
             }
@@ -187,7 +189,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 spinnerSeatReviewYear.visibility = GONE
 
                 when (viewModel.intuitiveDate.value) {
-                    is UiState.Success -> {
+                    is EditableUiState.DataState -> {
                         rvIntuitiveReview.visibility = VISIBLE
                         rvIntuitiveReviewMonth.visibility = VISIBLE
                         spinnerIntuitiveReviewYear.visibility = VISIBLE
@@ -197,7 +199,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorMonth.visibility = GONE
                     }
 
-                    is UiState.Failure -> {
+                    is EditableUiState.Failure -> {
                         rvIntuitiveReview.visibility = GONE
                         rvIntuitiveReviewMonth.visibility = GONE
                         spinnerIntuitiveReviewYear.visibility = GONE
@@ -207,7 +209,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                         tvErrorMonth.visibility = VISIBLE
                     }
 
-                    is UiState.Empty -> {
+                    is EditableUiState.Empty -> {
                         rvIntuitiveReview.visibility = GONE
                         rvIntuitiveReviewMonth.visibility = GONE
                         spinnerIntuitiveReviewYear.visibility = GONE
@@ -220,8 +222,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     else -> {}
                 }
 
-                viewModel.setReviewState(SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
-                if (viewModel.intuitiveDate.value !is UiState.Success) {
+                viewModel.setReviewState(RecordReviewType.FEED)
+                if (viewModel.intuitiveDate.value !is EditableUiState.DataState) {
                     viewModel.getIntuitiveReviewDate()
                 }
             }
@@ -237,65 +239,83 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeDates() {
         viewModel.seatDate.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == RecordReviewType.FEED)
+                return@observe
             when (state) {
-                is UiState.Success -> {
+                is EditableUiState.Success -> {
                     setErrorVisibility(SeatRecordErrorType.NONE)
                     setSeatYearSpinner(state.data)
                     seatReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getSeatReviews()
                     setSeatYearSpinnerBackground()
                 }
+                is EditableUiState.Edit -> {
+                    setSeatYearSpinner(state.data)
+                    seatReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
+                    setSeatYearSpinnerBackground()
+                }
 
-                is UiState.Empty -> {
+                is EditableUiState.Empty -> {
                     setErrorVisibility(SeatRecordErrorType.EMPTY)
                     setShimmer(false)
                 }
 
-                is UiState.Loading -> {
+                is EditableUiState.Loading -> {
                     setShimmer(true)
                 }
 
-                is UiState.Failure -> {
+                is EditableUiState.Failure -> {
                     setErrorVisibility(SeatRecordErrorType.FAIL)
 
                     binding.rvSeatReview.visibility = GONE
                     setShimmer(false)
                 }
+                else -> {}
 
             }
         }
 
         viewModel.intuitiveDate.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == RecordReviewType.VIEW)
+                return@observe
             when (state) {
-                is UiState.Success -> {
+                is EditableUiState.Success -> {
                     setErrorVisibility(SeatRecordErrorType.NONE)
                     setIntuitiveYearSpinner(state.data)
                     intuitiveReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
                     viewModel.getIntuitiveReviews()
                     setIntuitiveYearSpinnerBackground()
                 }
+                is EditableUiState.Edit -> {
+                    setIntuitiveYearSpinner(state.data)
+                    seatReviewMonthAdapter.submitList(state.data.yearMonths.first { it.isClicked }.months)
+                    setSeatYearSpinnerBackground()
+                }
 
-                is UiState.Empty -> {
+                is EditableUiState.Empty -> {
                     setErrorVisibility(SeatRecordErrorType.EMPTY)
                     setShimmer(false)
                 }
 
-                is UiState.Loading -> {
+                is EditableUiState.Loading -> {
                     //TODO : shimmer도 두개 분리할지 고민하기
                 }
 
-                is UiState.Failure -> {
+                is EditableUiState.Failure -> {
                     setErrorVisibility(SeatRecordErrorType.FAIL)
 
                     binding.rvIntuitiveReview.visibility = GONE
                     setShimmer(false)
                 }
+                else -> {}
             }
         }
     }
 
     private fun observeReviews() {
         viewModel.seatReviews.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == RecordReviewType.FEED)
+                return@observe
             when (state) {
                 is UiState.Success -> {
                     setShimmer(false)
@@ -310,7 +330,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Empty -> {
                     setShimmer(false)
                     monthSeatReviewAdapter.submitList(emptyList())
-                    makeSpotImageAppbar("해당 날짜에 작성한 글이 없습니다.")
                     setErrorVisibility(SeatRecordErrorType.EMPTY)
                 }
 
@@ -323,6 +342,8 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
 
         viewModel.intuitiveReviews.asLiveData().observe(this) { state ->
+            if(viewModel.currentReviewState.value == RecordReviewType.VIEW)
+                return@observe
             when (state) {
                 is UiState.Success -> {
                     setShimmer(false)
@@ -337,7 +358,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 is UiState.Empty -> {
                     setShimmer(false)
                     monthSeatReviewAdapter.submitList(emptyList())
-                    makeSpotImageAppbar("해당 날짜에 작성한 글이 없습니다.")
                     setErrorVisibility(SeatRecordErrorType.EMPTY)
                 }
 
@@ -351,7 +371,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun setSeatYearSpinnerBackground() =
-        when ((viewModel.seatDate.value as UiState.Success).data.yearMonths.size) {
+        when ((viewModel.seatDate.value as EditableUiState.DataState).data.yearMonths.size) {
             0, 1 -> {
                 binding.spinnerSeatReviewYear.background = null
             }
@@ -362,7 +382,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
 
     private fun setIntuitiveYearSpinnerBackground() =
-        when ((viewModel.intuitiveDate.value as UiState.Success).data.yearMonths.size) {
+        when ((viewModel.intuitiveDate.value as EditableUiState.DataState).data.yearMonths.size) {
             0, 1 -> {
                 binding.spinnerIntuitiveReviewYear.background = null
             }
@@ -423,7 +443,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     }
 
     private fun setSeatYearSpinner(data: ResponseReviewDate) {
-        val years = data.yearMonths.map { it.year }
+        val years = data.yearMonths.map { it.year }.sortedDescending()
         val yearList = years.map { "${it}년" }
         val selectedYear = data.yearMonths.firstOrNull { it.isClicked }?.year
         val selectedPosition = years.indexOf(selectedYear).takeIf { it >= 0 } ?: 0
@@ -432,30 +452,26 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         if (!::seatReviewYearAdapter.isInitialized) {
             seatReviewYearAdapter = SpotDropDownSpinner(yearList, selectedPosition)
             binding.spinnerSeatReviewYear.adapter = seatReviewYearAdapter
-
-
             binding.spinnerSeatReviewYear.setSelection(selectedPosition)
-            binding.spinnerSeatReviewYear.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long,
-                    ) {
-                        seatReviewYearAdapter.setSelectedItemPosition(position)
-                        viewModel.setSeatSelectedYear(years[position])
-                        binding.ssvRecord.smoothScrollTo(0, 0)
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {}
-                }
-
-
         } else {
             seatReviewYearAdapter.updateData(yearList, selectedPosition)
             binding.spinnerSeatReviewYear.setSelection(selectedPosition)
         }
+        binding.spinnerSeatReviewYear.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    seatReviewYearAdapter.setSelectedItemPosition(position)
+                    viewModel.setSeatSelectedYear(years[position])
+                    binding.ssvRecord.smoothScrollTo(0, 0)
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+            }
     }
 
     private fun setIntuitiveYearSpinner(data: ResponseReviewDate) {
@@ -468,29 +484,26 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         if (!::intuitiveReviewYearAdapter.isInitialized) {
             intuitiveReviewYearAdapter = SpotDropDownSpinner(yearList, selectedPosition)
             binding.spinnerIntuitiveReviewYear.adapter = intuitiveReviewYearAdapter
-
-
             binding.spinnerIntuitiveReviewYear.setSelection(selectedPosition)
-            binding.spinnerIntuitiveReviewYear.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long,
-                    ) {
-                        intuitiveReviewYearAdapter.setSelectedItemPosition(position)
-                        viewModel.setIntuitiveSelectedYear(years[position])
-                        binding.ssvRecord.smoothScrollTo(0, 0)
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {}
-                }
-
         } else {
             intuitiveReviewYearAdapter.updateData(yearList, selectedPosition)
             binding.spinnerIntuitiveReviewYear.setSelection(selectedPosition)
         }
+        binding.spinnerIntuitiveReviewYear.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    intuitiveReviewYearAdapter.setSelectedItemPosition(position)
+                    viewModel.setIntuitiveSelectedYear(years[position])
+                    binding.ssvRecord.smoothScrollTo(0, 0)
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+            }
     }
 
     private fun initSeatMonthAdapter() {
@@ -523,12 +536,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setErrorVisibility(errorType: SeatRecordErrorType) {
         with(binding) {
-            if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
+            if (viewModel.currentReviewState.value == RecordReviewType.VIEW) {
                 rvSeatReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerSeatReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvSeatReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
             }
-            if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW) {
+            if (viewModel.currentReviewState.value == RecordReviewType.FEED) {
                 rvIntuitiveReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerIntuitiveReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvIntuitiveReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
@@ -546,7 +559,6 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
     private fun initReviewList() {
         monthSeatReviewAdapter = MonthRecordAdapter()
         binding.rvSeatReview.adapter = monthSeatReviewAdapter
-//        (binding.rvSeatReview.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         binding.rvSeatReview.itemAnimator = null
 
 
@@ -606,11 +618,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 }
 
                 override fun onLikeClick(reviewId: Int) {
-                    //TODO : 좋아요 클릭
+                    /**좋아요 클릭 없음 */
                 }
 
                 override fun onScrapClick(reviewId: Int) {
-                    //TODO : 스크랩 클릭
+                    /**스크랩 클릭 없음 */
                 }
             }
 
@@ -619,11 +631,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
                 if (!isLoading) {
                     isLoading = true
-                    if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW
+                    if (viewModel.currentReviewState.value == RecordReviewType.VIEW
                         && (viewModel.seatReviews.value as? UiState.Success)?.data?.hasNext == true
                     ) {
                         viewModel.getNextSeatReviews()
-                    } else if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW
+                    } else if (viewModel.currentReviewState.value == RecordReviewType.FEED
                         && (viewModel.intuitiveReviews.value as? UiState.Success)?.data?.hasNext == true
                     ) {
                         viewModel.getNextIntuitiveReviews()
@@ -672,7 +684,16 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
 
     private fun moveEditReview() {
-        makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
+        viewModel.setEditReview(viewModel.editReviewId.value)
+        supportFragmentManager.commit {
+            replace(
+                R.id.fcv_record,
+                EditReviewFragment(),
+                EDIT_REVIEW_TAG
+            )
+            addToBackStack(null)
+        }
+        //makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
     }
 
     private fun setShimmer(isLoading: Boolean) = with(binding) {

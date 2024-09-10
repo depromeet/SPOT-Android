@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.NumberPicker
 import androidx.fragment.app.activityViewModels
-import com.dpm.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.CustomDatepickerBinding
+import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.util.CalendarUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,13 +17,13 @@ class EditDatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
     R.layout.custom_datepicker,
     CustomDatepickerBinding::inflate
 ) {
-    private val viewModel : SeatRecordViewModel by activityViewModels()
-    private val calendarInstance : Calendar by lazy { CalendarUtil.getCurrentCalendar() }
+    companion object {
+        val TAG = "editDatePickerDialog"
+    }
 
-    private var onDateSelected : ((year : Int, month : Int, day : Int) -> Unit)? = null
-    private var selectedYear = CalendarUtil.getYear(calendarInstance)
-    private var selectedMonth = CalendarUtil.getMonth(calendarInstance)
-    private var selectedDay = CalendarUtil.getDay(calendarInstance)
+    private val viewModel: SeatRecordViewModel by activityViewModels()
+    private val calendarInstance: Calendar by lazy { CalendarUtil.getCurrentCalendar() }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,56 +32,74 @@ class EditDatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
-            npYear.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
-            npMonth.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
-            npDay.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
-            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        initView()
+        initEvent()
+    }
 
-            npYear.minValue = 2000
-            npYear.maxValue = currentYear
-            npYear.value = CalendarUtil.getYearFromDateFormat(viewModel.editReview.value.date)
-            npYear.wrapSelectorWheel = false
+    private fun initView() = with(binding) {
+        val date = viewModel.editReview.value.date
 
-            npMonth.minValue = 1
-            npMonth.maxValue = 12
-            npMonth.value = CalendarUtil.getMonthFromDateFormat(viewModel.editReview.value.date)
-            npMonth.wrapSelectorWheel = false
+        npYear.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+        npMonth.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+        npDay.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
-            npDay.minValue = 1
-            npDay.maxValue = calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH)
-            npDay.value = CalendarUtil.getDayOfMonthFromDateFormat(viewModel.editReview.value.date)
-            npDay.wrapSelectorWheel = false
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
-            updateDisplayedValues()
+        npYear.minValue = 2000
+        npYear.maxValue = currentYear
+        npYear.value = CalendarUtil.getYearFromDateFormat(date)
+        npYear.wrapSelectorWheel = false
 
-            npMonth.setOnValueChangedListener { _, _, newVal ->
-                calendarInstance.set(Calendar.MONTH, newVal - 1)
-                npDay.maxValue = calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH)
-                updateDisplayedValues()
+        npMonth.minValue = 1
+        npMonth.maxValue = 12
+        npMonth.value = CalendarUtil.getMonthFromDateFormat(date)
+        npMonth.wrapSelectorWheel = false
+
+        calendarInstance.set(Calendar.MONTH, CalendarUtil.getMonthFromDateFormat(date) - 1)
+        calendarInstance.set(Calendar.YEAR, CalendarUtil.getYearFromDateFormat(date))
+
+        npDay.minValue = 1
+        npDay.maxValue = calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH)
+        npDay.value = CalendarUtil.getDayOfMonthFromDateFormat(date)
+        npDay.wrapSelectorWheel = false
+
+        updateDisplayedValues(npDay.maxValue)
+
+    }
+
+    private fun initEvent() = with(binding) {
+        npMonth.setOnValueChangedListener { _, _, newVal ->
+            calendarInstance.set(Calendar.MONTH, newVal - 1)
+            val maxDay = calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+            if (npDay.value > maxDay) {
+                npDay.value = maxDay
             }
+            updateDisplayedValues(maxDay)
 
-            tvCancel.setOnClickListener { dismiss() }
+        }
 
-            tvDone.setOnClickListener {
-                val selectedYear = npYear.value
-                val selectedMonth = npMonth.value - 1
-                val selectedDay = npDay.value
-                val selectedCalendar =
-                    CalendarUtil.getCalendar(selectedYear, selectedMonth, selectedDay)
-                val selectedDate = CalendarUtil.formatCalendarDate(selectedCalendar)
-//                viewModel.updateSelectedDate(selectedDate)
-                onDateSelected?.invoke(selectedYear, selectedMonth, selectedDay)
-                dismiss()
-            }
+        tvCancel.setOnClickListener { dismiss() }
+
+        tvDone.setOnClickListener {
+            val selectedYear = npYear.value
+            val selectedMonth = npMonth.value - 1
+            val selectedDay = npDay.value
+            val selectedCalendar =
+                CalendarUtil.getCalendar(selectedYear, selectedMonth, selectedDay)
+            val selectedDate = CalendarUtil.formatCalendarDate(selectedCalendar)
+            viewModel.updateEditSelectedDate(selectedDate)
+            dismiss()
         }
     }
 
-    private fun updateDisplayedValues() {
-        binding.npYear.displayedValues = Array(binding.npYear.maxValue - binding.npYear.minValue + 1) { i -> "${i + binding.npYear.minValue}년" }
+    private fun updateDisplayedValues(maxDay: Int = 0) {
+        binding.npYear.displayedValues =
+            Array(binding.npYear.maxValue - binding.npYear.minValue + 1) { i -> "${i + binding.npYear.minValue}년" }
         binding.npMonth.displayedValues = Array(12) { i -> "${i + 1}월" }
-        binding.npDay.displayedValues = Array(binding.npDay.maxValue) { i -> "${i + 1}일" }
+        binding.npDay.displayedValues = Array(maxDay + 1) { i -> "${i + 1}일" }
+        binding.npDay.maxValue = maxDay
     }
 
 }

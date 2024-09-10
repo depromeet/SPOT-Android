@@ -170,10 +170,10 @@ class ScrapDetailViewHolder(
         if (!::scrapImageAdapter.isInitialized) {
             scrapImageAdapter = ScrapImageAdapter()
             binding.vpImage.adapter = scrapImageAdapter
+            scrapImageAdapter.submitList(item.images.map { it.url })
+            setupIndicators(scrapImageAdapter.itemCount)
         }
 
-        scrapImageAdapter.submitList(item.images.map { it.url })
-        setupIndicators(scrapImageAdapter.itemCount)
         binding.vpImage.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

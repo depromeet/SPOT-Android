@@ -52,7 +52,7 @@
     <string name="upload_error_capacity_15MB">15MB</string>
     <string name="upload_error_discipline">에 맞게 다시 선택해주세요</string>
     <string name="upload_error_extension_description">선택한 사진\n확장자가 맞지 않아요</string>
-    <string name="upload_error_extension_photo">jpg, jpeg, png 사진을 선택해주세요</string>
+    <string name="upload_error_extension_photo">jpg, jpeg, png, heic 사진을 선택해주세요</string>
     <string name="upload_error_check">확인</string>
 
     <!-- viewfinder -->
@@ -180,6 +180,11 @@
     <string name="stadium_jamsil">잠실야구장</string>
     <string name="scrap_more"><u>더보기</u></string>
 
+
+    <!-- 게시물 수정 -->
+    <string name="edit_review_title">게시물 수정</string>
+    <string name="edit_review_select_seat">좌석 선택</string>
+    <string name="edit_review_upload">업로드</string>
 
 
 </resources>

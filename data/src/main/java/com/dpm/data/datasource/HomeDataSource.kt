@@ -1,5 +1,6 @@
 package com.dpm.data.datasource
 
+import com.dpm.data.model.request.home.RequestEditReviewDto
 import com.dpm.data.model.request.home.RequestMySeatRecordDto
 import com.dpm.data.model.request.home.RequestProfileEditDto
 import com.dpm.data.model.request.home.RequestScrapDto
@@ -64,4 +65,9 @@ interface HomeDataSource {
         cursor : String?,
         requestScrapDto: RequestScrapDto,
     ): ResponseScrapDto
+
+    suspend fun putEditReview(
+        reviewId : Int,
+        requestEditReviewDto : RequestEditReviewDto
+    ) : ResponseMySeatRecordDto.ResponseReviewDto
 }

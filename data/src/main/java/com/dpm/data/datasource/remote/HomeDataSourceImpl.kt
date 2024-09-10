@@ -1,6 +1,7 @@
 package com.dpm.data.datasource.remote
 
 import com.dpm.data.datasource.HomeDataSource
+import com.dpm.data.model.request.home.RequestEditReviewDto
 import com.dpm.data.model.request.home.RequestFileExtensionDto
 import com.dpm.data.model.request.home.RequestMySeatRecordDto
 import com.dpm.data.model.request.home.RequestProfileEditDto
@@ -112,4 +113,13 @@ class HomeDataSourceImpl @Inject constructor(
         )
     }
 
+    override suspend fun putEditReview(
+        reviewId: Int,
+        requestEditReviewDto: RequestEditReviewDto,
+    ): ResponseMySeatRecordDto.ResponseReviewDto {
+        return homeApiService.putEditReview(
+            reviewId = reviewId,
+            body = requestEditReviewDto
+        )
+    }
 }

@@ -156,7 +156,7 @@ data class ResponseMySeatRecordDto(
             isLoading = false
         )
 
-        private fun ResponseReviewDto.toReviewResponse() = ResponseMySeatRecord.ReviewResponse(
+        fun ResponseReviewDto.toReviewResponse() = ResponseMySeatRecord.ReviewResponse(
             id = id,
             stadiumId = stadium.id,
             stadiumName = stadium.name,
@@ -169,6 +169,7 @@ data class ResponseMySeatRecordDto(
             seatNumber = seat?.seatNumber,
             date = dateTime,
             content = content ?: "",
+            sectionId = section.id,
             sectionName = section.name,
             member = member.toMemberResponse(),
             images = images.map { it.toReviewImageResponse() },

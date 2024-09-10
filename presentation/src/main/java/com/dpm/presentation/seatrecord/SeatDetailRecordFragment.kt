@@ -3,6 +3,7 @@ package com.dpm.presentation.seatrecord
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -12,10 +13,13 @@ import com.dpm.core.base.BindingFragment
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.presentation.scheme.SchemeKey
+import com.dpm.presentation.seatrecord.EditReviewFragment.Companion.EDIT_REVIEW_TAG
 import com.dpm.presentation.seatrecord.adapter.DetailRecordAdapter
 import com.dpm.presentation.seatrecord.dialog.ConfirmDeleteDialog
 import com.dpm.presentation.seatrecord.dialog.RecordEditDialog
+import com.dpm.presentation.seatrecord.uistate.EditableUiState
 import com.dpm.presentation.seatrecord.viewmodel.EditUi
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
 import com.dpm.presentation.util.KakaoUtils
@@ -79,7 +83,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         viewModel.seatReviews.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
-                    if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
+                    if (viewModel.currentReviewState.value == RecordReviewType.VIEW) {
                         detailRecordAdapter.submitList(state.data.reviews.toList())
                         isLoading = false
                     }
@@ -93,7 +97,7 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         viewModel.intuitiveReviews.asLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
-                    if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW) {
+                    if (viewModel.currentReviewState.value == RecordReviewType.FEED) {
                         detailRecordAdapter.submitList(state.data.reviews.toList())
                         isLoading = false
                     }
@@ -104,20 +108,31 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
         }
 
         viewModel.seatDate.asLiveData().observe(viewLifecycleOwner) { state ->
-            if (state is UiState.Empty)
+            if (state is EditableUiState.Empty && viewModel.currentReviewState.value == RecordReviewType.VIEW){
                 detailRecordAdapter.submitList(emptyList())
+                makeSpotImageAppbar("모든 시야후기가 삭제되었습니다!")
+            }
+        }
+
+        viewModel.intuitiveDate.asLiveData().observe(viewLifecycleOwner) { state ->
+            if (state is EditableUiState.Empty && viewModel.currentReviewState.value == RecordReviewType.FEED){
+                detailRecordAdapter.submitList(emptyList())
+                makeSpotImageAppbar("모든 직관후기가 삭제되었습니다!")
+            }
         }
 
 
         viewModel.deleteClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {
                 moveConfirmationDialog()
+                viewModel.cancelDeleteEvent()
             }
         }
 
         viewModel.editClickedEvent.asLiveData().observe(viewLifecycleOwner) { state ->
             if (state == EditUi.SEAT_DETAIL) {
                 moveEditReview()
+                viewModel.cancelEditEvent()
             }
         }
     }
@@ -154,12 +169,20 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
             (rvDetailRecord.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
             val position = when (viewModel.currentReviewState.value) {
-                SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
-                    (viewModel.seatReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                RecordReviewType.VIEW -> {
+                    if(viewModel.seatReviews.value is UiState.Success){
+                        (viewModel.seatReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                    }else{
+                        0
+                    }
                 }
 
-                SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
-                    (viewModel.intuitiveReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                RecordReviewType.FEED -> {
+                    if(viewModel.intuitiveReviews.value is UiState.Success){
+                        (viewModel.intuitiveReviews.value as UiState.Success).data.reviews.indexOfFirst { it.id == viewModel.clickedReviewId.value }
+                    }else{
+                        0
+                    }
                 }
             }
 
@@ -170,22 +193,30 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
 
                     val scrollBottom = !rvDetailRecord.canScrollVertically(1)
                     val hasNextPage = when (viewModel.currentReviewState.value) {
-                        SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
-                            (viewModel.seatReviews.value as UiState.Success).data.hasNext
+                        RecordReviewType.VIEW -> {
+                            if(viewModel.seatReviews.value is UiState.Success){
+                                (viewModel.seatReviews.value as UiState.Success).data.hasNext
+                            }else{
+                                false
+                            }
                         }
 
-                        SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
-                            (viewModel.intuitiveReviews.value as UiState.Success).data.hasNext
+                        RecordReviewType.FEED -> {
+                            if(viewModel.intuitiveReviews.value is UiState.Success){
+                                (viewModel.intuitiveReviews.value as UiState.Success).data.hasNext
+                            }else{
+                                false
+                            }
                         }
                     }
                     if (scrollBottom && hasNextPage && !isLoading) {
                         isLoading = true
                         when (viewModel.currentReviewState.value) {
-                            SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
+                            RecordReviewType.VIEW -> {
                                 viewModel.getNextSeatReviews()
                             }
 
-                            SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
+                            RecordReviewType.FEED -> {
                                 viewModel.getNextIntuitiveReviews()
                             }
                         }
@@ -202,7 +233,16 @@ class SeatDetailRecordFragment : BindingFragment<ActivitySeatDetailRecordBinding
     }
 
     private fun moveEditReview() {
-        makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
+        viewModel.setEditReview(viewModel.editReviewId.value)
+        parentFragmentManager.commit {
+            replace(
+                R.id.fcv_record,
+                EditReviewFragment(),
+                EDIT_REVIEW_TAG
+            )
+            addToBackStack(null)
+        }
+        //makeSpotImageAppbar("게시물 수정 기능은 아직 준비중이에요!")
     }
 
     private fun makeSpotImageAppbar(message: String) {
