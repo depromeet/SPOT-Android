@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.NumberPicker
 import androidx.fragment.app.activityViewModels
-import com.dpm.core.base.BindingBottomSheetDialog
 import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.CustomDatepickerBinding
+import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatreview.viewmodel.ReviewViewModel
 import com.dpm.presentation.util.CalendarUtil
@@ -61,17 +61,21 @@ class DatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
             npDay.value = selectedDay
             npDay.wrapSelectorWheel = false
 
-            updateDateValue()
-
-            npMonth.setOnValueChangedListener { _, _, newVal ->
-                calendarInstance.set(Calendar.MONTH, newVal - 1)
-                npDay.maxValue = calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH)
-                updateDateValue()
-            }
+            updateDateValue(npDay.maxValue)
         }
     }
 
     private fun initEvent() {
+        binding.npMonth.setOnValueChangedListener { _, _, newVal ->
+            calendarInstance.set(Calendar.MONTH, newVal - 1)
+            val maxDay = calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+            if (binding.npDay.value > maxDay) {
+                binding.npDay.value = maxDay
+            }
+            updateDateValue(maxDay)
+        }
+
         binding.tvCancel.setOnSingleClickListener { dismiss() }
         binding.tvDone.setOnSingleClickListener {
             val selectedYear = binding.npYear.value
@@ -86,11 +90,12 @@ class DatePickerDialog : BindingBottomSheetDialog<CustomDatepickerBinding>(
         }
     }
 
-    private fun updateDateValue() {
+    private fun updateDateValue(maxDay: Int = 0) {
         with(binding) {
             npYear.displayedValues = Array(npYear.maxValue - npYear.minValue + 1) { i -> "${i + npYear.minValue}년" }
             npMonth.displayedValues = Array(12) { i -> "${i + 1}월" }
-            npDay.displayedValues = Array(npDay.maxValue) { i -> "${i + 1}일" }
+            npDay.displayedValues = Array(maxDay + 1) { i -> "${i + 1}일" }
+            binding.npDay.maxValue = maxDay
         }
     }
 }
