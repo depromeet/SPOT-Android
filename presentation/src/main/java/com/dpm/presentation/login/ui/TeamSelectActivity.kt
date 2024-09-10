@@ -9,8 +9,10 @@ import com.depromeet.presentation.databinding.FragmentTeamSelectBinding
 import com.dpm.core.base.BaseActivity
 import com.dpm.core.state.UiState
 import com.dpm.domain.entity.response.home.ResponseBaseballTeam
+import com.dpm.presentation.extension.dpToPx
 import com.dpm.presentation.extension.getCompatibleParcelableExtra
 import com.dpm.presentation.extension.toast
+import com.dpm.presentation.home.ProfileEditActivity
 import com.dpm.presentation.home.adapter.BaseballTeamAdapter
 import com.dpm.presentation.home.adapter.GridSpacingItemDecoration
 import com.dpm.presentation.login.viewmodel.SignUpViewModel
@@ -114,7 +116,7 @@ class TeamSelectActivity: BaseActivity<FragmentTeamSelectBinding>(
         binding.rvTeamSelectStadium.addItemDecoration(
             GridSpacingItemDecoration(
                 2,
-                40
+                10.dpToPx(this@TeamSelectActivity)
             )
         )
         adapter.itemClubClickListener = object : BaseballTeamAdapter.OnItemClubClickListener {
