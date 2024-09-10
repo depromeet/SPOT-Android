@@ -21,6 +21,7 @@ import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
 import com.dpm.domain.entity.response.home.ResponseReviewDate
 import com.dpm.domain.entity.response.home.ResponseUserInfo
+import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.presentation.extension.loadAndCircleProfile
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.home.ProfileEditActivity
@@ -111,7 +112,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 navigateToReviewActivity()
             }
             btRecordFailRefresh.setOnSingleClickListener {
-                if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
+                if (viewModel.currentReviewState.value == RecordReviewType.VIEW) {
                     viewModel.getSeatReviewDate()
                 } else {
                     viewModel.getIntuitiveReviewDate()
@@ -171,7 +172,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                 spinnerIntuitiveReviewYear.visibility = GONE
 
 
-                viewModel.setReviewState(SeatRecordViewModel.ReviewType.SEAT_REVIEW)
+                viewModel.setReviewState(RecordReviewType.VIEW)
                 if (viewModel.seatDate.value !is EditableUiState.DataState) {
                     viewModel.getSeatReviewDate()
                 }
@@ -221,7 +222,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
                     else -> {}
                 }
 
-                viewModel.setReviewState(SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
+                viewModel.setReviewState(RecordReviewType.FEED)
                 if (viewModel.intuitiveDate.value !is EditableUiState.DataState) {
                     viewModel.getIntuitiveReviewDate()
                 }
@@ -238,7 +239,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeDates() {
         viewModel.seatDate.asLiveData().observe(this) { state ->
-            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
+            if(viewModel.currentReviewState.value == RecordReviewType.FEED)
                 return@observe
             when (state) {
                 is EditableUiState.Success -> {
@@ -275,7 +276,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
 
         viewModel.intuitiveDate.asLiveData().observe(this) { state ->
-            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW)
+            if(viewModel.currentReviewState.value == RecordReviewType.VIEW)
                 return@observe
             when (state) {
                 is EditableUiState.Success -> {
@@ -313,7 +314,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun observeReviews() {
         viewModel.seatReviews.asLiveData().observe(this) { state ->
-            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW)
+            if(viewModel.currentReviewState.value == RecordReviewType.FEED)
                 return@observe
             when (state) {
                 is UiState.Success -> {
@@ -341,7 +342,7 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
         }
 
         viewModel.intuitiveReviews.asLiveData().observe(this) { state ->
-            if(viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW)
+            if(viewModel.currentReviewState.value == RecordReviewType.VIEW)
                 return@observe
             when (state) {
                 is UiState.Success -> {
@@ -535,12 +536,12 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
 
     private fun setErrorVisibility(errorType: SeatRecordErrorType) {
         with(binding) {
-            if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW) {
+            if (viewModel.currentReviewState.value == RecordReviewType.VIEW) {
                 rvSeatReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerSeatReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvSeatReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
             }
-            if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW) {
+            if (viewModel.currentReviewState.value == RecordReviewType.FEED) {
                 rvIntuitiveReview.setVisible(errorType == SeatRecordErrorType.NONE)
                 spinnerIntuitiveReviewYear.setVisible(errorType == SeatRecordErrorType.NONE)
                 rvIntuitiveReviewMonth.setVisible(errorType == SeatRecordErrorType.NONE)
@@ -630,11 +631,11 @@ class SeatRecordActivity : BaseActivity<ActivitySeatRecordBinding>(
             if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
                 if (!isLoading) {
                     isLoading = true
-                    if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.SEAT_REVIEW
+                    if (viewModel.currentReviewState.value == RecordReviewType.VIEW
                         && (viewModel.seatReviews.value as? UiState.Success)?.data?.hasNext == true
                     ) {
                         viewModel.getNextSeatReviews()
-                    } else if (viewModel.currentReviewState.value == SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW
+                    } else if (viewModel.currentReviewState.value == RecordReviewType.FEED
                         && (viewModel.intuitiveReviews.value as? UiState.Success)?.data?.hasNext == true
                     ) {
                         viewModel.getNextIntuitiveReviews()

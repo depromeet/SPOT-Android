@@ -18,6 +18,7 @@ import com.dpm.core.base.BindingFragment
 import com.dpm.core.state.UiState
 import com.dpm.designsystem.SpotImageSnackBar
 import com.dpm.domain.entity.response.home.ResponseMySeatRecord
+import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.presentation.extension.loadAndClip
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.global.LoadingDialog
@@ -49,7 +50,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
     lateinit var s3Url: String
 
     private val viewModel: SeatRecordViewModel by activityViewModels()
-    private lateinit var loadingDialog : LoadingDialog
+    private lateinit var loadingDialog: LoadingDialog
 
     private val selectedImage: List<ImageView> by lazy {
         listOf(
@@ -139,15 +140,15 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         imageUploadDialog.show(parentFragmentManager, IMAGE_UPLOAD_DIALOG)
     }
 
-    private fun initMethodNaming(reviewType: SeatRecordViewModel.ReviewType) {
+    private fun initMethodNaming(reviewType: RecordReviewType) {
         when (reviewType) {
-            SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
+            RecordReviewType.VIEW -> {
                 binding.tvTitle.text = "좌석의 시야를 공유해보세요"
                 "야구장 시야 사진을\n올려주세요".also { binding.tvAddImage.text = it }
                 binding.tvReviewMySeat.text = "내 시야 후기"
             }
 
-            SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
+            RecordReviewType.FEED -> {
                 binding.tvTitle.text = "경기의 순간을 간직해보세요"
                 "직관후기 사진을\n올려주세요".also { binding.tvAddImage.text = it }
                 binding.tvReviewMySeat.text = "내 직관 후기"
@@ -306,6 +307,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
                     makeSpotImageAppbar("게시물 수정 실패..")
                     dismissLoading()
                 }
+
                 else -> {}
             }
         }
@@ -342,7 +344,7 @@ class EditReviewFragment : BindingFragment<FragmentEditReviewBinding>(
         return inputStream?.use { it.readBytes() }
     }
 
-    private fun showLoading(){
+    private fun showLoading() {
         loadingDialog.show()
     }
 

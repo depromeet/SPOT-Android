@@ -13,6 +13,7 @@ import com.depromeet.presentation.R
 import com.depromeet.presentation.databinding.FragmentReviewMySeatBottomSheetBinding
 import com.dpm.core.base.BindingBottomSheetDialog
 import com.dpm.designsystem.SpotImageSnackBar
+import com.dpm.domain.model.seatrecord.RecordReviewType
 import com.dpm.presentation.extension.colorOf
 import com.dpm.presentation.extension.setOnSingleClickListener
 import com.dpm.presentation.seatrecord.viewmodel.SeatRecordViewModel
@@ -152,13 +153,13 @@ class EditReviewMySeatDialog : BindingBottomSheetDialog<FragmentReviewMySeatBott
 
     private fun initMethodNaming() {
         when (viewModel.currentReviewState.value) {
-            SeatRecordViewModel.ReviewType.SEAT_REVIEW -> {
+            RecordReviewType.VIEW -> {
                 binding.tvReviewMySeat.text = "시야 후기"
                 binding.tvWriteDetailReview.text = "더 자세한 시야 후기를 남길래요!"
                 binding.etDetailReview.hint = "시야에 대한 구체적인 후기를 남기면 다른 사람들이 참고하기에 좋아요!"
             }
 
-            SeatRecordViewModel.ReviewType.INTUITIVE_REVIEW -> {
+            RecordReviewType.FEED -> {
                 binding.tvReviewMySeat.text = "직관 후기"
                 binding.tvWriteDetailReview.text = "더 자세한 직관 후기를 남길래요!"
                 binding.etDetailReview.hint = "나의 경기 직관 후기를 작성해주세요! 그날의 날씨나 소소한 감상도 좋아요!"

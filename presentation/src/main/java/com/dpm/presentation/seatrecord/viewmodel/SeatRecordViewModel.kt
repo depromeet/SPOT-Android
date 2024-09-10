@@ -44,11 +44,6 @@ class SeatRecordViewModel @Inject constructor(
         const val MAX_IMAGE_CNT = 3
     }
 
-    enum class ReviewType {
-        SEAT_REVIEW,
-        INTUITIVE_REVIEW
-    }
-
     private val _seatReviews = MutableStateFlow<UiState<ResponseMySeatRecord>>(UiState.Loading)
     val seatReviews = _seatReviews.asStateFlow()
 
@@ -79,7 +74,7 @@ class SeatRecordViewModel @Inject constructor(
     private val _clickedReviewId = MutableStateFlow(0)
     val clickedReviewId = _clickedReviewId.asStateFlow()
 
-    private val _currentReviewState = MutableStateFlow(ReviewType.SEAT_REVIEW)
+    private val _currentReviewState = MutableStateFlow(RecordReviewType.VIEW)
     val currentReviewState = _currentReviewState.asStateFlow()
 
     /** 리뷰 수정 관련 데이터 **/
@@ -466,7 +461,7 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
-    fun setReviewState(reviewType: ReviewType) {
+    fun setReviewState(reviewType: RecordReviewType) {
         _currentReviewState.value = reviewType
     }
 
@@ -502,11 +497,11 @@ class SeatRecordViewModel @Inject constructor(
 
     fun removeReview() {
         when (currentReviewState.value) {
-            ReviewType.SEAT_REVIEW -> {
+            RecordReviewType.VIEW -> {
                 removeSeatReviewData()
             }
 
-            ReviewType.INTUITIVE_REVIEW -> {
+            RecordReviewType.FEED -> {
                 removeIntuitiveReviewData()
             }
         }
@@ -718,13 +713,13 @@ class SeatRecordViewModel @Inject constructor(
     /** 게시물 수정 관련 로직 */
     fun setEditReview(reviewId: Int) {
         _editReview.value = when (currentReviewState.value) {
-            ReviewType.SEAT_REVIEW -> {
+            RecordReviewType.VIEW -> {
                 (_seatReviews.value as UiState.Success).data.reviews.first {
                     it.id == reviewId
                 }
             }
 
-            ReviewType.INTUITIVE_REVIEW -> {
+            RecordReviewType.FEED -> {
                 (_intuitiveReviews.value as UiState.Success).data.reviews.first {
                     it.id == reviewId
                 }
@@ -1002,7 +997,7 @@ class SeatRecordViewModel @Inject constructor(
                 good = editReview.value.keywords.filter { it.isPositive }.map { it.content },
                 bad = editReview.value.keywords.filter { !it.isPositive }.map { it.content },
                 content = editReview.value.content,
-                reviewType = if (currentReviewState.value == ReviewType.SEAT_REVIEW) RecordReviewType.VIEW.name else RecordReviewType.FEED.name
+                reviewType = if (currentReviewState.value == RecordReviewType.VIEW) RecordReviewType.VIEW.name else RecordReviewType.FEED.name
             )
             _putReviewState.value = UiState.Loading
 
@@ -1035,7 +1030,7 @@ class SeatRecordViewModel @Inject constructor(
                 Timber.d("date 비교 : selectedYear : $selectedYear, selectedMonth : $selectedMonth, editYear : $editYear, editMonth : $editMonth")
                 if (selectedYear != editYear || selectedMonth != editMonth) {
                     when (currentReviewState.value) {
-                        ReviewType.SEAT_REVIEW -> {
+                        RecordReviewType.VIEW -> {
                             val currentState = _seatReviews.value
                             if (currentState is UiState.Success) {
                                 val reviewList = currentState.data.reviews.toMutableList()
@@ -1056,7 +1051,7 @@ class SeatRecordViewModel @Inject constructor(
                             }
                         }
 
-                        ReviewType.INTUITIVE_REVIEW -> {
+                        RecordReviewType.FEED -> {
                             val currentState = _intuitiveReviews.value
                             if (currentState is UiState.Success) {
                                 val reviewList = currentState.data.reviews.toMutableList()
@@ -1079,7 +1074,7 @@ class SeatRecordViewModel @Inject constructor(
                     }
                 } else {
                     when (currentReviewState.value) {
-                        ReviewType.SEAT_REVIEW -> {
+                        RecordReviewType.VIEW -> {
                             val currentState = _seatReviews.value
                             if (currentState is UiState.Success) {
                                 val reviewList = currentState.data.reviews.toMutableList()
@@ -1093,7 +1088,7 @@ class SeatRecordViewModel @Inject constructor(
                             }
                         }
 
-                        ReviewType.INTUITIVE_REVIEW -> {
+                        RecordReviewType.FEED -> {
                             val currentState = _intuitiveReviews.value
                             if (currentState is UiState.Success) {
                                 val reviewList = currentState.data.reviews.toMutableList()
@@ -1115,9 +1110,9 @@ class SeatRecordViewModel @Inject constructor(
         }
     }
 
-    private fun updateDate(newYear : Int, newMonth : Int){
-        when (currentReviewState.value){
-            ReviewType.SEAT_REVIEW -> {
+    private fun updateDate(newYear: Int, newMonth: Int) {
+        when (currentReviewState.value) {
+            RecordReviewType.VIEW -> {
                 val currentDateState = _seatDate.value
                 if (currentDateState is EditableUiState.DataState) {
                     val updatedYearMonths = currentDateState.data.yearMonths.toMutableList()
@@ -1127,7 +1122,12 @@ class SeatRecordViewModel @Inject constructor(
                         val updatedMonths = yearMonth.months.toMutableList()
                         val monthData = updatedMonths.find { it.month == newMonth }
                         if (monthData == null) {
-                            updatedMonths.add(ResponseReviewDate.MonthData(month = newMonth, isClicked = false))
+                            updatedMonths.add(
+                                ResponseReviewDate.MonthData(
+                                    month = newMonth,
+                                    isClicked = false
+                                )
+                            )
                         }
                         updatedYearMonths[updatedYearMonths.indexOf(yearMonth)] = yearMonth.copy(
                             months = updatedMonths,
@@ -1153,7 +1153,7 @@ class SeatRecordViewModel @Inject constructor(
                 }
             }
 
-            ReviewType.INTUITIVE_REVIEW -> {
+            RecordReviewType.FEED -> {
                 val currentDateState = _intuitiveDate.value
                 if (currentDateState is EditableUiState.DataState) {
                     val updatedYearMonths = currentDateState.data.yearMonths.toMutableList()
@@ -1163,7 +1163,12 @@ class SeatRecordViewModel @Inject constructor(
                         val updatedMonths = yearMonth.months.toMutableList()
                         val monthData = updatedMonths.find { it.month == newMonth }
                         if (monthData == null) {
-                            updatedMonths.add(ResponseReviewDate.MonthData(month = newMonth, isClicked = false))
+                            updatedMonths.add(
+                                ResponseReviewDate.MonthData(
+                                    month = newMonth,
+                                    isClicked = false
+                                )
+                            )
                         }
                         updatedYearMonths[updatedYearMonths.indexOf(yearMonth)] = yearMonth.copy(
                             months = updatedMonths,
