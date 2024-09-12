@@ -3,6 +3,11 @@
 # ⚾️✨ SPOT! - 야구장 시야 공유 서비스
 <p align="center"><img src="https://github.com/user-attachments/assets/649f9f8f-92dd-4365-ac20-88279b9f6b29" width=1300></p>
 
+[![PlayStore](http://img.shields.io/badge/PlayStore-34A853?style=flat&logo=android&logoColor=white&link=https://play.google.com/store/apps/details?id=com.dpm.spot)](https://play.google.com/store/apps/details?id=com.dpm.spot)
+[![Instagram](http://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white&link=https://www.instagram.com/spot_baseballview/)](https://www.instagram.com/spot_baseballview/)
+[![서비스 소개](http://img.shields.io/badge/서비스_소개-1976D2?style=flat&logo=notion&logoColor=white&link=https://bit.ly/3YxsqXe)](https://bit.ly/3YxsqXe)
+[![메이커 로그](http://img.shields.io/badge/메이커_로그-81B441?style=flat&logo=Pinboard&logoColor=white&link=https://dis.qa/fbtJ9H)](https://dis.qa/fbtJ9H)
+
 ## **내가 만들어가는 야구장 시야 서비스, SPOT!**
 🧐 야구 경기를 예매해야 하는데, 직관이 처음이라 어떤 좌석을 잡아야 할 지 모르겠어..
 </br>
